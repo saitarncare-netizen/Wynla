@@ -1,4 +1,4 @@
-# RideWise — Design Guide
+# Wynla — Design Guide
 
 ---
 
@@ -51,34 +51,34 @@ We do:
 
 ```css
 /* Snow & Sky */
---rw-white: #FFFFFF;
---rw-off-white: #F8FAFC;
---rw-light-gray: #E2E8F0;
---rw-mid-gray: #94A3B8;
---rw-dark-gray: #334155;
---rw-black: #0F172A;
+--wn-white: #FFFFFF;
+--wn-off-white: #F8FAFC;
+--wn-light-gray: #E2E8F0;
+--wn-mid-gray: #94A3B8;
+--wn-dark-gray: #334155;
+--wn-black: #0F172A;
 
 /* Brand */
---rw-primary: #2563EB;        /* Ski blue */
---rw-primary-dark: #1E40AF;
---rw-primary-light: #DBEAFE;
+--wn-primary: #2563EB;        /* Ski blue */
+--wn-primary-dark: #1E40AF;
+--wn-primary-light: #DBEAFE;
 
 /* Semantic (use sparingly) */
---rw-success: #059669;        /* Trail open */
---rw-warning: #D97706;        /* Caution */
---rw-info: #0891B2;          /* Weather */
+--wn-success: #059669;        /* Trail open */
+--wn-warning: #D97706;        /* Caution */
+--wn-info: #0891B2;          /* Weather */
 
 /* Pass Colors (subtle, for badges) */
---rw-epic: #003B71;          /* Epic Pass blue */
---rw-ikon: #00477F;          /* Ikon Pass blue */
---rw-indy: #E5732C;          /* Indy Pass orange */
---rw-independent: #6B7280;   /* Independent gray */
+--wn-epic: #003B71;          /* Epic Pass blue */
+--wn-ikon: #00477F;          /* Ikon Pass blue */
+--wn-indy: #E5732C;          /* Indy Pass orange */
+--wn-independent: #6B7280;   /* Independent gray */
 ```
 
 ### Usage Rules
 
 - **Backgrounds:** mostly white/off-white
-- **Text:** dark gray (--rw-dark-gray) for body, black for headers
+- **Text:** dark gray (--wn-dark-gray) for body, black for headers
 - **Primary action buttons:** ski blue
 - **Avoid red/green for conditions** (don't imply judgment)
 
@@ -508,7 +508,7 @@ xl: 1280px   /* Large desktop */
 
 **Page titles:**
 - ✅ "Find your mountain"
-- ❌ "Welcome to RideWise!"
+- ❌ "Welcome to Wynla!"
 
 **Empty states:**
 - ✅ "No mountains match your filters. Try fewer constraints."

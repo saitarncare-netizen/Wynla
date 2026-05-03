@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "RideWise — Plan your next ski trip",
-  description: "Find the right mountain for your next ski or snowboard trip. Map, weather, pass info — all in one place.",
+  title: "Wynla — Plan smart. Ride better.",
+  description: "Plan your ski or snowboard trip with confidence — map, weather, and pass info, all in one place.",
 };
 
 export default function RootLayout({

@@ -1,4 +1,4 @@
-# RideWise — Quick Start Guide
+# Wynla — Quick Start Guide
 
 **For: Founder using Cursor for the first time on this project**
 
@@ -14,7 +14,7 @@ This guide tells you **exactly** what to do in Cursor, step by step, for your fi
 
 ## 🎯 Day 1 Goal
 
-By end of today: **Working Next.js app deployed to Vercel, connected to Supabase, showing "Hello RideWise"**
+By end of today: **Working Next.js app deployed to Vercel, connected to Supabase, showing "Hello Wynla"**
 
 Time required: 2-4 hours
 
@@ -31,7 +31,7 @@ Before opening Cursor, verify:
 - [ ] Vercel account created (linked to GitHub)
 - [ ] Supabase account created
 - [ ] Mapbox account created with token saved
-- [ ] This `ridewise-handoff` folder downloaded to your computer
+- [ ] This `wynla-handoff` folder downloaded to your computer
 
 ---
 
@@ -41,12 +41,12 @@ Before opening Cursor, verify:
 
 1. Launch Cursor
 2. Choose "Open Folder"
-3. Create new folder on Desktop called `ridewise`
+3. Create new folder on Desktop called `wynla`
 4. Open it
 
 ### Step 2: Move Handoff Docs (1 min)
 
-1. Inside `ridewise`, create folder: `handoff-docs`
+1. Inside `wynla`, create folder: `handoff-docs`
 2. Copy all 7 .md files from this folder into `handoff-docs/`
 3. This way Cursor AI can read your project context
 
@@ -98,7 +98,7 @@ Press `Ctrl + C` in terminal to stop server.
 In the AI chat, type:
 
 ```
-I'm starting a new project called RideWise.
+I'm starting a new project called Wynla.
 
 Please read all the .md files in the handoff-docs folder 
 to understand:
@@ -119,13 +119,13 @@ Cursor will read all files and respond.
 
 ### Step 8: Customize Home Page (15 min)
 
-Replace default Next.js page with RideWise placeholder.
+Replace default Next.js page with Wynla placeholder.
 
 Ask Cursor:
 
 ```
 Replace the content in app/page.tsx with a simple landing page that says:
-- "RideWise" as a big heading
+- "Wynla" as a big heading
 - "Coming soon: Plan your next ski trip" subtitle
 - Simple, clean design with Tailwind
 - Use design principles from DESIGN_GUIDE.md
@@ -139,13 +139,13 @@ Run `npm run dev` again → see your custom page
 
 ```bash
 git add .
-git commit -m "Initial RideWise landing page"
+git commit -m "Initial Wynla landing page"
 ```
 
 ### Step 10: Push to GitHub (5 min)
 
 1. Go to github.com → Click "+" → "New repository"
-2. Name: `ridewise`
+2. Name: `wynla`
 3. Private (recommended for now)
 4. Don't initialize with README
 5. Create repository
@@ -153,7 +153,7 @@ git commit -m "Initial RideWise landing page"
 GitHub shows commands. Copy the "push existing repository" commands:
 
 ```bash
-git remote add origin https://github.com/YOUR_USERNAME/ridewise.git
+git remote add origin https://github.com/YOUR_USERNAME/wynla.git
 git branch -M main
 git push -u origin main
 ```
@@ -164,17 +164,17 @@ git push -u origin main
 
 1. Go to vercel.com
 2. Click "Add New" → "Project"
-3. Import `ridewise` repository
+3. Import `wynla` repository
 4. Click "Deploy"
 5. Wait ~1 minute
 6. Click on the deployment URL
 
-**You should see:** Your live RideWise landing page!
+**You should see:** Your live Wynla landing page!
 
 ### Step 12: Setup Supabase Database (10 min)
 
 1. Go to supabase.com → New Project
-2. Name: `ridewise`
+2. Name: `wynla`
 3. Set strong database password (save it!)
 4. Choose region closest to NYC
 5. Wait 2 min for setup

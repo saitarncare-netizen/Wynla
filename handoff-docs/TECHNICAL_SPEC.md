@@ -1,4 +1,4 @@
-# RideWise — Technical Specification
+# Wynla — Technical Specification
 
 ---
 
@@ -26,7 +26,7 @@
 ### Hosting & Deployment
 - **Frontend:** Vercel
 - **Database:** Supabase Cloud
-- **Domain:** TBD (e.g., ridewise.app)
+- **Domain:** TBD (e.g., wynla.app)
 - **Analytics:** Plausible or PostHog (free tier)
 
 ### Development Tools
@@ -104,7 +104,7 @@
 ## 4. Folder Structure
 
 ```
-ridewise/
+wynla/
 ├── public/
 │   ├── images/
 │   │   └── resorts/          # Resort photos
@@ -191,10 +191,10 @@ NEXT_PUBLIC_MAPBOX_TOKEN=pk.xxx
 
 ```bash
 # 1. Create Next.js project
-npx create-next-app@latest ridewise --typescript --tailwind --app
+npx create-next-app@latest wynla --typescript --tailwind --app
 
 # 2. Navigate into project
-cd ridewise
+cd wynla
 
 # 3. Install dependencies
 npm install @supabase/supabase-js mapbox-gl
@@ -206,7 +206,7 @@ git add .
 git commit -m "Initial commit"
 
 # 5. Connect to GitHub
-git remote add origin https://github.com/USERNAME/ridewise.git
+git remote add origin https://github.com/USERNAME/wynla.git
 git push -u origin main
 
 # 6. Deploy to Vercel
@@ -394,7 +394,7 @@ Push to GitHub (main branch)
        ↓
 Vercel auto-deploys
        ↓
-Live at ridewise.app
+Live at wynla.app
 ```
 
 ### Deploy commands:

@@ -1,4 +1,4 @@
-# RideWise — Business Context
+# Wynla — Business Context
 
 ---
 

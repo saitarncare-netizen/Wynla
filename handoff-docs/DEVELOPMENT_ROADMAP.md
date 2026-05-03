@@ -1,4 +1,4 @@
-# RideWise — Development Roadmap
+# Wynla — Development Roadmap
 
 ---
 
@@ -21,9 +21,9 @@ This roadmap is designed for a **non-technical founder building with AI assistan
 **Tasks:**
 1. Open Cursor
 2. Open Terminal in Cursor (Ctrl + ` ` ` )
-3. Run: `npx create-next-app@latest ridewise --typescript --tailwind --app`
+3. Run: `npx create-next-app@latest wynla --typescript --tailwind --app`
 4. When prompted, choose: ESLint Yes, src/ folder Yes, App Router Yes, default import alias
-5. `cd ridewise`
+5. `cd wynla`
 6. `npm run dev`
 7. Open http://localhost:3000 — see Next.js welcome page
 8. **Win!** First milestone done.
@@ -36,8 +36,8 @@ This roadmap is designed for a **non-technical founder building with AI assistan
 1. Initialize git: `git init`
 2. Create .gitignore (already exists)
 3. Add: `git add .` and commit: `git commit -m "Initial commit"`
-4. Create new repo on GitHub: `ridewise`
-5. Connect: `git remote add origin https://github.com/USERNAME/ridewise.git`
+4. Create new repo on GitHub: `wynla`
+5. Connect: `git remote add origin https://github.com/USERNAME/wynla.git`
 6. Push: `git push -u origin main`
 7. Visit GitHub, see your code
 
@@ -47,10 +47,10 @@ This roadmap is designed for a **non-technical founder building with AI assistan
 
 **Tasks:**
 1. Go to vercel.com
-2. "Import Project" → Choose ridewise repo
+2. "Import Project" → Choose wynla repo
 3. Click Deploy
 4. Wait 1 minute
-5. Visit your live URL (e.g., ridewise-abc123.vercel.app)
+5. Visit your live URL (e.g., wynla-abc123.vercel.app)
 
 **Verification:** Live URL works, default Next.js page shows
 
@@ -317,7 +317,7 @@ Ask Cursor:
 
 **Tasks:**
 - Iframe with resort website
-- Header with "Back to RideWise" button
+- Header with "Back to Wynla" button
 - Handle iframe security (some sites block embedding)
 
 ### Day 6-7: Polish & Buffer
@@ -364,7 +364,7 @@ Ask Cursor:
 ### Day 5: Domain & Branding
 
 **Tasks:**
-- Buy domain (e.g., ridewise.app)
+- Buy domain (e.g., wynla.app)
 - Connect to Vercel
 - Add basic logo (text-based for MVP)
 - Favicon
@@ -474,7 +474,7 @@ Once MVP is live:
 3. Ask in startup Discord/Reddit
 
 ### Stuck mentally?
-1. Talk to a skier friend about RideWise
+1. Talk to a skier friend about Wynla
 2. Re-read your "why"
 3. Take a day off
 4. Don't be a hero — sustainable > sprints

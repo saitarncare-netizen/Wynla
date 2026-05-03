@@ -1,10 +1,10 @@
-# RideWise — Database Schema
+# Wynla — Database Schema
 
 ---
 
 ## Overview
 
-This document defines the database structure for RideWise. We use **Supabase (PostgreSQL)**.
+This document defines the database structure for Wynla. We use **Supabase (PostgreSQL)**.
 
 The schema is designed to be:
 - **Simple** — easy to query and maintain

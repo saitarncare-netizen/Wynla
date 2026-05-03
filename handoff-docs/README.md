@@ -1,4 +1,4 @@
-# RideWise — Project Handoff Document
+# Wynla — Project Handoff Document
 
 **For: Cursor AI / Any AI Assistant working on this project**
 **From: Claude (planning phase)**
@@ -8,7 +8,7 @@
 
 ## 🎯 What This Folder Contains
 
-This folder is the **complete context** for the RideWise project. Read these files in order:
+This folder is the **complete context** for the Wynla project. Read these files in order:
 
 1. **README.md** (this file) — Quick overview
 2. **PRODUCT_SPEC.md** — What we're building and why
@@ -22,7 +22,7 @@ This folder is the **complete context** for the RideWise project. Read these fil
 
 ## 🚀 Quick Start for AI Assistants
 
-You are helping build **RideWise** — a map-based ski/snowboard trip planning web app for the US market.
+You are helping build **Wynla** — a map-based ski/snowboard trip planning web app for the US market.
 
 **Founder profile:**
 - Age 24, snowboard enthusiast
@@ -42,7 +42,7 @@ You are helping build **RideWise** — a map-based ski/snowboard trip planning w
 
 ## 🎿 The Product in One Sentence
 
-> "RideWise is a one-stop web app that helps NYC-area skiers and snowboarders plan their weekend trips by combining map, weather forecast, ski pass info, and resort details — all in one place."
+> "Wynla is a one-stop web app that helps NYC-area skiers and snowboarders plan their weekend trips by combining map, weather forecast, ski pass info, and resort details — all in one place."
 
 ---
 
@@ -62,7 +62,7 @@ You are helping build **RideWise** — a map-based ski/snowboard trip planning w
 ## 📁 Folder Structure (when project starts)
 
 ```
-ridewise/
+wynla/
 ├── handoff-docs/          # This folder (planning docs)
 ├── src/
 │   ├── app/               # Next.js pages

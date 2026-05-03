@@ -1,4 +1,4 @@
--- RideWise database — initial schema + Hunter Mountain sample
+-- Wynla database — initial schema + Hunter Mountain sample
 -- Run this in Supabase SQL Editor (Dashboard → SQL Editor → New Query → paste → Run)
 
 -- 1. Create the resorts table

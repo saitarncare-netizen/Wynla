@@ -1,10 +1,10 @@
-# RideWise — Product Specification
+# Wynla — Product Specification
 
 ---
 
 ## 1. Product Vision
 
-**RideWise** is a map-based ski and snowboard trip planning web app for skiers and snowboarders in the United States, starting with the Northeast (NYC, NJ, CT, VT, NH, MA, PA region).
+**Wynla** is a map-based ski and snowboard trip planning web app for skiers and snowboarders in the United States, starting with the Northeast (NYC, NJ, CT, VT, NH, MA, PA region).
 
 The product solves a specific, validated problem: **skiers currently use 3-4 different apps to plan a single trip.**
 
@@ -146,7 +146,7 @@ When user clicks a resort pin or filter result, they see:
 ### 3.4 In-App Browser
 
 When user clicks "Visit Resort Website":
-- Opens within RideWise interface
+- Opens within Wynla interface
 - User stays in our app context
 - Can return to map easily
 - Resort gets traffic credit (good for partnerships)
@@ -181,7 +181,7 @@ These are intentionally excluded from version 1:
 ## 5. User Journey (Critical Flow)
 
 ```
-1. User opens RideWise.app
+1. User opens Wynla.app
    ↓
 2. Allow location? → Yes
    ↓
@@ -265,7 +265,7 @@ These are intentionally excluded from version 1:
 
 **Examples:**
 
-❌ "RideWise leverages AI-powered recommendations to optimize your ski experience"
+❌ "Wynla leverages AI-powered recommendations to optimize your ski experience"
 ✅ "Find the best mountain for this weekend — no guessing, no 4 apps."
 
 ❌ "Our advanced algorithm predicts perfect conditions"
@@ -275,7 +275,7 @@ These are intentionally excluded from version 1:
 
 ## 9. Competitive Differentiation
 
-| Feature | OpenSnow | OnTheSnow | Slopes | RideWise |
+| Feature | OpenSnow | OnTheSnow | Slopes | Wynla |
 |---------|----------|-----------|--------|----------|
 | Pre-trip planning | Partial | Limited | No | **Core focus** |
 | Pass filtering | No | No | No | **Yes** |

@@ -8,26 +8,30 @@ export default async function Home() {
     .select("*", { count: "exact", head: true });
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-white px-6 py-24">
+    <main className="flex min-h-screen flex-col items-center justify-center bg-wn-offwhite px-6 py-24">
       <div className="flex max-w-2xl flex-col items-center text-center">
-        <span className="mb-6 inline-flex items-center rounded-full bg-blue-50 px-3 py-1 text-sm font-medium text-blue-700">
+        <span className="mb-6 inline-flex items-center rounded-full bg-wn-sky/15 px-3 py-1 text-sm font-medium text-wn-navy">
           Coming soon
         </span>
 
-        <h1 className="text-5xl font-extrabold tracking-tight text-slate-900 sm:text-6xl">
-          RideWise
+        <h1 className="text-6xl font-extrabold tracking-tight text-wn-navy sm:text-7xl">
+          Wynla
         </h1>
 
-        <p className="mt-6 text-lg leading-relaxed text-slate-600 sm:text-xl">
-          Plan your next ski or snowboard trip — map, weather, and pass info,
+        <p className="mt-6 text-xl font-semibold text-wn-charcoal sm:text-2xl">
+          Plan smart. Ride better.
+        </p>
+
+        <p className="mt-4 max-w-xl text-base leading-relaxed text-wn-charcoal/70">
+          Map, weather, and pass info for ski and snowboard trips —
           all in one place.
         </p>
 
-        <p className="mt-8 text-sm text-slate-400">
+        <p className="mt-8 text-sm text-wn-charcoal/50">
           Northeast US · Launching this season
         </p>
 
-        <p className="mt-8 rounded-md border border-slate-200 bg-slate-50 px-3 py-1.5 font-mono text-xs text-slate-500">
+        <p className="mt-8 rounded-md border border-wn-charcoal/10 bg-white px-3 py-1.5 font-mono text-xs text-wn-charcoal/60">
           {error
             ? `db error: ${error.message}`
             : count === null
