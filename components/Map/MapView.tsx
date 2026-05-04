@@ -170,9 +170,13 @@ export default function MapView({
               ? `<div style="font-size: 12px; color: #2A2A2A; margin-bottom: 8px;">🚗 ${driveTimeText} from ${originName}</div>`
               : ""
           }
-          <div style="display: flex; flex-wrap: wrap; gap: 4px;">
+          <div style="display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 10px;">
             ${passBadges}
           </div>
+          <a href="/resort/${resort.slug}"
+             style="display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:#1E2952;text-decoration:none;border-bottom:1px solid #1E2952;padding-bottom:1px;">
+            View details →
+          </a>
         </div>
       `;
 
