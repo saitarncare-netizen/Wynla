@@ -51,6 +51,10 @@ type Resort = {
   website_url: string | null;
   trail_map_url: string | null;
   ticket_booking_url: string | null;
+  hero_image_url: string | null;
+  hero_image_source: string | null;
+  hero_image_alt: string | null;
+  last_verified_at: string | null;
 };
 
 type DriveTime = {
@@ -127,7 +131,11 @@ export default async function ResortPage({
   const lat = Number(resort.latitude);
   const isFeatured = resort.tier === "featured";
   const primary = primaryPass(resort.passes);
-  const heroUrl = staticMapUrl({
+
+  // Prefer the verified Wikimedia Commons photo if we have one; fall back to
+  // a Mapbox static map of the location. Static map is contextual + always
+  // works even when no image was sourced.
+  const fallbackHero = staticMapUrl({
     lng,
     lat,
     zoom: 9,
@@ -135,6 +143,9 @@ export default async function ResortPage({
     height: 540,
     pinColor: passColor(primary),
   });
+  const heroUrl = resort.hero_image_url ?? fallbackHero;
+  const heroAlt = resort.hero_image_alt ?? `Map showing the location of ${resort.name}`;
+  const heroIsRealPhoto = !!resort.hero_image_url;
 
   // Weather (Next.js fetch caches 30 min server-side)
   let weather: WeatherDay[] = [];
@@ -177,10 +188,10 @@ export default async function ResortPage({
       {/* HERO */}
       <header className="relative h-[58vh] min-h-[400px] w-full overflow-hidden">
         {heroUrl ? (
-          // Static map background; eslint-disable-next-line @next/next/no-img-element
+          // eslint-disable-next-line @next/next/no-img-element
           <img
             src={heroUrl}
-            alt={`Map of ${resort.name}`}
+            alt={heroAlt}
             className="absolute inset-0 h-full w-full object-cover"
           />
         ) : (
@@ -379,6 +390,29 @@ export default async function ResortPage({
             </p>
           </div>
         )}
+
+        {/* Trust footer */}
+        <footer className="mt-8 rounded-lg border border-wn-charcoal/10 bg-white/70 p-4 text-xs text-wn-charcoal/60">
+          <div className="flex flex-wrap items-baseline justify-between gap-2">
+            <span>
+              {resort.last_verified_at
+                ? `Last verified ${new Date(resort.last_verified_at).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}`
+                : "Not yet verified"}
+              {resort.hero_image_source ? ` · Photo ${resort.hero_image_source}` : ""}
+            </span>
+            <a
+              href={`mailto:hello@wynla.app?subject=Incorrect%20info%20for%20${encodeURIComponent(resort.name)}&body=${encodeURIComponent(`Resort: ${resort.name}\nURL: https://wynla.app/resort/${resort.slug}\n\nWhat's wrong:\n`)}`}
+              className="font-medium text-wn-charcoal/80 underline hover:text-wn-navy"
+            >
+              Report incorrect info →
+            </a>
+          </div>
+          <p className="mt-2">
+            Wynla shows verified resort info from official sources. We use “—” when
+            a value isn’t confirmed — better that than a wrong number. Always check
+            the resort site for live trail status.
+          </p>
+        </footer>
       </div>
     </main>
   );
