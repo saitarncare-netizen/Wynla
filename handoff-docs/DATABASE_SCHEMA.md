@@ -90,7 +90,15 @@ CREATE TABLE resorts (
   hero_image_url TEXT,
   hero_image_credit TEXT,
   
-  -- Status
+  -- Status (Stage 2 additions)
+  tier TEXT NOT NULL DEFAULT 'listed'
+    CHECK (tier IN ('featured', 'listed')),
+                                       -- 'featured' = the 30 NE resorts with deep stats fields populated.
+                                       -- 'listed' = bulk imported (~355), basic info only (lat/lng/passes/website).
+                                       -- Map UI renders featured pins large with a star, listed pins smaller and faded.
+  operating_status TEXT NOT NULL DEFAULT 'active'
+    CHECK (operating_status IN ('active', 'closed', 'seasonal')),
+                                       -- 'closed' = permanently shuttered, 'seasonal' = limited/intermittent ops.
   active BOOLEAN DEFAULT true,
   
   -- Timestamps

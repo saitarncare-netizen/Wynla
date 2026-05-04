@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useTransition } from "react";
+import { useMemo, useState, useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import MapView from "./MapView";
 import FilterBar from "./FilterBar";
@@ -16,6 +16,7 @@ type Resort = {
   latitude: number | string;
   longitude: number | string;
   passes: string[];
+  tier: "featured" | "listed";
 };
 
 type DriveTime = {
@@ -34,6 +35,7 @@ export default function MapPage({ resorts, driveTimes }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [, startTransition] = useTransition();
+  const [featuredOnly, setFeaturedOnly] = useState(false);
 
   const passFilter = searchParams.get("pass");
   const fromCode = searchParams.get("from") ?? "nyc";
@@ -52,6 +54,7 @@ export default function MapPage({ resorts, driveTimes }: Props) {
 
   const filtered = useMemo(() => {
     return resorts.filter((r) => {
+      if (featuredOnly && r.tier !== "featured") return false;
       if (passFilter && !(r.passes ?? []).includes(passFilter)) return false;
       if (withinHours > 0) {
         const dt = driveTimeByResort.get(r.id)?.get(origin.name);
@@ -59,18 +62,25 @@ export default function MapPage({ resorts, driveTimes }: Props) {
       }
       return true;
     });
-  }, [resorts, passFilter, withinHours, origin, driveTimeByResort]);
+  }, [resorts, featuredOnly, passFilter, withinHours, origin, driveTimeByResort]);
 
   // Counts per pass — a resort with multiple passes is counted in each.
+  // Respects the featured-only toggle so the chip numbers match what's visible.
   const passCounts = useMemo(() => {
     const counts: Record<string, number> = {};
-    for (const r of resorts) {
+    const pool = featuredOnly ? resorts.filter((r) => r.tier === "featured") : resorts;
+    for (const r of pool) {
       for (const p of r.passes ?? []) {
         counts[p] = (counts[p] ?? 0) + 1;
       }
     }
     return counts;
-  }, [resorts]);
+  }, [resorts, featuredOnly]);
+
+  const featuredCount = useMemo(
+    () => resorts.filter((r) => r.tier === "featured").length,
+    [resorts],
+  );
 
   function updateParam(key: string, value: string | null) {
     const params = new URLSearchParams(searchParams.toString());
@@ -94,9 +104,23 @@ export default function MapPage({ resorts, driveTimes }: Props) {
               Plan smart. Ride better.
             </span>
           </div>
-          <span className="text-xs font-medium text-wn-charcoal/70">
-            {filtered.length} / {resorts.length} resorts
-          </span>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setFeaturedOnly((v) => !v)}
+              className={`rounded-md border px-2.5 py-1 text-xs font-semibold transition-all duration-200 ${
+                featuredOnly
+                  ? "border-wn-gold bg-wn-gold/15 text-wn-charcoal"
+                  : "border-wn-charcoal/20 bg-white text-wn-charcoal/70 hover:border-wn-charcoal/40"
+              }`}
+              title={`Show only the ${featuredCount} deeply-detailed resorts`}
+            >
+              ★ Featured {featuredOnly ? "ON" : "OFF"}
+            </button>
+            <span className="text-xs font-medium text-wn-charcoal/70">
+              {filtered.length} / {resorts.length}
+            </span>
+          </div>
         </div>
         <FilterBar
           passFilter={passFilter}
