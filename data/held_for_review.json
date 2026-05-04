@@ -1,0 +1,983 @@
+{
+  "generated_at": "2026-05-04T15:29:33.797Z",
+  "count": 48,
+  "held": [
+    {
+      "slug": "anthony-lakes",
+      "name": "Anthony Lakes Mountain Resort",
+      "state": "OR",
+      "tier": "listed",
+      "kind": "REPLACE_PASS",
+      "from": [
+        "indy"
+      ],
+      "to": [
+        "independent"
+      ],
+      "added": [
+        "independent"
+      ],
+      "removed": [
+        "indy"
+      ],
+      "evidence": {}
+    },
+    {
+      "slug": "blackjack-mountain",
+      "name": "Blackjack Mountain",
+      "state": "MI",
+      "tier": "listed",
+      "kind": "REPLACE_PASS",
+      "from": [
+        "indy"
+      ],
+      "to": [
+        "independent"
+      ],
+      "added": [
+        "independent"
+      ],
+      "removed": [
+        "indy"
+      ],
+      "evidence": {}
+    },
+    {
+      "slug": "bogus-basin",
+      "name": "Bogus Basin",
+      "state": "ID",
+      "tier": "listed",
+      "kind": "REPLACE_PASS",
+      "from": [
+        "indy"
+      ],
+      "to": [
+        "independent"
+      ],
+      "added": [
+        "independent"
+      ],
+      "removed": [
+        "indy"
+      ],
+      "evidence": {}
+    },
+    {
+      "slug": "bretton-woods",
+      "name": "Bretton Woods",
+      "state": "NH",
+      "tier": "listed",
+      "kind": "REPLACE_PASS",
+      "from": [
+        "ikon"
+      ],
+      "to": [
+        "independent"
+      ],
+      "added": [
+        "independent"
+      ],
+      "removed": [
+        "ikon"
+      ],
+      "evidence": {}
+    },
+    {
+      "slug": "brian-head",
+      "name": "Brian Head Resort",
+      "state": "UT",
+      "tier": "listed",
+      "kind": "REPLACE_PASS",
+      "from": [
+        "indy"
+      ],
+      "to": [
+        "independent"
+      ],
+      "added": [
+        "independent"
+      ],
+      "removed": [
+        "indy"
+      ],
+      "evidence": {}
+    },
+    {
+      "slug": "bridger-bowl",
+      "name": "Bridger Bowl Ski Area",
+      "state": "MT",
+      "tier": "listed",
+      "kind": "REPLACE_PASS",
+      "from": [
+        "indy"
+      ],
+      "to": [
+        "independent"
+      ],
+      "added": [
+        "independent"
+      ],
+      "removed": [
+        "indy"
+      ],
+      "evidence": {}
+    },
+    {
+      "slug": "bristol-mountain",
+      "name": "Bristol Mountain",
+      "state": "NY",
+      "tier": "listed",
+      "kind": "REPLACE_PASS",
+      "from": [
+        "indy"
+      ],
+      "to": [
+        "independent"
+      ],
+      "added": [
+        "independent"
+      ],
+      "removed": [
+        "indy"
+      ],
+      "evidence": {}
+    },
+    {
+      "slug": "buck-hill",
+      "name": "Buck Hill",
+      "state": "MN",
+      "tier": "listed",
+      "kind": "REPLACE_PASS",
+      "from": [
+        "indy"
+      ],
+      "to": [
+        "ikon"
+      ],
+      "added": [
+        "ikon"
+      ],
+      "removed": [
+        "indy"
+      ],
+      "evidence": {
+        "ikon": "Wikipedia + OnTheSnow + Alterra + lifted.ikonpass.com (agent cross-ref 2026-05-04)"
+      }
+    },
+    {
+      "slug": "discovery",
+      "name": "Discovery Ski Area",
+      "state": "MT",
+      "tier": "listed",
+      "kind": "REPLACE_PASS",
+      "from": [
+        "indy"
+      ],
+      "to": [
+        "independent"
+      ],
+      "added": [
+        "independent"
+      ],
+      "removed": [
+        "indy"
+      ],
+      "evidence": {}
+    },
+    {
+      "slug": "giants-ridge",
+      "name": "Giants Ridge",
+      "state": "MN",
+      "tier": "listed",
+      "kind": "REPLACE_PASS",
+      "from": [
+        "indy"
+      ],
+      "to": [
+        "independent"
+      ],
+      "added": [
+        "independent"
+      ],
+      "removed": [
+        "indy"
+      ],
+      "evidence": {}
+    },
+    {
+      "slug": "granite-gorge",
+      "name": "Granite Gorge",
+      "state": "NH",
+      "tier": "listed",
+      "kind": "REPLACE_PASS",
+      "from": [
+        "indy"
+      ],
+      "to": [
+        "independent"
+      ],
+      "added": [
+        "independent"
+      ],
+      "removed": [
+        "indy"
+      ],
+      "evidence": {}
+    },
+    {
+      "slug": "gunstock-mountain-resort",
+      "name": "Gunstock Mountain Resort",
+      "state": "NH",
+      "tier": "listed",
+      "kind": "REPLACE_PASS",
+      "from": [
+        "indy"
+      ],
+      "to": [
+        "independent"
+      ],
+      "added": [
+        "independent"
+      ],
+      "removed": [
+        "indy"
+      ],
+      "evidence": {}
+    },
+    {
+      "slug": "holiday-mountain",
+      "name": "Holiday Mountain",
+      "state": "NY",
+      "tier": "listed",
+      "kind": "REPLACE_PASS",
+      "from": [
+        "indy"
+      ],
+      "to": [
+        "independent"
+      ],
+      "added": [
+        "independent"
+      ],
+      "removed": [
+        "indy"
+      ],
+      "evidence": {}
+    },
+    {
+      "slug": "holiday-valley",
+      "name": "Holiday Valley",
+      "state": "NY",
+      "tier": "listed",
+      "kind": "REPLACE_PASS",
+      "from": [
+        "indy"
+      ],
+      "to": [
+        "independent"
+      ],
+      "added": [
+        "independent"
+      ],
+      "removed": [
+        "indy"
+      ],
+      "evidence": {}
+    },
+    {
+      "slug": "holimont",
+      "name": "HoliMont",
+      "state": "NY",
+      "tier": "listed",
+      "kind": "REPLACE_PASS",
+      "from": [
+        "indy"
+      ],
+      "to": [
+        "independent"
+      ],
+      "added": [
+        "independent"
+      ],
+      "removed": [
+        "indy"
+      ],
+      "evidence": {}
+    },
+    {
+      "slug": "indianhead-mountain",
+      "name": "Indianhead Mountain",
+      "state": "MI",
+      "tier": "listed",
+      "kind": "REPLACE_PASS",
+      "from": [
+        "indy"
+      ],
+      "to": [
+        "independent"
+      ],
+      "added": [
+        "independent"
+      ],
+      "removed": [
+        "indy"
+      ],
+      "evidence": {}
+    },
+    {
+      "slug": "lee-canyon",
+      "name": "Lee Canyon",
+      "state": "NV",
+      "tier": "listed",
+      "kind": "REPLACE_PASS",
+      "from": [
+        "indy"
+      ],
+      "to": [
+        "independent"
+      ],
+      "added": [
+        "independent"
+      ],
+      "removed": [
+        "indy"
+      ],
+      "evidence": {}
+    },
+    {
+      "slug": "lookout-pass",
+      "name": "Lookout Pass Ski and Recreation Area",
+      "state": "MT",
+      "tier": "listed",
+      "kind": "REPLACE_PASS",
+      "from": [
+        "indy"
+      ],
+      "to": [
+        "independent"
+      ],
+      "added": [
+        "independent"
+      ],
+      "removed": [
+        "indy"
+      ],
+      "evidence": {}
+    },
+    {
+      "slug": "lost-trail",
+      "name": "Lost Trail Powder Mountain",
+      "state": "MT",
+      "tier": "listed",
+      "kind": "REPLACE_PASS",
+      "from": [
+        "indy"
+      ],
+      "to": [
+        "independent"
+      ],
+      "added": [
+        "independent"
+      ],
+      "removed": [
+        "indy"
+      ],
+      "evidence": {}
+    },
+    {
+      "slug": "mad-river-glen",
+      "name": "Mad River Glen",
+      "state": "VT",
+      "tier": "listed",
+      "kind": "REPLACE_PASS",
+      "from": [
+        "indy"
+      ],
+      "to": [
+        "independent"
+      ],
+      "added": [
+        "independent"
+      ],
+      "removed": [
+        "indy"
+      ],
+      "evidence": {}
+    },
+    {
+      "slug": "mad-river-mountain",
+      "name": "Mad River Mountain",
+      "state": "OH",
+      "tier": "listed",
+      "kind": "REPLACE_PASS",
+      "from": [
+        "indy"
+      ],
+      "to": [
+        "epic"
+      ],
+      "added": [
+        "epic"
+      ],
+      "removed": [
+        "indy"
+      ],
+      "evidence": {
+        "epic": "Wikipedia/Epic_Pass + Wikipedia/Vail_Resorts (agent cross-ref 2026-05-04)"
+      }
+    },
+    {
+      "slug": "monarch-mountain",
+      "name": "Monarch Mountain",
+      "state": "CO",
+      "tier": "listed",
+      "kind": "REPLACE_PASS",
+      "from": [
+        "indy"
+      ],
+      "to": [
+        "independent"
+      ],
+      "added": [
+        "independent"
+      ],
+      "removed": [
+        "indy"
+      ],
+      "evidence": {}
+    },
+    {
+      "slug": "mount-bohemia",
+      "name": "Mount Bohemia",
+      "state": "MI",
+      "tier": "listed",
+      "kind": "REPLACE_PASS",
+      "from": [
+        "indy"
+      ],
+      "to": [
+        "independent"
+      ],
+      "added": [
+        "independent"
+      ],
+      "removed": [
+        "indy"
+      ],
+      "evidence": {}
+    },
+    {
+      "slug": "mt-brighton",
+      "name": "Mt. Brighton",
+      "state": "MI",
+      "tier": "listed",
+      "kind": "REPLACE_PASS",
+      "from": [
+        "epic"
+      ],
+      "to": [
+        "independent"
+      ],
+      "added": [
+        "independent"
+      ],
+      "removed": [
+        "epic"
+      ],
+      "evidence": {}
+    },
+    {
+      "slug": "mt-hood-skibowl",
+      "name": "Mt. Hood Skibowl",
+      "state": "OR",
+      "tier": "listed",
+      "kind": "REPLACE_PASS",
+      "from": [
+        "indy"
+      ],
+      "to": [
+        "independent"
+      ],
+      "added": [
+        "independent"
+      ],
+      "removed": [
+        "indy"
+      ],
+      "evidence": {}
+    },
+    {
+      "slug": "mt-rose-ski-tahoe",
+      "name": "Mt. Rose Ski Tahoe",
+      "state": "NV",
+      "tier": "listed",
+      "kind": "REPLACE_PASS",
+      "from": [
+        "indy"
+      ],
+      "to": [
+        "independent"
+      ],
+      "added": [
+        "independent"
+      ],
+      "removed": [
+        "indy"
+      ],
+      "evidence": {}
+    },
+    {
+      "slug": "mt-spokane",
+      "name": "Mt. Spokane Ski and Snowboard Park",
+      "state": "WA",
+      "tier": "listed",
+      "kind": "REPLACE_PASS",
+      "from": [
+        "indy"
+      ],
+      "to": [
+        "independent"
+      ],
+      "added": [
+        "independent"
+      ],
+      "removed": [
+        "indy"
+      ],
+      "evidence": {}
+    },
+    {
+      "slug": "nordic-valley",
+      "name": "Nordic Valley",
+      "state": "UT",
+      "tier": "listed",
+      "kind": "REPLACE_PASS",
+      "from": [
+        "indy"
+      ],
+      "to": [
+        "independent"
+      ],
+      "added": [
+        "independent"
+      ],
+      "removed": [
+        "indy"
+      ],
+      "evidence": {}
+    },
+    {
+      "slug": "pajarito-mountain",
+      "name": "Pajarito Mountain Ski Area",
+      "state": "NM",
+      "tier": "listed",
+      "kind": "REPLACE_PASS",
+      "from": [
+        "indy"
+      ],
+      "to": [
+        "independent"
+      ],
+      "added": [
+        "independent"
+      ],
+      "removed": [
+        "indy"
+      ],
+      "evidence": {}
+    },
+    {
+      "slug": "pats-peak",
+      "name": "Pat's Peak",
+      "state": "NH",
+      "tier": "listed",
+      "kind": "REPLACE_PASS",
+      "from": [
+        "indy"
+      ],
+      "to": [
+        "independent"
+      ],
+      "added": [
+        "independent"
+      ],
+      "removed": [
+        "indy"
+      ],
+      "evidence": {}
+    },
+    {
+      "slug": "purgatory",
+      "name": "Purgatory Resort",
+      "state": "CO",
+      "tier": "listed",
+      "kind": "REPLACE_PASS",
+      "from": [
+        "ikon",
+        "indy"
+      ],
+      "to": [
+        "independent"
+      ],
+      "added": [
+        "independent"
+      ],
+      "removed": [
+        "ikon",
+        "indy"
+      ],
+      "evidence": {}
+    },
+    {
+      "slug": "red-river-ski-area",
+      "name": "Red River Ski & Summer Area",
+      "state": "NM",
+      "tier": "listed",
+      "kind": "REPLACE_PASS",
+      "from": [
+        "indy"
+      ],
+      "to": [
+        "independent"
+      ],
+      "added": [
+        "independent"
+      ],
+      "removed": [
+        "indy"
+      ],
+      "evidence": {}
+    },
+    {
+      "slug": "sandia-peak",
+      "name": "Sandia Peak Ski Area",
+      "state": "NM",
+      "tier": "listed",
+      "kind": "REPLACE_PASS",
+      "from": [
+        "indy"
+      ],
+      "to": [
+        "independent"
+      ],
+      "added": [
+        "independent"
+      ],
+      "removed": [
+        "indy"
+      ],
+      "evidence": {}
+    },
+    {
+      "slug": "showdown",
+      "name": "Showdown Montana",
+      "state": "MT",
+      "tier": "listed",
+      "kind": "REPLACE_PASS",
+      "from": [
+        "indy"
+      ],
+      "to": [
+        "independent"
+      ],
+      "added": [
+        "independent"
+      ],
+      "removed": [
+        "indy"
+      ],
+      "evidence": {}
+    },
+    {
+      "slug": "sipapu",
+      "name": "Sipapu Ski Resort",
+      "state": "NM",
+      "tier": "listed",
+      "kind": "REPLACE_PASS",
+      "from": [
+        "indy"
+      ],
+      "to": [
+        "independent"
+      ],
+      "added": [
+        "independent"
+      ],
+      "removed": [
+        "indy"
+      ],
+      "evidence": {}
+    },
+    {
+      "slug": "ski-cooper",
+      "name": "Ski Cooper",
+      "state": "CO",
+      "tier": "listed",
+      "kind": "REPLACE_PASS",
+      "from": [
+        "indy"
+      ],
+      "to": [
+        "independent"
+      ],
+      "added": [
+        "independent"
+      ],
+      "removed": [
+        "indy"
+      ],
+      "evidence": {}
+    },
+    {
+      "slug": "smugglers-notch",
+      "name": "Smugglers' Notch",
+      "state": "VT",
+      "tier": "listed",
+      "kind": "REPLACE_PASS",
+      "from": [
+        "indy"
+      ],
+      "to": [
+        "independent"
+      ],
+      "added": [
+        "independent"
+      ],
+      "removed": [
+        "indy"
+      ],
+      "evidence": {}
+    },
+    {
+      "slug": "snowy-range",
+      "name": "Snowy Range Ski Area",
+      "state": "WY",
+      "tier": "listed",
+      "kind": "REPLACE_PASS",
+      "from": [
+        "indy"
+      ],
+      "to": [
+        "independent"
+      ],
+      "added": [
+        "independent"
+      ],
+      "removed": [
+        "indy"
+      ],
+      "evidence": {}
+    },
+    {
+      "slug": "sugar-bowl-resort",
+      "name": "Sugar Bowl Resort",
+      "state": "CA",
+      "tier": "listed",
+      "kind": "REPLACE_PASS",
+      "from": [
+        "indy"
+      ],
+      "to": [
+        "mountain_collective"
+      ],
+      "added": [
+        "mountain_collective"
+      ],
+      "removed": [
+        "indy"
+      ],
+      "evidence": {
+        "mountain_collective": "https://mountaincollective.com/resorts/ (manual parse from cache 2026-05-04)"
+      }
+    },
+    {
+      "slug": "sundance",
+      "name": "Sundance Mountain Resort",
+      "state": "UT",
+      "tier": "listed",
+      "kind": "REPLACE_PASS",
+      "from": [
+        "indy"
+      ],
+      "to": [
+        "independent"
+      ],
+      "added": [
+        "independent"
+      ],
+      "removed": [
+        "indy"
+      ],
+      "evidence": {}
+    },
+    {
+      "slug": "telluride",
+      "name": "Telluride Ski Resort",
+      "state": "CO",
+      "tier": "listed",
+      "kind": "REPLACE_PASS",
+      "from": [
+        "ikon",
+        "mountain_collective"
+      ],
+      "to": [
+        "epic",
+        "mountain_collective"
+      ],
+      "added": [
+        "epic"
+      ],
+      "removed": [
+        "ikon"
+      ],
+      "evidence": {
+        "epic": "Wikipedia/Epic_Pass + Wikipedia/Vail_Resorts (agent cross-ref 2026-05-04)",
+        "mountain_collective": "https://mountaincollective.com/resorts/ (manual parse from cache 2026-05-04)"
+      }
+    },
+    {
+      "slug": "timberline-lodge",
+      "name": "Timberline Lodge Ski Area",
+      "state": "OR",
+      "tier": "listed",
+      "kind": "REPLACE_PASS",
+      "from": [
+        "indy"
+      ],
+      "to": [
+        "independent"
+      ],
+      "added": [
+        "independent"
+      ],
+      "removed": [
+        "indy"
+      ],
+      "evidence": {}
+    },
+    {
+      "slug": "waterville-valley",
+      "name": "Waterville Valley",
+      "state": "NH",
+      "tier": "listed",
+      "kind": "REPLACE_PASS",
+      "from": [
+        "ikon"
+      ],
+      "to": [
+        "indy"
+      ],
+      "added": [
+        "indy"
+      ],
+      "removed": [
+        "ikon"
+      ],
+      "evidence": {
+        "indy": "indyskipass.com agent fetch (Stage 3.5, name+state match)"
+      }
+    },
+    {
+      "slug": "welch-village",
+      "name": "Welch Village",
+      "state": "MN",
+      "tier": "listed",
+      "kind": "REPLACE_PASS",
+      "from": [
+        "indy"
+      ],
+      "to": [
+        "independent"
+      ],
+      "added": [
+        "independent"
+      ],
+      "removed": [
+        "indy"
+      ],
+      "evidence": {}
+    },
+    {
+      "slug": "whitefish",
+      "name": "Whitefish Mountain Resort",
+      "state": "MT",
+      "tier": "listed",
+      "kind": "REPLACE_PASS",
+      "from": [
+        "indy"
+      ],
+      "to": [
+        "independent"
+      ],
+      "added": [
+        "independent"
+      ],
+      "removed": [
+        "indy"
+      ],
+      "evidence": {}
+    },
+    {
+      "slug": "willamette-pass",
+      "name": "Willamette Pass Resort",
+      "state": "OR",
+      "tier": "listed",
+      "kind": "REPLACE_PASS",
+      "from": [
+        "indy"
+      ],
+      "to": [
+        "independent"
+      ],
+      "added": [
+        "independent"
+      ],
+      "removed": [
+        "indy"
+      ],
+      "evidence": {}
+    },
+    {
+      "slug": "arapahoe-basin",
+      "name": "Arapahoe Basin",
+      "state": "CO",
+      "tier": "listed",
+      "kind": "REMOVE_PASS",
+      "from": [
+        "ikon",
+        "mountain_collective"
+      ],
+      "to": [
+        "ikon"
+      ],
+      "added": [],
+      "removed": [
+        "mountain_collective"
+      ],
+      "evidence": {
+        "ikon": "Wikipedia + OnTheSnow + Alterra + lifted.ikonpass.com (agent cross-ref 2026-05-04)"
+      }
+    },
+    {
+      "slug": "arizona-snowbowl",
+      "name": "Arizona Snowbowl",
+      "state": "AZ",
+      "tier": "listed",
+      "kind": "REMOVE_PASS",
+      "from": [
+        "ikon",
+        "indy"
+      ],
+      "to": [
+        "ikon"
+      ],
+      "added": [],
+      "removed": [
+        "indy"
+      ],
+      "evidence": {
+        "ikon": "Wikipedia + OnTheSnow + Alterra + lifted.ikonpass.com (agent cross-ref 2026-05-04)"
+      }
+    }
+  ]
+}

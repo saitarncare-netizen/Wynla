@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# scraper artifacts (~160MB raw HTML cache, regenerable via npm run scrape:pass-data)
+/cache
+/output
