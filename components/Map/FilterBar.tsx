@@ -1,7 +1,7 @@
 "use client";
 
 import { ORIGINS } from "@/lib/origins";
-import { PASS_LABELS } from "@/lib/passColors";
+import { PASS_COLORS, PASS_KEYS, PASS_SHORT } from "@/lib/passColors";
 
 type Props = {
   passFilter: string | null;
@@ -12,8 +12,6 @@ type Props = {
   onWithinChange: (w: string | null) => void;
   counts: Record<string, number>;
 };
-
-const PASS_KEYS = ["epic", "ikon", "indy", "independent"] as const;
 
 const HOUR_OPTIONS = [
   { value: "0", label: "Any drive time" },
@@ -32,21 +30,23 @@ export default function FilterBar({
   onWithinChange,
   counts,
 }: Props) {
+  const totalCount = Object.values(counts).reduce((a, b) => a + b, 0);
+
   return (
     <div className="flex flex-col gap-2 px-4 pb-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-6">
       {/* Pass chips — horizontal scroll on mobile */}
       <div className="-mx-4 flex gap-1.5 overflow-x-auto px-4 pb-1 sm:mx-0 sm:px-0 sm:pb-0">
         <Chip active={passFilter === null} onClick={() => onPassChange(null)}>
-          All <span className="opacity-60">{Object.values(counts).reduce((a, b) => a + b, 0)}</span>
+          All <span className="opacity-60">{totalCount}</span>
         </Chip>
         {PASS_KEYS.map((key) => (
           <Chip
             key={key}
             active={passFilter === key}
+            color={PASS_COLORS[key]}
             onClick={() => onPassChange(passFilter === key ? null : key)}
           >
-            {PASS_LABELS[key].replace(" Pass", "")}{" "}
-            <span className="opacity-60">{counts[key] ?? 0}</span>
+            {PASS_SHORT[key]} <span className="opacity-60">{counts[key] ?? 0}</span>
           </Chip>
         ))}
       </div>
@@ -56,7 +56,7 @@ export default function FilterBar({
         <select
           value={fromCode}
           onChange={(e) => onFromChange(e.target.value)}
-          className="min-h-[36px] rounded-md border border-wn-charcoal/20 bg-white px-2 py-1 font-medium text-wn-charcoal focus:outline-none focus:ring-2 focus:ring-wn-sky"
+          className="min-h-[36px] rounded-md border border-wn-charcoal/20 bg-white px-2 py-1 font-medium text-wn-charcoal transition-colors duration-200 hover:border-wn-charcoal/40 focus:outline-none focus:ring-2 focus:ring-wn-sky"
           aria-label="From city"
         >
           {ORIGINS.map((o) => (
@@ -70,7 +70,7 @@ export default function FilterBar({
           onChange={(e) =>
             onWithinChange(e.target.value === "0" ? null : e.target.value)
           }
-          className="min-h-[36px] rounded-md border border-wn-charcoal/20 bg-white px-2 py-1 font-medium text-wn-charcoal focus:outline-none focus:ring-2 focus:ring-wn-sky"
+          className="min-h-[36px] rounded-md border border-wn-charcoal/20 bg-white px-2 py-1 font-medium text-wn-charcoal transition-colors duration-200 hover:border-wn-charcoal/40 focus:outline-none focus:ring-2 focus:ring-wn-sky"
           aria-label="Maximum drive time"
         >
           {HOUR_OPTIONS.map((opt) => (
@@ -87,20 +87,32 @@ export default function FilterBar({
 function Chip({
   active,
   onClick,
+  color,
   children,
 }: {
   active: boolean;
   onClick: () => void;
+  color?: string;
   children: React.ReactNode;
 }) {
+  // When a brand color is provided and the chip is active, fill with that
+  // color (white text). Otherwise fall back to neutral active state.
+  const activeStyle =
+    active && color
+      ? { backgroundColor: color, borderColor: color, color: "#FFFFFF" }
+      : undefined;
+
   return (
     <button
       type="button"
       onClick={onClick}
-      className={`shrink-0 whitespace-nowrap rounded-full border px-3 py-1.5 text-xs font-medium transition ${
-        active
+      style={activeStyle}
+      className={`shrink-0 whitespace-nowrap rounded-md border px-3 py-1.5 text-xs font-semibold transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] ${
+        active && !color
           ? "border-wn-navy bg-wn-navy text-white"
-          : "border-wn-charcoal/20 bg-white text-wn-charcoal hover:border-wn-charcoal/40"
+          : !active
+            ? "border-wn-charcoal/20 bg-white text-wn-charcoal hover:border-wn-charcoal/40"
+            : ""
       }`}
     >
       {children}

@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { passColor, passLabel } from "@/lib/passColors";
+import { passColor, passBadgeHtml } from "@/lib/passColors";
 import { formatDriveTime } from "@/lib/origins";
 
 type Resort = {
@@ -14,7 +14,7 @@ type Resort = {
   region: string | null;
   latitude: number | string;
   longitude: number | string;
-  pass: string;
+  passes: string[];
 };
 
 type DriveTime = {
@@ -29,6 +29,12 @@ type Props = {
   originName: string;
   driveTimeByResort: Map<number, Map<string, DriveTime>>;
 };
+
+// First pass in the array is treated as the "primary" pass for pin color.
+// Convention: store passes in priority order (most-recognizable first).
+function primaryPass(passes: string[] | null | undefined): string {
+  return passes?.[0] ?? "independent";
+}
 
 export default function MapView({
   resorts,
@@ -78,29 +84,32 @@ export default function MapView({
       const lat = Number(resort.latitude);
       if (!Number.isFinite(lng) || !Number.isFinite(lat)) return;
 
+      const passes = resort.passes ?? [];
       const dt = driveTimeByResort.get(resort.id)?.get(originName);
       const driveTimeText = dt ? formatDriveTime(dt.duration_seconds) : null;
 
+      const passBadges = passes.map((p) => passBadgeHtml(p)).join(" ");
+
       const popupHtml = `
-        <div style="font-family: system-ui, -apple-system, sans-serif; padding: 4px 2px; min-width: 180px;">
+        <div style="font-family: system-ui, -apple-system, sans-serif; padding: 4px 2px; min-width: 200px;">
           <div style="font-weight: 700; font-size: 14px; color: #1E2952; margin-bottom: 4px;">
             ${resort.name}
           </div>
-          <div style="font-size: 12px; color: #6B7280; margin-bottom: 4px;">
+          <div style="font-size: 12px; color: #6B7280; margin-bottom: 8px;">
             ${resort.state}${resort.region ? " · " + resort.region : ""}
           </div>
           ${
             driveTimeText
-              ? `<div style="font-size: 12px; color: #2A2A2A; margin-bottom: 4px;">🚗 ${driveTimeText} from ${originName}</div>`
+              ? `<div style="font-size: 12px; color: #2A2A2A; margin-bottom: 8px;">🚗 ${driveTimeText} from ${originName}</div>`
               : ""
           }
-          <div style="font-size: 12px; color: ${passColor(resort.pass)}; font-weight: 500;">
-            ${passLabel(resort.pass)}
+          <div style="display: flex; flex-wrap: wrap; gap: 4px;">
+            ${passBadges}
           </div>
         </div>
       `;
 
-      const marker = new mapboxgl.Marker({ color: passColor(resort.pass) })
+      const marker = new mapboxgl.Marker({ color: passColor(primaryPass(passes)) })
         .setLngLat([lng, lat])
         .setPopup(
           new mapboxgl.Popup({ offset: 25, closeButton: false }).setHTML(

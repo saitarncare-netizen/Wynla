@@ -36,7 +36,13 @@ CREATE TABLE resorts (
   
   -- Pass affiliation
   pass TEXT NOT NULL DEFAULT 'independent',
-                                       -- 'epic', 'ikon', 'indy', 'mountain_collective', 'independent'
+                                       -- LEGACY single-pass field, kept as a Stage 1 rollback safety net.
+                                       -- NEW CODE READS `passes` (array). `pass` will be dropped in Stage 2.
+  passes TEXT[] DEFAULT '{}',          -- Stage 1 addition. A resort can be on multiple passes
+                                       -- e.g. Whiteface = ['independent','mountain_collective'].
+                                       -- Allowed values: 'epic','ikon','indy','mountain_collective','independent'.
+                                       -- Convention: store in priority order; first element is the
+                                       -- "primary" pass used for pin color in the map UI.
   pass_access_type TEXT,               -- 'unlimited', 'limited_5', 'limited_7', etc.
   
   -- Operating info

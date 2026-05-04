@@ -8,7 +8,7 @@ export default async function Home() {
   const [resortsRes, driveTimesRes] = await Promise.all([
     supabase
       .from("resorts")
-      .select("id, slug, name, state, region, latitude, longitude, pass")
+      .select("id, slug, name, state, region, latitude, longitude, passes")
       .eq("active", true)
       .order("name"),
     supabase

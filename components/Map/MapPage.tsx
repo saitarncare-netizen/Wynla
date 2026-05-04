@@ -15,7 +15,7 @@ type Resort = {
   region: string | null;
   latitude: number | string;
   longitude: number | string;
-  pass: string;
+  passes: string[];
 };
 
 type DriveTime = {
@@ -52,7 +52,7 @@ export default function MapPage({ resorts, driveTimes }: Props) {
 
   const filtered = useMemo(() => {
     return resorts.filter((r) => {
-      if (passFilter && r.pass !== passFilter) return false;
+      if (passFilter && !(r.passes ?? []).includes(passFilter)) return false;
       if (withinHours > 0) {
         const dt = driveTimeByResort.get(r.id)?.get(origin.name);
         if (!dt || dt.duration_seconds > withinHours * 3600) return false;
@@ -61,9 +61,14 @@ export default function MapPage({ resorts, driveTimes }: Props) {
     });
   }, [resorts, passFilter, withinHours, origin, driveTimeByResort]);
 
+  // Counts per pass — a resort with multiple passes is counted in each.
   const passCounts = useMemo(() => {
     const counts: Record<string, number> = {};
-    for (const r of resorts) counts[r.pass] = (counts[r.pass] ?? 0) + 1;
+    for (const r of resorts) {
+      for (const p of r.passes ?? []) {
+        counts[p] = (counts[p] ?? 0) + 1;
+      }
+    }
     return counts;
   }, [resorts]);
 
@@ -116,15 +121,17 @@ export default function MapPage({ resorts, driveTimes }: Props) {
             Pass
           </div>
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
-            {(["epic", "ikon", "indy", "independent"] as const).map((key) => (
-              <div key={key} className="flex items-center gap-1.5">
-                <span
-                  className="h-2.5 w-2.5 rounded-full"
-                  style={{ backgroundColor: PASS_COLORS[key] }}
-                />
-                <span className="text-wn-charcoal">{PASS_LABELS[key]}</span>
-              </div>
-            ))}
+            {(["epic", "ikon", "indy", "mountain_collective", "independent"] as const).map(
+              (key) => (
+                <div key={key} className="flex items-center gap-1.5">
+                  <span
+                    className="h-2.5 w-2.5 rounded-full"
+                    style={{ backgroundColor: PASS_COLORS[key] }}
+                  />
+                  <span className="text-wn-charcoal">{PASS_LABELS[key]}</span>
+                </div>
+              ),
+            )}
           </div>
         </div>
       </div>

@@ -68,11 +68,16 @@ We do:
 --wn-warning: #D97706;        /* Caution */
 --wn-info: #0891B2;          /* Weather */
 
-/* Pass Colors (subtle, for badges) */
---wn-epic: #003B71;          /* Epic Pass blue */
---wn-ikon: #00477F;          /* Ikon Pass blue */
---wn-indy: #E5732C;          /* Indy Pass orange */
---wn-independent: #6B7280;   /* Independent gray */
+/* Pass Colors — verified from official brand standards (2026) */
+--wn-epic: #F37021;                /* Vail Resorts orange */
+--wn-ikon: #000000;                /* Alterra/Ikon black */
+--wn-indy: #DC2626;                /* Indy Pass red, post-2023 rebrand */
+--wn-mountain-collective: #1E3A8A; /* Mountain Collective navy */
+--wn-independent: #6B7280;         /* Independent neutral gray */
+
+/* Pass tag styling spec (used in popups + badges) */
+/* Solid background = brand color, white text, WCAG AA contrast */
+/* Border-radius: 6-8px, padding: 2px 8px, font-weight: 500-600, font-size: 11-12px */
 ```
 
 ### Usage Rules
@@ -354,12 +359,17 @@ This provides:
 On hover/click: expand with name
 ```
 
-### Pin Colors by Pass
+### Pin Colors by Pass (verified brand colors)
 
-- Epic: Blue (#003B71)
-- Ikon: Darker blue (#00477F)
-- Indy: Orange (#E5732C)
+- Epic: Orange (#F37021) — Vail Resorts
+- Ikon: Black (#000000) — Alterra
+- Indy: Red (#DC2626) — post-2023 rebrand
+- Mountain Collective: Navy (#1E3A8A)
 - Independent: Gray (#6B7280)
+
+For resorts on multiple passes (e.g. Whiteface = independent + Mountain Collective),
+the pin uses the FIRST pass in `passes[]` as the primary color, and the popup shows
+all passes as separate badges.
 
 ---
 
