@@ -3,7 +3,8 @@
 import { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { passColor, passBadgeHtml } from "@/lib/passColors";
+import { passColor, passBadgeHtml, primaryPass, type Pass } from "@/lib/passColors";
+import { sizeTier, sizeTierRadius } from "@/lib/sizeTier";
 import { formatDriveTime } from "@/lib/origins";
 
 type Resort = {
@@ -16,6 +17,7 @@ type Resort = {
   longitude: number | string;
   passes: string[];
   tier: "featured" | "listed";
+  vertical_drop: number | null;
 };
 
 type DriveTime = {
@@ -31,65 +33,79 @@ type Props = {
   driveTimeByResort: Map<number, Map<string, DriveTime>>;
 };
 
-// First pass in the array is treated as the "primary" pass for pin color.
-// Convention: store passes in priority order (most-recognizable first).
-function primaryPass(passes: string[] | null | undefined): string {
-  return passes?.[0] ?? "independent";
+const SOURCE_ID = "wynla-resorts";
+const LAYER_CLUSTERS = "wynla-clusters";
+const LAYER_CLUSTER_COUNT = "wynla-cluster-count";
+const LAYER_LISTED = "wynla-listed-pins";
+const LAYER_FEATURED = "wynla-featured-pins";
+const LAYER_FEATURED_STAR = "wynla-featured-star";
+
+// Map a resort to its pin properties for the GeoJSON feature.
+function resortToProperties(resort: Resort, dt: DriveTime | undefined) {
+  const primary: Pass = primaryPass(resort.passes);
+  const tier = sizeTier(resort.vertical_drop);
+  return {
+    id: resort.id,
+    slug: resort.slug,
+    name: resort.name,
+    state: resort.state,
+    region: resort.region ?? "",
+    passes: JSON.stringify(resort.passes ?? []),
+    tier: resort.tier,
+    primary_pass: primary,
+    color: passColor(primary),
+    size_tier: tier ?? "unknown",
+    radius: sizeTierRadius(tier),
+    vertical_drop: resort.vertical_drop ?? -1,
+    drive_seconds: dt?.duration_seconds ?? -1,
+  };
 }
 
-const STAR_SVG_WHITE =
-  '<svg width="11" height="11" viewBox="0 0 24 24" fill="white" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
+function buildPopupHtml(props: {
+  name: string;
+  state: string;
+  region: string;
+  passes: string;
+  tier: string;
+  vertical_drop: number;
+  drive_seconds: number;
+  slug: string;
+}, originName: string): string {
+  const passes: string[] = JSON.parse(props.passes || "[]");
+  const isFeatured = props.tier === "featured";
+  const passBadges = passes.map((p) => passBadgeHtml(p)).join(" ");
+  const driveTimeText =
+    props.drive_seconds > 0 ? formatDriveTime(props.drive_seconds) : null;
+  const vertText =
+    props.vertical_drop > 0 ? `${props.vertical_drop.toLocaleString()} ft vert` : "—";
 
-// Build a DOM element used as a Mapbox custom marker. Featured tier gets a
-// larger, opaque circle with a white star; Listed tier gets a smaller,
-// semi-transparent dot. Both have hover transitions.
-function createMarkerElement(color: string, isFeatured: boolean): HTMLDivElement {
-  const el = document.createElement("div");
-  el.className = isFeatured ? "wynla-pin wynla-pin--featured" : "wynla-pin wynla-pin--listed";
-  el.style.cursor = "pointer";
-  el.style.transition = "transform 200ms ease, opacity 200ms ease, box-shadow 200ms ease";
-  el.style.willChange = "transform";
-
-  if (isFeatured) {
-    el.style.width = "30px";
-    el.style.height = "30px";
-    el.style.background = color;
-    el.style.border = "2px solid #FFFFFF";
-    el.style.borderRadius = "50%";
-    el.style.boxShadow = "0 2px 6px rgba(0,0,0,0.28)";
-    el.style.display = "flex";
-    el.style.alignItems = "center";
-    el.style.justifyContent = "center";
-    el.innerHTML = STAR_SVG_WHITE;
-  } else {
-    el.style.width = "13px";
-    el.style.height = "13px";
-    el.style.background = color;
-    el.style.border = "1.5px solid rgba(255,255,255,0.95)";
-    el.style.borderRadius = "50%";
-    el.style.opacity = "0.7";
-    el.style.boxShadow = "0 1px 2px rgba(0,0,0,0.15)";
-  }
-
-  el.addEventListener("mouseenter", () => {
-    if (isFeatured) {
-      el.style.transform = "scale(1.18)";
-      el.style.boxShadow = "0 4px 10px rgba(0,0,0,0.35)";
-    } else {
-      el.style.transform = "scale(1.5)";
-      el.style.opacity = "1";
-    }
-  });
-  el.addEventListener("mouseleave", () => {
-    el.style.transform = "scale(1)";
-    if (isFeatured) {
-      el.style.boxShadow = "0 2px 6px rgba(0,0,0,0.28)";
-    } else {
-      el.style.opacity = "0.7";
-    }
-  });
-
-  return el;
+  return `
+    <div style="font-family: system-ui, -apple-system, sans-serif; padding: 4px 2px; min-width: 200px;">
+      ${
+        isFeatured
+          ? '<div style="margin-bottom: 4px;"><span style="display:inline-flex;align-items:center;font-size:10px;font-weight:700;color:#1E2952;background:#F5C443;padding:2px 6px;border-radius:4px;letter-spacing:0.04em;">★ FEATURED</span></div>'
+          : ""
+      }
+      <div style="font-weight: 700; font-size: 14px; color: #1E2952; margin-bottom: 4px;">
+        ${props.name}
+      </div>
+      <div style="font-size: 12px; color: #6B7280; margin-bottom: 6px;">
+        ${props.state}${props.region ? " · " + props.region : ""} · ${vertText}
+      </div>
+      ${
+        driveTimeText
+          ? `<div style="font-size: 12px; color: #2A2A2A; margin-bottom: 8px;">🚗 ${driveTimeText} from ${originName}</div>`
+          : ""
+      }
+      <div style="display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 10px;">
+        ${passBadges}
+      </div>
+      <a href="/resort/${props.slug}"
+         style="display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:#1E2952;text-decoration:none;border-bottom:1px solid #1E2952;padding-bottom:1px;">
+        View details →
+      </a>
+    </div>
+  `;
 }
 
 export default function MapView({
@@ -99,7 +115,7 @@ export default function MapView({
 }: Props) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
-  const markersRef = useRef<mapboxgl.Marker[]>([]);
+  const popupRef = useRef<mapboxgl.Popup | null>(null);
 
   // Init map once
   useEffect(() => {
@@ -114,81 +130,221 @@ export default function MapView({
 
     const map = new mapboxgl.Map({
       container: mapContainer.current,
-      style: "mapbox://styles/mapbox/outdoors-v12",
-      // Centered to roughly cover the contiguous US Northeast + Midwest;
-      // user can pan/zoom out to reach the West and Alaska.
+      style: "mapbox://styles/mapbox/light-v11",
       center: [-95, 40],
       zoom: 3.6,
+      // 22 px halo around clicks/taps → effective 44×44 px touch target,
+      // even when the visible circle is only 12 px (small size tier).
+      clickTolerance: 22,
+      // Disable rotate/pitch — flat US map UX, prevents accidental gestures
+      pitchWithRotate: false,
+      dragRotate: false,
     });
+    map.touchZoomRotate.disableRotation();
+
     mapRef.current = map;
-    map.addControl(new mapboxgl.NavigationControl(), "top-right");
+    map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), "top-right");
+
+    // Setup runs once the basemap style is ready. In Mapbox 3.x the "load"
+    // event can be unreliable under React strict-mode double-mount; "style.load"
+    // fires earlier and consistently. We also run setup immediately if the
+    // style was somehow already loaded by the time this effect mounts.
+    const setup = () => {
+      // Empty source — features added in the data effect below
+      map.addSource(SOURCE_ID, {
+        type: "geojson",
+        data: { type: "FeatureCollection", features: [] },
+        cluster: true,
+        clusterMaxZoom: 7,
+        clusterRadius: 50,
+      });
+
+      // Cluster bubbles: light navy with white border, count label on top
+      map.addLayer({
+        id: LAYER_CLUSTERS,
+        type: "circle",
+        source: SOURCE_ID,
+        filter: ["has", "point_count"],
+        paint: {
+          "circle-color": "#1E2952",
+          "circle-opacity": 0.85,
+          "circle-stroke-width": 2,
+          "circle-stroke-color": "#FFFFFF",
+          "circle-radius": [
+            "step",
+            ["get", "point_count"],
+            16,   // <10 → 16px
+            10,
+            22,   // 10-50 → 22px
+            50,
+            28,   // 50+ → 28px
+          ],
+        },
+      });
+      map.addLayer({
+        id: LAYER_CLUSTER_COUNT,
+        type: "symbol",
+        source: SOURCE_ID,
+        filter: ["has", "point_count"],
+        layout: {
+          "text-field": ["get", "point_count_abbreviated"],
+          "text-size": 12,
+          "text-allow-overlap": true,
+          "text-font": ["DIN Pro Bold", "Arial Unicode MS Bold"],
+        },
+        paint: {
+          "text-color": "#FFFFFF",
+        },
+      });
+
+      // Listed-tier pins: size by vertical_drop (12/16/20 px), color by primary pass
+      map.addLayer({
+        id: LAYER_LISTED,
+        type: "circle",
+        source: SOURCE_ID,
+        filter: [
+          "all",
+          ["!", ["has", "point_count"]],
+          ["==", ["get", "tier"], "listed"],
+        ],
+        paint: {
+          "circle-color": ["get", "color"],
+          "circle-radius": ["get", "radius"],
+          "circle-opacity": 0.85,
+          "circle-stroke-width": 1.5,
+          "circle-stroke-color": "#FFFFFF",
+        },
+      });
+
+      // Featured-tier pins: always 30 px (radius 15), full opacity, white border
+      map.addLayer({
+        id: LAYER_FEATURED,
+        type: "circle",
+        source: SOURCE_ID,
+        filter: [
+          "all",
+          ["!", ["has", "point_count"]],
+          ["==", ["get", "tier"], "featured"],
+        ],
+        paint: {
+          "circle-color": ["get", "color"],
+          "circle-radius": 15,
+          "circle-stroke-width": 2,
+          "circle-stroke-color": "#FFFFFF",
+        },
+      });
+
+      // White star ★ on top of featured pins
+      map.addLayer({
+        id: LAYER_FEATURED_STAR,
+        type: "symbol",
+        source: SOURCE_ID,
+        filter: [
+          "all",
+          ["!", ["has", "point_count"]],
+          ["==", ["get", "tier"], "featured"],
+        ],
+        layout: {
+          "text-field": "★",
+          "text-size": 16,
+          "text-allow-overlap": true,
+          "text-anchor": "center",
+        },
+        paint: {
+          "text-color": "#FFFFFF",
+        },
+      });
+
+      // Cluster click → zoom in
+      map.on("click", LAYER_CLUSTERS, (e) => {
+        const features = map.queryRenderedFeatures(e.point, { layers: [LAYER_CLUSTERS] });
+        const clusterId = features[0]?.properties?.cluster_id as number | undefined;
+        const geom = features[0]?.geometry;
+        if (clusterId == null || !geom || geom.type !== "Point") return;
+        const src = map.getSource(SOURCE_ID) as mapboxgl.GeoJSONSource;
+        src.getClusterExpansionZoom(clusterId, (err, zoom) => {
+          if (err || zoom == null) return;
+          map.easeTo({
+            center: geom.coordinates as [number, number],
+            zoom,
+          });
+        });
+      });
+
+      // Pin click → popup
+      const pinLayers = [LAYER_LISTED, LAYER_FEATURED, LAYER_FEATURED_STAR];
+      pinLayers.forEach((layerId) => {
+        map.on("click", layerId, (e) => {
+          const f = e.features?.[0];
+          if (!f || !f.properties || f.geometry.type !== "Point") return;
+          popupRef.current?.remove();
+          popupRef.current = new mapboxgl.Popup({ offset: 16, closeButton: false })
+            .setLngLat(f.geometry.coordinates as [number, number])
+            .setHTML(buildPopupHtml(f.properties as Parameters<typeof buildPopupHtml>[0], originName))
+            .addTo(map);
+        });
+        map.on("mouseenter", layerId, () => {
+          map.getCanvas().style.cursor = "pointer";
+        });
+        map.on("mouseleave", layerId, () => {
+          map.getCanvas().style.cursor = "";
+        });
+      });
+      map.on("mouseenter", LAYER_CLUSTERS, () => {
+        map.getCanvas().style.cursor = "pointer";
+      });
+      map.on("mouseleave", LAYER_CLUSTERS, () => {
+        map.getCanvas().style.cursor = "";
+      });
+
+      if (process.env.NODE_ENV === "development" && typeof window !== "undefined") {
+        (window as unknown as { __map: mapboxgl.Map }).__map = map;
+      }
+    };
+
+    if (map.isStyleLoaded()) setup();
+    else map.on("style.load", setup);
 
     return () => {
+      popupRef.current?.remove();
+      popupRef.current = null;
       map.remove();
       mapRef.current = null;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Update markers whenever the filtered resorts list changes
+  // Update GeoJSON data when filtered resorts change
   useEffect(() => {
     const map = mapRef.current;
     if (!map) return;
 
-    markersRef.current.forEach((m) => m.remove());
-    markersRef.current = [];
+    const apply = () => {
+      const src = map.getSource(SOURCE_ID) as mapboxgl.GeoJSONSource | undefined;
+      if (!src) return;
 
-    resorts.forEach((resort) => {
-      const lng = Number(resort.longitude);
-      const lat = Number(resort.latitude);
-      if (!Number.isFinite(lng) || !Number.isFinite(lat)) return;
+      const features = resorts
+        .map((resort) => {
+          const lng = Number(resort.longitude);
+          const lat = Number(resort.latitude);
+          if (!Number.isFinite(lng) || !Number.isFinite(lat)) return null;
+          const dt = driveTimeByResort.get(resort.id)?.get(originName);
+          return {
+            type: "Feature" as const,
+            geometry: { type: "Point" as const, coordinates: [lng, lat] },
+            properties: resortToProperties(resort, dt),
+          };
+        })
+        .filter((f): f is NonNullable<typeof f> => f !== null);
 
-      const passes = resort.passes ?? [];
-      const isFeatured = resort.tier === "featured";
-      const color = passColor(primaryPass(passes));
-      const dt = driveTimeByResort.get(resort.id)?.get(originName);
-      const driveTimeText = dt ? formatDriveTime(dt.duration_seconds) : null;
+      src.setData({ type: "FeatureCollection", features });
+    };
 
-      const passBadges = passes.map((p) => passBadgeHtml(p)).join(" ");
-
-      const popupHtml = `
-        <div style="font-family: system-ui, -apple-system, sans-serif; padding: 4px 2px; min-width: 200px;">
-          <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
-            ${
-              isFeatured
-                ? '<span style="display:inline-flex;align-items:center;font-size:10px;font-weight:700;color:#1E2952;background:#F5C443;padding:2px 6px;border-radius:4px;letter-spacing:0.04em;">★ FEATURED</span>'
-                : ""
-            }
-          </div>
-          <div style="font-weight: 700; font-size: 14px; color: #1E2952; margin-bottom: 4px;">
-            ${resort.name}
-          </div>
-          <div style="font-size: 12px; color: #6B7280; margin-bottom: 8px;">
-            ${resort.state}${resort.region ? " · " + resort.region : ""}
-          </div>
-          ${
-            driveTimeText
-              ? `<div style="font-size: 12px; color: #2A2A2A; margin-bottom: 8px;">🚗 ${driveTimeText} from ${originName}</div>`
-              : ""
-          }
-          <div style="display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 10px;">
-            ${passBadges}
-          </div>
-          <a href="/resort/${resort.slug}"
-             style="display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:#1E2952;text-decoration:none;border-bottom:1px solid #1E2952;padding-bottom:1px;">
-            View details →
-          </a>
-        </div>
-      `;
-
-      const el = createMarkerElement(color, isFeatured);
-      const marker = new mapboxgl.Marker({ element: el })
-        .setLngLat([lng, lat])
-        .setPopup(
-          new mapboxgl.Popup({ offset: isFeatured ? 22 : 14, closeButton: false }).setHTML(popupHtml),
-        )
-        .addTo(map);
-      markersRef.current.push(marker);
-    });
+    // Source is added by the init effect's setup() — which runs on style.load
+    // (or immediately if already loaded). If the source isn't ready yet,
+    // re-attempt on style.load.
+    if (map.getSource(SOURCE_ID)) apply();
+    else map.once("style.load", apply);
   }, [resorts, originName, driveTimeByResort]);
 
   return <div ref={mapContainer} className="h-full w-full" />;

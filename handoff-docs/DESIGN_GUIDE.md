@@ -2,6 +2,43 @@
 
 ---
 
+## 0. Brand Story & Identity
+
+### The Name: Wynla (วิน-ลา / WIN-luh)
+
+**Wyn** (Old English) = joy, delight, pleasure
+**la** = elegant suffix that adds flow
+
+**Meaning:** *"The joy of the journey, planned right."*
+
+### Brand Pillars
+
+1. **Plan with confidence** — Smart tools, no guessing
+2. **Discover with joy** — Make planning feel exciting
+3. **Ride your way** — No prescribed "best" — your call
+
+### Brand Personality
+
+- **Premium** but approachable (like AllTrails meets Linear)
+- **Smart** but not nerdy
+- **Confident** but not arrogant
+- **Joyful** but not silly
+
+### Tone of Voice
+
+- ✅ Clear, direct, helpful
+- ✅ Warm but professional
+- ❌ Avoid bro-speak ("Crush it!")
+- ❌ Avoid corporate-speak ("Synergize")
+
+### Tagline Options
+
+- **"Plan smart. Ride better."** (primary)
+- **"The joy of the journey, planned right."** (extended)
+- **"Where every adventure begins."** (aspirational)
+
+---
+
 ## 1. Design Philosophy
 
 ### Core Principle: **"Show, don't decide"**
@@ -68,16 +105,12 @@ We do:
 --wn-warning: #D97706;        /* Caution */
 --wn-info: #0891B2;          /* Weather */
 
-/* Pass Colors — verified from official brand standards (2026) */
---wn-epic: #F37021;                /* Vail Resorts orange */
---wn-ikon: #000000;                /* Alterra/Ikon black */
---wn-indy: #DC2626;                /* Indy Pass red, post-2023 rebrand */
+/* Pass Colors (verified against each pass's official brand — locked Stage 1) */
+--wn-epic: #F37021;                /* Epic Pass orange — Vail Resorts brand */
+--wn-ikon: #F2C200;                /* Ikon Pass yellow — updated 2026-05-05 (was #000000 black; black blended with map UI; yellow more distinctive + matches Ikon's brand accent) */
+--wn-indy: #DC2626;                /* Indy Pass red — 2023 rebrand */
 --wn-mountain-collective: #1E3A8A; /* Mountain Collective navy */
---wn-independent: #6B7280;         /* Independent neutral gray */
-
-/* Pass tag styling spec (used in popups + badges) */
-/* Solid background = brand color, white text, WCAG AA contrast */
-/* Border-radius: 6-8px, padding: 2px 8px, font-weight: 500-600, font-size: 11-12px */
+--wn-independent: #6B7280;         /* Independent / no pass — gray */
 ```
 
 ### Usage Rules
@@ -359,17 +392,44 @@ This provides:
 On hover/click: expand with name
 ```
 
-### Pin Colors by Pass (verified brand colors)
+### Pin Colors by Pass
 
-- Epic: Orange (#F37021) — Vail Resorts
-- Ikon: Black (#000000) — Alterra
-- Indy: Red (#DC2626) — post-2023 rebrand
-- Mountain Collective: Navy (#1E3A8A)
-- Independent: Gray (#6B7280)
+- **Epic:** Orange `#F37021` (Vail Resorts brand)
+- **Ikon:** Yellow `#F2C200` (updated 2026-05-05 — was `#000000` black; black blended with map UI)
+- **Indy:** Red `#DC2626` (2023 rebrand)
+- **Mountain Collective:** Navy `#1E3A8A`
+- **Independent / no pass:** Gray `#6B7280`
 
-For resorts on multiple passes (e.g. Whiteface = independent + Mountain Collective),
-the pin uses the FIRST pass in `passes[]` as the primary color, and the popup shows
-all passes as separate badges.
+For multi-pass resorts (e.g. Snowbasin = Epic + Ikon + MC), render the pin
+as a multi-segment ring or use the resort's primary pass (per `passes[0]` in DB).
+Decide rendering approach during Stage 4.1.
+
+### Pin Size by Resort Size Tier
+
+Resorts are tiered by `vertical_drop` so the map naturally surfaces big
+mountains as more visible (Aspen / Killington / Big Sky outweigh local hills).
+
+| Tier   | Vertical drop      | Pin diameter | Filter-chip / list icon                | Touch target | Hover scale |
+|--------|--------------------|--------------|----------------------------------------|--------------|-------------|
+| Small  | < 1,000 ft         | 12 px        | `<Mountain>` Lucide icon @ 12 px       | 44×44 px box | 1.3×        |
+| Medium | 1,000 – 2,500 ft   | 16 px        | `<Mountain>` Lucide icon @ 16 px       | 44×44 px box | 1.25×       |
+| Large  | > 2,500 ft         | 20 px        | `<MountainSnow>` Lucide icon @ 20 px   | 44×44 px box | 1.2×        |
+| —      | NULL vertical drop | 12 px        | em-dash "—" @ 12 px (matches "no info" pattern) | 44×44 px box | 1.3×        |
+
+The 3 indicators (Small / Medium / Large) reuse Lucide's `Mountain` glyph
+at increasing sizes for filter chips, list views, and pin tooltips. Large
+swaps to `MountainSnow` for a subtle "summit" cue. NULL gets the em-dash
+treatment per the "NULL > guess" / "show '—' when missing" pattern in §6.
+
+Rules:
+- Touch target stays **44×44 px** at all tiers (Mobile-First Rule §13.4) —
+  invisible padding around the visible pin handles the hit area.
+- Use pin **size** (not color) for tier so it doesn't conflict with pass
+  color or the §3 "no red/green semantic" rule.
+- NULL vertical drop → render as Small AND keep visible in all filters
+  (per "NULL > guess" principle; never hide a resort because we don't have stats).
+- Featured tier (independent of size) gets a **subtle ring** added around the
+  pin (decoration, not size) to mark curated standouts.
 
 ---
 

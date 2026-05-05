@@ -3,9 +3,11 @@
 import { useMemo, useState, useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import MapView from "./MapView";
+import AlaskaInset from "./AlaskaInset";
 import FilterBar from "./FilterBar";
 import { originByCode } from "@/lib/origins";
-import { PASS_COLORS, PASS_LABELS } from "@/lib/passColors";
+import { PASS_COLORS, PASS_LABELS, PASS_KEYS } from "@/lib/passColors";
+import { sizeTier, matchesSizeFilter, type SizeTier } from "@/lib/sizeTier";
 
 type Resort = {
   id: number;
@@ -17,6 +19,7 @@ type Resort = {
   longitude: number | string;
   passes: string[];
   tier: "featured" | "listed";
+  vertical_drop: number | null;
 };
 
 type DriveTime = {
@@ -31,6 +34,10 @@ type Props = {
   driveTimes: DriveTime[];
 };
 
+function isSizeTier(v: string | null): v is SizeTier {
+  return v === "small" || v === "medium" || v === "large";
+}
+
 export default function MapPage({ resorts, driveTimes }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -38,6 +45,8 @@ export default function MapPage({ resorts, driveTimes }: Props) {
   const [featuredOnly, setFeaturedOnly] = useState(false);
 
   const passFilter = searchParams.get("pass");
+  const sizeParam = searchParams.get("size");
+  const sizeFilter: SizeTier | null = isSizeTier(sizeParam) ? sizeParam : null;
   const fromCode = searchParams.get("from") ?? "nyc";
   const withinHours = Number(searchParams.get("within")) || 0;
 
@@ -52,7 +61,9 @@ export default function MapPage({ resorts, driveTimes }: Props) {
     return map;
   }, [driveTimes]);
 
-  const filtered = useMemo(() => {
+  // Resorts that pass every filter EXCEPT size — used to compute the
+  // "X with unknown size hidden" caption when the size chip is active.
+  const filteredIgnoringSize = useMemo(() => {
     return resorts.filter((r) => {
       if (featuredOnly && r.tier !== "featured") return false;
       if (passFilter && !(r.passes ?? []).includes(passFilter)) return false;
@@ -64,8 +75,19 @@ export default function MapPage({ resorts, driveTimes }: Props) {
     });
   }, [resorts, featuredOnly, passFilter, withinHours, origin, driveTimeByResort]);
 
-  // Counts per pass — a resort with multiple passes is counted in each.
-  // Respects the featured-only toggle so the chip numbers match what's visible.
+  const filtered = useMemo(() => {
+    return filteredIgnoringSize.filter((r) => matchesSizeFilter(r.vertical_drop, sizeFilter));
+  }, [filteredIgnoringSize, sizeFilter]);
+
+  // Count of resorts hidden specifically because they have NULL vertical_drop
+  // and a size filter is active. 0 when no filter active or no NULL hits.
+  const hiddenByNullSize = useMemo(() => {
+    if (sizeFilter === null) return 0;
+    return filteredIgnoringSize.filter((r) => r.vertical_drop == null).length;
+  }, [filteredIgnoringSize, sizeFilter]);
+
+  // Pass counts respect the featured-only toggle so chip numbers match what's visible.
+  // A resort with multiple passes is counted in each.
   const passCounts = useMemo(() => {
     const counts: Record<string, number> = {};
     const pool = featuredOnly ? resorts.filter((r) => r.tier === "featured") : resorts;
@@ -73,6 +95,17 @@ export default function MapPage({ resorts, driveTimes }: Props) {
       for (const p of r.passes ?? []) {
         counts[p] = (counts[p] ?? 0) + 1;
       }
+    }
+    return counts;
+  }, [resorts, featuredOnly]);
+
+  // Size counts for the size chips (NULL excluded — those just stay always-visible)
+  const sizeCounts = useMemo(() => {
+    const counts: Record<string, number> = { small: 0, medium: 0, large: 0 };
+    const pool = featuredOnly ? resorts.filter((r) => r.tier === "featured") : resorts;
+    for (const r of pool) {
+      const t = sizeTier(r.vertical_drop);
+      if (t) counts[t] = (counts[t] ?? 0) + 1;
     }
     return counts;
   }, [resorts, featuredOnly]);
@@ -124,12 +157,16 @@ export default function MapPage({ resorts, driveTimes }: Props) {
         </div>
         <FilterBar
           passFilter={passFilter}
+          sizeFilter={sizeFilter}
           fromCode={fromCode}
           withinHours={withinHours}
           onPassChange={(p) => updateParam("pass", p)}
+          onSizeChange={(s) => updateParam("size", s)}
           onFromChange={(f) => updateParam("from", f)}
           onWithinChange={(w) => updateParam("within", w)}
-          counts={passCounts}
+          passCounts={passCounts}
+          sizeCounts={sizeCounts}
+          hiddenByNullSize={hiddenByNullSize}
         />
       </header>
 
@@ -139,23 +176,23 @@ export default function MapPage({ resorts, driveTimes }: Props) {
         driveTimeByResort={driveTimeByResort}
       />
 
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex justify-center px-4 pb-4 sm:justify-start sm:pl-6">
+      <AlaskaInset resorts={filtered} />
+
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex justify-center px-4 pb-4 sm:justify-end sm:pr-6">
         <div className="pointer-events-auto rounded-lg border border-wn-charcoal/10 bg-white/95 px-3 py-2 shadow-sm backdrop-blur-sm">
           <div className="mb-1 text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/60">
             Pass
           </div>
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
-            {(["epic", "ikon", "indy", "mountain_collective", "independent"] as const).map(
-              (key) => (
-                <div key={key} className="flex items-center gap-1.5">
-                  <span
-                    className="h-2.5 w-2.5 rounded-full"
-                    style={{ backgroundColor: PASS_COLORS[key] }}
-                  />
-                  <span className="text-wn-charcoal">{PASS_LABELS[key]}</span>
-                </div>
-              ),
-            )}
+            {PASS_KEYS.map((key) => (
+              <div key={key} className="flex items-center gap-1.5">
+                <span
+                  className="h-2.5 w-2.5 rounded-full"
+                  style={{ backgroundColor: PASS_COLORS[key] }}
+                />
+                <span className="text-wn-charcoal">{PASS_LABELS[key]}</span>
+              </div>
+            ))}
           </div>
         </div>
       </div>

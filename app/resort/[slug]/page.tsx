@@ -2,7 +2,6 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
-import { getForecast, dayLabel, type WeatherDay } from "@/lib/weather";
 import { staticMapUrl } from "@/lib/mapboxStatic";
 import {
   passColor,
@@ -147,15 +146,6 @@ export default async function ResortPage({
   const heroAlt = resort.hero_image_alt ?? `Map showing the location of ${resort.name}`;
   const heroIsRealPhoto = !!resort.hero_image_url;
 
-  // Weather (Next.js fetch caches 30 min server-side)
-  let weather: WeatherDay[] = [];
-  try {
-    weather = await getForecast(lat, lng);
-  } catch (err) {
-    console.error("Weather fetch failed for", resort.slug, err);
-  }
-  const todayIso = new Date().toISOString().slice(0, 10);
-
   return (
     <main className="min-h-dvh bg-wn-offwhite">
       {/* JSON-LD for SEO */}
@@ -250,16 +240,34 @@ export default async function ResortPage({
         {/* QUICK STATS — featured only */}
         {isFeatured && <QuickStats resort={resort} />}
 
-        {/* WEATHER */}
-        {weather.length > 0 && (
-          <Section title="7-Day Forecast" subtitle="Open-Meteo · cached 30 min · always verify on the resort site">
-            <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-2 sm:mx-0 sm:px-0">
-              {weather.map((day) => (
-                <WeatherCard key={day.date} day={day} todayIso={todayIso} />
-              ))}
-            </div>
-          </Section>
-        )}
+        {/* CURRENT CONDITIONS — curated external links, available for all resorts.
+            Wynla is a planner, not a conditions app: we link to specialized
+            sources rather than maintain mediocre inline data. */}
+        <Section
+          title="Current Conditions"
+          subtitle="For live snow + weather data, check these trusted sources:"
+        >
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+            <ActionLink
+              href={`https://www.mountain-forecast.com/peaks/${mountainForecastSlug(resort.name)}`}
+              label="🏔️ Mountain Forecast"
+              sub="Ski-specific by elevation"
+              external
+            />
+            <ActionLink
+              href={`https://forecast.weather.gov/MapClick.php?lat=${lat}&lon=${lng}`}
+              label="🌡️ Weather.gov"
+              sub="US gov 7-day forecast"
+              external
+            />
+            <ActionLink
+              href={`https://www.windy.com/?wind,${lat},${lng},12`}
+              label="🌬️ Windy.com"
+              sub="Animated wind layer"
+              external
+            />
+          </div>
+        </Section>
 
         {/* DRIVE TIMES — only if cached */}
         {driveTimes.length > 0 && (
@@ -297,9 +305,11 @@ export default async function ResortPage({
               <ActionLink href={resort.website_url} label="Resort website" sub="Live trail status, hours, news" external />
             )}
             <ActionLink
-              href={`https://www.google.com/maps/?q=${lat},${lng}`}
+              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                resort.state ? `${resort.name} ${resort.state} ski resort` : `${resort.name} ski resort`,
+              )}`}
               label="Open in Google Maps"
-              sub="Navigation"
+              sub="Navigation, photos, reviews"
               external
             />
             {resort.ticket_booking_url && (
@@ -316,32 +326,6 @@ export default async function ResortPage({
             />
           </div>
         </Section>
-
-        {/* EXTERNAL FORECAST LINKS — featured only */}
-        {isFeatured && (
-          <Section title="More forecasts" subtitle="Specialty snow forecasters worth a look">
-            <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
-              <ActionLink
-                href={`https://opensnow.com/location/${slug}`}
-                label="OpenSnow"
-                sub="Daily PEAKS snow forecast"
-                external
-              />
-              <ActionLink
-                href={`https://forecast.weather.gov/MapClick.php?lat=${lat}&lon=${lng}`}
-                label="NWS point forecast"
-                sub="Official US weather service"
-                external
-              />
-              <ActionLink
-                href={`https://www.snow-forecast.com/resorts/search?term=${encodeURIComponent(resort.name)}`}
-                label="Snow-Forecast.com"
-                sub="3-elevation forecast"
-                external
-              />
-            </div>
-          </Section>
-        )}
 
         {/* ABOUT — featured only */}
         {isFeatured && (
@@ -540,38 +524,18 @@ function TrailChip({ color, label }: { color: string; label: string }) {
   );
 }
 
-function WeatherCard({ day, todayIso }: { day: WeatherDay; todayIso: string }) {
-  const isToday = day.date === todayIso;
-  return (
-    <div
-      className={`flex min-w-[112px] flex-col rounded-lg border p-3 text-center shadow-sm transition ${
-        isToday
-          ? "border-wn-navy bg-wn-navy text-white"
-          : "border-wn-charcoal/10 bg-white text-wn-charcoal"
-      }`}
-    >
-      <div className={`text-[11px] font-semibold uppercase tracking-wide ${isToday ? "text-white/80" : "text-wn-charcoal/60"}`}>
-        {dayLabel(day.date, todayIso)}
-      </div>
-      <div className="my-1.5 text-2xl">{day.emoji}</div>
-      <div className="text-base font-bold">
-        {day.tempMaxF != null ? `${day.tempMaxF}°` : "—"}
-        <span className={`ml-1 text-xs font-normal ${isToday ? "text-white/70" : "text-wn-charcoal/50"}`}>
-          {day.tempMinF != null ? `${day.tempMinF}°` : ""}
-        </span>
-      </div>
-      <div className={`mt-0.5 text-[11px] ${isToday ? "text-white/80" : "text-wn-charcoal/60"}`}>
-        {day.snowfallInches > 0
-          ? `❄️ ${day.snowfallInches.toFixed(1)}"`
-          : day.rainInches > 0
-            ? `🌧 ${day.rainInches.toFixed(1)}"`
-            : day.conditions}
-      </div>
-      <div className={`mt-0.5 text-[11px] ${isToday ? "text-white/70" : "text-wn-charcoal/50"}`}>
-        wind {day.windSpeedMph} mph
-      </div>
-    </div>
-  );
+// Build a Mountain-Forecast peak slug from the resort name.
+// Their convention: words separated by hyphens, original case preserved.
+// Strip non-alphanumeric (apostrophes, periods, "Resort" suffix) so common
+// names like "Mt. Brighton" → "Mt-Brighton" land closer to a real peak page.
+// Some resorts will still 404 — Mountain-Forecast's own site has search on the
+// 404 page so the user can recover.
+function mountainForecastSlug(name: string): string {
+  return name
+    .replace(/\s*(Resort|Mountain Resort|Ski Area|Ski Resort)\s*$/i, "")
+    .replace(/['.]/g, "")
+    .trim()
+    .replace(/\s+/g, "-");
 }
 
 function ActionLink({
