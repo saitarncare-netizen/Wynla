@@ -280,6 +280,16 @@ Use Supabase + Resend:
 - Update sitemap URLs
 - Submit to Google Search Console
 
+### 6.9 PWA — pulled forward from Month 3 (locked 2026-05-07)
+**Why moved up:** user wants "feels like an app" experience at launch, not 3 months after.
+- Add `manifest.json` (icons 192/512, theme color, display=standalone)
+- Add service worker (offline shell + Mapbox tile cache)
+- Apple touch icon + iOS splash screens
+- "Add to Home Screen" prompt (custom UI on first map view)
+- Test: iOS Safari + Android Chrome both → install icon, fullscreen, no Safari chrome
+- Estimated +1.5 days within Stage 6
+- **80% of native-app feel without App Store review overhead.** Native iOS deferred to Stage 7.
+
 ### 6.9 Final QA Checklist
 
 Before deployment:
@@ -327,24 +337,61 @@ After Stage 6 complete:
 
 ---
 
+## 🎯 STAGE 7: Native iOS App (post-launch milestone)
+
+**Trigger:** ~500–1,000 PWA users with measurable retention. Don't start before that signal — the cost (3-4 weeks + $99/yr + App Store review cycle) is only worth it once we know users WILL come back, not just once.
+
+**Time estimate:** 2-3 weeks (Capacitor wrap of existing web app)
+
+**Why post-launch (locked 2026-05-07):**
+- App Store first-submission review = 2-4 weeks for solo dev
+- $99/yr Apple Developer Program (bootstrap cash cost)
+- Each update = 1-7 day review cycle (kills iteration speed)
+- Real moat is best-in-class UX + SEO compounding, not "we have an app too"
+- Komoot wasn't first hiking app; OnTheSnow ships apps for 10+ years — niche-app first-mover risk is overrated
+- PWA covers 80% of native value (home-screen icon, fullscreen, push) at 5% of effort
+
+### 7.1 Capacitor wrap
+- `npx cap add ios` against existing Next.js export
+- Native shell: navigation, status bar, splash screen
+- Mapbox SDK iOS native (better perf than mapbox-gl in webview)
+- Native location services for "find resorts near me"
+
+### 7.2 App Store assets
+- App icon (1024×1024 + variants)
+- 6 screenshots per device (6.7", 6.1", 5.5")
+- App Store description + keywords (ASO)
+- Privacy policy URL
+- Demo video (App Preview)
+
+### 7.3 iOS-specific features (justifying native vs PWA)
+- Native push notifications (snow alerts, drive-time updates)
+- Apple Maps integration (deeplink for navigation)
+- Haptic feedback on filter changes / pin selection
+- iOS share sheet integration ("Share resort with friend")
+
+### 7.4 Submission + iteration
+- TestFlight beta (50 user limit free)
+- App Store Connect submission
+- Phased rollout (1% → 10% → 100% over 7 days)
+
+---
+
 ## 📈 Post-Launch Roadmap (Optional)
 
-### Month 3: PWA
-- 2-3 days work
-- Install on phone capability
-- Home screen icon
-- Offline mode (basic)
+### Stage 7 (above): Native iOS
+Triggered by retention signal, not calendar.
 
-### Month 4-5: Phase 2 Features
-- Snow alerts (push notifications)
+### Phase 2 features (Month 4-5)
+- Snow alerts (push notifications) — works in PWA on Android, native on iOS
 - Save trip preferences
 - "Plan with friends" (shared trips)
 - Pro tier launch ($19.99/year)
+- **Pro waitlist form should be live from Stage 6 launch** to collect willingness-to-pay signal pre-paywall
 
-### Month 6+: Native App
-- If 1000+ users: invest in native
-- Use Capacitor (faster) or React Native (premium)
-- App Store + Google Play submission
+### Android native (Month 8+)
+- If iOS hits 5K users → mirror to Android via same Capacitor codebase
+- Lower priority than iOS for ski/snowboard demographic (skews iOS)
 
 ---
 

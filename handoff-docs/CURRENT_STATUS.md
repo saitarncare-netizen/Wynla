@@ -1,8 +1,8 @@
 # Wynla — Current Status
-Last updated: 2026-05-07 (Stage 4.2 complete, awaiting commit OK)
+Last updated: 2026-05-07 (Stage 4.2 shipped + Featured 30→50 + roadmap re-shaped)
 
 ## 🎯 Current Stage
-**Stage 4.2 (Detail Experience) CODE COMPLETE — awaiting user "OK commit".** Side panel / bottom sheet replaces Mapbox popup; weather link-outs wired into map flow; URL filter persistence gap closed (`featured` now in URL). Typecheck + ESLint clean. Browser smoke test passed (Big Snow listed + Hunter Mountain featured panels render correctly).
+**Stage 4.2 SHIPPED** (commit `fcd0dd6`) + **Featured tier expanded 30 → 50** with full data + photos via Wikipedia + Wikimedia Commons (verified). **Mobile strategy revised: PWA pulled forward to Stage 6 launch; native iOS becomes Stage 7 post-traction.** Next: Stage 4.3 (Smart Features).
 
 ## ✅ Stage 4.2 Result — what shipped
 - **2 new files:** `lib/externalLinks.ts` (5 shared URL builders), `components/Map/ResortPanel.tsx` (responsive side panel + bottom sheet, ~270 lines)
@@ -17,6 +17,25 @@ Last updated: 2026-05-07 (Stage 4.2 complete, awaiting commit OK)
   - Click Hunter Mountain (featured) → ★ Featured badge + 3 stats grid (1,600 ft / 67 trails / 320 acres).
   - ESC closes panel ✓
   - Responsive classes: mobile (`inset-x-0 bottom-0 max-h-[78vh] rounded-t-2xl`) + desktop (`md:right-0 md:top-0 md:bottom-0 md:w-[380px]`) both present, drag handle has `md:hidden`.
+
+## ✅ Featured 30 → 50 (applied 2026-05-07)
+20 flagship resorts promoted Listed → Featured with verified Wikipedia stats + Wikimedia Commons photos. SQL applied via Supabase SQL Editor (Chrome MCP); confirmed `featured_count = 50` post-commit.
+
+**Promoted:** Aspen Snowmass · Jackson Hole · Big Sky · Snowbird · Alta · Telluride · Sun Valley · Snowbasin · Vail · Park City · Mammoth Mountain · Beaver Creek · Breckenridge · Crested Butte · Killington · Sunday River · Sugarloaf · Jay Peak · Bretton Woods · Taos Ski Valley.
+
+**Coverage shift:** previous 30 were 100% Northeast/Mid-Atlantic (NYC traffic skew); new 20 add CO/UT/CA/MT/WY/ID/NM/ME → map now visually balanced for nationwide use.
+
+**Method:** [scripts/scrape-flagship-wikipedia.mjs](../scripts/scrape-flagship-wikipedia.mjs) → output/flagship-data.json → [scripts/build-promotion-sql.mjs](../scripts/build-promotion-sql.mjs) → [data/sql/stage-4.2-extra-featured-promotions.sql](../data/sql/stage-4.2-extra-featured-promotions.sql). Idempotent: only fills NULL fields, never overwrites existing values. Out-of-bounds sanity check skipped suspect parses (Telluride lifts manually overridden after WebFetch verification).
+
+**Stats backfilled per resort:** vertical_drop, elevation_summit/base, total_trails, total_lifts, total_acres, longest_run_miles, has_terrain_park, terrain_park_count, hero_image_url + alt + source. ~12 fields/resort × 20 resorts = ~240 data points added.
+
+## 📱 Mobile Strategy Revised (locked 2026-05-07)
+Founder asked "iPhone app first?" — analysis (PM/CFO/marketing lens) pushed back. **New ordering:**
+1. **PWA in Stage 6** (manifest + service worker + Apple touch icon + Add to Home Screen) — 80% of native-app feel, ships at launch
+2. **Native iOS = Stage 7** triggered by ~500–1,000 PWA users with retention signal — not a fixed month
+3. Android native = Month 8+ if iOS hits 5K users
+
+**Why deferred:** App Store first submission 2-4 weeks; per-update review 1-7 days kills iteration speed; $99/yr; real moat is best-in-class UX + SEO compounding, not "we have an app too." Roadmap doc updated: [STAGE_4_5_6_PLANS.md §6.9 + §7](STAGE_4_5_6_PLANS.md).
 
 ## 🟡 OPEN PROPOSAL — Re-sequence Stage 5/6 (decide at end of Stage 4.4)
 Logged 2026-05-07 after PM/CFO/marketing-skill analysis of remaining roadmap. **Not approved yet** — revisit when Stage 4 complete.
@@ -66,6 +85,9 @@ Plan stays approved; this is a *re-sequencing* proposal, not an overhaul. Do not
 - Estimated: 1 day
 
 ## 🧭 Recent Decisions (last 10, dated)
+- 2026-05-07: **Featured tier: 30 → 50 with regional balance.** Original 30 were 100% Northeast (NYC traffic skew); new 20 add Western flagships (Aspen, Vail, Park City, Big Sky, Jackson Hole, Mammoth, Telluride etc) so a CA/CO/UT user landing fresh sees their home mountain Featured. Did NOT add Stowe / Heavenly / Kirkwood / Sugarbush — Wikipedia titles didn't resolve cleanly; defer until manual research round.
+- 2026-05-07: **Wikipedia infobox + Wikimedia Commons = trustable data source for flagship stats.** Reverses the Stage 3.6 "no Wikipedia for pass affiliations" rule for THIS use case only — Wikipedia is unreliable for editorial claims (which pass a resort is on, etc) but reliable for hard stats (vertical drop, trails, acres). Verification rule: cross-check via WebFetch when single record looks anomalous (Jackson Hole / Telluride lift counts both needed manual override after parser ate first number of multi-line lift breakdown).
+- 2026-05-07: **PWA pulled forward into Stage 6; native iOS becomes Stage 7 (retention-triggered).** Reverses the Month 3 PWA / Month 6 native cadence. Reasons: App Store review 2-4 weeks first submission + 1-7 days per update kills iteration speed, $99/yr cash cost matters bootstrap, real moat is best-in-class UX + SEO compounding. PWA gives 80% of "feels like an app" without overhead. Don't ship native until 500-1K PWA users with retention signal.
 - 2026-05-07: **Stage 4.2 architecture: panel as overlay, not layout shift.** ResortPanel uses `fixed` positioning + z-40 over header (z-10) on desktop; mobile gets bottom sheet with scrim. Avoided layout-shift approach (map width changing) because it breaks Mapbox's viewport calculations during the transition. Tradeoff: panel covers right portion of header on desktop — acceptable since header buttons stay accessible at left side and panel has its own X.
 - 2026-05-07: **Selected pin uses Mapbox `feature-state`, not GeoJSON re-emit.** When user clicks a pin, only that feature's `selected: true` state toggles → navy halo via `case` expression in paint. Cheaper than re-emitting 451 features just to add `selected` property. Matches how Mapbox examples handle hover states.
 - 2026-05-07: **`featured` filter promoted from useState to URL param.** Stage 4.1 had pass/size/from/within in URL but `featuredOnly` in local state (inconsistency). Now `?featured=1`. Reason: deep-linking + page refresh should preserve full filter state.
@@ -116,8 +138,8 @@ Plan stays approved; this is a *re-sequencing* proposal, not an overhaul. Do not
 - `output/unified_pass_truth.json` — 241 USA records, 4-source merged
 
 ## 📊 Data Stats Snapshot
-- **Resorts in DB: 451 active** (30 Featured + 421 Listed)
-- **Hero images: 214 / 451 (47%)** — was 22 / 385 (5.7%); 9.7x increase
+- **Resorts in DB: 451 active** (50 Featured + 401 Listed) — was 30/421 pre-2026-05-07
+- **Hero images: 234 / 451 (52%)** — was 214/451 (47%); +20 from flagship promotion. Featured tier hero coverage = 100% (50/50)
 - **Pass affiliations 100% verified** from official sources (Indy/Epic/Ikon/MC)
 - Pass distribution: Epic 40 · Indy 229 · Ikon 59 · Mountain Collective 22 · Independent (none on any pass) ~163
 - Multi-pass resorts: ~25 (e.g. Snowbasin / Sun Valley / Telluride on Epic+Ikon+MC; Aspen Snowmass on Ikon+MC; Snowriver MI on Indy+Ikon)

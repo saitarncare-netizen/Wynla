@@ -43,3 +43,6 @@ next-env.d.ts
 # scraper artifacts (~160MB raw HTML cache, regenerable via npm run scrape:pass-data)
 /cache
 /output
+
+# scratch files Claude Code creates during multi-step work
+.tmp-*
