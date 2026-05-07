@@ -4,6 +4,13 @@ Last updated: 2026-05-07 (Stages 4-6 all shipped locally — soft-launch ready p
 ## 🎯 Current Stage
 **STAGES 4, 5, 6 ALL CODE-COMPLETE LOCALLY.** Map foundation + Detail panel + Smart filters + Polish + Auth/favorites + PWA/SEO/Analytics. **7 commits queued ahead of origin/main** (push blocked by sandbox, user must push manually). Next: user does Supabase Auth config + git push → Vercel auto-deploys → soft-launch to NYC warm leads + Snowboard The East DM list.
 
+## ✅ Hero image round 2 (data) — applied 2026-05-07
++104 Listed-tier resorts now have a Wikimedia Commons photo. Hero coverage **52% → 75%** (234/451 → 338/451). Method:
+- [scripts/wikimedia-hero-round2.mjs](../scripts/wikimedia-hero-round2.mjs) — for every resort with `hero_image_url IS NULL`, try 6 Wikipedia title variants (exact / stripped suffix / `+ Ski Resort` / `(ski resort)` / `, State` / `(State)`). Accept the first hit whose summary mentions ski/snowboard/resort vocabulary AND doesn't trigger the reject regex (film/album/disambig).
+- 228 candidates → 115 hits → 115 UPDATEs in [data/sql/stage-6.1-hero-round2.sql](../data/sql/stage-6.1-hero-round2.sql), idempotent (`WHERE hero_image_url IS NULL`).
+- Confirmed post-COMMIT: `with_hero=338, total=451, pct=74.9`.
+- 113 candidates skipped — no Wikipedia article found, or summary didn't read like a ski page. Kept NULL per "wrong > missing" principle. List in `output/wikimedia-round2-skipped.json` for future manual research.
+
 ## ✅ Stage 6 Result (trimmed launch polish) — what shipped
 - **PWA manifest:** [public/manifest.json](../public/manifest.json) with name + short_name + display:standalone + portrait + theme #1E2952. SVG icon (works in Chrome / Edge / Safari iOS 16+) at `public/icon.svg` (Wynla mountain logo, navy + gold). Includes `shortcuts` for /favorites jump.
 - **iOS PWA:** `appleWebApp.capable: true` + apple touch icon meta + theme-color via `viewport.themeColor`. iOS Safari users can "Add to Home Screen" → Wynla launches fullscreen, no browser chrome.
@@ -187,8 +194,8 @@ Plan stays approved; this is a *re-sequencing* proposal, not an overhaul. Do not
 - `output/unified_pass_truth.json` — 241 USA records, 4-source merged
 
 ## 📊 Data Stats Snapshot
-- **Resorts in DB: 451 active** (50 Featured + 401 Listed) — was 30/421 pre-2026-05-07
-- **Hero images: 234 / 451 (52%)** — was 214/451 (47%); +20 from flagship promotion. Featured tier hero coverage = 100% (50/50)
+- **Resorts in DB: 451 active** (50 Featured + 401 Listed)
+- **Hero images: 338 / 451 (75%)** — was 214 (47%) → 234 (52%, after Featured promotion) → 338 (75%, after Wikimedia round 2). Featured tier hero coverage = 100% (50/50). Listed tier 288/401 (72%).
 - **Pass affiliations 100% verified** from official sources (Indy/Epic/Ikon/MC)
 - Pass distribution: Epic 40 · Indy 229 · Ikon 59 · Mountain Collective 22 · Independent (none on any pass) ~163
 - Multi-pass resorts: ~25 (e.g. Snowbasin / Sun Valley / Telluride on Epic+Ikon+MC; Aspen Snowmass on Ikon+MC; Snowriver MI on Indy+Ikon)
