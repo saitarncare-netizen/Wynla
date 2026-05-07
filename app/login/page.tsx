@@ -1,11 +1,34 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
+// useSearchParams forces dynamic rendering — wrap in Suspense so the page
+// still passes Next 16's static-prerender phase.
 export default function LoginPage() {
+  return (
+    <Suspense fallback={<LoginShell />}>
+      <LoginForm />
+    </Suspense>
+  );
+}
+
+function LoginShell() {
+  return (
+    <main className="flex min-h-dvh items-center justify-center bg-wn-offwhite px-4 py-12">
+      <div className="w-full max-w-sm">
+        <div className="rounded-xl border border-wn-charcoal/10 bg-white p-6 shadow-sm">
+          <div className="h-6 w-40 animate-pulse rounded bg-wn-charcoal/10" />
+          <div className="mt-4 h-10 animate-pulse rounded bg-wn-charcoal/10" />
+        </div>
+      </div>
+    </main>
+  );
+}
+
+function LoginForm() {
   const params = useSearchParams();
   const next = params.get("next") ?? "/";
   const initialError = params.get("error");
