@@ -3,22 +3,9 @@
 import { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { passColor, passBadgeHtml, primaryPass, type Pass } from "@/lib/passColors";
+import { passColor, primaryPass, type Pass } from "@/lib/passColors";
 import { sizeTier, sizeTierRadius } from "@/lib/sizeTier";
-import { formatDriveTime } from "@/lib/origins";
-
-type Resort = {
-  id: number;
-  slug: string;
-  name: string;
-  state: string;
-  region: string | null;
-  latitude: number | string;
-  longitude: number | string;
-  passes: string[];
-  tier: "featured" | "listed";
-  vertical_drop: number | null;
-};
+import type { Resort } from "./MapPage";
 
 type DriveTime = {
   resort_id: number;
@@ -31,6 +18,8 @@ type Props = {
   resorts: Resort[];
   originName: string;
   driveTimeByResort: Map<number, Map<string, DriveTime>>;
+  selectedId: number | null;
+  onResortClick: (id: number) => void;
 };
 
 const SOURCE_ID = "wynla-resorts";
@@ -61,61 +50,22 @@ function resortToProperties(resort: Resort, dt: DriveTime | undefined) {
   };
 }
 
-function buildPopupHtml(props: {
-  name: string;
-  state: string;
-  region: string;
-  passes: string;
-  tier: string;
-  vertical_drop: number;
-  drive_seconds: number;
-  slug: string;
-}, originName: string): string {
-  const passes: string[] = JSON.parse(props.passes || "[]");
-  const isFeatured = props.tier === "featured";
-  const passBadges = passes.map((p) => passBadgeHtml(p)).join(" ");
-  const driveTimeText =
-    props.drive_seconds > 0 ? formatDriveTime(props.drive_seconds) : null;
-  const vertText =
-    props.vertical_drop > 0 ? `${props.vertical_drop.toLocaleString()} ft vert` : "—";
-
-  return `
-    <div style="font-family: system-ui, -apple-system, sans-serif; padding: 4px 2px; min-width: 200px;">
-      ${
-        isFeatured
-          ? '<div style="margin-bottom: 4px;"><span style="display:inline-flex;align-items:center;font-size:10px;font-weight:700;color:#1E2952;background:#F5C443;padding:2px 6px;border-radius:4px;letter-spacing:0.04em;">★ FEATURED</span></div>'
-          : ""
-      }
-      <div style="font-weight: 700; font-size: 14px; color: #1E2952; margin-bottom: 4px;">
-        ${props.name}
-      </div>
-      <div style="font-size: 12px; color: #6B7280; margin-bottom: 6px;">
-        ${props.state}${props.region ? " · " + props.region : ""} · ${vertText}
-      </div>
-      ${
-        driveTimeText
-          ? `<div style="font-size: 12px; color: #2A2A2A; margin-bottom: 8px;">🚗 ${driveTimeText} from ${originName}</div>`
-          : ""
-      }
-      <div style="display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 10px;">
-        ${passBadges}
-      </div>
-      <a href="/resort/${props.slug}"
-         style="display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:#1E2952;text-decoration:none;border-bottom:1px solid #1E2952;padding-bottom:1px;">
-        View details →
-      </a>
-    </div>
-  `;
-}
-
 export default function MapView({
   resorts,
   originName,
   driveTimeByResort,
+  selectedId,
+  onResortClick,
 }: Props) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
-  const popupRef = useRef<mapboxgl.Popup | null>(null);
+
+  // Keep a stable ref to the latest click handler so the map listeners
+  // (registered once) always see the freshest callback without re-registering.
+  const onResortClickRef = useRef(onResortClick);
+  useEffect(() => {
+    onResortClickRef.current = onResortClick;
+  }, [onResortClick]);
 
   // Init map once
   useEffect(() => {
@@ -197,7 +147,8 @@ export default function MapView({
         },
       });
 
-      // Listed-tier pins: size by vertical_drop (12/16/20 px), color by primary pass
+      // Listed-tier pins: size by vertical_drop (12/16/20 px), color by primary pass.
+      // Selected pin gets a wider navy stroke for visual feedback while panel is open.
       map.addLayer({
         id: LAYER_LISTED,
         type: "circle",
@@ -211,8 +162,18 @@ export default function MapView({
           "circle-color": ["get", "color"],
           "circle-radius": ["get", "radius"],
           "circle-opacity": 0.85,
-          "circle-stroke-width": 1.5,
-          "circle-stroke-color": "#FFFFFF",
+          "circle-stroke-width": [
+            "case",
+            ["boolean", ["feature-state", "selected"], false],
+            3,
+            1.5,
+          ],
+          "circle-stroke-color": [
+            "case",
+            ["boolean", ["feature-state", "selected"], false],
+            "#1E2952",
+            "#FFFFFF",
+          ],
         },
       });
 
@@ -229,8 +190,18 @@ export default function MapView({
         paint: {
           "circle-color": ["get", "color"],
           "circle-radius": 15,
-          "circle-stroke-width": 2,
-          "circle-stroke-color": "#FFFFFF",
+          "circle-stroke-width": [
+            "case",
+            ["boolean", ["feature-state", "selected"], false],
+            4,
+            2,
+          ],
+          "circle-stroke-color": [
+            "case",
+            ["boolean", ["feature-state", "selected"], false],
+            "#1E2952",
+            "#FFFFFF",
+          ],
         },
       });
 
@@ -271,17 +242,14 @@ export default function MapView({
         });
       });
 
-      // Pin click → popup
+      // Pin click → notify parent (which opens the side panel / bottom sheet).
+      // Stage 4.1 used a Mapbox popup here; that's now handled by ResortPanel.
       const pinLayers = [LAYER_LISTED, LAYER_FEATURED, LAYER_FEATURED_STAR];
       pinLayers.forEach((layerId) => {
         map.on("click", layerId, (e) => {
           const f = e.features?.[0];
-          if (!f || !f.properties || f.geometry.type !== "Point") return;
-          popupRef.current?.remove();
-          popupRef.current = new mapboxgl.Popup({ offset: 16, closeButton: false })
-            .setLngLat(f.geometry.coordinates as [number, number])
-            .setHTML(buildPopupHtml(f.properties as Parameters<typeof buildPopupHtml>[0], originName))
-            .addTo(map);
+          const id = f?.properties?.id;
+          if (typeof id === "number") onResortClickRef.current(id);
         });
         map.on("mouseenter", layerId, () => {
           map.getCanvas().style.cursor = "pointer";
@@ -306,8 +274,6 @@ export default function MapView({
     else map.on("style.load", setup);
 
     return () => {
-      popupRef.current?.remove();
-      popupRef.current = null;
       map.remove();
       mapRef.current = null;
     };
@@ -331,6 +297,7 @@ export default function MapView({
           const dt = driveTimeByResort.get(resort.id)?.get(originName);
           return {
             type: "Feature" as const,
+            id: resort.id,
             geometry: { type: "Point" as const, coordinates: [lng, lat] },
             properties: resortToProperties(resort, dt),
           };
@@ -346,6 +313,27 @@ export default function MapView({
     if (map.getSource(SOURCE_ID)) apply();
     else map.once("style.load", apply);
   }, [resorts, originName, driveTimeByResort]);
+
+  // Sync the "selected" feature-state so the matching pin gets a navy halo.
+  // Mapbox lets us toggle one boolean per feature without re-emitting the
+  // whole GeoJSON, which is much cheaper than re-rendering 451 features.
+  const lastSelectedRef = useRef<number | null>(null);
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+    const apply = () => {
+      const prev = lastSelectedRef.current;
+      if (prev != null) {
+        map.setFeatureState({ source: SOURCE_ID, id: prev }, { selected: false });
+      }
+      if (selectedId != null) {
+        map.setFeatureState({ source: SOURCE_ID, id: selectedId }, { selected: true });
+      }
+      lastSelectedRef.current = selectedId;
+    };
+    if (map.getSource(SOURCE_ID)) apply();
+    else map.once("style.load", apply);
+  }, [selectedId]);
 
   return <div ref={mapContainer} className="h-full w-full" />;
 }

@@ -11,6 +11,13 @@ import {
   type Pass,
 } from "@/lib/passColors";
 import { ORIGINS, formatDriveTime } from "@/lib/origins";
+import {
+  mountainForecastUrl,
+  weatherGovUrl,
+  windyUrl,
+  googleMapsUrl,
+  bookingComUrl,
+} from "@/lib/externalLinks";
 
 export const dynamic = "force-dynamic";
 
@@ -249,19 +256,19 @@ export default async function ResortPage({
         >
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
             <ActionLink
-              href={`https://www.mountain-forecast.com/peaks/${mountainForecastSlug(resort.name)}`}
+              href={mountainForecastUrl(resort.name)}
               label="🏔️ Mountain Forecast"
               sub="Ski-specific by elevation"
               external
             />
             <ActionLink
-              href={`https://forecast.weather.gov/MapClick.php?lat=${lat}&lon=${lng}`}
+              href={weatherGovUrl(lat, lng)}
               label="🌡️ Weather.gov"
               sub="US gov 7-day forecast"
               external
             />
             <ActionLink
-              href={`https://www.windy.com/?wind,${lat},${lng},12`}
+              href={windyUrl(lat, lng)}
               label="🌬️ Windy.com"
               sub="Animated wind layer"
               external
@@ -305,9 +312,7 @@ export default async function ResortPage({
               <ActionLink href={resort.website_url} label="Resort website" sub="Live trail status, hours, news" external />
             )}
             <ActionLink
-              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-                resort.state ? `${resort.name} ${resort.state} ski resort` : `${resort.name} ski resort`,
-              )}`}
+              href={googleMapsUrl(resort.name, resort.state)}
               label="Open in Google Maps"
               sub="Navigation, photos, reviews"
               external
@@ -319,7 +324,7 @@ export default async function ResortPage({
               <ActionLink href={resort.trail_map_url} label="Trail map" sub="Official PDF" external />
             )}
             <ActionLink
-              href={`https://www.booking.com/searchresults.html?ss=${encodeURIComponent(resort.name)}`}
+              href={bookingComUrl(resort.name)}
               label="Find lodging"
               sub="Hotels nearby (Booking.com)"
               external
@@ -522,20 +527,6 @@ function TrailChip({ color, label }: { color: string; label: string }) {
       {label}
     </span>
   );
-}
-
-// Build a Mountain-Forecast peak slug from the resort name.
-// Their convention: words separated by hyphens, original case preserved.
-// Strip non-alphanumeric (apostrophes, periods, "Resort" suffix) so common
-// names like "Mt. Brighton" → "Mt-Brighton" land closer to a real peak page.
-// Some resorts will still 404 — Mountain-Forecast's own site has search on the
-// 404 page so the user can recover.
-function mountainForecastSlug(name: string): string {
-  return name
-    .replace(/\s*(Resort|Mountain Resort|Ski Area|Ski Resort)\s*$/i, "")
-    .replace(/['.]/g, "")
-    .trim()
-    .replace(/\s+/g, "-");
 }
 
 function ActionLink({

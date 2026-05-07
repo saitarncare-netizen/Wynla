@@ -1,8 +1,34 @@
 # Wynla — Current Status
-Last updated: 2026-05-04 (Stage 4.1 complete)
+Last updated: 2026-05-07 (Stage 4.2 complete, awaiting commit OK)
 
 ## 🎯 Current Stage
-**Stage 4.1 (Map Foundation) COMPLETE.** Map + filters + Alaska inset shipped, detail page refactored, 4 UX bugs fixed in same commit. Ready for Stage 4.2 (Detail Experience side panel).
+**Stage 4.2 (Detail Experience) CODE COMPLETE — awaiting user "OK commit".** Side panel / bottom sheet replaces Mapbox popup; weather link-outs wired into map flow; URL filter persistence gap closed (`featured` now in URL). Typecheck + ESLint clean. Browser smoke test passed (Big Snow listed + Hunter Mountain featured panels render correctly).
+
+## ✅ Stage 4.2 Result — what shipped
+- **2 new files:** `lib/externalLinks.ts` (5 shared URL builders), `components/Map/ResortPanel.tsx` (responsive side panel + bottom sheet, ~270 lines)
+- **MapView refactor:** removed Mapbox popup + `buildPopupHtml`; pin click → `onResortClick(id)` callback. Selected pin gets navy halo via Mapbox `feature-state` (no GeoJSON re-emit).
+- **MapPage wiring:** `selectedId` state, ESC-to-close, scrim-tap-to-close on mobile, panel auto-updates drive time when From-city filter changes.
+- **URL persistence audit (4.1 gap closed):** `featured` was `useState`-only, now `?featured=1`. All 5 filters (`pass`/`size`/`from`/`within`/`featured`) round-trip through URL.
+- **Detail page DRY:** `mountainForecastSlug` moved to shared helpers; detail page now imports same URL builders panel uses → change once, propagates everywhere.
+- **Home query:** added `hero_image_url`, `total_trails`, `total_acres`, `website_url` (~60KB extra payload for 451 resorts, negligible).
+- **Browser verification:**
+  - URL `?featured=1&pass=epic&size=large&from=boston&within=4` → all filters reflected in UI ✓
+  - Click Big Snow American Dream (listed) → panel: name + NJ · Meadowlands + Independent badge + 3 weather links (MF/WG/Windy) + Google Maps + Resort website + View full details. All 6 link hrefs verified.
+  - Click Hunter Mountain (featured) → ★ Featured badge + 3 stats grid (1,600 ft / 67 trails / 320 acres).
+  - ESC closes panel ✓
+  - Responsive classes: mobile (`inset-x-0 bottom-0 max-h-[78vh] rounded-t-2xl`) + desktop (`md:right-0 md:top-0 md:bottom-0 md:w-[380px]`) both present, drag handle has `md:hidden`.
+
+## 🟡 OPEN PROPOSAL — Re-sequence Stage 5/6 (decide at end of Stage 4.4)
+Logged 2026-05-07 after PM/CFO/marketing-skill analysis of remaining roadmap. **Not approved yet** — revisit when Stage 4 complete.
+
+Concern: ~10–15 days of build remain (4.2 → 4.4 → 5 → 6) before any real-world user signal. Solo founder + bootstrap economics → time = capital; every day of build without users is opportunity cost.
+
+Tactical observations:
+1. **Soft-launch after Stage 4.4**, not after Stage 6 — `ridewise-rcko.vercel.app` is shippable to NYC warm leads (Snowboard The East post DMs) without auth. Stage 5 becomes "first iteration after 50–100 users", not "before launch".
+2. **Stage 5 scope likely over-built** — auth+favorites is the retention loop; trips planner + drag-reorder + history assume user behavior we haven't validated. Cut to auth+favorites for v1, defer trips/history to post-traction signal.
+3. **Monetization signal absent** — Pro tier $19.99/yr lives in Month 4-5 plan with 0 willingness-to-pay data. Add "Notify me when Pro launches" form during Stage 4.4 polish (~30 min, real signal pre-paywall).
+
+Plan stays approved; this is a *re-sequencing* proposal, not an overhaul. Do not act on this until Stage 4.4 complete.
 
 ## ✅ Last Session Result — Stage 4.1 delivered
 - **Map foundation (7 files in `lib/` + `components/Map/` + `app/page.tsx`):**
@@ -25,6 +51,7 @@ Last updated: 2026-05-04 (Stage 4.1 complete)
   - Hunter Mountain detail page: Google Maps URL = `?api=1&query=Hunter%20Mountain%20NY%20ski%20resort` ✓; 3 Current Conditions links present (Mountain-Forecast `/Hunter-Mountain`, Weather.gov w/ coords, Windy w/ coords); old "7-Day Forecast" / OpenSnow / Snow-Forecast.com all gone.
 
 ## 🔴 Blockers / Open Decisions
+- [ ] **Drive time data gap (Hunter Mountain)** — featured resort showed no Drive time card in Stage 4.2 panel from NYC. Likely missing `drive_time_cache` row, not a code bug. Verify scope when starting Stage 4.3 (drive-time calc would backfill anyway).
 - [ ] **OpenRouteService API key** — needed for Stage 4.3 drive-time calculation (free tier 2000 calls/day at openrouteservice.org). Not a blocker for 4.2.
 - [ ] **Mountain-Forecast slug 404 monitoring** — some resort names (e.g. "Mt-Brighton") may 404. Switch to search URL globally if widespread. Initial spot-check: Killington/Stowe/Hunter/Aspen/Big Bear all map cleanly.
 - [ ] Batch 4 (73 conflicts, mostly URL `www.` / trailing-slash variants) — defer until after Stage 4 launch; write a normalization rule then.
@@ -39,6 +66,10 @@ Last updated: 2026-05-04 (Stage 4.1 complete)
 - Estimated: 1 day
 
 ## 🧭 Recent Decisions (last 10, dated)
+- 2026-05-07: **Stage 4.2 architecture: panel as overlay, not layout shift.** ResortPanel uses `fixed` positioning + z-40 over header (z-10) on desktop; mobile gets bottom sheet with scrim. Avoided layout-shift approach (map width changing) because it breaks Mapbox's viewport calculations during the transition. Tradeoff: panel covers right portion of header on desktop — acceptable since header buttons stay accessible at left side and panel has its own X.
+- 2026-05-07: **Selected pin uses Mapbox `feature-state`, not GeoJSON re-emit.** When user clicks a pin, only that feature's `selected: true` state toggles → navy halo via `case` expression in paint. Cheaper than re-emitting 451 features just to add `selected` property. Matches how Mapbox examples handle hover states.
+- 2026-05-07: **`featured` filter promoted from useState to URL param.** Stage 4.1 had pass/size/from/within in URL but `featuredOnly` in local state (inconsistency). Now `?featured=1`. Reason: deep-linking + page refresh should preserve full filter state.
+- 2026-05-07: **External link helpers extracted to `lib/externalLinks.ts`.** `mountainForecastSlug` was duplicated risk between detail page + future panel. Now: `mountainForecastUrl`, `weatherGovUrl`, `windyUrl`, `googleMapsUrl`, `bookingComUrl` — single source of truth. Both surfaces import from the same module.
 - 2026-05-04: **Size filter behavior refined: strict-when-active.** NULL vertical_drop is HIDDEN when any size chip is active; INCLUSIVE only when no chip selected. Caption "{N} resorts with unknown size hidden" shown when NULL count > 0 and filter is active. **Reverses the kickoff "always inclusive" rule** based on real-world testing — mixed sizes broke the "I clicked Small" mental model.
 - 2026-05-04: **Google Maps link uses name+state search** (`?api=1&query={name}+{state}+ski+resort`), was lat/lng → unhelpful generic pin without name/photos/reviews. Edge case: name-only fallback if state missing.
 - 2026-05-04: **Removed inline weather widget from detail pages.** Wynla is a trip planner, not a conditions app — curating external sources (Mountain-Forecast, Weather.gov, Windy.com) better serves users than maintaining mediocre inline data via Open-Meteo. Aligns with "wrong > missing" + premium curator positioning. `lib/weather.ts` deleted entirely (only used in detail page).

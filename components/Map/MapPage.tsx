@@ -1,15 +1,16 @@
 "use client";
 
-import { useMemo, useState, useTransition } from "react";
+import { useMemo, useState, useTransition, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import MapView from "./MapView";
 import AlaskaInset from "./AlaskaInset";
 import FilterBar from "./FilterBar";
+import ResortPanel from "./ResortPanel";
 import { originByCode } from "@/lib/origins";
 import { PASS_COLORS, PASS_LABELS, PASS_KEYS } from "@/lib/passColors";
 import { sizeTier, matchesSizeFilter, type SizeTier } from "@/lib/sizeTier";
 
-type Resort = {
+export type Resort = {
   id: number;
   slug: string;
   name: string;
@@ -20,6 +21,10 @@ type Resort = {
   passes: string[];
   tier: "featured" | "listed";
   vertical_drop: number | null;
+  hero_image_url: string | null;
+  total_trails: number | null;
+  total_acres: number | null;
+  website_url: string | null;
 };
 
 type DriveTime = {
@@ -42,13 +47,14 @@ export default function MapPage({ resorts, driveTimes }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [, startTransition] = useTransition();
-  const [featuredOnly, setFeaturedOnly] = useState(false);
+  const [selectedId, setSelectedId] = useState<number | null>(null);
 
   const passFilter = searchParams.get("pass");
   const sizeParam = searchParams.get("size");
   const sizeFilter: SizeTier | null = isSizeTier(sizeParam) ? sizeParam : null;
   const fromCode = searchParams.get("from") ?? "nyc";
   const withinHours = Number(searchParams.get("within")) || 0;
+  const featuredOnly = searchParams.get("featured") === "1";
 
   const origin = originByCode(fromCode);
 
@@ -125,6 +131,24 @@ export default function MapPage({ resorts, driveTimes }: Props) {
     });
   }
 
+  // Resolve the currently-selected resort once per render (not in click
+  // handler) so the panel always reflects the latest data — e.g. drive-time
+  // updates when the user changes the From-city filter.
+  const selectedResort = useMemo(
+    () => (selectedId == null ? null : resorts.find((r) => r.id === selectedId) ?? null),
+    [selectedId, resorts],
+  );
+
+  // ESC key closes the panel — keyboard parity with the X button.
+  useEffect(() => {
+    if (selectedId == null) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSelectedId(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [selectedId]);
+
   return (
     <div className="relative h-dvh w-full overflow-hidden">
       <header className="absolute inset-x-0 top-0 z-10 border-b border-wn-charcoal/10 bg-white/95 backdrop-blur-sm">
@@ -140,7 +164,7 @@ export default function MapPage({ resorts, driveTimes }: Props) {
           <div className="flex items-center gap-3">
             <button
               type="button"
-              onClick={() => setFeaturedOnly((v) => !v)}
+              onClick={() => updateParam("featured", featuredOnly ? null : "1")}
               className={`rounded-md border px-2.5 py-1 text-xs font-semibold transition-all duration-200 ${
                 featuredOnly
                   ? "border-wn-gold bg-wn-gold/15 text-wn-charcoal"
@@ -174,9 +198,20 @@ export default function MapPage({ resorts, driveTimes }: Props) {
         resorts={filtered}
         originName={origin.name}
         driveTimeByResort={driveTimeByResort}
+        selectedId={selectedId}
+        onResortClick={setSelectedId}
       />
 
       <AlaskaInset resorts={filtered} />
+
+      {selectedResort && (
+        <ResortPanel
+          resort={selectedResort}
+          driveTime={driveTimeByResort.get(selectedResort.id)?.get(origin.name)}
+          originShort={origin.short}
+          onClose={() => setSelectedId(null)}
+        />
+      )}
 
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex justify-center px-4 pb-4 sm:justify-end sm:pr-6">
         <div className="pointer-events-auto rounded-lg border border-wn-charcoal/10 bg-white/95 px-3 py-2 shadow-sm backdrop-blur-sm">
