@@ -1,8 +1,22 @@
 # Wynla — Current Status
-Last updated: 2026-05-07 (Stage 5 trimmed shipped — Auth + Favorites)
+Last updated: 2026-05-07 (Stages 4-6 all shipped locally — soft-launch ready pending user-side config + push)
 
 ## 🎯 Current Stage
-**STAGE 5 (TRIMMED) CODE-COMPLETE.** Auth + favorites loop is live locally; user needs to verify Supabase Auth Site URL config + test magic-link email end-to-end. **Stage 5.4 (Trip Planning) and 5.5 (Recently Viewed) deferred to post-launch per re-sequence proposal B.** Next: Stage 6 PWA + minimal launch polish, then soft-launch.
+**STAGES 4, 5, 6 ALL CODE-COMPLETE LOCALLY.** Map foundation + Detail panel + Smart filters + Polish + Auth/favorites + PWA/SEO/Analytics. **7 commits queued ahead of origin/main** (push blocked by sandbox, user must push manually). Next: user does Supabase Auth config + git push → Vercel auto-deploys → soft-launch to NYC warm leads + Snowboard The East DM list.
+
+## ✅ Stage 6 Result (trimmed launch polish) — what shipped
+- **PWA manifest:** [public/manifest.json](../public/manifest.json) with name + short_name + display:standalone + portrait + theme #1E2952. SVG icon (works in Chrome / Edge / Safari iOS 16+) at `public/icon.svg` (Wynla mountain logo, navy + gold). Includes `shortcuts` for /favorites jump.
+- **iOS PWA:** `appleWebApp.capable: true` + apple touch icon meta + theme-color via `viewport.themeColor`. iOS Safari users can "Add to Home Screen" → Wynla launches fullscreen, no browser chrome.
+- **SEO meta:** `metadataBase` + title template `%s · Wynla` + OpenGraph + Twitter card meta in [app/layout.tsx](../app/layout.tsx).
+- **Sitemap:** [app/sitemap.ts](../app/sitemap.ts) — dynamic, 24h revalidation. 452 URLs (homepage + 451 resorts). Featured priority 0.9, listed 0.6. Confirmed 200 OK at `/sitemap.xml` (74KB).
+- **Robots:** [app/robots.ts](../app/robots.ts) — allow all except `/login`, `/auth/`, `/favorites` (auth-gated, no SEO value).
+- **Analytics:** Vercel Analytics + Speed Insights wired in `app/layout.tsx`. Both no-ops until deployed to Vercel; production-only.
+
+**Skipped from original Stage 6 spec (defer to post-launch):**
+- Service worker — minimum viable PWA without it (iOS supports manifest-only). Add via `@serwist/next` post-traction if Android install prompt becomes important.
+- Cookie consent / GDPR / privacy policy — nice-to-have, not legally required for US-launch product. Add when EU users appear.
+- Welcome email branded template — Supabase default is fine for v1; brand later.
+- Custom domain (wynla.app) — user task: Vercel + DNS.
 
 ## ✅ Stage 5 Result (trimmed) — what shipped
 - **Schema:** [data/sql/stage-5-auth-schema.sql](../data/sql/stage-5-auth-schema.sql) — `profiles` (1:1 with auth.users, auto-created via trigger) + `favorites` (composite PK on user+resort). Both with RLS so a user only ever sees/edits their own rows. Applied via Supabase SQL Editor.
@@ -15,10 +29,16 @@ Last updated: 2026-05-07 (Stage 5 trimmed shipped — Auth + Favorites)
 - **Heart wired into:** ResortPanel (top-right of hero) + Resort detail page hero (next to ★ Featured badge).
 - **/favorites page:** server-rendered grid of saved resorts with hero image, state, region, vert, pass badges. RLS-implicit user scoping. Empty state with CTA back to map. Auth-guarded — redirects to `/login?next=/favorites` if not signed in.
 
-## 🔴 User action required before launch
-- [ ] **Configure Supabase Auth Site URL.** Go to Supabase Dashboard → Auth → URL Configuration → set Site URL to `http://localhost:3000` for dev (and `https://wynla.app` for prod when domain is wired). Add `http://localhost:3000/auth/callback` and `https://wynla.app/auth/callback` to Redirect URLs.
-- [ ] **Test magic link end-to-end.** Open `/login`, enter your real email, click the link in the email, confirm you land back on the map signed in. (I can't test this from MCP.)
-- [ ] **Branded auth email template** — Stage 6 polish.
+## 🔴 User action required before soft-launch
+- [ ] **`git push origin main`** — 7 commits ahead of remote. Sandbox blocked me from pushing; you do it. Vercel will auto-deploy on push.
+- [ ] **Configure Supabase Auth Site URL.** Supabase Dashboard → Auth → URL Configuration → Site URL = `https://ridewise-rcko.vercel.app` (current prod) or `https://wynla.app` (when domain wired). Redirect URLs: add `${SITE_URL}/auth/callback` and `http://localhost:3000/auth/callback`.
+- [ ] **Test magic link end-to-end** on prod URL once deployed. (I can't click email links from MCP.)
+- [ ] **Add `NEXT_PUBLIC_SITE_URL`** env var on Vercel (used by sitemap + OG). Set to `https://ridewise-rcko.vercel.app` or `https://wynla.app`.
+- [ ] **Soft-launch checklist:**
+  - DM 10–20 commenters from Snowboard The East post (warm leads)
+  - Post in r/skiing + r/snowboarding (mention 451-resort coverage + multi-pass color map)
+  - Post in NYC snowboard Facebook groups
+  - Watch Vercel Analytics for first 100 visitors
 
 ## ✅ Stage 4.4 Result — what shipped (Polish)
 - **Empty state UI** when filters return zero — centered card with 🔍 icon, "No resorts match" + "Reset all filters" CTA. Uses `pointer-events-none` overlay so map remains pannable behind it.

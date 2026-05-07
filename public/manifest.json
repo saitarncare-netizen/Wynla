@@ -1,0 +1,33 @@
+{
+  "name": "Wynla — Ski Resort Trip Planner",
+  "short_name": "Wynla",
+  "description": "Plan smart. Ride better. Find ski resorts by pass, drive time, and size — across the US.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#FAFAF7",
+  "theme_color": "#1E2952",
+  "categories": ["sports", "travel", "lifestyle"],
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "View favorites",
+      "short_name": "Favorites",
+      "description": "Resorts you saved",
+      "url": "/favorites"
+    }
+  ]
+}
