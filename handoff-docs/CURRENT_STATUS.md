@@ -2,7 +2,13 @@
 Last updated: 2026-05-07 (Stage 4.3 shipped — Smart Features)
 
 ## 🎯 Current Stage
-**Stage 4.2 + 4.3 SHIPPED.** Map foundation + Detail Experience side panel + Featured 30→50 + drive-time backfill for all 451 resorts × 4 origins + day-trip/weekend filter chips. **Mobile strategy revised: PWA pulled forward to Stage 6 launch; native iOS becomes Stage 7 post-traction.** Next: Stage 4.4 (Polish).
+**STAGE 4 COMPLETE.** All 4 sub-stages shipped (4.1 Map Foundation, 4.2 Detail Experience, 4.3 Smart Features, 4.4 Polish). Map UX is now AllTrails/Komoot-tier for the trip-planning use case. **Mobile strategy revised: PWA pulled forward to Stage 6 launch; native iOS becomes Stage 7 post-traction.** Awaiting end-of-stage user review before kicking off Stage 5.
+
+## ✅ Stage 4.4 Result — what shipped (Polish)
+- **Empty state UI** when filters return zero — centered card with 🔍 icon, "No resorts match" + "Reset all filters" CTA. Uses `pointer-events-none` overlay so map remains pannable behind it.
+- **Panel slide-in animations** — mobile slides up from bottom, desktop slides in from right. 220ms cubic-bezier easing (slow-out matches AllTrails). Disabled via `prefers-reduced-motion`.
+- **Map auto-pan on resort selection** — when a pin is clicked or a deeplinked resort opens the panel, `easeTo` with `padding: {right: 380}` (desktop) / `{bottom: 380}` (mobile) shifts the camera so the pin sits visually centered in the *unobstructed* portion of the map (not under the panel). 600ms duration, smooth.
+- **Virtualized rendering** — Mapbox's native clustering already handles 451 markers efficiently; no separate virtualization needed.
 
 ## ✅ Stage 4.3 Result — what shipped
 - **Drive-time cache backfilled 451 × 4 = 1804 routes** via Mapbox Matrix API (76 calls, 21s), replacing the partial 120-route cache. Now ALL resorts have drive times from NYC/Boston/Philly/Hartford. Coverage: 6.7% → 100%.

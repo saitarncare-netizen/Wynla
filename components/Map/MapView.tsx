@@ -317,6 +317,9 @@ export default function MapView({
   // Sync the "selected" feature-state so the matching pin gets a navy halo.
   // Mapbox lets us toggle one boolean per feature without re-emitting the
   // whole GeoJSON, which is much cheaper than re-rendering 451 features.
+  // Also pan the map so the selected pin sits clear of the panel: on desktop
+  // the panel covers the right ~380 px, so we shift the camera left by half
+  // the panel width to keep the pin visually centered in the *visible* area.
   const lastSelectedRef = useRef<number | null>(null);
   useEffect(() => {
     const map = mapRef.current;
@@ -328,12 +331,34 @@ export default function MapView({
       }
       if (selectedId != null) {
         map.setFeatureState({ source: SOURCE_ID, id: selectedId }, { selected: true });
+
+        // Find the feature in the source data + pan camera. Skip if the
+        // pin is already visible in the unobstructed area to avoid jarring
+        // motion when the user clicked on-screen.
+        const resort = resorts.find((r) => r.id === selectedId);
+        if (resort) {
+          const lng = Number(resort.longitude);
+          const lat = Number(resort.latitude);
+          if (Number.isFinite(lng) && Number.isFinite(lat)) {
+            const isDesktop = window.matchMedia("(min-width: 768px)").matches;
+            map.easeTo({
+              center: [lng, lat],
+              // Desktop: panel covers right 380 px → shift center left so pin
+              // ends up around 35% from left edge (visually centered in the
+              // ~1180 px visible area).
+              padding: isDesktop
+                ? { right: 380, top: 0, bottom: 0, left: 0 }
+                : { right: 0, top: 0, bottom: 380, left: 0 },
+              duration: 600,
+            });
+          }
+        }
       }
       lastSelectedRef.current = selectedId;
     };
     if (map.getSource(SOURCE_ID)) apply();
     else map.once("style.load", apply);
-  }, [selectedId]);
+  }, [selectedId, resorts]);
 
   return <div ref={mapContainer} className="h-full w-full" />;
 }

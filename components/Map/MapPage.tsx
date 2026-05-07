@@ -204,6 +204,27 @@ export default function MapPage({ resorts, driveTimes }: Props) {
 
       <AlaskaInset resorts={filtered} />
 
+      {/* Empty state — only when filters return zero. The Alaska inset
+          handles its own emptiness; this banner is for the main map. */}
+      {filtered.length === 0 && (
+        <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center px-4">
+          <div className="pointer-events-auto max-w-sm rounded-xl border border-wn-charcoal/10 bg-white/95 p-5 text-center shadow-lg backdrop-blur-sm">
+            <div className="mb-2 text-2xl" aria-hidden="true">🔍</div>
+            <h2 className="mb-1 text-base font-bold text-wn-navy">No resorts match</h2>
+            <p className="mb-3 text-xs text-wn-charcoal/70">
+              Try removing a filter — your current selection has nothing in common.
+            </p>
+            <button
+              type="button"
+              onClick={() => router.replace("?", { scroll: false })}
+              className="inline-flex items-center gap-1 rounded-md bg-wn-navy px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-wn-navy/90"
+            >
+              Reset all filters
+            </button>
+          </div>
+        </div>
+      )}
+
       {selectedResort && (
         <ResortPanel
           resort={selectedResort}

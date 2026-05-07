@@ -71,10 +71,12 @@ export default function ResortPanel({
         aria-label={`${resort.name} details`}
         className={[
           "fixed z-40 flex flex-col bg-white shadow-2xl",
-          // mobile bottom sheet
+          // mobile bottom sheet — slides up from bottom on open
           "inset-x-0 bottom-0 max-h-[78vh] rounded-t-2xl",
-          // desktop right side panel — overlays the header (z-40 > header z-10)
+          "animate-[slideUp_220ms_cubic-bezier(0.16,1,0.3,1)]",
+          // desktop right side panel — slides in from right
           "md:inset-x-auto md:right-0 md:top-0 md:bottom-0 md:w-[380px] md:max-h-none md:rounded-none",
+          "md:animate-[slideLeft_220ms_cubic-bezier(0.16,1,0.3,1)]",
         ].join(" ")}
       >
         {/* Mobile drag handle (visual only — Stage 4.4 will wire drag) */}
