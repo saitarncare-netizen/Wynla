@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
-import { staticMapUrl } from "@/lib/mapboxStatic";
+import { staticMapUrl, satelliteHeroUrl } from "@/lib/mapboxStatic";
 import {
   passColor,
   passLabel,
@@ -113,8 +113,10 @@ export async function generateMetadata({
     .map((p) => passLabel(p))
     .join(", ");
 
+  // Layout's title.template adds " · Wynla" automatically, so the per-page
+  // title omits it to avoid "X · Wynla · Wynla".
   return {
-    title: `${resort.name} — ${resort.state} Ski Resort · Wynla`,
+    title: `${resort.name} — ${resort.state} Ski Resort`,
     description: `${resort.name} in ${resort.state}${resort.region ? " (" + resort.region + ")" : ""}. ${passSummary ? "On the " + passSummary + ". " : ""}Plan your ski or snowboard trip with weather, drive times, and resort info.`,
     openGraph: {
       title: `${resort.name} · Wynla`,
@@ -139,19 +141,12 @@ export default async function ResortPage({
   const isFeatured = resort.tier === "featured";
   const primary = primaryPass(resort.passes);
 
-  // Prefer the verified Wikimedia Commons photo if we have one; fall back to
-  // a Mapbox static map of the location. Static map is contextual + always
-  // works even when no image was sourced.
-  const fallbackHero = staticMapUrl({
-    lng,
-    lat,
-    zoom: 9,
-    width: 1600,
-    height: 540,
-    pinColor: passColor(primary),
-  });
-  const heroUrl = resort.hero_image_url ?? fallbackHero;
-  const heroAlt = resort.hero_image_alt ?? `Map showing the location of ${resort.name}`;
+  // Prefer the verified Wikimedia photo when we have one; otherwise show a
+  // Mapbox satellite aerial of the actual coordinates. Satellite is honest —
+  // the user sees real terrain — and gives 100% visual coverage. Mapbox
+  // satellite imagery is licensed under our token for commercial use.
+  const heroUrl = resort.hero_image_url ?? satelliteHeroUrl({ lng, lat, width: 1600, height: 540 });
+  const heroAlt = resort.hero_image_alt ?? `Satellite view of ${resort.name}`;
   const heroIsRealPhoto = !!resort.hero_image_url;
 
   return (
@@ -197,6 +192,14 @@ export default async function ResortPage({
         )}
         {/* Gradient overlay for text contrast */}
         <div className="absolute inset-0 bg-gradient-to-t from-wn-navy via-wn-navy/40 to-transparent" />
+
+        {/* "Satellite view" attribution chip — only shown when we don't have
+            a real photo. Keeps the source transparent. */}
+        {!heroIsRealPhoto && (
+          <span className="absolute right-3 bottom-3 z-10 rounded bg-black/55 px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-white/90 backdrop-blur-sm">
+            Satellite view · Mapbox
+          </span>
+        )}
 
         {/* Top bar — back link */}
         <div className="absolute inset-x-0 top-0 z-10 flex items-center justify-between px-4 py-4 sm:px-6">

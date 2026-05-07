@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { passColor, passLabel } from "@/lib/passColors";
 import { formatDriveTime } from "@/lib/origins";
-import { staticMapUrl } from "@/lib/mapboxStatic";
+import { satelliteHeroUrl } from "@/lib/mapboxStatic";
 import {
   mountainForecastUrl,
   weatherGovUrl,
@@ -36,20 +36,15 @@ export default function ResortPanel({
   const lng = Number(resort.longitude);
   const lat = Number(resort.latitude);
   const isFeatured = resort.tier === "featured";
-  const primaryColor = passColor(resort.passes?.[0] ?? "independent");
 
-  // Hero image: real photo if we have one, else a tinted Mapbox static map
-  // matching the pin color so every panel has a visual identity.
+  // Hero image: real Wikimedia photo when we have one, otherwise a Mapbox
+  // satellite aerial of the actual coordinates. Satellite is honest (the user
+  // sees the real mountain terrain) and always covers — no resort is
+  // imageless. Mapbox satellite is licensed under our token.
   const heroUrl =
     resort.hero_image_url ??
-    staticMapUrl({
-      lng,
-      lat,
-      zoom: 9,
-      width: 760,
-      height: 320,
-      pinColor: primaryColor,
-    });
+    satelliteHeroUrl({ lng, lat, width: 760, height: 320 });
+  const heroIsSatellite = !resort.hero_image_url;
 
   const driveText = driveTime ? formatDriveTime(driveTime.duration_seconds) : null;
   const distanceMiles = driveTime?.distance_meters
@@ -91,9 +86,9 @@ export default function ResortPanel({
           <img
             src={heroUrl}
             alt={
-              resort.hero_image_url
-                ? `${resort.name} resort photo`
-                : `Map showing the location of ${resort.name}`
+              heroIsSatellite
+                ? `Satellite view of ${resort.name}`
+                : `${resort.name} resort photo`
             }
             className="h-40 w-full object-cover md:h-44"
           />
