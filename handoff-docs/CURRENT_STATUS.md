@@ -1,8 +1,15 @@
 # Wynla — Current Status
-Last updated: 2026-05-07 (Stage 4.2 shipped + Featured 30→50 + roadmap re-shaped)
+Last updated: 2026-05-07 (Stage 4.3 shipped — Smart Features)
 
 ## 🎯 Current Stage
-**Stage 4.2 SHIPPED** (commit `fcd0dd6`) + **Featured tier expanded 30 → 50** with full data + photos via Wikipedia + Wikimedia Commons (verified). **Mobile strategy revised: PWA pulled forward to Stage 6 launch; native iOS becomes Stage 7 post-traction.** Next: Stage 4.3 (Smart Features).
+**Stage 4.2 + 4.3 SHIPPED.** Map foundation + Detail Experience side panel + Featured 30→50 + drive-time backfill for all 451 resorts × 4 origins + day-trip/weekend filter chips. **Mobile strategy revised: PWA pulled forward to Stage 6 launch; native iOS becomes Stage 7 post-traction.** Next: Stage 4.4 (Polish).
+
+## ✅ Stage 4.3 Result — what shipped
+- **Drive-time cache backfilled 451 × 4 = 1804 routes** via Mapbox Matrix API (76 calls, 21s), replacing the partial 120-route cache. Now ALL resorts have drive times from NYC/Boston/Philly/Hartford. Coverage: 6.7% → 100%.
+- **Day-trip / Weekend chip presets** in FilterBar — replaces the granular "Any/2h/3h/4h/5h" dropdown with one-tap chips: `Anytime · 🚗 Day trip (≤3h) · 🏕️ Weekend (≤5h)`. Matches how skiers actually plan; URL still uses `within=3` / `within=5` so deep links unchanged.
+- **scripts/compute-drive-times.mjs upgraded** to use Mapbox Matrix API (1 origin × 24 destinations per call) instead of Directions API (1 origin × 1 destination). 24× fewer API calls.
+- **scripts/check-drive-cache.mjs** — read-only audit utility for verifying coverage state.
+- Sort options deferred to Stage 4.4 (only meaningful with a list view, which 4.4 may add).
 
 ## ✅ Stage 4.2 Result — what shipped
 - **2 new files:** `lib/externalLinks.ts` (5 shared URL builders), `components/Map/ResortPanel.tsx` (responsive side panel + bottom sheet, ~270 lines)

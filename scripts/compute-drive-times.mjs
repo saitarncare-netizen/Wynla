@@ -1,8 +1,11 @@
-// Compute drive times from 4 origin cities to every resort in Supabase.
-// Output: data/drive_times.sql (CREATE TABLE + RLS + INSERT for drive_time_cache)
+// Compute drive times from 4 origin cities to every active resort using
+// Mapbox Matrix API (one call per origin × 24-destination chunk → ~76 calls
+// total instead of 1804). Output: data/drive_times.sql ready to apply via
+// Supabase SQL Editor.
 //
 // Run: node scripts/compute-drive-times.mjs
-// Requires: NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY, NEXT_PUBLIC_MAPBOX_TOKEN in .env.local
+// Requires: NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY,
+//           NEXT_PUBLIC_MAPBOX_TOKEN in .env.local
 
 import { readFileSync, writeFileSync } from "node:fs";
 
@@ -10,7 +13,10 @@ const env = Object.fromEntries(
   readFileSync(".env.local", "utf8")
     .split("\n")
     .filter((l) => l.includes("="))
-    .map((l) => l.split("=").map((s) => s.trim())),
+    .map((l) => {
+      const i = l.indexOf("=");
+      return [l.slice(0, i).trim(), l.slice(i + 1).trim().replace(/^["']|["']$/g, "")];
+    }),
 );
 
 const SUPABASE_URL = env.NEXT_PUBLIC_SUPABASE_URL;
@@ -22,61 +28,99 @@ if (!SUPABASE_URL || !SUPABASE_KEY || !MAPBOX_TOKEN) {
   process.exit(1);
 }
 
-const origins = [
+const ORIGINS = [
   { name: "NYC",          lat: 40.7128, lon: -74.006  },
   { name: "Boston",       lat: 42.3601, lon: -71.0589 },
   { name: "Philadelphia", lat: 39.9526, lon: -75.1652 },
   { name: "Hartford",     lat: 41.7637, lon: -72.6851 },
 ];
 
-console.error("Fetching resorts from Supabase...");
+// Mapbox Matrix API limits coordinates per request — free tier allows 25
+// (1 origin + up to 24 destinations). Stay one under to be safe.
+const CHUNK_SIZE = 24;
+
+console.error("Fetching active resorts from Supabase...");
 const resp = await fetch(
-  `${SUPABASE_URL}/rest/v1/resorts?select=id,slug,latitude,longitude&order=id`,
+  `${SUPABASE_URL}/rest/v1/resorts?select=id,slug,name,latitude,longitude&active=eq.true&order=id&limit=2000`,
   { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } },
 );
-const resorts = await resp.json();
-console.error(`  -> ${resorts.length} resorts`);
+const resorts = (await resp.json()).filter(
+  (r) => r.latitude != null && r.longitude != null,
+);
+console.error(`  -> ${resorts.length} resorts with coordinates`);
 
-console.error(`Computing ${origins.length * resorts.length} drive times in parallel...`);
 const t0 = Date.now();
+const results = [];
+let calls = 0;
 
-const tasks = [];
-for (const origin of origins) {
-  for (const resort of resorts) {
-    tasks.push(
-      fetch(
-        `https://api.mapbox.com/directions/v5/mapbox/driving/` +
-          `${origin.lon},${origin.lat};${resort.longitude},${resort.latitude}` +
-          `?access_token=${MAPBOX_TOKEN}&overview=false`,
-      )
-        .then((r) => r.json())
-        .then((data) => {
-          const route = data.routes?.[0];
-          if (!route) {
-            console.error(`  ! no route: ${origin.name} -> ${resort.slug}`);
-            return null;
-          }
-          return {
-            resort_id: resort.id,
-            resort_slug: resort.slug,
-            origin_name: origin.name,
-            origin_lat: origin.lat,
-            origin_lon: origin.lon,
-            duration_seconds: Math.round(route.duration),
-            distance_meters: Math.round(route.distance),
-          };
-        }),
-    );
+for (const origin of ORIGINS) {
+  for (let i = 0; i < resorts.length; i += CHUNK_SIZE) {
+    const chunk = resorts.slice(i, i + CHUNK_SIZE);
+    // Matrix request: ;-joined coords list, source index = 0 (origin),
+    // destinations = 1..N (the resorts in this chunk).
+    const coords = [
+      `${origin.lon},${origin.lat}`,
+      ...chunk.map((r) => `${Number(r.longitude)},${Number(r.latitude)}`),
+    ].join(";");
+    const destinationsParam = chunk.map((_, idx) => idx + 1).join(";");
+
+    const url =
+      `https://api.mapbox.com/directions-matrix/v1/mapbox/driving/${coords}` +
+      `?sources=0&destinations=${destinationsParam}&annotations=duration,distance` +
+      `&access_token=${MAPBOX_TOKEN}`;
+
+    const r = await fetch(url);
+    calls += 1;
+    if (!r.ok) {
+      console.error(`  ! HTTP ${r.status} for ${origin.name} chunk @ ${i}`);
+      const body = await r.text();
+      console.error(`     body: ${body.slice(0, 200)}`);
+      // Brief backoff and retry once
+      await new Promise((res) => setTimeout(res, 2000));
+      const r2 = await fetch(url);
+      if (!r2.ok) {
+        console.error(`  ! retry failed; skipping chunk`);
+        continue;
+      }
+      Object.assign(r, r2);
+    }
+    const data = await r.json();
+    if (!data.durations?.[0] || !data.distances?.[0]) {
+      console.error(`  ! malformed response for ${origin.name} chunk @ ${i}`);
+      continue;
+    }
+    const durations = data.durations[0];   // 1 source × N destinations
+    const distances = data.distances[0];
+
+    for (let j = 0; j < chunk.length; j++) {
+      const dur = durations[j];
+      const dist = distances[j];
+      if (dur == null) continue;            // unreachable (rare; e.g. island resort)
+      results.push({
+        resort_id: chunk[j].id,
+        resort_slug: chunk[j].slug,
+        origin_name: origin.name,
+        origin_lat: origin.lat,
+        origin_lon: origin.lon,
+        duration_seconds: Math.round(dur),
+        distance_meters: dist == null ? null : Math.round(dist),
+      });
+    }
+
+    // Throttle gently — well under Mapbox free-tier 600/min limit.
+    await new Promise((res) => setTimeout(res, 200));
   }
+  process.stderr.write(`  ${origin.name}: done (${results.filter((x) => x.origin_name === origin.name).length} routes)\n`);
 }
 
-const results = (await Promise.all(tasks)).filter(Boolean);
-console.error(`  -> ${results.length} routes in ${((Date.now() - t0) / 1000).toFixed(1)}s`);
+console.error(`\n${calls} Matrix API calls, ${results.length} routes in ${((Date.now() - t0) / 1000).toFixed(1)}s\n`);
 
-// Build SQL
+// Build SQL. Schema already exists in DB (created in earlier phase) —
+// but include CREATE IF NOT EXISTS so this script remains self-contained
+// for fresh environments. Use TRUNCATE to fully refresh; rows are derivable.
 const lines = [
-  `-- Drive time cache: ${origins.length} origins x ${resorts.length} resorts = ${results.length} rows`,
-  `-- Computed ${new Date().toISOString().slice(0, 19)}Z via Mapbox Directions API`,
+  `-- Drive time cache: ${ORIGINS.length} origins x ${resorts.length} resorts = ${results.length} rows`,
+  `-- Computed ${new Date().toISOString().slice(0, 19)}Z via Mapbox Matrix API`,
   ``,
   `CREATE TABLE IF NOT EXISTS drive_time_cache (`,
   `  id BIGSERIAL PRIMARY KEY,`,
@@ -97,7 +141,7 @@ const lines = [
   `DROP POLICY IF EXISTS "Public read drive times" ON drive_time_cache;`,
   `CREATE POLICY "Public read drive times" ON drive_time_cache FOR SELECT USING (true);`,
   ``,
-  `-- Re-runnable: clear existing data first`,
+  `BEGIN;`,
   `TRUNCATE drive_time_cache RESTART IDENTITY;`,
   ``,
   `INSERT INTO drive_time_cache (resort_id, origin_name, origin_lat, origin_lon, duration_seconds, distance_meters) VALUES`,
@@ -105,27 +149,23 @@ const lines = [
 
 const values = results.map(
   (r) =>
-    `  (${r.resort_id}, '${r.origin_name}', ${r.origin_lat}, ${r.origin_lon}, ${r.duration_seconds}, ${r.distance_meters})`,
+    `  (${r.resort_id}, '${r.origin_name}', ${r.origin_lat}, ${r.origin_lon}, ${r.duration_seconds}, ${r.distance_meters ?? "NULL"})`,
 );
 lines.push(values.join(",\n") + ";");
 lines.push("");
 lines.push("-- Verify: row count per origin");
 lines.push("SELECT origin_name, COUNT(*) FROM drive_time_cache GROUP BY origin_name ORDER BY origin_name;");
 lines.push("");
-lines.push("-- Closest 5 resorts from NYC");
-lines.push(
-  `SELECT r.name, ROUND(dt.duration_seconds/3600.0, 2) AS hours_from_nyc, ROUND(dt.distance_meters/1609.34, 1) AS miles
-FROM drive_time_cache dt JOIN resorts r ON r.id = dt.resort_id
-WHERE dt.origin_name = 'NYC' ORDER BY dt.duration_seconds LIMIT 5;`,
-);
+lines.push("COMMIT;");
 
 writeFileSync("data/drive_times.sql", lines.join("\n") + "\n");
-console.error(`Wrote data/drive_times.sql (${lines.length} lines, ${results.length} INSERTs)`);
+console.error(`Wrote data/drive_times.sql (${results.length} INSERTs)`);
 
 // Print quick summary
 console.error("\nQuick stats:");
-for (const origin of origins) {
+for (const origin of ORIGINS) {
   const fromOrigin = results.filter((r) => r.origin_name === origin.name);
+  if (fromOrigin.length === 0) continue;
   const avgHours = fromOrigin.reduce((s, r) => s + r.duration_seconds, 0) / fromOrigin.length / 3600;
   const minHours = Math.min(...fromOrigin.map((r) => r.duration_seconds)) / 3600;
   const maxHours = Math.max(...fromOrigin.map((r) => r.duration_seconds)) / 3600;

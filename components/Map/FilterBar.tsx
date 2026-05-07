@@ -18,12 +18,13 @@ type Props = {
   hiddenByNullSize: number;
 };
 
-const HOUR_OPTIONS = [
-  { value: "0", label: "Any drive time" },
-  { value: "2", label: "≤ 2 hours" },
-  { value: "3", label: "≤ 3 hours" },
-  { value: "4", label: "≤ 4 hours" },
-  { value: "5", label: "≤ 5 hours" },
+// Distance presets — match how skiers actually plan trips. "Day trip" = home
+// before bedtime; "Weekend" = leave Friday night, return Sunday. Custom hours
+// available via the more-filters dropdown when needed.
+const TRIP_PRESETS = [
+  { value: "0", emoji: "",   label: "Anytime" },
+  { value: "3", emoji: "🚗", label: "Day trip" },
+  { value: "5", emoji: "🏕️", label: "Weekend" },
 ];
 
 // Visual marker size for the size chips (matches map pin diameters)
@@ -65,7 +66,9 @@ export default function FilterBar({
           ))}
         </div>
 
-        {/* Distance dropdowns */}
+        {/* From city + trip-length presets. From-city stays a dropdown because
+            the 4 options are stable; trip length becomes chips because the
+            common cases (day trip vs weekend) want to be one tap away. */}
         <div className="flex shrink-0 items-center gap-2 text-xs">
           <select
             value={fromCode}
@@ -79,20 +82,25 @@ export default function FilterBar({
               </option>
             ))}
           </select>
-          <select
-            value={String(withinHours)}
-            onChange={(e) =>
-              onWithinChange(e.target.value === "0" ? null : e.target.value)
-            }
-            className="min-h-[36px] rounded-md border border-wn-charcoal/20 bg-white px-2 py-1 font-medium text-wn-charcoal transition-colors duration-200 hover:border-wn-charcoal/40 focus:outline-none focus:ring-2 focus:ring-wn-sky"
-            aria-label="Maximum drive time"
-          >
-            {HOUR_OPTIONS.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
+          <div className="flex gap-1.5">
+            {TRIP_PRESETS.map((opt) => {
+              const active = String(withinHours) === opt.value;
+              return (
+                <Chip
+                  key={opt.value}
+                  active={active}
+                  onClick={() =>
+                    onWithinChange(active && opt.value !== "0" ? null : opt.value === "0" ? null : opt.value)
+                  }
+                >
+                  <span className="inline-flex items-center gap-1">
+                    {opt.emoji && <span aria-hidden="true">{opt.emoji}</span>}
+                    {opt.label}
+                  </span>
+                </Chip>
+              );
+            })}
+          </div>
         </div>
       </div>
 
