@@ -18,6 +18,7 @@ import {
   googleMapsUrl,
   bookingComUrl,
 } from "@/lib/externalLinks";
+import FavoriteToggle from "@/components/auth/FavoriteToggle";
 
 export const dynamic = "force-dynamic";
 
@@ -205,11 +206,14 @@ export default async function ResortPage({
           >
             ← Map
           </Link>
-          {isFeatured && (
-            <span className="inline-flex items-center rounded-md bg-wn-gold/95 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-wn-navy shadow-sm">
-              ★ Featured
-            </span>
-          )}
+          <div className="flex items-center gap-2">
+            {isFeatured && (
+              <span className="inline-flex items-center rounded-md bg-wn-gold/95 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-wn-navy shadow-sm">
+                ★ Featured
+              </span>
+            )}
+            <FavoriteToggle resortId={resort.id} size="lg" />
+          </div>
         </div>
 
         {/* Hero text */}

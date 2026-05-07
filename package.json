@@ -10,6 +10,7 @@
     "scrape:pass-data": "node scripts/scrape-pass-data.mjs"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.10.2",
     "@supabase/supabase-js": "^2.105.1",
     "cheerio": "^1.0.0",
     "mapbox-gl": "^3.23.0",

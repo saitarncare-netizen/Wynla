@@ -10,6 +10,7 @@ import {
   windyUrl,
   googleMapsUrl,
 } from "@/lib/externalLinks";
+import FavoriteToggle from "@/components/auth/FavoriteToggle";
 import type { Resort } from "./MapPage";
 
 type DriveTime = {
@@ -98,15 +99,18 @@ export default function ResortPanel({
           />
           <div className="absolute inset-0 bg-gradient-to-t from-wn-navy/70 to-transparent" />
 
-          {/* Close button — top-right of hero, always visible */}
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close"
-            className="absolute right-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/95 text-wn-navy shadow-md backdrop-blur-sm transition hover:bg-white"
-          >
-            <span aria-hidden="true" className="text-lg leading-none">×</span>
-          </button>
+          {/* Top-right action stack: Favorite + Close */}
+          <div className="absolute right-3 top-3 flex items-center gap-2">
+            <FavoriteToggle resortId={resort.id} />
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Close"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/95 text-wn-navy shadow-md backdrop-blur-sm transition hover:bg-white"
+            >
+              <span aria-hidden="true" className="text-lg leading-none">×</span>
+            </button>
+          </div>
 
           {isFeatured && (
             <span className="absolute left-3 top-3 inline-flex items-center rounded-md bg-wn-gold/95 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-wn-navy shadow-sm">

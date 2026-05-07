@@ -6,6 +6,7 @@ import MapView from "./MapView";
 import AlaskaInset from "./AlaskaInset";
 import FilterBar from "./FilterBar";
 import ResortPanel from "./ResortPanel";
+import AuthButton from "@/components/auth/AuthButton";
 import { originByCode } from "@/lib/origins";
 import { PASS_COLORS, PASS_LABELS, PASS_KEYS } from "@/lib/passColors";
 import { sizeTier, matchesSizeFilter, type SizeTier } from "@/lib/sizeTier";
@@ -177,6 +178,7 @@ export default function MapPage({ resorts, driveTimes }: Props) {
             <span className="text-xs font-medium text-wn-charcoal/70">
               {filtered.length} / {resorts.length}
             </span>
+            <AuthButton />
           </div>
         </div>
         <FilterBar

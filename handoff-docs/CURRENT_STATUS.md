@@ -1,8 +1,24 @@
 # Wynla — Current Status
-Last updated: 2026-05-07 (Stage 4.3 shipped — Smart Features)
+Last updated: 2026-05-07 (Stage 5 trimmed shipped — Auth + Favorites)
 
 ## 🎯 Current Stage
-**STAGE 4 COMPLETE.** All 4 sub-stages shipped (4.1 Map Foundation, 4.2 Detail Experience, 4.3 Smart Features, 4.4 Polish). Map UX is now AllTrails/Komoot-tier for the trip-planning use case. **Mobile strategy revised: PWA pulled forward to Stage 6 launch; native iOS becomes Stage 7 post-traction.** Awaiting end-of-stage user review before kicking off Stage 5.
+**STAGE 5 (TRIMMED) CODE-COMPLETE.** Auth + favorites loop is live locally; user needs to verify Supabase Auth Site URL config + test magic-link email end-to-end. **Stage 5.4 (Trip Planning) and 5.5 (Recently Viewed) deferred to post-launch per re-sequence proposal B.** Next: Stage 6 PWA + minimal launch polish, then soft-launch.
+
+## ✅ Stage 5 Result (trimmed) — what shipped
+- **Schema:** [data/sql/stage-5-auth-schema.sql](../data/sql/stage-5-auth-schema.sql) — `profiles` (1:1 with auth.users, auto-created via trigger) + `favorites` (composite PK on user+resort). Both with RLS so a user only ever sees/edits their own rows. Applied via Supabase SQL Editor.
+- **Auth clients:** `lib/supabase/server.ts` (RSC + Route Handlers + Server Actions) and `lib/supabase/client.ts` (browser). Both use `@supabase/ssr`.
+- **Next.js 16 proxy:** `proxy.ts` (NOT middleware.ts — Next 16 renamed the convention) refreshes the Supabase auth cookie on every request. Matcher excludes static assets.
+- **Login UI:** `/login` magic-link form. Submits via `signInWithOtp`; redirect URL preserves `next=` for post-auth landing.
+- **Auth callback:** `app/auth/callback/route.ts` exchanges the magic-link code for a session via `supabase.auth.exchangeCodeForSession()` then redirects to `next`.
+- **Header AuthButton:** subscribes to `onAuthStateChange`; shows "Sign in" when signed-out, avatar dropdown (email + Favorites + Sign out) when signed-in. Renders skeleton during initial load to avoid layout shift.
+- **FavoriteToggle:** heart icon. Optimistic toggle with rollback on error. Anonymous click → bounce to `/login?next={current}`.
+- **Heart wired into:** ResortPanel (top-right of hero) + Resort detail page hero (next to ★ Featured badge).
+- **/favorites page:** server-rendered grid of saved resorts with hero image, state, region, vert, pass badges. RLS-implicit user scoping. Empty state with CTA back to map. Auth-guarded — redirects to `/login?next=/favorites` if not signed in.
+
+## 🔴 User action required before launch
+- [ ] **Configure Supabase Auth Site URL.** Go to Supabase Dashboard → Auth → URL Configuration → set Site URL to `http://localhost:3000` for dev (and `https://wynla.app` for prod when domain is wired). Add `http://localhost:3000/auth/callback` and `https://wynla.app/auth/callback` to Redirect URLs.
+- [ ] **Test magic link end-to-end.** Open `/login`, enter your real email, click the link in the email, confirm you land back on the map signed in. (I can't test this from MCP.)
+- [ ] **Branded auth email template** — Stage 6 polish.
 
 ## ✅ Stage 4.4 Result — what shipped (Polish)
 - **Empty state UI** when filters return zero — centered card with 🔍 icon, "No resorts match" + "Reset all filters" CTA. Uses `pointer-events-none` overlay so map remains pannable behind it.
