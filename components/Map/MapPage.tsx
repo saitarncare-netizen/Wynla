@@ -7,6 +7,7 @@ import AlaskaInset from "./AlaskaInset";
 import FilterBar from "./FilterBar";
 import ResortPanel from "./ResortPanel";
 import AuthButton from "@/components/auth/AuthButton";
+import Link from "next/link";
 import { originByCode } from "@/lib/origins";
 import { PASS_COLORS, PASS_LABELS, PASS_KEYS } from "@/lib/passColors";
 import { sizeTier, matchesSizeFilter, type SizeTier } from "@/lib/sizeTier";
@@ -178,6 +179,13 @@ export default function MapPage({ resorts, driveTimes }: Props) {
             <span className="text-xs font-medium text-wn-charcoal/70">
               {filtered.length} / {resorts.length}
             </span>
+            <Link
+              href="/pro"
+              className="hidden rounded-md border border-wn-gold/60 bg-wn-gold/10 px-2.5 py-1 text-xs font-semibold text-wn-navy transition hover:bg-wn-gold/25 sm:inline-block"
+              title="Wynla Pro — coming soon"
+            >
+              ✨ Pro
+            </Link>
             <AuthButton />
           </div>
         </div>
