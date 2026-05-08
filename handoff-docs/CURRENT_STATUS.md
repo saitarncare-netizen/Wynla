@@ -1,8 +1,57 @@
 # Wynla — Current Status
-Last updated: 2026-05-07 (Stages 4-6 all shipped locally — soft-launch ready pending user-side config + push)
+Last updated: 2026-05-08 (UX redesign + 451-resort data verification complete; needs git push)
 
 ## 🎯 Current Stage
-**STAGES 4, 5, 6 ALL CODE-COMPLETE LOCALLY.** Map foundation + Detail panel + Smart filters + Polish + Auth/favorites + PWA/SEO/Analytics. **7 commits queued ahead of origin/main** (push blocked by sandbox, user must push manually). Next: user does Supabase Auth config + git push → Vercel auto-deploys → soft-launch to NYC warm leads + Snowboard The East DM list.
+**PRODUCTION** at https://ridewise-rcko.vercel.app is the OLD code. **2 commits queued locally** (231b902 redesign + new Stage 7 data) waiting for `git push origin main` (sandbox blocks; user must push). Vercel auto-redeploys on push.
+
+DB is already live with Stage 7 verified data — applied via Supabase SQL Editor (Chrome MCP) regardless of code-deploy timing. Old production code reads it without issue (extra fields just sit there until new code reads them).
+
+## ✅ Stage 7 — UX redesign + 451-resort data verification (2026-05-08)
+
+### Phase 1 — UX redesign (commit 231b902)
+4 parallel agents executed all 6 locked decisions in one coherent commit.
+
+- **REMOVE all hero images.** ResortPanel, detail page, favorites cards now render a typographic hero (pass-color gradient `#{primary} → #1E2952` → `#0F1530` on the detail page; primary→#1E2952 on the panel + favorites). `hero_image_url` dropped from home + favorites SELECTs; `satelliteHeroUrl()` deleted.
+- **Filter UI redesigned.** New `components/Map/FilterBar.tsx` is 3 dropdowns (`All passes ▾`, `From … · trip ▾`, `≡ More filters`) plus an active-filter chips strip. New `components/Map/FilterDrawer.tsx` houses the size chip-row + 🌙 Night skiing toggle. New URL param `?night=1`. `MapPage.tsx` rewires with `drawerOpen` state, `clearAll`, derived chips.
+- **★ Featured tier visual removed everywhere.** Map: `LAYER_FEATURED_STAR` deleted; featured pins now use vertical-drop size tier like listed pins. ResortPanel: ★ FEATURED badge removed. Detail page: ★ Featured badge in hero removed. Favorites: badge removed. Header: ★ Featured ON/OFF toggle removed. DB `tier` column kept (future-proof) — just not rendered. Featured-only gates on QuickStats + About relaxed: now show whenever data exists.
+- **Mountain-Forecast removed.** `mountainForecastUrl` + `mountainForecastSlug` deleted from `lib/externalLinks.ts`. ResortPanel: `Section title="Weather"` is now one card with Weather.gov + Windy.com sub-rows. Detail page: same pattern (2-card grid).
+- **Detail page gains "Best time to visit"** — new `BestTimeStrip` helper. 12-month grid; highlights months in the typical_season range (handles year-end wrap like Nov-Apr). Renders only when both `typical_season_start` + `typical_season_end` exist.
+- **Map style** `light-v11` → `outdoors-v12` in MapView.tsx + AlaskaInset.tsx. Terrain hillshading + park boundaries.
+- **Dynamic OG image** at [app/resort/[slug]/opengraph-image.tsx](../app/resort/[slug]/opengraph-image.tsx) — Edge runtime, 1200×630, pass-color gradient + Wynla wordmark + pass badges + huge resort name + 3 stat columns. `generateMetadata` no longer builds a static-map ogImage (Next auto-detects).
+
+Verified: typecheck clean, eslint 0 errors (10 warnings, all pre-existing in scripts/), production build green (8 routes including `/resort/-/opengraph-image`).
+
+### Phase 2 — Data verification (next commit, post-Phase-1)
+10 parallel agents fetched each resort's official `website_url` (+ `/the-mountain` `/mountain-stats` `/about` `/trails` `/stats` subpaths, 4-fetch hard cap per resort). Strict NULL-over-guess: only fields explicitly extracted from the official site were written. No Wikipedia, no inference.
+
+**Results:**
+- **277 / 451 resorts updated (61%)** — `last_verified_at = NOW()` set on each
+- **1,259 field writes**
+- **46 resorts unreachable** (sites refused / 403 / 404 / domain expired / Korean sports site after hijack — Nordic Valley)
+- **174 resorts with no extractable stats** — mostly small mom-and-pop sites whose homepage doesn't expose specs
+- **Downgrade guardrail** caught 3 obvious wrong-extracts where the site showed today's-open count instead of total: Snowbasin total_trails 104→23, Lutsen 95→58, McIntyre total_lifts 5→2 — those fields kept their existing values.
+
+**Strong wins (full or near-full stats verified):** Loveland, Winter Park, Bridger Bowl, Beech Mountain, Bruce Mound, Stratton, Saddleback, Snowshoe, Bear Valley, Mt. Spokane, Wachusett, Waterville Valley, Burke Mountain, Perfect North Slopes, Hatley Pointe, Schweitzer, Sipapu, Winterplace, Ski Sundown, Mount Pisgah, Elk Mountain, Bromley, Steamboat, Brundage, Pleasant Mountain, Sugarbush, Schuss/Shanty Creek, Moose Mountain, Blue Hills, Appalachian, Bousquet, Diamond Peak, Ski Apache, Sunlight, Tamarack, Jackson Hole, Arizona Snowbowl, Mt. Rose, Crystal Mountain MI, Cataloochee, Blue Knob, Bogus Basin, Cascade Mountain, Snow Trails, Summit at Snoqualmie, Grand Targhee, Whitefish, Mt. Baker, Ski Big Bear PA, Bittersweet, Kissing Bridge, White Grass, Lutsen, Jiminy Peak, Monarch Mountain, Red Lodge, Pebble Creek, Hilltop AK, Windham Mountain.
+
+**Vail Resorts blackout:** every Vail-owned property's `website_url` returned the same "system cannot process your request" reservations error → all kept their existing Wikipedia-derived stats. Affected: Hunter, Stowe, Okemo, Keystone, Heavenly, Park City, Vail, Beaver Creek, Crested Butte, Breckenridge, Mount Sunapee, Stevens Pass, Attitash, Mt. Brighton, Northstar, Wildcat, Big Boulder, Mount Snow, Whitetail, Boston Mills, Brandywine, Kirkwood, Hidden Valley MO, Snow Creek, Laurel Mountain, Mountain High. Need a different fetch path or manual verification post-launch.
+
+**Files added:**
+- `scripts/fetch-resorts-for-verify.mjs` — pulls active resorts, splits 10x
+- `scripts/combine-and-apply-verify.mjs` — merges agent outputs, emits SQL
+- `scripts/filter-verify-downgrades.mjs` — guardrail; final SQL emitter
+- `data/sql/stage-7-verify-451.sql` — raw (pre-guardrail), audit trail
+- `data/sql/stage-7-verify-451-filtered.sql` — applied to production
+
+Applied via Supabase SQL Editor (Chrome MCP); transactional, "Success. 0 rows returned" on commit. Idempotent — re-runnable safely.
+
+### Phase 1.5 — DB hero_image_url cleanup (deferred)
+The plan called for `UPDATE resorts SET hero_image_url=NULL, hero_image_alt=NULL, hero_image_source=NULL WHERE active=TRUE;` to wipe now-unused columns. **Sandbox blocked** the clipboard op (destructive shared-infra change). It's a true no-op functionally — new code no longer SELECTs those fields. User can apply manually in Supabase SQL Editor when convenient. Not a launch blocker.
+
+## 🔴 User actions still pending (unchanged from 2026-05-07 except where noted)
+- [ ] **`git push origin main`** to deploy Stage 7. 2 new commits queued: `231b902` (redesign) + the Stage 7 data commit. Sandbox blocks the push from this session.
+- [ ] **Optional: apply the 1-line hero cleanup SQL** if you want to clear unused columns: `UPDATE resorts SET hero_image_url=NULL, hero_image_alt=NULL, hero_image_source=NULL WHERE active=TRUE;` in Supabase SQL Editor.
+- [ ] **Soft-launch checklist** — DM warm leads, post in NYC FB groups + r/skiing/r/snowboarding, watch Vercel Analytics for first 100 visitors.
+- [ ] **Custom domain `wynla.app`** — Vercel project → Domains → add custom; update `NEXT_PUBLIC_SITE_URL` env to `https://wynla.app`; update Supabase Auth Site URL too.
 
 ## ✅ Hero image round 2 (data) — applied 2026-05-07
 +104 Listed-tier resorts now have a Wikimedia Commons photo. Hero coverage **52% → 75%** (234/451 → 338/451). Method:
@@ -36,16 +85,22 @@ Last updated: 2026-05-07 (Stages 4-6 all shipped locally — soft-launch ready p
 - **Heart wired into:** ResortPanel (top-right of hero) + Resort detail page hero (next to ★ Featured badge).
 - **/favorites page:** server-rendered grid of saved resorts with hero image, state, region, vert, pass badges. RLS-implicit user scoping. Empty state with CTA back to map. Auth-guarded — redirects to `/login?next=/favorites` if not signed in.
 
-## 🔴 User action required before soft-launch
-- [ ] **`git push origin main`** — 7 commits ahead of remote. Sandbox blocked me from pushing; you do it. Vercel will auto-deploy on push.
-- [ ] **Configure Supabase Auth Site URL.** Supabase Dashboard → Auth → URL Configuration → Site URL = `https://ridewise-rcko.vercel.app` (current prod) or `https://wynla.app` (when domain wired). Redirect URLs: add `${SITE_URL}/auth/callback` and `http://localhost:3000/auth/callback`.
-- [ ] **Test magic link end-to-end** on prod URL once deployed. (I can't click email links from MCP.)
-- [ ] **Add `NEXT_PUBLIC_SITE_URL`** env var on Vercel (used by sitemap + OG). Set to `https://ridewise-rcko.vercel.app` or `https://wynla.app`.
-- [ ] **Soft-launch checklist:**
+## ✅ User actions DONE (2026-05-07 evening)
+- [x] git push origin main — 11 commits live
+- [x] Vercel env vars (4 vars: SITE_URL, MAPBOX_TOKEN, SUPABASE_URL, SUPABASE_ANON_KEY)
+- [x] Vercel redeployed after token fix (Mapbox token was stale → updated from .env.local)
+- [x] Supabase Auth Site URL + 3 Redirect URLs configured
+- [x] Magic-link e2e tested — works
+- [x] Favorites tested — works
+- [x] Pro waitlist tested — works
+
+## 🔴 User actions still pending
+- [ ] **Soft-launch checklist** — wait until UX redesign phase complete (decisions #1-4 above):
   - DM 10–20 commenters from Snowboard The East post (warm leads)
   - Post in r/skiing + r/snowboarding (mention 451-resort coverage + multi-pass color map)
   - Post in NYC snowboard Facebook groups
   - Watch Vercel Analytics for first 100 visitors
+- [ ] **Custom domain `wynla.app`** — when ready: Vercel project → Domains → add custom; update `NEXT_PUBLIC_SITE_URL` env to `https://wynla.app`; update Supabase Auth Site URL too
 
 ## ✅ Stage 4.4 Result — what shipped (Polish)
 - **Empty state UI** when filters return zero — centered card with 🔍 icon, "No resorts match" + "Reset all filters" CTA. Uses `pointer-events-none` overlay so map remains pannable behind it.
