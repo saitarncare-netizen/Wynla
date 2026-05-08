@@ -9,6 +9,7 @@ type Props = {
   passFilter: string | null;
   origin: Origin;
   withinHours: number;
+  days: number;
   sizeFilter: SizeTier | null;
   nightOnly: boolean;
   passCounts: Record<string, number>;
@@ -19,19 +20,33 @@ type Props = {
   onFromCity: (code: string) => void;
   onFromGeo: (lat: number, lng: number) => void;
   onWithinChange: (w: string | null) => void;
+  onDaysChange: (d: number) => void;
   onSizeChange: (s: SizeTier | null) => void;
   onNightChange: (v: boolean) => void;
+  onOpenPlanner: () => void;
   onClearAll: () => void;
   onOpenDrawer: () => void;
 };
 
-// Distance presets — match how skiers actually plan trips. "Day trip" = home
-// before bedtime; "Weekend" = leave Friday night, return Sunday.
-const TRIP_PRESETS = [
-  { value: "0", emoji: "",   label: "Anytime"   },
-  { value: "3", emoji: "🚗", label: "Day trip"  },
-  { value: "5", emoji: "🏕️", label: "Weekend"  },
+// Trip-type presets. "Day trip" caps single-leg drive at 3h and runs
+// the same day. "Weekend" / "Big trip" enable the multi-day planner
+// where the user picks how many days. The maximum drive cap rises with
+// trip length: at 5h for weekend, 6h for big trips, since the user is
+// willing to spend more of day 1 driving when there are more days.
+type TripKind = "anytime" | "day" | "weekend" | "big";
+const TRIP_PRESETS: { kind: TripKind; emoji: string; label: string; within: number; defaultDays: number }[] = [
+  { kind: "anytime", emoji: "",   label: "Anytime",  within: 0, defaultDays: 1 },
+  { kind: "day",     emoji: "🚗", label: "Day trip", within: 3, defaultDays: 1 },
+  { kind: "weekend", emoji: "🏕️", label: "Weekend",  within: 5, defaultDays: 2 },
+  { kind: "big",     emoji: "🎿", label: "Big trip", within: 6, defaultDays: 5 },
 ];
+
+function tripKindFor(within: number, days: number): TripKind {
+  if (days >= 4) return "big";
+  if (days >= 2) return "weekend";
+  if (within > 0) return "day";
+  return "anytime";
+}
 
 type ActiveChip = {
   key: string;
@@ -43,6 +58,7 @@ export default function FilterBar({
   passFilter,
   origin,
   withinHours,
+  days,
   sizeFilter,
   nightOnly,
   passCounts,
@@ -53,8 +69,10 @@ export default function FilterBar({
   onFromCity,
   onFromGeo,
   onWithinChange,
+  onDaysChange,
   onSizeChange,
   onNightChange,
+  onOpenPlanner,
   onClearAll,
   onOpenDrawer,
 }: Props) {
@@ -62,9 +80,10 @@ export default function FilterBar({
 
   // Build active-chip strip from current filter state. Chips render in a
   // stable order so the strip doesn't shuffle as users add/remove.
-  const tripPreset =
-    TRIP_PRESETS.find((p) => p.value === String(withinHours)) ?? TRIP_PRESETS[0];
-  const tripActive = withinHours > 0;
+  const tripKind = tripKindFor(withinHours, days);
+  const tripPreset = TRIP_PRESETS.find((p) => p.kind === tripKind) ?? TRIP_PRESETS[0];
+  const tripActive = tripKind !== "anytime";
+  const isMultiDay = days >= 2;
 
   const activeChips: ActiveChip[] = [];
   if (passFilter) {
@@ -76,10 +95,14 @@ export default function FilterBar({
   }
   if (tripActive) {
     const fromShort = origin.kind === "geo" ? "here" : origin.short;
+    const dayPart = isMultiDay ? ` · ${days} days` : "";
     activeChips.push({
       key: "trip",
-      label: `${tripPreset.label} from ${fromShort}`,
-      onRemove: () => onWithinChange(null),
+      label: `${tripPreset.label}${dayPart} from ${fromShort}`,
+      onRemove: () => {
+        onWithinChange(null);
+        onDaysChange(1);
+      },
     });
   }
   if (sizeFilter) {
@@ -102,9 +125,10 @@ export default function FilterBar({
   // Trip dropdown label collapses From + preset into one line. The geo
   // origin gets a distinctive 📍 prefix so it's instantly recognizable.
   const fromLabel = origin.kind === "geo" ? "📍 From here" : `From ${origin.short}`;
-  const tripLabel = tripActive
-    ? `${fromLabel} · ${tripPreset.label}`
-    : `${fromLabel} · Anytime`;
+  const tripLabelTail = tripActive
+    ? `${tripPreset.label}${isMultiDay ? ` ${days}d` : ""}`
+    : "Anytime";
+  const tripLabel = `${fromLabel} · ${tripLabelTail}`;
 
   // Pass dropdown label shows the active pass + colored dot when one is set.
   const passLabel = passFilter
@@ -127,10 +151,13 @@ export default function FilterBar({
           <TripDropdown
             origin={origin}
             withinHours={withinHours}
+            days={days}
             label={tripLabel}
             onFromCity={onFromCity}
             onFromGeo={onFromGeo}
             onWithinChange={onWithinChange}
+            onDaysChange={onDaysChange}
+            onOpenPlanner={onOpenPlanner}
           />
           <button
             type="button"
@@ -285,22 +312,29 @@ function PassDropdown({
 function TripDropdown({
   origin,
   withinHours,
+  days,
   label,
   onFromCity,
   onFromGeo,
   onWithinChange,
+  onDaysChange,
+  onOpenPlanner,
 }: {
   origin: Origin;
   withinHours: number;
+  days: number;
   label: string;
   onFromCity: (code: string) => void;
   onFromGeo: (lat: number, lng: number) => void;
   onWithinChange: (w: string | null) => void;
+  onDaysChange: (d: number) => void;
+  onOpenPlanner: () => void;
 }) {
   const { open, setOpen, ref } = useDropdown();
   const [requestingGeo, setRequestingGeo] = useState(false);
   const [geoError, setGeoError] = useState<string | null>(null);
-  const tripActive = withinHours > 0;
+  const currentKind = tripKindFor(withinHours, days);
+  const tripActive = currentKind !== "anytime";
   const isGeo = origin.kind === "geo";
 
   function handleUseHere() {
@@ -389,18 +423,24 @@ function TripDropdown({
             ))}
           </select>
           <div className="mb-1 text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
-            Trip length
+            Trip type
           </div>
           <div className="flex flex-col gap-1">
             {TRIP_PRESETS.map((opt) => {
-              const active = String(withinHours) === opt.value;
+              const active = currentKind === opt.kind;
               return (
                 <button
-                  key={opt.value}
+                  key={opt.kind}
                   type="button"
                   onClick={() => {
-                    onWithinChange(opt.value === "0" ? null : opt.value);
-                    setOpen(false);
+                    if (opt.kind === "anytime") {
+                      onWithinChange(null);
+                      onDaysChange(1);
+                    } else {
+                      onWithinChange(String(opt.within));
+                      onDaysChange(opt.defaultDays);
+                    }
+                    if (opt.kind === "day" || opt.kind === "anytime") setOpen(false);
                   }}
                   className={`flex items-center gap-2 rounded-md border px-2.5 py-1.5 text-xs font-semibold transition-colors ${
                     active
@@ -410,20 +450,72 @@ function TripDropdown({
                 >
                   {opt.emoji && <span aria-hidden="true">{opt.emoji}</span>}
                   <span>{opt.label}</span>
-                  {opt.value === "3" && (
+                  {opt.kind === "day" && (
                     <span className={`ml-auto text-[10px] ${active ? "text-white/75" : "text-wn-charcoal/55"}`}>
                       ≤ 3h
                     </span>
                   )}
-                  {opt.value === "5" && (
+                  {(opt.kind === "weekend" || opt.kind === "big") && (
                     <span className={`ml-auto text-[10px] ${active ? "text-white/75" : "text-wn-charcoal/55"}`}>
-                      ≤ 5h
+                      multi-day
                     </span>
                   )}
                 </button>
               );
             })}
           </div>
+
+          {/* Day-count picker — appears only for multi-day trips. Weekend
+              has 2/3 quick buttons; Big trip has a 3-10 slider. */}
+          {(currentKind === "weekend" || currentKind === "big") && (
+            <div className="mt-3 rounded-md border border-wn-charcoal/10 bg-wn-offwhite p-2">
+              <div className="mb-1.5 flex items-baseline justify-between text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/60">
+                <span>How many days?</span>
+                <span className="text-wn-navy">{days}d</span>
+              </div>
+              {currentKind === "weekend" ? (
+                <div className="flex gap-1">
+                  {[2, 3].map((d) => (
+                    <button
+                      key={d}
+                      type="button"
+                      onClick={() => onDaysChange(d)}
+                      className={`flex-1 rounded-md border px-2 py-1 text-xs font-semibold transition-colors ${
+                        days === d
+                          ? "border-wn-navy bg-wn-navy text-white"
+                          : "border-wn-charcoal/15 bg-white text-wn-charcoal hover:border-wn-charcoal/40"
+                      }`}
+                    >
+                      {d} days
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <input
+                  type="range"
+                  min={3}
+                  max={10}
+                  step={1}
+                  value={days}
+                  onChange={(e) => onDaysChange(Number(e.target.value))}
+                  className="w-full accent-wn-navy"
+                  aria-label="Trip length in days"
+                />
+              )}
+
+              <button
+                type="button"
+                onClick={() => {
+                  onOpenPlanner();
+                  setOpen(false);
+                }}
+                className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-md bg-wn-navy px-2.5 py-1.5 text-xs font-semibold text-white transition hover:bg-wn-navy/90 active:scale-95"
+              >
+                <span aria-hidden="true">🗺️</span>
+                <span>Plan my {days}-day trip</span>
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>

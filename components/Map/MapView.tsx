@@ -14,12 +14,22 @@ type DriveTime = {
   distance_meters: number | null;
 };
 
+export type TripRoutePoint = {
+  lat: number;
+  lng: number;
+  label: string;
+  kind: "origin" | "resort";
+};
+
 type Props = {
   resorts: Resort[];
   originName: string;
   driveTimeByResort: Map<number, Map<string, DriveTime>>;
   selectedId: number | null;
   onResortClick: (id: number) => void;
+  // Optional ordered list of points to draw as a route line + numbered
+  // markers when the trip planner is open. First point is the origin.
+  tripRoute?: TripRoutePoint[];
 };
 
 const SOURCE_ID = "wynla-resorts";
@@ -55,9 +65,11 @@ export default function MapView({
   driveTimeByResort,
   selectedId,
   onResortClick,
+  tripRoute,
 }: Props) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
+  const tripMarkersRef = useRef<mapboxgl.Marker[]>([]);
 
   // Keep a stable ref to the latest click handler so the map listeners
   // (registered once) always see the freshest callback without re-registering.
@@ -388,6 +400,93 @@ export default function MapView({
     if (map.getSource(SOURCE_ID)) apply();
     else map.once("style.load", apply);
   }, [selectedId, resorts]);
+
+  // Trip-route overlay: when the planner is open we draw a connecting
+  // line between the origin and each resort in plan order, plus a small
+  // numbered marker per stop so the order on the map matches the panel.
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+    const ROUTE_SRC = "wynla-trip-route";
+    const ROUTE_LAYER = "wynla-trip-route-line";
+
+    const apply = () => {
+      // Tear down previous markers and route every time — it's a small
+      // dataset (≤11 stops) so this is cheaper than diffing.
+      for (const m of tripMarkersRef.current) m.remove();
+      tripMarkersRef.current = [];
+      if (map.getLayer(ROUTE_LAYER)) map.removeLayer(ROUTE_LAYER);
+      if (map.getSource(ROUTE_SRC)) map.removeSource(ROUTE_SRC);
+
+      if (!tripRoute || tripRoute.length < 2) return;
+
+      const coords = tripRoute.map((p) => [p.lng, p.lat] as [number, number]);
+      map.addSource(ROUTE_SRC, {
+        type: "geojson",
+        data: {
+          type: "Feature",
+          properties: {},
+          geometry: { type: "LineString", coordinates: coords },
+        },
+      });
+      map.addLayer({
+        id: ROUTE_LAYER,
+        type: "line",
+        source: ROUTE_SRC,
+        layout: { "line-cap": "round", "line-join": "round" },
+        paint: {
+          "line-color": "#1E2952",
+          "line-width": 3,
+          "line-opacity": 0.7,
+          "line-dasharray": [2, 1.5],
+        },
+      });
+
+      // Numbered stop markers. Origin gets "🏠"; each resort day i gets
+      // "1", "2", … so the map reads in trip order at a glance.
+      tripRoute.forEach((p, i) => {
+        const el = document.createElement("div");
+        el.className =
+          "flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-wn-navy text-[11px] font-extrabold text-white shadow-md";
+        el.style.cursor = "pointer";
+        el.textContent = p.kind === "origin" ? "🏠" : String(i);
+        el.title = p.label;
+        const marker = new mapboxgl.Marker({ element: el, anchor: "center" })
+          .setLngLat([p.lng, p.lat])
+          .addTo(map);
+        tripMarkersRef.current.push(marker);
+      });
+
+      // Fit map to the whole route, leaving room for the panel on the right.
+      const bounds = coords.reduce(
+        (b, c) => b.extend(c),
+        new mapboxgl.LngLatBounds(coords[0], coords[0]),
+      );
+      const isDesktop = window.matchMedia("(min-width: 768px)").matches;
+      map.fitBounds(bounds, {
+        padding: isDesktop
+          ? { top: 80, bottom: 60, left: 60, right: 440 }
+          : { top: 80, bottom: 360, left: 40, right: 40 },
+        duration: 600,
+        maxZoom: 8,
+      });
+    };
+
+    if (map.isStyleLoaded()) apply();
+    else map.once("style.load", apply);
+
+    return () => {
+      // Cleanup runs on unmount AND on every tripRoute change before the
+      // next apply() runs. Apply() handles its own removal so the cleanup
+      // here mostly matters when the component itself unmounts.
+      for (const m of tripMarkersRef.current) m.remove();
+      tripMarkersRef.current = [];
+      if (mapRef.current) {
+        if (mapRef.current.getLayer(ROUTE_LAYER)) mapRef.current.removeLayer(ROUTE_LAYER);
+        if (mapRef.current.getSource(ROUTE_SRC)) mapRef.current.removeSource(ROUTE_SRC);
+      }
+    };
+  }, [tripRoute]);
 
   return <div ref={mapContainer} className="h-full w-full" />;
 }

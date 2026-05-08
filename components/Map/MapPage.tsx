@@ -2,16 +2,18 @@
 
 import { useMemo, useState, useTransition, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import MapView from "./MapView";
+import MapView, { type TripRoutePoint } from "./MapView";
 import AlaskaInset from "./AlaskaInset";
 import FilterBar from "./FilterBar";
 import FilterDrawer from "./FilterDrawer";
 import ResortPanel from "./ResortPanel";
 import GeoBanner from "./GeoBanner";
+import TripPlannerPanel from "./TripPlannerPanel";
 import AuthButton from "@/components/auth/AuthButton";
 import Link from "next/link";
 import { resolveOrigin } from "@/lib/origins";
 import { haversineMeters, estimateDriveSeconds, estimateDriveMeters } from "@/lib/distance";
+import { planTrip, planFromOrderedSlugs } from "@/lib/tripPlanner";
 import { PASS_COLORS, PASS_LABELS, PASS_KEYS } from "@/lib/passColors";
 import { sizeTier, matchesSizeFilter, type SizeTier } from "@/lib/sizeTier";
 
@@ -46,13 +48,14 @@ export type DriveTime = {
 type Props = {
   resorts: Resort[];
   driveTimes: DriveTime[];
+  isAuthed: boolean;
 };
 
 function isSizeTier(v: string | null): v is SizeTier {
   return v === "small" || v === "medium" || v === "large";
 }
 
-export default function MapPage({ resorts, driveTimes }: Props) {
+export default function MapPage({ resorts, driveTimes, isAuthed }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [, startTransition] = useTransition();
@@ -66,6 +69,8 @@ export default function MapPage({ resorts, driveTimes }: Props) {
   const fromLat = searchParams.get("fromLat");
   const fromLng = searchParams.get("fromLng");
   const withinHours = Number(searchParams.get("within")) || 0;
+  const days = Math.min(10, Math.max(1, Number(searchParams.get("days")) || 1));
+  const plannerOpen = searchParams.get("plan") === "1";
   const nightOnly = searchParams.get("night") === "1";
   // featured URL param kept for backward compatibility (no UI control).
   const featuredOnly = searchParams.get("featured") === "1";
@@ -208,6 +213,46 @@ export default function MapPage({ resorts, driveTimes }: Props) {
     [selectedId, resorts],
   );
 
+  // Live trip-route computation for the map overlay. Mirrors what the
+  // TripPlannerPanel computes; we recalculate here so the map can draw
+  // the route line + numbered markers in sync with whichever mode is
+  // visible. When the planner is closed, we skip this entirely.
+  const tripRoute = useMemo<TripRoutePoint[] | undefined>(() => {
+    if (!plannerOpen || days < 2) return undefined;
+    const candidates = filtered
+      .filter((r) => Number.isFinite(Number(r.latitude)) && Number.isFinite(Number(r.longitude)))
+      .map((r) => ({
+        id: r.id,
+        slug: r.slug,
+        name: r.name,
+        state: r.state,
+        lat: Number(r.latitude),
+        lng: Number(r.longitude),
+      }));
+    const originLatLng = { lat: origin.lat, lng: origin.lon };
+    const originLabel = origin.kind === "geo" ? "Your location" : origin.name;
+    // Default mode is roadtrip — matches the panel's initial state.
+    // The route URL param (set by the panel when the user explicitly
+    // saves an order) wins if present.
+    const routeParam = searchParams.get("route");
+    const orderedSlugs = routeParam ? routeParam.split(",").filter(Boolean) : null;
+    const plan =
+      orderedSlugs && orderedSlugs.length > 0
+        ? planFromOrderedSlugs(originLatLng, originLabel, candidates, orderedSlugs, "roadtrip")
+        : planTrip("roadtrip", originLatLng, originLabel, candidates, days);
+    if (!plan) return undefined;
+    const points: TripRoutePoint[] = [
+      { lat: origin.lat, lng: origin.lon, label: originLabel, kind: "origin" },
+      ...plan.resorts.map((r) => ({
+        lat: r.lat,
+        lng: r.lng,
+        label: r.name,
+        kind: "resort" as const,
+      })),
+    ];
+    return points;
+  }, [plannerOpen, days, filtered, origin, searchParams]);
+
   // ESC key closes the panel — keyboard parity with the X button.
   useEffect(() => {
     if (selectedId == null) return;
@@ -245,6 +290,7 @@ export default function MapPage({ resorts, driveTimes }: Props) {
           passFilter={passFilter}
           origin={origin}
           withinHours={withinHours}
+          days={days}
           sizeFilter={sizeFilter}
           nightOnly={nightOnly}
           passCounts={passCounts}
@@ -255,8 +301,10 @@ export default function MapPage({ resorts, driveTimes }: Props) {
           onFromCity={handleFromCity}
           onFromGeo={handleFromGeo}
           onWithinChange={(w) => updateParam("within", w)}
+          onDaysChange={(d) => updateParam("days", d > 1 ? String(d) : null)}
           onSizeChange={(s) => updateParam("size", s)}
           onNightChange={(v) => updateParam("night", v ? "1" : null)}
+          onOpenPlanner={() => updateParam("plan", "1")}
           onClearAll={clearAll}
           onOpenDrawer={() => setDrawerOpen(true)}
         />
@@ -280,6 +328,7 @@ export default function MapPage({ resorts, driveTimes }: Props) {
         driveTimeByResort={driveTimeByResort}
         selectedId={selectedId}
         onResortClick={setSelectedId}
+        tripRoute={tripRoute}
       />
 
       <AlaskaInset resorts={filtered} />
@@ -330,6 +379,15 @@ export default function MapPage({ resorts, driveTimes }: Props) {
           onClose={() => setSelectedId(null)}
         />
       )}
+
+      <TripPlannerPanel
+        open={plannerOpen && days >= 2}
+        origin={origin}
+        candidates={filtered}
+        days={days}
+        isAuthed={isAuthed}
+        onClose={() => updateParam("plan", null)}
+      />
 
       {/* First-visit banner asking permission to use device location.
           Stays mounted at all times — it self-suppresses via localStorage. */}

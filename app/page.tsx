@@ -1,11 +1,12 @@
 import { Suspense } from "react";
 import { supabase } from "@/lib/supabase";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 import MapPage from "@/components/Map/MapPage";
 
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const [resortsRes, driveTimesRes] = await Promise.all([
+  const [resortsRes, driveTimesRes, authRes] = await Promise.all([
     supabase
       .from("resorts")
       .select(
@@ -16,6 +17,11 @@ export default async function Home() {
     supabase
       .from("drive_time_cache")
       .select("resort_id, origin_name, duration_seconds, distance_meters"),
+    (async () => {
+      const ssr = await createSupabaseServerClient();
+      const { data } = await ssr.auth.getUser();
+      return { user: data.user };
+    })(),
   ]);
 
   if (resortsRes.error) {
@@ -39,6 +45,7 @@ export default async function Home() {
       <MapPage
         resorts={resortsRes.data ?? []}
         driveTimes={driveTimesRes.data ?? []}
+        isAuthed={!!authRes.user}
       />
     </Suspense>
   );

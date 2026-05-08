@@ -77,6 +77,13 @@ export default function AuthButton() {
             >
               ❤️ Favorites
             </Link>
+            <Link
+              href="/trips"
+              onClick={() => setMenuOpen(false)}
+              className="block border-t border-wn-charcoal/10 px-3 py-2 text-sm font-medium text-wn-charcoal transition hover:bg-wn-offwhite hover:text-wn-navy"
+            >
+              🗺️ My trips
+            </Link>
             <button
               type="button"
               onClick={async () => {
