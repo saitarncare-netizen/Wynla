@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ORIGINS, originByCode } from "@/lib/origins";
+import { ORIGINS, type Origin } from "@/lib/origins";
 import { PASS_COLORS, PASS_KEYS, PASS_LABELS } from "@/lib/passColors";
 import { SIZE_TIER_LABELS, type SizeTier } from "@/lib/sizeTier";
 
 type Props = {
   passFilter: string | null;
-  fromCode: string;
+  origin: Origin;
   withinHours: number;
   sizeFilter: SizeTier | null;
   nightOnly: boolean;
@@ -16,7 +16,8 @@ type Props = {
   filteredCount: number;
   totalCount: number;
   onPassChange: (p: string | null) => void;
-  onFromChange: (f: string) => void;
+  onFromCity: (code: string) => void;
+  onFromGeo: (lat: number, lng: number) => void;
   onWithinChange: (w: string | null) => void;
   onSizeChange: (s: SizeTier | null) => void;
   onNightChange: (v: boolean) => void;
@@ -40,7 +41,7 @@ type ActiveChip = {
 
 export default function FilterBar({
   passFilter,
-  fromCode,
+  origin,
   withinHours,
   sizeFilter,
   nightOnly,
@@ -49,7 +50,8 @@ export default function FilterBar({
   filteredCount,
   totalCount,
   onPassChange,
-  onFromChange,
+  onFromCity,
+  onFromGeo,
   onWithinChange,
   onSizeChange,
   onNightChange,
@@ -57,7 +59,6 @@ export default function FilterBar({
   onOpenDrawer,
 }: Props) {
   const totalPass = Object.values(passCounts).reduce((a, b) => a + b, 0);
-  const origin = originByCode(fromCode);
 
   // Build active-chip strip from current filter state. Chips render in a
   // stable order so the strip doesn't shuffle as users add/remove.
@@ -74,9 +75,10 @@ export default function FilterBar({
     });
   }
   if (tripActive) {
+    const fromShort = origin.kind === "geo" ? "here" : origin.short;
     activeChips.push({
       key: "trip",
-      label: `${tripPreset.label} from ${origin.short}`,
+      label: `${tripPreset.label} from ${fromShort}`,
       onRemove: () => onWithinChange(null),
     });
   }
@@ -97,10 +99,12 @@ export default function FilterBar({
 
   const moreCount = (sizeFilter ? 1 : 0) + (nightOnly ? 1 : 0);
 
-  // Trip dropdown label collapses From + preset into one line.
+  // Trip dropdown label collapses From + preset into one line. The geo
+  // origin gets a distinctive 📍 prefix so it's instantly recognizable.
+  const fromLabel = origin.kind === "geo" ? "📍 From here" : `From ${origin.short}`;
   const tripLabel = tripActive
-    ? `From ${origin.short} · ${tripPreset.label}`
-    : `From ${origin.short} · Anytime`;
+    ? `${fromLabel} · ${tripPreset.label}`
+    : `${fromLabel} · Anytime`;
 
   // Pass dropdown label shows the active pass + colored dot when one is set.
   const passLabel = passFilter
@@ -121,10 +125,11 @@ export default function FilterBar({
             onPassChange={onPassChange}
           />
           <TripDropdown
-            fromCode={fromCode}
+            origin={origin}
             withinHours={withinHours}
             label={tripLabel}
-            onFromChange={onFromChange}
+            onFromCity={onFromCity}
+            onFromGeo={onFromGeo}
             onWithinChange={onWithinChange}
           />
           <button
@@ -162,7 +167,7 @@ export default function FilterBar({
               key={chip.key}
               type="button"
               onClick={chip.onRemove}
-              className="inline-flex shrink-0 items-center gap-1 rounded-full border border-wn-navy bg-wn-navy px-2.5 py-1 text-[11px] font-semibold text-white transition-colors hover:bg-wn-navy/85"
+              className="inline-flex shrink-0 items-center gap-1 rounded-full border border-wn-navy bg-wn-navy px-2.5 py-1 text-[11px] font-semibold text-white transition-all duration-150 hover:bg-wn-navy/85 active:scale-95"
               aria-label={`Remove ${chip.label}`}
             >
               <span>{chip.label}</span>
@@ -278,20 +283,50 @@ function PassDropdown({
 /* -------------------------------------------------------------------------- */
 
 function TripDropdown({
-  fromCode,
+  origin,
   withinHours,
   label,
-  onFromChange,
+  onFromCity,
+  onFromGeo,
   onWithinChange,
 }: {
-  fromCode: string;
+  origin: Origin;
   withinHours: number;
   label: string;
-  onFromChange: (f: string) => void;
+  onFromCity: (code: string) => void;
+  onFromGeo: (lat: number, lng: number) => void;
   onWithinChange: (w: string | null) => void;
 }) {
   const { open, setOpen, ref } = useDropdown();
+  const [requestingGeo, setRequestingGeo] = useState(false);
+  const [geoError, setGeoError] = useState<string | null>(null);
   const tripActive = withinHours > 0;
+  const isGeo = origin.kind === "geo";
+
+  function handleUseHere() {
+    if (typeof navigator === "undefined" || !navigator.geolocation) {
+      setGeoError("Browser doesn't support location.");
+      return;
+    }
+    setRequestingGeo(true);
+    setGeoError(null);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        onFromGeo(pos.coords.latitude, pos.coords.longitude);
+        setRequestingGeo(false);
+        setOpen(false);
+      },
+      (err) => {
+        setRequestingGeo(false);
+        setGeoError(
+          err.code === err.PERMISSION_DENIED
+            ? "Permission denied. Allow location in your browser settings."
+            : "Couldn't get your location.",
+        );
+      },
+      { enableHighAccuracy: false, timeout: 8000, maximumAge: 60_000 },
+    );
+  }
 
   return (
     <div className="relative shrink-0" ref={ref}>
@@ -299,7 +334,7 @@ function TripDropdown({
         type="button"
         onClick={() => setOpen((v) => !v)}
         className={`inline-flex min-h-[36px] items-center gap-1.5 whitespace-nowrap rounded-md border px-3 py-1.5 text-xs font-semibold transition-colors duration-200 ${
-          tripActive
+          tripActive || isGeo
             ? "border-wn-navy bg-wn-navy text-white"
             : "border-wn-charcoal/20 bg-white text-wn-charcoal hover:border-wn-charcoal/40"
         }`}
@@ -317,12 +352,36 @@ function TripDropdown({
           <div className="mb-1 text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
             From
           </div>
+
+          <button
+            type="button"
+            onClick={handleUseHere}
+            disabled={requestingGeo}
+            className={`mb-2 flex w-full items-center gap-2 rounded-md border px-2.5 py-1.5 text-xs font-semibold transition-colors disabled:opacity-60 ${
+              isGeo
+                ? "border-wn-navy bg-wn-navy text-white"
+                : "border-wn-charcoal/15 bg-white text-wn-charcoal hover:border-wn-charcoal/40"
+            }`}
+          >
+            <span aria-hidden="true">📍</span>
+            <span>{requestingGeo ? "Locating…" : isGeo ? "Using your location" : "From here"}</span>
+            {isGeo && <span className="ml-auto text-[10px] text-white/75">live</span>}
+          </button>
+          {geoError && (
+            <p className="mb-2 text-[10px] leading-tight text-wn-charcoal/60">{geoError}</p>
+          )}
+
           <select
-            value={fromCode}
-            onChange={(e) => onFromChange(e.target.value)}
+            value={origin.kind === "city" ? origin.code : ""}
+            onChange={(e) => onFromCity(e.target.value)}
             className="mb-3 w-full rounded-md border border-wn-charcoal/20 bg-white px-2 py-1.5 text-xs font-medium text-wn-charcoal hover:border-wn-charcoal/40 focus:outline-none focus:ring-2 focus:ring-wn-sky"
             aria-label="From city"
           >
+            {origin.kind === "geo" && (
+              <option value="" disabled>
+                — pick a city —
+              </option>
+            )}
             {ORIGINS.map((o) => (
               <option key={o.code} value={o.code}>
                 {o.name}

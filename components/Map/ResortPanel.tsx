@@ -1,30 +1,25 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { passColor, passLabel, primaryPass } from "@/lib/passColors";
-import { formatDriveTime } from "@/lib/origins";
+import { formatDriveTime, type Origin } from "@/lib/origins";
 import { weatherGovUrl, windyUrl, googleMapsUrl } from "@/lib/externalLinks";
+import { fetchMatrixDriveTime, type MatrixResult } from "@/lib/mapboxMatrix";
 import FavoriteToggle from "@/components/auth/FavoriteToggle";
-import type { Resort } from "./MapPage";
-
-type DriveTime = {
-  resort_id: number;
-  origin_name: string;
-  duration_seconds: number;
-  distance_meters: number | null;
-};
+import type { Resort, DriveTime } from "./MapPage";
 
 type Props = {
   resort: Resort;
   driveTime: DriveTime | undefined;
-  originShort: string;
+  origin: Origin;
   onClose: () => void;
 };
 
 export default function ResortPanel({
   resort,
   driveTime,
-  originShort,
+  origin,
   onClose,
 }: Props) {
   const lng = Number(resort.longitude);
@@ -36,10 +31,44 @@ export default function ResortPanel({
   const primary = primaryPass(resort.passes);
   const heroBg = passColor(primary);
 
-  const driveText = driveTime ? formatDriveTime(driveTime.duration_seconds) : null;
-  const distanceMiles = driveTime?.distance_meters
-    ? Math.round(driveTime.distance_meters / 1609.34)
-    : null;
+  // Phase B: when the origin is the user's geolocation the initial drive
+  // time is a Haversine ESTIMATE. We upgrade it to a Mapbox Matrix exact
+  // value once the panel opens. The state is keyed on resort.id + origin
+  // signature so stale results from a previous pin are ignored without
+  // having to call setState synchronously inside the effect.
+  type MatrixState = {
+    key: string;
+    result: MatrixResult;
+  };
+  const matrixKey = `${resort.id}|${origin.kind}|${origin.lat.toFixed(5)}|${origin.lon.toFixed(5)}`;
+  const [matrixState, setMatrixState] = useState<MatrixState | null>(null);
+  const matrixResult = matrixState?.key === matrixKey ? matrixState.result : null;
+  useEffect(() => {
+    if (origin.kind !== "geo") return;
+    if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
+    const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
+    if (!token) return;
+    const ctrl = new AbortController();
+    fetchMatrixDriveTime({ lat: origin.lat, lng: origin.lon }, { lat, lng }, token, ctrl.signal)
+      .then((res) => {
+        if (ctrl.signal.aborted || !res) return;
+        setMatrixState({ key: matrixKey, result: res });
+      });
+    return () => ctrl.abort();
+  }, [matrixKey, lat, lng, origin]);
+
+  // Pick the best drive-time data we have for display.
+  const isEstimate = matrixResult ? false : driveTime?.is_estimate ?? false;
+  const displayDurationSeconds = matrixResult?.durationSeconds ?? driveTime?.duration_seconds ?? null;
+  const displayDistanceMeters =
+    matrixResult?.distanceMeters ?? driveTime?.distance_meters ?? null;
+  const driveText =
+    displayDurationSeconds != null ? formatDriveTime(displayDurationSeconds) : null;
+  const distanceMiles =
+    displayDistanceMeters != null
+      ? Math.round(displayDistanceMeters / 1609.34)
+      : null;
+  const originShort = origin.kind === "geo" ? "your location" : origin.short;
 
   return (
     <>
@@ -77,6 +106,16 @@ export default function ResortPanel({
             background: `linear-gradient(135deg, ${heroBg} 0%, #1E2952 100%)`,
           }}
         >
+          {/* Faint SVG-grain layer adding subtle depth to the flat gradient. */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 opacity-[0.06] mix-blend-overlay"
+            style={{
+              backgroundImage:
+                "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.85'/></svg>\")",
+              backgroundSize: "160px 160px",
+            }}
+          />
           <div className="relative h-32 px-4 pt-4 pb-3 md:h-36">
             {/* Top-right: Favorite + Close */}
             <div className="absolute right-3 top-3 flex items-center gap-2 z-10">
@@ -121,20 +160,29 @@ export default function ResortPanel({
             </div>
           )}
 
-          {/* Drive time card */}
+          {/* Drive time card. For geo origins we show "≈ 4h 20m" until the
+              Mapbox Matrix call resolves, then swap in the exact value. */}
           {driveText && (
             <div className="mb-4 rounded-lg border border-wn-charcoal/10 bg-wn-offwhite px-3 py-2.5">
               <div className="text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
                 Drive from {originShort}
               </div>
               <div className="mt-0.5 flex items-baseline gap-2">
-                <span className="text-lg font-bold text-wn-navy">🚗 {driveText}</span>
+                <span className="text-lg font-bold text-wn-navy">
+                  🚗 {isEstimate ? "≈ " : ""}
+                  {driveText}
+                </span>
                 {distanceMiles && (
                   <span className="text-xs text-wn-charcoal/60">
                     {distanceMiles} mi
                   </span>
                 )}
               </div>
+              {isEstimate && (
+                <div className="mt-1 text-[10px] text-wn-charcoal/45">
+                  Estimate based on straight-line distance.
+                </div>
+              )}
             </div>
           )}
 

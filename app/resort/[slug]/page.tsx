@@ -169,13 +169,24 @@ export default async function ResortPage({
           background: `linear-gradient(135deg, ${heroBg} 0%, #1E2952 60%, #0F1530 100%)`,
         }}
       >
-        {/* Subtle topographic texture overlay using a CSS pattern */}
+        {/* Two-stop atmosphere overlay — soft highlight top-left, deeper
+            shadow bottom-right. Plus a faint SVG-grain layer that gives
+            the gradient a Stripe/Linear-style depth instead of a flat fill. */}
         <div
           aria-hidden="true"
           className="absolute inset-0 opacity-10"
           style={{
             backgroundImage:
               "radial-gradient(circle at 20% 30%, rgba(255,255,255,0.4) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(255,255,255,0.3) 0%, transparent 50%)",
+          }}
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 opacity-[0.07] mix-blend-overlay"
+          style={{
+            backgroundImage:
+              "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.85'/></svg>\")",
+            backgroundSize: "160px 160px",
           }}
         />
 
@@ -197,10 +208,10 @@ export default async function ResortPage({
               <PassBadge key={p} pass={p} />
             ))}
           </div>
-          <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-6xl">
+          <h1 className="text-4xl font-extrabold leading-[0.95] tracking-tight text-white sm:text-7xl md:text-[7.5rem] md:tracking-[-0.025em]">
             {resort.name}
           </h1>
-          <p className="mt-2 text-base text-white/85 sm:text-lg">
+          <p className="mt-3 text-base text-white/85 sm:text-lg">
             {resort.state}
             {resort.region ? " · " + resort.region : ""}
             {resort.city ? " · " + resort.city : ""}

@@ -150,7 +150,9 @@ export default function MapView({
       });
 
       // Listed-tier pins: size by vertical_drop (12/16/20 px), color by primary pass.
-      // Selected pin gets a wider navy stroke for visual feedback while panel is open.
+      // Selected pin gets a wider navy stroke for visual feedback while panel
+      // is open. Hovered pin grows by 1.25× and gets a thicker white stroke
+      // — a Stripe/Linear-style touch that signals "this is interactive".
       map.addLayer({
         id: LAYER_LISTED,
         type: "circle",
@@ -162,12 +164,20 @@ export default function MapView({
         ],
         paint: {
           "circle-color": ["get", "color"],
-          "circle-radius": ["get", "radius"],
+          "circle-radius": [
+            "interpolate",
+            ["linear"],
+            ["case", ["boolean", ["feature-state", "hover"], false], 1, 0],
+            0, ["get", "radius"],
+            1, ["*", ["get", "radius"], 1.25],
+          ],
           "circle-opacity": 0.85,
           "circle-stroke-width": [
             "case",
             ["boolean", ["feature-state", "selected"], false],
             3,
+            ["boolean", ["feature-state", "hover"], false],
+            2.5,
             1.5,
           ],
           "circle-stroke-color": [
@@ -176,6 +186,8 @@ export default function MapView({
             "#1E2952",
             "#FFFFFF",
           ],
+          "circle-radius-transition": { duration: 150 },
+          "circle-stroke-width-transition": { duration: 150 },
         },
       });
 
@@ -192,11 +204,19 @@ export default function MapView({
         ],
         paint: {
           "circle-color": ["get", "color"],
-          "circle-radius": ["get", "radius"],
+          "circle-radius": [
+            "interpolate",
+            ["linear"],
+            ["case", ["boolean", ["feature-state", "hover"], false], 1, 0],
+            0, ["get", "radius"],
+            1, ["*", ["get", "radius"], 1.25],
+          ],
           "circle-stroke-width": [
             "case",
             ["boolean", ["feature-state", "selected"], false],
             4,
+            ["boolean", ["feature-state", "hover"], false],
+            3,
             2,
           ],
           "circle-stroke-color": [
@@ -205,6 +225,8 @@ export default function MapView({
             "#1E2952",
             "#FFFFFF",
           ],
+          "circle-radius-transition": { duration: 150 },
+          "circle-stroke-width-transition": { duration: 150 },
         },
       });
 
@@ -227,16 +249,42 @@ export default function MapView({
       // Pin click → notify parent (which opens the side panel / bottom sheet).
       // Stage 4.1 used a Mapbox popup here; that's now handled by ResortPanel.
       const pinLayers = [LAYER_LISTED, LAYER_FEATURED];
+      let hoveredFeatureId: number | null = null;
       pinLayers.forEach((layerId) => {
         map.on("click", layerId, (e) => {
           const f = e.features?.[0];
           const id = f?.properties?.id;
           if (typeof id === "number") onResortClickRef.current(id);
         });
-        map.on("mouseenter", layerId, () => {
+        // Hover state: track the feature under the cursor and toggle its
+        // hover feature-state. Pin radius/stroke smoothly scale via the
+        // paint expressions defined on each layer.
+        map.on("mousemove", layerId, (e) => {
+          const f = e.features?.[0];
+          const id = f?.properties?.id;
+          if (typeof id !== "number") return;
+          if (hoveredFeatureId === id) return;
+          if (hoveredFeatureId != null) {
+            map.setFeatureState(
+              { source: SOURCE_ID, id: hoveredFeatureId },
+              { hover: false },
+            );
+          }
+          hoveredFeatureId = id;
+          map.setFeatureState(
+            { source: SOURCE_ID, id },
+            { hover: true },
+          );
           map.getCanvas().style.cursor = "pointer";
         });
         map.on("mouseleave", layerId, () => {
+          if (hoveredFeatureId != null) {
+            map.setFeatureState(
+              { source: SOURCE_ID, id: hoveredFeatureId },
+              { hover: false },
+            );
+            hoveredFeatureId = null;
+          }
           map.getCanvas().style.cursor = "";
         });
       });
