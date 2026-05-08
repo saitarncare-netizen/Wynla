@@ -238,6 +238,92 @@ export function planTrip(
     : planRoadtrip(origin, originLabel, candidates, days);
 }
 
+// Plan a trip where SOME days are user-locked to a specific slug and
+// the rest fill in via greedy nearest-neighbor from the previous day's
+// position. Picks and gaps are interleaved correctly, so a Day-1
+// override of "loveland" leads Days 2..N to greedy from Loveland CO,
+// not from the origin. Lock entries for resorts not in `candidates`
+// are silently dropped.
+export function planWithOverrides(
+  origin: LatLng,
+  originLabel: string,
+  candidates: PlannerCandidate[],
+  days: number,
+  overridesByDay: Record<number, string>,
+): TripPlan | null {
+  if (candidates.length === 0 || days < 1) return null;
+  const bySlug = new Map(candidates.map((c) => [c.slug, c]));
+  const visited = new Set<number>();
+  const resorts: PlannerCandidate[] = [];
+  let cursor: { lat: number; lng: number; name: string; kind: "origin" | "resort" } = {
+    lat: origin.lat,
+    lng: origin.lng,
+    name: originLabel,
+    kind: "origin",
+  };
+
+  for (let day = 0; day < days; day++) {
+    let pick: PlannerCandidate | null = null;
+    const overrideSlug = overridesByDay[day];
+    if (overrideSlug) {
+      const found = bySlug.get(overrideSlug);
+      if (found && !visited.has(found.id)) pick = found;
+    }
+    if (!pick) {
+      // Greedy nearest unvisited from cursor — no drive cap when filling
+      // gaps around user picks, since the user has explicitly anchored
+      // a far point and may want the algorithm to reach toward it.
+      let bestSeconds = Infinity;
+      for (const c of candidates) {
+        if (visited.has(c.id)) continue;
+        const meters = haversineMeters(cursor.lat, cursor.lng, c.lat, c.lng);
+        const seconds = estimateDriveSeconds(meters);
+        if (seconds < bestSeconds) {
+          bestSeconds = seconds;
+          pick = c;
+        }
+      }
+    }
+    if (!pick) break;
+    resorts.push(pick);
+    visited.add(pick.id);
+    cursor = { lat: pick.lat, lng: pick.lng, name: pick.name, kind: "resort" };
+  }
+  if (resorts.length === 0) return null;
+
+  // Build legs by walking the route again so we get the correct fromName.
+  const legs: TripLeg[] = [];
+  let walkCursor: { lat: number; lng: number; name: string; kind: "origin" | "resort" } = {
+    lat: origin.lat,
+    lng: origin.lng,
+    name: originLabel,
+    kind: "origin",
+  };
+  for (const r of resorts) {
+    legs.push(legBetween(walkCursor.kind, walkCursor.name, walkCursor, r));
+    walkCursor = { lat: r.lat, lng: r.lng, name: r.name, kind: "resort" };
+  }
+
+  const last = resorts[resorts.length - 1];
+  const homeLeg = legBetween(
+    "resort",
+    last.name,
+    { lat: last.lat, lng: last.lng },
+    { id: -1, slug: "__origin__", name: originLabel, state: "", lat: origin.lat, lng: origin.lng },
+  );
+  const totalDriveSeconds =
+    legs.reduce((s, l) => s + l.durationSeconds, 0) + homeLeg.durationSeconds;
+
+  return {
+    mode: "roadtrip",
+    days: resorts.length,
+    resorts,
+    legs,
+    homeLeg,
+    totalDriveSeconds,
+  };
+}
+
 // Reconstruct a plan from a fixed list of resort slugs (the form used
 // by saved trips and the share-link URL state). Skips resorts not in
 // `candidates`. Used by the panel when ?route=… or a saved trip

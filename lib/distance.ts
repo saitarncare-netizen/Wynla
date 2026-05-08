@@ -1,19 +1,18 @@
-// Haversine + drive-time estimator for the geolocation feature.
-// We keep a cached drive_time_cache for the 4 fixed origins (NYC/Boston/
-// Philly/Hartford). When the origin is the user's actual location, we
-// compute great-circle distance and estimate drive time on-the-fly:
-//   driveMeters ≈ greatCircleMeters × 1.3
-//   driveSeconds = (driveMeters / METERS_PER_MILE) / AVG_MPH × 3600
+// Haversine + drive-time estimator. Used both for live geolocation
+// origins (no cached row in drive_time_cache) and for the trip planner's
+// per-leg estimates. The panel + ResortPanel both upgrade to a Mapbox
+// Matrix exact value once the user is on a specific pin.
 //
-// 1.3 is a typical "circuity factor" for US road networks; 55 mph splits
-// the difference between 65 mph highway and 35 mph local. The estimate
-// is good enough for filtering ("≤ 5h trips"); the panel upgrades to a
-// Mapbox Matrix exact value on click (see lib/mapboxMatrix.ts).
+// Tuning: 1.3 × Haversine + 55 mph over-estimated cross-country routes
+// by ~10h (NYC→Rockies came out at 39h vs ~28h real). Lowering the
+// factor to 1.2 and bumping the average speed to 60 mph keeps short
+// East-Coast drives within ~10% of Mapbox while making far Western
+// resorts feel reachable instead of impossible.
 
 const EARTH_RADIUS_METERS = 6_371_000;
 const METERS_PER_MILE = 1609.34;
-const HIGHWAY_FACTOR = 1.3;
-const AVG_MPH = 55;
+const HIGHWAY_FACTOR = 1.2;
+const AVG_MPH = 60;
 
 export function haversineMeters(
   lat1: number,

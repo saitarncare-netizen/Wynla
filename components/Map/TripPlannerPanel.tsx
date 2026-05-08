@@ -8,6 +8,7 @@ import { passColor, primaryPass } from "@/lib/passColors";
 import {
   planTrip,
   planFromOrderedSlugs,
+  planWithOverrides,
   type PlannerCandidate,
   type TripPlan,
 } from "@/lib/tripPlanner";
@@ -100,16 +101,23 @@ export default function TripPlannerPanel({
     return planTrip(mode, originLatLng, originLabel, candidatePool, days);
   }, [mode, originLat, originLng, originLabel, candidatePool, allCandidatePool, days, initialOrderedSlugs]);
 
-  // Final plan = initial plan with per-day overrides spliced in.
-  // Built by re-running planFromOrderedSlugs against allCandidatePool so
-  // resorts the user picked from outside the filter still resolve.
+  // Final plan = anchor-and-greedy: each day uses its override if set,
+  // otherwise greedy-nearest-unvisited from the previous day's position.
+  // This means a Day-1 override of a far resort cascades — Days 2..N
+  // greedy from THERE, not from the origin. Basecamp mode uses the
+  // first override (if any) for all days.
   const plan: TripPlan | null = useMemo(() => {
     if (!initialPlan) return null;
     if (Object.keys(overrides).length === 0) return initialPlan;
-    const slugs = initialPlan.resorts.map((r, i) => overrides[i] ?? r.slug);
     const originLatLng = { lat: originLat, lng: originLng };
-    return planFromOrderedSlugs(originLatLng, originLabel, allCandidatePool, slugs, mode);
-  }, [initialPlan, overrides, originLat, originLng, originLabel, allCandidatePool, mode]);
+    if (mode === "basecamp") {
+      const firstOverride = overrides[0];
+      if (!firstOverride) return initialPlan;
+      const slugs = Array(days).fill(firstOverride);
+      return planFromOrderedSlugs(originLatLng, originLabel, allCandidatePool, slugs, "basecamp");
+    }
+    return planWithOverrides(originLatLng, originLabel, allCandidatePool, days, overrides);
+  }, [initialPlan, overrides, originLat, originLng, originLabel, allCandidatePool, mode, days]);
 
   // Compute the "from" point for the picker based on which day the user
   // is editing. Day 0 starts at the origin; day N starts at day N-1's
