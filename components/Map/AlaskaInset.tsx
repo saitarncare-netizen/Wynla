@@ -45,7 +45,7 @@ export default function AlaskaInset({ resorts }: Props) {
 
     const map = new mapboxgl.Map({
       container: container.current,
-      style: "mapbox://styles/mapbox/outdoors-v12",
+      style: "mapbox://styles/mapbox/light-v11",
       // Force Mercator (see MapView.tsx for rationale).
       projection: "mercator",
       bounds: ALASKA_BOUNDS,

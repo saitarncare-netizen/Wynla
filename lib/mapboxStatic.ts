@@ -12,7 +12,7 @@ type StaticMapOptions = {
   height?: number;
   pinColor?: string;     // hex without leading #
   retina?: boolean;
-  style?: string;        // mapbox style URL slug, e.g. "outdoors-v12"
+  style?: string;        // mapbox style URL slug, e.g. "light-v11"
   token?: string;
 };
 
@@ -25,7 +25,7 @@ export function staticMapUrl(opts: StaticMapOptions): string {
     height = 540,
     pinColor = "1E2952",
     retina = true,
-    style = "outdoors-v12",
+    style = "light-v11",
     token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN,
   } = opts;
   if (!token) return "";

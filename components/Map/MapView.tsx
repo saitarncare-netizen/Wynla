@@ -79,9 +79,9 @@ export default function MapView({
 
     const map = new mapboxgl.Map({
       container: mapContainer.current,
-      style: "mapbox://styles/mapbox/outdoors-v12",
-      // Force Mercator. Mapbox 3.x + outdoors-v12 defaults to globe at low
-      // zoom, which clips circle layers and shows the earth as a sphere.
+      style: "mapbox://styles/mapbox/light-v11",
+      // Force Mercator. Mapbox 3.x defaults to globe at low zoom, which
+      // clips circle layers and shows the earth as a sphere.
       projection: "mercator",
       center: [-95, 40],
       zoom: 3.6,
@@ -259,7 +259,6 @@ export default function MapView({
       map.remove();
       mapRef.current = null;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Update GeoJSON data when filtered resorts change
