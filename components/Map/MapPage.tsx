@@ -384,6 +384,7 @@ export default function MapPage({ resorts, driveTimes, isAuthed }: Props) {
         open={plannerOpen && days >= 2}
         origin={origin}
         candidates={filtered}
+        allResorts={resorts}
         days={days}
         isAuthed={isAuthed}
         onClose={() => updateParam("plan", null)}

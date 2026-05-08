@@ -338,6 +338,18 @@ function TripDropdown({
   const { open, setOpen, ref } = useDropdown();
   const [requestingGeo, setRequestingGeo] = useState(false);
   const [geoError, setGeoError] = useState<string | null>(null);
+  // Local visual-only mirror of `days` for the Big-trip slider so dragging
+  // is responsive even though committing the value to the URL triggers a
+  // full server-side re-fetch. Render-phase sync: when the parent's `days`
+  // prop changes (e.g. via URL update or a different preset), we adopt it
+  // as the new draft. This is React's recommended pattern for derived
+  // state from props (no setState-in-effect cascade).
+  const [draftDays, setDraftDays] = useState(days);
+  const [lastSeenDays, setLastSeenDays] = useState(days);
+  if (lastSeenDays !== days) {
+    setLastSeenDays(days);
+    setDraftDays(days);
+  }
   const currentKind = tripKindFor(withinHours, days);
   const tripActive = currentKind !== "anytime";
   const isGeo = origin.kind === "geo";
@@ -476,7 +488,7 @@ function TripDropdown({
             <div className="mt-3 rounded-md border border-wn-charcoal/10 bg-wn-offwhite p-2">
               <div className="mb-1.5 flex items-baseline justify-between text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/60">
                 <span>How many days?</span>
-                <span className="text-wn-navy">{days}d</span>
+                <span className="text-wn-navy">{draftDays}d</span>
               </div>
               {currentKind === "weekend" ? (
                 <div className="flex gap-1">
@@ -501,8 +513,15 @@ function TripDropdown({
                   min={3}
                   max={10}
                   step={1}
-                  value={days}
-                  onChange={(e) => onDaysChange(Number(e.target.value))}
+                  value={draftDays}
+                  // Live drag updates only the local visual; the URL +
+                  // server re-fetch waits until the user lets go (or
+                  // releases an arrow key). Without this the slider felt
+                  // stuck because every tick triggered a full RSC fetch.
+                  onChange={(e) => setDraftDays(Number(e.target.value))}
+                  onMouseUp={(e) => onDaysChange(Number((e.target as HTMLInputElement).value))}
+                  onTouchEnd={(e) => onDaysChange(Number((e.target as HTMLInputElement).value))}
+                  onKeyUp={(e) => onDaysChange(Number((e.target as HTMLInputElement).value))}
                   className="w-full accent-wn-navy"
                   aria-label="Trip length in days"
                 />
@@ -511,13 +530,17 @@ function TripDropdown({
               <button
                 type="button"
                 onClick={() => {
+                  // Make sure the latest dragged value lands in the URL
+                  // before opening the planner — otherwise the panel
+                  // could open with a stale day count.
+                  if (draftDays !== days) onDaysChange(draftDays);
                   onOpenPlanner();
                   setOpen(false);
                 }}
                 className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-md bg-wn-navy px-2.5 py-1.5 text-xs font-semibold text-white transition hover:bg-wn-navy/90 active:scale-95"
               >
                 <span aria-hidden="true">🗺️</span>
-                <span>Plan my {days}-day trip</span>
+                <span>Plan my {draftDays}-day trip</span>
               </button>
             </div>
           )}
