@@ -9,7 +9,7 @@ export default async function Home() {
     supabase
       .from("resorts")
       .select(
-        "id, slug, name, state, region, latitude, longitude, passes, tier, vertical_drop, hero_image_url, total_trails, total_acres, website_url",
+        "id, slug, name, state, region, latitude, longitude, passes, tier, vertical_drop, total_trails, total_acres, website_url, has_night_skiing",
       )
       .eq("active", true)
       .order("name"),

@@ -45,7 +45,7 @@ export default function AlaskaInset({ resorts }: Props) {
 
     const map = new mapboxgl.Map({
       container: container.current,
-      style: "mapbox://styles/mapbox/light-v11",
+      style: "mapbox://styles/mapbox/outdoors-v12",
       bounds: ALASKA_BOUNDS,
       interactive: false,
       attributionControl: false,

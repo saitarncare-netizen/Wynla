@@ -1,15 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { passColor, passLabel } from "@/lib/passColors";
+import { passColor, passLabel, primaryPass } from "@/lib/passColors";
 import { formatDriveTime } from "@/lib/origins";
-import { satelliteHeroUrl } from "@/lib/mapboxStatic";
-import {
-  mountainForecastUrl,
-  weatherGovUrl,
-  windyUrl,
-  googleMapsUrl,
-} from "@/lib/externalLinks";
+import { weatherGovUrl, windyUrl, googleMapsUrl } from "@/lib/externalLinks";
 import FavoriteToggle from "@/components/auth/FavoriteToggle";
 import type { Resort } from "./MapPage";
 
@@ -35,16 +29,12 @@ export default function ResortPanel({
 }: Props) {
   const lng = Number(resort.longitude);
   const lat = Number(resort.latitude);
-  const isFeatured = resort.tier === "featured";
 
-  // Hero image: real Wikimedia photo when we have one, otherwise a Mapbox
-  // satellite aerial of the actual coordinates. Satellite is honest (the user
-  // sees the real mountain terrain) and always covers — no resort is
-  // imageless. Mapbox satellite is licensed under our token.
-  const heroUrl =
-    resort.hero_image_url ??
-    satelliteHeroUrl({ lng, lat, width: 760, height: 320 });
-  const heroIsSatellite = !resort.hero_image_url;
+  // Typographic hero — pass-color gradient instead of imagery. All resorts
+  // get equal visual treatment regardless of tier. Primary pass drives the
+  // gradient hue (matches the pin color on the map for visual continuity).
+  const primary = primaryPass(resort.passes);
+  const heroBg = passColor(primary);
 
   const driveText = driveTime ? formatDriveTime(driveTime.duration_seconds) : null;
   const distanceMiles = driveTime?.distance_meters
@@ -80,48 +70,37 @@ export default function ResortPanel({
           <div className="h-1 w-10 rounded-full bg-wn-charcoal/20" />
         </div>
 
-        {/* Hero strip */}
-        <div className="relative shrink-0 overflow-hidden">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={heroUrl}
-            alt={
-              heroIsSatellite
-                ? `Satellite view of ${resort.name}`
-                : `${resort.name} resort photo`
-            }
-            className="h-40 w-full object-cover md:h-44"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-wn-navy/70 to-transparent" />
+        {/* Typographic hero — pass-color gradient + resort name. No image. */}
+        <div
+          className="relative shrink-0 overflow-hidden"
+          style={{
+            background: `linear-gradient(135deg, ${heroBg} 0%, #1E2952 100%)`,
+          }}
+        >
+          <div className="relative h-32 px-4 pt-4 pb-3 md:h-36">
+            {/* Top-right: Favorite + Close */}
+            <div className="absolute right-3 top-3 flex items-center gap-2 z-10">
+              <FavoriteToggle resortId={resort.id} />
+              <button
+                type="button"
+                onClick={onClose}
+                aria-label="Close"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/95 text-wn-navy shadow-md backdrop-blur-sm transition hover:bg-white"
+              >
+                <span aria-hidden="true" className="text-lg leading-none">×</span>
+              </button>
+            </div>
 
-          {/* Top-right action stack: Favorite + Close */}
-          <div className="absolute right-3 top-3 flex items-center gap-2">
-            <FavoriteToggle resortId={resort.id} />
-            <button
-              type="button"
-              onClick={onClose}
-              aria-label="Close"
-              className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/95 text-wn-navy shadow-md backdrop-blur-sm transition hover:bg-white"
-            >
-              <span aria-hidden="true" className="text-lg leading-none">×</span>
-            </button>
-          </div>
-
-          {isFeatured && (
-            <span className="absolute left-3 top-3 inline-flex items-center rounded-md bg-wn-gold/95 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-wn-navy shadow-sm">
-              ★ Featured
-            </span>
-          )}
-
-          {/* Title overlaid on hero */}
-          <div className="absolute inset-x-0 bottom-0 px-4 pb-3">
-            <h2 className="text-lg font-extrabold leading-tight text-white drop-shadow-sm sm:text-xl">
-              {resort.name}
-            </h2>
-            <p className="text-xs text-white/85">
-              {resort.state}
-              {resort.region ? " · " + resort.region : ""}
-            </p>
+            {/* Title block bottom-left */}
+            <div className="absolute inset-x-4 bottom-3">
+              <h2 className="text-2xl font-extrabold leading-tight text-white drop-shadow-sm sm:text-3xl">
+                {resort.name}
+              </h2>
+              <p className="mt-0.5 text-xs text-white/85">
+                {resort.state}
+                {resort.region ? " · " + resort.region : ""}
+              </p>
+            </div>
           </div>
         </div>
 
@@ -159,8 +138,8 @@ export default function ResortPanel({
             </div>
           )}
 
-          {/* Quick stats — featured only, only fields we have on home query */}
-          {isFeatured && (resort.vertical_drop || resort.total_trails || resort.total_acres) && (
+          {/* Quick stats — show whenever any field exists, regardless of tier */}
+          {(resort.vertical_drop || resort.total_trails || resort.total_acres) && (
             <div className="mb-4 grid grid-cols-3 gap-2">
               {resort.vertical_drop != null && (
                 <Stat label="Vert" value={`${resort.vertical_drop.toLocaleString()} ft`} />
@@ -174,27 +153,36 @@ export default function ResortPanel({
             </div>
           )}
 
-          {/* Current Conditions — 3 weather link-outs */}
-          <Section title="Current Conditions">
-            <div className="grid grid-cols-1 gap-1.5">
-              <PanelLink
-                href={mountainForecastUrl(resort.name)}
-                emoji="🏔️"
-                label="Mountain Forecast"
-                sub="Ski-specific by elevation"
-              />
-              <PanelLink
+          {/* Weather — single card with Weather.gov + Windy sub-rows */}
+          <Section title="Weather">
+            <div className="rounded-lg border border-wn-charcoal/10 bg-white overflow-hidden">
+              <a
                 href={weatherGovUrl(lat, lng)}
-                emoji="🌡️"
-                label="Weather.gov"
-                sub="US gov 7-day"
-              />
-              <PanelLink
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center gap-2.5 px-3 py-2.5 transition hover:bg-wn-offwhite"
+              >
+                <span aria-hidden="true" className="text-base">🌡️</span>
+                <div className="min-w-0 flex-1">
+                  <div className="text-sm font-semibold text-wn-navy">Weather.gov forecast</div>
+                  <div className="text-[11px] text-wn-charcoal/60">Official US 7-day forecast</div>
+                </div>
+                <span className="text-wn-navy/40 transition group-hover:translate-x-0.5 group-hover:text-wn-navy">↗</span>
+              </a>
+              <div className="border-t border-wn-charcoal/10" />
+              <a
                 href={windyUrl(lat, lng)}
-                emoji="🌬️"
-                label="Windy.com"
-                sub="Animated wind layer"
-              />
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center gap-2.5 px-3 py-2.5 transition hover:bg-wn-offwhite"
+              >
+                <span aria-hidden="true" className="text-base">🌬️</span>
+                <div className="min-w-0 flex-1">
+                  <div className="text-sm font-semibold text-wn-navy">Windy.com</div>
+                  <div className="text-[11px] text-wn-charcoal/60">Animated wind layer</div>
+                </div>
+                <span className="text-wn-navy/40 transition group-hover:translate-x-0.5 group-hover:text-wn-navy">↗</span>
+              </a>
             </div>
           </Section>
 

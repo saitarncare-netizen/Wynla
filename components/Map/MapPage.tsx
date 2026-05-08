@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import MapView from "./MapView";
 import AlaskaInset from "./AlaskaInset";
 import FilterBar from "./FilterBar";
+import FilterDrawer from "./FilterDrawer";
 import ResortPanel from "./ResortPanel";
 import AuthButton from "@/components/auth/AuthButton";
 import Link from "next/link";
@@ -23,10 +24,10 @@ export type Resort = {
   passes: string[];
   tier: "featured" | "listed";
   vertical_drop: number | null;
-  hero_image_url: string | null;
   total_trails: number | null;
   total_acres: number | null;
   website_url: string | null;
+  has_night_skiing: boolean | null;
 };
 
 type DriveTime = {
@@ -50,12 +51,15 @@ export default function MapPage({ resorts, driveTimes }: Props) {
   const searchParams = useSearchParams();
   const [, startTransition] = useTransition();
   const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const passFilter = searchParams.get("pass");
   const sizeParam = searchParams.get("size");
   const sizeFilter: SizeTier | null = isSizeTier(sizeParam) ? sizeParam : null;
   const fromCode = searchParams.get("from") ?? "nyc";
   const withinHours = Number(searchParams.get("within")) || 0;
+  const nightOnly = searchParams.get("night") === "1";
+  // featured URL param kept for backward compatibility (no UI control).
   const featuredOnly = searchParams.get("featured") === "1";
 
   const origin = originByCode(fromCode);
@@ -75,13 +79,14 @@ export default function MapPage({ resorts, driveTimes }: Props) {
     return resorts.filter((r) => {
       if (featuredOnly && r.tier !== "featured") return false;
       if (passFilter && !(r.passes ?? []).includes(passFilter)) return false;
+      if (nightOnly && !r.has_night_skiing) return false;
       if (withinHours > 0) {
         const dt = driveTimeByResort.get(r.id)?.get(origin.name);
         if (!dt || dt.duration_seconds > withinHours * 3600) return false;
       }
       return true;
     });
-  }, [resorts, featuredOnly, passFilter, withinHours, origin, driveTimeByResort]);
+  }, [resorts, featuredOnly, passFilter, nightOnly, withinHours, origin, driveTimeByResort]);
 
   const filtered = useMemo(() => {
     return filteredIgnoringSize.filter((r) => matchesSizeFilter(r.vertical_drop, sizeFilter));
@@ -118,11 +123,6 @@ export default function MapPage({ resorts, driveTimes }: Props) {
     return counts;
   }, [resorts, featuredOnly]);
 
-  const featuredCount = useMemo(
-    () => resorts.filter((r) => r.tier === "featured").length,
-    [resorts],
-  );
-
   function updateParam(key: string, value: string | null) {
     const params = new URLSearchParams(searchParams.toString());
     if (value === null || value === "") params.delete(key);
@@ -130,6 +130,12 @@ export default function MapPage({ resorts, driveTimes }: Props) {
     const qs = params.toString();
     startTransition(() => {
       router.replace(qs ? `?${qs}` : "?", { scroll: false });
+    });
+  }
+
+  function clearAll() {
+    startTransition(() => {
+      router.replace("?", { scroll: false });
     });
   }
 
@@ -164,21 +170,6 @@ export default function MapPage({ resorts, driveTimes }: Props) {
             </span>
           </div>
           <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={() => updateParam("featured", featuredOnly ? null : "1")}
-              className={`rounded-md border px-2.5 py-1 text-xs font-semibold transition-all duration-200 ${
-                featuredOnly
-                  ? "border-wn-gold bg-wn-gold/15 text-wn-charcoal"
-                  : "border-wn-charcoal/20 bg-white text-wn-charcoal/70 hover:border-wn-charcoal/40"
-              }`}
-              title={`Show only the ${featuredCount} deeply-detailed resorts`}
-            >
-              ★ Featured {featuredOnly ? "ON" : "OFF"}
-            </button>
-            <span className="text-xs font-medium text-wn-charcoal/70">
-              {filtered.length} / {resorts.length}
-            </span>
             <Link
               href="/pro"
               className="hidden rounded-md border border-wn-gold/60 bg-wn-gold/10 px-2.5 py-1 text-xs font-semibold text-wn-navy transition hover:bg-wn-gold/25 sm:inline-block"
@@ -191,18 +182,35 @@ export default function MapPage({ resorts, driveTimes }: Props) {
         </div>
         <FilterBar
           passFilter={passFilter}
-          sizeFilter={sizeFilter}
           fromCode={fromCode}
           withinHours={withinHours}
+          sizeFilter={sizeFilter}
+          nightOnly={nightOnly}
+          passCounts={passCounts}
+          hiddenByNullSize={hiddenByNullSize}
+          filteredCount={filtered.length}
+          totalCount={resorts.length}
           onPassChange={(p) => updateParam("pass", p)}
-          onSizeChange={(s) => updateParam("size", s)}
           onFromChange={(f) => updateParam("from", f)}
           onWithinChange={(w) => updateParam("within", w)}
-          passCounts={passCounts}
-          sizeCounts={sizeCounts}
-          hiddenByNullSize={hiddenByNullSize}
+          onSizeChange={(s) => updateParam("size", s)}
+          onNightChange={(v) => updateParam("night", v ? "1" : null)}
+          onClearAll={clearAll}
+          onOpenDrawer={() => setDrawerOpen(true)}
         />
       </header>
+
+      <FilterDrawer
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        sizeFilter={sizeFilter}
+        nightOnly={nightOnly}
+        sizeCounts={sizeCounts}
+        hiddenByNullSize={hiddenByNullSize}
+        onSizeChange={(s) => updateParam("size", s)}
+        onNightChange={(v) => updateParam("night", v ? "1" : null)}
+        onClearAll={clearAll}
+      />
 
       <MapView
         resorts={filtered}
@@ -226,7 +234,7 @@ export default function MapPage({ resorts, driveTimes }: Props) {
             </p>
             <button
               type="button"
-              onClick={() => router.replace("?", { scroll: false })}
+              onClick={clearAll}
               className="inline-flex items-center gap-1 rounded-md bg-wn-navy px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-wn-navy/90"
             >
               Reset all filters

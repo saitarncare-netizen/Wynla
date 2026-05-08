@@ -2,23 +2,6 @@
 // Used by both the detail page and the map ResortPanel so the link patterns
 // stay in one place — change once, propagates everywhere.
 
-// Build a Mountain-Forecast peak slug from the resort name.
-// Their convention: words separated by hyphens, original case preserved.
-// Strip "Resort"/"Ski Area" suffix + apostrophes/periods so common names
-// like "Mt. Brighton" → "Mt-Brighton" land closer to a real peak page.
-// Some resorts will still 404 — Mountain-Forecast's 404 page has search.
-export function mountainForecastSlug(name: string): string {
-  return name
-    .replace(/\s*(Resort|Mountain Resort|Ski Area|Ski Resort)\s*$/i, "")
-    .replace(/['.]/g, "")
-    .trim()
-    .replace(/\s+/g, "-");
-}
-
-export function mountainForecastUrl(name: string): string {
-  return `https://www.mountain-forecast.com/peaks/${mountainForecastSlug(name)}`;
-}
-
 export function weatherGovUrl(lat: number, lng: number): string {
   return `https://forecast.weather.gov/MapClick.php?lat=${lat}&lon=${lng}`;
 }

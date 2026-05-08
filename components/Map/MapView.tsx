@@ -27,7 +27,6 @@ const LAYER_CLUSTERS = "wynla-clusters";
 const LAYER_CLUSTER_COUNT = "wynla-cluster-count";
 const LAYER_LISTED = "wynla-listed-pins";
 const LAYER_FEATURED = "wynla-featured-pins";
-const LAYER_FEATURED_STAR = "wynla-featured-star";
 
 // Map a resort to its pin properties for the GeoJSON feature.
 function resortToProperties(resort: Resort, dt: DriveTime | undefined) {
@@ -80,7 +79,7 @@ export default function MapView({
 
     const map = new mapboxgl.Map({
       container: mapContainer.current,
-      style: "mapbox://styles/mapbox/light-v11",
+      style: "mapbox://styles/mapbox/outdoors-v12",
       center: [-95, 40],
       zoom: 3.6,
       // 22 px halo around clicks/taps → effective 44×44 px touch target,
@@ -177,7 +176,8 @@ export default function MapView({
         },
       });
 
-      // Featured-tier pins: always 30 px (radius 15), full opacity, white border
+      // Featured-tier pins: same vertical-drop-based size tier as listed pins,
+      // full opacity, slightly wider white border (2 px vs 1.5 px)
       map.addLayer({
         id: LAYER_FEATURED,
         type: "circle",
@@ -189,7 +189,7 @@ export default function MapView({
         ],
         paint: {
           "circle-color": ["get", "color"],
-          "circle-radius": 15,
+          "circle-radius": ["get", "radius"],
           "circle-stroke-width": [
             "case",
             ["boolean", ["feature-state", "selected"], false],
@@ -202,27 +202,6 @@ export default function MapView({
             "#1E2952",
             "#FFFFFF",
           ],
-        },
-      });
-
-      // White star ★ on top of featured pins
-      map.addLayer({
-        id: LAYER_FEATURED_STAR,
-        type: "symbol",
-        source: SOURCE_ID,
-        filter: [
-          "all",
-          ["!", ["has", "point_count"]],
-          ["==", ["get", "tier"], "featured"],
-        ],
-        layout: {
-          "text-field": "★",
-          "text-size": 16,
-          "text-allow-overlap": true,
-          "text-anchor": "center",
-        },
-        paint: {
-          "text-color": "#FFFFFF",
         },
       });
 
@@ -244,7 +223,7 @@ export default function MapView({
 
       // Pin click → notify parent (which opens the side panel / bottom sheet).
       // Stage 4.1 used a Mapbox popup here; that's now handled by ResortPanel.
-      const pinLayers = [LAYER_LISTED, LAYER_FEATURED, LAYER_FEATURED_STAR];
+      const pinLayers = [LAYER_LISTED, LAYER_FEATURED];
       pinLayers.forEach((layerId) => {
         map.on("click", layerId, (e) => {
           const f = e.features?.[0];

@@ -6,7 +6,6 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { passColor, passLabel } from "@/lib/passColors";
-import { staticMapUrl } from "@/lib/mapboxStatic";
 
 export const dynamic = "force-dynamic";
 
@@ -22,7 +21,6 @@ type FavoriteRow = {
     longitude: number | string;
     passes: string[];
     tier: "featured" | "listed";
-    hero_image_url: string | null;
     vertical_drop: number | null;
   };
 };
@@ -38,7 +36,7 @@ export default async function FavoritesPage() {
   const { data, error } = await supabase
     .from("favorites")
     .select(
-      "resort_id, resorts(id, slug, name, state, region, latitude, longitude, passes, tier, hero_image_url, vertical_drop)",
+      "resort_id, resorts(id, slug, name, state, region, latitude, longitude, passes, tier, vertical_drop)",
     )
     .order("created_at", { ascending: false })
     .returns<FavoriteRow[]>();
@@ -101,45 +99,26 @@ export default async function FavoritesPage() {
   );
 }
 
-function FavoriteCard({
-  r,
-}: {
-  r: FavoriteRow["resorts"];
-}) {
-  const lng = Number(r.longitude);
-  const lat = Number(r.latitude);
-  const primaryPass = r.passes?.[0] ?? "independent";
-  const heroUrl =
-    r.hero_image_url ??
-    staticMapUrl({
-      lng,
-      lat,
-      zoom: 8,
-      width: 600,
-      height: 280,
-      pinColor: passColor(primaryPass),
-    });
+function FavoriteCard({ r }: { r: FavoriteRow["resorts"] }) {
+  const primary = r.passes?.[0] ?? "independent";
+  const bg = passColor(primary);
 
   return (
     <Link
       href={`/resort/${r.slug}`}
       className="group overflow-hidden rounded-xl border border-wn-charcoal/10 bg-white shadow-sm transition hover:shadow-md"
     >
-      <div className="relative h-32 w-full overflow-hidden">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={heroUrl}
-          alt={r.name}
-          className="h-full w-full object-cover transition group-hover:scale-105"
-        />
-        {r.tier === "featured" && (
-          <span className="absolute left-2 top-2 inline-flex items-center rounded bg-wn-gold/95 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-wn-navy shadow-sm">
-            ★ Featured
-          </span>
-        )}
+      <div
+        className="relative flex h-28 items-center justify-center overflow-hidden px-4"
+        style={{
+          background: `linear-gradient(135deg, ${bg} 0%, #1E2952 100%)`,
+        }}
+      >
+        <h3 className="line-clamp-2 text-center text-base font-extrabold leading-tight text-white drop-shadow-sm sm:text-lg">
+          {r.name}
+        </h3>
       </div>
       <div className="p-3">
-        <h3 className="truncate text-sm font-bold text-wn-navy">{r.name}</h3>
         <p className="text-xs text-wn-charcoal/60">
           {r.state}
           {r.region ? ` · ${r.region}` : ""}
@@ -149,8 +128,11 @@ function FavoriteCard({
           {(r.passes ?? []).map((p) => (
             <span
               key={p}
-              className="inline-block rounded px-1.5 py-0.5 text-[9px] font-semibold text-white"
-              style={{ backgroundColor: passColor(p) }}
+              className="inline-block rounded px-1.5 py-0.5 text-[9px] font-semibold"
+              style={{
+                backgroundColor: passColor(p),
+                color: p === "ikon" ? "#1E2952" : "white",
+              }}
             >
               {passLabel(p)}
             </span>
