@@ -140,7 +140,12 @@ export default function FilterBar({
       {/* Top row — three dropdown buttons + count on the right.
           Mobile: horizontal scroll keeps the row compact; desktop: inline. */}
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <div className="-mx-4 flex shrink-0 gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:px-0 sm:pb-0">
+        {/* No overflow-x-auto here. CSS spec: any non-visible overflow on
+            either axis makes the OTHER axis "auto" too, which clips the
+            absolute-positioned dropdown menus this row contains. We use
+            flex-wrap on mobile so a long button label (e.g. "From here · 5d")
+            stacks rather than scrolls; on desktop everything fits one row. */}
+        <div className="flex shrink-0 flex-wrap gap-2 pb-1 sm:flex-nowrap sm:pb-0">
           <PassDropdown
             passFilter={passFilter}
             passCounts={passCounts}
