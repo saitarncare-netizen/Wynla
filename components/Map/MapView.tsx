@@ -80,6 +80,9 @@ export default function MapView({
     const map = new mapboxgl.Map({
       container: mapContainer.current,
       style: "mapbox://styles/mapbox/outdoors-v12",
+      // Force Mercator. Mapbox 3.x + outdoors-v12 defaults to globe at low
+      // zoom, which clips circle layers and shows the earth as a sphere.
+      projection: "mercator",
       center: [-95, 40],
       zoom: 3.6,
       // 22 px halo around clicks/taps → effective 44×44 px touch target,
