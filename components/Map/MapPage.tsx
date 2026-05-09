@@ -45,9 +45,22 @@ export type DriveTime = {
   is_estimate?: boolean;
 };
 
+export type WeatherSnapshot = {
+  resort_id: number;
+  temp_high_f: number | null;
+  temp_low_f: number | null;
+  conditions_short: string | null;
+  snow_24h_in: number | string | null;
+  snow_48h_in: number | string | null;
+  wind_mph_avg: number | null;
+  wind_dir_short: string | null;
+  fetched_at: string | null;
+};
+
 type Props = {
   resorts: Resort[];
   driveTimes: DriveTime[];
+  weather: WeatherSnapshot[];
   isAuthed: boolean;
 };
 
@@ -55,7 +68,11 @@ function isSizeTier(v: string | null): v is SizeTier {
   return v === "small" || v === "medium" || v === "large";
 }
 
-export default function MapPage({ resorts, driveTimes, isAuthed }: Props) {
+export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Props) {
+  const weatherByResort = useMemo(
+    () => new Map(weather.map((w) => [w.resort_id, w])),
+    [weather],
+  );
   const router = useRouter();
   const searchParams = useSearchParams();
   const [, startTransition] = useTransition();
@@ -378,6 +395,7 @@ export default function MapPage({ resorts, driveTimes, isAuthed }: Props) {
           resort={selectedResort}
           driveTime={driveTimeByResort.get(selectedResort.id)?.get(origin.name)}
           origin={origin}
+          weather={weatherByResort.get(selectedResort.id) ?? null}
           onClose={() => setSelectedId(null)}
         />
       )}

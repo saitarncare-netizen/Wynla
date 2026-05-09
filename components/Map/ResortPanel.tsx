@@ -1,18 +1,21 @@
 "use client";
 
 import { useEffect, useState } from "react";
+// useEffect/useState used by the matrix-driven drive-time refinement;
+// other hooks not needed here.
 import Link from "next/link";
 import { passColor, passLabel, primaryPass } from "@/lib/passColors";
 import { formatDriveTime, type Origin } from "@/lib/origins";
 import { weatherGovUrl, windyUrl, googleMapsUrl } from "@/lib/externalLinks";
 import { fetchMatrixDriveTime, type MatrixResult } from "@/lib/mapboxMatrix";
 import FavoriteToggle from "@/components/auth/FavoriteToggle";
-import type { Resort, DriveTime } from "./MapPage";
+import type { Resort, DriveTime, WeatherSnapshot } from "./MapPage";
 
 type Props = {
   resort: Resort;
   driveTime: DriveTime | undefined;
   origin: Origin;
+  weather: WeatherSnapshot | null;
   onClose: () => void;
 };
 
@@ -20,6 +23,7 @@ export default function ResortPanel({
   resort,
   driveTime,
   origin,
+  weather,
   onClose,
 }: Props) {
   const lng = Number(resort.longitude);
@@ -201,37 +205,12 @@ export default function ResortPanel({
             </div>
           )}
 
-          {/* Weather — single card with Weather.gov + Windy sub-rows */}
-          <Section title="Weather">
-            <div className="rounded-lg border border-wn-charcoal/10 bg-white overflow-hidden">
-              <a
-                href={weatherGovUrl(lat, lng)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center gap-2.5 px-3 py-2.5 transition hover:bg-wn-offwhite"
-              >
-                <span aria-hidden="true" className="text-base">🌡️</span>
-                <div className="min-w-0 flex-1">
-                  <div className="text-sm font-semibold text-wn-navy">Weather.gov forecast</div>
-                  <div className="text-[11px] text-wn-charcoal/60">Official US 7-day forecast</div>
-                </div>
-                <span className="text-wn-navy/40 transition group-hover:translate-x-0.5 group-hover:text-wn-navy">↗</span>
-              </a>
-              <div className="border-t border-wn-charcoal/10" />
-              <a
-                href={windyUrl(lat, lng)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center gap-2.5 px-3 py-2.5 transition hover:bg-wn-offwhite"
-              >
-                <span aria-hidden="true" className="text-base">🌬️</span>
-                <div className="min-w-0 flex-1">
-                  <div className="text-sm font-semibold text-wn-navy">Windy.com</div>
-                  <div className="text-[11px] text-wn-charcoal/60">Animated wind layer</div>
-                </div>
-                <span className="text-wn-navy/40 transition group-hover:translate-x-0.5 group-hover:text-wn-navy">↗</span>
-              </a>
-            </div>
+          {/* Weather — in-app card built from weather_cache (refreshed
+              daily by the cron). Falls back to a "no data yet" state
+              with the original Weather.gov / Windy links until the
+              first refresh lands. */}
+          <Section title="Today's weather">
+            <WeatherCard weather={weather} lat={lat} lng={lng} />
           </Section>
 
           {/* Visit & book — Google Maps + resort website */}
@@ -288,6 +267,158 @@ function Stat({ label, value }: { label: string; value: string }) {
         {label}
       </div>
       <div className="mt-0.5 text-sm font-bold text-wn-navy">{value}</div>
+    </div>
+  );
+}
+
+// In-app weather card. Renders a hero strip (high/low + conditions),
+// a snow chip when there's measurable precipitation, and a wind block.
+// Falls back to two link rows (Weather.gov + Windy) when the cache row
+// hasn't been populated yet — first refresh lands once Vercel Cron runs.
+function WeatherCard({
+  weather,
+  lat,
+  lng,
+}: {
+  weather: WeatherSnapshot | null;
+  lat: number;
+  lng: number;
+}) {
+  // Show absolute fetch date (no relative "X hours ago") — Date.now()
+  // during render trips the React purity lint, and the relative form
+  // doesn't add much value once we already have an exact timestamp.
+  const fetchedLabel = weather?.fetched_at
+    ? new Date(weather.fetched_at).toLocaleString(undefined, {
+        weekday: "short",
+        hour: "numeric",
+        minute: "2-digit",
+      })
+    : null;
+
+  const conditionEmoji = (cond: string | null): string => {
+    if (!cond) return "🌤️";
+    const c = cond.toLowerCase();
+    if (c.includes("snow")) return "🌨️";
+    if (c.includes("rain") || c.includes("shower")) return "🌧️";
+    if (c.includes("thunder")) return "⛈️";
+    if (c.includes("cloud")) return "☁️";
+    if (c.includes("clear") || c.includes("sun")) return "☀️";
+    if (c.includes("fog") || c.includes("mist")) return "🌫️";
+    return "🌤️";
+  };
+
+  if (!weather || (weather.temp_high_f == null && weather.temp_low_f == null)) {
+    // No cache row yet — show the two external-link rows as a safe fallback.
+    return (
+      <div className="rounded-lg border border-wn-charcoal/10 bg-white">
+        <a
+          href={weatherGovUrl(lat, lng)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group flex items-center gap-2.5 px-3 py-2.5 transition hover:bg-wn-offwhite"
+        >
+          <span aria-hidden="true" className="text-base">🌡️</span>
+          <div className="min-w-0 flex-1">
+            <div className="text-sm font-semibold text-wn-navy">Weather.gov</div>
+            <div className="text-[11px] text-wn-charcoal/55">In-app forecast loads once today&apos;s refresh runs</div>
+          </div>
+          <span className="text-wn-navy/40 transition group-hover:translate-x-0.5 group-hover:text-wn-navy">↗</span>
+        </a>
+        <div className="border-t border-wn-charcoal/10" />
+        <a
+          href={windyUrl(lat, lng)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group flex items-center gap-2.5 px-3 py-2.5 transition hover:bg-wn-offwhite"
+        >
+          <span aria-hidden="true" className="text-base">🌬️</span>
+          <div className="min-w-0 flex-1">
+            <div className="text-sm font-semibold text-wn-navy">Windy.com</div>
+            <div className="text-[11px] text-wn-charcoal/55">Animated wind layer</div>
+          </div>
+          <span className="text-wn-navy/40 transition group-hover:translate-x-0.5 group-hover:text-wn-navy">↗</span>
+        </a>
+      </div>
+    );
+  }
+
+  const snow24 = Number(weather.snow_24h_in ?? 0);
+  const snow48 = Number(weather.snow_48h_in ?? 0);
+  return (
+    <div className="overflow-hidden rounded-lg border border-wn-charcoal/10 bg-white">
+      {/* Hero — temps + conditions */}
+      <div className="flex items-center gap-3 bg-gradient-to-br from-sky-50 to-white px-3 py-3">
+        <div className="text-3xl leading-none" aria-hidden="true">
+          {conditionEmoji(weather.conditions_short)}
+        </div>
+        <div className="min-w-0 flex-1">
+          <div className="flex items-baseline gap-1">
+            {weather.temp_high_f != null && (
+              <span className="text-xl font-extrabold text-wn-navy">
+                {Math.round(weather.temp_high_f)}°
+              </span>
+            )}
+            {weather.temp_low_f != null && weather.temp_high_f != null && (
+              <span className="text-sm text-wn-charcoal/55">
+                / {Math.round(weather.temp_low_f)}°
+              </span>
+            )}
+            <span className="ml-0.5 text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/50">
+              F
+            </span>
+          </div>
+          {weather.conditions_short && (
+            <div className="truncate text-xs font-medium text-wn-charcoal">
+              {weather.conditions_short}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Snow + wind grid */}
+      <div className="grid grid-cols-2 divide-x divide-wn-charcoal/10 border-t border-wn-charcoal/10">
+        <div className="px-3 py-2.5">
+          <div className="flex items-baseline gap-1.5">
+            <span aria-hidden="true">🌨️</span>
+            <span className="text-base font-bold text-wn-navy">
+              {snow24 > 0 ? `${snow24.toFixed(snow24 < 1 ? 1 : 0)}"` : "—"}
+            </span>
+          </div>
+          <div className="text-[10px] uppercase tracking-wide text-wn-charcoal/55">
+            snow / 24h
+          </div>
+          {snow48 > 0 && snow48 !== snow24 && (
+            <div className="mt-0.5 text-[10px] text-wn-charcoal/55">
+              {snow48.toFixed(snow48 < 1 ? 1 : 0)}&quot; / 48h
+            </div>
+          )}
+        </div>
+        <div className="px-3 py-2.5">
+          <div className="flex items-baseline gap-1.5">
+            <span aria-hidden="true">🌬️</span>
+            <span className="text-base font-bold text-wn-navy">
+              {weather.wind_mph_avg != null ? `${weather.wind_mph_avg}` : "—"}
+            </span>
+            <span className="text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
+              mph
+            </span>
+            {weather.wind_dir_short && (
+              <span className="text-[10px] text-wn-charcoal/55">
+                · {weather.wind_dir_short}
+              </span>
+            )}
+          </div>
+          <div className="text-[10px] uppercase tracking-wide text-wn-charcoal/55">
+            wind
+          </div>
+        </div>
+      </div>
+
+      {fetchedLabel && (
+        <div className="border-t border-wn-charcoal/10 bg-wn-offwhite px-3 py-1.5 text-[10px] text-wn-charcoal/55">
+          Updated {fetchedLabel} · weather.gov + Open-Meteo
+        </div>
+      )}
     </div>
   );
 }

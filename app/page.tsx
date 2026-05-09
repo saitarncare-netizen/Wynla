@@ -6,7 +6,7 @@ import MapPage from "@/components/Map/MapPage";
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const [resortsRes, driveTimesRes, authRes] = await Promise.all([
+  const [resortsRes, driveTimesRes, weatherRes, authRes] = await Promise.all([
     supabase
       .from("resorts")
       .select(
@@ -17,6 +17,11 @@ export default async function Home() {
     supabase
       .from("drive_time_cache")
       .select("resort_id, origin_name, duration_seconds, distance_meters"),
+    supabase
+      .from("weather_cache")
+      .select(
+        "resort_id, temp_high_f, temp_low_f, conditions_short, snow_24h_in, snow_48h_in, wind_mph_avg, wind_dir_short, fetched_at",
+      ),
     (async () => {
       const ssr = await createSupabaseServerClient();
       const { data } = await ssr.auth.getUser();
@@ -45,6 +50,7 @@ export default async function Home() {
       <MapPage
         resorts={resortsRes.data ?? []}
         driveTimes={driveTimesRes.data ?? []}
+        weather={weatherRes.data ?? []}
         isAuthed={!!authRes.user}
       />
     </Suspense>
