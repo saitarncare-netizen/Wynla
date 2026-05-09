@@ -61,6 +61,7 @@ export default function MapPage({ resorts, driveTimes, isAuthed }: Props) {
   const [, startTransition] = useTransition();
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [cameraTarget, setCameraTarget] = useState<{ lat: number; lng: number; token: string } | null>(null);
 
   const passFilter = searchParams.get("pass");
   const sizeParam = searchParams.get("size");
@@ -329,6 +330,7 @@ export default function MapPage({ resorts, driveTimes, isAuthed }: Props) {
         selectedId={selectedId}
         onResortClick={setSelectedId}
         tripRoute={tripRoute}
+        cameraTarget={cameraTarget}
       />
 
       <AlaskaInset resorts={filtered} />
@@ -388,6 +390,11 @@ export default function MapPage({ resorts, driveTimes, isAuthed }: Props) {
         days={days}
         isAuthed={isAuthed}
         onClose={() => updateParam("plan", null)}
+        onFocusResort={(point) =>
+          point
+            ? setCameraTarget({ ...point, token: `${Date.now()}` })
+            : setCameraTarget(null)
+        }
       />
 
       {/* First-visit banner asking permission to use device location.

@@ -324,6 +324,75 @@ export function planWithOverrides(
   };
 }
 
+// Detect inefficient orderings — e.g. user picked Day 1 Loveland CO,
+// Day 2 Stowe VT, Day 3 Aspen CO. The geographic backtracking adds
+// hours that a smarter permutation would avoid. We brute-force every
+// permutation (n! up to 7! = 5040 is fast in the browser) and compare
+// the user's total driving against the cheapest order. Returns the
+// cheaper order if it saves more than the threshold; null otherwise.
+//
+// Origin is fixed at index -1 for distance comparisons — only resort
+// order is permuted; we always start at origin and end going home.
+export function suggestReorder(
+  origin: LatLng,
+  resorts: PlannerCandidate[],
+  thresholdSeconds: number,
+): { betterOrder: PlannerCandidate[]; savedSeconds: number } | null {
+  const n = resorts.length;
+  if (n < 3 || n > 7) return null; // 2-stop trips can't backtrack; >7 = factorial blowup
+  const distSecondsCache = new Map<string, number>();
+  const distSeconds = (a: LatLng, b: LatLng): number => {
+    const key = `${a.lat.toFixed(4)},${a.lng.toFixed(4)}|${b.lat.toFixed(4)},${b.lng.toFixed(4)}`;
+    const hit = distSecondsCache.get(key);
+    if (hit != null) return hit;
+    const meters = haversineMeters(a.lat, a.lng, b.lat, b.lng);
+    const sec = estimateDriveSeconds(meters);
+    distSecondsCache.set(key, sec);
+    return sec;
+  };
+  function totalDrive(order: PlannerCandidate[]): number {
+    let total = distSeconds(origin, order[0]);
+    for (let i = 0; i < order.length - 1; i++) {
+      total += distSeconds(order[i], order[i + 1]);
+    }
+    total += distSeconds(order[order.length - 1], origin);
+    return total;
+  }
+  const userTotal = totalDrive(resorts);
+
+  let best = resorts;
+  let bestTotal = userTotal;
+  // Generate permutations via Heap's algorithm.
+  const a = [...resorts];
+  const c = new Array(n).fill(0);
+  let i = 0;
+  while (i < n) {
+    if (c[i] < i) {
+      const swap = i % 2 === 0 ? 0 : c[i];
+      const tmp = a[swap];
+      a[swap] = a[i];
+      a[i] = tmp;
+      const t = totalDrive(a);
+      if (t < bestTotal) {
+        bestTotal = t;
+        best = [...a];
+      }
+      c[i]++;
+      i = 0;
+    } else {
+      c[i] = 0;
+      i++;
+    }
+  }
+  const saved = userTotal - bestTotal;
+  if (saved < thresholdSeconds) return null;
+  // No suggestion if the "better" order is just a literal rotation of
+  // the user's order (which doesn't really change anything in practice).
+  const sameOrder = best.every((r, i) => r.slug === resorts[i].slug);
+  if (sameOrder) return null;
+  return { betterOrder: best, savedSeconds: saved };
+}
+
 // Reconstruct a plan from a fixed list of resort slugs (the form used
 // by saved trips and the share-link URL state). Skips resorts not in
 // `candidates`. Used by the panel when ?route=… or a saved trip

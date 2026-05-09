@@ -30,9 +30,29 @@ type Props = {
   // Optional ordered list of points to draw as a route line + numbered
   // markers when the trip planner is open. First point is the origin.
   tripRoute?: TripRoutePoint[];
+  // When the user picks a resort for a specific day in the planner, we
+  // fly the camera to that resort so they see exactly where they're
+  // headed instead of just a bigger bounds. The string token changes
+  // each time a pick happens so MapView's effect re-runs even when the
+  // coordinates happen to repeat.
+  cameraTarget?: { lat: number; lng: number; token: string } | null;
 };
 
 const SOURCE_ID = "wynla-resorts";
+
+// Initial bearing in degrees (0=north, 90=east) from point A to point B.
+// Used to rotate the leg-midpoint chevron so it visually points along
+// the route in the direction of travel.
+function computeBearing(lat1: number, lng1: number, lat2: number, lng2: number): number {
+  const toRad = (deg: number) => (deg * Math.PI) / 180;
+  const toDeg = (rad: number) => (rad * 180) / Math.PI;
+  const dLng = toRad(lng2 - lng1);
+  const y = Math.sin(dLng) * Math.cos(toRad(lat2));
+  const x =
+    Math.cos(toRad(lat1)) * Math.sin(toRad(lat2)) -
+    Math.sin(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.cos(dLng);
+  return (toDeg(Math.atan2(y, x)) + 360) % 360;
+}
 const LAYER_CLUSTERS = "wynla-clusters";
 const LAYER_CLUSTER_COUNT = "wynla-cluster-count";
 const LAYER_LISTED = "wynla-listed-pins";
@@ -66,6 +86,7 @@ export default function MapView({
   selectedId,
   onResortClick,
   tripRoute,
+  cameraTarget,
 }: Props) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
@@ -92,9 +113,12 @@ export default function MapView({
     const map = new mapboxgl.Map({
       container: mapContainer.current,
       style: "mapbox://styles/mapbox/light-v11",
-      // Force Mercator. Mapbox 3.x defaults to globe at low zoom, which
-      // clips circle layers and shows the earth as a sphere.
-      projection: "mercator",
+      // Mapbox 3.x default projection: "globe" at low zoom, transitions
+      // to mercator (flat) as you zoom in past ~5. User feedback was
+      // that the globe-at-low-zoom view looked nicer; the previous
+      // forced "mercator" was a workaround for an old circle-layer
+      // clipping issue that's no longer reproducing.
+      projection: "globe",
       center: [-95, 40],
       zoom: 3.6,
       // 22 px halo around clicks/taps → effective 44×44 px touch target,
@@ -457,6 +481,29 @@ export default function MapView({
         tripMarkersRef.current.push(marker);
       });
 
+      // Direction arrows at each leg midpoint. The bearing puts a
+      // chevron pointing along the line so the user sees travel
+      // direction at a glance ("east → west" vs "west → east"). Hidden
+      // on legs shorter than ~30 km because the chevron would crowd
+      // the endpoint markers.
+      for (let i = 0; i < tripRoute.length - 1; i++) {
+        const a = tripRoute[i];
+        const b = tripRoute[i + 1];
+        const midLng = (a.lng + b.lng) / 2;
+        const midLat = (a.lat + b.lat) / 2;
+        const bearing = computeBearing(a.lat, a.lng, b.lat, b.lng);
+        const el = document.createElement("div");
+        el.className =
+          "flex h-5 w-5 items-center justify-center rounded-full border border-white bg-wn-navy/85 text-[10px] font-bold text-white shadow";
+        el.style.transform = `rotate(${bearing - 90}deg)`;
+        el.textContent = "▶";
+        el.title = `${a.label} → ${b.label}`;
+        const marker = new mapboxgl.Marker({ element: el, anchor: "center" })
+          .setLngLat([midLng, midLat])
+          .addTo(map);
+        tripMarkersRef.current.push(marker);
+      }
+
       // Fit map to the whole route, leaving room for the panel on the right.
       const bounds = coords.reduce(
         (b, c) => b.extend(c),
@@ -487,6 +534,30 @@ export default function MapView({
       }
     };
   }, [tripRoute]);
+
+  // Camera-follow effect: when the trip planner reports that a specific
+  // resort just became the focus (e.g. user picked Day 3 = Loveland),
+  // fly the camera over to it. Token in the prop changes per pick so
+  // re-picking the same resort still triggers a fly. Skips when no
+  // target is set or the map's still loading style.
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+    if (!cameraTarget) return;
+    const apply = () => {
+      const isDesktop = window.matchMedia("(min-width: 768px)").matches;
+      map.flyTo({
+        center: [cameraTarget.lng, cameraTarget.lat],
+        zoom: 8,
+        padding: isDesktop
+          ? { right: 440, top: 0, bottom: 0, left: 0 }
+          : { bottom: 360, top: 0, left: 0, right: 0 },
+        duration: 700,
+      });
+    };
+    if (map.isStyleLoaded()) apply();
+    else map.once("style.load", apply);
+  }, [cameraTarget]);
 
   return <div ref={mapContainer} className="h-full w-full" />;
 }

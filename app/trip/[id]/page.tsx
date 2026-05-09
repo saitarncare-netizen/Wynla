@@ -129,6 +129,29 @@ export default async function TripPage({
   const completedSet = new Set(trip.completed_days);
   const tripFinished = isActive && completedSet.size >= trip.total_days;
 
+  // Google Maps multi-waypoint URL. Round-trip from origin → resorts in
+  // order → back to origin. Dedupes consecutive repeats (basecamp mode
+  // where the same resort fills every day). Caps to 9 waypoints which
+  // is the Maps URL limit.
+  const dedupedWaypointSlugs: string[] = [];
+  for (const slug of trip.resort_slugs) {
+    if (dedupedWaypointSlugs[dedupedWaypointSlugs.length - 1] !== slug) {
+      dedupedWaypointSlugs.push(slug);
+    }
+  }
+  const waypointCoords = dedupedWaypointSlugs
+    .slice(0, 9)
+    .map((slug) => bySlug.get(slug))
+    .filter((r): r is ResortRow => r != null)
+    .map((r) => `${Number(r.latitude)},${Number(r.longitude)}`);
+  const googleMapsUrl =
+    waypointCoords.length === 0
+      ? null
+      : `https://www.google.com/maps/dir/?api=1&travelmode=driving` +
+        `&origin=${trip.origin_lat},${trip.origin_lng}` +
+        `&destination=${trip.origin_lat},${trip.origin_lng}` +
+        `&waypoints=${encodeURIComponent(waypointCoords.join("|"))}`;
+
   return (
     <main className="min-h-dvh bg-wn-offwhite px-4 py-10 sm:px-6">
       <div className="mx-auto max-w-3xl">
@@ -162,6 +185,7 @@ export default async function TripPage({
           tripFinished={tripFinished}
           currentDay={currentDay}
           totalDays={trip.total_days}
+          googleMapsUrl={googleMapsUrl}
         />
 
         <ol className="mt-6 flex flex-col gap-3">

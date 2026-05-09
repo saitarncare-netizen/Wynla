@@ -28,25 +28,27 @@ type Props = {
   onOpenDrawer: () => void;
 };
 
-// Trip-type presets. "Day trip" caps single-leg drive at 3h and runs
-// the same day. "Weekend" / "Big trip" enable the multi-day planner
-// where the user picks how many days. The maximum drive cap rises with
-// trip length: at 5h for weekend, 6h for big trips, since the user is
-// willing to spend more of day 1 driving when there are more days.
+// Trip-type presets — pure trip length. The drive cap is now its own
+// independent filter ("≤ Xh") so a Weekend trip with willingness to
+// drive 10h on day 1 is expressible. Anytime = no trip-length filter
+// at all (single day, no cap). Day/Weekend/Big differ only in days.
 type TripKind = "anytime" | "day" | "weekend" | "big";
-const TRIP_PRESETS: { kind: TripKind; emoji: string; label: string; within: number; defaultDays: number }[] = [
-  { kind: "anytime", emoji: "",   label: "Anytime",  within: 0, defaultDays: 1 },
-  { kind: "day",     emoji: "🚗", label: "Day trip", within: 3, defaultDays: 1 },
-  { kind: "weekend", emoji: "🏕️", label: "Weekend",  within: 5, defaultDays: 2 },
-  { kind: "big",     emoji: "🎿", label: "Big trip", within: 6, defaultDays: 5 },
+const TRIP_PRESETS: { kind: TripKind; emoji: string; label: string; defaultDays: number }[] = [
+  { kind: "anytime", emoji: "",   label: "Anytime",  defaultDays: 1 },
+  { kind: "day",     emoji: "🚗", label: "Day trip", defaultDays: 1 },
+  { kind: "weekend", emoji: "🏕️", label: "Weekend",  defaultDays: 2 },
+  { kind: "big",     emoji: "🎿", label: "Big trip", defaultDays: 5 },
 ];
 
-function tripKindFor(within: number, days: number): TripKind {
+function tripKindFor(days: number, hasDayTripFlag: boolean): TripKind {
   if (days >= 4) return "big";
   if (days >= 2) return "weekend";
-  if (within > 0) return "day";
+  if (hasDayTripFlag) return "day";
   return "anytime";
 }
+
+// Drive-time presets for the new standalone Drive-time dropdown.
+const DRIVE_TIME_PRESETS = [0, 3, 5, 8, 12];
 
 type ActiveChip = {
   key: string;
@@ -80,7 +82,8 @@ export default function FilterBar({
 
   // Build active-chip strip from current filter state. Chips render in a
   // stable order so the strip doesn't shuffle as users add/remove.
-  const tripKind = tripKindFor(withinHours, days);
+  const driveActive = withinHours > 0;
+  const tripKind = tripKindFor(days, false);
   const tripPreset = TRIP_PRESETS.find((p) => p.kind === tripKind) ?? TRIP_PRESETS[0];
   const tripActive = tripKind !== "anytime";
   const isMultiDay = days >= 2;
@@ -93,16 +96,20 @@ export default function FilterBar({
       onRemove: () => onPassChange(null),
     });
   }
-  if (tripActive) {
+  if (driveActive) {
     const fromShort = origin.kind === "geo" ? "here" : origin.short;
+    activeChips.push({
+      key: "drive",
+      label: `≤ ${withinHours}h drive from ${fromShort}`,
+      onRemove: () => onWithinChange(null),
+    });
+  }
+  if (tripActive) {
     const dayPart = isMultiDay ? ` · ${days} days` : "";
     activeChips.push({
       key: "trip",
-      label: `${tripPreset.label}${dayPart} from ${fromShort}`,
-      onRemove: () => {
-        onWithinChange(null);
-        onDaysChange(1);
-      },
+      label: `${tripPreset.label}${dayPart}`,
+      onRemove: () => onDaysChange(1),
     });
   }
   if (sizeFilter) {
@@ -122,13 +129,14 @@ export default function FilterBar({
 
   const moreCount = (sizeFilter ? 1 : 0) + (nightOnly ? 1 : 0);
 
-  // Trip dropdown label collapses From + preset into one line. The geo
-  // origin gets a distinctive 📍 prefix so it's instantly recognizable.
+  // Trip dropdown label = From + trip-length preset. Drive cap is
+  // surfaced through its own dropdown.
   const fromLabel = origin.kind === "geo" ? "📍 From here" : `From ${origin.short}`;
   const tripLabelTail = tripActive
     ? `${tripPreset.label}${isMultiDay ? ` ${days}d` : ""}`
     : "Anytime";
   const tripLabel = `${fromLabel} · ${tripLabelTail}`;
+  const driveLabel = driveActive ? `≤ ${withinHours}h drive` : "Any drive";
 
   // Pass dropdown label shows the active pass + colored dot when one is set.
   const passLabel = passFilter
@@ -155,14 +163,18 @@ export default function FilterBar({
           />
           <TripDropdown
             origin={origin}
-            withinHours={withinHours}
             days={days}
             label={tripLabel}
             onFromCity={onFromCity}
             onFromGeo={onFromGeo}
-            onWithinChange={onWithinChange}
             onDaysChange={onDaysChange}
             onOpenPlanner={onOpenPlanner}
+          />
+          <DriveTimeDropdown
+            withinHours={withinHours}
+            label={driveLabel}
+            active={driveActive}
+            onWithinChange={onWithinChange}
           />
           <button
             type="button"
@@ -316,41 +328,31 @@ function PassDropdown({
 
 function TripDropdown({
   origin,
-  withinHours,
   days,
   label,
   onFromCity,
   onFromGeo,
-  onWithinChange,
   onDaysChange,
   onOpenPlanner,
 }: {
   origin: Origin;
-  withinHours: number;
   days: number;
   label: string;
   onFromCity: (code: string) => void;
   onFromGeo: (lat: number, lng: number) => void;
-  onWithinChange: (w: string | null) => void;
   onDaysChange: (d: number) => void;
   onOpenPlanner: () => void;
 }) {
   const { open, setOpen, ref } = useDropdown();
   const [requestingGeo, setRequestingGeo] = useState(false);
   const [geoError, setGeoError] = useState<string | null>(null);
-  // Local visual-only mirror of `days` for the Big-trip slider so dragging
-  // is responsive even though committing the value to the URL triggers a
-  // full server-side re-fetch. Render-phase sync: when the parent's `days`
-  // prop changes (e.g. via URL update or a different preset), we adopt it
-  // as the new draft. This is React's recommended pattern for derived
-  // state from props (no setState-in-effect cascade).
   const [draftDays, setDraftDays] = useState(days);
   const [lastSeenDays, setLastSeenDays] = useState(days);
   if (lastSeenDays !== days) {
     setLastSeenDays(days);
     setDraftDays(days);
   }
-  const currentKind = tripKindFor(withinHours, days);
+  const currentKind = tripKindFor(days, false);
   const tripActive = currentKind !== "anytime";
   const isGeo = origin.kind === "geo";
 
@@ -450,13 +452,7 @@ function TripDropdown({
                   key={opt.kind}
                   type="button"
                   onClick={() => {
-                    if (opt.kind === "anytime") {
-                      onWithinChange(null);
-                      onDaysChange(1);
-                    } else {
-                      onWithinChange(String(opt.within));
-                      onDaysChange(opt.defaultDays);
-                    }
+                    onDaysChange(opt.defaultDays);
                     if (opt.kind === "day" || opt.kind === "anytime") setOpen(false);
                   }}
                   className={`flex items-center gap-2 rounded-md border px-2.5 py-1.5 text-xs font-semibold transition-colors ${
@@ -467,9 +463,9 @@ function TripDropdown({
                 >
                   {opt.emoji && <span aria-hidden="true">{opt.emoji}</span>}
                   <span>{opt.label}</span>
-                  {opt.kind === "day" && (
+                  {opt.kind === "anytime" && (
                     <span className={`ml-auto text-[10px] ${active ? "text-white/75" : "text-wn-charcoal/55"}`}>
-                      ≤ 3h
+                      single
                     </span>
                   )}
                   {(opt.kind === "weekend" || opt.kind === "big") && (
@@ -579,6 +575,129 @@ function useDropdown() {
   }, [open]);
 
   return { open, setOpen, ref };
+}
+
+/* -------------------------------------------------------------------------- */
+/* Drive-time dropdown — independent filter capping single-leg drive          */
+/* -------------------------------------------------------------------------- */
+
+function DriveTimeDropdown({
+  withinHours,
+  label,
+  active,
+  onWithinChange,
+}: {
+  withinHours: number;
+  label: string;
+  active: boolean;
+  onWithinChange: (w: string | null) => void;
+}) {
+  const { open, setOpen, ref } = useDropdown();
+  const [customHours, setCustomHours] = useState<string>(
+    withinHours > 0 ? String(withinHours) : "",
+  );
+  const [lastSeenWithin, setLastSeenWithin] = useState(withinHours);
+  if (lastSeenWithin !== withinHours) {
+    setLastSeenWithin(withinHours);
+    setCustomHours(withinHours > 0 ? String(withinHours) : "");
+  }
+
+  function commitCustom() {
+    const n = Number(customHours);
+    if (Number.isFinite(n) && n > 0 && n <= 24) {
+      onWithinChange(String(Math.round(n)));
+      setOpen(false);
+    } else if (customHours.trim() === "") {
+      onWithinChange(null);
+      setOpen(false);
+    }
+  }
+
+  return (
+    <div className="relative shrink-0" ref={ref}>
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className={`inline-flex min-h-[36px] items-center gap-1.5 whitespace-nowrap rounded-md border px-3 py-1.5 text-xs font-semibold transition-colors duration-200 ${
+          active
+            ? "border-wn-navy bg-wn-navy text-white"
+            : "border-wn-charcoal/20 bg-white text-wn-charcoal hover:border-wn-charcoal/40"
+        }`}
+        aria-haspopup="menu"
+        aria-expanded={open}
+      >
+        <span aria-hidden="true">⏱️</span>
+        <span>{label}</span>
+        <span aria-hidden="true" className="opacity-70">▾</span>
+      </button>
+      {open && (
+        <div
+          role="menu"
+          className="absolute left-0 mt-1 w-64 rounded-lg border border-wn-charcoal/15 bg-white p-3 shadow-lg z-30"
+        >
+          <div className="mb-2 text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
+            Max drive on day 1
+          </div>
+          <div className="grid grid-cols-3 gap-1">
+            {DRIVE_TIME_PRESETS.map((h) => {
+              const presetActive = withinHours === h && !(h === 0 && !active);
+              const isAny = h === 0;
+              return (
+                <button
+                  key={h}
+                  type="button"
+                  onClick={() => {
+                    onWithinChange(isAny ? null : String(h));
+                    setOpen(false);
+                  }}
+                  className={`rounded-md border px-2 py-1.5 text-xs font-semibold transition-colors ${
+                    presetActive || (isAny && !active)
+                      ? "border-wn-navy bg-wn-navy text-white"
+                      : "border-wn-charcoal/15 bg-white text-wn-charcoal hover:border-wn-charcoal/40"
+                  }`}
+                >
+                  {isAny ? "Any" : `≤ ${h}h`}
+                </button>
+              );
+            })}
+          </div>
+          <div className="mt-3 flex items-center gap-2">
+            <span className="text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
+              Custom
+            </span>
+            <input
+              type="number"
+              min={1}
+              max={24}
+              step={1}
+              placeholder="e.g. 10"
+              value={customHours}
+              onChange={(e) => setCustomHours(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  commitCustom();
+                }
+              }}
+              className="w-16 rounded-md border border-wn-charcoal/20 bg-white px-2 py-1 text-xs font-medium text-wn-charcoal focus:border-wn-navy focus:outline-none focus:ring-2 focus:ring-wn-navy/20"
+              aria-label="Custom max drive hours"
+            />
+            <span className="text-[10px] text-wn-charcoal/55">hrs</span>
+            <button
+              type="button"
+              onClick={commitCustom}
+              className="ml-auto rounded-md bg-wn-navy px-2 py-1 text-[11px] font-semibold text-white transition hover:bg-wn-navy/90 active:scale-95"
+            >
+              Apply
+            </button>
+          </div>
+          <p className="mt-2 text-[10px] leading-tight text-wn-charcoal/55">
+            Hides resorts the drive time can&apos;t reach within this cap. Doesn&apos;t affect manual picks in the trip planner.
+          </p>
+        </div>
+      )}
+    </div>
+  );
 }
 
 function DropdownRow({

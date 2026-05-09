@@ -46,7 +46,8 @@ export default function AlaskaInset({ resorts }: Props) {
     const map = new mapboxgl.Map({
       container: container.current,
       style: "mapbox://styles/mapbox/light-v11",
-      // Force Mercator (see MapView.tsx for rationale).
+      // Inset stays mercator — at this small bbox the globe projection
+      // would just produce a tiny curved sliver that's harder to read.
       projection: "mercator",
       bounds: ALASKA_BOUNDS,
       interactive: false,

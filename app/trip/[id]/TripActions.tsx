@@ -15,6 +15,7 @@ type Props = {
   tripFinished: boolean;
   currentDay: number;
   totalDays: number;
+  googleMapsUrl: string | null;
 };
 
 export default function TripActions({
@@ -23,6 +24,7 @@ export default function TripActions({
   tripFinished,
   currentDay,
   totalDays,
+  googleMapsUrl,
 }: Props) {
   const router = useRouter();
   const [, startTransition] = useTransition();
@@ -129,11 +131,21 @@ export default function TripActions({
             >
               {busy === "start" ? "Starting…" : "🚀 Start trip"}
             </button>
+            {googleMapsUrl && (
+              <a
+                href={googleMapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-lg border border-wn-charcoal/20 bg-white px-4 py-2 text-sm font-semibold text-wn-charcoal transition hover:border-wn-navy hover:text-wn-navy"
+              >
+                🗺️ Open in Google Maps
+              </a>
+            )}
             <button
               type="button"
               onClick={deleteTrip}
               disabled={busy != null}
-              className="rounded-lg border border-wn-charcoal/20 bg-white px-4 py-2 text-sm font-semibold text-wn-charcoal transition hover:border-red-400 hover:text-red-700 disabled:opacity-60"
+              className="ml-auto rounded-lg border border-wn-charcoal/20 bg-white px-4 py-2 text-sm font-semibold text-wn-charcoal transition hover:border-red-400 hover:text-red-700 disabled:opacity-60"
             >
               Delete
             </button>
@@ -156,6 +168,16 @@ export default function TripActions({
             >
               {busy === "advance" ? "Saving…" : "✓ Mark Day " + currentDay + " complete"}
             </button>
+            {googleMapsUrl && (
+              <a
+                href={googleMapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-lg border border-wn-charcoal/20 bg-white px-4 py-2 text-sm font-semibold text-wn-charcoal transition hover:border-wn-navy hover:text-wn-navy"
+              >
+                🗺️ Open in Google Maps
+              </a>
+            )}
             <button
               type="button"
               onClick={restart}

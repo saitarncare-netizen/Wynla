@@ -9,6 +9,7 @@ import {
   planTrip,
   planFromOrderedSlugs,
   planWithOverrides,
+  suggestReorder,
   type PlannerCandidate,
   type TripPlan,
 } from "@/lib/tripPlanner";
@@ -31,6 +32,9 @@ type Props = {
   initialOrderedSlugs?: string[];
   isAuthed: boolean;
   onClose: () => void;
+  /** Notifies the parent map that a particular resort just became the
+      active focus (e.g. user picked Day 3). Pass null to clear. */
+  onFocusResort?: (point: { lat: number; lng: number } | null) => void;
 };
 
 function resortToCandidate(r: Resort): PlannerCandidate {
@@ -53,6 +57,7 @@ export default function TripPlannerPanel({
   initialOrderedSlugs,
   isAuthed,
   onClose,
+  onFocusResort,
 }: Props) {
   const router = useRouter();
   const [mode, setMode] = useState<"basecamp" | "roadtrip">("roadtrip");
@@ -65,6 +70,7 @@ export default function TripPlannerPanel({
   const [overrides, setOverrides] = useState<Record<number, string>>({});
   const [overridesKey, setOverridesKey] = useState<string>("");
   const [pickerDay, setPickerDay] = useState<number | null>(null);
+  const [dismissedReorder, setDismissedReorder] = useState(false);
 
   const candidatePool = useMemo(
     () => candidates.filter((r) => Number.isFinite(Number(r.latitude)) && Number.isFinite(Number(r.longitude))).map(resortToCandidate),
@@ -119,6 +125,31 @@ export default function TripPlannerPanel({
     return planWithOverrides(originLatLng, originLabel, allCandidatePool, days, overrides);
   }, [initialPlan, overrides, originLat, originLng, originLabel, allCandidatePool, mode, days]);
 
+  // Reorder suggestion — fires when the user's current order has at
+  // least 4 hours of avoidable backtracking. Suppressed in basecamp
+  // mode (single resort, no order to swap) and after the user explicitly
+  // dismisses for this trip.
+  const reorderSuggestion = useMemo(() => {
+    if (mode !== "roadtrip") return null;
+    if (!plan || plan.resorts.length < 3) return null;
+    if (dismissedReorder) return null;
+    return suggestReorder(
+      { lat: originLat, lng: originLng },
+      plan.resorts,
+      4 * 3600, // 4-hour threshold
+    );
+  }, [mode, plan, originLat, originLng, dismissedReorder]);
+
+  function applyReorder() {
+    if (!reorderSuggestion) return;
+    const newOverrides: Record<number, string> = {};
+    reorderSuggestion.betterOrder.forEach((r, i) => {
+      newOverrides[i] = r.slug;
+    });
+    setOverrides(newOverrides);
+    setDismissedReorder(true);
+  }
+
   // Compute the "from" point for the picker based on which day the user
   // is editing. Day 0 starts at the origin; day N starts at day N-1's
   // resort (post-overrides).
@@ -136,8 +167,6 @@ export default function TripPlannerPanel({
     setOverrides((prev) => {
       const next = { ...prev };
       if (mode === "basecamp") {
-        // Basecamp: one resort for the whole trip — overriding any day
-        // overrides every day. Simpler model than per-day picks here.
         for (let i = 0; i < days; i++) next[i] = slug;
       } else {
         next[dayIndex] = slug;
@@ -145,6 +174,10 @@ export default function TripPlannerPanel({
       return next;
     });
     setPickerDay(null);
+    // Tell the map to fly the camera over to the freshly-picked resort
+    // so the user sees exactly where it sits geographically.
+    const r = allCandidatePool.find((c) => c.slug === slug);
+    if (r && onFocusResort) onFocusResort({ lat: r.lat, lng: r.lng });
   }
 
   async function saveTrip() {
@@ -269,6 +302,44 @@ export default function TripPlannerPanel({
             </p>
           )}
 
+          {reorderSuggestion && (
+            <div className="mb-3 rounded-lg border border-wn-gold/40 bg-wn-gold/10 p-3">
+              <div className="flex items-start gap-2">
+                <span className="text-base" aria-hidden="true">💡</span>
+                <div className="flex-1 text-[11px] leading-snug text-wn-charcoal">
+                  <p className="font-bold text-wn-navy">
+                    Save ≈ {formatDriveTime(reorderSuggestion.savedSeconds)} of driving
+                  </p>
+                  <p className="mt-0.5 text-wn-charcoal/80">
+                    Your current order backtracks. Reorder to{" "}
+                    <strong>
+                      {reorderSuggestion.betterOrder
+                        .map((r) => r.name.split(" ")[0])
+                        .join(" → ")}
+                    </strong>
+                    {" "}and the loop tightens up.
+                  </p>
+                  <div className="mt-2 flex gap-1.5">
+                    <button
+                      type="button"
+                      onClick={applyReorder}
+                      className="rounded-md bg-wn-navy px-2.5 py-1 text-[11px] font-semibold text-white transition hover:bg-wn-navy/90 active:scale-95"
+                    >
+                      Apply suggestion
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setDismissedReorder(true)}
+                      className="rounded-md border border-wn-charcoal/15 bg-white px-2.5 py-1 text-[11px] font-semibold text-wn-charcoal/70 transition hover:border-wn-charcoal/30 hover:text-wn-navy"
+                    >
+                      Keep my order
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {plan && (
             <ol className="flex flex-col gap-3">
               {plan.legs.map((leg, i) => {
@@ -350,14 +421,44 @@ export default function TripPlannerPanel({
           )}
 
           {plan && (
-            <div className="mt-3 rounded-md bg-wn-offwhite px-3 py-2 text-[11px] text-wn-charcoal/70">
-              Total drive time across the trip:{" "}
-              <strong className="text-wn-navy">
-                ≈ {formatDriveTime(plan.totalDriveSeconds)}
-              </strong>
-              <span className="ml-1 text-wn-charcoal/55">
-                (estimate — exact via Mapbox once you start the trip)
-              </span>
+            <div className="mt-3 rounded-lg border border-wn-charcoal/10 bg-gradient-to-br from-wn-offwhite to-white p-3">
+              <div className="mb-2 text-[10px] font-bold uppercase tracking-[0.15em] text-wn-charcoal/55">
+                Trip summary
+              </div>
+              <div className="grid grid-cols-3 gap-2 text-center">
+                <div>
+                  <div className="text-base font-extrabold tracking-tight text-wn-navy">
+                    {plan.days}
+                  </div>
+                  <div className="text-[10px] uppercase tracking-wide text-wn-charcoal/55">
+                    ski day{plan.days === 1 ? "" : "s"}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-base font-extrabold tracking-tight text-wn-navy">
+                    {formatDriveTime(plan.totalDriveSeconds)}
+                  </div>
+                  <div className="text-[10px] uppercase tracking-wide text-wn-charcoal/55">
+                    total drive
+                  </div>
+                </div>
+                <div>
+                  <div className="text-base font-extrabold tracking-tight text-wn-navy">
+                    {Math.round(
+                      ([...plan.legs, plan.homeLeg]
+                        .filter((l): l is NonNullable<typeof l> => l != null)
+                        .reduce((s, l) => s + (l.distanceMeters ?? 0), 0)) /
+                        1609.34,
+                    ).toLocaleString()}
+                  </div>
+                  <div className="text-[10px] uppercase tracking-wide text-wn-charcoal/55">
+                    miles
+                  </div>
+                </div>
+              </div>
+              <p className="mt-2 text-center text-[10px] text-wn-charcoal/55">
+                Estimates — exact times once you start the trip.
+              </p>
             </div>
           )}
 
