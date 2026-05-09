@@ -1,16 +1,31 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { formatDriveTime, type Origin } from "@/lib/origins";
 import { passColor, primaryPass } from "@/lib/passColors";
 import { haversineMeters, estimateDriveSeconds } from "@/lib/distance";
 import { expandStopsToDays, type Stop } from "@/lib/tripPlanner";
-import { supabase } from "@/lib/supabase";
+import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import ResortPicker from "./ResortPicker";
 import type { Resort } from "./MapPage";
 import type { TripRoutePoint } from "./MapView";
+
+// localStorage key for the in-flight trip draft. Used to preserve the
+// user's stops + day choices across the magic-link login round-trip:
+// they tap Save → we stash the draft → bounce to /login → they click
+// the email link → /auth/callback exchanges the code → they land back
+// on the map with ?restore=1 → we hydrate from localStorage and clear
+// the key. 1-hour TTL guards against stale drafts from old sessions.
+const DRAFT_KEY = "wynla_pending_trip_draft";
+const DRAFT_TTL_MS = 60 * 60 * 1000;
+
+type TripDraft = {
+  stops: Stop[];
+  draftName: string;
+  savedAt: number;
+};
 
 type Props = {
   open: boolean;
@@ -68,6 +83,15 @@ export default function TripPlannerPanel({
   onViewFullRoute,
 }: Props) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  // SSR-aware browser Supabase client. The bare createClient() in
+  // @/lib/supabase reads its session from localStorage, but our magic
+  // link flow writes the session to cookies via /auth/callback. With
+  // the bare client, supabase.auth.getUser() returned no user right
+  // after login — so saveTrip kept bouncing the user back to /login.
+  // createSupabaseBrowserClient uses @supabase/ssr's cookie-based
+  // session, matching what the proxy + callback set up.
+  const supabase = useMemo(() => createSupabaseBrowserClient(), []);
   const [stops, setStops] = useState<Stop[]>([]);
   const [pickerForIndex, setPickerForIndex] = useState<"new" | number | null>(null);
   // Inline "How many days here?" confirm card. Set when the user picks
@@ -99,7 +123,10 @@ export default function TripPlannerPanel({
     setSeededFor(contextKey);
     // Wizard-style: don't pre-pick anything. User starts blank and
     // picks the first resort themselves. Only the share-link path
-    // (?route=…) seeds with explicit slugs.
+    // (?route=…) seeds with explicit slugs. Draft restoration from
+    // localStorage happens in a separate effect below — it can't run
+    // here because it needs Date.now() (an impure call) for the TTL
+    // check, which violates render-phase purity.
     const initialStops: Stop[] = [];
     if (initialOrderedSlugs && initialOrderedSlugs.length > 0) {
       for (const slug of initialOrderedSlugs) {
@@ -112,6 +139,47 @@ export default function TripPlannerPanel({
     setDraftName("");
     setPendingStop(null);
   }
+
+  // Draft hydration after a magic-link round-trip. Triggered when the
+  // URL carries ?restore=1 (set by saveTrip right before redirecting
+  // to /login). Reads the localStorage draft, applies it to state, and
+  // strips the restore flag so a refresh doesn't re-hydrate. One-shot
+  // per restore param value — guarded by a ref-style state token.
+  const restoreToken = searchParams.get("restore");
+  // Ref instead of state so we don't trigger a re-render or violate
+  // the no-setState-in-effect lint when we mark the restore as
+  // applied. Persists across re-renders within the same mount.
+  const restoreAppliedRef = useRef(false);
+  useEffect(() => {
+    if (!open || restoreToken !== "1" || restoreAppliedRef.current) return;
+    restoreAppliedRef.current = true;
+    if (typeof window === "undefined") return;
+    try {
+      const raw = window.localStorage.getItem(DRAFT_KEY);
+      if (raw) {
+        const draft = JSON.parse(raw) as Partial<TripDraft>;
+        const ageMs = Date.now() - (draft.savedAt ?? 0);
+        if (
+          ageMs < DRAFT_TTL_MS &&
+          Array.isArray(draft.stops) &&
+          draft.stops.length > 0
+        ) {
+          // eslint-disable-next-line react-hooks/set-state-in-effect -- hydrating from external store (localStorage) is a documented valid use case.
+          setStops(draft.stops as Stop[]);
+          setDraftName(draft.draftName ?? "");
+          setPendingStop(null);
+        }
+      }
+      window.localStorage.removeItem(DRAFT_KEY);
+    } catch {
+      // Bad JSON or storage error — fall through.
+    }
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("restore");
+    const qs = params.toString();
+    router.replace(qs ? `?${qs}` : "?", { scroll: false });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, restoreToken]);
 
   // Render-phase reset for pendingStop on panel close. Avoids the
   // setState-in-effect lint while still guaranteeing the in-flight
@@ -301,12 +369,35 @@ export default function TripPlannerPanel({
     const { data: userRes } = await supabase.auth.getUser();
     if (!userRes.user) {
       setSaving(false);
+      // Stash the in-flight draft so the user's stops + name aren't
+      // lost on the magic-link round-trip. The seededFor block above
+      // hydrates from this when the user returns with ?restore=1.
+      try {
+        if (typeof window !== "undefined") {
+          const draft: TripDraft = {
+            stops,
+            draftName,
+            // eslint-disable-next-line react-hooks/purity -- event handler, not render
+            savedAt: Date.now(),
+          };
+          window.localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+        }
+      } catch {
+        // localStorage can throw in private browsing / quota-full —
+        // safe to continue, the user just won't get draft preserved.
+      }
       // Clear map overlays before bouncing to login so the route line
       // and pin highlights don't linger when the user comes back.
       onTripResortIds?.([]);
       onPreviewLeg?.(null);
       onTripRoute?.(null);
-      const returnTo = `${window.location.pathname}${window.location.search}`;
+      // Build the return URL with ?plan=1 (re-open planner) and
+      // ?restore=1 (signal hydration) so the planner re-mounts in the
+      // right state when /auth/callback redirects them back.
+      const returnParams = new URLSearchParams(window.location.search);
+      returnParams.set("plan", "1");
+      returnParams.set("restore", "1");
+      const returnTo = `${window.location.pathname}?${returnParams.toString()}`;
       router.push(`/login?next=${encodeURIComponent(returnTo)}`);
       return;
     }
@@ -338,6 +429,10 @@ export default function TripPlannerPanel({
     onTripResortIds?.([]);
     onPreviewLeg?.(null);
     onTripRoute?.(null);
+    // Successful save — drop any preserved draft.
+    try {
+      if (typeof window !== "undefined") window.localStorage.removeItem(DRAFT_KEY);
+    } catch {}
     router.push(`/trip/${data.id}`);
   }
 
@@ -603,9 +698,14 @@ export default function TripPlannerPanel({
               );
             })()}
 
-            {/* Add stop button — hidden while a pending-stop confirm
-                card is showing so users finish that flow first. */}
-            {!pendingStop && (
+            {/* Add stop button — only when:
+                  - no pending-stop confirm card is open AND
+                  - there are still days left to plan (remainingDays > 0)
+                Once daysPlanned >= days the button hides and a green
+                "All days planned — ready to save" card takes its place
+                so the wizard has a visible end state instead of letting
+                the user keep adding stops past the trip length. */}
+            {!pendingStop && remainingDays > 0 && (
               <li>
                 <button
                   type="button"
@@ -614,12 +714,24 @@ export default function TripPlannerPanel({
                 >
                   <span aria-hidden="true">+</span>
                   <span>{stops.length === 0 ? "Add stop" : "Add next stop"}</span>
-                  {remainingDays > 0 && (
-                    <span className="text-[11px] font-normal text-wn-navy/65">
-                      ({remainingDays} day{remainingDays === 1 ? "" : "s"} remaining)
-                    </span>
-                  )}
+                  <span className="text-[11px] font-normal text-wn-navy/65">
+                    ({remainingDays} day{remainingDays === 1 ? "" : "s"} remaining)
+                  </span>
                 </button>
+              </li>
+            )}
+
+            {/* All-days-planned card. Replaces the Add-stop button when
+                the user has filled their day count. Points them at the
+                Save CTA in the footer. */}
+            {!pendingStop && stops.length > 0 && remainingDays === 0 && daysPlanned <= days && (
+              <li className="rounded-lg border border-emerald-300 bg-emerald-50 p-3 text-center">
+                <div className="text-sm font-bold text-emerald-800">
+                  ✓ All {days} days planned
+                </div>
+                <div className="mt-0.5 text-[11px] text-emerald-700">
+                  Ready to save your trip below — or remove a stop to add a different one.
+                </div>
               </li>
             )}
 

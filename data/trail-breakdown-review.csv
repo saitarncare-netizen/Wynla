@@ -1,0 +1,146 @@
+slug,name,trails_beginner,trails_intermediate,trails_advanced,trails_expert,terrain_park_count,confidence,sources,notes
+afton-alps,Afton Alps,13,25,12,,,LOW,https://en.wikipedia.org/wiki/Afton_Alps,vail-owned wiki only; derived from 25/50/25% of 50 trails
+alpine-meadows,Alpine Meadows,25,40,35,,1,LOW,https://en.wikipedia.org/wiki/Alpine_Meadows_(ski_resort),derived from 25/40/35% of 100 trails
+alta,Alta Ski Area,17,35,64,,0,LOW,https://en.wikipedia.org/wiki/Alta_Ski_Area,derived from 15/30/55% of 116; advanced+expert combined
+alyeska-resort,Alyeska Resort,8,38,27,,,LOW,https://en.wikipedia.org/wiki/Alyeska_Resort,derived from 11/52/37% of 73
+angel-fire-resort,Angel Fire Resort,17,45,18,,3,LOW,https://en.wikipedia.org/wiki/Angel_Fire_Resort,derived from 21/56/23% of 80
+anthony-lakes,Anthony Lakes Mountain Resort,4,8,9,,1,LOW,https://en.wikipedia.org/wiki/Anthony_Lakes_(ski_area),derived from 20/38/42% of 21
+arctic-valley,Arctic Valley Ski Area,2,10,12,,,LOW,https://en.wikipedia.org/wiki/Arctic_Valley,derived from 10/40/50% of 24
+arizona-snowbowl,Arizona Snowbowl,20,23,12,,3,LOW,https://en.wikipedia.org/wiki/Arizona_Snowbowl,derived from 37/42/21% of 55
+attitash,Attitash Mountain Resort,20,30,18,,3,LOW,https://en.wikipedia.org/wiki/Attitash_Mountain_Resort,vail-owned wiki only; derived from 29/44/27% of 68
+bear-creek-mountain-resort,Bear Creek Mountain Resort,,,,,3,LOW,https://en.wikipedia.org/wiki/Bear_Creek_Mountain_Resort,wikipedia has total 21 but no breakdown
+bear-mountain,Bear Mountain,4,14,8,,13,LOW,https://en.wikipedia.org/wiki/Bear_Mountain_(ski_area),derived from 15+15/40/30% of 26
+bear-valley-mountain,Bear Valley Mountain Resort,17,27,23,,,LOW,https://en.wikipedia.org/wiki/Bear_Valley_Mountain_Resort,derived from 25/40/35% of 67
+beartooth-basin,Beartooth Basin Summer Ski Area,,,,,1,LOW,https://en.wikipedia.org/wiki/Beartooth_Basin,wikipedia has 9 trails total no breakdown
+beaver-creek,Beaver Creek Resort,47,63,57,,3,LOW,https://en.wikipedia.org/wiki/Beaver_Creek_Resort,vail-owned; derived from 28/38/34% of 167; advanced+expert combined
+beaver-mountain,Beaver Mountain,16,19,12,,2,LOW,https://en.wikipedia.org/wiki/Beaver_Mountain,derived from 35/40/25% of 47
+big-squaw-mountain,Big Moose Mountain,,,,,,LOW,https://en.wikipedia.org/wiki/Big_Moose_Mountain,wikipedia has 33 trails no breakdown
+big-powderhorn-mountain,Big Powderhorn Mountain,,,,,2,LOW,https://en.wikipedia.org/wiki/Big_Powderhorn_Mountain,wikipedia notes 45 total even mix; no exact breakdown
+big-sky,Big Sky Resort,48,80,192,,7,LOW,https://en.wikipedia.org/wiki/Big_Sky_Resort,derived from 15/25/60% of 320; 60% advanced+expert combined
+black-mountain-of-maine,Black Mountain of Maine,,,,,1,LOW,https://en.wikipedia.org/wiki/Black_Mountain_of_Maine,wikipedia has 46 trails no breakdown
+blacktail,Blacktail Mountain Ski Area,4,18,4,,,LOW,https://en.wikipedia.org/wiki/Blacktail_Mountain_Ski_Area,derived from 15/70/15% of 26
+bogus-basin,Bogus Basin,20,40,30,,3,LOW,https://en.wikipedia.org/wiki/Bogus_Basin,derived from 22/45/33% of 90
+bolton-valley,Bolton Valley,,,,,3,LOW,https://en.wikipedia.org/wiki/Bolton_Valley,wikipedia has 71 trails 3 parks no difficulty breakdown
+boreal-mountain-resort,Boreal Mountain Resort,12,23,6,,,LOW,https://en.wikipedia.org/wiki/Boreal_Mountain_Resort,derived from 30/55/15% of 41
+bousquet-mountain,Bousquet Mountain,,,,,1,LOW,https://en.wikipedia.org/wiki/Bousquet_Mountain,wikipedia has 24 trails no breakdown
+boyne-mountain,Boyne Mountain Resort,,,,,4,LOW,https://en.wikipedia.org/wiki/Boyne_Mountain,wikipedia has 60 trails 4 parks no exact breakdown
+bretton-woods,Bretton Woods,26,30,47,,1,LOW,https://en.wikipedia.org/wiki/Bretton_Woods_Mountain_Resort,derived from 25/29/46% of 102; 3-tier
+brian-head,Brian Head Resort,25,25,14,7,,LOW,https://en.wikipedia.org/wiki/Brian_Head_Resort,derived from 35/35/20/10% of 71
+brighton,Brighton Resort,14,26,26,,5,LOW,https://en.wikipedia.org/wiki/Brighton_Ski_Resort,derived from 21/40/39% of 66; advanced+expert combined as 39%
+bristol-mountain,Bristol Mountain,12,17,6,,2,LOW,https://en.wikipedia.org/wiki/Bristol_Mountain_Ski_Resort,derived from 33/49/18% of 35
+bryce-resort,Bryce Resort,4,6,2,,1,LOW,https://en.wikipedia.org/wiki/Bryce_Resort,derived from 33/50/17% of 12
+camden-snow-bowl,Camden Snow Bowl,,,,,2,LOW,https://en.wikipedia.org/wiki/Camden_Snow_Bowl,wikipedia has 15 trails 2 parks no breakdown
+canaan-valley-resort,Canaan Valley Resort,,,,,1,LOW,https://en.wikipedia.org/wiki/Canaan_Valley_Resort_State_Park,wikipedia has 47-49 trails 1 park no exact breakdown
+cannon-mountain,Cannon Mountain,15,34,23,,,LOW,https://en.wikipedia.org/wiki/Cannon_Mountain_Ski_Area,derived from 21/47/32% of 73; no double blacks
+cascade-mountain,Cascade Mountain,18,12,18,,4,LOW,https://en.wikipedia.org/wiki/Cascade_Mountain_(ski_area),derived from 38/24/38% of 48; advanced+expert combined
+cherry-peak,Cherry Peak Resort,9,13,7,,1,LOW,https://en.wikipedia.org/wiki/Cherry_Peak_Resort,derived from 30/45/25% of 29
+china-peak,China Peak Mountain Resort,,,,,3,LOW,https://en.wikipedia.org/wiki/China_Peak,wikipedia has 45 trails 3 parks no difficulty breakdown
+copper-mountain,Copper Mountain,29,35,50,25,,LOW,https://en.wikipedia.org/wiki/Copper_Mountain_(Colorado),derived from 21/25/36/18% of 140 trails; rounded
+crested-butte,Crested Butte Mountain Resort,28,69,24,,2,LOW,https://en.wikipedia.org/wiki/Crested_Butte_Mountain_Resort,vail-owned; derived from 23/57/20% of 121 trails; advanced+expert combined
+crystal-mountain,Crystal Mountain,9,43,28,,2,LOW,https://en.wikipedia.org/wiki/Crystal_Mountain_(Washington),derived from 11/54/35% of 80 trails; advanced+expert combined
+dartmouth-skiway,Dartmouth Skiway,8,15,8,,1,LOW,https://en.wikipedia.org/wiki/Dartmouth_Skiway,derived from 25/50/25% of 30 trails; advanced+expert combined
+deer-valley,Deer Valley Resort,71,89,42,,0,LOW,https://en.wikipedia.org/wiki/Deer_Valley,derived from 35/44/21% of 202 trails; advanced+expert combined
+diamond-peak,Diamond Peak,5,14,11,,3,LOW,https://en.wikipedia.org/wiki/Diamond_Peak_(ski_area),derived from 18/46/36% of 30 trails; advanced+expert combined
+eaglecrest,Eaglecrest,7,14,14,,,LOW,https://en.wikipedia.org/wiki/Eaglecrest_Ski_Area,derived from 20/40/40% of 36 trails; expert listed under advanced category
+eaglecrest-ski-area,Eaglecrest Ski Area,7,14,14,,,LOW,https://en.wikipedia.org/wiki/Eaglecrest_Ski_Area,derived from 20/40/40% of 36 trails; expert listed under advanced category
+eldora,Eldora Mountain Resort,11,26,16,,4,LOW,https://en.wikipedia.org/wiki/Eldora_Mountain_Resort,derived from 20/50/30% of 53 trails
+giants-ridge,Giants Ridge,11,18,7,,2,LOW,https://en.wikipedia.org/wiki/Giants_Ridge,derived from 30/50/20% of 35 trails
+grand-targhee,Grand Targhee Resort,9,65,14,5,2,LOW,https://en.wikipedia.org/wiki/Grand_Targhee_Resort,derived from 10/70/15/5% of 93 trails
+granite-gorge,Granite Gorge,7,3,9,,,LOW,https://en.wikipedia.org/wiki/Granite_Gorge_Ski_Area,derived from 39/16/48% of 19 trails; expert mapped to advanced
+gunstock-mountain-resort,Gunstock Mountain Resort,7,34,15,,1,LOW,https://en.wikipedia.org/wiki/Gunstock_Mountain_Resort,derived from 12/61/27% of 55 trails; expert mapped to advanced
+heavenly-mountain-resort,Heavenly Mountain Resort,19,44,34,,3,LOW,https://en.wikipedia.org/wiki/Heavenly_Mountain_Resort,vail-owned; derived from 20/45/35% of 97 trails
+hesperus-ski-area,Hesperus Ski Area,8,5,,13,,LOW,https://en.wikipedia.org/wiki/Hesperus_Ski_Area,derived from 30/20/50% of 26 trails; expert listed in expert column
+hogadon,Hogadon Basin Ski Area,6,11,11,,1,LOW,https://en.wikipedia.org/wiki/Hogadon_Ski_Area,derived from 20/40/40% of 28 trails; expert mapped to advanced
+homewood-mountain-resort,Homewood Mountain Resort,9,30,21,,2,LOW,https://en.wikipedia.org/wiki/Homewood_Mountain_Resort,derived from 15/50/35% of 60 trails
+hoodoo,Hoodoo,7,13,14,,,LOW,https://en.wikipedia.org/wiki/Hoodoo_Ski_Area,derived from 20/39/41% of 34 trails; expert mapped to advanced
+hoodoo-ski-area,Hoodoo Ski Area,7,13,14,,,LOW,https://en.wikipedia.org/wiki/Hoodoo_Ski_Area,derived from 20/39/41% of 34 trails; expert mapped to advanced
+june-mountain,June Mountain,6,16,18,,4,LOW,https://en.wikipedia.org/wiki/June_Mountain,derived from 15/40/45% of 41 trails
+keystone,Keystone Resort,26,43,66,,,LOW,https://en.wikipedia.org/wiki/Keystone_Resort,vail-owned; derived from 19/32/49% of 135 trails
+killington,Killington,43,51,61,,5,LOW,https://en.wikipedia.org/wiki/Killington_Ski_Resort,derived from 28/33/39% of 155 trails; advanced+expert combined
+kirkwood-mountain-resort,Kirkwood Mountain Resort,8,20,38,,2,LOW,https://en.wikipedia.org/wiki/Kirkwood_Mountain_Resort,vail-owned; derived from 12/30/58% of 65 trails; advanced+expert combined
+lee-canyon,Lee Canyon,4,11,9,,1,LOW,https://en.wikipedia.org/wiki/Las_Vegas_Ski_and_Snowboard_Resort,derived from 15/45/40% of 24 trails; adv+exp combined
+lost-trail,Lost Trail Powder Mountain,12,36,12,,2,LOW,https://en.wikipedia.org/wiki/Lost_Trail_Powder_Mountain,derived from 20/60/20% of 60 trails; adv+exp combined
+mad-river-glen,Mad River Glen,,,,,,LOW,https://en.wikipedia.org/wiki/Mad_River_Glen,60 trails but no difficulty breakdown in wiki; terrain parks Yes but unspecified
+mad-river-mountain,Mad River Mountain,,,,,2,LOW,https://en.wikipedia.org/wiki/Mad_River_Mountain,vail-owned; 20 trails but no difficulty breakdown
+mammoth,Mammoth Mountain,26,84,65,,8,LOW,https://en.wikipedia.org/wiki/Mammoth_Mountain_Ski_Area,derived from 15/48/37% of 175 trails; 3-tier wikipedia
+mammoth-mountain,Mammoth Mountain Ski Area,26,84,65,,8,LOW,https://en.wikipedia.org/wiki/Mammoth_Mountain_Ski_Area,derived from 15/48/37% of 175 trails; 3-tier wikipedia
+marquette-mountain,Marquette Mountain,4,12,9,,,LOW,https://en.wikipedia.org/wiki/Marquette_Mountain,derived from 15/50/35% of 25 trails; adv+exp combined; 0 parks
+maverick-mountain,Maverick Mountain Ski Area,6,9,4,4,,LOW,https://en.wikipedia.org/wiki/Maverick_Mountain_Ski_Area,derived from 27/37/18/18% of 24 runs
+mccauley-mountain,McCauley Mountain,,,,,,LOW,https://en.wikipedia.org/wiki/McCauley_Mountain_(New_York),21 trails but no difficulty breakdown
+mcintyre-ski-area,McIntyre Ski Area,8,1,,,,LOW,https://en.wikipedia.org/wiki/McIntyre_Ski_Area,derived from 90/10% of 9 trails
+middlebury-snow-bowl,Middlebury Snow Bowl,,,,,,LOW,https://en.wikipedia.org/wiki/Middlebury_College_Snow_Bowl,17 trails but no difficulty breakdown in wiki
+mohawk,Mohawk Mountain,,,,,,LOW,https://en.wikipedia.org/wiki/Mohawk_Mountain_Ski_Area,27 trails but no difficulty breakdown
+mohawk-mountain-ski-area,Mohawk Mountain Ski Area,,,,,,LOW,https://en.wikipedia.org/wiki/Mohawk_Mountain_Ski_Area,27 trails but no difficulty breakdown
+montana-snowbowl,Montana Snowbowl,,,,,,LOW,https://en.wikipedia.org/wiki/Montana_Snowbowl,39 trails but no difficulty breakdown in wiki
+moose,Moose Mountain,,,,,,LOW,https://en.wikipedia.org/wiki/Moose_Mountain_(Alaska),40 runs intermediate/advanced; no precise breakdown; no terrain parks
+mount-bohemia,Mount Bohemia,,3,,,0,LOW,https://en.wikipedia.org/wiki/Mount_Bohemia,95 trails; only 3 intermediate blues + remainder single/double/triple black; expert-only mountain; no terrain parks
+mount-kato,Mount Kato,,,,,,LOW,https://en.wikipedia.org/wiki/Mount_Kato,19 trails but no difficulty breakdown
+mt-eyak,Mt Eyak,,,,,,LOW,https://en.wikipedia.org/wiki/Mt._Eyak,10 trails but no difficulty breakdown
+mt-brighton,Mt. Brighton,8,10,7,,1,LOW,https://en.wikipedia.org/wiki/Mt._Brighton,vail-owned; derived from 30/40/30% of 25 trails; adv+exp combined
+mt-eyak-ski-area,Mt. Eyak Ski Area,,,,,,LOW,https://en.wikipedia.org/wiki/Mt._Eyak,10 trails but no difficulty breakdown
+mt-hood-skibowl,Mt. Hood Skibowl,,,,,2,LOW,https://www.skibowl.com/about-skibowl/trail-map/,website notes 2 progressive terrain parks; no public difficulty breakdown
+mt-spokane,Mt. Spokane Ski and Snowboard Park,,,,,1,LOW,https://www.mtspokane.com/,53 runs total; no public difficulty breakdown; 1 large terrain park
+nordic-valley,Nordic Valley,8,12,20,,1,LOW,https://en.wikipedia.org/wiki/Wolf_Mountain_Ski_Resort,renamed from Wolf Mountain; derived from 20/30/50% of 40 trails; adv+exp combined
+northeast-slopes,Northeast Slopes,,,,,,LOW,https://en.wikipedia.org/wiki/Northeast_Slopes,12 trails but no difficulty breakdown; volunteer-run
+nubs-nob,Nub's Nob,,,,10,,LOW,https://en.wikipedia.org/wiki/Nub%27s_Nob,53 runs; only expert count (10) explicit in wiki; rest narrative
+okemo-mountain-resort,Okemo Mountain Resort,,,,,8,LOW,https://en.wikipedia.org/wiki/Okemo_Mountain,vail-owned; wiki only gives total 121 and 'evenly divided' across 3 categories — no usable counts
+palisades-tahoe,Palisades Tahoe,,,,,2,LOW,https://en.wikipedia.org/wiki/Palisades_Tahoe,total 177+ but no difficulty breakdown
+paoli-peaks,Paoli Peaks,4,8,3,,2,LOW,https://en.wikipedia.org/wiki/Paoli_Peaks,vail-owned; derived from wiki 15 trails with 25/55/20% beginner/intermediate/advanced; 3-tier
+park-city,Park City Mountain Resort,52,188,108,,4,LOW,https://en.wikipedia.org/wiki/Park_City_Mountain_Resort,vail-owned; derived from wiki 348 trails with 15/54/31% beginner/intermediate/expert; single+double black combined as advanced
+peek-n-peak,Peek'n Peak,,,,,4,LOW,https://en.wikipedia.org/wiki/Peek%27n_Peak,wiki gives 25 total and 4 parks but no difficulty breakdown
+pine-knob,Pine Knob,,,,,3,LOW,https://en.wikipedia.org/wiki/Pine_Knob_Ski_Area,wiki gives 17 total and 3 parks but no difficulty breakdown
+pomerelle,Pomerelle Mountain Resort,5,12,7,,,LOW,https://en.wikipedia.org/wiki/Pomerelle,derived from wiki 24 trails 20/50/30% 3-tier
+ragged-mountain,Ragged Mountain,,,,,3,LOW,https://en.wikipedia.org/wiki/Ragged_Mountain_Resort,wiki gives 57 total and 3 parks but no difficulty breakdown
+saskadena-six,Saskadena Six,,,,,1,LOW,https://en.wikipedia.org/wiki/Saskadena_Six,wiki gives 28 total and 1 park but no difficulty breakdown
+saskadena-six-area,Saskadena Six Ski Area,,,,,1,LOW,https://en.wikipedia.org/wiki/Saskadena_Six,duplicate slug; same data as saskadena-six
+shanty-creek,Shanty Creek Resorts,,,,,2,LOW,https://www.shantycreek.com,site shows 42 total + 2 parks but no difficulty breakdown
+shawnee-mountain,Shawnee Mountain Ski Area,,,,,2,LOW,https://en.wikipedia.org/wiki/Shawnee_Mountain_Ski_Area,wiki gives 23 total and 2 parks but no difficulty breakdown
+silverton-mountain,Silverton Mountain,,,,,0,LOW,https://en.wikipedia.org/wiki/Silverton_Mountain,no groomed runs/cut trails; advanced+expert only; 0 terrain parks
+snow-king,Snow King Mountain,6,13,15,,3,LOW,https://en.wikipedia.org/wiki/Snow_King_Mountain | https://www.snowkingmountain.com,wiki 35 total + 3 parks; site text 6 beginner/13 intermediate/15 expert (advanced+expert combined); 3-tier-ish
+snow-summit,Snow Summit,3,21,8,,,LOW,https://en.wikipedia.org/wiki/Snow_Summit,derived from wiki 31 trails with 10% beginner/65% intermediate (low+std combined)/25% advanced; 2 named parks (no count provided)
+snow-trails,Snow Trails,,,,,5,LOW,https://www.snowtrails.com,site lists 21 trails + 5 parks but no difficulty breakdown
+snowhaven,Snowhaven,7,2,,,,LOW,https://en.wikipedia.org/wiki/Snowhaven,derived from wiki 9 trails with 75/25% beginner/intermediate; no advanced/expert
+snowriver,Snowriver,,,,,4,LOW,https://en.wikipedia.org/wiki/Snowriver_Mountain_Resort,wiki gives Jackson Creek breakdown (10/7/7/4) but Black River basin only as % — total breakdown not reliably combinable
+snowshoe-mountain,Snowshoe Mountain,,,,,4,LOW,https://en.wikipedia.org/wiki/Snowshoe_Mountain | https://www.snowshoemtn.com/mountain-info/mountain-stats,site gives % terrain by acres not trail counts; 60 total trails per wiki
+solitude,Solitude Mountain Resort,8,32,40,,,LOW,https://en.wikipedia.org/wiki/Solitude_Mountain_Resort,derived from wiki 80 trails with 10/40/50% 3-tier; advanced+expert combined per source
+spout-springs,Spout Springs Ski Area,6,6,5,,,LOW,https://en.wikipedia.org/wiki/Spout_Springs_Ski_Area,derived from %; 17 trails 35/35/30; closed since 2017-18 season
+steamboat,Steamboat Ski Resort,24,71,75,,6,LOW,https://en.wikipedia.org/wiki/Steamboat_Ski_Resort,derived from %; 170 trails 14/42/44; single+double black combined
+stevens-pass,Stevens Pass,4,20,13,,3,LOW,https://en.wikipedia.org/wiki/Stevens_Pass_Ski_Area,vail-owned; derived from %; 37 trails 11/54/35; single+double black combined
+stowe-mountain-resort,Stowe Mountain Resort,19,64,35,,4,LOW,https://en.wikipedia.org/wiki/Stowe_Mountain_Resort,vail-owned; derived from %; 116 trails 16/55/30; single+double black combined
+stratton-mountain,Stratton Mountain,40,35,25,,,LOW,https://en.wikipedia.org/wiki/Stratton_Mountain_Resort,derived from %; 99 trails 40/35/25; single+double black combined
+sugar-bowl-resort,Sugar Bowl Resort,18,46,39,,,LOW,https://en.wikipedia.org/wiki/Sugar_Bowl_Ski_Resort,derived from %; 103 trails 17/45/38; single+double black combined
+sun-valley,Sun Valley Resort,44,51,24,2,,LOW,https://en.wikipedia.org/wiki/Sun_Valley,derived from %; 121 trails 36/42/20/2
+sundance,Sundance Mountain Resort,9,18,18,,2,LOW,https://en.wikipedia.org/wiki/Sundance_Mountain_Resort,derived from %; 44 trails 20/40/40; single+double black combined
+sunday-river,Sunday River,45,49,26,16,,LOW,https://en.wikipedia.org/wiki/Sunday_River_Ski_Resort,derived from %; 135 trails 33/36/19/12
+sunlight-mountain,Sunlight Mountain Resort,13,37,13,3,1,LOW,https://en.wikipedia.org/wiki/Sunlight_Mountain_Resort,derived from %; 67 trails 20/55/20/5
+sunrise-park-resort,Sunrise Park Resort,31,19,17,,1,LOW,https://en.wikipedia.org/wiki/Sunrise_Park_Resort,derived from %; 67 trails 46/28/25; advanced+expert combined
+tahoe-donner-downhill,Tahoe Donner Downhill Ski Area,4,6,4,,,LOW,https://en.wikipedia.org/wiki/Tahoe_Donner_Downhill_Ski_Area,derived from %; 14 trails 30/40/30
+tamarack,Tamarack Resort,9,23,19,,3,LOW,https://en.wikipedia.org/wiki/Tamarack_Resort,derived from %; 50 trails 17/45/38; single+double black combined
+taos-ski-valley,Taos Ski Valley,26,28,56,,2,LOW,https://en.wikipedia.org/wiki/Taos_Ski_Valley,derived from %; 110 trails 24/25/51; single+double black combined
+telluride,Telluride Ski Resort,29,46,52,,3,LOW,https://en.wikipedia.org/wiki/Telluride_Ski_Resort,derived from %; 127 trails 23/36/41; single+double black combined
+terry-peak,Terry Peak Ski Area,,,,,1,LOW,https://en.wikipedia.org/wiki/Terry_Peak,wikipedia infobox: 30 total trails 1 terrain park; no difficulty breakdown
+highlands,The Highlands,,,,,3,LOW,https://en.wikipedia.org/wiki/Boyne_Highlands,55 total trails 3 parks; no difficulty breakdown; aka Boyne Highlands
+the-highlands,The Highlands (Boyne Highlands),,,,,3,LOW,https://en.wikipedia.org/wiki/Boyne_Highlands,55 total trails 3 parks; no difficulty breakdown
+the-summit-at-snoqualmie,The Summit at Snoqualmie,9,28,25,,,LOW,https://en.wikipedia.org/wiki/The_Summit_at_Snoqualmie,derived from %; 62 trails 14/45/41; single+double black combined
+thunder-ridge-ski-area,Thunder Ridge Ski Area,10,4,7,,1,LOW,https://en.wikipedia.org/wiki/Thunder_Ridge_Ski_Area,derived from %; 21 trails 48/19/33
+timberline-lodge,Timberline Lodge Ski Area,7,18,11,,,LOW,https://en.wikipedia.org/wiki/Timberline_Lodge_ski_area,derived from %; 35 trails 20/50/30; single+double black combined
+titcomb-mountain,Titcomb Mountain,,,,,,LOW,https://en.wikipedia.org/wiki/Titcomb_Mountain,16 total trails; no difficulty breakdown
+titus-mountain,Titus Mountain,,,,,,LOW,https://en.wikipedia.org/wiki/Titus_Mountain,52 trails/glades/parks; no difficulty breakdown
+trollhaugen,Trollhaugen,8,12,7,,4,LOW,https://en.wikipedia.org/wiki/Trollhaugen,derived from %; 30 trails 28/40/22; single+double black combined; 3-4 parks rounded to 4
+tyrol-basin,Tyrol Basin,,,,,5,LOW,https://en.wikipedia.org/wiki/Tyrol_Basin,22 total trails 5 parks; no numeric breakdown
+tyrol-basin-and-snowboard,Tyrol Basin Ski and Snowboard,,,,,5,LOW,https://en.wikipedia.org/wiki/Tyrol_Basin,22 total trails 5 parks; no numeric breakdown; likely dup of tyrol-basin
+vail,Vail Ski Resort,35,57,103,,2,LOW,https://en.wikipedia.org/wiki/Vail_Ski_Resort,vail-owned; derived from %; 195 trails 18/29/53; single+double black combined; +superpipe
+waterville-valley,Waterville Valley,9,37,16,,6,LOW,https://en.wikipedia.org/wiki/Waterville_Valley_Resort,derived from %; 62 trails 15/59/26
+welch-village,Welch Village,,,,,2,LOW,https://en.wikipedia.org/wiki/Welch_Village,50 trails 2 parks; no numeric difficulty breakdown
+west-mountain,West Mountain,6,20,8,,2,LOW,https://en.wikipedia.org/wiki/West_Mountain_(ski_area),derived from %; 31 trails 20/65/25 (note: percentages sum to 110%); single+double black combined
+white-pass,White Pass Ski Area,14,23,9,,2,LOW,https://en.wikipedia.org/wiki/White_Pass_(ski_area),derived from %; 45 trails 30/50/20; single+double black combined
+whitecap-mountains,Whitecap Mountains,,,,,,LOW,https://en.wikipedia.org/wiki/Whitecap_Mountains,article mentions 43 runs; no difficulty breakdown
+whiteface-mountain,Whiteface Mountain,23,43,28,,7,LOW,https://en.wikipedia.org/wiki/Whiteface_Mountain,derived from %; 94 trails 24/46/30; single+double black combined
+whitefish,Whitefish Mountain Resort,14,33,37,9,1,LOW,https://en.wikipedia.org/wiki/Whitefish_Mountain_Resort,derived from %; 93 trails 15/35/40/10
+wild-mountain,Wild Mountain,,,,,4,LOW,https://en.wikipedia.org/wiki/Wild_Mountain,26 runs 4 parks; no difficulty breakdown
+wildcat-mountain,Wildcat Mountain,12,22,15,,,LOW,https://en.wikipedia.org/wiki/Wildcat_Mountain_Ski_Area,vail-owned; derived from %; 49 trails 25/45/30; single+double black combined; no terrain park
+willamette-pass,Willamette Pass Resort,6,13,10,,1,LOW,https://en.wikipedia.org/wiki/Willamette_Pass_Resort,derived from %; 29 trails 20/45/35; single+double black combined
+wilmot-mountain,Wilmot Mountain,,,,,2,LOW,https://en.wikipedia.org/wiki/Wilmot_Mountain,vail-owned; 23 trails 2 parks; no difficulty breakdown
+winter-park,Winter Park Resort,13,30,32,92,,LOW,https://en.wikipedia.org/wiki/Winter_Park_Resort,derived from %; 167 trails 8/18/19/52/3; expert=most-difficult+expert
+wintergreen-resort,Wintergreen Resort,6,9,11,,1,LOW,https://en.wikipedia.org/wiki/Wintergreen_Resort,derived from %; 26 trails 23/35/42; single+double black combined
+wolf-creek,Wolf Creek Ski Area,15,27,35,,,LOW,https://en.wikipedia.org/wiki/Wolf_Creek_Ski_Area,derived from %; 77 trails 20/35/45; single+double black combined

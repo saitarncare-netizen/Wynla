@@ -5,9 +5,9 @@
 // and Supabase mutations. Refreshes via router.refresh() after each
 // mutation so server-rendered day cards re-color correctly.
 
-import { useState, useTransition } from "react";
+import { useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase";
+import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
 type Props = {
   tripId: string;
@@ -27,6 +27,12 @@ export default function TripActions({
   googleMapsUrl,
 }: Props) {
   const router = useRouter();
+  // SSR-aware browser client. Reads its session from cookies set by the
+  // /auth/callback exchange + refreshed by proxy.ts. Using the bare
+  // createClient() singleton in @/lib/supabase here would read from
+  // localStorage and silently appear signed-out right after a magic-link
+  // login — that's the bug Stage 16 fixes.
+  const supabase = useMemo(() => createSupabaseBrowserClient(), []);
   const [, startTransition] = useTransition();
   const [busy, setBusy] = useState<null | "start" | "advance" | "restart" | "delete">(null);
   const [error, setError] = useState<string | null>(null);

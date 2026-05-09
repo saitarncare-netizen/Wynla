@@ -104,11 +104,17 @@ export default function ResortPicker({
 
   return (
     <>
+      {/* Light scrim — no blur. We deliberately keep the map fully
+          visible behind the picker so users can see the gold dashed
+          preview line drawn from origin/last-stop to whatever resort
+          they're hovering, plus their existing trip line. The 12%
+          tint is just enough to signal "modal is in front" without
+          hiding the map. Click outside to close (existing behavior). */}
       <button
         type="button"
         aria-label="Close picker"
         onClick={onClose}
-        className="fixed inset-0 z-[60] bg-wn-charcoal/40 backdrop-blur-[2px]"
+        className="fixed inset-0 z-[60] bg-wn-charcoal/15"
       />
       <div
         role="dialog"
