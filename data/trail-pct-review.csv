@@ -1,0 +1,33 @@
+slug,name,pct_beginner,pct_intermediate,pct_advanced,pct_expert,terrain_park_count,confidence,sources,notes
+afton-alps,Afton Alps,25,50,25,,1,LOW,https://en.wikipedia.org/wiki/Afton_Alps,"vail-owned wiki only, 3-tier resort"
+attitash,Attitash Mountain Resort,29,44,27,,,LOW,https://en.wikipedia.org/wiki/Attitash_Mountain_Resort,"vail-owned wiki only, 3-tier resort"
+beaver-creek,Beaver Creek Resort,28,38,34,,3,LOW,https://en.wikipedia.org/wiki/Beaver_Creek_Resort,"vail-owned wiki only, single+double black combined"
+big-powderhorn-mountain,Big Powderhorn Mountain,24,44,29,2,2,LOW,https://en.wikipedia.org/wiki/Big_Powderhorn_Mountain,derived from trail counts
+jiminy-peak,Jiminy Peak,,,,,3,LOW,https://en.wikipedia.org/wiki/Jiminy_Peak,wiki only mentions 3 terrain parks; no pct breakdown
+mad-river-glen,Mad River Glen,,,,,0,LOW,https://en.wikipedia.org/wiki/Mad_River_Glen,no pct breakdown; wiki confirms 0 terrain parks
+mount-bohemia,Mount Bohemia,0,3,97,,0,LOW,https://en.wikipedia.org/wiki/Mount_Bohemia,all-expert resort: only single/double/triple black + 3 blue runs out of 95; pcts derived; single+double black combined
+okemo-mountain-resort,Okemo Mountain Resort,33,33,34,,8,LOW,https://en.wikipedia.org/wiki/Okemo_Mountain,"vail-owned; wiki says ""almost evenly divided"" - pcts approximated; single+double black combined"
+otsego-resort,Otsego Resort,,,,,2,LOW,https://otsegoclub.com/mountain-information/,resort site mentions 2 terrain parks no pct breakdown
+palisades-tahoe,Palisades Tahoe,,,,,2,LOW,https://en.wikipedia.org/wiki/Palisades_Tahoe,wiki gives 2 terrain parks no pct breakdown
+peek-n-peak,Peek'n Peak,,,,,4,LOW,https://en.wikipedia.org/wiki/Peek%27n_Peak,wiki gives 4 terrain parks no pct breakdown
+pico-mountain,Pico Mountain,,,,,1,LOW,https://en.wikipedia.org/wiki/Pico_Mountain,1 triple slope terrain park no pct breakdown
+pine-knob,Pine Knob,,,,,3,LOW,https://en.wikipedia.org/wiki/Pine_Knob,wiki gives 3 terrain parks no pct breakdown
+ragged-mountain,Ragged Mountain,,,,,3,LOW,https://en.wikipedia.org/wiki/Ragged_Mountain_Resort,wiki gives 3 terrain parks no pct breakdown
+saskadena-six,Saskadena Six,,,,,1,LOW,https://en.wikipedia.org/wiki/Saskadena_Six,wiki has 1 terrain park no pct
+saskadena-six-area,Saskadena Six Ski Area,,,,,1,LOW,https://en.wikipedia.org/wiki/Saskadena_Six,duplicate of saskadena-six
+shawnee-mountain,Shawnee Mountain Ski Area,,,,,2,LOW,https://en.wikipedia.org/wiki/Shawnee_Mountain_Ski_Area,wiki has 2 terrain parks no pct
+big-bear-pa,Ski Big Bear,33,22,22,6,2,LOW,https://en.wikipedia.org/wiki/Ski_Big_Bear,counts converted from wiki not exact
+ski-ward,Ski Ward,33,33,,33,1,LOW,https://en.wikipedia.org/wiki/Ski_Ward,counts only no exact pct beg/int/expert each 3 trails
+snow-king,Snow King Mountain,,,,,3,LOW,https://en.wikipedia.org/wiki/Snow_King_Mountain,wiki gives 3 terrain parks no pct breakdown
+snow-trails,Snow Trails,,,,,5,LOW,https://www.snowtrails.com/,resort site mentions 5 terrain parks no pct
+snowriver,Snowriver,20,40,40,,2,LOW,https://www.snowriver.com/ | https://en.wikipedia.org/wiki/Snowriver_Mountain_Resort,Black River Basin pct used; 3-tier; 2 terrain parks per resort site
+terry-peak,Terry Peak Ski Area,,,,,1,LOW,https://en.wikipedia.org/wiki/Terry_Peak,terrain park count only
+titus-mountain,Titus Mountain,,,,,3,LOW,https://www.titusmountain.com/,terrain park count only
+trollhaugen,Trollhaugen,28,40,22,,3,LOW,https://en.wikipedia.org/wiki/Trollhaugen,percentages don't sum to 100; uncertain
+tyrol-basin,Tyrol Basin,,,,,5,LOW,https://en.wikipedia.org/wiki/Tyrol_Basin,terrain park count only
+tyrol-basin-and-snowboard,Tyrol Basin Ski and Snowboard,,,,,5,LOW,https://en.wikipedia.org/wiki/Tyrol_Basin,duplicate of tyrol-basin
+welch-village,Welch Village,,,,,2,LOW,https://en.wikipedia.org/wiki/Welch_Village,terrain park count only
+wild-mountain,Wild Mountain,,,,,4,LOW,https://en.wikipedia.org/wiki/Wild_Mountain,terrain park count only
+willard-mountain,Willard Mountain,24,47,29,,,LOW,https://www.willardmountain.com/,counts-derived 4/8/5 of 17 listed
+wilmot-mountain,Wilmot Mountain,,,,,2,LOW,https://en.wikipedia.org/wiki/Wilmot_Mountain,vail-owned; terrain park only
+wisp-resort,Wisp Resort,29,41,29,,,LOW,https://en.wikipedia.org/wiki/Wisp_Resort,counts-derived; sums to 99

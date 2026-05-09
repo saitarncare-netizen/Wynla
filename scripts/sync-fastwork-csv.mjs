@@ -1,15 +1,10 @@
 // Reads back the Fastwork freelancer's filled CSV and emits SQL UPDATE
-// statements for review. Same shape as scripts/process-trail-csvs.mjs
-// but takes only verified_* columns (the freelancer's hand-checked
-// values) and ignores agent_guess_* (those were just leads).
+// statements for difficulty_pct_* columns. Stage 18 schema.
 //
-// Run from repo root:
-//   node scripts/sync-fastwork-csv.mjs <path-to-filled-csv>
-//
+// Run: node scripts/sync-fastwork-csv.mjs <path-to-filled-csv>
 // Default path: data/fastwork-trail-data-output.csv
 //
-// Output: data/trail-breakdown-fastwork-apply.sql — paste into the
-// Supabase SQL editor like the agent SQL.
+// Output: data/trail-breakdown-fastwork-apply.sql — paste into Supabase.
 
 import fs from "node:fs";
 import path from "node:path";
@@ -67,12 +62,12 @@ function parseCsv(text) {
   });
 }
 
-function asInt(v) {
+function asInt(v, { min = 0, max = 100 } = {}) {
   if (v == null) return null;
   const s = String(v).trim();
   if (s === "") return null;
   const n = Number(s);
-  if (!Number.isFinite(n) || !Number.isInteger(n) || n < 0) return null;
+  if (!Number.isFinite(n) || !Number.isInteger(n) || n < min || n > max) return null;
   return n;
 }
 
@@ -81,51 +76,58 @@ console.log(`Loaded ${rows.length} rows from ${path.relative(REPO_ROOT, inputPat
 
 const updates = [];
 let blanks = 0;
-let invalidSlugs = 0;
+let noSource = 0;
+let badSum = 0;
 
 for (const r of rows) {
-  if (!r.slug || !/^[a-z0-9-]+$/.test(r.slug)) {
-    invalidSlugs++;
-    continue;
-  }
-  const b = asInt(r.verified_beginner);
-  const i = asInt(r.verified_intermediate);
-  const a = asInt(r.verified_advanced);
-  const e = asInt(r.verified_expert);
-  const p = asInt(r.verified_terrain_park_count);
-  const hasAny = b != null || i != null || a != null || e != null || p != null;
-  if (!hasAny) {
+  if (!r.slug || !/^[a-z0-9-]+$/.test(r.slug)) continue;
+  const b = asInt(r.verified_pct_beginner);
+  const i = asInt(r.verified_pct_intermediate);
+  const a = asInt(r.verified_pct_advanced);
+  const e = asInt(r.verified_pct_expert);
+  const park = asInt(r.verified_terrain_park_count, { min: 0, max: 50 });
+  const hasAnyPct = b != null || i != null || a != null || e != null;
+  if (!hasAnyPct && park == null) {
     blanks++;
     continue;
   }
-  // Source URL is required when any verified value is set — guards
-  // against the freelancer skipping the citation column.
-  if (!r.verified_source_url || !r.verified_source_url.trim()) {
-    console.warn(`⚠  ${r.slug}: verified data but no source URL — skipping`);
+  // If any pct is set, the four pcts present must sum to ~100. Allow
+  // 95-105 for rounding + 3-tier resorts where expert is intentionally
+  // blank (in which case sum of beg+int+adv may be ~100 already).
+  if (hasAnyPct) {
+    const presentSum = (b ?? 0) + (i ?? 0) + (a ?? 0) + (e ?? 0);
+    // 3-tier resort: only beg/int/adv set, sum 95-105 still OK.
+    if (presentSum < 95 || presentSum > 105) {
+      console.warn(`⚠  ${r.slug}: pcts sum to ${presentSum} (outside 95-105) — skipping`);
+      badSum++;
+      continue;
+    }
+  }
+  if (hasAnyPct && (!r.verified_source_url || !r.verified_source_url.trim())) {
+    console.warn(`⚠  ${r.slug}: pct values but no source URL — skipping`);
+    noSource++;
     continue;
   }
   updates.push({
     slug: r.slug,
     name: r.name,
-    trails_beginner: b,
-    trails_intermediate: i,
-    trails_advanced: a,
-    trails_expert: e,
-    terrain_park_count: p,
-    has_terrain_park: p != null && p > 0 ? true : null,
-    source: r.verified_source_url.trim(),
+    pct_b: b,
+    pct_i: i,
+    pct_a: a,
+    pct_e: e,
+    park,
+    source: r.verified_source_url?.trim() ?? "",
     notes: r.freelancer_notes,
   });
 }
 
 console.log(`Updates ready: ${updates.length}`);
 console.log(`  - ${blanks} rows left blank (no public data)`);
-if (invalidSlugs > 0) {
-  console.warn(`  - ${invalidSlugs} rows had invalid slugs — skipped`);
-}
+if (noSource > 0) console.warn(`  - ${noSource} rows skipped (no source URL)`);
+if (badSum > 0) console.warn(`  - ${badSum} rows skipped (pcts didn't sum to 95-105)`);
 
 const sqlLines = [
-  "-- Trail breakdown sync — Fastwork freelancer hand-verified data.",
+  "-- Trail breakdown sync — Fastwork freelancer hand-verified PERCENTAGES.",
   "-- Apply via Supabase SQL editor.",
   `-- Total updates: ${updates.length}`,
   "",
@@ -135,12 +137,15 @@ const sqlLines = [
 
 for (const u of updates) {
   const sets = [];
-  if (u.trails_beginner != null) sets.push(`trails_beginner = ${u.trails_beginner}`);
-  if (u.trails_intermediate != null) sets.push(`trails_intermediate = ${u.trails_intermediate}`);
-  if (u.trails_advanced != null) sets.push(`trails_advanced = ${u.trails_advanced}`);
-  if (u.trails_expert != null) sets.push(`trails_expert = ${u.trails_expert}`);
-  if (u.terrain_park_count != null) sets.push(`terrain_park_count = ${u.terrain_park_count}`);
-  if (u.has_terrain_park === true) sets.push(`has_terrain_park = true`);
+  if (u.pct_b != null) sets.push(`difficulty_pct_beginner = ${u.pct_b}`);
+  if (u.pct_i != null) sets.push(`difficulty_pct_intermediate = ${u.pct_i}`);
+  if (u.pct_a != null) sets.push(`difficulty_pct_advanced = ${u.pct_a}`);
+  if (u.pct_e != null) sets.push(`difficulty_pct_expert = ${u.pct_e}`);
+  if (u.park != null) {
+    sets.push(`terrain_park_count = ${u.park}`);
+    if (u.park > 0) sets.push(`has_terrain_park = true`);
+  }
+  if (sets.length === 0) continue;
   const slugSql = String(u.slug).replace(/'/g, "''");
   sqlLines.push(`-- ${u.name}  (source: ${u.source})`);
   if (u.notes && u.notes.trim()) {

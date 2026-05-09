@@ -14,7 +14,9 @@ import {
   googleMapsUrl,
   bookingComUrl,
 } from "@/lib/externalLinks";
+import { getDifficultyMix } from "@/lib/difficulty";
 import FavoriteToggle from "@/components/auth/FavoriteToggle";
+import DifficultyBar from "@/components/Map/DifficultyBar";
 
 export const dynamic = "force-dynamic";
 
@@ -35,6 +37,10 @@ type Resort = {
   total_trails: number | null;
   total_lifts: number | null;
   total_acres: number | null;
+  difficulty_pct_beginner: number | null;
+  difficulty_pct_intermediate: number | null;
+  difficulty_pct_advanced: number | null;
+  difficulty_pct_expert: number | null;
   trails_beginner: number | null;
   trails_intermediate: number | null;
   trails_advanced: number | null;
@@ -436,45 +442,22 @@ function Section({
 }
 
 function QuickStats({ resort }: { resort: Resort }) {
-  // Smart total: derive from breakdown sum when total_trails is NULL
-  // but at least one difficulty count is populated. Keeps the Trails
-  // stat from going blank just because the resort entered counts by
-  // difficulty without an aggregate. Caption "by difficulty" makes
-  // the source transparent.
-  const someTrails =
-    resort.trails_beginner != null ||
-    resort.trails_intermediate != null ||
-    resort.trails_advanced != null ||
-    resort.trails_expert != null;
-  const breakdownSum =
-    (resort.trails_beginner ?? 0) +
-    (resort.trails_intermediate ?? 0) +
-    (resort.trails_advanced ?? 0) +
-    (resort.trails_expert ?? 0);
-  const displayTrails = resort.total_trails ?? (someTrails ? breakdownSum : null);
-  const trailsDerived = resort.total_trails == null && someTrails;
-
-  const stats: Array<{ label: string; value: string; hint?: string }> = [];
+  const stats: Array<{ label: string; value: string }> = [];
   if (resort.vertical_drop) stats.push({ label: "Vertical drop", value: `${resort.vertical_drop.toLocaleString()} ft` });
-  if (displayTrails != null) {
-    stats.push({
-      label: "Trails",
-      value: String(displayTrails),
-      hint: trailsDerived ? "by difficulty" : undefined,
-    });
-  }
+  if (resort.total_trails) stats.push({ label: "Trails", value: String(resort.total_trails) });
   if (resort.total_lifts) stats.push({ label: "Lifts", value: String(resort.total_lifts) });
   if (resort.total_acres) stats.push({ label: "Skiable acres", value: resort.total_acres.toLocaleString() });
   if (resort.elevation_summit) stats.push({ label: "Summit elevation", value: `${resort.elevation_summit.toLocaleString()} ft` });
   if (resort.longest_run_miles) stats.push({ label: "Longest run", value: `${resort.longest_run_miles} mi` });
 
-  // Trail breakdown gate — same as ResortPanel's MountainStats.
-  const hasTrailBreakdown = someTrails || resort.terrain_park_count != null || resort.has_terrain_park === true;
+  const mix = getDifficultyMix(resort);
+  const hasPark =
+    resort.has_terrain_park === true || (resort.terrain_park_count ?? 0) > 0;
 
-  if (stats.length === 0 && !hasTrailBreakdown) return null;
+  if (stats.length === 0 && !mix && !hasPark) return null;
 
-  // Features chip row. Terrain park lives in the breakdown grid so we
-  // don't duplicate it here.
+  // Features chip row. Terrain park lives in its own pill below the
+  // difficulty bar so we don't duplicate it here.
   const features: string[] = [];
   if (resort.has_halfpipe) features.push("Halfpipe");
   if (resort.has_glades) features.push("Glades");
@@ -495,21 +478,40 @@ function QuickStats({ resort }: { resort: Resort }) {
               <div className="mt-0.5 text-base font-semibold text-wn-navy">
                 {s.value}
               </div>
-              {s.hint && (
-                <div className="text-[10px] italic text-wn-charcoal/45">{s.hint}</div>
-              )}
             </div>
           ))}
         </div>
       )}
 
-      {hasTrailBreakdown ? (
-        <TrailBreakdownGrid resort={resort} />
-      ) : displayTrails != null ? (
+      {mix ? (
+        <div className="mt-4 rounded-lg border border-wn-charcoal/10 bg-white p-4">
+          <div className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-wn-charcoal/50">
+            Difficulty mix
+          </div>
+          <DifficultyBar mix={mix} size="full" showSourceHint />
+        </div>
+      ) : (
         <p className="mt-3 text-xs italic text-wn-charcoal/55">
           Difficulty mix not yet verified.
         </p>
-      ) : null}
+      )}
+
+      {hasPark && (
+        <div className="mt-3 inline-flex items-center gap-2 rounded-full border border-wn-charcoal/15 bg-white px-3 py-1.5 text-xs font-medium text-wn-charcoal">
+          <span
+            className="block h-2.5 w-5 rounded-full bg-orange-500"
+            aria-hidden="true"
+          />
+          <span>
+            Terrain park
+            {resort.terrain_park_count != null && resort.terrain_park_count > 0 && (
+              <span className="ml-1 font-normal text-wn-charcoal/60">
+                · {resort.terrain_park_count}
+              </span>
+            )}
+          </span>
+        </div>
+      )}
 
       {features.length > 0 && (
         <div className="mt-3 flex flex-wrap gap-1.5 text-xs">
@@ -524,94 +526,6 @@ function QuickStats({ resort }: { resort: Resort }) {
         </div>
       )}
     </Section>
-  );
-}
-
-// Trail breakdown — 5-column grid using the same trail-map symbols you'd
-// see on a resort piste: green circle (Beginner), blue square
-// (Intermediate), single black diamond (Expert), double black (Expert
-// Only), orange pill (Terrain Park). Hidden by the caller when no data
-// is present; individual cells render "—" when only some are missing.
-function TrailBreakdownGrid({ resort }: { resort: Resort }) {
-  const someTrails =
-    resort.trails_beginner != null ||
-    resort.trails_intermediate != null ||
-    resort.trails_advanced != null ||
-    resort.trails_expert != null;
-  let parkDisplay: string;
-  if (resort.terrain_park_count != null) parkDisplay = String(resort.terrain_park_count);
-  else if (resort.has_terrain_park) parkDisplay = "✓";
-  else if (someTrails) parkDisplay = "—";
-  else parkDisplay = "—";
-
-  return (
-    <div className="mt-4 rounded-lg border border-wn-charcoal/10 bg-white p-3">
-      <div className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-wn-charcoal/50">
-        Trail breakdown
-      </div>
-      <div className="grid grid-cols-5 gap-2">
-        <TrailColumn
-          symbol={<span className="block h-3.5 w-3.5 rounded-full bg-emerald-500" aria-hidden="true" />}
-          label="Beginner"
-          value={resort.trails_beginner}
-        />
-        <TrailColumn
-          symbol={<span className="block h-3.5 w-3.5 bg-sky-500" aria-hidden="true" />}
-          label="Intermediate"
-          value={resort.trails_intermediate}
-        />
-        <TrailColumn
-          symbol={<span className="block h-3.5 w-3.5 rotate-45 bg-black" aria-hidden="true" />}
-          label="Expert"
-          value={resort.trails_advanced}
-        />
-        <TrailColumn
-          symbol={
-            <span className="flex items-center gap-0.5" aria-hidden="true">
-              <span className="block h-3.5 w-3.5 rotate-45 bg-black" />
-              <span className="block h-3.5 w-3.5 rotate-45 bg-black" />
-            </span>
-          }
-          label="Expert Only"
-          value={resort.trails_expert}
-        />
-        <TrailColumn
-          symbol={
-            <span className="block h-3 w-6 rounded-full bg-orange-500" aria-hidden="true" />
-          }
-          label="Terrain Park"
-          rawValue={parkDisplay}
-        />
-      </div>
-    </div>
-  );
-}
-
-function TrailColumn({
-  symbol,
-  label,
-  value,
-  rawValue,
-}: {
-  symbol: React.ReactNode;
-  label: string;
-  value?: number | null;
-  rawValue?: string;
-}) {
-  const display = rawValue != null ? rawValue : value != null ? String(value) : "—";
-  const muted = display === "—";
-  return (
-    <div className="flex flex-col items-center gap-1.5 text-center">
-      <span className="flex h-5 items-center justify-center">{symbol}</span>
-      <span
-        className={`text-lg font-bold leading-none ${muted ? "text-wn-charcoal/30" : "text-wn-navy"}`}
-      >
-        {display}
-      </span>
-      <span className="text-[10px] font-semibold uppercase leading-tight tracking-wide text-wn-charcoal/55">
-        {label}
-      </span>
-    </div>
   );
 }
 

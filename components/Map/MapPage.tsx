@@ -32,9 +32,15 @@ export type Resort = {
   total_acres: number | null;
   website_url: string | null;
   has_night_skiing: boolean | null;
-  // Trail breakdown by difficulty. Null when not yet verified — the UI
-  // shows "—" for those rows. has_terrain_park is the boolean gate;
-  // terrain_park_count is the precise number when known.
+  // Trail breakdown by difficulty. Stage 18 stores PERCENTAGES
+  // (difficulty_pct_*) as the canonical source — easier to verify
+  // against resort marketing materials than raw counts. The trails_*
+  // count columns are kept for backwards-compat reference; the UI
+  // prefers pct when set and derives pct from counts as fallback.
+  difficulty_pct_beginner: number | null;
+  difficulty_pct_intermediate: number | null;
+  difficulty_pct_advanced: number | null;
+  difficulty_pct_expert: number | null;
   trails_beginner: number | null;
   trails_intermediate: number | null;
   trails_advanced: number | null;

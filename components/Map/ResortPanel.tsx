@@ -8,7 +8,9 @@ import { passColor, passLabel, primaryPass } from "@/lib/passColors";
 import { formatDriveTime, type Origin } from "@/lib/origins";
 import { weatherGovUrl, windyUrl, googleMapsUrl } from "@/lib/externalLinks";
 import { fetchMatrixDriveTime, type MatrixResult } from "@/lib/mapboxMatrix";
+import { getDifficultyMix } from "@/lib/difficulty";
 import FavoriteToggle from "@/components/auth/FavoriteToggle";
+import DifficultyBar from "./DifficultyBar";
 import type { Resort, DriveTime, WeatherSnapshot } from "./MapPage";
 
 type Props = {
@@ -247,38 +249,17 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   );
 }
 
-// Unified Mountain stats — Vert / Trails / Acres up top, then the
-// 5-level trail breakdown when we have data for it. Smart total: when
-// the breakdown is populated but `total_trails` is NULL we derive the
-// total from the sum (so the Trails stat never goes blank just because
-// the resort entered counts by difficulty but not the aggregate). When
-// the breakdown is missing but a total exists we render a small
-// "Difficulty mix not yet verified" caption inside the card so users
-// understand it's a known gap, not a layout glitch.
+// Unified Mountain stats — Vert / Trails / Acres up top, the
+// difficulty-mix percentage bar below, and a terrain-park badge at
+// the bottom when the resort has one. Stage 18 swapped the prior
+// 5-column count grid for a stacked % bar; counts are inherently
+// fuzzy (try counting trails on a piste map and you'll see) and
+// percentages are what resorts publish in their own marketing.
 function MountainStats({ resort }: { resort: Resort }) {
-  const beginner = resort.trails_beginner;
-  const intermediate = resort.trails_intermediate;
-  const advanced = resort.trails_advanced;
-  const expert = resort.trails_expert;
+  const mix = getDifficultyMix(resort);
   const hasPark = resort.has_terrain_park === true;
   const parkCount = resort.terrain_park_count;
-
-  const someTrails =
-    beginner != null || intermediate != null || advanced != null || expert != null;
-  const breakdownSum =
-    (beginner ?? 0) + (intermediate ?? 0) + (advanced ?? 0) + (expert ?? 0);
-  // If the resort row already has total_trails, trust it (even when
-  // it's larger than the breakdown sum — e.g., resorts that don't
-  // categorize glades or beginner-area runs). When it's NULL but we
-  // have at least one breakdown value, derive from sum.
-  const displayTrails =
-    resort.total_trails ?? (someTrails ? breakdownSum : null);
-  const trailsDerived = resort.total_trails == null && someTrails;
-
-  let parkDisplay: string;
-  if (parkCount != null) parkDisplay = String(parkCount);
-  else if (hasPark) parkDisplay = "✓";
-  else parkDisplay = "—";
+  const showPark = hasPark || parkCount != null;
 
   return (
     <div className="mb-4 rounded-lg border border-wn-charcoal/10 bg-white p-3">
@@ -297,9 +278,8 @@ function MountainStats({ resort }: { resort: Resort }) {
         />
         <Stat
           label="Trails"
-          value={displayTrails != null ? String(displayTrails) : "—"}
-          muted={displayTrails == null}
-          hint={trailsDerived ? "by difficulty" : undefined}
+          value={resort.total_trails != null ? String(resort.total_trails) : "—"}
+          muted={resort.total_trails == null}
         />
         <Stat
           label="Acres"
@@ -310,81 +290,35 @@ function MountainStats({ resort }: { resort: Resort }) {
         />
       </div>
 
-      {someTrails || hasPark || parkCount != null ? (
-        <>
-          <div className="mt-3 border-t border-wn-charcoal/10 pt-2.5">
-            <div className="mb-1.5 text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/50">
-              By difficulty
-            </div>
-            <div className="grid grid-cols-5 gap-1.5">
-              <TrailCol
-                symbol={<span className="block h-3 w-3 rounded-full bg-emerald-500" aria-hidden="true" />}
-                label="Beginner"
-                value={beginner}
-              />
-              <TrailCol
-                symbol={<span className="block h-3 w-3 bg-sky-500" aria-hidden="true" />}
-                label="Intermediate"
-                value={intermediate}
-              />
-              <TrailCol
-                symbol={<span className="block h-3 w-3 rotate-45 bg-black" aria-hidden="true" />}
-                label="Expert"
-                value={advanced}
-              />
-              <TrailCol
-                symbol={
-                  <span className="flex items-center gap-0.5" aria-hidden="true">
-                    <span className="block h-3 w-3 rotate-45 bg-black" />
-                    <span className="block h-3 w-3 rotate-45 bg-black" />
-                  </span>
-                }
-                label="Expert Only"
-                value={expert}
-              />
-              <TrailCol
-                symbol={
-                  <span className="block h-2.5 w-5 rounded-full bg-orange-500" aria-hidden="true" />
-                }
-                label="Terrain Park"
-                rawValue={parkDisplay}
-              />
-            </div>
+      {mix ? (
+        <div className="mt-3 border-t border-wn-charcoal/10 pt-2.5">
+          <div className="mb-1.5 text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/50">
+            Difficulty mix
           </div>
-        </>
-      ) : displayTrails != null ? (
+          <DifficultyBar mix={mix} size="compact" showSourceHint />
+        </div>
+      ) : (
         <p className="mt-2.5 border-t border-wn-charcoal/10 pt-2 text-[10px] italic text-wn-charcoal/50">
           Difficulty mix not yet verified.
         </p>
-      ) : null}
-    </div>
-  );
-}
+      )}
 
-function TrailCol({
-  symbol,
-  label,
-  value,
-  rawValue,
-}: {
-  symbol: React.ReactNode;
-  label: string;
-  value?: number | null;
-  rawValue?: string;
-}) {
-  const display = rawValue != null ? rawValue : value != null ? String(value) : "—";
-  const muted = display === "—";
-  return (
-    <div className="flex flex-col items-center gap-1 text-center">
-      <span className="flex h-4 items-center justify-center">{symbol}</span>
-      <span
-        className={`text-base font-bold leading-none ${muted ? "text-wn-charcoal/30" : "text-wn-navy"}`}
-      >
-        {display}
-      </span>
-      <span className="text-[9px] font-semibold uppercase leading-tight tracking-wide text-wn-charcoal/55">
-        {label}
-      </span>
+      {showPark && (
+        <div className="mt-2.5 flex items-center gap-2 border-t border-wn-charcoal/10 pt-2">
+          <span
+            className="block h-2.5 w-5 rounded-full bg-orange-500"
+            aria-hidden="true"
+          />
+          <span className="text-[11px] font-semibold text-wn-charcoal">
+            Terrain park
+            {parkCount != null && parkCount > 0 && (
+              <span className="ml-1 font-normal text-wn-charcoal/60">
+                · {parkCount}
+              </span>
+            )}
+          </span>
+        </div>
+      )}
     </div>
   );
 }
