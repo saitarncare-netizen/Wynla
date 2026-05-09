@@ -23,7 +23,6 @@ type Props = {
   onDaysChange: (d: number) => void;
   onSizeChange: (s: SizeTier | null) => void;
   onNightChange: (v: boolean) => void;
-  onOpenPlanner: () => void;
   onClearAll: () => void;
   onOpenDrawer: () => void;
 };
@@ -74,7 +73,6 @@ export default function FilterBar({
   onDaysChange,
   onSizeChange,
   onNightChange,
-  onOpenPlanner,
   onClearAll,
   onOpenDrawer,
 }: Props) {
@@ -161,14 +159,10 @@ export default function FilterBar({
             label={passLabel}
             onPassChange={onPassChange}
           />
-          <TripDropdown
+          <FromDropdown
             origin={origin}
-            days={days}
-            label={tripLabel}
             onFromCity={onFromCity}
             onFromGeo={onFromGeo}
-            onDaysChange={onDaysChange}
-            onOpenPlanner={onOpenPlanner}
           />
           <DriveTimeDropdown
             withinHours={withinHours}
@@ -323,38 +317,23 @@ function PassDropdown({
 }
 
 /* -------------------------------------------------------------------------- */
-/* Trip dropdown (origin + length)                                            */
+/* From dropdown — geolocation primary, 4-city fallback                       */
 /* -------------------------------------------------------------------------- */
 
-function TripDropdown({
+function FromDropdown({
   origin,
-  days,
-  label,
   onFromCity,
   onFromGeo,
-  onDaysChange,
-  onOpenPlanner,
 }: {
   origin: Origin;
-  days: number;
-  label: string;
   onFromCity: (code: string) => void;
   onFromGeo: (lat: number, lng: number) => void;
-  onDaysChange: (d: number) => void;
-  onOpenPlanner: () => void;
 }) {
   const { open, setOpen, ref } = useDropdown();
   const [requestingGeo, setRequestingGeo] = useState(false);
   const [geoError, setGeoError] = useState<string | null>(null);
-  const [draftDays, setDraftDays] = useState(days);
-  const [lastSeenDays, setLastSeenDays] = useState(days);
-  if (lastSeenDays !== days) {
-    setLastSeenDays(days);
-    setDraftDays(days);
-  }
-  const currentKind = tripKindFor(days, false);
-  const tripActive = currentKind !== "anytime";
   const isGeo = origin.kind === "geo";
+  const buttonLabel = isGeo ? "📍 From here" : `From ${origin.short}`;
 
   function handleUseHere() {
     if (typeof navigator === "undefined" || !navigator.geolocation) {
@@ -387,14 +366,14 @@ function TripDropdown({
         type="button"
         onClick={() => setOpen((v) => !v)}
         className={`inline-flex min-h-[36px] items-center gap-1.5 whitespace-nowrap rounded-md border px-3 py-1.5 text-xs font-semibold transition-colors duration-200 ${
-          tripActive || isGeo
+          isGeo
             ? "border-wn-navy bg-wn-navy text-white"
             : "border-wn-charcoal/20 bg-white text-wn-charcoal hover:border-wn-charcoal/40"
         }`}
         aria-haspopup="menu"
         aria-expanded={open}
       >
-        <span>{label}</span>
+        <span>{buttonLabel}</span>
         <span aria-hidden="true" className="opacity-70">▾</span>
       </button>
       {open && (
@@ -402,10 +381,6 @@ function TripDropdown({
           role="menu"
           className="absolute left-0 mt-1 w-64 rounded-lg border border-wn-charcoal/15 bg-white p-3 shadow-lg z-30"
         >
-          <div className="mb-1 text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
-            From
-          </div>
-
           <button
             type="button"
             onClick={handleUseHere}
@@ -417,23 +392,26 @@ function TripDropdown({
             }`}
           >
             <span aria-hidden="true">📍</span>
-            <span>{requestingGeo ? "Locating…" : isGeo ? "Using your location" : "From here"}</span>
+            <span>{requestingGeo ? "Locating…" : isGeo ? "Using your location" : "Use my location"}</span>
             {isGeo && <span className="ml-auto text-[10px] text-white/75">live</span>}
           </button>
           {geoError && (
             <p className="mb-2 text-[10px] leading-tight text-wn-charcoal/60">{geoError}</p>
           )}
-
+          <div className="mb-1 mt-1 text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
+            Or pick a city
+          </div>
           <select
             value={origin.kind === "city" ? origin.code : ""}
-            onChange={(e) => onFromCity(e.target.value)}
-            className="mb-3 w-full rounded-md border border-wn-charcoal/20 bg-white px-2 py-1.5 text-xs font-medium text-wn-charcoal hover:border-wn-charcoal/40 focus:outline-none focus:ring-2 focus:ring-wn-sky"
+            onChange={(e) => {
+              onFromCity(e.target.value);
+              setOpen(false);
+            }}
+            className="w-full rounded-md border border-wn-charcoal/20 bg-white px-2 py-1.5 text-xs font-medium text-wn-charcoal hover:border-wn-charcoal/40 focus:outline-none focus:ring-2 focus:ring-wn-sky"
             aria-label="From city"
           >
             {origin.kind === "geo" && (
-              <option value="" disabled>
-                — pick a city —
-              </option>
+              <option value="" disabled>— pick a city —</option>
             )}
             {ORIGINS.map((o) => (
               <option key={o.code} value={o.code}>
@@ -441,105 +419,6 @@ function TripDropdown({
               </option>
             ))}
           </select>
-          <div className="mb-1 text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
-            Trip type
-          </div>
-          <div className="flex flex-col gap-1">
-            {TRIP_PRESETS.map((opt) => {
-              const active = currentKind === opt.kind;
-              return (
-                <button
-                  key={opt.kind}
-                  type="button"
-                  onClick={() => {
-                    onDaysChange(opt.defaultDays);
-                    if (opt.kind === "day" || opt.kind === "anytime") setOpen(false);
-                  }}
-                  className={`flex items-center gap-2 rounded-md border px-2.5 py-1.5 text-xs font-semibold transition-colors ${
-                    active
-                      ? "border-wn-navy bg-wn-navy text-white"
-                      : "border-wn-charcoal/15 bg-white text-wn-charcoal hover:border-wn-charcoal/40"
-                  }`}
-                >
-                  {opt.emoji && <span aria-hidden="true">{opt.emoji}</span>}
-                  <span>{opt.label}</span>
-                  {opt.kind === "anytime" && (
-                    <span className={`ml-auto text-[10px] ${active ? "text-white/75" : "text-wn-charcoal/55"}`}>
-                      single
-                    </span>
-                  )}
-                  {(opt.kind === "weekend" || opt.kind === "big") && (
-                    <span className={`ml-auto text-[10px] ${active ? "text-white/75" : "text-wn-charcoal/55"}`}>
-                      multi-day
-                    </span>
-                  )}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Day-count picker — appears only for multi-day trips. Weekend
-              has 2/3 quick buttons; Big trip has a 3-10 slider. */}
-          {(currentKind === "weekend" || currentKind === "big") && (
-            <div className="mt-3 rounded-md border border-wn-charcoal/10 bg-wn-offwhite p-2">
-              <div className="mb-1.5 flex items-baseline justify-between text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/60">
-                <span>How many days?</span>
-                <span className="text-wn-navy">{draftDays}d</span>
-              </div>
-              {currentKind === "weekend" ? (
-                <div className="flex gap-1">
-                  {[2, 3].map((d) => (
-                    <button
-                      key={d}
-                      type="button"
-                      onClick={() => onDaysChange(d)}
-                      className={`flex-1 rounded-md border px-2 py-1 text-xs font-semibold transition-colors ${
-                        days === d
-                          ? "border-wn-navy bg-wn-navy text-white"
-                          : "border-wn-charcoal/15 bg-white text-wn-charcoal hover:border-wn-charcoal/40"
-                      }`}
-                    >
-                      {d} days
-                    </button>
-                  ))}
-                </div>
-              ) : (
-                <input
-                  type="range"
-                  min={3}
-                  max={10}
-                  step={1}
-                  value={draftDays}
-                  // Live drag updates only the local visual; the URL +
-                  // server re-fetch waits until the user lets go (or
-                  // releases an arrow key). Without this the slider felt
-                  // stuck because every tick triggered a full RSC fetch.
-                  onChange={(e) => setDraftDays(Number(e.target.value))}
-                  onMouseUp={(e) => onDaysChange(Number((e.target as HTMLInputElement).value))}
-                  onTouchEnd={(e) => onDaysChange(Number((e.target as HTMLInputElement).value))}
-                  onKeyUp={(e) => onDaysChange(Number((e.target as HTMLInputElement).value))}
-                  className="w-full accent-wn-navy"
-                  aria-label="Trip length in days"
-                />
-              )}
-
-              <button
-                type="button"
-                onClick={() => {
-                  // Make sure the latest dragged value lands in the URL
-                  // before opening the planner — otherwise the panel
-                  // could open with a stale day count.
-                  if (draftDays !== days) onDaysChange(draftDays);
-                  onOpenPlanner();
-                  setOpen(false);
-                }}
-                className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-md bg-wn-navy px-2.5 py-1.5 text-xs font-semibold text-white transition hover:bg-wn-navy/90 active:scale-95"
-              >
-                <span aria-hidden="true">🗺️</span>
-                <span>Plan my {draftDays}-day trip</span>
-              </button>
-            </div>
-          )}
         </div>
       )}
     </div>

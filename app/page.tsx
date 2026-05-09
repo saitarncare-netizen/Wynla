@@ -20,7 +20,7 @@ export default async function Home() {
     supabase
       .from("weather_cache")
       .select(
-        "resort_id, temp_high_f, temp_low_f, conditions_short, snow_24h_in, snow_48h_in, wind_mph_avg, wind_dir_short, fetched_at",
+        "resort_id, temp_high_f, temp_low_f, conditions_short, snow_24h_in, snow_48h_in, wind_mph_avg, wind_dir_short, fetched_at, forecast_json",
       ),
     (async () => {
       const ssr = await createSupabaseServerClient();

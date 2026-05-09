@@ -108,35 +108,59 @@ async function getOpenMeteoWind(lat, lng) {
 }
 
 // Parse the NWS /forecast response into our cache row fields.
+// Today's "headline" + a 7-day forecast_json array (one entry per day).
+// weather.gov returns up to 14 periods (7 days × day/night); we
+// aggregate adjacent day/night pairs into a single calendar-day entry.
 function parseNwsForecast(forecast) {
   const periods = forecast?.properties?.periods ?? [];
   if (periods.length === 0) return null;
-  // Find the next daytime period (period.isDaytime === true). Index 0
-  // is "Today" or "This Afternoon" if we're in the morning, "Tonight"
-  // if we're in the evening — handle either.
   const today = periods.find((p) => p.isDaytime) ?? periods[0];
   const tonight = periods.find((p) => !p.isDaytime) ?? null;
 
   const tempHighF = today.isDaytime ? today.temperature : tonight?.temperature ?? null;
   const tempLowF = today.isDaytime ? tonight?.temperature ?? null : today.temperature;
 
-  // Snowfall: weather.gov gridpoint forecast returns mm in
-  // probabilisticPrecipitation; the periods endpoint gives a text
-  // detailedForecast. We approximate snow by parsing the text for
-  // "X inches of snow" since the structured field is inconsistent.
   const snow24 = sumSnowInches([today.detailedForecast, tonight?.detailedForecast]);
   const next2 = periods.slice(2, 4).map((p) => p?.detailedForecast ?? "");
   const snow48 = snow24 + sumSnowInches(next2);
+
+  // 7-day rollup. Group periods by calendar date of startTime.
+  const byDate = new Map();
+  for (const p of periods) {
+    const date = p.startTime?.slice(0, 10);
+    if (!date) continue;
+    if (!byDate.has(date)) byDate.set(date, { day: null, night: null });
+    const slot = byDate.get(date);
+    if (p.isDaytime) slot.day = p;
+    else slot.night = p;
+  }
+  const forecastDays = Array.from(byDate.entries())
+    .slice(0, 7)
+    .map(([date, { day, night }]) => {
+      const primary = day ?? night;
+      const snow = sumSnowInches([day?.detailedForecast, night?.detailedForecast]);
+      return {
+        date,
+        weekday: new Date(date + "T12:00:00").toLocaleDateString("en-US", { weekday: "short" }),
+        temp_high_f: day?.temperature ?? primary?.temperature ?? null,
+        temp_low_f: night?.temperature ?? null,
+        conditions_short: primary?.shortForecast ?? null,
+        snow_in: snow || 0,
+        precip_chance: primary?.probabilityOfPrecipitation?.value ?? null,
+        wind_short: primary?.windSpeed ?? null,
+        wind_dir_short: primary?.windDirection ?? null,
+      };
+    });
 
   return {
     temp_high_f: tempHighF,
     temp_low_f: tempLowF,
     conditions_short: today.shortForecast ?? null,
     conditions_long: today.detailedForecast ?? null,
-    precip_chance:
-      today.probabilityOfPrecipitation?.value ?? null,
+    precip_chance: today.probabilityOfPrecipitation?.value ?? null,
     snow_24h_in: snow24 || null,
     snow_48h_in: snow48 || null,
+    forecast_json: forecastDays,
   };
 }
 

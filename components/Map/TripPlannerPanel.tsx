@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { formatDriveTime, type Origin } from "@/lib/origins";
@@ -35,6 +35,17 @@ type Props = {
   /** Notifies the parent map that a particular resort just became the
       active focus (e.g. user picked Day 3). Pass null to clear. */
   onFocusResort?: (point: { lat: number; lng: number } | null) => void;
+  /** Live ephemeral leg drawn from the previous resort to whatever
+      candidate the picker is currently hovering. Cleared on close. */
+  onPreviewLeg?: (
+    leg: { fromLat: number; fromLng: number; toLat: number; toLng: number } | null,
+  ) => void;
+  /** Resort IDs in the active plan — MapPage forwards to MapView so
+      those pins get the in_trip highlight. */
+  onTripResortIds?: (ids: number[]) => void;
+  /** Bumps the day count via the URL — same setter MapPage uses for
+      the deprecated FilterBar TripDropdown. */
+  onDaysChange?: (d: number) => void;
 };
 
 function resortToCandidate(r: Resort): PlannerCandidate {
@@ -58,6 +69,9 @@ export default function TripPlannerPanel({
   isAuthed,
   onClose,
   onFocusResort,
+  onPreviewLeg,
+  onTripResortIds,
+  onDaysChange,
 }: Props) {
   const router = useRouter();
   const [mode, setMode] = useState<"basecamp" | "roadtrip">("roadtrip");
@@ -149,6 +163,26 @@ export default function TripPlannerPanel({
     setOverrides(newOverrides);
     setDismissedReorder(true);
   }
+
+  // Sync tripResortIds upstream whenever the plan changes so MapView
+  // highlights in_trip pins. Effect keyed on the joined slug list so
+  // the callback only fires when the actual contents change.
+  const planResortIds = useMemo(
+    () => (plan ? plan.resorts.map((r) => r.id) : []),
+    [plan],
+  );
+  const idsKey = planResortIds.join(",");
+  useEffect(() => {
+    onTripResortIds?.(planResortIds);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [idsKey]);
+  // Clear overlays when panel closes.
+  useEffect(() => {
+    if (open) return;
+    onTripResortIds?.([]);
+    onPreviewLeg?.(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
 
   // Compute the "from" point for the picker based on which day the user
   // is editing. Day 0 starts at the origin; day N starts at day N-1's
@@ -261,6 +295,34 @@ export default function TripPlannerPanel({
               <span aria-hidden="true" className="text-lg leading-none">×</span>
             </button>
           </div>
+
+          {/* Day count picker — moved out of the FilterBar dropdown into
+              the planner itself so it lives next to the rest of the trip
+              setup. 1d to 10d. 1d shows a nearby-resorts list view. */}
+          {onDaysChange && (
+            <div className="mt-3">
+              <div className="mb-1 flex items-baseline justify-between text-[10px] font-semibold uppercase tracking-[0.15em] text-white/60">
+                <span>Trip length</span>
+                <span className="text-white">{days}d</span>
+              </div>
+              <div className="grid grid-cols-9 gap-0.5">
+                {[2, 3, 4, 5, 6, 7, 8, 9, 10].map((d) => (
+                  <button
+                    key={d}
+                    type="button"
+                    onClick={() => onDaysChange(d)}
+                    className={`rounded px-0 py-1 text-[11px] font-semibold transition ${
+                      days === d
+                        ? "bg-white text-wn-navy"
+                        : "bg-white/10 text-white/75 hover:bg-white/15"
+                    }`}
+                  >
+                    {d}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
 
           <div className="mt-3 grid grid-cols-2 gap-1 rounded-md bg-white/10 p-1">
             <button
@@ -504,7 +566,24 @@ export default function TripPlannerPanel({
           allResorts={allResorts}
           alreadyPicked={pickedSlugs}
           onSelect={(slug) => handlePickFor(pickerDay, slug)}
-          onClose={() => setPickerDay(null)}
+          onClose={() => {
+            setPickerDay(null);
+            onPreviewLeg?.(null);
+          }}
+          onHover={(slug) => {
+            if (!slug) {
+              onPreviewLeg?.(null);
+              return;
+            }
+            const r = allResorts.find((c) => c.slug === slug);
+            if (!r) return;
+            onPreviewLeg?.({
+              fromLat: pickerFromPoint.lat,
+              fromLng: pickerFromPoint.lng,
+              toLat: Number(r.latitude),
+              toLng: Number(r.longitude),
+            });
+          }}
         />
       )}
     </>

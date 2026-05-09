@@ -70,16 +70,18 @@ async function getGridpoint(
   return { office: props.gridId, x: props.gridX, y: props.gridY };
 }
 
+type NwsPeriod = {
+  isDaytime: boolean;
+  temperature: number;
+  shortForecast: string;
+  detailedForecast: string;
+  startTime?: string;
+  windSpeed?: string;
+  windDirection?: string;
+  probabilityOfPrecipitation?: { value: number | null };
+};
 type NwsForecast = {
-  properties?: {
-    periods?: {
-      isDaytime: boolean;
-      temperature: number;
-      shortForecast: string;
-      detailedForecast: string;
-      probabilityOfPrecipitation?: { value: number | null };
-    }[];
-  };
+  properties?: { periods?: NwsPeriod[] };
 };
 
 function sumSnowInches(strings: (string | undefined)[]): number {
@@ -105,6 +107,33 @@ function parseNws(forecast: NwsForecast) {
   const snow24 = sumSnowInches([today.detailedForecast, tonight?.detailedForecast]);
   const next2 = periods.slice(2, 4).map((p) => p.detailedForecast);
   const snow48 = snow24 + sumSnowInches(next2);
+
+  // 7-day rollup grouped by calendar date.
+  const byDate = new Map<string, { day?: NwsPeriod; night?: NwsPeriod }>();
+  for (const p of periods) {
+    const date = p.startTime?.slice(0, 10);
+    if (!date) continue;
+    const slot = byDate.get(date) ?? {};
+    if (p.isDaytime) slot.day = p;
+    else slot.night = p;
+    byDate.set(date, slot);
+  }
+  const forecastDays = Array.from(byDate.entries()).slice(0, 7).map(([date, slot]) => {
+    const primary = slot.day ?? slot.night;
+    const snow = sumSnowInches([slot.day?.detailedForecast, slot.night?.detailedForecast]);
+    return {
+      date,
+      weekday: new Date(date + "T12:00:00").toLocaleDateString("en-US", { weekday: "short" }),
+      temp_high_f: slot.day?.temperature ?? primary?.temperature ?? null,
+      temp_low_f: slot.night?.temperature ?? null,
+      conditions_short: primary?.shortForecast ?? null,
+      snow_in: snow || 0,
+      precip_chance: primary?.probabilityOfPrecipitation?.value ?? null,
+      wind_short: primary?.windSpeed ?? null,
+      wind_dir_short: primary?.windDirection ?? null,
+    };
+  });
+
   return {
     temp_high_f: today.isDaytime ? today.temperature : tonight?.temperature ?? null,
     temp_low_f: today.isDaytime ? tonight?.temperature ?? null : today.temperature,
@@ -113,6 +142,7 @@ function parseNws(forecast: NwsForecast) {
     precip_chance: today.probabilityOfPrecipitation?.value ?? null,
     snow_24h_in: snow24 || null,
     snow_48h_in: snow48 || null,
+    forecast_json: forecastDays,
   };
 }
 

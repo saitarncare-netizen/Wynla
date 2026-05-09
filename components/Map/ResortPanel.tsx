@@ -190,20 +190,33 @@ export default function ResortPanel({
             </div>
           )}
 
-          {/* Quick stats — show whenever any field exists, regardless of tier */}
-          {(resort.vertical_drop || resort.total_trails || resort.total_acres) && (
-            <div className="mb-4 grid grid-cols-3 gap-2">
-              {resort.vertical_drop != null && (
-                <Stat label="Vert" value={`${resort.vertical_drop.toLocaleString()} ft`} />
-              )}
-              {resort.total_trails != null && (
-                <Stat label="Trails" value={String(resort.total_trails)} />
-              )}
-              {resort.total_acres != null && (
-                <Stat label="Acres" value={resort.total_acres.toLocaleString()} />
-              )}
-            </div>
-          )}
+          {/* Quick stats — always shown for visual consistency across
+              all 451 resorts. Missing values show "—" so the layout
+              never shifts and the user knows which dimensions matter
+              even for resorts whose specs aren't published. */}
+          <div className="mb-4 grid grid-cols-3 gap-2">
+            <Stat
+              label="Vert"
+              value={
+                resort.vertical_drop != null
+                  ? `${resort.vertical_drop.toLocaleString()} ft`
+                  : "—"
+              }
+              muted={resort.vertical_drop == null}
+            />
+            <Stat
+              label="Trails"
+              value={resort.total_trails != null ? String(resort.total_trails) : "—"}
+              muted={resort.total_trails == null}
+            />
+            <Stat
+              label="Acres"
+              value={
+                resort.total_acres != null ? resort.total_acres.toLocaleString() : "—"
+              }
+              muted={resort.total_acres == null}
+            />
+          </div>
 
           {/* Weather — in-app card built from weather_cache (refreshed
               daily by the cron). Falls back to a "no data yet" state
@@ -260,13 +273,25 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   );
 }
 
-function Stat({ label, value }: { label: string; value: string }) {
+function Stat({
+  label,
+  value,
+  muted,
+}: {
+  label: string;
+  value: string;
+  muted?: boolean;
+}) {
   return (
     <div className="rounded-lg border border-wn-charcoal/10 bg-white px-2.5 py-2 text-center">
       <div className="text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/50">
         {label}
       </div>
-      <div className="mt-0.5 text-sm font-bold text-wn-navy">{value}</div>
+      <div
+        className={`mt-0.5 text-sm font-bold ${muted ? "text-wn-charcoal/30" : "text-wn-navy"}`}
+      >
+        {value}
+      </div>
     </div>
   );
 }
@@ -413,6 +438,45 @@ function WeatherCard({
           </div>
         </div>
       </div>
+
+      {/* 7-day forecast strip — scrollable on overflow. Skips today
+          since it's already the hero above. */}
+      {weather.forecast_json && weather.forecast_json.length > 1 && (
+        <div className="border-t border-wn-charcoal/10 bg-white px-3 py-2.5">
+          <div className="mb-1.5 text-[10px] font-semibold uppercase tracking-[0.15em] text-wn-charcoal/55">
+            Next 6 days
+          </div>
+          <div className="-mx-1 flex gap-1 overflow-x-auto px-1 pb-1">
+            {weather.forecast_json.slice(1, 7).map((d) => (
+              <div
+                key={d.date}
+                className="flex w-16 shrink-0 flex-col items-center rounded-md border border-wn-charcoal/10 bg-wn-offwhite px-1.5 py-1.5 text-center"
+                title={d.conditions_short ?? undefined}
+              >
+                <div className="text-[10px] font-bold uppercase tracking-wide text-wn-charcoal/65">
+                  {d.weekday}
+                </div>
+                <div className="my-0.5 text-base leading-none" aria-hidden="true">
+                  {conditionEmoji(d.conditions_short)}
+                </div>
+                <div className="text-[11px] font-bold text-wn-navy leading-tight">
+                  {d.temp_high_f != null ? `${Math.round(d.temp_high_f)}°` : "—"}
+                </div>
+                {d.temp_low_f != null && (
+                  <div className="text-[9px] text-wn-charcoal/55 leading-tight">
+                    {Math.round(d.temp_low_f)}°
+                  </div>
+                )}
+                {d.snow_in != null && d.snow_in > 0 && (
+                  <div className="mt-0.5 text-[9px] font-semibold text-sky-700">
+                    🌨️{Number(d.snow_in).toFixed(d.snow_in < 1 ? 1 : 0)}&quot;
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {fetchedLabel && (
         <div className="border-t border-wn-charcoal/10 bg-wn-offwhite px-3 py-1.5 text-[10px] text-wn-charcoal/55">

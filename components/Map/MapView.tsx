@@ -36,6 +36,14 @@ type Props = {
   // each time a pick happens so MapView's effect re-runs even when the
   // coordinates happen to repeat.
   cameraTarget?: { lat: number; lng: number; token: string } | null;
+  // Resort IDs included in the active trip plan. We bump these pins
+  // visually (bigger radius, gold halo) so the user can tell at a
+  // glance which resorts are in their trip vs available alternatives.
+  tripResortIds?: number[];
+  // Ephemeral dashed line drawn while the user hovers a candidate in
+  // the picker. Lets them preview the direction/length of a leg before
+  // committing.
+  previewLeg?: { fromLat: number; fromLng: number; toLat: number; toLng: number } | null;
 };
 
 const SOURCE_ID = "wynla-resorts";
@@ -87,6 +95,8 @@ export default function MapView({
   onResortClick,
   tripRoute,
   cameraTarget,
+  tripResortIds,
+  previewLeg,
 }: Props) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
@@ -201,15 +211,18 @@ export default function MapView({
         paint: {
           "circle-color": ["get", "color"],
           "circle-radius": [
-            "interpolate",
-            ["linear"],
-            ["case", ["boolean", ["feature-state", "hover"], false], 1, 0],
-            0, ["get", "radius"],
-            1, ["*", ["get", "radius"], 1.25],
+            "case",
+            ["boolean", ["feature-state", "in_trip"], false],
+            ["*", ["get", "radius"], 1.5],
+            ["boolean", ["feature-state", "hover"], false],
+            ["*", ["get", "radius"], 1.25],
+            ["get", "radius"],
           ],
           "circle-opacity": 0.85,
           "circle-stroke-width": [
             "case",
+            ["boolean", ["feature-state", "in_trip"], false],
+            3.5,
             ["boolean", ["feature-state", "selected"], false],
             3,
             ["boolean", ["feature-state", "hover"], false],
@@ -218,6 +231,8 @@ export default function MapView({
           ],
           "circle-stroke-color": [
             "case",
+            ["boolean", ["feature-state", "in_trip"], false],
+            "#D4A84B",
             ["boolean", ["feature-state", "selected"], false],
             "#1E2952",
             "#FFFFFF",
@@ -241,14 +256,17 @@ export default function MapView({
         paint: {
           "circle-color": ["get", "color"],
           "circle-radius": [
-            "interpolate",
-            ["linear"],
-            ["case", ["boolean", ["feature-state", "hover"], false], 1, 0],
-            0, ["get", "radius"],
-            1, ["*", ["get", "radius"], 1.25],
+            "case",
+            ["boolean", ["feature-state", "in_trip"], false],
+            ["*", ["get", "radius"], 1.5],
+            ["boolean", ["feature-state", "hover"], false],
+            ["*", ["get", "radius"], 1.25],
+            ["get", "radius"],
           ],
           "circle-stroke-width": [
             "case",
+            ["boolean", ["feature-state", "in_trip"], false],
+            4,
             ["boolean", ["feature-state", "selected"], false],
             4,
             ["boolean", ["feature-state", "hover"], false],
@@ -257,6 +275,8 @@ export default function MapView({
           ],
           "circle-stroke-color": [
             "case",
+            ["boolean", ["feature-state", "in_trip"], false],
+            "#D4A84B",
             ["boolean", ["feature-state", "selected"], false],
             "#1E2952",
             "#FFFFFF",
@@ -535,6 +555,82 @@ export default function MapView({
     };
   }, [tripRoute]);
 
+  // Sync in_trip feature-state for the resort source so trip pins get
+  // the bigger gold-haloed paint. Diffs against the previous render so
+  // we only flip the changed pins, never re-flip the whole map.
+  const lastTripIdsRef = useRef<Set<number>>(new Set());
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+    const apply = () => {
+      if (!map.getSource(SOURCE_ID)) return;
+      const next = new Set(tripResortIds ?? []);
+      const prev = lastTripIdsRef.current;
+      for (const id of prev) {
+        if (!next.has(id)) {
+          map.setFeatureState({ source: SOURCE_ID, id }, { in_trip: false });
+        }
+      }
+      for (const id of next) {
+        if (!prev.has(id)) {
+          map.setFeatureState({ source: SOURCE_ID, id }, { in_trip: true });
+        }
+      }
+      lastTripIdsRef.current = next;
+    };
+    if (map.isStyleLoaded()) apply();
+    else map.once("style.load", apply);
+  }, [tripResortIds]);
+
+  // Preview leg — ephemeral dashed line from the previous resort to a
+  // candidate the user is hovering inside the picker. Helps them see
+  // the direction/length of a leg before committing to the pick.
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+    const PREVIEW_SRC = "wynla-preview-leg";
+    const PREVIEW_LAYER = "wynla-preview-leg-line";
+    const apply = () => {
+      if (map.getLayer(PREVIEW_LAYER)) map.removeLayer(PREVIEW_LAYER);
+      if (map.getSource(PREVIEW_SRC)) map.removeSource(PREVIEW_SRC);
+      if (!previewLeg) return;
+      map.addSource(PREVIEW_SRC, {
+        type: "geojson",
+        data: {
+          type: "Feature",
+          properties: {},
+          geometry: {
+            type: "LineString",
+            coordinates: [
+              [previewLeg.fromLng, previewLeg.fromLat],
+              [previewLeg.toLng, previewLeg.toLat],
+            ],
+          },
+        },
+      });
+      map.addLayer({
+        id: PREVIEW_LAYER,
+        type: "line",
+        source: PREVIEW_SRC,
+        layout: { "line-cap": "round", "line-join": "round" },
+        paint: {
+          "line-color": "#D4A84B",
+          "line-width": 2.5,
+          "line-opacity": 0.85,
+          "line-dasharray": [1, 1.2],
+        },
+      });
+    };
+    if (map.isStyleLoaded()) apply();
+    else map.once("style.load", apply);
+    return () => {
+      if (mapRef.current) {
+        if (mapRef.current.getLayer(PREVIEW_LAYER)) mapRef.current.removeLayer(PREVIEW_LAYER);
+        if (mapRef.current.getSource(PREVIEW_SRC)) mapRef.current.removeSource(PREVIEW_SRC);
+      }
+    };
+  }, [previewLeg]);
+
   // Camera-follow effect: when the trip planner reports that a specific
   // resort just became the focus (e.g. user picked Day 3 = Loveland),
   // fly the camera over to it. Token in the prop changes per pick so
@@ -548,7 +644,11 @@ export default function MapView({
       const isDesktop = window.matchMedia("(min-width: 768px)").matches;
       map.flyTo({
         center: [cameraTarget.lng, cameraTarget.lat],
-        zoom: 8,
+        // Closer than the previous zoom-8 (which left several other
+        // resorts in frame and made it hard to spot the picked one).
+        // 11 is "I can see this single ski area and the road network
+        // around it" — the sweet spot for confirming a pick.
+        zoom: 11,
         padding: isDesktop
           ? { right: 440, top: 0, bottom: 0, left: 0 }
           : { bottom: 360, top: 0, left: 0, right: 0 },

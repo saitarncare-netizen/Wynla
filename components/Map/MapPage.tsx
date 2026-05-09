@@ -45,6 +45,18 @@ export type DriveTime = {
   is_estimate?: boolean;
 };
 
+export type ForecastDay = {
+  date: string;
+  weekday: string;
+  temp_high_f: number | null;
+  temp_low_f: number | null;
+  conditions_short: string | null;
+  snow_in: number | null;
+  precip_chance: number | null;
+  wind_short: string | null;
+  wind_dir_short: string | null;
+};
+
 export type WeatherSnapshot = {
   resort_id: number;
   temp_high_f: number | null;
@@ -55,6 +67,7 @@ export type WeatherSnapshot = {
   wind_mph_avg: number | null;
   wind_dir_short: string | null;
   fetched_at: string | null;
+  forecast_json: ForecastDay[] | null;
 };
 
 type Props = {
@@ -79,6 +92,8 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [cameraTarget, setCameraTarget] = useState<{ lat: number; lng: number; token: string } | null>(null);
+  const [previewLeg, setPreviewLeg] = useState<{ fromLat: number; fromLng: number; toLat: number; toLng: number } | null>(null);
+  const [tripResortIds, setTripResortIds] = useState<number[]>([]);
 
   const passFilter = searchParams.get("pass");
   const sizeParam = searchParams.get("size");
@@ -293,7 +308,18 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
               Plan smart. Ride better.
             </span>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            {/* Top-level Plan-a-trip CTA. Replaces the buried "Plan my N-day
+                trip" button that used to live inside the Trip dropdown. */}
+            <button
+              type="button"
+              onClick={() => updateParam("plan", "1")}
+              className="inline-flex items-center gap-1.5 rounded-md bg-wn-navy px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:bg-wn-navy/90 active:scale-95"
+              title="Plan a multi-day ski trip"
+            >
+              <span aria-hidden="true">🗺️</span>
+              <span>Plan a trip</span>
+            </button>
             <Link
               href="/pro"
               className="hidden rounded-md border border-wn-gold/60 bg-wn-gold/10 px-2.5 py-1 text-xs font-semibold text-wn-navy transition hover:bg-wn-gold/25 sm:inline-block"
@@ -322,7 +348,6 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
           onDaysChange={(d) => updateParam("days", d > 1 ? String(d) : null)}
           onSizeChange={(s) => updateParam("size", s)}
           onNightChange={(v) => updateParam("night", v ? "1" : null)}
-          onOpenPlanner={() => updateParam("plan", "1")}
           onClearAll={clearAll}
           onOpenDrawer={() => setDrawerOpen(true)}
         />
@@ -348,6 +373,8 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         onResortClick={setSelectedId}
         tripRoute={tripRoute}
         cameraTarget={cameraTarget}
+        tripResortIds={tripResortIds}
+        previewLeg={previewLeg}
       />
 
       <AlaskaInset resorts={filtered} />
@@ -401,11 +428,11 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
       )}
 
       <TripPlannerPanel
-        open={plannerOpen && days >= 2}
+        open={plannerOpen}
         origin={origin}
         candidates={filtered}
         allResorts={resorts}
-        days={days}
+        days={Math.max(2, days)}
         isAuthed={isAuthed}
         onClose={() => updateParam("plan", null)}
         onFocusResort={(point) =>
@@ -413,6 +440,9 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
             ? setCameraTarget({ ...point, token: `${Date.now()}` })
             : setCameraTarget(null)
         }
+        onPreviewLeg={setPreviewLeg}
+        onTripResortIds={setTripResortIds}
+        onDaysChange={(d) => updateParam("days", d > 1 ? String(d) : null)}
       />
 
       {/* First-visit banner asking permission to use device location.

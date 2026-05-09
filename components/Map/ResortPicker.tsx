@@ -19,6 +19,9 @@ type Props = {
   alreadyPicked: string[];
   onSelect: (slug: string) => void;
   onClose: () => void;
+  /** Live hover preview — fires when the user mouseenters a row so the
+      map can draw an ephemeral leg from fromPoint to that resort. */
+  onHover?: (slug: string | null) => void;
 };
 
 export default function ResortPicker({
@@ -29,6 +32,7 @@ export default function ResortPicker({
   alreadyPicked,
   onSelect,
   onClose,
+  onHover,
 }: Props) {
   const [query, setQuery] = useState("");
   const [sortBy, setSortBy] = useState<"distance" | "name">("distance");
@@ -173,6 +177,10 @@ export default function ResortPicker({
               <button
                 type="button"
                 onClick={() => onSelect(r.slug)}
+                onMouseEnter={() => onHover?.(r.slug)}
+                onFocus={() => onHover?.(r.slug)}
+                onMouseLeave={() => onHover?.(null)}
+                onBlur={() => onHover?.(null)}
                 className="flex w-full items-center gap-3 px-3 py-2.5 text-left transition hover:bg-wn-offwhite"
               >
                 <div className="min-w-0 flex-1">
