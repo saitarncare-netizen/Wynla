@@ -218,6 +218,8 @@ export default function ResortPanel({
             />
           </div>
 
+          <TrailBreakdown resort={resort} />
+
           {/* Weather — in-app card built from weather_cache (refreshed
               daily by the cron). Falls back to a "no data yet" state
               with the original Weather.gov / Windy links until the
@@ -270,6 +272,110 @@ function Section({ title, children }: { title: string; children: React.ReactNode
       </h3>
       {children}
     </section>
+  );
+}
+
+// 5-column trail breakdown — green / blue / black / double-black /
+// terrain park, each with the symbol used on resort trail maps + the
+// count from the DB. Hidden when the resort has no breakdown data at
+// all (all four trail counts null AND no terrain park flag), which is
+// the case for ~90% of the catalog. Individual rows still show "—"
+// when only some columns are missing so the grid stays consistent.
+function TrailBreakdown({ resort }: { resort: Resort }) {
+  const beginner = resort.trails_beginner;
+  const intermediate = resort.trails_intermediate;
+  const advanced = resort.trails_advanced;
+  const expert = resort.trails_expert;
+  const hasPark = resort.has_terrain_park === true;
+  const parkCount = resort.terrain_park_count;
+
+  const allMissing =
+    beginner == null &&
+    intermediate == null &&
+    advanced == null &&
+    expert == null &&
+    !hasPark &&
+    parkCount == null;
+  if (allMissing) return null;
+
+  // Terrain park value: count if known, "✓" if flag is true with no
+  // count, "—" otherwise. Booleans don't have null/false distinction
+  // in our schema (default false), so we treat false as "no data" too
+  // unless one of the trail levels is populated — in which case false
+  // genuinely means "no terrain park here".
+  const someTrails =
+    beginner != null || intermediate != null || advanced != null || expert != null;
+  let parkDisplay: string;
+  if (parkCount != null) parkDisplay = String(parkCount);
+  else if (hasPark) parkDisplay = "✓";
+  else if (someTrails) parkDisplay = "—";
+  else parkDisplay = "—";
+
+  return (
+    <Section title="Trail breakdown">
+      <div className="grid grid-cols-5 gap-1.5 rounded-lg border border-wn-charcoal/10 bg-white px-2 py-2.5">
+        <TrailCol
+          symbol={<span className="block h-3 w-3 rounded-full bg-emerald-500" aria-hidden="true" />}
+          label="Beginner"
+          value={beginner}
+        />
+        <TrailCol
+          symbol={<span className="block h-3 w-3 bg-sky-500" aria-hidden="true" />}
+          label="Intermediate"
+          value={intermediate}
+        />
+        <TrailCol
+          symbol={<span className="block h-3 w-3 rotate-45 bg-black" aria-hidden="true" />}
+          label="Expert"
+          value={advanced}
+        />
+        <TrailCol
+          symbol={
+            <span className="flex items-center gap-0.5" aria-hidden="true">
+              <span className="block h-3 w-3 rotate-45 bg-black" />
+              <span className="block h-3 w-3 rotate-45 bg-black" />
+            </span>
+          }
+          label="Expert Only"
+          value={expert}
+        />
+        <TrailCol
+          symbol={
+            <span className="block h-2.5 w-5 rounded-full bg-orange-500" aria-hidden="true" />
+          }
+          label="Terrain Park"
+          rawValue={parkDisplay}
+        />
+      </div>
+    </Section>
+  );
+}
+
+function TrailCol({
+  symbol,
+  label,
+  value,
+  rawValue,
+}: {
+  symbol: React.ReactNode;
+  label: string;
+  value?: number | null;
+  rawValue?: string;
+}) {
+  const display = rawValue != null ? rawValue : value != null ? String(value) : "—";
+  const muted = display === "—";
+  return (
+    <div className="flex flex-col items-center gap-1 text-center">
+      <span className="flex h-4 items-center justify-center">{symbol}</span>
+      <span
+        className={`text-base font-bold leading-none ${muted ? "text-wn-charcoal/30" : "text-wn-navy"}`}
+      >
+        {display}
+      </span>
+      <span className="text-[9px] font-semibold uppercase leading-tight tracking-wide text-wn-charcoal/55">
+        {label}
+      </span>
+    </div>
   );
 }
 

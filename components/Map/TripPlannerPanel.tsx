@@ -10,11 +10,13 @@ import { expandStopsToDays, type Stop } from "@/lib/tripPlanner";
 import { supabase } from "@/lib/supabase";
 import ResortPicker from "./ResortPicker";
 import type { Resort } from "./MapPage";
+import type { TripRoutePoint } from "./MapView";
 
 type Props = {
   open: boolean;
   origin: Origin;
-  /** Kept for backward compatibility — wizard flow doesn't auto-pick. */
+  /** Currently-filtered resorts — what the picker offers. Falls back to
+      allResorts when omitted (e.g. tests). */
   candidates?: Resort[];
   allResorts: Resort[];
   days: number;
@@ -26,6 +28,10 @@ type Props = {
     leg: { fromLat: number; fromLng: number; toLat: number; toLng: number } | null,
   ) => void;
   onTripResortIds?: (ids: number[]) => void;
+  /** Single source of truth for the on-map trip route. Emits the
+      ordered list of points (origin + each stop) whenever stops change,
+      and null when the panel is empty so the line/markers clear. */
+  onTripRoute?: (points: TripRoutePoint[] | null) => void;
   onDaysChange?: (d: number) => void;
   onViewFullRoute?: () => void;
 };
@@ -48,6 +54,7 @@ function suggestTripName(stops: Stop[], allResorts: Resort[], days: number): str
 export default function TripPlannerPanel({
   open,
   origin,
+  candidates,
   allResorts,
   days,
   initialOrderedSlugs,
@@ -56,20 +63,30 @@ export default function TripPlannerPanel({
   onFocusResort,
   onPreviewLeg,
   onTripResortIds,
+  onTripRoute,
   onDaysChange,
   onViewFullRoute,
 }: Props) {
   const router = useRouter();
   const [stops, setStops] = useState<Stop[]>([]);
   const [pickerForIndex, setPickerForIndex] = useState<"new" | number | null>(null);
+  // Inline "How many days here?" confirm card. Set when the user picks
+  // a resort in the picker; we hold the slug + chosen day count here
+  // until they confirm or cancel. Confirm pushes a Stop; Cancel drops it.
+  const [pendingStop, setPendingStop] = useState<{ slug: string; days: number } | null>(null);
   const [draftName, setDraftName] = useState<string>("");
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
 
+  // Slug→Resort lookup uses allResorts so we can render names for any
+  // already-picked stop, even if filters now hide it. The picker itself
+  // gets `candidates` (filtered) so users see only what's currently
+  // visible on the map.
   const candidateBySlug = useMemo(
     () => new Map(allResorts.map((r) => [r.slug, r])),
     [allResorts],
   );
+  const pickerResorts = candidates ?? allResorts;
 
   const originLabel = origin.kind === "geo" ? "Your location" : origin.name;
   const originLat = origin.lat;
@@ -93,6 +110,16 @@ export default function TripPlannerPanel({
     }
     setStops(initialStops);
     setDraftName("");
+    setPendingStop(null);
+  }
+
+  // Render-phase reset for pendingStop on panel close. Avoids the
+  // setState-in-effect lint while still guaranteeing the in-flight
+  // confirm card disappears when the user closes the planner.
+  const [lastOpen, setLastOpen] = useState(open);
+  if (lastOpen !== open) {
+    setLastOpen(open);
+    if (!open && pendingStop) setPendingStop(null);
   }
 
   // Days-planned vs target. Stops are freeform — user may overrun or
@@ -154,10 +181,44 @@ export default function TripPlannerPanel({
     onTripResortIds?.(planResortIds);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idsKey]);
+
+  // Single source of truth for the trip route line + numbered markers
+  // on the map. Emits origin + each stop's resort point in order, so
+  // MapPage can pass it straight to MapView. When there are no stops we
+  // emit null so the line and markers clear.
+  const tripRoutePoints = useMemo<TripRoutePoint[] | null>(() => {
+    if (stops.length === 0) return null;
+    const points: TripRoutePoint[] = [
+      { lat: originLat, lng: originLng, label: originLabel, kind: "origin" },
+    ];
+    for (const s of stops) {
+      const r = candidateBySlug.get(s.slug);
+      if (!r) continue;
+      points.push({
+        lat: Number(r.latitude),
+        lng: Number(r.longitude),
+        label: r.name,
+        kind: "resort",
+      });
+    }
+    // Need at least origin + one resort to draw a meaningful line.
+    return points.length >= 2 ? points : null;
+  }, [stops, candidateBySlug, originLat, originLng, originLabel]);
+  // Stable key to drive the upstream callback — avoids re-firing when
+  // points array identity changes but contents don't.
+  const routeKey = tripRoutePoints
+    ? tripRoutePoints.map((p) => `${p.kind}:${p.lat.toFixed(4)},${p.lng.toFixed(4)}`).join("|")
+    : "";
+  useEffect(() => {
+    onTripRoute?.(tripRoutePoints);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [routeKey]);
+
   useEffect(() => {
     if (open) return;
     onTripResortIds?.([]);
     onPreviewLeg?.(null);
+    onTripRoute?.(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
@@ -177,20 +238,46 @@ export default function TripPlannerPanel({
 
   function handlePicked(slug: string) {
     if (pickerForIndex == null) return;
-    if (pickerForIndex === "new") {
-      // Add a fresh stop with as many days as fit (capped at remaining,
-      // but at least 1 so the user sees the row).
-      const want = Math.max(1, Math.min(remainingDays, 1));
-      setStops((prev) => [...prev, { slug, days: want }]);
-    } else {
-      // Swap the resort at this index, keep day count.
-      setStops((prev) => prev.map((s, i) => (i === pickerForIndex ? { ...s, slug } : s)));
-    }
+    const targetIndex = pickerForIndex;
     setPickerForIndex(null);
+    onPreviewLeg?.(null);
+
+    if (targetIndex === "new") {
+      // Wizard step: instead of silently appending a 1-day stop, show
+      // an inline "How many days at <resort>?" confirm card and let the
+      // user pick the day count before we commit. Camera flies to the
+      // resort during confirm so they can see exactly where it is.
+      setPendingStop({ slug, days: Math.max(1, Math.min(remainingDays || 1, 1)) });
+    } else {
+      // Swap-resort flow: still in-place. Day count stays the same so
+      // there's nothing to confirm — we just update the slug.
+      setStops((prev) => prev.map((s, i) => (i === targetIndex ? { ...s, slug } : s)));
+    }
+
     const r = candidateBySlug.get(slug);
     if (r && onFocusResort) {
       onFocusResort({ lat: Number(r.latitude), lng: Number(r.longitude) });
     }
+  }
+
+  function adjustPendingDays(delta: number) {
+    setPendingStop((prev) => {
+      if (!prev) return prev;
+      const next = Math.max(1, Math.min(days, prev.days + delta));
+      return { ...prev, days: next };
+    });
+  }
+
+  function confirmPendingStop() {
+    if (!pendingStop) return;
+    setStops((prev) => [...prev, { slug: pendingStop.slug, days: pendingStop.days }]);
+    setPendingStop(null);
+  }
+
+  function cancelPendingStop() {
+    setPendingStop(null);
+    onPreviewLeg?.(null);
+    onFocusResort?.(null);
   }
 
   function adjustStopDays(idx: number, delta: number) {
@@ -218,6 +305,7 @@ export default function TripPlannerPanel({
       // and pin highlights don't linger when the user comes back.
       onTripResortIds?.([]);
       onPreviewLeg?.(null);
+      onTripRoute?.(null);
       const returnTo = `${window.location.pathname}${window.location.search}`;
       router.push(`/login?next=${encodeURIComponent(returnTo)}`);
       return;
@@ -249,6 +337,7 @@ export default function TripPlannerPanel({
     // pins don't stay visually highlighted on the main map.
     onTripResortIds?.([]);
     onPreviewLeg?.(null);
+    onTripRoute?.(null);
     router.push(`/trip/${data.id}`);
   }
 
@@ -450,22 +539,89 @@ export default function TripPlannerPanel({
               );
             })}
 
-            {/* Add stop button */}
-            <li>
-              <button
-                type="button"
-                onClick={() => setPickerForIndex("new")}
-                className="flex w-full items-center justify-center gap-1.5 rounded-lg border-2 border-dashed border-wn-navy/40 bg-wn-navy/5 px-3 py-3 text-sm font-semibold text-wn-navy transition hover:border-wn-navy hover:bg-wn-navy/10 active:scale-[0.99]"
-              >
-                <span aria-hidden="true">+</span>
-                <span>Add stop</span>
-                {remainingDays > 0 && (
-                  <span className="text-[11px] font-normal text-wn-navy/65">
-                    ({remainingDays} day{remainingDays === 1 ? "" : "s"} remaining)
-                  </span>
-                )}
-              </button>
-            </li>
+            {/* Inline "How many days here?" confirm card. Renders only
+                while the user is mid-pick — between selecting a resort
+                in the picker and either confirming (push stop) or
+                cancelling (drop). Stops the wizard from silently
+                appending a 1-day stop the user didn't actively choose. */}
+            {pendingStop && (() => {
+              const r = candidateBySlug.get(pendingStop.slug);
+              const name = r?.name ?? pendingStop.slug;
+              return (
+                <li
+                  className="rounded-lg border-2 border-wn-navy bg-wn-navy/5 p-3 shadow-sm"
+                  aria-live="polite"
+                >
+                  <div className="mb-1 text-[10px] font-semibold uppercase tracking-[0.15em] text-wn-navy">
+                    Confirm stop {stops.length + 1}
+                  </div>
+                  <div className="text-sm font-bold text-wn-navy">
+                    How many days at {name}?
+                  </div>
+                  <div className="mt-2.5 flex items-center gap-2">
+                    <div className="flex items-center gap-1 rounded-md border border-wn-navy/30 bg-white px-1 py-0.5">
+                      <button
+                        type="button"
+                        onClick={() => adjustPendingDays(-1)}
+                        disabled={pendingStop.days <= 1}
+                        className="inline-flex h-7 w-7 items-center justify-center rounded text-wn-navy hover:bg-wn-navy/10 disabled:opacity-30"
+                        aria-label="Fewer days"
+                      >
+                        −
+                      </button>
+                      <span className="min-w-[3rem] text-center text-[13px] font-bold text-wn-navy">
+                        {pendingStop.days} day{pendingStop.days === 1 ? "" : "s"}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => adjustPendingDays(1)}
+                        disabled={pendingStop.days >= days}
+                        className="inline-flex h-7 w-7 items-center justify-center rounded text-wn-navy hover:bg-wn-navy/10 disabled:opacity-30"
+                        aria-label="More days"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                  <div className="mt-3 flex gap-2">
+                    <button
+                      type="button"
+                      onClick={confirmPendingStop}
+                      className="flex-1 rounded-md bg-wn-navy px-3 py-2 text-sm font-semibold text-white transition hover:bg-wn-navy/90 active:scale-[0.98]"
+                    >
+                      ✓ Confirm
+                    </button>
+                    <button
+                      type="button"
+                      onClick={cancelPendingStop}
+                      className="rounded-md border border-wn-charcoal/20 bg-white px-3 py-2 text-sm font-semibold text-wn-charcoal/70 transition hover:border-wn-charcoal/40 hover:text-wn-charcoal"
+                    >
+                      ✗ Cancel
+                    </button>
+                  </div>
+                </li>
+              );
+            })()}
+
+            {/* Add stop button — hidden while a pending-stop confirm
+                card is showing so users finish that flow first. */}
+            {!pendingStop && (
+              <li>
+                <button
+                  type="button"
+                  onClick={() => setPickerForIndex("new")}
+                  className="flex w-full items-center justify-center gap-1.5 rounded-lg border-2 border-dashed border-wn-navy/40 bg-wn-navy/5 px-3 py-3 text-sm font-semibold text-wn-navy transition hover:border-wn-navy hover:bg-wn-navy/10 active:scale-[0.99]"
+                >
+                  <span aria-hidden="true">+</span>
+                  <span>{stops.length === 0 ? "Add stop" : "Add next stop"}</span>
+                  {remainingDays > 0 && (
+                    <span className="text-[11px] font-normal text-wn-navy/65">
+                      ({remainingDays} day{remainingDays === 1 ? "" : "s"} remaining)
+                    </span>
+                  )}
+                </button>
+              </li>
+            )}
 
             {/* Drive home leg */}
             {stops.length > 0 && (
@@ -566,7 +722,7 @@ export default function TripPlannerPanel({
           open
           title={pickerForIndex === "new" ? "Pick a resort to add" : `Swap stop ${(pickerForIndex as number) + 1}`}
           fromPoint={pickerFromPoint}
-          allResorts={allResorts}
+          allResorts={pickerResorts}
           alreadyPicked={pickedSlugs}
           onSelect={handlePicked}
           onClose={() => {

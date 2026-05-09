@@ -446,17 +446,19 @@ function QuickStats({ resort }: { resort: Resort }) {
 
   if (stats.length === 0) return null;
 
-  // Trail breakdown chip row, if all four levels present
-  const hasTrailBreakdown = [
-    resort.trails_beginner,
-    resort.trails_intermediate,
-    resort.trails_advanced,
-    resort.trails_expert,
-  ].some((v) => v != null && v > 0);
+  // Trail breakdown grid — show whenever any of the five rows has data.
+  // Matches the ResortPanel's TrailBreakdown gate.
+  const hasTrailBreakdown =
+    resort.trails_beginner != null ||
+    resort.trails_intermediate != null ||
+    resort.trails_advanced != null ||
+    resort.trails_expert != null ||
+    resort.terrain_park_count != null ||
+    resort.has_terrain_park === true;
 
-  // Features chip row
+  // Features chip row. Terrain park lives in the Trail breakdown grid
+  // (orange pill column) so we don't duplicate it here.
   const features: string[] = [];
-  if (resort.has_terrain_park) features.push(resort.terrain_park_count ? `Terrain park (${resort.terrain_park_count})` : "Terrain park");
   if (resort.has_halfpipe) features.push("Halfpipe");
   if (resort.has_glades) features.push("Glades");
   if (resort.has_night_skiing) features.push("Night skiing");
@@ -479,22 +481,7 @@ function QuickStats({ resort }: { resort: Resort }) {
         ))}
       </div>
 
-      {hasTrailBreakdown && (
-        <div className="mt-3 flex flex-wrap gap-2 text-xs">
-          {resort.trails_beginner != null && (
-            <TrailChip color="#22c55e" label={`${resort.trails_beginner} beginner`} />
-          )}
-          {resort.trails_intermediate != null && (
-            <TrailChip color="#3b82f6" label={`${resort.trails_intermediate} intermediate`} />
-          )}
-          {resort.trails_advanced != null && (
-            <TrailChip color="#1f2937" label={`${resort.trails_advanced} advanced`} />
-          )}
-          {resort.trails_expert != null && resort.trails_expert > 0 && (
-            <TrailChip color="#dc2626" label={`${resort.trails_expert} expert`} />
-          )}
-        </div>
-      )}
+      {hasTrailBreakdown && <TrailBreakdownGrid resort={resort} />}
 
       {features.length > 0 && (
         <div className="mt-3 flex flex-wrap gap-1.5 text-xs">
@@ -512,12 +499,91 @@ function QuickStats({ resort }: { resort: Resort }) {
   );
 }
 
-function TrailChip({ color, label }: { color: string; label: string }) {
+// Trail breakdown — 5-column grid using the same trail-map symbols you'd
+// see on a resort piste: green circle (Beginner), blue square
+// (Intermediate), single black diamond (Expert), double black (Expert
+// Only), orange pill (Terrain Park). Hidden by the caller when no data
+// is present; individual cells render "—" when only some are missing.
+function TrailBreakdownGrid({ resort }: { resort: Resort }) {
+  const someTrails =
+    resort.trails_beginner != null ||
+    resort.trails_intermediate != null ||
+    resort.trails_advanced != null ||
+    resort.trails_expert != null;
+  let parkDisplay: string;
+  if (resort.terrain_park_count != null) parkDisplay = String(resort.terrain_park_count);
+  else if (resort.has_terrain_park) parkDisplay = "✓";
+  else if (someTrails) parkDisplay = "—";
+  else parkDisplay = "—";
+
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-2.5 py-1 font-medium text-wn-charcoal shadow-sm">
-      <span className="h-2 w-2 rounded-full" style={{ backgroundColor: color }} />
-      {label}
-    </span>
+    <div className="mt-4 rounded-lg border border-wn-charcoal/10 bg-white p-3">
+      <div className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-wn-charcoal/50">
+        Trail breakdown
+      </div>
+      <div className="grid grid-cols-5 gap-2">
+        <TrailColumn
+          symbol={<span className="block h-3.5 w-3.5 rounded-full bg-emerald-500" aria-hidden="true" />}
+          label="Beginner"
+          value={resort.trails_beginner}
+        />
+        <TrailColumn
+          symbol={<span className="block h-3.5 w-3.5 bg-sky-500" aria-hidden="true" />}
+          label="Intermediate"
+          value={resort.trails_intermediate}
+        />
+        <TrailColumn
+          symbol={<span className="block h-3.5 w-3.5 rotate-45 bg-black" aria-hidden="true" />}
+          label="Expert"
+          value={resort.trails_advanced}
+        />
+        <TrailColumn
+          symbol={
+            <span className="flex items-center gap-0.5" aria-hidden="true">
+              <span className="block h-3.5 w-3.5 rotate-45 bg-black" />
+              <span className="block h-3.5 w-3.5 rotate-45 bg-black" />
+            </span>
+          }
+          label="Expert Only"
+          value={resort.trails_expert}
+        />
+        <TrailColumn
+          symbol={
+            <span className="block h-3 w-6 rounded-full bg-orange-500" aria-hidden="true" />
+          }
+          label="Terrain Park"
+          rawValue={parkDisplay}
+        />
+      </div>
+    </div>
+  );
+}
+
+function TrailColumn({
+  symbol,
+  label,
+  value,
+  rawValue,
+}: {
+  symbol: React.ReactNode;
+  label: string;
+  value?: number | null;
+  rawValue?: string;
+}) {
+  const display = rawValue != null ? rawValue : value != null ? String(value) : "—";
+  const muted = display === "—";
+  return (
+    <div className="flex flex-col items-center gap-1.5 text-center">
+      <span className="flex h-5 items-center justify-center">{symbol}</span>
+      <span
+        className={`text-lg font-bold leading-none ${muted ? "text-wn-charcoal/30" : "text-wn-navy"}`}
+      >
+        {display}
+      </span>
+      <span className="text-[10px] font-semibold uppercase leading-tight tracking-wide text-wn-charcoal/55">
+        {label}
+      </span>
+    </div>
   );
 }
 

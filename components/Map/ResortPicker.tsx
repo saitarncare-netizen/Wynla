@@ -93,10 +93,11 @@ export default function ResortPicker({
       if (sortBy === "name") return a.name.localeCompare(b.name);
       return a.driveSeconds - b.driveSeconds;
     });
-    // Cap to 100 hits — the list virtualizes naturally with browser scrolling
-    // but keeping it bounded avoids a 451-row paint when the user opens it
-    // without typing.
-    return list.slice(0, 200);
+    // No cap — show every match so the count label is honest. The list
+    // is plain DOM rows under an overflow-y-auto container, so browser
+    // virtualization handles the ~450 max comfortably (one repaint on
+    // open, then scroll-only).
+    return list;
   }, [enriched, query, sortBy]);
 
   if (!open) return null;
@@ -161,7 +162,7 @@ export default function ResortPicker({
               A–Z
             </button>
             <span className="ml-auto text-wn-charcoal/45">
-              {visible.length === 200 ? "200+" : visible.length} resorts
+              {visible.length} resort{visible.length === 1 ? "" : "s"}
             </span>
           </div>
         </header>

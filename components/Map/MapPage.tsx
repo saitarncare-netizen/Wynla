@@ -14,7 +14,6 @@ import AuthButton from "@/components/auth/AuthButton";
 import Link from "next/link";
 import { resolveOrigin } from "@/lib/origins";
 import { haversineMeters, estimateDriveSeconds, estimateDriveMeters } from "@/lib/distance";
-import { planTrip, planFromOrderedSlugs } from "@/lib/tripPlanner";
 import { PASS_COLORS, PASS_LABELS, PASS_KEYS } from "@/lib/passColors";
 import { sizeTier, matchesSizeFilter, type SizeTier } from "@/lib/sizeTier";
 
@@ -33,6 +32,15 @@ export type Resort = {
   total_acres: number | null;
   website_url: string | null;
   has_night_skiing: boolean | null;
+  // Trail breakdown by difficulty. Null when not yet verified — the UI
+  // shows "—" for those rows. has_terrain_park is the boolean gate;
+  // terrain_park_count is the precise number when known.
+  trails_beginner: number | null;
+  trails_intermediate: number | null;
+  trails_advanced: number | null;
+  trails_expert: number | null;
+  has_terrain_park: boolean | null;
+  terrain_park_count: number | null;
 };
 
 export type DriveTime = {
@@ -94,6 +102,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   const [cameraTarget, setCameraTarget] = useState<{ lat: number; lng: number; token: string } | null>(null);
   const [previewLeg, setPreviewLeg] = useState<{ fromLat: number; fromLng: number; toLat: number; toLng: number } | null>(null);
   const [tripResortIds, setTripResortIds] = useState<number[]>([]);
+  const [tripRoute, setTripRoute] = useState<TripRoutePoint[] | null>(null);
   const [fitTripVersion, setFitTripVersion] = useState(0);
   const [searchOpen, setSearchOpen] = useState(false);
   const [lastSeenPlannerOpen, setLastSeenPlannerOpen] = useState(false);
@@ -117,6 +126,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
     if (!plannerOpen) {
       if (tripResortIds.length > 0) setTripResortIds([]);
       if (previewLeg) setPreviewLeg(null);
+      if (tripRoute) setTripRoute(null);
     }
   }
   // featured URL param kept for backward compatibility (no UI control).
@@ -249,46 +259,6 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
     [selectedId, resorts],
   );
 
-  // Live trip-route computation for the map overlay. Mirrors what the
-  // TripPlannerPanel computes; we recalculate here so the map can draw
-  // the route line + numbered markers in sync with whichever mode is
-  // visible. When the planner is closed, we skip this entirely.
-  const tripRoute = useMemo<TripRoutePoint[] | undefined>(() => {
-    if (!plannerOpen || days < 2) return undefined;
-    const candidates = filtered
-      .filter((r) => Number.isFinite(Number(r.latitude)) && Number.isFinite(Number(r.longitude)))
-      .map((r) => ({
-        id: r.id,
-        slug: r.slug,
-        name: r.name,
-        state: r.state,
-        lat: Number(r.latitude),
-        lng: Number(r.longitude),
-      }));
-    const originLatLng = { lat: origin.lat, lng: origin.lon };
-    const originLabel = origin.kind === "geo" ? "Your location" : origin.name;
-    // Default mode is roadtrip — matches the panel's initial state.
-    // The route URL param (set by the panel when the user explicitly
-    // saves an order) wins if present.
-    const routeParam = searchParams.get("route");
-    const orderedSlugs = routeParam ? routeParam.split(",").filter(Boolean) : null;
-    const plan =
-      orderedSlugs && orderedSlugs.length > 0
-        ? planFromOrderedSlugs(originLatLng, originLabel, candidates, orderedSlugs, "roadtrip")
-        : planTrip("roadtrip", originLatLng, originLabel, candidates, days);
-    if (!plan) return undefined;
-    const points: TripRoutePoint[] = [
-      { lat: origin.lat, lng: origin.lon, label: originLabel, kind: "origin" },
-      ...plan.resorts.map((r) => ({
-        lat: r.lat,
-        lng: r.lng,
-        label: r.name,
-        kind: "resort" as const,
-      })),
-    ];
-    return points;
-  }, [plannerOpen, days, filtered, origin, searchParams]);
-
   // ESC key closes the panel — keyboard parity with the X button.
   useEffect(() => {
     if (selectedId == null) return;
@@ -326,6 +296,18 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
               <span aria-hidden="true">🔍</span>
               <span className="hidden sm:inline">Search</span>
             </button>
+            {/* My trips — quick access to the saved-trips list. /trips
+                redirects to /login when signed out, so we always show
+                the button regardless of auth state. */}
+            <Link
+              href="/trips"
+              className="inline-flex items-center gap-1.5 rounded-md border border-wn-charcoal/20 bg-white px-3 py-1.5 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95"
+              title="View saved trips"
+              aria-label="My trips"
+            >
+              <span aria-hidden="true">📋</span>
+              <span className="hidden sm:inline">My trips</span>
+            </Link>
             {/* Top-level Plan-a-trip CTA. Replaces the buried "Plan my N-day
                 trip" button that used to live inside the Trip dropdown. */}
             <button
@@ -376,7 +358,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         driveTimeByResort={driveTimeByResort}
         selectedId={selectedId}
         onResortClick={setSelectedId}
-        tripRoute={tripRoute}
+        tripRoute={tripRoute ?? undefined}
         cameraTarget={cameraTarget}
         tripResortIds={tripResortIds}
         previewLeg={previewLeg}
@@ -448,17 +430,20 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         }
         onPreviewLeg={setPreviewLeg}
         onTripResortIds={setTripResortIds}
+        onTripRoute={setTripRoute}
         onDaysChange={(d) => updateParam("days", d > 1 ? String(d) : null)}
         onViewFullRoute={() => setFitTripVersion((v) => v + 1)}
       />
 
       {/* Header search modal — re-uses the planner's ResortPicker.
-          Selecting a resort flies the camera + opens its panel. */}
+          Selecting a resort flies the camera + opens its panel. We pass
+          the active filter set (not all 451) so a user who's narrowed
+          down by Pass / Size / Night / Drive sees only those resorts. */}
       <ResortPicker
         open={searchOpen}
         title="Find a resort"
         fromPoint={{ lat: origin.lat, lng: origin.lon, label: origin.kind === "geo" ? "your location" : origin.name }}
-        allResorts={resorts}
+        allResorts={filtered}
         alreadyPicked={[]}
         onSelect={(slug) => {
           const r = resorts.find((c) => c.slug === slug);
