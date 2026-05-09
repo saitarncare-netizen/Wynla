@@ -6,11 +6,7 @@ import { useRouter } from "next/navigation";
 import { formatDriveTime, type Origin } from "@/lib/origins";
 import { passColor, primaryPass } from "@/lib/passColors";
 import { haversineMeters, estimateDriveSeconds } from "@/lib/distance";
-import {
-  planTrip,
-  expandStopsToDays,
-  type Stop,
-} from "@/lib/tripPlanner";
+import { expandStopsToDays, type Stop } from "@/lib/tripPlanner";
 import { supabase } from "@/lib/supabase";
 import ResortPicker from "./ResortPicker";
 import type { Resort } from "./MapPage";
@@ -18,7 +14,8 @@ import type { Resort } from "./MapPage";
 type Props = {
   open: boolean;
   origin: Origin;
-  candidates: Resort[];
+  /** Kept for backward compatibility — wizard flow doesn't auto-pick. */
+  candidates?: Resort[];
   allResorts: Resort[];
   days: number;
   initialOrderedSlugs?: string[];
@@ -51,7 +48,6 @@ function suggestTripName(stops: Stop[], allResorts: Resort[], days: number): str
 export default function TripPlannerPanel({
   open,
   origin,
-  candidates,
   allResorts,
   days,
   initialOrderedSlugs,
@@ -84,30 +80,15 @@ export default function TripPlannerPanel({
   const [seededFor, setSeededFor] = useState<string>("");
   if (seededFor !== contextKey) {
     setSeededFor(contextKey);
-    let initialStops: Stop[] = [];
+    // Wizard-style: don't pre-pick anything. User starts blank and
+    // picks the first resort themselves. Only the share-link path
+    // (?route=…) seeds with explicit slugs.
+    const initialStops: Stop[] = [];
     if (initialOrderedSlugs && initialOrderedSlugs.length > 0) {
-      // Group consecutive duplicates so a saved-trip slug list of
-      // ['vail','vail','vail','aspen','aspen'] collapses into 2 stops.
       for (const slug of initialOrderedSlugs) {
         const last = initialStops[initialStops.length - 1];
         if (last && last.slug === slug) last.days += 1;
         else initialStops.push({ slug, days: 1 });
-      }
-    } else {
-      // Auto-pick: seed with N nearest resorts × 1 day each.
-      const candidatePool = candidates
-        .filter((r) => Number.isFinite(Number(r.latitude)) && Number.isFinite(Number(r.longitude)))
-        .map((r) => ({
-          id: r.id,
-          slug: r.slug,
-          name: r.name,
-          state: r.state,
-          lat: Number(r.latitude),
-          lng: Number(r.longitude),
-        }));
-      const auto = planTrip("roadtrip", { lat: originLat, lng: originLng }, originLabel, candidatePool, days);
-      if (auto) {
-        initialStops = auto.resorts.map((r) => ({ slug: r.slug, days: 1 }));
       }
     }
     setStops(initialStops);
@@ -233,6 +214,10 @@ export default function TripPlannerPanel({
     const { data: userRes } = await supabase.auth.getUser();
     if (!userRes.user) {
       setSaving(false);
+      // Clear map overlays before bouncing to login so the route line
+      // and pin highlights don't linger when the user comes back.
+      onTripResortIds?.([]);
+      onPreviewLeg?.(null);
       const returnTo = `${window.location.pathname}${window.location.search}`;
       router.push(`/login?next=${encodeURIComponent(returnTo)}`);
       return;
@@ -260,6 +245,10 @@ export default function TripPlannerPanel({
       setSaveError(error?.message ?? "Couldn't save trip.");
       return;
     }
+    // Clear all map overlays before navigating away so the saved-trip
+    // pins don't stay visually highlighted on the main map.
+    onTripResortIds?.([]);
+    onPreviewLeg?.(null);
     router.push(`/trip/${data.id}`);
   }
 
@@ -314,29 +303,40 @@ export default function TripPlannerPanel({
 
           {onDaysChange && (
             <div className="mt-3">
-              <div className="mb-1 flex items-baseline justify-between text-[10px] font-semibold uppercase tracking-[0.15em] text-white/60">
-                <span>Total trip length</span>
-                <span className="text-white">{days}d</span>
-              </div>
-              <div className="grid grid-cols-9 gap-0.5">
-                {[2, 3, 4, 5, 6, 7, 8, 9, 10].map((d) => (
-                  <button
-                    key={d}
-                    type="button"
-                    onClick={() => onDaysChange(d)}
-                    className={`rounded px-0 py-1 text-[11px] font-semibold transition ${
-                      days === d ? "bg-white text-wn-navy" : "bg-white/10 text-white/75 hover:bg-white/15"
-                    }`}
-                  >
-                    {d}
-                  </button>
-                ))}
+              <label
+                htmlFor="trip-days-input"
+                className="mb-1 block text-[10px] font-semibold uppercase tracking-[0.15em] text-white/60"
+              >
+                How many days is your trip?
+              </label>
+              <div className="flex items-center gap-2">
+                <input
+                  id="trip-days-input"
+                  type="number"
+                  min={1}
+                  max={30}
+                  step={1}
+                  value={days}
+                  onChange={(e) => {
+                    const n = Number(e.target.value);
+                    if (Number.isFinite(n) && n >= 1 && n <= 30) {
+                      onDaysChange(n);
+                    }
+                  }}
+                  className="w-20 rounded-md border border-white/20 bg-white/5 px-3 py-2 text-center text-base font-bold text-white focus:border-white focus:outline-none focus:ring-2 focus:ring-white/30"
+                  aria-label="Trip length in days"
+                />
+                <span className="text-[11px] text-white/65">
+                  {days === 1 ? "day" : "days"} total
+                </span>
               </div>
             </div>
           )}
 
           <p className="mt-3 text-[11px] leading-tight text-white/70">
-            Tap any stop to swap the resort or change how many days you stay there. Add or remove stops to fit the trip.
+            {stops.length === 0
+              ? "Tap Add stop below to pick your first resort. The map will fly to it once selected."
+              : "Tap +/− to change how many days you stay at each stop. Add another stop when ready."}
           </p>
         </header>
 

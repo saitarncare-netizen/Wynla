@@ -24,7 +24,6 @@ type Props = {
   onSizeChange: (s: SizeTier | null) => void;
   onNightChange: (v: boolean) => void;
   onClearAll: () => void;
-  onOpenDrawer: () => void;
 };
 
 // Trip-type presets — pure trip length. The drive cap is now its own
@@ -74,7 +73,6 @@ export default function FilterBar({
   onSizeChange,
   onNightChange,
   onClearAll,
-  onOpenDrawer,
 }: Props) {
   const totalPass = Object.values(passCounts).reduce((a, b) => a + b, 0);
 
@@ -125,7 +123,6 @@ export default function FilterBar({
     });
   }
 
-  const moreCount = (sizeFilter ? 1 : 0) + (nightOnly ? 1 : 0);
 
   // Trip dropdown label = From + trip-length preset. Drive cap is
   // surfaced through its own dropdown.
@@ -170,19 +167,23 @@ export default function FilterBar({
             active={driveActive}
             onWithinChange={onWithinChange}
           />
+          <SizeDropdown
+            sizeFilter={sizeFilter}
+            onSizeChange={onSizeChange}
+          />
           <button
             type="button"
-            onClick={onOpenDrawer}
-            className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-md border border-wn-charcoal/20 bg-white px-3 py-1.5 text-xs font-semibold text-wn-charcoal transition-colors duration-200 hover:border-wn-charcoal/40 min-h-[36px]"
-            aria-label="More filters"
+            onClick={() => onNightChange(!nightOnly)}
+            className={`inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-md border px-3 py-1.5 text-xs font-semibold transition-colors duration-200 min-h-[36px] ${
+              nightOnly
+                ? "border-wn-navy bg-wn-navy text-white"
+                : "border-wn-charcoal/20 bg-white text-wn-charcoal hover:border-wn-charcoal/40"
+            }`}
+            aria-pressed={nightOnly}
+            title="Show only resorts with night skiing"
           >
-            <span aria-hidden="true">≡</span>
-            <span>More filters</span>
-            {moreCount > 0 && (
-              <span className="ml-0.5 inline-flex h-4 min-w-[16px] items-center justify-center rounded-full bg-wn-navy px-1 text-[10px] font-bold text-white">
-                {moreCount}
-              </span>
-            )}
+            <span aria-hidden="true">🌙</span>
+            <span>Night</span>
           </button>
         </div>
 
@@ -573,6 +574,68 @@ function DriveTimeDropdown({
           <p className="mt-2 text-[10px] leading-tight text-wn-charcoal/55">
             Hides resorts the drive time can&apos;t reach within this cap. Doesn&apos;t affect manual picks in the trip planner.
           </p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* Size dropdown — vertical drop tier filter (Small / Medium / Large)         */
+/* -------------------------------------------------------------------------- */
+
+function SizeDropdown({
+  sizeFilter,
+  onSizeChange,
+}: {
+  sizeFilter: SizeTier | null;
+  onSizeChange: (s: SizeTier | null) => void;
+}) {
+  const { open, setOpen, ref } = useDropdown();
+  const label = sizeFilter ? `Size: ${SIZE_TIER_LABELS[sizeFilter]}` : "Any size";
+  return (
+    <div className="relative shrink-0" ref={ref}>
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className={`inline-flex min-h-[36px] items-center gap-1.5 whitespace-nowrap rounded-md border px-3 py-1.5 text-xs font-semibold transition-colors duration-200 ${
+          sizeFilter
+            ? "border-wn-navy bg-wn-navy text-white"
+            : "border-wn-charcoal/20 bg-white text-wn-charcoal hover:border-wn-charcoal/40"
+        }`}
+        aria-haspopup="menu"
+        aria-expanded={open}
+      >
+        <span aria-hidden="true">⛰️</span>
+        <span>{label}</span>
+        <span aria-hidden="true" className="opacity-70">▾</span>
+      </button>
+      {open && (
+        <div
+          role="menu"
+          className="absolute left-0 mt-1 w-44 rounded-lg border border-wn-charcoal/15 bg-white p-1 shadow-lg z-30"
+        >
+          <DropdownRow
+            active={sizeFilter === null}
+            onClick={() => {
+              onSizeChange(null);
+              setOpen(false);
+            }}
+          >
+            <span className="font-semibold">Any size</span>
+          </DropdownRow>
+          {(["small", "medium", "large"] as const).map((tier) => (
+            <DropdownRow
+              key={tier}
+              active={sizeFilter === tier}
+              onClick={() => {
+                onSizeChange(sizeFilter === tier ? null : tier);
+                setOpen(false);
+              }}
+            >
+              <span>{SIZE_TIER_LABELS[tier]}</span>
+            </DropdownRow>
+          ))}
         </div>
       )}
     </div>

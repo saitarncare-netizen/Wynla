@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import MapView, { type TripRoutePoint } from "./MapView";
 import AlaskaInset from "./AlaskaInset";
 import FilterBar from "./FilterBar";
-import FilterDrawer from "./FilterDrawer";
+// FilterDrawer removed in Stage 14 — Size + Night now inline pills.
 import ResortPanel from "./ResortPanel";
 import ResortPicker from "./ResortPicker";
 import GeoBanner from "./GeoBanner";
@@ -91,12 +91,12 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   const searchParams = useSearchParams();
   const [, startTransition] = useTransition();
   const [selectedId, setSelectedId] = useState<number | null>(null);
-  const [drawerOpen, setDrawerOpen] = useState(false);
   const [cameraTarget, setCameraTarget] = useState<{ lat: number; lng: number; token: string } | null>(null);
   const [previewLeg, setPreviewLeg] = useState<{ fromLat: number; fromLng: number; toLat: number; toLng: number } | null>(null);
   const [tripResortIds, setTripResortIds] = useState<number[]>([]);
   const [fitTripVersion, setFitTripVersion] = useState(0);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [lastSeenPlannerOpen, setLastSeenPlannerOpen] = useState(false);
 
   const passFilter = searchParams.get("pass");
   const sizeParam = searchParams.get("size");
@@ -105,9 +105,20 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   const fromLat = searchParams.get("fromLat");
   const fromLng = searchParams.get("fromLng");
   const withinHours = Number(searchParams.get("within")) || 0;
-  const days = Math.min(10, Math.max(1, Number(searchParams.get("days")) || 1));
+  const days = Math.min(30, Math.max(1, Number(searchParams.get("days")) || 1));
   const plannerOpen = searchParams.get("plan") === "1";
   const nightOnly = searchParams.get("night") === "1";
+
+  // Defensive: when the planner closes, clear any trip overlays so a
+  // user who saved + deleted a trip never sees lingering "in_trip"
+  // pin highlights or preview lines on the main map.
+  if (lastSeenPlannerOpen !== plannerOpen) {
+    setLastSeenPlannerOpen(plannerOpen);
+    if (!plannerOpen) {
+      if (tripResortIds.length > 0) setTripResortIds([]);
+      if (previewLeg) setPreviewLeg(null);
+    }
+  }
   // featured URL param kept for backward compatibility (no UI control).
   const featuredOnly = searchParams.get("featured") === "1";
 
@@ -181,17 +192,6 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
       for (const p of r.passes ?? []) {
         counts[p] = (counts[p] ?? 0) + 1;
       }
-    }
-    return counts;
-  }, [resorts, featuredOnly]);
-
-  // Size counts for the size chips (NULL excluded — those just stay always-visible)
-  const sizeCounts = useMemo(() => {
-    const counts: Record<string, number> = { small: 0, medium: 0, large: 0 };
-    const pool = featuredOnly ? resorts.filter((r) => r.tier === "featured") : resorts;
-    for (const r of pool) {
-      const t = sizeTier(r.vertical_drop);
-      if (t) counts[t] = (counts[t] ?? 0) + 1;
     }
     return counts;
   }, [resorts, featuredOnly]);
@@ -366,21 +366,9 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
           onSizeChange={(s) => updateParam("size", s)}
           onNightChange={(v) => updateParam("night", v ? "1" : null)}
           onClearAll={clearAll}
-          onOpenDrawer={() => setDrawerOpen(true)}
         />
       </header>
 
-      <FilterDrawer
-        open={drawerOpen}
-        onClose={() => setDrawerOpen(false)}
-        sizeFilter={sizeFilter}
-        nightOnly={nightOnly}
-        sizeCounts={sizeCounts}
-        hiddenByNullSize={hiddenByNullSize}
-        onSizeChange={(s) => updateParam("size", s)}
-        onNightChange={(v) => updateParam("night", v ? "1" : null)}
-        onClearAll={clearAll}
-      />
 
       <MapView
         resorts={filtered}
