@@ -190,35 +190,7 @@ export default function ResortPanel({
             </div>
           )}
 
-          {/* Quick stats — always shown for visual consistency across
-              all 451 resorts. Missing values show "—" so the layout
-              never shifts and the user knows which dimensions matter
-              even for resorts whose specs aren't published. */}
-          <div className="mb-4 grid grid-cols-3 gap-2">
-            <Stat
-              label="Vert"
-              value={
-                resort.vertical_drop != null
-                  ? `${resort.vertical_drop.toLocaleString()} ft`
-                  : "—"
-              }
-              muted={resort.vertical_drop == null}
-            />
-            <Stat
-              label="Trails"
-              value={resort.total_trails != null ? String(resort.total_trails) : "—"}
-              muted={resort.total_trails == null}
-            />
-            <Stat
-              label="Acres"
-              value={
-                resort.total_acres != null ? resort.total_acres.toLocaleString() : "—"
-              }
-              muted={resort.total_acres == null}
-            />
-          </div>
-
-          <TrailBreakdown resort={resort} />
+          <MountainStats resort={resort} />
 
           {/* Weather — in-app card built from weather_cache (refreshed
               daily by the cron). Falls back to a "no data yet" state
@@ -275,13 +247,15 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   );
 }
 
-// 5-column trail breakdown — green / blue / black / double-black /
-// terrain park, each with the symbol used on resort trail maps + the
-// count from the DB. Hidden when the resort has no breakdown data at
-// all (all four trail counts null AND no terrain park flag), which is
-// the case for ~90% of the catalog. Individual rows still show "—"
-// when only some columns are missing so the grid stays consistent.
-function TrailBreakdown({ resort }: { resort: Resort }) {
+// Unified Mountain stats — Vert / Trails / Acres up top, then the
+// 5-level trail breakdown when we have data for it. Smart total: when
+// the breakdown is populated but `total_trails` is NULL we derive the
+// total from the sum (so the Trails stat never goes blank just because
+// the resort entered counts by difficulty but not the aggregate). When
+// the breakdown is missing but a total exists we render a small
+// "Difficulty mix not yet verified" caption inside the card so users
+// understand it's a known gap, not a layout glitch.
+function MountainStats({ resort }: { resort: Resort }) {
   const beginner = resort.trails_beginner;
   const intermediate = resort.trails_intermediate;
   const advanced = resort.trails_advanced;
@@ -289,65 +263,101 @@ function TrailBreakdown({ resort }: { resort: Resort }) {
   const hasPark = resort.has_terrain_park === true;
   const parkCount = resort.terrain_park_count;
 
-  const allMissing =
-    beginner == null &&
-    intermediate == null &&
-    advanced == null &&
-    expert == null &&
-    !hasPark &&
-    parkCount == null;
-  if (allMissing) return null;
-
-  // Terrain park value: count if known, "✓" if flag is true with no
-  // count, "—" otherwise. Booleans don't have null/false distinction
-  // in our schema (default false), so we treat false as "no data" too
-  // unless one of the trail levels is populated — in which case false
-  // genuinely means "no terrain park here".
   const someTrails =
     beginner != null || intermediate != null || advanced != null || expert != null;
+  const breakdownSum =
+    (beginner ?? 0) + (intermediate ?? 0) + (advanced ?? 0) + (expert ?? 0);
+  // If the resort row already has total_trails, trust it (even when
+  // it's larger than the breakdown sum — e.g., resorts that don't
+  // categorize glades or beginner-area runs). When it's NULL but we
+  // have at least one breakdown value, derive from sum.
+  const displayTrails =
+    resort.total_trails ?? (someTrails ? breakdownSum : null);
+  const trailsDerived = resort.total_trails == null && someTrails;
+
   let parkDisplay: string;
   if (parkCount != null) parkDisplay = String(parkCount);
   else if (hasPark) parkDisplay = "✓";
-  else if (someTrails) parkDisplay = "—";
   else parkDisplay = "—";
 
   return (
-    <Section title="Trail breakdown">
-      <div className="grid grid-cols-5 gap-1.5 rounded-lg border border-wn-charcoal/10 bg-white px-2 py-2.5">
-        <TrailCol
-          symbol={<span className="block h-3 w-3 rounded-full bg-emerald-500" aria-hidden="true" />}
-          label="Beginner"
-          value={beginner}
-        />
-        <TrailCol
-          symbol={<span className="block h-3 w-3 bg-sky-500" aria-hidden="true" />}
-          label="Intermediate"
-          value={intermediate}
-        />
-        <TrailCol
-          symbol={<span className="block h-3 w-3 rotate-45 bg-black" aria-hidden="true" />}
-          label="Expert"
-          value={advanced}
-        />
-        <TrailCol
-          symbol={
-            <span className="flex items-center gap-0.5" aria-hidden="true">
-              <span className="block h-3 w-3 rotate-45 bg-black" />
-              <span className="block h-3 w-3 rotate-45 bg-black" />
-            </span>
+    <div className="mb-4 rounded-lg border border-wn-charcoal/10 bg-white p-3">
+      <h3 className="mb-2 text-[11px] font-bold uppercase tracking-wide text-wn-charcoal/55">
+        Mountain stats
+      </h3>
+      <div className="grid grid-cols-3 gap-2">
+        <Stat
+          label="Vert"
+          value={
+            resort.vertical_drop != null
+              ? `${resort.vertical_drop.toLocaleString()} ft`
+              : "—"
           }
-          label="Expert Only"
-          value={expert}
+          muted={resort.vertical_drop == null}
         />
-        <TrailCol
-          symbol={
-            <span className="block h-2.5 w-5 rounded-full bg-orange-500" aria-hidden="true" />
+        <Stat
+          label="Trails"
+          value={displayTrails != null ? String(displayTrails) : "—"}
+          muted={displayTrails == null}
+          hint={trailsDerived ? "by difficulty" : undefined}
+        />
+        <Stat
+          label="Acres"
+          value={
+            resort.total_acres != null ? resort.total_acres.toLocaleString() : "—"
           }
-          label="Terrain Park"
-          rawValue={parkDisplay}
+          muted={resort.total_acres == null}
         />
       </div>
-    </Section>
+
+      {someTrails || hasPark || parkCount != null ? (
+        <>
+          <div className="mt-3 border-t border-wn-charcoal/10 pt-2.5">
+            <div className="mb-1.5 text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/50">
+              By difficulty
+            </div>
+            <div className="grid grid-cols-5 gap-1.5">
+              <TrailCol
+                symbol={<span className="block h-3 w-3 rounded-full bg-emerald-500" aria-hidden="true" />}
+                label="Beginner"
+                value={beginner}
+              />
+              <TrailCol
+                symbol={<span className="block h-3 w-3 bg-sky-500" aria-hidden="true" />}
+                label="Intermediate"
+                value={intermediate}
+              />
+              <TrailCol
+                symbol={<span className="block h-3 w-3 rotate-45 bg-black" aria-hidden="true" />}
+                label="Expert"
+                value={advanced}
+              />
+              <TrailCol
+                symbol={
+                  <span className="flex items-center gap-0.5" aria-hidden="true">
+                    <span className="block h-3 w-3 rotate-45 bg-black" />
+                    <span className="block h-3 w-3 rotate-45 bg-black" />
+                  </span>
+                }
+                label="Expert Only"
+                value={expert}
+              />
+              <TrailCol
+                symbol={
+                  <span className="block h-2.5 w-5 rounded-full bg-orange-500" aria-hidden="true" />
+                }
+                label="Terrain Park"
+                rawValue={parkDisplay}
+              />
+            </div>
+          </div>
+        </>
+      ) : displayTrails != null ? (
+        <p className="mt-2.5 border-t border-wn-charcoal/10 pt-2 text-[10px] italic text-wn-charcoal/50">
+          Difficulty mix not yet verified.
+        </p>
+      ) : null}
+    </div>
   );
 }
 
@@ -383,13 +393,15 @@ function Stat({
   label,
   value,
   muted,
+  hint,
 }: {
   label: string;
   value: string;
   muted?: boolean;
+  hint?: string;
 }) {
   return (
-    <div className="rounded-lg border border-wn-charcoal/10 bg-white px-2.5 py-2 text-center">
+    <div className="rounded-lg border border-wn-charcoal/10 bg-wn-offwhite/60 px-2.5 py-2 text-center">
       <div className="text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/50">
         {label}
       </div>
@@ -398,6 +410,9 @@ function Stat({
       >
         {value}
       </div>
+      {hint && (
+        <div className="text-[9px] italic text-wn-charcoal/45">{hint}</div>
+      )}
     </div>
   );
 }

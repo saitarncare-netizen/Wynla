@@ -9,6 +9,7 @@ import { passColor, primaryPass, passLabel } from "@/lib/passColors";
 import { haversineMeters, estimateDriveSeconds } from "@/lib/distance";
 import { formatDriveTime } from "@/lib/origins";
 import TripActions from "./TripActions";
+import TripNameEditor from "./TripNameEditor";
 
 export const dynamic = "force-dynamic";
 
@@ -168,43 +169,103 @@ export default async function TripPage({
         `&destination=${trip.origin_lat},${trip.origin_lng}` +
         `&waypoints=${encodeURIComponent(waypointCoords.join("|"))}`;
 
+  // Hero gradient — pulled from the FIRST resort's primary pass color
+  // so the page picks up an accent without us shipping per-trip art.
+  const firstResortRow = bySlug.get(expandedSlugs[0]);
+  const heroPrimary = primaryPass(firstResortRow?.passes ?? []);
+  const heroAccent = passColor(heroPrimary);
+  const fallbackName = `${expandedSlugs.length}-day trip`;
+  const completedCount = completedSet.size;
+  const progressPct = isActive
+    ? Math.round((completedCount / expandedSlugs.length) * 100)
+    : 0;
+
   return (
-    <main className="min-h-dvh bg-wn-offwhite px-4 py-10 sm:px-6">
-      <div className="mx-auto max-w-3xl">
-        <div className="mb-4">
+    <main className="min-h-dvh bg-wn-offwhite">
+      {/* Hero — gradient + huge editable trip name. Replaces the prior
+          terse plain-bg header so the trip page finally feels like
+          something the user planned, not a CRUD record. */}
+      <header
+        className="relative w-full overflow-hidden"
+        style={{
+          background: `linear-gradient(135deg, ${heroAccent} 0%, #1E2952 60%, #0F1530 100%)`,
+        }}
+      >
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 opacity-10"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at 20% 30%, rgba(255,255,255,0.4) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(255,255,255,0.3) 0%, transparent 50%)",
+          }}
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 opacity-[0.07] mix-blend-overlay"
+          style={{
+            backgroundImage:
+              "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.85'/></svg>\")",
+            backgroundSize: "160px 160px",
+          }}
+        />
+
+        <div className="relative z-10 mx-auto max-w-3xl px-4 py-6 sm:px-6 sm:py-8">
           <Link
             href="/trips"
-            className="inline-flex items-center gap-1 text-xs font-semibold text-wn-charcoal/60 hover:text-wn-navy"
+            className="mb-4 inline-flex items-center gap-1 rounded-md bg-white/95 px-2.5 py-1 text-xs font-semibold text-wn-navy shadow-sm backdrop-blur-sm transition hover:bg-white"
           >
             ← All trips
           </Link>
-        </div>
 
-        <header className="mb-6">
-          <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.15em] text-wn-charcoal/55">
+          <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/70">
             🛣️ {expandedSlugs.length} day{expandedSlugs.length === 1 ? "" : "s"}
             {dedupedWaypointSlugs.length > 0 &&
               ` · ${dedupedWaypointSlugs.length} stop${dedupedWaypointSlugs.length === 1 ? "" : "s"}`}
             {trip.origin_label ? ` · from ${trip.origin_label}` : ""}
           </p>
-          <h1 className="text-3xl font-extrabold tracking-tight text-wn-navy sm:text-4xl">
-            {trip.name ?? `${expandedSlugs.length}-day trip`}
-          </h1>
-          <p className="mt-1 text-xs text-wn-charcoal/55">
-            Total drive time across the trip: ≈ {formatDriveTime(totalDriveSeconds)}
-          </p>
-        </header>
 
-        <TripActions
-          tripId={trip.id}
-          isActive={isActive}
-          tripFinished={tripFinished}
-          currentDay={currentDay}
-          totalDays={expandedSlugs.length}
-          googleMapsUrl={googleMapsUrl}
-        />
+          <TripNameEditor
+            tripId={trip.id}
+            initialName={trip.name}
+            fallbackName={fallbackName}
+          />
 
-        <ol className="mt-6 flex flex-col gap-3">
+          {/* Trip-status badge */}
+          <div className="mt-3 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[11px] font-semibold text-white/95 backdrop-blur-sm">
+            {tripFinished ? (
+              <>🎉 <span>Trip complete</span></>
+            ) : isActive ? (
+              <>
+                <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400" aria-hidden="true" />
+                <span>Day {currentDay} of {expandedSlugs.length} · {progressPct}% done</span>
+              </>
+            ) : (
+              <>📅 <span>Not started yet</span></>
+            )}
+          </div>
+        </div>
+      </header>
+
+      <div className="mx-auto max-w-3xl px-4 py-6 sm:px-6 sm:py-8">
+        {/* Trip summary tiles — replaces the old terse "total drive"
+            line. Three stats so the page has visual weight without an
+            image. */}
+        <section className="mb-6 grid grid-cols-3 gap-2 sm:gap-3">
+          <SummaryTile
+            label="Ski days"
+            value={String(expandedSlugs.length)}
+          />
+          <SummaryTile
+            label="Stops"
+            value={String(dedupedWaypointSlugs.length)}
+          />
+          <SummaryTile
+            label="Total drive"
+            value={formatDriveTime(totalDriveSeconds)}
+          />
+        </section>
+
+        <ol className="flex flex-col gap-3">
           {expandedSlugs.map((slug, i) => {
             const dayNum = i + 1;
             const r = bySlug.get(slug);
@@ -290,7 +351,7 @@ export default async function TripPage({
               </li>
             );
           })}
-          <li className="rounded-xl border border-dashed border-wn-charcoal/20 bg-wn-offwhite p-3">
+          <li className="rounded-xl border border-dashed border-wn-charcoal/20 bg-white p-3">
             <div className="text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
               After day {expandedSlugs.length}
             </div>
@@ -302,7 +363,38 @@ export default async function TripPage({
             </div>
           </li>
         </ol>
+
+        {/* Action panel — moved to the bottom so the page reads as
+            "here's your trip" first, "do something with it" second.
+            The previous layout put Start-trip right under the title
+            and users were tapping it expecting "view details". */}
+        <section className="mt-8">
+          <h2 className="mb-2 text-[11px] font-bold uppercase tracking-[0.15em] text-wn-charcoal/55">
+            Trip controls
+          </h2>
+          <TripActions
+            tripId={trip.id}
+            isActive={isActive}
+            tripFinished={tripFinished}
+            currentDay={currentDay}
+            totalDays={expandedSlugs.length}
+            googleMapsUrl={googleMapsUrl}
+          />
+        </section>
       </div>
     </main>
+  );
+}
+
+function SummaryTile({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-xl border border-wn-charcoal/10 bg-white px-3 py-3 text-center shadow-sm">
+      <div className="text-lg font-extrabold tracking-tight text-wn-navy sm:text-xl">
+        {value}
+      </div>
+      <div className="mt-0.5 text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
+        {label}
+      </div>
+    </div>
   );
 }

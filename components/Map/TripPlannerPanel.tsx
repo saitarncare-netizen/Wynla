@@ -235,15 +235,23 @@ export default function TripPlannerPanel({
   const totalDriveSeconds =
     legs.reduce((s, l) => s + l.durationSeconds, 0) + homeLegSeconds;
 
-  // Sync upstream — pin highlight + plan IDs.
+  // Sync upstream — pin highlight + plan IDs. We include the
+  // pendingStop's resort here so the pin gets the gold-halo treatment
+  // the moment the user picks it (before confirming day count). Pairs
+  // with the route line below so the user can see where they're
+  // committing to even mid-wizard.
   const planResortIds = useMemo(() => {
     const ids: number[] = [];
     for (const s of stops) {
       const r = candidateBySlug.get(s.slug);
       if (r?.id != null) ids.push(r.id);
     }
+    if (pendingStop) {
+      const pr = candidateBySlug.get(pendingStop.slug);
+      if (pr?.id != null && !ids.includes(pr.id)) ids.push(pr.id);
+    }
     return ids;
-  }, [stops, candidateBySlug]);
+  }, [stops, pendingStop, candidateBySlug]);
   const idsKey = planResortIds.join(",");
   useEffect(() => {
     onTripResortIds?.(planResortIds);
@@ -251,11 +259,13 @@ export default function TripPlannerPanel({
   }, [idsKey]);
 
   // Single source of truth for the trip route line + numbered markers
-  // on the map. Emits origin + each stop's resort point in order, so
-  // MapPage can pass it straight to MapView. When there are no stops we
-  // emit null so the line and markers clear.
+  // on the map. Emits origin + each stop's resort point in order, plus
+  // the pendingStop at the tail when one is mid-confirm. That way the
+  // route line stays connected through the whole wizard — we never
+  // strip it out between picker close and Confirm click. When there
+  // are no stops AND no pending pick we emit null so the line clears.
   const tripRoutePoints = useMemo<TripRoutePoint[] | null>(() => {
-    if (stops.length === 0) return null;
+    if (stops.length === 0 && !pendingStop) return null;
     const points: TripRoutePoint[] = [
       { lat: originLat, lng: originLng, label: originLabel, kind: "origin" },
     ];
@@ -269,9 +279,20 @@ export default function TripPlannerPanel({
         kind: "resort",
       });
     }
+    if (pendingStop) {
+      const pr = candidateBySlug.get(pendingStop.slug);
+      if (pr) {
+        points.push({
+          lat: Number(pr.latitude),
+          lng: Number(pr.longitude),
+          label: pr.name,
+          kind: "resort",
+        });
+      }
+    }
     // Need at least origin + one resort to draw a meaningful line.
     return points.length >= 2 ? points : null;
-  }, [stops, candidateBySlug, originLat, originLng, originLabel]);
+  }, [stops, pendingStop, candidateBySlug, originLat, originLng, originLabel]);
   // Stable key to drive the upstream callback — avoids re-firing when
   // points array identity changes but contents don't.
   const routeKey = tripRoutePoints

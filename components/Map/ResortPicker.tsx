@@ -116,10 +116,22 @@ export default function ResortPicker({
         onClick={onClose}
         className="fixed inset-0 z-[60] bg-wn-charcoal/15"
       />
+      {/* Picker container — on mobile renders as a top-docked card
+          (max-w-md, near the top of the viewport). On desktop docks
+          to the LEFT side as a 360px sidebar so the trip planner
+          (right) + map (middle) + picker (left) don't overlap. The
+          map middle stays visible the whole time. */}
       <div
         role="dialog"
         aria-label={title}
-        className="fixed inset-x-2 top-8 z-[61] mx-auto flex max-h-[80vh] max-w-md flex-col overflow-hidden rounded-xl border border-wn-charcoal/15 bg-white shadow-2xl sm:inset-x-auto sm:left-1/2 sm:-translate-x-1/2"
+        className={[
+          "fixed z-[61] flex flex-col overflow-hidden rounded-xl border border-wn-charcoal/15 bg-white shadow-2xl",
+          // Mobile: top-docked, centered, max-w-md
+          "inset-x-2 top-8 mx-auto max-h-[80vh] max-w-md",
+          // Desktop (md+): left-docked sidebar. Cancel mobile centering
+          // and switch to a fixed left rail.
+          "md:inset-x-auto md:left-4 md:top-28 md:bottom-4 md:right-auto md:mx-0 md:max-h-none md:w-[360px] md:max-w-none",
+        ].join(" ")}
       >
         <header className="shrink-0 border-b border-wn-charcoal/10 p-3">
           <div className="flex items-baseline justify-between gap-2">

@@ -436,28 +436,45 @@ function Section({
 }
 
 function QuickStats({ resort }: { resort: Resort }) {
-  const stats: Array<{ label: string; value: string; }> = [];
+  // Smart total: derive from breakdown sum when total_trails is NULL
+  // but at least one difficulty count is populated. Keeps the Trails
+  // stat from going blank just because the resort entered counts by
+  // difficulty without an aggregate. Caption "by difficulty" makes
+  // the source transparent.
+  const someTrails =
+    resort.trails_beginner != null ||
+    resort.trails_intermediate != null ||
+    resort.trails_advanced != null ||
+    resort.trails_expert != null;
+  const breakdownSum =
+    (resort.trails_beginner ?? 0) +
+    (resort.trails_intermediate ?? 0) +
+    (resort.trails_advanced ?? 0) +
+    (resort.trails_expert ?? 0);
+  const displayTrails = resort.total_trails ?? (someTrails ? breakdownSum : null);
+  const trailsDerived = resort.total_trails == null && someTrails;
+
+  const stats: Array<{ label: string; value: string; hint?: string }> = [];
   if (resort.vertical_drop) stats.push({ label: "Vertical drop", value: `${resort.vertical_drop.toLocaleString()} ft` });
-  if (resort.total_trails) stats.push({ label: "Trails", value: String(resort.total_trails) });
+  if (displayTrails != null) {
+    stats.push({
+      label: "Trails",
+      value: String(displayTrails),
+      hint: trailsDerived ? "by difficulty" : undefined,
+    });
+  }
   if (resort.total_lifts) stats.push({ label: "Lifts", value: String(resort.total_lifts) });
   if (resort.total_acres) stats.push({ label: "Skiable acres", value: resort.total_acres.toLocaleString() });
   if (resort.elevation_summit) stats.push({ label: "Summit elevation", value: `${resort.elevation_summit.toLocaleString()} ft` });
   if (resort.longest_run_miles) stats.push({ label: "Longest run", value: `${resort.longest_run_miles} mi` });
 
-  if (stats.length === 0) return null;
+  // Trail breakdown gate — same as ResortPanel's MountainStats.
+  const hasTrailBreakdown = someTrails || resort.terrain_park_count != null || resort.has_terrain_park === true;
 
-  // Trail breakdown grid — show whenever any of the five rows has data.
-  // Matches the ResortPanel's TrailBreakdown gate.
-  const hasTrailBreakdown =
-    resort.trails_beginner != null ||
-    resort.trails_intermediate != null ||
-    resort.trails_advanced != null ||
-    resort.trails_expert != null ||
-    resort.terrain_park_count != null ||
-    resort.has_terrain_park === true;
+  if (stats.length === 0 && !hasTrailBreakdown) return null;
 
-  // Features chip row. Terrain park lives in the Trail breakdown grid
-  // (orange pill column) so we don't duplicate it here.
+  // Features chip row. Terrain park lives in the breakdown grid so we
+  // don't duplicate it here.
   const features: string[] = [];
   if (resort.has_halfpipe) features.push("Halfpipe");
   if (resort.has_glades) features.push("Glades");
@@ -465,23 +482,34 @@ function QuickStats({ resort }: { resort: Resort }) {
 
   return (
     <Section title="Mountain stats">
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
-        {stats.map((s) => (
-          <div
-            key={s.label}
-            className="rounded-lg border border-wn-charcoal/10 bg-white px-3 py-2.5"
-          >
-            <div className="text-[11px] font-semibold uppercase tracking-wide text-wn-charcoal/50">
-              {s.label}
+      {stats.length > 0 && (
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
+          {stats.map((s) => (
+            <div
+              key={s.label}
+              className="rounded-lg border border-wn-charcoal/10 bg-white px-3 py-2.5"
+            >
+              <div className="text-[11px] font-semibold uppercase tracking-wide text-wn-charcoal/50">
+                {s.label}
+              </div>
+              <div className="mt-0.5 text-base font-semibold text-wn-navy">
+                {s.value}
+              </div>
+              {s.hint && (
+                <div className="text-[10px] italic text-wn-charcoal/45">{s.hint}</div>
+              )}
             </div>
-            <div className="mt-0.5 text-base font-semibold text-wn-navy">
-              {s.value}
-            </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
-      {hasTrailBreakdown && <TrailBreakdownGrid resort={resort} />}
+      {hasTrailBreakdown ? (
+        <TrailBreakdownGrid resort={resort} />
+      ) : displayTrails != null ? (
+        <p className="mt-3 text-xs italic text-wn-charcoal/55">
+          Difficulty mix not yet verified.
+        </p>
+      ) : null}
 
       {features.length > 0 && (
         <div className="mt-3 flex flex-wrap gap-1.5 text-xs">

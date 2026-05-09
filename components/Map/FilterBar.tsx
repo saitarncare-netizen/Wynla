@@ -333,8 +333,52 @@ function FromDropdown({
   const { open, setOpen, ref } = useDropdown();
   const [requestingGeo, setRequestingGeo] = useState(false);
   const [geoError, setGeoError] = useState<string | null>(null);
+  // ZIP-code fallback. Browser geolocation on desktop is IP-based and
+  // can be off by 50+ km (especially on a VPN), so users get a precise
+  // alternative: type a US ZIP, we resolve it via zippopotam.us (free,
+  // no key) and feed the centroid into the same onFromGeo handler the
+  // browser-geo path uses.
+  const [zipInput, setZipInput] = useState("");
+  const [resolvingZip, setResolvingZip] = useState(false);
+  const [zipError, setZipError] = useState<string | null>(null);
   const isGeo = origin.kind === "geo";
   const buttonLabel = isGeo ? "📍 From here" : `From ${origin.short}`;
+
+  async function handleZipSubmit() {
+    const clean = zipInput.trim();
+    if (!/^\d{5}$/.test(clean)) {
+      setZipError("Enter a 5-digit US ZIP code.");
+      return;
+    }
+    setResolvingZip(true);
+    setZipError(null);
+    try {
+      const res = await fetch(`https://api.zippopotam.us/us/${clean}`);
+      if (!res.ok) {
+        setZipError(res.status === 404 ? "ZIP not found." : "Lookup failed.");
+        setResolvingZip(false);
+        return;
+      }
+      const data = (await res.json()) as {
+        places?: { latitude?: string; longitude?: string }[];
+      };
+      const place = data.places?.[0];
+      const lat = place ? Number(place.latitude) : NaN;
+      const lng = place ? Number(place.longitude) : NaN;
+      if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
+        setZipError("ZIP returned no coordinates.");
+        setResolvingZip(false);
+        return;
+      }
+      onFromGeo(lat, lng);
+      setResolvingZip(false);
+      setZipInput("");
+      setOpen(false);
+    } catch {
+      setResolvingZip(false);
+      setZipError("Network error — try again.");
+    }
+  }
 
   function handleUseHere() {
     if (typeof navigator === "undefined" || !navigator.geolocation) {
@@ -399,6 +443,43 @@ function FromDropdown({
           {geoError && (
             <p className="mb-2 text-[10px] leading-tight text-wn-charcoal/60">{geoError}</p>
           )}
+          <div className="mb-1 mt-1 text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
+            Or use a US ZIP code
+          </div>
+          <div className="mb-2 flex gap-1">
+            <input
+              type="text"
+              inputMode="numeric"
+              pattern="\d{5}"
+              maxLength={5}
+              placeholder="e.g. 80424"
+              value={zipInput}
+              onChange={(e) => {
+                // Keep only digits to make iOS numeric keyboard work
+                // and prevent accidental letters from country codes.
+                setZipInput(e.target.value.replace(/\D/g, "").slice(0, 5));
+                if (zipError) setZipError(null);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleZipSubmit();
+              }}
+              disabled={resolvingZip}
+              className="min-w-0 flex-1 rounded-md border border-wn-charcoal/20 bg-white px-2 py-1.5 text-xs font-medium text-wn-charcoal placeholder:text-wn-charcoal/40 hover:border-wn-charcoal/40 focus:outline-none focus:ring-2 focus:ring-wn-sky disabled:opacity-60"
+              aria-label="ZIP code"
+            />
+            <button
+              type="button"
+              onClick={handleZipSubmit}
+              disabled={resolvingZip || zipInput.length !== 5}
+              className="rounded-md bg-wn-navy px-2.5 py-1.5 text-xs font-semibold text-white transition hover:bg-wn-navy/90 disabled:opacity-50"
+            >
+              {resolvingZip ? "…" : "Use"}
+            </button>
+          </div>
+          {zipError && (
+            <p className="mb-2 text-[10px] leading-tight text-wn-charcoal/60">{zipError}</p>
+          )}
+
           <div className="mb-1 mt-1 text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
             Or pick a city
           </div>
