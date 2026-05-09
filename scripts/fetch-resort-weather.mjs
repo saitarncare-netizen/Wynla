@@ -21,7 +21,33 @@
 // SUPABASE_SERVICE_ROLE_KEY in the env (also wired into the Vercel
 // env so the daily cron Edge Function can run the same logic).
 
+import fs from "node:fs";
 import { createClient } from "@supabase/supabase-js";
+
+// Node doesn't auto-load .env.local the way Next.js does, so we
+// shim a tiny loader here. Lines like `KEY=value` (and `KEY="value"`)
+// land in process.env if not already set. Existing process.env values
+// win so a CI env (Vercel) overrides what's on disk.
+function loadDotEnv(path) {
+  if (!fs.existsSync(path)) return;
+  for (const raw of fs.readFileSync(path, "utf8").split(/\r?\n/)) {
+    const line = raw.trim();
+    if (!line || line.startsWith("#")) continue;
+    const eq = line.indexOf("=");
+    if (eq < 0) continue;
+    const key = line.slice(0, eq).trim();
+    let value = line.slice(eq + 1).trim();
+    if (
+      (value.startsWith('"') && value.endsWith('"')) ||
+      (value.startsWith("'") && value.endsWith("'"))
+    ) {
+      value = value.slice(1, -1);
+    }
+    if (process.env[key] === undefined) process.env[key] = value;
+  }
+}
+loadDotEnv(".env.local");
+loadDotEnv(".env");
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
