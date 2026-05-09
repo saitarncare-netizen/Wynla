@@ -40,6 +40,52 @@ export type TripLeg = {
   distanceMeters: number;
 };
 
+// Stop = one resort + how many days the user wants to stay there. The
+// trip is a chain of stops. A "basecamp" trip is just one Stop with
+// days = totalDays; a "road trip" is N stops × 1 day each. Anything
+// in between is now expressible.
+export type Stop = {
+  slug: string;
+  days: number;
+};
+
+// Convert an ordered list of Stops into the flat per-day arrays we
+// store in the trips table. Mirrors the legacy shape so /trip/[id]
+// still works without conditional logic everywhere.
+export function expandStopsToDays(stops: Stop[]): {
+  resort_slugs: string[];
+  days_per_resort: number[];
+} {
+  return {
+    resort_slugs: stops.map((s) => s.slug),
+    days_per_resort: stops.map((s) => s.days),
+  };
+}
+
+// Reverse: given the parallel arrays from the trips row, return a
+// Stop[] for UI rendering. Falls back to "1 day per slug" when
+// days_per_resort is null (old rows).
+export function compactStops(
+  resort_slugs: string[],
+  days_per_resort: number[] | null | undefined,
+): Stop[] {
+  if (days_per_resort && days_per_resort.length === resort_slugs.length) {
+    return resort_slugs.map((slug, i) => ({ slug, days: days_per_resort[i] }));
+  }
+  // Legacy: each slug repeats once per day (basecamp row had all-same).
+  // Group consecutive duplicates so the UI shows "Vail · 3 days" once.
+  const stops: Stop[] = [];
+  for (const slug of resort_slugs) {
+    const last = stops[stops.length - 1];
+    if (last && last.slug === slug) {
+      last.days += 1;
+    } else {
+      stops.push({ slug, days: 1 });
+    }
+  }
+  return stops;
+}
+
 export type TripPlan = {
   mode: "basecamp" | "roadtrip";
   days: number;

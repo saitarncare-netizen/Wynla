@@ -47,6 +47,12 @@ export default function TripActions({
       setError(error.message);
       return;
     }
+    // Open Google Maps with the full multi-waypoint route in a new
+    // tab so the user can drive straight off this screen. Refreshes
+    // the page state in parallel so the day counter updates.
+    if (googleMapsUrl && typeof window !== "undefined") {
+      window.open(googleMapsUrl, "_blank", "noopener,noreferrer");
+    }
     startTransition(() => router.refresh());
   }
 

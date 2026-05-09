@@ -46,3 +46,6 @@ next-env.d.ts
 
 # scratch files Claude Code creates during multi-step work
 .tmp-*
+
+.vercel
+.env*.local

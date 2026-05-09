@@ -20,6 +20,7 @@ type Trip = {
   origin_lng: number;
   origin_label: string | null;
   resort_slugs: string[];
+  days_per_resort: number[] | null;
   lodging_mode: "basecamp" | "roadtrip";
   total_days: number;
   started_at: string | null;
@@ -56,7 +57,7 @@ export default async function TripPage({
   const { data: tripData, error: tripErr } = await supabase
     .from("trips")
     .select(
-      "id, user_id, name, origin_lat, origin_lng, origin_label, resort_slugs, lodging_mode, total_days, started_at, current_day, completed_days, created_at",
+      "id, user_id, name, origin_lat, origin_lng, origin_label, resort_slugs, days_per_resort, lodging_mode, total_days, started_at, current_day, completed_days, created_at",
     )
     .eq("id", id)
     .maybeSingle<Trip>();
@@ -74,10 +75,25 @@ export default async function TripPage({
 
   const trip = tripData;
 
+  // Stage 13: trips can store days_per_resort[] alongside resort_slugs[]
+  // so a "Vail 3 days, Aspen 2 days" trip is expressible as
+  // resort_slugs=['vail','aspen'], days_per_resort=[3,2]. The day-by-
+  // day UI below expects ONE slug per day, so we expand here.
+  const expandedSlugs: string[] = (() => {
+    if (trip.days_per_resort && trip.days_per_resort.length === trip.resort_slugs.length) {
+      const out: string[] = [];
+      for (let i = 0; i < trip.resort_slugs.length; i++) {
+        const reps = Math.max(1, trip.days_per_resort[i] ?? 1);
+        for (let j = 0; j < reps; j++) out.push(trip.resort_slugs[i]);
+      }
+      return out;
+    }
+    return trip.resort_slugs;
+  })();
+
   // Pull resort details for every slug in the itinerary (deduped) to
-  // render the day cards. Dedup matters in basecamp mode where the same
-  // slug repeats `total_days` times.
-  const uniqueSlugs = Array.from(new Set(trip.resort_slugs));
+  // render the day cards.
+  const uniqueSlugs = Array.from(new Set(expandedSlugs));
   const { data: resortData } = await supabase
     .from("resorts")
     .select("id, slug, name, state, region, latitude, longitude, passes, vertical_drop, total_trails")
@@ -90,8 +106,8 @@ export default async function TripPage({
   const legs: { fromLabel: string; toSlug: string; driveSeconds: number }[] = [];
   let cursor = { lat: trip.origin_lat, lng: trip.origin_lng, label: trip.origin_label ?? "Start" };
   let prevSlug: string | null = null;
-  for (let i = 0; i < trip.resort_slugs.length; i++) {
-    const slug = trip.resort_slugs[i];
+  for (let i = 0; i < expandedSlugs.length; i++) {
+    const slug = expandedSlugs[i];
     const r = bySlug.get(slug);
     if (!r) {
       legs.push({ fromLabel: cursor.label, toSlug: slug, driveSeconds: 0 });
@@ -110,7 +126,7 @@ export default async function TripPage({
     prevSlug = slug;
   }
   // Drive home leg
-  const last = bySlug.get(trip.resort_slugs[trip.resort_slugs.length - 1]);
+  const last = bySlug.get(expandedSlugs[expandedSlugs.length - 1]);
   const homeLegSeconds = last
     ? estimateDriveSeconds(
         haversineMeters(
@@ -134,7 +150,7 @@ export default async function TripPage({
   // where the same resort fills every day). Caps to 9 waypoints which
   // is the Maps URL limit.
   const dedupedWaypointSlugs: string[] = [];
-  for (const slug of trip.resort_slugs) {
+  for (const slug of expandedSlugs) {
     if (dedupedWaypointSlugs[dedupedWaypointSlugs.length - 1] !== slug) {
       dedupedWaypointSlugs.push(slug);
     }
@@ -166,13 +182,13 @@ export default async function TripPage({
 
         <header className="mb-6">
           <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.15em] text-wn-charcoal/55">
-            {trip.lodging_mode === "basecamp" ? "🏠 Basecamp" : "🛣️ Road trip"}
-            {" · "}
-            {trip.total_days} day{trip.total_days === 1 ? "" : "s"}
+            🛣️ {expandedSlugs.length} day{expandedSlugs.length === 1 ? "" : "s"}
+            {dedupedWaypointSlugs.length > 0 &&
+              ` · ${dedupedWaypointSlugs.length} stop${dedupedWaypointSlugs.length === 1 ? "" : "s"}`}
             {trip.origin_label ? ` · from ${trip.origin_label}` : ""}
           </p>
           <h1 className="text-3xl font-extrabold tracking-tight text-wn-navy sm:text-4xl">
-            {trip.name ?? `${trip.total_days}-day trip`}
+            {trip.name ?? `${expandedSlugs.length}-day trip`}
           </h1>
           <p className="mt-1 text-xs text-wn-charcoal/55">
             Total drive time across the trip: ≈ {formatDriveTime(totalDriveSeconds)}
@@ -184,12 +200,12 @@ export default async function TripPage({
           isActive={isActive}
           tripFinished={tripFinished}
           currentDay={currentDay}
-          totalDays={trip.total_days}
+          totalDays={expandedSlugs.length}
           googleMapsUrl={googleMapsUrl}
         />
 
         <ol className="mt-6 flex flex-col gap-3">
-          {trip.resort_slugs.map((slug, i) => {
+          {expandedSlugs.map((slug, i) => {
             const dayNum = i + 1;
             const r = bySlug.get(slug);
             const leg = legs[i];
@@ -276,7 +292,7 @@ export default async function TripPage({
           })}
           <li className="rounded-xl border border-dashed border-wn-charcoal/20 bg-wn-offwhite p-3">
             <div className="text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
-              After day {trip.total_days}
+              After day {expandedSlugs.length}
             </div>
             <div className="mt-1 flex items-baseline gap-2">
               <span className="text-sm font-bold text-wn-navy">🏠 Drive home</span>

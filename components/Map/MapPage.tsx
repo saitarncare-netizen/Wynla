@@ -7,6 +7,7 @@ import AlaskaInset from "./AlaskaInset";
 import FilterBar from "./FilterBar";
 import FilterDrawer from "./FilterDrawer";
 import ResortPanel from "./ResortPanel";
+import ResortPicker from "./ResortPicker";
 import GeoBanner from "./GeoBanner";
 import TripPlannerPanel from "./TripPlannerPanel";
 import AuthButton from "@/components/auth/AuthButton";
@@ -94,6 +95,8 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   const [cameraTarget, setCameraTarget] = useState<{ lat: number; lng: number; token: string } | null>(null);
   const [previewLeg, setPreviewLeg] = useState<{ fromLat: number; fromLng: number; toLat: number; toLng: number } | null>(null);
   const [tripResortIds, setTripResortIds] = useState<number[]>([]);
+  const [fitTripVersion, setFitTripVersion] = useState(0);
+  const [searchOpen, setSearchOpen] = useState(false);
 
   const passFilter = searchParams.get("pass");
   const sizeParam = searchParams.get("size");
@@ -309,6 +312,20 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
             </span>
           </div>
           <div className="flex items-center gap-2">
+            {/* Header-level resort search. Click → opens the same
+                ResortPicker the planner uses, but seeded with the
+                origin so results are sorted by drive time. Selecting
+                a resort opens its panel and flies the camera in. */}
+            <button
+              type="button"
+              onClick={() => setSearchOpen(true)}
+              className="inline-flex items-center gap-1.5 rounded-md border border-wn-charcoal/20 bg-white px-3 py-1.5 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95"
+              title="Search for a specific resort"
+              aria-label="Search resorts"
+            >
+              <span aria-hidden="true">🔍</span>
+              <span className="hidden sm:inline">Search</span>
+            </button>
             {/* Top-level Plan-a-trip CTA. Replaces the buried "Plan my N-day
                 trip" button that used to live inside the Trip dropdown. */}
             <button
@@ -375,6 +392,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         cameraTarget={cameraTarget}
         tripResortIds={tripResortIds}
         previewLeg={previewLeg}
+        fitTripVersion={fitTripVersion}
       />
 
       <AlaskaInset resorts={filtered} />
@@ -443,6 +461,30 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         onPreviewLeg={setPreviewLeg}
         onTripResortIds={setTripResortIds}
         onDaysChange={(d) => updateParam("days", d > 1 ? String(d) : null)}
+        onViewFullRoute={() => setFitTripVersion((v) => v + 1)}
+      />
+
+      {/* Header search modal — re-uses the planner's ResortPicker.
+          Selecting a resort flies the camera + opens its panel. */}
+      <ResortPicker
+        open={searchOpen}
+        title="Find a resort"
+        fromPoint={{ lat: origin.lat, lng: origin.lon, label: origin.kind === "geo" ? "your location" : origin.name }}
+        allResorts={resorts}
+        alreadyPicked={[]}
+        onSelect={(slug) => {
+          const r = resorts.find((c) => c.slug === slug);
+          if (r) {
+            setSelectedId(r.id);
+            setCameraTarget({
+              lat: Number(r.latitude),
+              lng: Number(r.longitude),
+              token: `search-${Date.now()}`,
+            });
+          }
+          setSearchOpen(false);
+        }}
+        onClose={() => setSearchOpen(false)}
       />
 
       {/* First-visit banner asking permission to use device location.

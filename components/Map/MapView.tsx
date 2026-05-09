@@ -44,6 +44,10 @@ type Props = {
   // the picker. Lets them preview the direction/length of a leg before
   // committing.
   previewLeg?: { fromLat: number; fromLng: number; toLat: number; toLng: number } | null;
+  // Bumping this number tells MapView to fitBounds the entire trip
+  // route (origin + every resort + return-home leg). Used by the
+  // "View full route" button on TripPlannerPanel.
+  fitTripVersion?: number;
 };
 
 const SOURCE_ID = "wynla-resorts";
@@ -97,6 +101,7 @@ export default function MapView({
   cameraTarget,
   tripResortIds,
   previewLeg,
+  fitTripVersion,
 }: Props) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
@@ -631,6 +636,33 @@ export default function MapView({
     };
   }, [previewLeg]);
 
+  // "View full route" — fit the camera around the entire trip line
+  // when the user explicitly asks for an overview. Triggered by the
+  // button on TripPlannerPanel that bumps fitTripVersion.
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+    if (!fitTripVersion) return;
+    if (!tripRoute || tripRoute.length < 2) return;
+    const apply = () => {
+      const isDesktop = window.matchMedia("(min-width: 768px)").matches;
+      const coords = tripRoute.map((p) => [p.lng, p.lat] as [number, number]);
+      const bounds = coords.reduce(
+        (b, c) => b.extend(c),
+        new mapboxgl.LngLatBounds(coords[0], coords[0]),
+      );
+      map.fitBounds(bounds, {
+        padding: isDesktop
+          ? { top: 80, bottom: 60, left: 60, right: 440 }
+          : { top: 80, bottom: 360, left: 40, right: 40 },
+        duration: 700,
+        maxZoom: 8,
+      });
+    };
+    if (map.isStyleLoaded()) apply();
+    else map.once("style.load", apply);
+  }, [fitTripVersion, tripRoute]);
+
   // Camera-follow effect: when the trip planner reports that a specific
   // resort just became the focus (e.g. user picked Day 3 = Loveland),
   // fly the camera over to it. Token in the prop changes per pick so
@@ -644,11 +676,13 @@ export default function MapView({
       const isDesktop = window.matchMedia("(min-width: 768px)").matches;
       map.flyTo({
         center: [cameraTarget.lng, cameraTarget.lat],
-        // Closer than the previous zoom-8 (which left several other
-        // resorts in frame and made it hard to spot the picked one).
-        // 11 is "I can see this single ski area and the road network
-        // around it" — the sweet spot for confirming a pick.
-        zoom: 11,
+        // zoom 9 — close enough to see the picked resort + road
+        // network, but far enough that previously-picked resorts and
+        // the trip line stay in the same viewport (so the user can
+        // see "is the route going east → west or backtracking?"). The
+        // earlier zoom 11 zoomed in too tight and made the trip
+        // overview legs disappear off-screen.
+        zoom: 9,
         padding: isDesktop
           ? { right: 440, top: 0, bottom: 0, left: 0 }
           : { bottom: 360, top: 0, left: 0, right: 0 },
