@@ -43,6 +43,11 @@ type Props = {
   /** Setter for the global pass filter. Wired directly to MapPage's
       URL update; without it the picker chips don't change anything. */
   onPassChange?: (passes: string[]) => void;
+  /** Lets MapPage hand off resort-pin clicks to the panel while the
+      picker is open. Panel registers a (slug) => void handler when
+      pickerForIndex is set, and clears it on close. MapPage routes
+      pin clicks to this handler instead of opening ResortPanel. */
+  onMapPickHandlerChange?: (handler: ((slug: string) => void) | null) => void;
   days: number;
   initialOrderedSlugs?: string[];
   isAuthed: boolean;
@@ -82,6 +87,7 @@ export default function TripPlannerPanel({
   allResorts,
   passFilter,
   onPassChange,
+  onMapPickHandlerChange,
   days,
   initialOrderedSlugs,
   isAuthed,
@@ -342,6 +348,27 @@ export default function TripPlannerPanel({
     };
   }, []);
 
+  // Expose handlePicked to MapPage so map-pin clicks can pick a
+  // resort directly while the picker is open. We funnel through a ref
+  // so the registered handler always sees the latest closure (current
+  // pickerForIndex, stops, etc.) without re-registering on every
+  // render. Register only when picker is active; clear on close.
+  const handlePickedRef = useRef<(slug: string) => void>(() => {});
+  // Update the ref inside an effect to keep render pure (the
+  // react-hooks/refs lint disallows mutating .current during render).
+  useEffect(() => {
+    handlePickedRef.current = handlePicked;
+  });
+  useEffect(() => {
+    if (!onMapPickHandlerChange) return;
+    if (pickerForIndex == null) {
+      onMapPickHandlerChange(null);
+      return;
+    }
+    onMapPickHandlerChange((slug: string) => handlePickedRef.current(slug));
+    return () => onMapPickHandlerChange(null);
+  }, [pickerForIndex, onMapPickHandlerChange]);
+
   // Picker fromPoint: origin for stop 0, previous stop's resort otherwise.
   const pickerFromPoint = useMemo(() => {
     if (pickerForIndex == null) return null;
@@ -359,22 +386,22 @@ export default function TripPlannerPanel({
   function handlePicked(slug: string) {
     if (pickerForIndex == null) return;
     const targetIndex = pickerForIndex;
-    setPickerForIndex(null);
     onPreviewLeg?.(null);
     // Cancel any pending hover-zoom so the click's flyTo isn't
     // overwritten by a stale debounced call to the previous hover row.
     clearHoverZoom();
 
     if (targetIndex === "new") {
-      // Wizard step: instead of silently appending a 1-day stop, show
-      // an inline "How many days at <resort>?" confirm card and let the
-      // user pick the day count before we commit. Camera flies to the
-      // resort during confirm so they can see exactly where it is.
+      // Stage 19.5: keep the picker OPEN after a new pick — the user
+      // can change their mind and tap a different row or map pin and
+      // the pendingStop card on the right panel just updates. Closes
+      // automatically on Confirm (commits) or via the picker's X.
       setPendingStop({ slug, days: Math.max(1, Math.min(remainingDays || 1, 1)) });
     } else {
-      // Swap-resort flow: still in-place. Day count stays the same so
-      // there's nothing to confirm — we just update the slug.
+      // Swap-resort flow: still in-place + closes the picker (single
+      // explicit change, no confirm step).
       setStops((prev) => prev.map((s, i) => (i === targetIndex ? { ...s, slug } : s)));
+      setPickerForIndex(null);
     }
 
     const r = candidateBySlug.get(slug);
@@ -397,8 +424,15 @@ export default function TripPlannerPanel({
 
   function confirmPendingStop() {
     if (!pendingStop) return;
-    setStops((prev) => [...prev, { slug: pendingStop.slug, days: pendingStop.days }]);
+    const committed = { slug: pendingStop.slug, days: pendingStop.days };
+    setStops((prev) => [...prev, committed]);
     setPendingStop(null);
+    // Auto-close the picker when this commit fills the last remaining
+    // day of the trip. The user can re-open via "Add stop" if they
+    // want to overrun. Compute against the would-be next stops since
+    // setStops hasn't flushed yet.
+    const wouldBeDays = daysPlanned + committed.days;
+    if (wouldBeDays >= days) setPickerForIndex(null);
   }
 
   function cancelPendingStop() {
@@ -905,6 +939,7 @@ export default function TripPlannerPanel({
           fromPoint={pickerFromPoint}
           allResorts={pickerResorts}
           alreadyPicked={pickedSlugs}
+          pendingSlug={pendingStop?.slug}
           passFilter={passFilter}
           onPassFilterChange={onPassChange}
           onSelect={handlePicked}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useTransition, useEffect } from "react";
+import { useMemo, useRef, useState, useTransition, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import MapView, { type TripRoutePoint } from "./MapView";
 import AlaskaInset from "./AlaskaInset";
@@ -112,6 +112,17 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   const [fitTripVersion, setFitTripVersion] = useState(0);
   const [searchOpen, setSearchOpen] = useState(false);
   const [lastSeenPlannerOpen, setLastSeenPlannerOpen] = useState(false);
+  // Stage 19.5: when the trip planner's picker is active, it
+  // registers a handler here. Map pin clicks route through it
+  // (treating the click as "pick this resort for the current stop")
+  // instead of the default "open ResortPanel" behavior, so the user
+  // can build a trip directly from the map without dismissing the
+  // picker. Stored in a ref because we don't need re-renders when it
+  // flips — only the click handler reads the latest value.
+  const mapPickHandlerRef = useRef<((slug: string) => void) | null>(null);
+  function handleMapPickHandlerChange(handler: ((slug: string) => void) | null) {
+    mapPickHandlerRef.current = handler;
+  }
 
   // Pass filter is multi-select. URL stores it as a comma-separated
   // list ("?pass=ikon,epic"). Empty list = no pass filter active. The
@@ -401,7 +412,19 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         originName={origin.name}
         driveTimeByResort={driveTimeByResort}
         selectedId={selectedId}
-        onResortClick={setSelectedId}
+        onResortClick={(id) => {
+          // While the trip planner's picker is open, route pin
+          // clicks through to handlePicked — let the user build a
+          // trip from the map. Otherwise fall through to the normal
+          // "open the resort panel" behavior.
+          const pickHandler = mapPickHandlerRef.current;
+          if (pickHandler) {
+            const r = resorts.find((c) => c.id === id);
+            if (r) pickHandler(r.slug);
+            return;
+          }
+          setSelectedId(id);
+        }}
         tripRoute={tripRoute ?? undefined}
         cameraTarget={cameraTarget}
         tripResortIds={tripResortIds}
@@ -468,6 +491,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         onPassChange={(passes) =>
           updateParam("pass", passes.length === 0 ? null : passes.join(","))
         }
+        onMapPickHandlerChange={handleMapPickHandlerChange}
         days={Math.max(2, days)}
         isAuthed={isAuthed}
         onClose={() => updateParam("plan", null)}

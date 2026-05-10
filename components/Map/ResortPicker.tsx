@@ -18,6 +18,11 @@ type Props = {
   allResorts: Resort[];
   /** Slugs already in the trip — shown as "in trip" tags but still clickable. */
   alreadyPicked: string[];
+  /** Slug currently being previewed in the right-panel pendingStop
+      card. Renders that row with a navy outline so the user can tell
+      which one their "How many days?" prompt is asking about, even
+      when they've clicked a different one since. */
+  pendingSlug?: string | null;
   /** Current global pass filter. The picker's chip row IS this set —
       toggling a chip in the picker calls onPassFilterChange which
       updates the URL, which feeds back here, which re-renders the
@@ -39,6 +44,7 @@ export default function ResortPicker({
   fromPoint,
   allResorts,
   alreadyPicked,
+  pendingSlug,
   passFilter,
   onPassFilterChange,
   onSelect,
@@ -145,18 +151,15 @@ export default function ResortPicker({
 
   return (
     <>
-      {/* Light scrim — no blur. We deliberately keep the map fully
-          visible behind the picker so users can see the gold dashed
-          preview line drawn from origin/last-stop to whatever resort
-          they're hovering, plus their existing trip line. The 12%
-          tint is just enough to signal "modal is in front" without
-          hiding the map. Click outside to close (existing behavior). */}
-      <button
-        type="button"
-        aria-label="Close picker"
-        onClick={onClose}
-        className="fixed inset-0 z-[60] bg-wn-charcoal/15"
-      />
+      {/* No scrim — Stage 19.5. The map BEHIND the picker stays
+          fully clickable so the user can tap a pin directly to pick
+          that resort (MapPage routes pin clicks through to
+          handlePicked while the picker is open). The picker dialog
+          itself sits on top with z-[61]; close is via the dialog's
+          own X button. The light /15 tint scrim used to live here,
+          but that scrim ate map clicks (closed the picker on every
+          tap outside) and the user couldn't use map → picker
+          interaction at all. */}
       {/* Picker container — on mobile renders as a top-docked card
           (max-w-md, near the top of the viewport). On desktop docks
           to the LEFT side as a 360px sidebar so the trip planner
@@ -277,36 +280,48 @@ export default function ResortPicker({
               No resorts match your search.
             </li>
           )}
-          {visible.map((r) => (
-            <li key={r.slug} className="border-b border-wn-charcoal/5 last:border-b-0">
-              <button
-                type="button"
-                onClick={() => onSelect(r.slug)}
-                onMouseEnter={() => onHover?.(r.slug)}
-                onFocus={() => onHover?.(r.slug)}
-                onMouseLeave={() => onHover?.(null)}
-                onBlur={() => onHover?.(null)}
-                className="flex w-full items-center gap-3 px-3 py-2.5 text-left transition hover:bg-wn-offwhite"
-              >
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-baseline gap-1.5">
-                    <span className="truncate text-sm font-semibold text-wn-navy">
-                      {r.name}
-                    </span>
-                    <span className="shrink-0 text-[10px] text-wn-charcoal/55">{r.state}</span>
-                    {r.alreadyInTrip && (
-                      <span className="ml-auto shrink-0 rounded bg-amber-100 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-amber-800">
-                        in trip
+          {visible.map((r) => {
+            const isPending = pendingSlug != null && pendingSlug === r.slug;
+            return (
+              <li key={r.slug} className="border-b border-wn-charcoal/5 last:border-b-0">
+                <button
+                  type="button"
+                  onClick={() => onSelect(r.slug)}
+                  onMouseEnter={() => onHover?.(r.slug)}
+                  onFocus={() => onHover?.(r.slug)}
+                  onMouseLeave={() => onHover?.(null)}
+                  onBlur={() => onHover?.(null)}
+                  className={`flex w-full items-center gap-3 px-3 py-2.5 text-left transition ${
+                    isPending
+                      ? "bg-wn-navy/10 ring-1 ring-inset ring-wn-navy/40"
+                      : "hover:bg-wn-offwhite"
+                  }`}
+                >
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-baseline gap-1.5">
+                      <span className="truncate text-sm font-semibold text-wn-navy">
+                        {r.name}
                       </span>
-                    )}
+                      <span className="shrink-0 text-[10px] text-wn-charcoal/55">{r.state}</span>
+                      {isPending && (
+                        <span className="ml-auto shrink-0 rounded bg-wn-navy px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-white">
+                          picking
+                        </span>
+                      )}
+                      {r.alreadyInTrip && !isPending && (
+                        <span className="ml-auto shrink-0 rounded bg-amber-100 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-amber-800">
+                          in trip
+                        </span>
+                      )}
+                    </div>
                   </div>
-                </div>
-                <span className="shrink-0 rounded bg-wn-offwhite px-2 py-0.5 text-[11px] font-semibold text-wn-navy">
-                  ≈ {formatDriveTime(r.driveSeconds)}
-                </span>
-              </button>
-            </li>
-          ))}
+                  <span className="shrink-0 rounded bg-wn-offwhite px-2 py-0.5 text-[11px] font-semibold text-wn-navy">
+                    ≈ {formatDriveTime(r.driveSeconds)}
+                  </span>
+                </button>
+              </li>
+            );
+          })}
         </ul>
       </div>
     </>
