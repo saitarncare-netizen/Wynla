@@ -111,18 +111,6 @@ export default function TripPlannerPanel({
   const supabase = useMemo(() => createSupabaseBrowserClient(), []);
   const [stops, setStops] = useState<Stop[]>([]);
   const [pickerForIndex, setPickerForIndex] = useState<"new" | number | null>(null);
-  // Hover-zoom debounce. While the user scans the picker list we want
-  // the camera to follow whichever resort they're sitting on (so they
-  // can decide before clicking) — but firing flyTo on every mouse-
-  // move would be jittery. 350ms hover before the camera flies; any
-  // mouse-move to a different row resets the timer.
-  const hoverZoomTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  function clearHoverZoom() {
-    if (hoverZoomTimerRef.current) {
-      clearTimeout(hoverZoomTimerRef.current);
-      hoverZoomTimerRef.current = null;
-    }
-  }
   // Inline "How many days here?" confirm card. Set when the user picks
   // a resort in the picker; we hold the slug + chosen day count here
   // until they confirm or cancel. Confirm pushes a Stop; Cancel drops it.
@@ -340,13 +328,6 @@ export default function TripPlannerPanel({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
-  // Always clear the hover-zoom timer on unmount so a debounced flyTo
-  // doesn't fire after the panel is gone.
-  useEffect(() => {
-    return () => {
-      if (hoverZoomTimerRef.current) clearTimeout(hoverZoomTimerRef.current);
-    };
-  }, []);
 
   // Stage 19.7: when the picker opens for a NEW stop and there's
   // already at least one confirmed stop, immediately fitBounds the
@@ -400,9 +381,6 @@ export default function TripPlannerPanel({
     if (pickerForIndex == null) return;
     const targetIndex = pickerForIndex;
     onPreviewLeg?.(null);
-    // Cancel any pending hover-zoom so the picker click doesn't get
-    // overwritten by a stale debounced flyTo from the previous row.
-    clearHoverZoom();
 
     if (targetIndex === "new") {
       // Stage 19.5: keep the picker OPEN after a new pick — the user
@@ -970,12 +948,16 @@ export default function TripPlannerPanel({
           onClose={() => {
             setPickerForIndex(null);
             onPreviewLeg?.(null);
-            clearHoverZoom();
           }}
           onHover={(slug) => {
+            // Stage 19.8: hover only draws the gold preview line.
+            // Camera is left alone so the trip-overview view (set by
+            // the Stage 19.7 click / open / confirm paths) stays
+            // visible while the user scans candidates. Zooming-in on
+            // hover broke the planning context the user explicitly
+            // asked us to keep.
             if (!slug) {
               onPreviewLeg?.(null);
-              clearHoverZoom();
               return;
             }
             const r = candidateBySlug.get(slug);
@@ -986,18 +968,6 @@ export default function TripPlannerPanel({
               toLat: Number(r.latitude),
               toLng: Number(r.longitude),
             });
-            // Debounced camera zoom so the user can preview a resort's
-            // location just by hovering its row — no commit yet. 350ms
-            // sweet spot: long enough that scrolling fast doesn't fire
-            // a flyTo for every row passed over, short enough to feel
-            // responsive on intentional hover.
-            clearHoverZoom();
-            hoverZoomTimerRef.current = setTimeout(() => {
-              onFocusResort?.({
-                lat: Number(r.latitude),
-                lng: Number(r.longitude),
-              });
-            }, 350);
           }}
         />
       )}
