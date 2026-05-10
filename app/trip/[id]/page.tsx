@@ -156,18 +156,26 @@ export default async function TripPage({
       dedupedWaypointSlugs.push(slug);
     }
   }
-  const waypointCoords = dedupedWaypointSlugs
+  // Use the resort name + state as the waypoint string instead of raw
+  // coords. Google Maps then labels the stop as "Vail Mountain Resort"
+  // in the directions panel (and pins to the resort's POI rather than
+  // a generic nearby address). Coords-only waypoints displayed as
+  // "633 Tamarack Rd, Pittsfield, MA" — adjacent address but not the
+  // actual resort POI — which the user flagged as not premium.
+  const waypointResorts = dedupedWaypointSlugs
     .slice(0, 9)
     .map((slug) => bySlug.get(slug))
-    .filter((r): r is ResortRow => r != null)
-    .map((r) => `${Number(r.latitude)},${Number(r.longitude)}`);
+    .filter((r): r is ResortRow => r != null);
+  const waypointStrings = waypointResorts.map((r) =>
+    r.state ? `${r.name}, ${r.state}` : r.name,
+  );
   const googleMapsUrl =
-    waypointCoords.length === 0
+    waypointStrings.length === 0
       ? null
       : `https://www.google.com/maps/dir/?api=1&travelmode=driving` +
         `&origin=${trip.origin_lat},${trip.origin_lng}` +
         `&destination=${trip.origin_lat},${trip.origin_lng}` +
-        `&waypoints=${encodeURIComponent(waypointCoords.join("|"))}`;
+        `&waypoints=${encodeURIComponent(waypointStrings.join("|"))}`;
 
   // Hero gradient — pulled from the FIRST resort's primary pass color
   // so the page picks up an accent without us shipping per-trip art.

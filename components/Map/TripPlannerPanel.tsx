@@ -100,6 +100,18 @@ export default function TripPlannerPanel({
   const supabase = useMemo(() => createSupabaseBrowserClient(), []);
   const [stops, setStops] = useState<Stop[]>([]);
   const [pickerForIndex, setPickerForIndex] = useState<"new" | number | null>(null);
+  // Hover-zoom debounce. While the user scans the picker list we want
+  // the camera to follow whichever resort they're sitting on (so they
+  // can decide before clicking) — but firing flyTo on every mouse-
+  // move would be jittery. 350ms hover before the camera flies; any
+  // mouse-move to a different row resets the timer.
+  const hoverZoomTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  function clearHoverZoom() {
+    if (hoverZoomTimerRef.current) {
+      clearTimeout(hoverZoomTimerRef.current);
+      hoverZoomTimerRef.current = null;
+    }
+  }
   // Inline "How many days here?" confirm card. Set when the user picks
   // a resort in the picker; we hold the slug + chosen day count here
   // until they confirm or cancel. Confirm pushes a Stop; Cancel drops it.
@@ -317,6 +329,14 @@ export default function TripPlannerPanel({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
+  // Always clear the hover-zoom timer on unmount so a debounced flyTo
+  // doesn't fire after the panel is gone.
+  useEffect(() => {
+    return () => {
+      if (hoverZoomTimerRef.current) clearTimeout(hoverZoomTimerRef.current);
+    };
+  }, []);
+
   // Picker fromPoint: origin for stop 0, previous stop's resort otherwise.
   const pickerFromPoint = useMemo(() => {
     if (pickerForIndex == null) return null;
@@ -336,6 +356,9 @@ export default function TripPlannerPanel({
     const targetIndex = pickerForIndex;
     setPickerForIndex(null);
     onPreviewLeg?.(null);
+    // Cancel any pending hover-zoom so the click's flyTo isn't
+    // overwritten by a stale debounced call to the previous hover row.
+    clearHoverZoom();
 
     if (targetIndex === "new") {
       // Wizard step: instead of silently appending a 1-day stop, show
@@ -882,10 +905,12 @@ export default function TripPlannerPanel({
           onClose={() => {
             setPickerForIndex(null);
             onPreviewLeg?.(null);
+            clearHoverZoom();
           }}
           onHover={(slug) => {
             if (!slug) {
               onPreviewLeg?.(null);
+              clearHoverZoom();
               return;
             }
             const r = candidateBySlug.get(slug);
@@ -896,6 +921,18 @@ export default function TripPlannerPanel({
               toLat: Number(r.latitude),
               toLng: Number(r.longitude),
             });
+            // Debounced camera zoom so the user can preview a resort's
+            // location just by hovering its row — no commit yet. 350ms
+            // sweet spot: long enough that scrolling fast doesn't fire
+            // a flyTo for every row passed over, short enough to feel
+            // responsive on intentional hover.
+            clearHoverZoom();
+            hoverZoomTimerRef.current = setTimeout(() => {
+              onFocusResort?.({
+                lat: Number(r.latitude),
+                lng: Number(r.longitude),
+              });
+            }, 350);
           }}
         />
       )}
