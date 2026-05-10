@@ -116,7 +116,9 @@ export default function AlaskaInset({ resorts }: Props) {
 
   return (
     <div
-      className="pointer-events-auto absolute bottom-3 left-3 z-10 overflow-hidden rounded-md border border-wn-charcoal/20 bg-white/95 shadow-md backdrop-blur-sm sm:bottom-4 sm:left-4"
+      // Hidden on mobile — phone users have limited screen real estate
+      // and the Alaska resorts are surfaced via region/size filters too.
+      className="pointer-events-auto absolute bottom-3 left-3 z-10 hidden overflow-hidden rounded-md border border-wn-charcoal/20 bg-white/95 shadow-md backdrop-blur-sm md:block sm:bottom-4 sm:left-4"
       style={{
         width: "var(--ak-w, 200px)",
         height: "var(--ak-h, 150px)",

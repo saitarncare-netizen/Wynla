@@ -8,7 +8,7 @@ import FilterBar from "./FilterBar";
 // FilterDrawer removed in Stage 14 — Size + Night now inline pills.
 import ResortPanel from "./ResortPanel";
 import ResortPicker from "./ResortPicker";
-import GeoBanner from "./GeoBanner";
+import LocationButton from "./LocationButton";
 import TripPlannerPanel from "./TripPlannerPanel";
 import AuthButton from "@/components/auth/AuthButton";
 import Link from "next/link";
@@ -324,10 +324,16 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
 
   return (
     <div className="relative h-dvh w-full overflow-hidden">
-      <header className="absolute inset-x-0 top-0 z-10 border-b border-wn-charcoal/10 bg-white/95 backdrop-blur-sm">
-        <div className="flex items-center justify-between gap-3 px-4 pt-3 sm:px-6">
+      <header
+        className="absolute inset-x-0 top-0 z-10 md:border-b md:border-wn-charcoal/10 md:bg-white/95 md:backdrop-blur-sm"
+        style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}
+      >
+        <div className="flex items-center justify-between gap-2 px-3 pt-3 sm:px-6">
           <div className="flex items-baseline gap-3">
-            <span className="text-xl font-extrabold tracking-tight text-wn-navy">
+            {/* Brand pill — gets its own bg on mobile (header is transparent
+                there for a Google-Maps-style float), inherits the solid
+                header bg on desktop. */}
+            <span className="rounded-md bg-white/90 px-2 py-0.5 text-xl font-extrabold tracking-tight text-wn-navy shadow-sm backdrop-blur-sm md:bg-transparent md:px-0 md:py-0 md:shadow-none md:backdrop-blur-none">
               Wynla
             </span>
             <span className="hidden text-xs text-wn-charcoal/50 sm:inline">
@@ -532,11 +538,17 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         onClose={() => setSearchOpen(false)}
       />
 
-      {/* First-visit banner asking permission to use device location.
-          Stays mounted at all times — it self-suppresses via localStorage. */}
-      <GeoBanner currentFromCode={fromCode} onUseMyLocation={handleFromGeo} />
+      {/* Floating "use my location" pill — replaces Stage 19's GeoBanner.
+          Always discoverable on mobile, doesn't occlude the map. */}
+      <LocationButton
+        isUsingGeo={origin.kind === "geo"}
+        onUseMyLocation={handleFromGeo}
+      />
 
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex justify-center px-4 pb-4 sm:justify-end sm:pr-6">
+      {/* Pass color legend — desktop only. On mobile, the same info
+          is already conveyed by the active-filter chips and the pin
+          dot colors, so we save the screen real estate. */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 hidden justify-center px-4 pb-4 md:flex sm:justify-end sm:pr-6">
         <div className="pointer-events-auto rounded-lg border border-wn-charcoal/10 bg-white/95 px-3 py-2 shadow-sm backdrop-blur-sm">
           <div className="mb-1 text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/60">
             Pass
