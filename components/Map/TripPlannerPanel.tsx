@@ -348,6 +348,19 @@ export default function TripPlannerPanel({
     };
   }, []);
 
+  // Stage 19.7: when the picker opens for a NEW stop and there's
+  // already at least one confirmed stop, immediately fitBounds the
+  // trip-so-far. The user wants to see "home + everything I've
+  // booked" before scanning candidates — without this the camera was
+  // wherever the last pick / hover left it, which was usually a tight
+  // close-up that lost spatial context.
+  useEffect(() => {
+    if (pickerForIndex !== "new") return;
+    if (stops.length === 0) return;
+    onViewFullRoute?.();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pickerForIndex]);
+
   // Expose handlePicked to MapPage so map-pin clicks can pick a
   // resort directly while the picker is open. We funnel through a ref
   // so the registered handler always sees the latest closure (current
@@ -387,8 +400,8 @@ export default function TripPlannerPanel({
     if (pickerForIndex == null) return;
     const targetIndex = pickerForIndex;
     onPreviewLeg?.(null);
-    // Cancel any pending hover-zoom so the click's flyTo isn't
-    // overwritten by a stale debounced call to the previous hover row.
+    // Cancel any pending hover-zoom so the picker click doesn't get
+    // overwritten by a stale debounced flyTo from the previous row.
     clearHoverZoom();
 
     if (targetIndex === "new") {
@@ -404,10 +417,13 @@ export default function TripPlannerPanel({
       setPickerForIndex(null);
     }
 
-    const r = candidateBySlug.get(slug);
-    if (r && onFocusResort) {
-      onFocusResort({ lat: Number(r.latitude), lng: Number(r.longitude) });
-    }
+    // Stage 19.7: zoom OUT to the trip-so-far overview instead of
+    // flying in to the picked resort. The user wants planning context
+    // (home + every confirmed stop + this candidate) while deciding,
+    // not a detail close-up. The hover-zoom path (Stage 19.3) still
+    // serves the "what does this resort look like" check; explicit
+    // clicks now trigger the wider overview.
+    onViewFullRoute?.();
   }
 
   function adjustPendingDays(delta: number) {
