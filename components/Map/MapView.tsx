@@ -48,6 +48,9 @@ type Props = {
   // route (origin + every resort + return-home leg). Used by the
   // "View full route" button on TripPlannerPanel.
   fitTripVersion?: number;
+  // Google-Maps-style "you are here" blue dot. Rendered when the user
+  // grants browser geolocation. Null = no dot.
+  userLocation?: { lat: number; lng: number } | null;
 };
 
 const SOURCE_ID = "wynla-resorts";
@@ -102,10 +105,12 @@ export default function MapView({
   tripResortIds,
   previewLeg,
   fitTripVersion,
+  userLocation,
 }: Props) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const tripMarkersRef = useRef<mapboxgl.Marker[]>([]);
+  const userLocationMarkerRef = useRef<mapboxgl.Marker | null>(null);
   // Stage 19.2 fix — flips true once the map has fully loaded (style +
   // initial sources). Every downstream effect (tripRoute, previewLeg,
   // tripResortIds, fitTripVersion, cameraTarget) gates on this so it
@@ -711,5 +716,81 @@ export default function MapView({
     apply();
   }, [cameraTarget, mapReady]);
 
-  return <div ref={mapContainer} className="h-full w-full" />;
+  // "You are here" blue dot — Google Maps style. A DOM marker (rather
+  // than a circle layer) so we can use CSS @keyframes for the halo
+  // pulse animation. Renders only when the user has granted geolocation
+  // and the parent passes their lat/lng down.
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !mapReady) return;
+    // Tear down when location goes away (user switches back to a city).
+    if (!userLocation) {
+      if (userLocationMarkerRef.current) {
+        userLocationMarkerRef.current.remove();
+        userLocationMarkerRef.current = null;
+      }
+      return;
+    }
+    // Reuse the existing marker if we already have one — just move it.
+    if (userLocationMarkerRef.current) {
+      userLocationMarkerRef.current.setLngLat([userLocation.lng, userLocation.lat]);
+      return;
+    }
+    const el = document.createElement("div");
+    el.className = "wynla-user-loc-marker";
+    el.setAttribute("aria-label", "Your location");
+    el.innerHTML = `
+      <div class="wynla-user-loc-halo"></div>
+      <div class="wynla-user-loc-dot"></div>
+    `;
+    const marker = new mapboxgl.Marker({ element: el, anchor: "center" })
+      .setLngLat([userLocation.lng, userLocation.lat])
+      .addTo(map);
+    userLocationMarkerRef.current = marker;
+    return () => {
+      marker.remove();
+      if (userLocationMarkerRef.current === marker) {
+        userLocationMarkerRef.current = null;
+      }
+    };
+  }, [userLocation, mapReady]);
+
+  return (
+    <>
+      <style>{`
+        .wynla-user-loc-marker {
+          position: relative;
+          width: 22px;
+          height: 22px;
+          pointer-events: none;
+        }
+        .wynla-user-loc-dot {
+          position: absolute;
+          inset: 0;
+          margin: auto;
+          width: 14px;
+          height: 14px;
+          border-radius: 9999px;
+          background: #1A73E8;
+          border: 2px solid #ffffff;
+          box-shadow: 0 1px 4px rgba(15,21,48,0.35);
+        }
+        .wynla-user-loc-halo {
+          position: absolute;
+          inset: 0;
+          margin: auto;
+          width: 22px;
+          height: 22px;
+          border-radius: 9999px;
+          background: rgba(26,115,232,0.25);
+          animation: wynla-user-loc-pulse 2s ease-out infinite;
+        }
+        @keyframes wynla-user-loc-pulse {
+          0%   { transform: scale(0.6); opacity: 0.85; }
+          100% { transform: scale(2.4); opacity: 0; }
+        }
+      `}</style>
+      <div ref={mapContainer} className="h-full w-full" />
+    </>
+  );
 }

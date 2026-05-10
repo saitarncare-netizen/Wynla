@@ -418,6 +418,9 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         originName={origin.name}
         driveTimeByResort={driveTimeByResort}
         selectedId={selectedId}
+        userLocation={
+          origin.kind === "geo" ? { lat: origin.lat, lng: origin.lon } : null
+        }
         onResortClick={(id) => {
           // While the trip planner's picker is open, route pin
           // clicks through to handlePicked — let the user build a
