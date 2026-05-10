@@ -591,32 +591,67 @@ export default function TripPlannerPanel({
 
           {onDaysChange && (
             <div className="mt-3">
-              <label
-                htmlFor="trip-days-input"
-                className="mb-1 block text-[10px] font-semibold uppercase tracking-[0.15em] text-white/60"
+              <span
+                id="trip-days-label"
+                className="mb-1.5 block text-[10px] font-semibold uppercase tracking-[0.15em] text-white/60"
               >
                 How many days is your trip?
-              </label>
-              <div className="flex items-center gap-2">
-                <input
-                  id="trip-days-input"
-                  type="number"
-                  min={1}
-                  max={30}
-                  step={1}
-                  value={days}
-                  onChange={(e) => {
-                    const n = Number(e.target.value);
-                    if (Number.isFinite(n) && n >= 1 && n <= 30) {
-                      onDaysChange(n);
-                    }
-                  }}
-                  className="w-20 rounded-md border border-white/20 bg-white/5 px-3 py-2 text-center text-base font-bold text-white focus:border-white focus:outline-none focus:ring-2 focus:ring-white/30"
-                  aria-label="Trip length in days"
-                />
-                <span className="text-[11px] text-white/65">
-                  {days === 1 ? "day" : "days"} total
-                </span>
+              </span>
+              {/* Stepper card — replaces the number input that opened
+                  the iOS keypad and covered half the screen. */}
+              <div
+                role="group"
+                aria-labelledby="trip-days-label"
+                className="flex items-center gap-1.5 rounded-lg border border-white/20 bg-white/10 p-1"
+              >
+                <button
+                  type="button"
+                  onClick={() => onDaysChange(Math.max(2, days - 1))}
+                  disabled={days <= 2}
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-md bg-white/10 text-lg font-bold text-white transition hover:bg-white/20 disabled:opacity-30"
+                  aria-label="Fewer days"
+                >
+                  −
+                </button>
+                <div className="flex flex-1 items-baseline justify-center gap-1.5">
+                  <span className="text-xl font-extrabold tracking-tight text-white">{days}</span>
+                  <span className="text-[11px] font-semibold uppercase tracking-wide text-white/70">
+                    {days === 1 ? "day" : "days"} total
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => onDaysChange(Math.min(30, days + 1))}
+                  disabled={days >= 30}
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-md bg-white/10 text-lg font-bold text-white transition hover:bg-white/20 disabled:opacity-30"
+                  aria-label="More days"
+                >
+                  +
+                </button>
+              </div>
+              {/* Preset chips — common trip lengths. Skip 1d since the
+                  planner enforces a 2-day minimum (single-day trips
+                  use the main map's Day-trip filter instead). */}
+              <div className="mt-1.5 flex flex-wrap gap-1">
+                {[2, 3, 5, 7, 10, 14].map((n) => {
+                  const active = n === days;
+                  return (
+                    <button
+                      key={n}
+                      type="button"
+                      onClick={() => onDaysChange(n)}
+                      aria-pressed={active}
+                      className={[
+                        "inline-flex h-7 items-center rounded-full px-2.5 text-[11px] font-semibold transition",
+                        active
+                          ? "bg-white text-wn-navy"
+                          : "border border-white/25 bg-white/5 text-white/85 hover:bg-white/15",
+                      ].join(" ")}
+                    >
+                      {n}d
+                    </button>
+                  );
+                })}
               </div>
             </div>
           )}
