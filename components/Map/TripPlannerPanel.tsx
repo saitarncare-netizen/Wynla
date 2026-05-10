@@ -119,6 +119,24 @@ export default function TripPlannerPanel({
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
 
+  // Stage 21 mobile wizard state. The mobile path renders one phase at a
+  // time (set days → pick stop → confirm days → repeat → review). Desktop
+  // ignores all of this and shows the legacy single-screen layout.
+  const [isMobile, setIsMobile] = useState(false);
+  // daysLockedIn = the user has explicitly committed to a trip length
+  // and is now picking stops. Reset to false on each fresh planner open
+  // so a returning user always re-confirms their day count.
+  const [daysLockedIn, setDaysLockedIn] = useState(false);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const compute = () => {
+      setIsMobile(window.matchMedia("(max-width: 767px)").matches);
+    };
+    compute();
+    window.addEventListener("resize", compute);
+    return () => window.removeEventListener("resize", compute);
+  }, []);
+
   // Slug→Resort lookup uses allResorts so we can render names for any
   // already-picked stop, even if filters now hide it. The picker itself
   // gets `candidates` (filtered) so users see only what's currently
@@ -205,6 +223,13 @@ export default function TripPlannerPanel({
   if (lastOpen !== open) {
     setLastOpen(open);
     if (!open && pendingStop) setPendingStop(null);
+    if (open) {
+      // Wizard reset: a returning user (e.g. closes + reopens with no
+      // saved stops) re-enters at the days-picker step. If they reopen
+      // mid-trip with confirmed stops they skip days and go straight
+      // to picking the next one.
+      setDaysLockedIn(stops.length > 0);
+    }
   }
 
   // Days-planned vs target. Stops are freeform — user may overrun or
@@ -466,6 +491,39 @@ export default function TripPlannerPanel({
     setStops((prev) => prev.filter((_, i) => i !== idx));
   }
 
+  // Mobile wizard phase derivation. Order matters: set-days gates
+  // everything until the user commits to a trip length; pick comes
+  // before confirm because we don't render the planner sheet at all
+  // during pick (the picker overlay takes its place); review is the
+  // terminal "all days planned" state.
+  type WizardPhase = "set-days" | "pick" | "confirm" | "review";
+  const wizardPhase: WizardPhase = !daysLockedIn
+    ? "set-days"
+    : pickerForIndex !== null
+      ? "pick"
+      : pendingStop
+        ? "confirm"
+        : remainingDays > 0
+          ? "pick"
+          : "review";
+
+  // Wizard "Continue" from set-days → lock in trip length + open the
+  // picker so the user lands directly on stop 1. Existing
+  // confirmPendingStop already keeps the picker open after each
+  // confirm when remainingDays > 0, so we only need to seed the very
+  // first transition.
+  function lockInDays() {
+    setDaysLockedIn(true);
+    if (isMobile && pickerForIndex === null && !pendingStop) {
+      setPickerForIndex("new");
+    }
+  }
+  // Wizard "Change trip length" from review → reset to set-days. We
+  // keep stops as-is so the user doesn't lose their picks.
+  function unlockDays() {
+    setDaysLockedIn(false);
+  }
+
   async function saveTrip() {
     if (stops.length === 0) return;
     setSaving(true);
@@ -545,29 +603,344 @@ export default function TripPlannerPanel({
   const pickedSlugs = stops.map((s) => s.slug);
   const namePlaceholder = suggestTripName(stops, allResorts, daysPlanned) || "My ski trip";
 
+  // Mobile wizard hides the planner sheet entirely during the pick
+  // phase — the picker overlay (z-61) takes its place, so stacking
+  // two sheets at once is avoided. Desktop keeps both visible.
+  const hidePlannerSheet = isMobile && wizardPhase === "pick";
+
   return (
     <>
-      <button
-        type="button"
-        aria-label="Close trip planner"
-        onClick={onClose}
-        className="fixed inset-0 z-30 bg-wn-charcoal/30 backdrop-blur-[1px] md:hidden"
-      />
+      {/* Stage 21 — no mobile scrim. Map stays clickable so the user
+          can pan/zoom while planning, matching the user's request that
+          the top half of the screen remains a usable map. */}
 
       <aside
         role="complementary"
         aria-label="Trip planner"
         className={[
           "fixed z-40 flex flex-col bg-white shadow-2xl",
-          "inset-x-0 bottom-0 max-h-[88vh] rounded-t-2xl",
+          // Mobile: capped at ~55vh so the map above stays usable.
+          // Hidden during pick phase (picker overlay shows in its
+          // place). Desktop: full-height right rail.
+          "inset-x-0 bottom-0 max-h-[55vh] rounded-t-2xl",
+          hidePlannerSheet ? "hidden md:flex" : "",
           "animate-[slideUp_220ms_cubic-bezier(0.16,1,0.3,1)]",
-          "md:inset-x-auto md:right-0 md:top-0 md:bottom-0 md:w-[440px] md:max-h-none md:rounded-none",
+          "md:inset-x-auto md:right-0 md:top-0 md:bottom-0 md:flex md:w-[440px] md:max-h-none md:rounded-none",
           "md:animate-[slideLeft_220ms_cubic-bezier(0.16,1,0.3,1)]",
         ].join(" ")}
       >
         <div className="flex shrink-0 justify-center pt-2 md:hidden" aria-hidden="true">
           <div className="h-1 w-10 rounded-full bg-wn-charcoal/20" />
         </div>
+
+        {/* ---- MOBILE WIZARD — phase-driven, one screen at a time ---- */}
+        <div className="flex flex-1 flex-col md:hidden">
+          {/* Phase 1: How many days? — visible until the user taps Continue. */}
+          {wizardPhase === "set-days" && (
+            <>
+              <header className="relative shrink-0 border-b border-wn-charcoal/10 bg-wn-navy px-4 py-4 text-white">
+                <button
+                  type="button"
+                  onClick={onClose}
+                  aria-label="Close"
+                  className="absolute right-3 top-3 inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20"
+                >
+                  <span aria-hidden="true" className="text-lg leading-none">×</span>
+                </button>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-white/60">
+                  Trip planner · step 1 of 2
+                </p>
+                <h2 className="mt-0.5 text-lg font-extrabold tracking-tight">
+                  How long is your trip?
+                </h2>
+                <p className="mt-1 text-[11px] leading-tight text-white/70">
+                  Pick the total ski days. You can change this later.
+                </p>
+              </header>
+              <div className="flex-1 overflow-y-auto px-4 py-4">
+                <div className="rounded-xl border border-wn-charcoal/15 bg-wn-offwhite p-3">
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => onDaysChange?.(Math.max(2, days - 1))}
+                      disabled={days <= 2}
+                      className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-white text-2xl font-bold text-wn-navy shadow-sm transition active:scale-95 disabled:opacity-30"
+                      aria-label="Fewer days"
+                    >
+                      −
+                    </button>
+                    <div className="flex flex-1 items-baseline justify-center gap-1.5">
+                      <span className="text-3xl font-extrabold tracking-tight text-wn-navy">{days}</span>
+                      <span className="text-xs font-semibold uppercase tracking-wide text-wn-charcoal/60">
+                        {days === 1 ? "day" : "days"}
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => onDaysChange?.(Math.min(30, days + 1))}
+                      disabled={days >= 30}
+                      className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-white text-2xl font-bold text-wn-navy shadow-sm transition active:scale-95 disabled:opacity-30"
+                      aria-label="More days"
+                    >
+                      +
+                    </button>
+                  </div>
+                  <div className="mt-3 flex flex-wrap justify-center gap-1.5">
+                    {[2, 3, 5, 7, 10, 14].map((n) => {
+                      const active = n === days;
+                      return (
+                        <button
+                          key={n}
+                          type="button"
+                          onClick={() => onDaysChange?.(n)}
+                          aria-pressed={active}
+                          className={[
+                            "inline-flex h-8 items-center rounded-full px-3 text-xs font-semibold transition",
+                            active
+                              ? "bg-wn-navy text-white"
+                              : "border border-wn-charcoal/20 bg-white text-wn-charcoal hover:border-wn-navy",
+                          ].join(" ")}
+                        >
+                          {n}d
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+              <footer className="shrink-0 border-t border-wn-charcoal/10 bg-white p-3">
+                <button
+                  type="button"
+                  onClick={lockInDays}
+                  className="flex w-full items-center justify-center gap-2 rounded-lg bg-wn-navy px-4 py-3 text-sm font-semibold text-white transition hover:bg-wn-navy/90 active:scale-[0.98]"
+                >
+                  Continue → Pick stop 1
+                </button>
+              </footer>
+            </>
+          )}
+
+          {/* Phase 3: How many days at this resort? — pendingStop confirm. */}
+          {wizardPhase === "confirm" && pendingStop && (() => {
+            const r = candidateBySlug.get(pendingStop.slug);
+            const name = r?.name ?? pendingStop.slug;
+            const stateLabel = r?.state ?? "";
+            const stopNumber = stops.length + 1;
+            // Find the leg from previous cursor to this resort for drive time hint.
+            const prev = stops[stops.length - 1];
+            const prevR = prev ? candidateBySlug.get(prev.slug) : null;
+            const fromLat = prevR ? Number(prevR.latitude) : originLat;
+            const fromLng = prevR ? Number(prevR.longitude) : originLng;
+            const fromLabel = prevR?.name ?? originLabel;
+            const driveSec = r
+              ? estimateDriveSeconds(
+                  haversineMeters(fromLat, fromLng, Number(r.latitude), Number(r.longitude)),
+                )
+              : 0;
+            const cap = Math.max(1, days - daysPlanned);
+            return (
+              <>
+                <header className="relative shrink-0 border-b border-wn-charcoal/10 bg-wn-navy px-4 py-4 text-white">
+                  <button
+                    type="button"
+                    onClick={onClose}
+                    aria-label="Close"
+                    className="absolute right-3 top-3 inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20"
+                  >
+                    <span aria-hidden="true" className="text-lg leading-none">×</span>
+                  </button>
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-white/60">
+                    Stop {stopNumber} of {days}
+                  </p>
+                  <h2 className="mt-0.5 text-lg font-extrabold tracking-tight">
+                    {name}
+                    {stateLabel && <span className="ml-2 text-sm font-medium text-white/70">{stateLabel}</span>}
+                  </h2>
+                  <p className="mt-1 text-[11px] leading-tight text-white/70">
+                    From {fromLabel} · ≈ {formatDriveTime(driveSec)} drive
+                  </p>
+                </header>
+                <div className="flex-1 overflow-y-auto px-4 py-4">
+                  <p className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
+                    How many days at {name}?
+                  </p>
+                  <div className="flex items-center gap-2 rounded-xl border border-wn-charcoal/15 bg-wn-offwhite p-3">
+                    <button
+                      type="button"
+                      onClick={() => adjustPendingDays(-1)}
+                      disabled={pendingStop.days <= 1}
+                      className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-white text-2xl font-bold text-wn-navy shadow-sm transition active:scale-95 disabled:opacity-30"
+                      aria-label="Fewer days"
+                    >
+                      −
+                    </button>
+                    <div className="flex flex-1 items-baseline justify-center gap-1.5">
+                      <span className="text-3xl font-extrabold tracking-tight text-wn-navy">
+                        {pendingStop.days}
+                      </span>
+                      <span className="text-xs font-semibold uppercase tracking-wide text-wn-charcoal/60">
+                        day{pendingStop.days === 1 ? "" : "s"}
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => adjustPendingDays(1)}
+                      disabled={pendingStop.days >= cap}
+                      className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-white text-2xl font-bold text-wn-navy shadow-sm transition active:scale-95 disabled:opacity-30"
+                      aria-label="More days"
+                    >
+                      +
+                    </button>
+                  </div>
+                  <p className="mt-2 text-[11px] text-wn-charcoal/55">
+                    {cap - pendingStop.days > 0
+                      ? `${cap - pendingStop.days} day${cap - pendingStop.days === 1 ? "" : "s"} left to plan after this stop.`
+                      : "This fills the rest of your trip."}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      cancelPendingStop();
+                      // Re-open picker so the user can choose a different resort.
+                      setPickerForIndex("new");
+                    }}
+                    className="mt-4 text-[12px] font-semibold text-wn-charcoal/65 underline-offset-2 hover:text-wn-navy hover:underline"
+                  >
+                    ← Pick a different resort
+                  </button>
+                </div>
+                <footer className="shrink-0 border-t border-wn-charcoal/10 bg-white p-3">
+                  <button
+                    type="button"
+                    onClick={confirmPendingStop}
+                    className="flex w-full items-center justify-center gap-2 rounded-lg bg-wn-navy px-4 py-3 text-sm font-semibold text-white transition hover:bg-wn-navy/90 active:scale-[0.98]"
+                  >
+                    ✓ Confirm stop {stopNumber}
+                  </button>
+                </footer>
+              </>
+            );
+          })()}
+
+          {/* Phase 4: Review — all days planned, ready to save. */}
+          {wizardPhase === "review" && (
+            <>
+              <header className="relative shrink-0 border-b border-wn-charcoal/10 bg-wn-navy px-4 py-4 text-white">
+                <button
+                  type="button"
+                  onClick={onClose}
+                  aria-label="Close"
+                  className="absolute right-3 top-3 inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20"
+                >
+                  <span aria-hidden="true" className="text-lg leading-none">×</span>
+                </button>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-white/60">
+                  Trip ready · review
+                </p>
+                <h2 className="mt-0.5 text-lg font-extrabold tracking-tight">
+                  {days}-day trip from {originLabel}
+                </h2>
+                <p className="mt-1 text-[11px] leading-tight text-white/70">
+                  ✓ All {days} days planned · {stops.length} stop{stops.length === 1 ? "" : "s"} · ≈ {formatDriveTime(totalDriveSeconds)} total drive
+                </p>
+              </header>
+              <div className="flex-1 overflow-y-auto px-4 py-4">
+                <ol className="flex flex-col gap-2">
+                  {stops.map((stop, i) => {
+                    const r = candidateBySlug.get(stop.slug);
+                    const name = r?.name ?? stop.slug;
+                    const primary = primaryPass(r?.passes ?? []);
+                    const dot = passColor(primary);
+                    return (
+                      <li
+                        key={`${stop.slug}-${i}`}
+                        className="flex items-center gap-2 rounded-lg border border-wn-charcoal/10 bg-white p-2.5"
+                      >
+                        <span
+                          className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[10px] font-bold text-white"
+                          style={{ backgroundColor: dot }}
+                        >
+                          {i + 1}
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <div className="truncate text-sm font-semibold text-wn-navy">
+                            {name}
+                          </div>
+                          <div className="text-[11px] text-wn-charcoal/55">
+                            {stop.days} day{stop.days === 1 ? "" : "s"}
+                            {r?.state ? ` · ${r.state}` : ""}
+                          </div>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => setPickerForIndex(i)}
+                          className="rounded-md border border-wn-charcoal/15 bg-white px-2 py-1 text-[10px] font-semibold text-wn-charcoal/70 transition hover:border-wn-navy hover:text-wn-navy"
+                          aria-label={`Swap stop ${i + 1}`}
+                        >
+                          Swap
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => removeStop(i)}
+                          className="rounded-md border border-wn-charcoal/15 bg-white px-2 py-1 text-[10px] font-semibold text-wn-charcoal/70 transition hover:border-red-400 hover:text-red-700"
+                          aria-label={`Remove stop ${i + 1}`}
+                        >
+                          ✕
+                        </button>
+                      </li>
+                    );
+                  })}
+                </ol>
+
+                <div className="mt-3">
+                  <label
+                    htmlFor="trip-name-mobile"
+                    className="mb-1 block text-[10px] font-bold uppercase tracking-[0.15em] text-wn-charcoal/55"
+                  >
+                    Trip name
+                  </label>
+                  <input
+                    id="trip-name-mobile"
+                    type="text"
+                    value={draftName}
+                    onChange={(e) => setDraftName(e.target.value)}
+                    placeholder={namePlaceholder}
+                    maxLength={80}
+                    className="w-full rounded-md border border-wn-charcoal/20 bg-white px-3 py-2 text-sm font-medium text-wn-charcoal placeholder:text-wn-charcoal/35 focus:border-wn-navy focus:outline-none focus:ring-2 focus:ring-wn-navy/20"
+                  />
+                </div>
+
+                <button
+                  type="button"
+                  onClick={unlockDays}
+                  className="mt-4 text-[12px] font-semibold text-wn-charcoal/65 underline-offset-2 hover:text-wn-navy hover:underline"
+                >
+                  ← Change trip length
+                </button>
+              </div>
+              <footer className="shrink-0 border-t border-wn-charcoal/10 bg-white p-3">
+                {saveError && <p className="mb-2 text-[11px] text-red-700">{saveError}</p>}
+                <button
+                  type="button"
+                  onClick={saveTrip}
+                  disabled={stops.length === 0 || saving}
+                  className="flex w-full items-center justify-center gap-2 rounded-lg bg-wn-navy px-4 py-3 text-sm font-semibold text-white transition hover:bg-wn-navy/90 disabled:opacity-60"
+                >
+                  {saving ? "Saving…" : isAuthed ? "Save trip" : "Sign in to save"}
+                  <span aria-hidden="true">→</span>
+                </button>
+                <p className="mt-1.5 text-center text-[10px] text-wn-charcoal/55">
+                  {isAuthed
+                    ? "Saved trips appear under My trips."
+                    : "We use a magic link, no password."}
+                </p>
+              </footer>
+            </>
+          )}
+        </div>
+
+        {/* ---- DESKTOP LAYOUT — existing single-screen view ---- */}
+        <div className="hidden flex-1 flex-col md:flex">
 
         <header className="shrink-0 border-b border-wn-charcoal/10 bg-wn-navy px-4 py-4 text-white">
           <div className="flex items-start justify-between gap-2">
@@ -967,6 +1340,7 @@ export default function TripPlannerPanel({
               : "We use a magic link, no password."}
           </p>
         </footer>
+        </div>{/* end desktop layout wrapper */}
       </aside>
 
       {pickerFromPoint && pickerForIndex != null && (
