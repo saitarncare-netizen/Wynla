@@ -669,7 +669,14 @@ export default function MapView({
           ? { top: 80, bottom: 60, left: 60, right: 440 }
           : { top: 80, bottom: 360, left: 40, right: 40 },
         duration: 700,
-        maxZoom: 8,
+        // Stage 19.9 — was maxZoom: 8 which still pinched short trips
+        // (NYC→CT, ~80mi) into a tight regional close-up. zoom 6
+        // shows roughly state-level (Northeast US fits in viewport)
+        // so the user can see surrounding candidate resorts while
+        // planning the next stop. Long trips that already span more
+        // ground than maxZoom:6 would render at hit fitBounds's
+        // natural fit (maxZoom is only an upper limit).
+        maxZoom: 6,
       });
     };
     apply();
