@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { passColor, primaryPass, type Pass } from "@/lib/passColors";
@@ -106,6 +106,19 @@ export default function MapView({
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const tripMarkersRef = useRef<mapboxgl.Marker[]>([]);
+  // Stage 19.2 fix — flips true once the map has fully loaded (style +
+  // initial sources). Every downstream effect (tripRoute, previewLeg,
+  // tripResortIds, fitTripVersion, cameraTarget) gates on this so it
+  // can safely call addSource/addLayer/setFeatureState without racing
+  // mapbox's loading state. Previously each effect did its own
+  // `if (map.isStyleLoaded()) apply(); else map.once("style.load",
+  // apply)` dance — but `once` is single-fire, so any effect that ran
+  // AFTER the initial style.load saw isStyleLoaded() return false (a
+  // known mapbox quirk where the flag stays false during ongoing
+  // source loads), registered a NEW once handler, and that handler
+  // never fired because style.load doesn't replay. Net: trip line +
+  // pin highlights stopped working after the very first paint.
+  const [mapReady, setMapReady] = useState(false);
 
   // Keep a stable ref to the latest click handler so the map listeners
   // (registered once) always see the freshest callback without re-registering.
@@ -364,6 +377,16 @@ export default function MapView({
     if (map.isStyleLoaded()) setup();
     else map.on("style.load", setup);
 
+    // Flip mapReady once the map's "load" event fires — that's the
+    // signal that style + initial sources are fully loaded and it's
+    // safe to add/remove sources & layers from any downstream effect.
+    // Idempotent: only set once. If load already fired before we
+    // register (rare, but possible under StrictMode double-mount), we
+    // catch up via map.loaded().
+    const onLoad = () => setMapReady(true);
+    if (map.loaded()) onLoad();
+    else map.once("load", onLoad);
+
     return () => {
       map.remove();
       mapRef.current = null;
@@ -397,12 +420,11 @@ export default function MapView({
       src.setData({ type: "FeatureCollection", features });
     };
 
-    // Source is added by the init effect's setup() — which runs on style.load
-    // (or immediately if already loaded). If the source isn't ready yet,
-    // re-attempt on style.load.
-    if (map.getSource(SOURCE_ID)) apply();
-    else map.once("style.load", apply);
-  }, [resorts, originName, driveTimeByResort]);
+    // Source is added by the init effect's setup() once mapReady. We
+    // gate this effect on mapReady too so it doesn't run before the
+    // source exists.
+    if (mapRef.current?.getSource(SOURCE_ID)) apply();
+  }, [resorts, originName, driveTimeByResort, mapReady]);
 
   // Sync the "selected" feature-state so the matching pin gets a navy halo.
   // Mapbox lets us toggle one boolean per feature without re-emitting the
@@ -447,24 +469,18 @@ export default function MapView({
       lastSelectedRef.current = selectedId;
     };
     if (map.getSource(SOURCE_ID)) apply();
-    else map.once("style.load", apply);
-  }, [selectedId, resorts]);
+  }, [selectedId, resorts, mapReady]);
 
   // Trip-route overlay: when the planner is open we draw a connecting
   // line between the origin and each resort in plan order, plus a small
   // numbered marker per stop so the order on the map matches the panel.
   useEffect(() => {
     const map = mapRef.current;
-    if (!map) return;
+    if (!map || !mapReady) return;
     const ROUTE_SRC = "wynla-trip-route";
     const ROUTE_LAYER = "wynla-trip-route-line";
 
     const apply = () => {
-      // eslint-disable-next-line no-console
-      console.log("[wynla] MapView.tripRoute apply:", {
-        tripRouteLen: tripRoute?.length ?? 0,
-        styleLoaded: map.isStyleLoaded(),
-      });
       // Tear down previous markers and route every time — it's a small
       // dataset (≤11 stops) so this is cheaper than diffing.
       for (const m of tripMarkersRef.current) m.remove();
@@ -544,8 +560,7 @@ export default function MapView({
       // "View full route on map" in the trip planner footer.
     };
 
-    if (map.isStyleLoaded()) apply();
-    else map.once("style.load", apply);
+    apply();
 
     return () => {
       // Cleanup runs on unmount AND on every tripRoute change before the
@@ -558,7 +573,7 @@ export default function MapView({
         if (mapRef.current.getSource(ROUTE_SRC)) mapRef.current.removeSource(ROUTE_SRC);
       }
     };
-  }, [tripRoute]);
+  }, [tripRoute, mapReady]);
 
   // Sync in_trip feature-state for the resort source so trip pins get
   // the bigger gold-haloed paint. Diffs against the previous render so
@@ -566,7 +581,7 @@ export default function MapView({
   const lastTripIdsRef = useRef<Set<number>>(new Set());
   useEffect(() => {
     const map = mapRef.current;
-    if (!map) return;
+    if (!map || !mapReady) return;
     const apply = () => {
       if (!map.getSource(SOURCE_ID)) return;
       const next = new Set(tripResortIds ?? []);
@@ -583,16 +598,15 @@ export default function MapView({
       }
       lastTripIdsRef.current = next;
     };
-    if (map.isStyleLoaded()) apply();
-    else map.once("style.load", apply);
-  }, [tripResortIds]);
+    apply();
+  }, [tripResortIds, mapReady]);
 
   // Preview leg — ephemeral dashed line from the previous resort to a
   // candidate the user is hovering inside the picker. Helps them see
   // the direction/length of a leg before committing to the pick.
   useEffect(() => {
     const map = mapRef.current;
-    if (!map) return;
+    if (!map || !mapReady) return;
     const PREVIEW_SRC = "wynla-preview-leg";
     const PREVIEW_LAYER = "wynla-preview-leg-line";
     const apply = () => {
@@ -626,22 +640,21 @@ export default function MapView({
         },
       });
     };
-    if (map.isStyleLoaded()) apply();
-    else map.once("style.load", apply);
+    apply();
     return () => {
       if (mapRef.current) {
         if (mapRef.current.getLayer(PREVIEW_LAYER)) mapRef.current.removeLayer(PREVIEW_LAYER);
         if (mapRef.current.getSource(PREVIEW_SRC)) mapRef.current.removeSource(PREVIEW_SRC);
       }
     };
-  }, [previewLeg]);
+  }, [previewLeg, mapReady]);
 
   // "View full route" — fit the camera around the entire trip line
   // when the user explicitly asks for an overview. Triggered by the
   // button on TripPlannerPanel that bumps fitTripVersion.
   useEffect(() => {
     const map = mapRef.current;
-    if (!map) return;
+    if (!map || !mapReady) return;
     if (!fitTripVersion) return;
     if (!tripRoute || tripRoute.length < 2) return;
     const apply = () => {
@@ -659,9 +672,8 @@ export default function MapView({
         maxZoom: 8,
       });
     };
-    if (map.isStyleLoaded()) apply();
-    else map.once("style.load", apply);
-  }, [fitTripVersion, tripRoute]);
+    apply();
+  }, [fitTripVersion, tripRoute, mapReady]);
 
   // Camera-follow effect: when the trip planner reports that a specific
   // resort just became the focus (e.g. user picked Day 3 = Loveland),
@@ -670,7 +682,7 @@ export default function MapView({
   // target is set or the map's still loading style.
   useEffect(() => {
     const map = mapRef.current;
-    if (!map) return;
+    if (!map || !mapReady) return;
     if (!cameraTarget) return;
     const apply = () => {
       const isDesktop = window.matchMedia("(min-width: 768px)").matches;
@@ -689,9 +701,8 @@ export default function MapView({
         duration: 700,
       });
     };
-    if (map.isStyleLoaded()) apply();
-    else map.once("style.load", apply);
-  }, [cameraTarget]);
+    apply();
+  }, [cameraTarget, mapReady]);
 
   return <div ref={mapContainer} className="h-full w-full" />;
 }
