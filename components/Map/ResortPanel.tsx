@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 // useEffect/useState used by the matrix-driven drive-time refinement;
-// other hooks not needed here.
+// useRef + the snap state below drive the mobile bottom-sheet drag.
 import Link from "next/link";
 import { passColor, passLabel, primaryPass } from "@/lib/passColors";
 import { formatDriveTime, type Origin } from "@/lib/origins";
@@ -76,33 +76,104 @@ export default function ResortPanel({
       : null;
   const originShort = origin.kind === "geo" ? "your location" : origin.short;
 
+  // Mobile bottom-sheet snap state — half (default, ~50vh) or full
+  // (85vh). No scrim on mobile so the map stays pannable behind. User
+  // can drag the handle up/down between snaps, or X out to close. On
+  // desktop this state is unused (the panel is a fixed right rail).
+  type Snap = "half" | "full";
+  const [snap, setSnap] = useState<Snap>("half");
+  const [dragHeight, setDragHeight] = useState<number | null>(null);
+  const [vh, setVh] = useState(800);
+  const [isMobile, setIsMobile] = useState(false);
+  const dragRef = useRef<{ startY: number; startHeight: number } | null>(null);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const compute = () => {
+      setVh(window.innerHeight);
+      setIsMobile(window.matchMedia("(max-width: 767px)").matches);
+    };
+    compute();
+    window.addEventListener("resize", compute);
+    return () => window.removeEventListener("resize", compute);
+  }, []);
+
+  function snapToPx(s: Snap) {
+    return Math.round(vh * (s === "half" ? 0.5 : 0.85));
+  }
+  function nearestSnap(px: number): Snap {
+    return Math.abs(px - snapToPx("half")) < Math.abs(px - snapToPx("full"))
+      ? "half"
+      : "full";
+  }
+
+  function handleTouchStart(e: React.TouchEvent) {
+    if (!isMobile) return;
+    const t = e.touches[0];
+    dragRef.current = {
+      startY: t.clientY,
+      startHeight: dragHeight ?? snapToPx(snap),
+    };
+  }
+  function handleTouchMove(e: React.TouchEvent) {
+    if (!dragRef.current) return;
+    const t = e.touches[0];
+    const dy = dragRef.current.startY - t.clientY;
+    const proposed = dragRef.current.startHeight + dy;
+    // Allow drag below half so the user can flick down to close.
+    setDragHeight(Math.max(80, Math.min(vh * 0.95, proposed)));
+  }
+  function handleTouchEnd() {
+    if (!dragRef.current) return;
+    const finalH = dragHeight ?? snapToPx(snap);
+    // Drag-down past half closes the panel — common bottom-sheet UX.
+    if (finalH < snapToPx("half") - 80) {
+      onClose();
+    } else {
+      setSnap(nearestSnap(finalH));
+    }
+    setDragHeight(null);
+    dragRef.current = null;
+  }
+
+  const sheetHeight = isMobile ? (dragHeight ?? snapToPx(snap)) : undefined;
+
   return (
     <>
-      {/* Mobile-only scrim — taps outside the sheet close it. Hidden on
-          desktop where the panel is alongside the map. */}
-      <button
-        type="button"
-        aria-label="Close resort panel"
-        onClick={onClose}
-        className="fixed inset-0 z-30 bg-wn-charcoal/30 backdrop-blur-[1px] md:hidden"
-      />
-
+      {/* No mobile scrim — Stage 21. Map stays fully pannable behind
+          the resort detail card so the user can keep exploring while
+          reading. Tap the X (top-right of card) or flick the sheet
+          down to close. */}
       <aside
         role="complementary"
         aria-label={`${resort.name} details`}
         className={[
           "fixed z-40 flex flex-col bg-white shadow-2xl",
           // mobile bottom sheet — slides up from bottom on open
-          "inset-x-0 bottom-0 max-h-[78vh] rounded-t-2xl",
+          "inset-x-0 bottom-0 rounded-t-2xl",
           "animate-[slideUp_220ms_cubic-bezier(0.16,1,0.3,1)]",
           // desktop right side panel — slides in from right
           "md:inset-x-auto md:right-0 md:top-0 md:bottom-0 md:w-[380px] md:max-h-none md:rounded-none",
           "md:animate-[slideLeft_220ms_cubic-bezier(0.16,1,0.3,1)]",
         ].join(" ")}
+        style={{
+          height: sheetHeight != null ? `${sheetHeight}px` : undefined,
+          transition:
+            dragHeight !== null
+              ? "none"
+              : "height 220ms cubic-bezier(0.16,1,0.3,1)",
+        }}
       >
-        {/* Mobile drag handle (visual only — Stage 4.4 will wire drag) */}
-        <div className="flex shrink-0 justify-center pt-2 md:hidden" aria-hidden="true">
-          <div className="h-1 w-10 rounded-full bg-wn-charcoal/20" />
+        {/* Mobile drag handle — touch handlers attached so the user
+            can resize between half/full or flick down to close. */}
+        <div
+          className="flex shrink-0 cursor-grab justify-center py-2 active:cursor-grabbing md:hidden"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+          aria-hidden="true"
+        >
+          <div className="h-1 w-10 rounded-full bg-wn-charcoal/25" />
         </div>
 
         {/* Typographic hero — pass-color gradient + resort name. No image. */}
