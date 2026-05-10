@@ -529,19 +529,14 @@ export default function MapView({
         tripMarkersRef.current.push(marker);
       }
 
-      // Fit map to the whole route, leaving room for the panel on the right.
-      const bounds = coords.reduce(
-        (b, c) => b.extend(c),
-        new mapboxgl.LngLatBounds(coords[0], coords[0]),
-      );
-      const isDesktop = window.matchMedia("(min-width: 768px)").matches;
-      map.fitBounds(bounds, {
-        padding: isDesktop
-          ? { top: 80, bottom: 60, left: 60, right: 440 }
-          : { top: 80, bottom: 360, left: 40, right: 40 },
-        duration: 600,
-        maxZoom: 8,
-      });
+      // NB: NO auto-fitBounds here — Stage 19 fix. Stage 17 added
+      // pendingStop to tripRoute, which fires this effect on every
+      // pick. Pairing it with fitBounds caused a tug-of-war with the
+      // cameraTarget flyTo (which zooms into the picked resort), so
+      // the user lost the "zoom in to the new resort" behavior. The
+      // explicit fitTripVersion effect below is the only path that
+      // still fits the whole route — triggered by the user clicking
+      // "View full route on map" in the trip planner footer.
     };
 
     if (map.isStyleLoaded()) apply();
