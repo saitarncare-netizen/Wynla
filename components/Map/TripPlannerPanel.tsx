@@ -34,11 +34,15 @@ type Props = {
       allResorts when omitted (e.g. tests). */
   candidates?: Resort[];
   allResorts: Resort[];
-  /** Global pass filter — passed through to the picker as the initial
-      chip selection. The picker keeps its own internal state from
-      there; toggling chips inside the dialog does NOT change the
-      global filter. */
+  /** Global pass filter — passed through to the picker so its chip
+      row is the SAME source of truth as the URL/map filter. Toggling
+      a chip inside the picker calls onPassChange below, which flips
+      the URL, which feeds back here, which re-renders the chips AND
+      narrows the map behind. */
   passFilter?: string[];
+  /** Setter for the global pass filter. Wired directly to MapPage's
+      URL update; without it the picker chips don't change anything. */
+  onPassChange?: (passes: string[]) => void;
   days: number;
   initialOrderedSlugs?: string[];
   isAuthed: boolean;
@@ -77,6 +81,7 @@ export default function TripPlannerPanel({
   candidates,
   allResorts,
   passFilter,
+  onPassChange,
   days,
   initialOrderedSlugs,
   isAuthed,
@@ -900,7 +905,8 @@ export default function TripPlannerPanel({
           fromPoint={pickerFromPoint}
           allResorts={pickerResorts}
           alreadyPicked={pickedSlugs}
-          initialPassFilter={passFilter}
+          passFilter={passFilter}
+          onPassFilterChange={onPassChange}
           onSelect={handlePicked}
           onClose={() => {
             setPickerForIndex(null);

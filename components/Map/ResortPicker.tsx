@@ -18,13 +18,14 @@ type Props = {
   allResorts: Resort[];
   /** Slugs already in the trip — shown as "in trip" tags but still clickable. */
   alreadyPicked: string[];
-  /** Initial pass filter for the in-picker chips. Inherits the global
-      pass filter so a user who has already narrowed to Ikon doesn't
-      have to re-tick it. The picker keeps its own state from there
-      (toggling chips inside the dialog doesn't change the global
-      filter), so a user planning a trip can scope to "Ikon + Epic"
-      for THIS pick without disrupting the map behind. */
-  initialPassFilter?: string[];
+  /** Current global pass filter. The picker's chip row IS this set —
+      toggling a chip in the picker calls onPassFilterChange which
+      updates the URL, which feeds back here, which re-renders the
+      chips AND re-filters the map behind. Single source of truth, so
+      a multi-pass owner ticking "Ikon + Epic" inside the picker also
+      sees the map narrow to those passes. */
+  passFilter?: string[];
+  onPassFilterChange?: (passes: string[]) => void;
   onSelect: (slug: string) => void;
   onClose: () => void;
   /** Live hover preview — fires when the user mouseenters a row so the
@@ -38,30 +39,26 @@ export default function ResortPicker({
   fromPoint,
   allResorts,
   alreadyPicked,
-  initialPassFilter,
+  passFilter,
+  onPassFilterChange,
   onSelect,
   onClose,
   onHover,
 }: Props) {
   const [query, setQuery] = useState("");
   const [sortBy, setSortBy] = useState<"distance" | "name">("distance");
-  // In-picker pass filter. Multi-pass owners commonly look for
-  // "Ikon + Epic" — letting them tick both inside the picker (instead
-  // of the header) means the map filter behind stays untouched.
-  const [passFilter, setPassFilter] = useState<string[]>(
-    () => initialPassFilter ?? [],
-  );
   // Track the most recent `open` value we've seen so we can clear the
   // query whenever the picker opens. React's recommended way to derive
   // state from a prop change without a setState-in-effect cascade.
   const [lastOpen, setLastOpen] = useState(open);
   if (lastOpen !== open) {
     setLastOpen(open);
-    if (open) {
-      setQuery("");
-      setPassFilter(initialPassFilter ?? []);
-    }
+    if (open) setQuery("");
   }
+  // Memoize so downstream useMemo deps see a stable identity (the
+  // ?? would otherwise return a fresh empty array on every render
+  // and invalidate the visible-list memo for nothing).
+  const activePasses = useMemo(() => passFilter ?? [], [passFilter]);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -122,8 +119,8 @@ export default function ResortPicker({
           r.state.toLowerCase().includes(q),
       );
     }
-    if (passFilter.length > 0) {
-      const filterSet = new Set(passFilter);
+    if (activePasses.length > 0) {
+      const filterSet = new Set(activePasses);
       list = list.filter((r) => r.passes.some((p) => filterSet.has(p)));
     }
     list = [...list].sort((a, b) => {
@@ -135,12 +132,13 @@ export default function ResortPicker({
     // virtualization handles the ~450 max comfortably (one repaint on
     // open, then scroll-only).
     return list;
-  }, [enriched, query, sortBy, passFilter]);
+  }, [enriched, query, sortBy, activePasses]);
 
   function togglePassChip(key: string) {
-    setPassFilter((prev) =>
-      prev.includes(key) ? prev.filter((p) => p !== key) : [...prev, key],
-    );
+    const next = activePasses.includes(key)
+      ? activePasses.filter((p) => p !== key)
+      : [...activePasses, key];
+    onPassFilterChange?.(next);
   }
 
   if (!open) return null;
@@ -206,7 +204,7 @@ export default function ResortPicker({
               chips for passes nobody in the picker has. */}
           <div className="mt-2 flex flex-wrap items-center gap-1.5">
             {PASS_KEYS.filter((k) => (passCounts[k] ?? 0) > 0).map((k) => {
-              const isActive = passFilter.includes(k);
+              const isActive = activePasses.includes(k);
               const count = passCounts[k] ?? 0;
               return (
                 <button
@@ -233,10 +231,10 @@ export default function ResortPicker({
                 </button>
               );
             })}
-            {passFilter.length > 0 && (
+            {activePasses.length > 0 && (
               <button
                 type="button"
-                onClick={() => setPassFilter([])}
+                onClick={() => onPassFilterChange?.([])}
                 className="text-[10px] font-semibold text-wn-charcoal/55 underline-offset-2 hover:text-wn-navy hover:underline"
               >
                 Clear

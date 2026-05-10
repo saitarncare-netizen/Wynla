@@ -118,11 +118,16 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   // single legacy value ("?pass=ikon") is still parsed correctly since
   // it splits to ["ikon"]. A resort matches when ANY of its passes is
   // in the active filter set (OR semantics — multi-pass owners see
-  // every resort that's on at least one of their passes).
+  // every resort that's on at least one of their passes). Memoized so
+  // downstream useMemo deps don't change identity on every render.
   const passFilterRaw = searchParams.get("pass");
-  const passFilter: string[] = passFilterRaw
-    ? passFilterRaw.split(",").map((s) => s.trim()).filter(Boolean)
-    : [];
+  const passFilter = useMemo<string[]>(
+    () =>
+      passFilterRaw
+        ? passFilterRaw.split(",").map((s) => s.trim()).filter(Boolean)
+        : [],
+    [passFilterRaw],
+  );
   const sizeParam = searchParams.get("size");
   const sizeFilter: SizeTier | null = isSizeTier(sizeParam) ? sizeParam : null;
   const fromCode = searchParams.get("from") ?? "nyc";
@@ -460,6 +465,9 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         candidates={filteredForPicker}
         allResorts={resorts}
         passFilter={passFilter}
+        onPassChange={(passes) =>
+          updateParam("pass", passes.length === 0 ? null : passes.join(","))
+        }
         days={Math.max(2, days)}
         isAuthed={isAuthed}
         onClose={() => updateParam("plan", null)}
