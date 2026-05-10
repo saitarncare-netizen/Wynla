@@ -34,42 +34,22 @@ export default function TripActions({
   // login — that's the bug Stage 16 fixes.
   const supabase = useMemo(() => createSupabaseBrowserClient(), []);
   const [, startTransition] = useTransition();
-  const [busy, setBusy] = useState<null | "start" | "advance" | "restart" | "delete">(null);
+  const [busy, setBusy] = useState<null | "advance" | "restart" | "delete">(null);
   const [error, setError] = useState<string | null>(null);
 
-  async function startTrip() {
-    setBusy("start");
-    setError(null);
-    const { error } = await supabase
-      .from("trips")
-      .update({
-        started_at: new Date().toISOString(),
-        current_day: 1,
-        completed_days: [],
-      })
-      .eq("id", tripId);
-    setBusy(null);
-    if (error) {
-      setError(error.message);
-      return;
-    }
-    // Open Google Maps with the full multi-waypoint route in a new
-    // tab so the user can drive straight off this screen. Refreshes
-    // the page state in parallel so the day counter updates.
-    if (googleMapsUrl && typeof window !== "undefined") {
-      window.open(googleMapsUrl, "_blank", "noopener,noreferrer");
-    }
-    startTransition(() => router.refresh());
-  }
+  // Display day = the day they're about to complete. Before any progress
+  // exists this is Day 1; once a day is marked complete current_day
+  // becomes the next day, which is also what we show next.
+  const displayDay = isActive ? currentDay : 1;
 
   async function markTodayComplete() {
     setBusy("advance");
     setError(null);
     const { data: prior, error: readErr } = await supabase
       .from("trips")
-      .select("completed_days, current_day")
+      .select("started_at, completed_days, current_day")
       .eq("id", tripId)
-      .single<{ completed_days: number[]; current_day: number | null }>();
+      .single<{ started_at: string | null; completed_days: number[]; current_day: number | null }>();
     if (readErr || !prior) {
       setBusy(null);
       setError(readErr?.message ?? "Couldn't load trip.");
@@ -78,12 +58,18 @@ export default function TripActions({
     const today = prior.current_day ?? 1;
     const nextCompleted = Array.from(new Set([...(prior.completed_days ?? []), today]));
     const nextDay = today + 1 > totalDays ? today : today + 1;
+    const update: Record<string, unknown> = {
+      completed_days: nextCompleted,
+      current_day: nextDay,
+    };
+    // Auto-start: with no separate Start button (Stage 20), the first
+    // "Mark Day complete" is what flips the trip into the active state.
+    if (!prior.started_at) {
+      update.started_at = new Date().toISOString();
+    }
     const { error } = await supabase
       .from("trips")
-      .update({
-        completed_days: nextCompleted,
-        current_day: nextDay,
-      })
+      .update(update)
       .eq("id", tripId);
     setBusy(null);
     if (error) {
@@ -129,75 +115,50 @@ export default function TripActions({
         </p>
       )}
 
-      {!isActive && (
+      {!tripFinished && (
         <>
           <p className="mb-3 text-sm text-wn-charcoal/80">
-            Ready when you are. Hitting Start records today as Day 1 and the trip-day counter advances each time you mark a day complete.
+            {isActive ? (
+              <>
+                <strong className="text-wn-navy">Today is Day {displayDay} of {totalDays}.</strong>
+                {" "}When you&apos;re done skiing, mark the day complete and the next day&apos;s resort moves into focus.
+              </>
+            ) : (
+              <>
+                <strong className="text-wn-navy">Ready to ride.</strong>{" "}
+                Open Google Maps for turn-by-turn driving, then mark each day complete on your way home.
+              </>
+            )}
           </p>
           <div className="flex flex-wrap gap-2">
-            <button
-              type="button"
-              onClick={startTrip}
-              disabled={busy != null}
-              className="rounded-lg bg-wn-navy px-4 py-2 text-sm font-semibold text-white transition hover:bg-wn-navy/90 disabled:opacity-60"
-            >
-              {busy === "start" ? "Starting…" : "🚀 Start trip"}
-            </button>
             {googleMapsUrl && (
               <a
                 href={googleMapsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-lg border border-wn-charcoal/20 bg-white px-4 py-2 text-sm font-semibold text-wn-charcoal transition hover:border-wn-navy hover:text-wn-navy"
+                className="rounded-lg bg-wn-navy px-4 py-2 text-sm font-semibold text-white transition hover:bg-wn-navy/90"
               >
                 🗺️ Open in Google Maps
               </a>
             )}
-            <button
-              type="button"
-              onClick={deleteTrip}
-              disabled={busy != null}
-              className="ml-auto rounded-lg border border-wn-charcoal/20 bg-white px-4 py-2 text-sm font-semibold text-wn-charcoal transition hover:border-red-400 hover:text-red-700 disabled:opacity-60"
-            >
-              Delete
-            </button>
-          </div>
-        </>
-      )}
-
-      {isActive && !tripFinished && (
-        <>
-          <p className="mb-3 text-sm text-wn-charcoal/80">
-            <strong className="text-wn-navy">Today is Day {currentDay} of {totalDays}.</strong>
-            {" "}When you&apos;re done skiing, mark the day complete and the next day&apos;s resort moves into focus.
-          </p>
-          <div className="flex flex-wrap gap-2">
             <button
               type="button"
               onClick={markTodayComplete}
               disabled={busy != null}
-              className="rounded-lg bg-wn-navy px-4 py-2 text-sm font-semibold text-white transition hover:bg-wn-navy/90 disabled:opacity-60"
+              className="rounded-lg border border-wn-charcoal/20 bg-white px-4 py-2 text-sm font-semibold text-wn-charcoal transition hover:border-wn-navy hover:text-wn-navy disabled:opacity-60"
             >
-              {busy === "advance" ? "Saving…" : "✓ Mark Day " + currentDay + " complete"}
+              {busy === "advance" ? "Saving…" : "✓ Mark Day " + displayDay + " complete"}
             </button>
-            {googleMapsUrl && (
-              <a
-                href={googleMapsUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-lg border border-wn-charcoal/20 bg-white px-4 py-2 text-sm font-semibold text-wn-charcoal transition hover:border-wn-navy hover:text-wn-navy"
+            {isActive && (
+              <button
+                type="button"
+                onClick={restart}
+                disabled={busy != null}
+                className="rounded-lg border border-wn-charcoal/20 bg-white px-4 py-2 text-sm font-semibold text-wn-charcoal transition hover:border-wn-charcoal/40 disabled:opacity-60"
               >
-                🗺️ Open in Google Maps
-              </a>
+                Restart trip
+              </button>
             )}
-            <button
-              type="button"
-              onClick={restart}
-              disabled={busy != null}
-              className="rounded-lg border border-wn-charcoal/20 bg-white px-4 py-2 text-sm font-semibold text-wn-charcoal transition hover:border-wn-charcoal/40 disabled:opacity-60"
-            >
-              Restart trip
-            </button>
             <button
               type="button"
               onClick={deleteTrip}
