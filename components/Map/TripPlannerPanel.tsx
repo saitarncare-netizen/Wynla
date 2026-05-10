@@ -432,7 +432,15 @@ export default function TripPlannerPanel({
     // want to overrun. Compute against the would-be next stops since
     // setStops hasn't flushed yet.
     const wouldBeDays = daysPlanned + committed.days;
-    if (wouldBeDays >= days) setPickerForIndex(null);
+    if (wouldBeDays >= days) {
+      setPickerForIndex(null);
+    } else {
+      // Stage 19.6: zoom out to the trip-so-far overview (home +
+      // every confirmed stop) so the user has spatial context
+      // before picking the next one. The camera will zoom back in
+      // once they hover or tap another candidate.
+      onViewFullRoute?.();
+    }
   }
 
   function cancelPendingStop() {
