@@ -460,6 +460,11 @@ export default function MapView({
     const ROUTE_LAYER = "wynla-trip-route-line";
 
     const apply = () => {
+      // eslint-disable-next-line no-console
+      console.log("[wynla] MapView.tripRoute apply:", {
+        tripRouteLen: tripRoute?.length ?? 0,
+        styleLoaded: map.isStyleLoaded(),
+      });
       // Tear down previous markers and route every time — it's a small
       // dataset (≤11 stops) so this is cheaper than diffing.
       for (const m of tripMarkersRef.current) m.remove();

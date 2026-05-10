@@ -305,6 +305,11 @@ export default function TripPlannerPanel({
     ? tripRoutePoints.map((p) => `${p.kind}:${p.lat.toFixed(4)},${p.lng.toFixed(4)}`).join("|")
     : "";
   useEffect(() => {
+    // eslint-disable-next-line no-console
+    console.log("[wynla] onTripRoute emit:", {
+      pointsCount: tripRoutePoints?.length ?? 0,
+      routeKey,
+    });
     onTripRoute?.(tripRoutePoints);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [routeKey]);
@@ -334,22 +339,20 @@ export default function TripPlannerPanel({
   function handlePicked(slug: string) {
     if (pickerForIndex == null) return;
     const targetIndex = pickerForIndex;
+    // eslint-disable-next-line no-console
+    console.log("[wynla] handlePicked:", { slug, targetIndex });
     setPickerForIndex(null);
     onPreviewLeg?.(null);
 
     if (targetIndex === "new") {
-      // Wizard step: instead of silently appending a 1-day stop, show
-      // an inline "How many days at <resort>?" confirm card and let the
-      // user pick the day count before we commit. Camera flies to the
-      // resort during confirm so they can see exactly where it is.
       setPendingStop({ slug, days: Math.max(1, Math.min(remainingDays || 1, 1)) });
     } else {
-      // Swap-resort flow: still in-place. Day count stays the same so
-      // there's nothing to confirm — we just update the slug.
       setStops((prev) => prev.map((s, i) => (i === targetIndex ? { ...s, slug } : s)));
     }
 
     const r = candidateBySlug.get(slug);
+    // eslint-disable-next-line no-console
+    console.log("[wynla] candidateBySlug.get:", { slug, found: !!r, lat: r?.latitude, lng: r?.longitude });
     if (r && onFocusResort) {
       onFocusResort({ lat: Number(r.latitude), lng: Number(r.longitude) });
     }
