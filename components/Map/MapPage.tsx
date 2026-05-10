@@ -113,7 +113,16 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   const [searchOpen, setSearchOpen] = useState(false);
   const [lastSeenPlannerOpen, setLastSeenPlannerOpen] = useState(false);
 
-  const passFilter = searchParams.get("pass");
+  // Pass filter is multi-select. URL stores it as a comma-separated
+  // list ("?pass=ikon,epic"). Empty list = no pass filter active. The
+  // single legacy value ("?pass=ikon") is still parsed correctly since
+  // it splits to ["ikon"]. A resort matches when ANY of its passes is
+  // in the active filter set (OR semantics — multi-pass owners see
+  // every resort that's on at least one of their passes).
+  const passFilterRaw = searchParams.get("pass");
+  const passFilter: string[] = passFilterRaw
+    ? passFilterRaw.split(",").map((s) => s.trim()).filter(Boolean)
+    : [];
   const sizeParam = searchParams.get("size");
   const sizeFilter: SizeTier | null = isSizeTier(sizeParam) ? sizeParam : null;
   const fromCode = searchParams.get("from") ?? "nyc";
@@ -178,7 +187,10 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   const filteredIgnoringSize = useMemo(() => {
     return resorts.filter((r) => {
       if (featuredOnly && r.tier !== "featured") return false;
-      if (passFilter && !(r.passes ?? []).includes(passFilter)) return false;
+      if (passFilter.length > 0) {
+        const userPasses = r.passes ?? [];
+        if (!userPasses.some((p) => passFilter.includes(p))) return false;
+      }
       if (nightOnly && !r.has_night_skiing) return false;
       if (withinHours > 0) {
         const dt = driveTimeByResort.get(r.id)?.get(origin.name);
@@ -191,6 +203,25 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   const filtered = useMemo(() => {
     return filteredIgnoringSize.filter((r) => matchesSizeFilter(r.vertical_drop, sizeFilter));
   }, [filteredIgnoringSize, sizeFilter]);
+
+  // Pool offered to the trip-planner picker: every active filter
+  // EXCEPT pass. The picker has its own pass-chip row inside the
+  // dialog, so a multi-pass owner can scope to "Ikon + Epic" for the
+  // current pick without disrupting the map filter behind. We still
+  // honor drive cap / size / night / featured because those are about
+  // whether the user can actually get to / use the resort.
+  const filteredForPicker = useMemo(() => {
+    return resorts.filter((r) => {
+      if (featuredOnly && r.tier !== "featured") return false;
+      if (nightOnly && !r.has_night_skiing) return false;
+      if (withinHours > 0) {
+        const dt = driveTimeByResort.get(r.id)?.get(origin.name);
+        if (!dt || dt.duration_seconds > withinHours * 3600) return false;
+      }
+      if (!matchesSizeFilter(r.vertical_drop, sizeFilter)) return false;
+      return true;
+    });
+  }, [resorts, featuredOnly, nightOnly, withinHours, origin, driveTimeByResort, sizeFilter]);
 
   // Count of resorts hidden specifically because they have NULL vertical_drop
   // and a size filter is active. 0 when no filter active or no NULL hits.
@@ -346,7 +377,9 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
           hiddenByNullSize={hiddenByNullSize}
           filteredCount={filtered.length}
           totalCount={resorts.length}
-          onPassChange={(p) => updateParam("pass", p)}
+          onPassChange={(passes) =>
+            updateParam("pass", passes.length === 0 ? null : passes.join(","))
+          }
           onFromCity={handleFromCity}
           onFromGeo={handleFromGeo}
           onWithinChange={(w) => updateParam("within", w)}
@@ -424,8 +457,9 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
       <TripPlannerPanel
         open={plannerOpen}
         origin={origin}
-        candidates={filtered}
+        candidates={filteredForPicker}
         allResorts={resorts}
+        passFilter={passFilter}
         days={Math.max(2, days)}
         isAuthed={isAuthed}
         onClose={() => updateParam("plan", null)}

@@ -265,7 +265,17 @@ export default async function TripPage({
           />
         </section>
 
-        <ol className="flex flex-col gap-3">
+        {/* Timeline view — Home → Resort → Resort → Home, with each
+            drive leg made explicit as a dashed connector showing the
+            estimated time. Stage 19 redesign. The previous layout
+            tucked drive time inside each day card's header so the
+            ordering / direction of the trip wasn't obvious at a glance. */}
+        <ol className="flex flex-col">
+          {/* Origin card */}
+          <li>
+            <OriginCard label={trip.origin_label ?? "Home"} kind="start" />
+          </li>
+
           {expandedSlugs.map((slug, i) => {
             const dayNum = i + 1;
             const r = bySlug.get(slug);
@@ -277,90 +287,77 @@ export default async function TripPage({
             const primary = primaryPass(r?.passes ?? []);
             const dot = passColor(primary);
             return (
-              <li
-                key={i}
-                className={`rounded-xl border bg-white p-4 transition ${
-                  isCurrent
-                    ? "border-wn-navy ring-2 ring-wn-navy/20"
-                    : completed
-                      ? "border-wn-charcoal/10 opacity-70"
-                      : "border-wn-charcoal/10"
-                }`}
-              >
-                <div className="mb-1 flex items-baseline justify-between text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
-                  <span>
-                    Day {dayNum}
-                    {completed && <span className="ml-2 text-emerald-700">✓ done</span>}
-                    {isCurrent && <span className="ml-2 text-wn-navy">today</span>}
-                    {isFuture && <span className="ml-2 text-wn-charcoal/45">upcoming</span>}
-                  </span>
-                  <span className="text-wn-charcoal/45 normal-case tracking-normal">
-                    {stayPut ? "stay put" : `≈ ${formatDriveTime(leg.driveSeconds)} drive`}
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span
-                    className="h-3 w-3 shrink-0 rounded-full"
-                    style={{ backgroundColor: dot }}
-                    aria-hidden="true"
-                  />
-                  {r ? (
-                    <Link
-                      href={`/resort/${r.slug}`}
-                      className="text-base font-bold text-wn-navy hover:underline"
-                    >
-                      {r.name}
-                    </Link>
-                  ) : (
-                    <span className="text-base font-bold text-wn-charcoal/55">{slug}</span>
-                  )}
-                  {r && (
-                    <span className="text-[11px] text-wn-charcoal/55">{r.state}</span>
-                  )}
-                </div>
-                {r && (r.passes ?? []).length > 0 && (
-                  <div className="mt-2 flex flex-wrap gap-1">
-                    {(r.passes ?? []).slice(0, 4).map((p) => (
-                      <span
-                        key={p}
-                        className="rounded px-1.5 py-0.5 text-[10px] font-semibold text-white"
-                        style={{ backgroundColor: passColor(p) }}
-                      >
-                        {passLabel(p)}
-                      </span>
-                    ))}
+              <li key={i}>
+                <TimelineLeg
+                  kind={stayPut ? "stay" : "drive"}
+                  durationSeconds={leg.driveSeconds}
+                />
+                <div
+                  className={`rounded-xl border bg-white p-4 transition ${
+                    isCurrent
+                      ? "border-wn-navy ring-2 ring-wn-navy/20"
+                      : completed
+                        ? "border-wn-charcoal/10 opacity-70"
+                        : "border-wn-charcoal/10"
+                  }`}
+                >
+                  <div className="mb-1 text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
+                    <span>
+                      Day {dayNum}
+                      {completed && <span className="ml-2 text-emerald-700">✓ done</span>}
+                      {isCurrent && <span className="ml-2 text-wn-navy">today</span>}
+                      {isFuture && <span className="ml-2 text-wn-charcoal/45">upcoming</span>}
+                    </span>
                   </div>
-                )}
-                {r && (r.vertical_drop || r.total_trails) && (
-                  <p className="mt-1 text-[11px] text-wn-charcoal/55">
-                    {r.vertical_drop != null && `${r.vertical_drop.toLocaleString()} ft vert`}
-                    {r.vertical_drop && r.total_trails ? " · " : ""}
-                    {r.total_trails != null && `${r.total_trails} trails`}
-                  </p>
-                )}
-                {!stayPut && i === 0 && (
-                  <p className="mt-1.5 text-[11px] text-wn-charcoal/55">
-                    From {leg.fromLabel}
-                  </p>
-                )}
-                {!stayPut && i > 0 && (
-                  <p className="mt-1.5 text-[11px] text-wn-charcoal/55">
-                    From {leg.fromLabel} the night before
-                  </p>
-                )}
+                  <div className="flex items-center gap-2">
+                    <span
+                      className="h-3 w-3 shrink-0 rounded-full"
+                      style={{ backgroundColor: dot }}
+                      aria-hidden="true"
+                    />
+                    {r ? (
+                      <Link
+                        href={`/resort/${r.slug}`}
+                        className="text-base font-bold text-wn-navy hover:underline"
+                      >
+                        {r.name}
+                      </Link>
+                    ) : (
+                      <span className="text-base font-bold text-wn-charcoal/55">{slug}</span>
+                    )}
+                    {r && (
+                      <span className="text-[11px] text-wn-charcoal/55">{r.state}</span>
+                    )}
+                  </div>
+                  {r && (r.passes ?? []).length > 0 && (
+                    <div className="mt-2 flex flex-wrap gap-1">
+                      {(r.passes ?? []).slice(0, 4).map((p) => (
+                        <span
+                          key={p}
+                          className="rounded px-1.5 py-0.5 text-[10px] font-semibold text-white"
+                          style={{ backgroundColor: passColor(p) }}
+                        >
+                          {passLabel(p)}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  {r && (r.vertical_drop || r.total_trails) && (
+                    <p className="mt-1 text-[11px] text-wn-charcoal/55">
+                      {r.vertical_drop != null && `${r.vertical_drop.toLocaleString()} ft vert`}
+                      {r.vertical_drop && r.total_trails ? " · " : ""}
+                      {r.total_trails != null && `${r.total_trails} trails`}
+                    </p>
+                  )}
+                </div>
               </li>
             );
           })}
-          <li className="rounded-xl border border-dashed border-wn-charcoal/20 bg-white p-3">
-            <div className="text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
-              After day {expandedSlugs.length}
-            </div>
-            <div className="mt-1 flex items-baseline gap-2">
-              <span className="text-sm font-bold text-wn-navy">🏠 Drive home</span>
-              <span className="text-xs text-wn-charcoal/60">
-                ≈ {formatDriveTime(homeLegSeconds)}
-              </span>
-            </div>
+
+          {/* Final leg + home card */}
+          <li>
+            <TimelineLeg kind="drive" durationSeconds={homeLegSeconds} />
+            <OriginCard label={trip.origin_label ?? "Home"} kind="end" />
           </li>
         </ol>
 
@@ -394,6 +391,63 @@ function SummaryTile({ label, value }: { label: string; value: string }) {
       </div>
       <div className="mt-0.5 text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
         {label}
+      </div>
+    </div>
+  );
+}
+
+// Origin card — the home/start anchor at the top and bottom of the
+// timeline. Distinct from a day card so it's visually obvious where
+// the trip starts and ends.
+function OriginCard({ label, kind }: { label: string; kind: "start" | "end" }) {
+  return (
+    <div className="flex items-center gap-3 rounded-xl border border-wn-charcoal/15 bg-wn-offwhite px-4 py-3 shadow-sm">
+      <span className="text-2xl leading-none" aria-hidden="true">
+        🏠
+      </span>
+      <div className="min-w-0 flex-1">
+        <div className="text-[10px] font-semibold uppercase tracking-[0.15em] text-wn-charcoal/55">
+          {kind === "start" ? "Trip start" : "Trip end"}
+        </div>
+        <div className="truncate text-base font-bold text-wn-navy">{label}</div>
+      </div>
+    </div>
+  );
+}
+
+// Vertical connector between trip cards. Shows a dashed line on the
+// left + a centered duration chip. "stay" kind is used when a stop
+// repeats (basecamp days) — connector becomes a small "stay put" pill
+// rather than a drive estimate to keep the timeline readable.
+function TimelineLeg({
+  kind,
+  durationSeconds,
+}: {
+  kind: "drive" | "stay";
+  durationSeconds: number;
+}) {
+  const isStay = kind === "stay";
+  return (
+    <div className="relative flex min-h-[44px] items-center py-1.5 pl-4 sm:pl-6">
+      {/* Dashed vertical line — sits flush with the cards above and
+          below by stretching the parent's full vertical extent. */}
+      <span
+        aria-hidden="true"
+        className={`absolute bottom-0 left-4 top-0 border-l-2 border-dashed sm:left-6 ${
+          isStay ? "border-wn-charcoal/20" : "border-wn-navy/35"
+        }`}
+      />
+      <div
+        className={`relative ml-4 inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-semibold backdrop-blur-sm sm:ml-6 ${
+          isStay
+            ? "border-wn-charcoal/15 bg-wn-offwhite text-wn-charcoal/70"
+            : "border-wn-navy/25 bg-white text-wn-navy"
+        }`}
+      >
+        <span aria-hidden="true">{isStay ? "🏔️" : "🚗"}</span>
+        <span>
+          {isStay ? "stay put" : `≈ ${formatDriveTime(durationSeconds)} drive`}
+        </span>
       </div>
     </div>
   );

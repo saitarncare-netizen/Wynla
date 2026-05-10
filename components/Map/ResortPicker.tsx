@@ -8,6 +8,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { haversineMeters, estimateDriveSeconds } from "@/lib/distance";
 import { formatDriveTime } from "@/lib/origins";
+import { PASS_COLORS, PASS_KEYS, PASS_LABELS } from "@/lib/passColors";
 import type { Resort } from "./MapPage";
 
 type Props = {
@@ -17,6 +18,13 @@ type Props = {
   allResorts: Resort[];
   /** Slugs already in the trip — shown as "in trip" tags but still clickable. */
   alreadyPicked: string[];
+  /** Initial pass filter for the in-picker chips. Inherits the global
+      pass filter so a user who has already narrowed to Ikon doesn't
+      have to re-tick it. The picker keeps its own state from there
+      (toggling chips inside the dialog doesn't change the global
+      filter), so a user planning a trip can scope to "Ikon + Epic"
+      for THIS pick without disrupting the map behind. */
+  initialPassFilter?: string[];
   onSelect: (slug: string) => void;
   onClose: () => void;
   /** Live hover preview — fires when the user mouseenters a row so the
@@ -30,19 +38,29 @@ export default function ResortPicker({
   fromPoint,
   allResorts,
   alreadyPicked,
+  initialPassFilter,
   onSelect,
   onClose,
   onHover,
 }: Props) {
   const [query, setQuery] = useState("");
   const [sortBy, setSortBy] = useState<"distance" | "name">("distance");
+  // In-picker pass filter. Multi-pass owners commonly look for
+  // "Ikon + Epic" — letting them tick both inside the picker (instead
+  // of the header) means the map filter behind stays untouched.
+  const [passFilter, setPassFilter] = useState<string[]>(
+    () => initialPassFilter ?? [],
+  );
   // Track the most recent `open` value we've seen so we can clear the
   // query whenever the picker opens. React's recommended way to derive
   // state from a prop change without a setState-in-effect cascade.
   const [lastOpen, setLastOpen] = useState(open);
   if (lastOpen !== open) {
     setLastOpen(open);
-    if (open) setQuery("");
+    if (open) {
+      setQuery("");
+      setPassFilter(initialPassFilter ?? []);
+    }
   }
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -73,11 +91,26 @@ export default function ResortPicker({
           slug: r.slug,
           name: r.name,
           state: r.state,
+          passes: r.passes ?? [],
           driveSeconds: estimateDriveSeconds(meters),
           alreadyInTrip: pickedSet.has(r.slug),
         };
       });
   }, [allResorts, fromPoint, alreadyPicked]);
+
+  // Pass counts inside the picker — used for chip badges so the user
+  // can see "12 Ikon · 18 Epic" before clicking. Counts respect the
+  // pre-pass filtering (whatever the parent passed in `allResorts`),
+  // so they line up with what's actually pickable.
+  const passCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    for (const r of enriched) {
+      for (const p of r.passes) {
+        counts[p] = (counts[p] ?? 0) + 1;
+      }
+    }
+    return counts;
+  }, [enriched]);
 
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -89,6 +122,10 @@ export default function ResortPicker({
           r.state.toLowerCase().includes(q),
       );
     }
+    if (passFilter.length > 0) {
+      const filterSet = new Set(passFilter);
+      list = list.filter((r) => r.passes.some((p) => filterSet.has(p)));
+    }
     list = [...list].sort((a, b) => {
       if (sortBy === "name") return a.name.localeCompare(b.name);
       return a.driveSeconds - b.driveSeconds;
@@ -98,7 +135,13 @@ export default function ResortPicker({
     // virtualization handles the ~450 max comfortably (one repaint on
     // open, then scroll-only).
     return list;
-  }, [enriched, query, sortBy]);
+  }, [enriched, query, sortBy, passFilter]);
+
+  function togglePassChip(key: string) {
+    setPassFilter((prev) =>
+      prev.includes(key) ? prev.filter((p) => p !== key) : [...prev, key],
+    );
+  }
 
   if (!open) return null;
 
@@ -156,6 +199,51 @@ export default function ResortPicker({
             onChange={(e) => setQuery(e.target.value)}
             className="mt-2 w-full rounded-md border border-wn-charcoal/20 bg-white px-3 py-2 text-sm font-medium text-wn-charcoal placeholder:text-wn-charcoal/40 focus:border-wn-navy focus:outline-none focus:ring-2 focus:ring-wn-navy/20"
           />
+          {/* Pass-filter chip row. Multi-pass owners frequently want
+              "Ikon + Epic" — clicking a chip toggles inclusion (OR
+              semantics). Only chips with at least one matching resort
+              in the current list are shown so we don't render dead
+              chips for passes nobody in the picker has. */}
+          <div className="mt-2 flex flex-wrap items-center gap-1.5">
+            {PASS_KEYS.filter((k) => (passCounts[k] ?? 0) > 0).map((k) => {
+              const isActive = passFilter.includes(k);
+              const count = passCounts[k] ?? 0;
+              return (
+                <button
+                  key={k}
+                  type="button"
+                  onClick={() => togglePassChip(k)}
+                  className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold transition ${
+                    isActive
+                      ? "border-wn-navy bg-wn-navy text-white"
+                      : "border-wn-charcoal/20 bg-white text-wn-charcoal hover:border-wn-charcoal/40"
+                  }`}
+                  aria-pressed={isActive}
+                  title={`${PASS_LABELS[k]} (${count})`}
+                >
+                  <span
+                    className="block h-1.5 w-1.5 rounded-full"
+                    style={{ backgroundColor: PASS_COLORS[k] }}
+                    aria-hidden="true"
+                  />
+                  <span>{PASS_LABELS[k]}</span>
+                  <span className={isActive ? "text-white/70" : "text-wn-charcoal/55"}>
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
+            {passFilter.length > 0 && (
+              <button
+                type="button"
+                onClick={() => setPassFilter([])}
+                className="text-[10px] font-semibold text-wn-charcoal/55 underline-offset-2 hover:text-wn-navy hover:underline"
+              >
+                Clear
+              </button>
+            )}
+          </div>
+
           <div className="mt-2 flex gap-1 text-[10px]">
             <button
               type="button"

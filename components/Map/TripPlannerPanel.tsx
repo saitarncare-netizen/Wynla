@@ -34,6 +34,11 @@ type Props = {
       allResorts when omitted (e.g. tests). */
   candidates?: Resort[];
   allResorts: Resort[];
+  /** Global pass filter — passed through to the picker as the initial
+      chip selection. The picker keeps its own internal state from
+      there; toggling chips inside the dialog does NOT change the
+      global filter. */
+  passFilter?: string[];
   days: number;
   initialOrderedSlugs?: string[];
   isAuthed: boolean;
@@ -71,6 +76,7 @@ export default function TripPlannerPanel({
   origin,
   candidates,
   allResorts,
+  passFilter,
   days,
   initialOrderedSlugs,
   isAuthed,
@@ -352,7 +358,11 @@ export default function TripPlannerPanel({
   function adjustPendingDays(delta: number) {
     setPendingStop((prev) => {
       if (!prev) return prev;
-      const next = Math.max(1, Math.min(days, prev.days + delta));
+      // Cap at days that remain in the trip budget — total days minus
+      // every already-confirmed stop's days. The pendingStop itself
+      // isn't in `stops` yet, so daysPlanned excludes it correctly.
+      const cap = Math.max(1, days - daysPlanned);
+      const next = Math.max(1, Math.min(cap, prev.days + delta));
       return { ...prev, days: next };
     });
   }
@@ -370,13 +380,22 @@ export default function TripPlannerPanel({
   }
 
   function adjustStopDays(idx: number, delta: number) {
-    setStops((prev) =>
-      prev.map((s, i) => {
+    setStops((prev) => {
+      // Cap each stop at trip total minus the days already used by
+      // OTHER stops. Stage 19 fix — previously capped at total days
+      // alone, so a 3-day trip with stop 1 = 1 day let stop 2 climb
+      // to 3 days (overrun). Now stop 2's max is 3 - 1 = 2.
+      const otherDays = prev.reduce(
+        (sum, s, j) => (j === idx ? sum : sum + s.days),
+        0,
+      );
+      const cap = Math.max(1, days - otherDays);
+      return prev.map((s, i) => {
         if (i !== idx) return s;
-        const next = Math.max(1, Math.min(days, s.days + delta));
+        const next = Math.max(1, Math.min(cap, s.days + delta));
         return { ...s, days: next };
-      }),
-    );
+      });
+    });
   }
 
   function removeStop(idx: number) {
@@ -628,9 +647,10 @@ export default function TripPlannerPanel({
                       <button
                         type="button"
                         onClick={() => adjustStopDays(i, 1)}
-                        disabled={stop.days >= days}
+                        disabled={remainingDays === 0}
                         className="inline-flex h-6 w-6 items-center justify-center rounded text-wn-charcoal hover:bg-wn-charcoal/10 disabled:opacity-30"
                         aria-label="More days"
+                        title={remainingDays === 0 ? "All trip days are already planned — remove a day from another stop first." : "More days at this stop"}
                       >
                         +
                       </button>
@@ -691,7 +711,7 @@ export default function TripPlannerPanel({
                       <button
                         type="button"
                         onClick={() => adjustPendingDays(1)}
-                        disabled={pendingStop.days >= days}
+                        disabled={pendingStop.days >= Math.max(1, days - daysPlanned)}
                         className="inline-flex h-7 w-7 items-center justify-center rounded text-wn-navy hover:bg-wn-navy/10 disabled:opacity-30"
                         aria-label="More days"
                       >
@@ -857,6 +877,7 @@ export default function TripPlannerPanel({
           fromPoint={pickerFromPoint}
           allResorts={pickerResorts}
           alreadyPicked={pickedSlugs}
+          initialPassFilter={passFilter}
           onSelect={handlePicked}
           onClose={() => {
             setPickerForIndex(null);

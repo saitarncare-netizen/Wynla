@@ -6,7 +6,7 @@ import { PASS_COLORS, PASS_KEYS, PASS_LABELS } from "@/lib/passColors";
 import { SIZE_TIER_LABELS, type SizeTier } from "@/lib/sizeTier";
 
 type Props = {
-  passFilter: string | null;
+  passFilter: string[];
   origin: Origin;
   withinHours: number;
   days: number;
@@ -16,7 +16,7 @@ type Props = {
   hiddenByNullSize: number;
   filteredCount: number;
   totalCount: number;
-  onPassChange: (p: string | null) => void;
+  onPassChange: (passes: string[]) => void;
   onFromCity: (code: string) => void;
   onFromGeo: (lat: number, lng: number) => void;
   onWithinChange: (w: string | null) => void;
@@ -85,11 +85,14 @@ export default function FilterBar({
   const isMultiDay = days >= 2;
 
   const activeChips: ActiveChip[] = [];
-  if (passFilter) {
+  if (passFilter.length > 0) {
+    const labels = passFilter
+      .map((p) => PASS_LABELS[p as keyof typeof PASS_LABELS] ?? p)
+      .join(" + ");
     activeChips.push({
       key: "pass",
-      label: `Pass: ${PASS_LABELS[passFilter as keyof typeof PASS_LABELS] ?? passFilter}`,
-      onRemove: () => onPassChange(null),
+      label: `Pass: ${labels}`,
+      onRemove: () => onPassChange([]),
     });
   }
   if (driveActive) {
@@ -133,10 +136,16 @@ export default function FilterBar({
   const tripLabel = `${fromLabel} · ${tripLabelTail}`;
   const driveLabel = driveActive ? `≤ ${withinHours}h drive` : "Any drive";
 
-  // Pass dropdown label shows the active pass + colored dot when one is set.
-  const passLabel = passFilter
-    ? PASS_LABELS[passFilter as keyof typeof PASS_LABELS] ?? "All passes"
-    : "All passes";
+  // Pass dropdown label — multi-select aware. "All passes" when empty,
+  // single label when one selected, "Ikon + Epic" when multiple.
+  const passLabel =
+    passFilter.length === 0
+      ? "All passes"
+      : passFilter.length === 1
+        ? PASS_LABELS[passFilter[0] as keyof typeof PASS_LABELS] ?? passFilter[0]
+        : passFilter
+            .map((p) => PASS_LABELS[p as keyof typeof PASS_LABELS] ?? p)
+            .join(" + ");
 
   return (
     <div className="flex flex-col gap-2 px-4 pb-3 sm:px-6">
@@ -239,16 +248,27 @@ function PassDropdown({
   label,
   onPassChange,
 }: {
-  passFilter: string | null;
+  passFilter: string[];
   passCounts: Record<string, number>;
   totalPass: number;
   label: string;
-  onPassChange: (p: string | null) => void;
+  onPassChange: (passes: string[]) => void;
 }) {
   const { open, setOpen, ref } = useDropdown();
-  const activeColor = passFilter
-    ? PASS_COLORS[passFilter as keyof typeof PASS_COLORS]
-    : null;
+  // For the button-color dot, show the first selected pass's color
+  // when exactly one is active. With multi-select we drop the dot
+  // entirely — the label "Ikon + Epic" already conveys the state.
+  const activeColor =
+    passFilter.length === 1
+      ? PASS_COLORS[passFilter[0] as keyof typeof PASS_COLORS]
+      : null;
+
+  function togglePass(key: string) {
+    const next = passFilter.includes(key)
+      ? passFilter.filter((p) => p !== key)
+      : [...passFilter, key];
+    onPassChange(next);
+  }
 
   return (
     <div className="relative shrink-0" ref={ref}>
@@ -256,7 +276,7 @@ function PassDropdown({
         type="button"
         onClick={() => setOpen((v) => !v)}
         className={`inline-flex min-h-[36px] items-center gap-1.5 whitespace-nowrap rounded-md border px-3 py-1.5 text-xs font-semibold transition-colors duration-200 ${
-          passFilter
+          passFilter.length > 0
             ? "border-wn-navy bg-wn-navy text-white"
             : "border-wn-charcoal/20 bg-white text-wn-charcoal hover:border-wn-charcoal/40"
         }`}
@@ -279,9 +299,9 @@ function PassDropdown({
           className="absolute left-0 mt-1 w-64 rounded-lg border border-wn-charcoal/15 bg-white p-2 shadow-lg z-30"
         >
           <DropdownRow
-            active={passFilter === null}
+            active={passFilter.length === 0}
             onClick={() => {
-              onPassChange(null);
+              onPassChange([]);
               setOpen(false);
             }}
           >
@@ -289,18 +309,33 @@ function PassDropdown({
             <span className="ml-auto text-wn-charcoal/55">{totalPass}</span>
           </DropdownRow>
           <div className="my-1 h-px bg-wn-charcoal/10" />
+          <p className="mb-1 px-2 text-[10px] text-wn-charcoal/55">
+            Tap to toggle. Pick multiple if you own more than one pass.
+          </p>
           {PASS_KEYS.map((key) => {
             const count = passCounts[key] ?? 0;
-            const isActive = passFilter === key;
+            const isActive = passFilter.includes(key);
             return (
               <DropdownRow
                 key={key}
                 active={isActive}
-                onClick={() => {
-                  onPassChange(isActive ? null : key);
-                  setOpen(false);
-                }}
+                onClick={() => togglePass(key)}
               >
+                {/* Checkbox indicator — square, fills navy on active */}
+                <span
+                  className={`flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-sm border ${
+                    isActive
+                      ? "border-wn-navy bg-wn-navy text-white"
+                      : "border-wn-charcoal/30 bg-white"
+                  }`}
+                  aria-hidden="true"
+                >
+                  {isActive && (
+                    <svg viewBox="0 0 12 12" className="h-2.5 w-2.5" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M2 6.5L5 9.5L10 3" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  )}
+                </span>
                 <span
                   className="h-2.5 w-2.5 shrink-0 rounded-full"
                   style={{ backgroundColor: PASS_COLORS[key] }}
