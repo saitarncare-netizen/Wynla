@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState, useTransition, useEffect } from "react";
+import { useMemo, useRef, useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import MapView, { type TripRoutePoint } from "./MapView";
 import AlaskaInset from "./AlaskaInset";
@@ -104,7 +104,6 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   );
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [, startTransition] = useTransition();
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [cameraTarget, setCameraTarget] = useState<{ lat: number; lng: number; token: string } | null>(null);
   const [previewLeg, setPreviewLeg] = useState<{ fromLat: number; fromLng: number; toLat: number; toLng: number } | null>(null);
@@ -261,14 +260,17 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
     return counts;
   }, [resorts, featuredOnly]);
 
+  // Stage 21.4 — dropped `startTransition()` around router.replace.
+  // The transition wrapper marked URL writes as low-priority, which on
+  // a phone meant filter taps felt laggy (the user saw the chip toggle
+  // ~150-300ms after tapping). Replace runs synchronously now so the
+  // checkbox visual + map re-filter happen in the same paint.
   function updateParam(key: string, value: string | null) {
     const params = new URLSearchParams(searchParams.toString());
     if (value === null || value === "") params.delete(key);
     else params.set(key, value);
     const qs = params.toString();
-    startTransition(() => {
-      router.replace(qs ? `?${qs}` : "?", { scroll: false });
-    });
+    router.replace(qs ? `?${qs}` : "?", { scroll: false });
   }
 
   // Atomic multi-param update — used when "From here" needs to set
@@ -281,9 +283,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
       else params.set(key, value);
     }
     const qs = params.toString();
-    startTransition(() => {
-      router.replace(qs ? `?${qs}` : "?", { scroll: false });
-    });
+    router.replace(qs ? `?${qs}` : "?", { scroll: false });
   }
 
   // Switch the From-origin to a city. Drops any stale geo lat/lng params.
@@ -301,9 +301,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   }
 
   function clearAll() {
-    startTransition(() => {
-      router.replace("?", { scroll: false });
-    });
+    router.replace("?", { scroll: false });
   }
 
   // Resolve the currently-selected resort once per render (not in click
