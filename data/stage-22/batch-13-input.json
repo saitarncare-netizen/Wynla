@@ -1,0 +1,392 @@
+[
+  {
+    "slug": "snowmass",
+    "name": "Snowmass",
+    "state": "CO",
+    "website_url": "https://www.aspensnowmass.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": 6,
+      "intermediate": 47,
+      "advanced": 17,
+      "expert": 30
+    }
+  },
+  {
+    "slug": "snowriver",
+    "name": "Snowriver",
+    "state": "MI",
+    "website_url": "https://www.snowriver.com",
+    "current_total_trails": 53,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "snowshoe-mountain",
+    "name": "Snowshoe Mountain",
+    "state": "WV",
+    "website_url": "https://www.snowshoemtn.com",
+    "current_total_trails": 56,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "snowstar",
+    "name": "Snowstar Winter Park",
+    "state": "IL",
+    "website_url": "https://skisnowstar.com/",
+    "current_total_trails": 15,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "snowy-range",
+    "name": "Snowy Range Ski Area",
+    "state": "WY",
+    "website_url": "https://www.snowyrangeski.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "soda-springs",
+    "name": "Soda Springs Mountain Resort",
+    "state": "CA",
+    "website_url": "https://www.skisodasprings.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "soldier-hollow",
+    "name": "Soldier Hollow",
+    "state": "UT",
+    "website_url": "https://www.soldierhollow.org",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "soldier-mountain",
+    "name": "Soldier Mountain",
+    "state": "ID",
+    "website_url": "https://soldiermountain.com",
+    "current_total_trails": 35,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "solitude",
+    "name": "Solitude Mountain Resort",
+    "state": "UT",
+    "website_url": "https://www.solitudemountain.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "song-mountain",
+    "name": "Song Mountain",
+    "state": "NY",
+    "website_url": "https://www.songmountain.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "spirit-mountain",
+    "name": "Spirit Mountain",
+    "state": "MN",
+    "website_url": "https://www.spiritmt.com",
+    "current_total_trails": 22,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "spout-springs",
+    "name": "Spout Springs Ski Area",
+    "state": "OR",
+    "website_url": "https://spoutspringsskiarea.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "spring-mountain",
+    "name": "Spring Mountain",
+    "state": "PA",
+    "website_url": "https://www.springmountainadventures.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "spruce-mountain-ski-area",
+    "name": "Spruce Mountain Ski Area",
+    "state": "ME",
+    "website_url": "https://www.sprucemountain.org",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "steamboat",
+    "name": "Steamboat Ski Resort",
+    "state": "CO",
+    "website_url": "https://www.steamboat.com",
+    "current_total_trails": 182,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "steamboat-touring-center",
+    "name": "Steamboat Ski Touring Center",
+    "state": "CO",
+    "website_url": "https://nordicski.net/steamboat-ski-touring-center/",
+    "current_total_trails": 7,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "stevens-pass",
+    "name": "Stevens Pass",
+    "state": "WA",
+    "website_url": "https://www.stevenspass.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "stowe-mountain-resort",
+    "name": "Stowe Mountain Resort",
+    "state": "VT",
+    "website_url": "https://www.stowe.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "stratton-mountain",
+    "name": "Stratton Mountain",
+    "state": "VT",
+    "website_url": "https://www.stratton.com",
+    "current_total_trails": 99,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "sugar-bowl-resort",
+    "name": "Sugar Bowl Resort",
+    "state": "CA",
+    "website_url": "https://www.sugarbowl.com",
+    "current_total_trails": 105,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "sugar-mountain-resort",
+    "name": "Sugar Mountain Resort",
+    "state": "NC",
+    "website_url": "https://www.skisugar.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "sugarbush",
+    "name": "Sugarbush",
+    "state": "VT",
+    "website_url": "https://www.sugarbush.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 46,
+      "advanced": 32,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "sugarloaf",
+    "name": "Sugarloaf",
+    "state": "ME",
+    "website_url": "https://www.sugarloaf.com",
+    "current_total_trails": 176,
+    "current_difficulty_pct": {
+      "beginner": 23,
+      "intermediate": 31,
+      "advanced": 25,
+      "expert": 21
+    }
+  },
+  {
+    "slug": "summit-ski-area",
+    "name": "Summit Ski Area",
+    "state": "OR",
+    "website_url": "https://summitskiarea.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "sun-valley",
+    "name": "Sun Valley Resort",
+    "state": "ID",
+    "website_url": "https://www.sunvalley.com",
+    "current_total_trails": 121,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "sunburst",
+    "name": "Sunburst",
+    "state": "WI",
+    "website_url": "https://www.skisunburst.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "sunburst-area",
+    "name": "Sunburst Ski Area",
+    "state": "WI",
+    "website_url": "https://skisunburst.com/",
+    "current_total_trails": 11,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "sundance",
+    "name": "Sundance Mountain Resort",
+    "state": "UT",
+    "website_url": "https://www.sundanceresort.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "sunday-river",
+    "name": "Sunday River",
+    "state": "ME",
+    "website_url": "https://www.sundayriver.com",
+    "current_total_trails": 139,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "sundown-mountain",
+    "name": "Sundown Mountain",
+    "state": "IA",
+    "website_url": "https://www.sundownmtn.com",
+    "current_total_trails": 21,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  }
+]

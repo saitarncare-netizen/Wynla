@@ -1,0 +1,392 @@
+[
+  {
+    "slug": "blacktail",
+    "name": "Blacktail Mountain Ski Area",
+    "state": "MT",
+    "website_url": "https://blacktailmountain.com",
+    "current_total_trails": 29,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "blue-hills-ski-area",
+    "name": "Blue Hills Ski Area",
+    "state": "MA",
+    "website_url": "https://www.bluehillsboston.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": 40,
+      "intermediate": 33,
+      "advanced": 27,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "blue-knob",
+    "name": "Blue Knob All Seasons Resort",
+    "state": "PA",
+    "website_url": "https://www.blueknob.com",
+    "current_total_trails": 34,
+    "current_difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 35,
+      "advanced": 35,
+      "expert": 9
+    }
+  },
+  {
+    "slug": "blue-mountain-resort",
+    "name": "Blue Mountain Resort",
+    "state": "PA",
+    "website_url": "https://www.skibluemt.com",
+    "current_total_trails": 40,
+    "current_difficulty_pct": {
+      "beginner": 42,
+      "intermediate": 12,
+      "advanced": 36,
+      "expert": 9
+    }
+  },
+  {
+    "slug": "bluewood",
+    "name": "Ski Bluewood",
+    "state": "WA",
+    "website_url": "https://bluewood.com",
+    "current_total_trails": 25,
+    "current_difficulty_pct": {
+      "beginner": 29,
+      "intermediate": 42,
+      "advanced": 29,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "bogus-basin",
+    "name": "Bogus Basin",
+    "state": "ID",
+    "website_url": "https://www.bogusbasin.org",
+    "current_total_trails": 86,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "bolton-valley",
+    "name": "Bolton Valley",
+    "state": "VT",
+    "website_url": "https://www.boltonvalley.com",
+    "current_total_trails": 71,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "boreal-mountain-resort",
+    "name": "Boreal Mountain Resort",
+    "state": "CA",
+    "website_url": "https://www.rideboreal.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "boston-mills",
+    "name": "Boston Mills Ski Resort",
+    "state": "OH",
+    "website_url": "https://www.bmbw.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "bottineau-winter-park",
+    "name": "Bottineau Winter Park",
+    "state": "ND",
+    "website_url": "https://www.skibwp.com",
+    "current_total_trails": 8,
+    "current_difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 33,
+      "advanced": 44,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "bousquet-mountain",
+    "name": "Bousquet Mountain",
+    "state": "MA",
+    "website_url": "https://bousquetmountain.com",
+    "current_total_trails": 23,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "boyne-mountain",
+    "name": "Boyne Mountain Resort",
+    "state": "MI",
+    "website_url": "https://www.boynemountain.com",
+    "current_total_trails": 65,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "brandywine",
+    "name": "Brandywine Ski Resort",
+    "state": "OH",
+    "website_url": "https://www.bmbw.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "breckenridge",
+    "name": "Breckenridge Ski Resort",
+    "state": "CO",
+    "website_url": "https://www.breckenridge.com",
+    "current_total_trails": 187,
+    "current_difficulty_pct": {
+      "beginner": 14,
+      "intermediate": 31,
+      "advanced": 19,
+      "expert": 36
+    }
+  },
+  {
+    "slug": "bretton-woods",
+    "name": "Bretton Woods",
+    "state": "NH",
+    "website_url": "https://www.brettonwoods.com",
+    "current_total_trails": 102,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "brian-head",
+    "name": "Brian Head Resort",
+    "state": "UT",
+    "website_url": "https://www.brianhead.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "bridger-bowl",
+    "name": "Bridger Bowl Ski Area",
+    "state": "MT",
+    "website_url": "https://bridgerbowl.com",
+    "current_total_trails": 75,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "brighton",
+    "name": "Brighton Resort",
+    "state": "UT",
+    "website_url": "https://www.brightonresort.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "bristol-mountain",
+    "name": "Bristol Mountain",
+    "state": "NY",
+    "website_url": "https://www.bristolmountain.com",
+    "current_total_trails": 39,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "bromley-mountain",
+    "name": "Bromley Mountain",
+    "state": "VT",
+    "website_url": "https://www.bromley.com",
+    "current_total_trails": 47,
+    "current_difficulty_pct": {
+      "beginner": 32,
+      "intermediate": 36,
+      "advanced": 32,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "bruce-mound-winter-sports-area",
+    "name": "Bruce Mound Winter Sports Area",
+    "state": "WI",
+    "website_url": "https://www.clarkcountywi.gov/brucemound?fbclid=IwY2xjawGGKnNleHRuA2FlbQIxMAABHVI0TRWfgUqgH2E-x8t200vmclOlQI6wlMJneID4P6hL7n2rBYvFIMewtg_aem___GnBCZLiGgScH-L8YrkfA",
+    "current_total_trails": 10,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "brundage-mountain",
+    "name": "Brundage Mountain",
+    "state": "ID",
+    "website_url": "https://www.brundage.com",
+    "current_total_trails": 70,
+    "current_difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 33,
+      "advanced": 46,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "bryce-resort",
+    "name": "Bryce Resort",
+    "state": "VA",
+    "website_url": "https://www.bryceresort.com",
+    "current_total_trails": 8,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "buck-hill",
+    "name": "Buck Hill",
+    "state": "MN",
+    "website_url": "https://www.buckhill.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": 38,
+      "intermediate": 38,
+      "advanced": 25,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "buena-vista",
+    "name": "Buena Vista Ski Area",
+    "state": "MN",
+    "website_url": "https://www.bvskiarea.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "buffalo-ski-club",
+    "name": "Buffalo Ski Club",
+    "state": "NY",
+    "website_url": "https://www.buffaloskiclub.com",
+    "current_total_trails": 43,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "burke-mountain",
+    "name": "Burke Mountain",
+    "state": "VT",
+    "website_url": "https://www.skiburke.com",
+    "current_total_trails": 53,
+    "current_difficulty_pct": {
+      "beginner": 11,
+      "intermediate": 47,
+      "advanced": 33,
+      "expert": 9
+    }
+  },
+  {
+    "slug": "buttermilk",
+    "name": "Buttermilk",
+    "state": "CO",
+    "website_url": "https://www.aspensnowmass.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 40,
+      "advanced": 26,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "caberfae-peaks",
+    "name": "Caberfae Peaks",
+    "state": "MI",
+    "website_url": "https://www.caberfaepeaks.com",
+    "current_total_trails": 27,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "camden-snow-bowl",
+    "name": "Camden Snow Bowl",
+    "state": "ME",
+    "website_url": "https://www.camdensnowbowl.com",
+    "current_total_trails": 15,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  }
+]

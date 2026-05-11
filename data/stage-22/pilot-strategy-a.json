@@ -1,0 +1,182 @@
+[
+  {
+    "slug": "49-degrees-north",
+    "trails_total": 90,
+    "difficulty_pct": {"beginner": 30, "intermediate": 40, "advanced": 25, "expert": 5},
+    "website_url": "https://www.ski49n.com",
+    "website_alive": true,
+    "source_url": "https://www.ski49n.com/mountain-info/trail-map-stats",
+    "notes": "Found total trails and percentage difficulty breakdown on Trail Map & Stats page"
+  },
+  {
+    "slug": "afton-alps",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.aftonalps.com",
+    "website_alive": true,
+    "source_url": "https://www.aftonalps.com",
+    "notes": "Site returned system error/reservations page on multiple paths; no trail data accessible"
+  },
+  {
+    "slug": "alpine-meadows",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.palisadestahoe.com",
+    "website_alive": true,
+    "source_url": "https://www.palisadestahoe.com",
+    "notes": "Palisades Tahoe site does not break out Alpine Meadows-only stats on landing page; SPA, no SSR trail data"
+  },
+  {
+    "slug": "alpine-valley-mi",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.skialpinevalley.com",
+    "website_alive": true,
+    "source_url": "https://www.skialpinevalley.com/trail-map/",
+    "notes": "Trail map page only shows an image; no text-based trail counts or difficulty breakdown"
+  },
+  {
+    "slug": "alpine-valley-oh",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.alpinevalleyohio.com",
+    "website_alive": true,
+    "source_url": "https://www.alpinevalleyohio.com",
+    "notes": "Site returns a system error page; no trail data available"
+  },
+  {
+    "slug": "alpine-valley-wi",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.alpinevalleyresort.com",
+    "website_alive": true,
+    "source_url": "https://www.alpinevalleyresort.com/trail-map/",
+    "notes": "Trail map page only shows image; no machine-readable trail counts"
+  },
+  {
+    "slug": "alta",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.alta.com",
+    "website_alive": true,
+    "source_url": "https://www.alta.com",
+    "notes": "Trail map is a PDF; homepage and plan-your-trip page reference skill levels but no counts or pcts in SSR HTML"
+  },
+  {
+    "slug": "alyeska-resort",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.alyeskaresort.com",
+    "website_alive": true,
+    "source_url": "https://www.alyeskaresort.com/mountain-report-winter/",
+    "notes": "Trail map is a PDF; SPA without SSR trail stats"
+  },
+  {
+    "slug": "andes-tower-hills",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.andestowerhills.com",
+    "website_alive": true,
+    "source_url": "https://www.andestowerhills.com",
+    "notes": "Homepage lacks trail count and difficulty breakdown; no dedicated stats page in SSR HTML"
+  },
+  {
+    "slug": "angel-fire-resort",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.angelfireresort.com",
+    "website_alive": true,
+    "source_url": "https://www.angelfireresort.com",
+    "notes": "Winter mountain pages 404 on direct paths; homepage SSR HTML has no trail stats"
+  },
+  {
+    "slug": "antelope-butte",
+    "trails_total": 30,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.antelopebutte.org",
+    "website_alive": true,
+    "source_url": "https://www.skiantelopebutte.com/",
+    "notes": "Redirects to skiantelopebutte.com which states '30+ Trails'; no difficulty breakdown given (using 30 as floor)"
+  },
+  {
+    "slug": "anthony-lakes",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.anthonylakes.com",
+    "website_alive": true,
+    "source_url": "https://anthonylakes.com/winter/maps-stats/",
+    "notes": "Maps & Stats page lists vertical/lifts but no trail count or difficulty breakdown"
+  },
+  {
+    "slug": "appalachian-ski-mountain",
+    "trails_total": 13,
+    "difficulty_pct": {"beginner": 25, "intermediate": 50, "advanced": 25, "expert": null},
+    "website_url": "https://www.appskimtn.com",
+    "website_alive": true,
+    "source_url": "https://appskimtn.com/mountain-stats",
+    "notes": "Mountain Stats page lists 13 slopes with 25/50/25 easy/more/most difficult split (no expert tier called out)"
+  },
+  {
+    "slug": "apple-mountain",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.applemountain.com",
+    "website_alive": true,
+    "source_url": "https://www.applemountain.com",
+    "notes": "Site is now golf/dining/events only; ski page redirects back to homepage with no trail content"
+  },
+  {
+    "slug": "arapahoe-basin",
+    "trails_total": 147,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.arapahoebasin.com",
+    "website_alive": true,
+    "source_url": "https://www.arapahoebasin.com",
+    "notes": "Homepage lists 147 total runs; difficulty breakdown not on landing page or /the-mountain (404)"
+  },
+  {
+    "slug": "arctic-valley",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://skiarctic.net",
+    "website_alive": false,
+    "source_url": "https://skiarctic.net",
+    "notes": "Site returns HTTP 500 on multiple attempts; data not accessible"
+  },
+  {
+    "slug": "arizona-snowbowl",
+    "trails_total": 61,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.snowbowl.ski",
+    "website_alive": true,
+    "source_url": "https://www.snowbowl.ski/the-mountain/trail-maps",
+    "notes": "Trail Maps page states 61 total trails (54 lift-served); no difficulty percentages given"
+  },
+  {
+    "slug": "ascutney-outdoors",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.ascutneyoutdoors.org",
+    "website_alive": true,
+    "source_url": "https://www.ascutneyoutdoors.org",
+    "notes": "Mentions '35+ miles of trails' but no count of named ski runs or difficulty breakdown"
+  },
+  {
+    "slug": "aspen-highlands",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.aspensnowmass.com",
+    "website_alive": true,
+    "source_url": "https://www.aspensnowmass.com/our-mountains/aspen-highlands",
+    "notes": "Trail maps are PDFs only; SSR HTML has no trail counts or difficulty breakdown"
+  },
+  {
+    "slug": "aspen-mountain",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.aspensnowmass.com",
+    "website_alive": true,
+    "source_url": "https://www.aspensnowmass.com/our-mountains/aspen-mountain",
+    "notes": "Trail maps are PDFs only; SSR HTML lacks trail counts and difficulty breakdown"
+  }
+]

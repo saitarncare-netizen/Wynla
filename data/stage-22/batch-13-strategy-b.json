@@ -1,0 +1,392 @@
+[
+  {
+    "slug": "snowmass",
+    "trails_total": 98,
+    "difficulty_pct": {
+      "beginner": 6,
+      "intermediate": 43,
+      "advanced": 17,
+      "expert": 34
+    },
+    "source_url": "https://www.onthesnow.com/colorado/aspen-snowmass/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "trails_total=98 from official Snowmass count (commonly cited); difficulty_pct from OnTheSnow Aspen Snowmass page (combined). skiresort.info has 237 km of slopes (5/48/47 easy/int/diff 3-bucket). Aspen Snowmass system lists 366 across all 4 mountains."
+  },
+  {
+    "slug": "snowriver",
+    "trails_total": 73,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 32,
+      "advanced": 32,
+      "expert": 16
+    },
+    "source_url": "https://www.snowriver.com/mountain-info/trail-map-mountain-stats",
+    "source_site": "official_via_search",
+    "notes": "73 trails & glades; 20% Beginner / 32% More Difficult / 32% Most Difficult / 16% Expert per Snowriver official stats."
+  },
+  {
+    "slug": "snowshoe-mountain",
+    "trails_total": 61,
+    "difficulty_pct": {
+      "beginner": 40,
+      "intermediate": 33,
+      "advanced": 25,
+      "expert": 2
+    },
+    "source_url": "https://www.onthesnow.com/west-virginia/snowshoe-mountain-resort/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "61 runs / 257 acres per OnTheSnow."
+  },
+  {
+    "slug": "snowstar",
+    "trails_total": 15,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 50,
+      "advanced": 25,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/illinois/ski-snowstar-winter-sports-park/ski-resort",
+    "source_site": "onthesnow_via_search",
+    "notes": "15 trails per OnTheSnow; 25/50/25 beginner/intermediate/advanced 3-bucket; expert=0 explicit."
+  },
+  {
+    "slug": "snowy-range",
+    "trails_total": 27,
+    "difficulty_pct": {
+      "beginner": 26,
+      "intermediate": 44,
+      "advanced": 30,
+      "expert": null
+    },
+    "source_url": "https://snowyrangeski.com/lifts-and-trails-report/",
+    "source_site": "official_via_search",
+    "notes": "27 trails (7 beginner / 12 intermediate / 8 expert); percentages derived from trail counts (7/27=26%, 12/27=44%, 8/27=30%). 3-bucket source; advanced/expert split not given."
+  },
+  {
+    "slug": "soda-springs",
+    "trails_total": 19,
+    "difficulty_pct": {
+      "beginner": 53,
+      "intermediate": 16,
+      "advanced": 32,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/california/soda-springs/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "19 trails per OnTheSnow; expert not listed by source."
+  },
+  {
+    "slug": "soldier-hollow",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 44,
+      "intermediate": 25,
+      "advanced": 31,
+      "expert": null
+    },
+    "source_url": "https://nordic-pulse.com/centres/US/UT/Soldier-Hollow",
+    "source_site": "nordic_pulse_via_search",
+    "notes": "Nordic center; 28.22 km total trails (12.29 easy / 7.07 int / 8.87 adv); reported as km not trail count, so trails_total left null. 3-bucket source."
+  },
+  {
+    "slug": "soldier-mountain",
+    "trails_total": 36,
+    "difficulty_pct": {
+      "beginner": 36,
+      "intermediate": 32,
+      "advanced": 32,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/soldier-mountain/",
+    "source_site": "skiresort.info",
+    "notes": "36 trails per OnTheSnow/Wikipedia (commonly cited); difficulty_pct mapped from skiresort.info 3-bucket km data (easy 36% / int 32% / diff 32%). Expert split unknown."
+  },
+  {
+    "slug": "solitude",
+    "trails_total": 82,
+    "difficulty_pct": {
+      "beginner": 10,
+      "intermediate": 40,
+      "advanced": 50,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/utah/solitude-mountain-resort/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "82 runs per OnTheSnow. OnTheSnow shows incomplete pct data; using skiresort.info 3-bucket km pct (10/40/50). Expert split unknown."
+  },
+  {
+    "slug": "song-mountain",
+    "trails_total": 24,
+    "difficulty_pct": {
+      "beginner": 50,
+      "intermediate": 42,
+      "advanced": 21,
+      "expert": null
+    },
+    "source_url": "https://nyskiblog.com/directory/ny-ski-areas/central-ny/song-mountain/",
+    "source_site": "nyskiblog_via_search",
+    "notes": "24 trails (12 beginner / 10 intermediate / 5 advanced); percentages derived from counts. Counts sum to 27 (some trails likely overlap categories); reporting unscaled pct. 3-bucket source."
+  },
+  {
+    "slug": "spirit-mountain",
+    "trails_total": 22,
+    "difficulty_pct": {
+      "beginner": 29,
+      "intermediate": 33,
+      "advanced": 38,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/minnesota/spirit-mountain/ski-resort",
+    "source_site": "onthesnow_via_search",
+    "notes": "22 downhill runs; 29% beginner / 33% intermediate / 38% advanced per OnTheSnow. 3-bucket source."
+  },
+  {
+    "slug": "spout-springs",
+    "trails_total": 11,
+    "difficulty_pct": {
+      "beginner": 31,
+      "intermediate": 52,
+      "advanced": 17,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/spout-springs/",
+    "source_site": "skiresort.info",
+    "notes": "11 downhill trails per USFS/Wikipedia; difficulty_pct from skiresort.info 3-bucket km (easy 31% / int 52% / diff 17%). Note: resort closed since 2018."
+  },
+  {
+    "slug": "spring-mountain",
+    "trails_total": 8,
+    "difficulty_pct": {
+      "beginner": 47,
+      "intermediate": 29,
+      "advanced": 24,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/spring-mountain/",
+    "source_site": "skiresort.info",
+    "notes": "Trail count ~7-9 per sources (8 typical); difficulty_pct from skiresort.info 3-bucket km (easy 47% / int 29% / diff 24%). Expert split unknown."
+  },
+  {
+    "slug": "spruce-mountain-ski-area",
+    "trails_total": 11,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 58,
+      "advanced": 17,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/spruce-mountain-jay/",
+    "source_site": "skiresort.info",
+    "notes": "11 trails per Ski Maine Association; difficulty_pct from skiresort.info Spruce Mountain-Jay (Maine) 3-bucket km (easy 25% / int 58% / diff 17%)."
+  },
+  {
+    "slug": "steamboat",
+    "trails_total": 184,
+    "difficulty_pct": {
+      "beginner": 12,
+      "intermediate": 38,
+      "advanced": 41,
+      "expert": 9
+    },
+    "source_url": "https://www.onthesnow.com/colorado/steamboat/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "184 runs per OnTheSnow."
+  },
+  {
+    "slug": "steamboat-touring-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://nordicski.net/",
+    "source_site": "official",
+    "notes": "Nordic center; 15 km groomed trails reported (km not trails). No per-difficulty breakdown found across 4-source check (skiresort.info/onthesnow/skicentral/official). Source describes 'novice to advanced' qualitatively only."
+  },
+  {
+    "slug": "stevens-pass",
+    "trails_total": 57,
+    "difficulty_pct": {
+      "beginner": 11,
+      "intermediate": 54,
+      "advanced": 35,
+      "expert": null
+    },
+    "source_url": "https://www.stevenspass.com/the-mountain/about-the-mountain/mountain-info.aspx",
+    "source_site": "official_via_search",
+    "notes": "57 total runs per OnTheSnow; 11/54/35 beginner/intermediate/advanced per official site (3-bucket — Stevens Pass does not list expert separately)."
+  },
+  {
+    "slug": "stowe-mountain-resort",
+    "trails_total": 126,
+    "difficulty_pct": {
+      "beginner": 17,
+      "intermediate": 53,
+      "advanced": 14,
+      "expert": 15
+    },
+    "source_url": "https://www.onthesnow.com/vermont/stowe-mountain-resort/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "126 runs per OnTheSnow."
+  },
+  {
+    "slug": "stratton-mountain",
+    "trails_total": 99,
+    "difficulty_pct": {
+      "beginner": 41,
+      "intermediate": 31,
+      "advanced": 17,
+      "expert": 11
+    },
+    "source_url": "https://www.onthesnow.com/vermont/stratton-mountain/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "99 runs / 670 acres per OnTheSnow."
+  },
+  {
+    "slug": "sugar-bowl-resort",
+    "trails_total": 105,
+    "difficulty_pct": {
+      "beginner": 15,
+      "intermediate": 41,
+      "advanced": 31,
+      "expert": 12
+    },
+    "source_url": "https://www.onthesnow.com/california/sugar-bowl-resort/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "105 runs per OnTheSnow; 1650 acres."
+  },
+  {
+    "slug": "sugar-mountain-resort",
+    "trails_total": 20,
+    "difficulty_pct": {
+      "beginner": 40,
+      "intermediate": 40,
+      "advanced": 10,
+      "expert": 10
+    },
+    "source_url": "https://www.onthesnow.com/north-carolina/sugar-mountain/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "20 runs / 125 acres per OnTheSnow."
+  },
+  {
+    "slug": "sugarbush",
+    "trails_total": 111,
+    "difficulty_pct": {
+      "beginner": 23,
+      "intermediate": 42,
+      "advanced": 27,
+      "expert": 7
+    },
+    "source_url": "https://www.onthesnow.com/vermont/sugarbush/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "111 runs per OnTheSnow."
+  },
+  {
+    "slug": "sugarloaf",
+    "trails_total": 176,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 31,
+      "advanced": 24,
+      "expert": 20
+    },
+    "source_url": "https://www.onthesnow.com/maine/sugarloaf/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "176 runs per OnTheSnow."
+  },
+  {
+    "slug": "summit-ski-area",
+    "trails_total": 3,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.allmounthood.com/ski_resorts/summit.php",
+    "source_site": "allmounthood_via_search",
+    "notes": "3 ski trails per AllTrips/AllMountHood; now part of Timberline (renamed Summit Pass since 2021). Sources describe as 'beginner and intermediate' but no percentage breakdown found across 4-source check."
+  },
+  {
+    "slug": "sun-valley",
+    "trails_total": 121,
+    "difficulty_pct": {
+      "beginner": 36,
+      "intermediate": 42,
+      "advanced": 20,
+      "expert": 2
+    },
+    "source_url": "https://snowstash.com/usa/idaho/sun-valley",
+    "source_site": "snowstash_via_search",
+    "notes": "121 runs per SnowStash/web sources; 36/42/20/2 beginner/intermediate/advanced/expert across Bald Mtn + Dollar Mtn."
+  },
+  {
+    "slug": "sunburst",
+    "trails_total": 10,
+    "difficulty_pct": {
+      "beginner": 17,
+      "intermediate": 50,
+      "advanced": 33,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/wisconsin/sunburst/ski-resort",
+    "source_site": "onthesnow_via_search",
+    "notes": "10 trails per OnTheSnow (some sources say 11); 17/50/33 beginner/intermediate/advanced. 3-bucket source."
+  },
+  {
+    "slug": "sunburst-area",
+    "trails_total": 11,
+    "difficulty_pct": {
+      "beginner": 17,
+      "intermediate": 50,
+      "advanced": 33,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/sunburst/",
+    "source_site": "skiresort.info",
+    "notes": "Likely duplicate of 'sunburst' slug (same Wisconsin resort). 11 trails per official site; difficulty_pct from skiresort.info 3-bucket km (easy 17% / int 50% / diff 33%)."
+  },
+  {
+    "slug": "sundance",
+    "trails_total": 72,
+    "difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 32,
+      "advanced": 43,
+      "expert": 9
+    },
+    "source_url": "https://www.onthesnow.com/utah/sundance/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "72 runs per OnTheSnow."
+  },
+  {
+    "slug": "sunday-river",
+    "trails_total": 140,
+    "difficulty_pct": {
+      "beginner": 31,
+      "intermediate": 32,
+      "advanced": 16,
+      "expert": 21
+    },
+    "source_url": "https://www.onthesnow.com/maine/sunday-river/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "140 runs / 884 acres per OnTheSnow."
+  },
+  {
+    "slug": "sundown-mountain",
+    "trails_total": 21,
+    "difficulty_pct": {
+      "beginner": 40,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/iowa/sundown-mountain/ski-resort",
+    "source_site": "onthesnow_via_search",
+    "notes": "21 trails / 55 acres / 475ft vert per OnTheSnow. Only beginner pct (40%) reported in retrieved sources; full breakdown not located within 4-source budget."
+  }
+]

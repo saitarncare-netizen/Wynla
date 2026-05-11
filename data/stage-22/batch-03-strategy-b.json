@@ -1,0 +1,422 @@
+[
+  {
+    "slug": "blacktail",
+    "name": "Blacktail Mountain Ski Area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 64,
+      "advanced": 17,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/blacktail-mountain/",
+    "source_site": "skiresort.info",
+    "notes": "km-based: 3/11/3 km (easy/intermediate/difficult); total 17 km; advanced lumped with difficult"
+  },
+  {
+    "slug": "blue-hills-ski-area",
+    "name": "Blue Hills Ski Area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 50,
+      "intermediate": 33,
+      "advanced": 17,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/blue-hills/",
+    "source_site": "skiresort.info",
+    "notes": "km-based: 1.5/1/0.5 km; total 3 km"
+  },
+  {
+    "slug": "blue-knob",
+    "name": "Blue Knob All Seasons Resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 31,
+      "intermediate": 50,
+      "advanced": 19,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/blue-knob/",
+    "source_site": "skiresort.info",
+    "notes": "km-based: 5/8/3 km; total 16 km"
+  },
+  {
+    "slug": "blue-mountain-resort",
+    "name": "Blue Mountain Resort",
+    "trails_total": 34,
+    "difficulty_pct": {
+      "beginner": 46,
+      "intermediate": 11,
+      "advanced": 34,
+      "expert": 9
+    },
+    "source_url": "https://www.onthesnow.com/pennsylvania/blue-mountain-ski-area/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "found on OnTheSnow (slug 'blue-mountain-ski-area')"
+  },
+  {
+    "slug": "bluewood",
+    "name": "Ski Bluewood",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 27,
+      "intermediate": 46,
+      "advanced": 27,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/bluewood/",
+    "source_site": "skiresort.info",
+    "notes": "km-based: 3/5/3 km; total 11 km"
+  },
+  {
+    "slug": "bogus-basin",
+    "name": "Bogus Basin",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 44,
+      "advanced": 34,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/bogus-basin/",
+    "source_site": "skiresort.info",
+    "notes": "km-based: 11/22/17 km; total 50 km"
+  },
+  {
+    "slug": "bolton-valley",
+    "name": "Bolton Valley",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 50,
+      "intermediate": 33,
+      "advanced": 17,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/bolton-valley/",
+    "source_site": "skiresort.info",
+    "notes": "km-based: 15/10/5 km; total 30 km"
+  },
+  {
+    "slug": "boreal-mountain-resort",
+    "name": "Boreal Mountain Resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 55,
+      "advanced": 15,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/boreal/",
+    "source_site": "skiresort.info",
+    "notes": "km-based: 6/11/3 km; total 20 km"
+  },
+  {
+    "slug": "boston-mills",
+    "name": "Boston Mills Ski Resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 34,
+      "intermediate": 33,
+      "advanced": 33,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/boston-mills/",
+    "source_site": "skiresort.info",
+    "notes": "km-based: 0.5/0.5/0.5 km; total 1.5 km"
+  },
+  {
+    "slug": "bottineau-winter-park",
+    "name": "Bottineau Winter Park",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 41,
+      "intermediate": 41,
+      "advanced": 18,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/bottineau-winter-park/",
+    "source_site": "skiresort.info",
+    "notes": "km-based: 0.5/0.5/0.2 km; total 1.2 km"
+  },
+  {
+    "slug": "bousquet-mountain",
+    "name": "Bousquet Mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 37,
+      "intermediate": 26,
+      "advanced": 37,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/bousquet/",
+    "source_site": "skiresort.info",
+    "notes": "km-based: 3/2/3 km; total 8 km"
+  },
+  {
+    "slug": "boyne-mountain",
+    "name": "Boyne Mountain Resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 29,
+      "intermediate": 41,
+      "advanced": 30,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/boyne-mountain/",
+    "source_site": "skiresort.info",
+    "notes": "km-based: 4.1/5.7/4.2 km; total 14 km"
+  },
+  {
+    "slug": "brandywine",
+    "name": "Brandywine Ski Resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 50,
+      "intermediate": 35,
+      "advanced": 15,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/brandywine/",
+    "source_site": "skiresort.info",
+    "notes": "km-based: 1/0.7/0.3 km; total 2 km"
+  },
+  {
+    "slug": "breckenridge",
+    "name": "Breckenridge Ski Resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 18,
+      "intermediate": 39,
+      "advanced": 43,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/breckenridge/",
+    "source_site": "skiresort.info",
+    "notes": "km-based: 28/60/65 km; total 153 km"
+  },
+  {
+    "slug": "bretton-woods",
+    "name": "Bretton Woods",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 44,
+      "intermediate": 28,
+      "advanced": 28,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/bretton-woods/",
+    "source_site": "skiresort.info",
+    "notes": "km-based: 25/16/15 km; total 56 km"
+  },
+  {
+    "slug": "brian-head",
+    "name": "Brian Head Resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 27,
+      "intermediate": 42,
+      "advanced": 31,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/brian-head/",
+    "source_site": "skiresort.info",
+    "notes": "km-based: 12/19/14 km; total 45 km"
+  },
+  {
+    "slug": "bridger-bowl",
+    "name": "Bridger Bowl Ski Area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 28,
+      "intermediate": 37,
+      "advanced": 35,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/bridger-bowl-bozeman/",
+    "source_site": "skiresort.info",
+    "notes": "km-based: 20/26/25 km; total 71 km (slug 'bridger-bowl-bozeman')"
+  },
+  {
+    "slug": "brighton",
+    "name": "Brighton Resort",
+    "trails_total": 67,
+    "difficulty_pct": {
+      "beginner": 24,
+      "intermediate": 36,
+      "advanced": 27,
+      "expert": 13
+    },
+    "source_url": "https://www.onthesnow.com/utah/brighton-resort/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "OnTheSnow gives 4-level breakdown including expert"
+  },
+  {
+    "slug": "bristol-mountain",
+    "name": "Bristol Mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 50,
+      "advanced": 20,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/bristol-mountain/",
+    "source_site": "skiresort.info",
+    "notes": "km-based: 6/10/4 km; total 20 km"
+  },
+  {
+    "slug": "bromley-mountain",
+    "name": "Bromley Mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 40,
+      "advanced": 27,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/bromley-mountain/",
+    "source_site": "skiresort.info",
+    "notes": "km-based: 15/18/12 km; total 45 km"
+  },
+  {
+    "slug": "bruce-mound-winter-sports-area",
+    "name": "Bruce Mound Winter Sports Area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 11,
+      "intermediate": 23,
+      "advanced": 66,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/bruce-mound/",
+    "source_site": "skiresort.info",
+    "notes": "km-based: 0.4/1/2.8 km; total 4.2 km (slug 'bruce-mound')"
+  },
+  {
+    "slug": "brundage-mountain",
+    "name": "Brundage Mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 50,
+      "advanced": 30,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/brundage-mountain/",
+    "source_site": "skiresort.info",
+    "notes": "km-based: 6/15/9 km; total 30 km"
+  },
+  {
+    "slug": "bryce-resort",
+    "name": "Bryce Resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 40,
+      "intermediate": 56,
+      "advanced": 4,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/bryce-resort/",
+    "source_site": "skiresort.info",
+    "notes": "km-based: 2/2.8/0.2 km; total 5 km"
+  },
+  {
+    "slug": "buck-hill",
+    "name": "Buck Hill",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 55,
+      "intermediate": 36,
+      "advanced": 9,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/buck-hill/",
+    "source_site": "skiresort.info",
+    "notes": "km-based: 1.2/0.8/0.2 km; total 2.2 km"
+  },
+  {
+    "slug": "buena-vista",
+    "name": "Buena Vista Ski Area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 54,
+      "advanced": 27,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/buena-vista/",
+    "source_site": "skiresort.info",
+    "notes": "km-based: 0.5/1.4/0.7 km; total 2.6 km"
+  },
+  {
+    "slug": "buffalo-ski-club",
+    "name": "Buffalo Ski Club",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 46,
+      "intermediate": 36,
+      "advanced": 18,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/buffalo-ski-club/",
+    "source_site": "skiresort.info",
+    "notes": "km-based: 5/4/2 km; total 11 km"
+  },
+  {
+    "slug": "burke-mountain",
+    "name": "Burke Mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 40,
+      "advanced": 40,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/burke-mountain/",
+    "source_site": "skiresort.info",
+    "notes": "km-based: 2/4/4 km; total 10 km"
+  },
+  {
+    "slug": "buttermilk",
+    "name": "Buttermilk",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 39,
+      "advanced": 26,
+      "expert": 0
+    },
+    "source_url": "https://www.snowpak.com/colorado/aspen/buttermilk/ski-and-terrain",
+    "source_site": "snowpak.com",
+    "notes": "SnowPak via web search (skiresort.info returned homepage; onthesnow rolled into aspen-snowmass aggregate)"
+  },
+  {
+    "slug": "caberfae-peaks",
+    "name": "Caberfae Peaks",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 36,
+      "intermediate": 46,
+      "advanced": 18,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/caberfae-peaks/",
+    "source_site": "skiresort.info",
+    "notes": "km-based: 4/5/2 km; total 11 km"
+  },
+  {
+    "slug": "camden-snow-bowl",
+    "name": "Camden Snow Bowl",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 60,
+      "advanced": 20,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/camden-snow-bowl/",
+    "source_site": "skiresort.info",
+    "notes": "km-based: 1.2/3.6/1.2 km; total 6 km"
+  }
+]

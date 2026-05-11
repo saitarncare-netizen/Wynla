@@ -1,0 +1,392 @@
+[
+  {
+    "slug": "granby-ranch",
+    "name": "Granby Ranch",
+    "state": "CO",
+    "website_url": "https://www.granbyranch.com",
+    "current_total_trails": 43,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "grand-targhee",
+    "name": "Grand Targhee Resort",
+    "state": "WY",
+    "website_url": "https://www.grandtarghee.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "granite-gorge",
+    "name": "Granite Gorge",
+    "state": "NH",
+    "website_url": "https://www.granitegorge.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "granite-peak",
+    "name": "Granite Peak Ski Area",
+    "state": "WI",
+    "website_url": "https://www.skigranitepeak.com",
+    "current_total_trails": 62,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "great-bear",
+    "name": "Great Bear Recreation Park",
+    "state": "SD",
+    "website_url": "https://www.greatbearpark.com",
+    "current_total_trails": 14,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "great-bear-valley",
+    "name": "Great Bear Ski Valley",
+    "state": "SD",
+    "website_url": "https://www.greatbearpark.com",
+    "current_total_trails": 14,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "great-divide",
+    "name": "Great Divide",
+    "state": "MT",
+    "website_url": "https://www.skigd.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "great-glen-trails-outdoor-center",
+    "name": "Great Glen Trails Outdoor Center",
+    "state": "NH",
+    "website_url": "https://greatglentrails.com/cross-country-skiing/?_gl=1%2Aqitcvz%2A_up%2AMQ..%2A_gs%2AMQ..&gclid=CjwKCAiAkvDMBhBMEiwAnUA9BZ6kNL4vegv6BQD_C82hd7pI8lI1ty6BH6gkk6SHvR7OfZLV-E40MBoCbe4QAvD_BwE&gbraid=0AAAAApFtTRt_XANX2BB0O-CyvlwPep5xO",
+    "current_total_trails": 22,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "greek-peak",
+    "name": "Greek Peak",
+    "state": "NY",
+    "website_url": "https://www.greekpeak.net",
+    "current_total_trails": 55,
+    "current_difficulty_pct": {
+      "beginner": 36,
+      "intermediate": 29,
+      "advanced": 25,
+      "expert": 9
+    }
+  },
+  {
+    "slug": "gunstock-mountain-resort",
+    "name": "Gunstock Mountain Resort",
+    "state": "NH",
+    "website_url": "https://www.gunstock.com",
+    "current_total_trails": 49,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "hatley-pointe",
+    "name": "Hatley Pointe",
+    "state": "NC",
+    "website_url": "https://hatleypointe.com",
+    "current_total_trails": 21,
+    "current_difficulty_pct": {
+      "beginner": 27,
+      "intermediate": 53,
+      "advanced": 20,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "haymaker-nordic-center",
+    "name": "Haymaker Nordic Center",
+    "state": "CO",
+    "website_url": "https://nordicski.net/haymaker-nordic-center/",
+    "current_total_trails": 4,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "heavenly-mountain-resort",
+    "name": "Heavenly Mountain Resort",
+    "state": "CA",
+    "website_url": "https://www.skiheavenly.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "hermon-mountain",
+    "name": "Hermon Mountain",
+    "state": "ME",
+    "website_url": "https://www.skihermonmountain.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "hesperus-ski-area",
+    "name": "Hesperus Ski Area",
+    "state": "CO",
+    "website_url": "https://www.ski-hesperus.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "hidden-valley",
+    "name": "Hidden Valley (PA)",
+    "state": "PA",
+    "website_url": "https://www.hiddenvalleyresort.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "hidden-valley-mo",
+    "name": "Hidden Valley Ski Resort (MO)",
+    "state": "MO",
+    "website_url": "https://www.hiddenvalleyski.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "high-point-xc-center",
+    "name": "High Point XC Ski Center",
+    "state": "NJ",
+    "website_url": "https://www.xcskihighpoint.com/home",
+    "current_total_trails": 6,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "highlands",
+    "name": "The Highlands",
+    "state": "MI",
+    "website_url": null,
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "hilltop-ski-area",
+    "name": "Hilltop Ski Area",
+    "state": "AK",
+    "website_url": "https://hilltopskiarea.org",
+    "current_total_trails": 12,
+    "current_difficulty_pct": {
+      "beginner": 83,
+      "intermediate": 8,
+      "advanced": 8,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "hoedown-hill",
+    "name": "Hoedown Hill",
+    "state": "CO",
+    "website_url": "https://www.hoedownhill.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "hogadon",
+    "name": "Hogadon Basin Ski Area",
+    "state": "WY",
+    "website_url": "https://www.hogadon.net",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "holiday-mountain",
+    "name": "Holiday Mountain",
+    "state": "NY",
+    "website_url": "https://www.holidaymtn.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "holiday-valley",
+    "name": "Holiday Valley",
+    "state": "NY",
+    "website_url": "https://www.holidayvalley.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 33,
+      "advanced": 24,
+      "expert": 11
+    }
+  },
+  {
+    "slug": "holimont",
+    "name": "HoliMont",
+    "state": "NY",
+    "website_url": "https://www.holimont.com",
+    "current_total_trails": 55,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "homestake-lodge",
+    "name": "Homestake Lodge",
+    "state": "MT",
+    "website_url": null,
+    "current_total_trails": 21,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "homestead-resort",
+    "name": "The Homestead",
+    "state": "MI",
+    "website_url": "https://www.thehomesteadresort.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "homewood-mountain-resort",
+    "name": "Homewood Mountain Resort",
+    "state": "CA",
+    "website_url": "https://www.skihomewood.com",
+    "current_total_trails": 67,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "hoodoo",
+    "name": "Hoodoo",
+    "state": "OR",
+    "website_url": "http://skihoodoo.com",
+    "current_total_trails": 36,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "howelsen-hill",
+    "name": "Howelsen Hill Ski Area",
+    "state": "CO",
+    "website_url": "https://www.steamboatsprings.net",
+    "current_total_trails": 19,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  }
+]

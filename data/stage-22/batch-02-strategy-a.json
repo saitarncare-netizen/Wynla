@@ -1,0 +1,272 @@
+[
+  {
+    "slug": "aspen-snowmass",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": null,
+    "website_alive": false,
+    "source_url": null,
+    "notes": "No website_url in input; skipped"
+  },
+  {
+    "slug": "attitash",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.attitash.com",
+    "website_alive": true,
+    "source_url": "https://www.attitash.com",
+    "notes": "Vail-owned site returning system error page; no data extractable"
+  },
+  {
+    "slug": "badger-mountain-wa",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "http://www.nwwintersportsman.com/BadgerMt/index2.htm",
+    "website_alive": false,
+    "source_url": null,
+    "notes": "Self-signed certificate error on HTTPS upgrade; site inaccessible"
+  },
+  {
+    "slug": "badger-pass",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.travelyosemite.com/winter/yosemite-ski-snowboard-area/",
+    "website_alive": true,
+    "source_url": "https://www.travelyosemite.com/winter/yosemite-ski-snowboard-area/",
+    "notes": "Page loaded but no trail count or difficulty data published"
+  },
+  {
+    "slug": "bear-basin-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://payettelakesskiclub.org/pages/bear-basin-nordic-center",
+    "website_alive": true,
+    "source_url": "https://payettelakesskiclub.org/pages/bear-basin-nordic-center",
+    "notes": "Nordic center lists 25km groomed trails but no count or difficulty breakdown"
+  },
+  {
+    "slug": "bear-creek-mountain-resort",
+    "trails_total": 23,
+    "difficulty_pct": {"beginner": 30, "intermediate": 40, "advanced": 30, "expert": null},
+    "website_url": "https://www.bcmountainresort.com",
+    "website_alive": true,
+    "source_url": "https://www.bcmountainresort.com/activities/ski-snowboarding/",
+    "notes": "Found on ski/snowboarding activity page"
+  },
+  {
+    "slug": "bear-mountain",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.bigbearmountainresort.com",
+    "website_alive": true,
+    "source_url": "https://www.bigbearmountainresort.com",
+    "notes": "Mountain stats path returned 404; data not located on homepage"
+  },
+  {
+    "slug": "bear-paw",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://skibearpaw.com",
+    "website_alive": true,
+    "source_url": "https://skibearpaw.com",
+    "notes": "Launching Soon placeholder page; no content"
+  },
+  {
+    "slug": "bear-valley-adventure-company",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.bvadventures.com/",
+    "website_alive": true,
+    "source_url": "https://www.bvadventures.com/",
+    "notes": "Mountain biking/nordic operator; no specific trail count or difficulty breakdown on homepage"
+  },
+  {
+    "slug": "bear-valley-mountain",
+    "trails_total": 75,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.bearvalley.com",
+    "website_alive": true,
+    "source_url": "https://www.bearvalley.com",
+    "notes": "75 trails confirmed; no difficulty breakdown on accessible pages"
+  },
+  {
+    "slug": "beartooth-basin",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.beartoothbasin.com",
+    "website_alive": true,
+    "source_url": "https://www.beartoothbasin.com",
+    "notes": "Summer ski area; no trail stats or difficulty breakdown on homepage"
+  },
+  {
+    "slug": "beaver-creek",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.beavercreek.com",
+    "website_alive": true,
+    "source_url": "https://www.beavercreek.com",
+    "notes": "Vail-owned site returning system error page; no data extractable"
+  },
+  {
+    "slug": "beaver-mountain",
+    "trails_total": 48,
+    "difficulty_pct": {"beginner": 35, "intermediate": 40, "advanced": 25, "expert": null},
+    "website_url": "https://www.skithebeav.com",
+    "website_alive": true,
+    "source_url": "https://www.skithebeav.com/mountain/",
+    "notes": "Found on mountain stats page"
+  },
+  {
+    "slug": "beech-mountain-resort",
+    "trails_total": 17,
+    "difficulty_pct": {"beginner": 18, "intermediate": 53, "advanced": 24, "expert": null},
+    "website_url": "https://www.beechmountainresort.com",
+    "website_alive": true,
+    "source_url": "https://www.beechmountainresort.com/mountain/mountain-stats/",
+    "notes": "Found on official Mountain Stats page; trails counted by type (3/9/4 plus 1 freestyle)"
+  },
+  {
+    "slug": "belleayre-mountain",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.belleayre.com",
+    "website_alive": true,
+    "source_url": "https://www.belleayre.com",
+    "notes": "Site returned HTTP 403 to fetcher; bot-blocked"
+  },
+  {
+    "slug": "berkshire-east",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://berkshireeast.com",
+    "website_alive": true,
+    "source_url": "https://berkshireeast.com",
+    "notes": "Homepage loaded but stats not on it; trail-map subpage returned 404"
+  },
+  {
+    "slug": "bethel-village-trails",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://woodsandtrails.org/",
+    "website_alive": true,
+    "source_url": "https://woodsandtrails.org/",
+    "notes": "Nordic/multi-use trail network; no count or difficulty breakdown published on homepage"
+  },
+  {
+    "slug": "big-bear-ca",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": null,
+    "website_alive": false,
+    "source_url": null,
+    "notes": "No website_url in input; skipped"
+  },
+  {
+    "slug": "big-bear-pa",
+    "trails_total": 18,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.ski-bigbear.com",
+    "website_alive": true,
+    "source_url": "https://www.ski-bigbear.com",
+    "notes": "18 trails confirmed; no difficulty breakdown published"
+  },
+  {
+    "slug": "big-boulder",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.jfbb.com",
+    "website_alive": true,
+    "source_url": "https://www.jfbb.com",
+    "notes": "Vail-owned site returning system error page; no data extractable"
+  },
+  {
+    "slug": "big-powderhorn-mountain",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.bigpowderhorn.net",
+    "website_alive": true,
+    "source_url": "https://www.bigpowderhorn.net",
+    "notes": "Trail map page references PDF only; no on-page stats or difficulty breakdown"
+  },
+  {
+    "slug": "big-rock",
+    "trails_total": 25,
+    "difficulty_pct": {"beginner": 20, "intermediate": 60, "advanced": 20, "expert": null},
+    "website_url": "https://www.bigrockmaine.com",
+    "website_alive": true,
+    "source_url": "https://www.bigrockmaine.com/trails/",
+    "notes": "Found on trails page; 5/15/5 by green/blue/black. Closed 2025-26 season."
+  },
+  {
+    "slug": "big-sky",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.bigskyresort.com",
+    "website_alive": true,
+    "source_url": "https://www.bigskyresort.com",
+    "notes": "Summer-mode homepage; winter stats subpages returned 404"
+  },
+  {
+    "slug": "big-snow-american-dream",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.bigsnowamericandream.com",
+    "website_alive": true,
+    "source_url": "https://www.bigsnowamericandream.com",
+    "notes": "Indoor resort; no trail count or difficulty breakdown published on site"
+  },
+  {
+    "slug": "big-squaw-mountain",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.skibigsquaw.com",
+    "website_alive": true,
+    "source_url": "https://skibigmoose.com/",
+    "notes": "Redirects to skibigmoose.com; lift info available but no trail count or difficulty breakdown"
+  },
+  {
+    "slug": "bittersweet-ski-resort",
+    "trails_total": 20,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.skibittersweet.com",
+    "website_alive": true,
+    "source_url": "https://www.skibittersweet.com",
+    "notes": "20 runs confirmed on homepage; no difficulty breakdown"
+  },
+  {
+    "slug": "black-area",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.blackmt.com",
+    "website_alive": true,
+    "source_url": "https://www.blackmt.com",
+    "notes": "Trail map page is image-only; no text stats or difficulty breakdown"
+  },
+  {
+    "slug": "black-mountain-nh",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.blackmt.com",
+    "website_alive": true,
+    "source_url": "https://www.blackmt.com",
+    "notes": "Same site as black-area slug; trail map is image-only; no on-page stats"
+  },
+  {
+    "slug": "black-mountain-of-maine",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.skiblackmountain.org",
+    "website_alive": true,
+    "source_url": "https://www.skiblackmountain.org",
+    "notes": "Trail map image present but no text stats or difficulty breakdown"
+  },
+  {
+    "slug": "blackjack-mountain",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.skiblackjack.com",
+    "website_alive": false,
+    "source_url": null,
+    "notes": "Domain returns blackjack card-game content; ski resort site appears expired/parked"
+  }
+]

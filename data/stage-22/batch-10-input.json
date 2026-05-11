@@ -1,0 +1,392 @@
+[
+  {
+    "slug": "mystic-mountain",
+    "name": "Mystic Mountain",
+    "state": "PA",
+    "website_url": "https://www.nemacolin.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "nashoba-valley-ski-area",
+    "name": "Nashoba Valley Ski Area",
+    "state": "MA",
+    "website_url": "https://skinashoba.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": 24,
+      "intermediate": 47,
+      "advanced": 29,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "nordic-mountain",
+    "name": "Nordic Mountain",
+    "state": "WI",
+    "website_url": "https://www.nordicmountain.com",
+    "current_total_trails": 16,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "nordic-valley",
+    "name": "Nordic Valley",
+    "state": "UT",
+    "website_url": "https://www.nordicvalley.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "north-cascade-heli",
+    "name": "North Cascade Heli",
+    "state": "WA",
+    "website_url": "https://heli-ski.com/",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "northeast-slopes",
+    "name": "Northeast Slopes",
+    "state": "VT",
+    "website_url": "https://www.northeastslopes.org",
+    "current_total_trails": 12,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "northern-maine-community-trails",
+    "name": "Northern Maine Community Trails",
+    "state": "ME",
+    "website_url": "https://www.nmctrails.org/",
+    "current_total_trails": 16,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "northstar-california",
+    "name": "Northstar California",
+    "state": "CA",
+    "website_url": "https://www.northstarcalifornia.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": 13,
+      "intermediate": 60,
+      "advanced": 27,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "norway-mountain",
+    "name": "Norway Mountain",
+    "state": "MI",
+    "website_url": "https://www.norwaymountain.com",
+    "current_total_trails": 17,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "nubs-nob",
+    "name": "Nub's Nob",
+    "state": "MI",
+    "website_url": "https://www.nubsnob.com",
+    "current_total_trails": 53,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "oak-mountain",
+    "name": "Oak Mountain",
+    "state": "NY",
+    "website_url": "https://www.oakmountainski.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "ober-mountain",
+    "name": "Ober Mountain",
+    "state": "TN",
+    "website_url": "https://www.obermountain.com",
+    "current_total_trails": 10,
+    "current_difficulty_pct": {
+      "beginner": 27,
+      "intermediate": 55,
+      "advanced": 18,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "oglebay-resort",
+    "name": "Oglebay Resort",
+    "state": "WV",
+    "website_url": "https://oglebay.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "okemo-mountain-resort",
+    "name": "Okemo Mountain Resort",
+    "state": "VT",
+    "website_url": "https://www.okemo.com",
+    "current_total_trails": 123,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "otis-ridge",
+    "name": "Otis Ridge",
+    "state": "MA",
+    "website_url": "https://otisridge.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "otsego-resort",
+    "name": "Otsego Resort",
+    "state": "MI",
+    "website_url": "https://www.otsegoresort.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "pajarito-mountain",
+    "name": "Pajarito Mountain Ski Area",
+    "state": "NM",
+    "website_url": "https://www.skipajarito.com",
+    "current_total_trails": 53,
+    "current_difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 49,
+      "advanced": 30,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "palisades-tahoe",
+    "name": "Palisades Tahoe",
+    "state": "CA",
+    "website_url": "https://www.palisadestahoe.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "paoli-peaks",
+    "name": "Paoli Peaks",
+    "state": "IN",
+    "website_url": "https://www.paolipeaks.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "park-city",
+    "name": "Park City Mountain Resort",
+    "state": "UT",
+    "website_url": "https://www.parkcitymountain.com",
+    "current_total_trails": 324,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "pats-peak",
+    "name": "Pat's Peak",
+    "state": "NH",
+    "website_url": "https://www.patspeak.com",
+    "current_total_trails": 28,
+    "current_difficulty_pct": {
+      "beginner": 50,
+      "intermediate": 21,
+      "advanced": 11,
+      "expert": 18
+    }
+  },
+  {
+    "slug": "paul-bunyan-hill",
+    "name": "Paul Bunyan Ski Hill",
+    "state": "WI",
+    "website_url": "https://skipaulbunyan.com/",
+    "current_total_trails": 14,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "pebble-creek",
+    "name": "Pebble Creek Ski Area",
+    "state": "ID",
+    "website_url": "https://www.pebblecreekskiarea.com",
+    "current_total_trails": 51,
+    "current_difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 35,
+      "advanced": 41,
+      "expert": 4
+    }
+  },
+  {
+    "slug": "peek-n-peak",
+    "name": "Peek'n Peak",
+    "state": "NY",
+    "website_url": "https://www.pknpk.com",
+    "current_total_trails": 26,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "perfect-north",
+    "name": "Perfect North Slopes",
+    "state": "IN",
+    "website_url": "https://www.perfectnorth.com",
+    "current_total_trails": 23,
+    "current_difficulty_pct": {
+      "beginner": 24,
+      "intermediate": 52,
+      "advanced": 19,
+      "expert": 5
+    }
+  },
+  {
+    "slug": "pico-mountain",
+    "name": "Pico Mountain",
+    "state": "VT",
+    "website_url": "https://www.picomountain.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "pine-knob",
+    "name": "Pine Knob",
+    "state": "MI",
+    "website_url": "https://www.pineknobskiresort.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "pine-mountain",
+    "name": "Pine Mountain Resort",
+    "state": "MI",
+    "website_url": "https://www.pinemountainresort.com",
+    "current_total_trails": 35,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "plain-valley-trails",
+    "name": "Plain Valley Ski Trails",
+    "state": "WA",
+    "website_url": "https://www.skiplain.com/",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "plattekill-mountain",
+    "name": "Plattekill Mountain",
+    "state": "NY",
+    "website_url": "https://plattekill.com",
+    "current_total_trails": 41,
+    "current_difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 40,
+      "advanced": 20,
+      "expert": 20
+    }
+  }
+]

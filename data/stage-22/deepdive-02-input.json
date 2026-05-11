@@ -1,0 +1,152 @@
+[
+  {
+    "slug": "chapman-hill",
+    "name": "Chapman Hill Ski Area",
+    "state": "CO",
+    "website_url": "https://www.durangogov.org"
+  },
+  {
+    "slug": "china-peak",
+    "name": "China Peak Mountain Resort",
+    "state": "CA",
+    "website_url": "https://www.skichinapeak.com"
+  },
+  {
+    "slug": "christie",
+    "name": "Christie Mountain",
+    "state": "WI",
+    "website_url": "https://www.christiemountain.com/"
+  },
+  {
+    "slug": "cloudmont-ski-resort",
+    "name": "Cloudmont Ski Resort",
+    "state": "AL",
+    "website_url": "https://ww1.cloudmont.com"
+  },
+  {
+    "slug": "copper-mountain",
+    "name": "Copper Mountain",
+    "state": "CO",
+    "website_url": "https://www.coppercolorado.com"
+  },
+  {
+    "slug": "cottonwood-butte",
+    "name": "Cottonwood Butte",
+    "state": "ID",
+    "website_url": "https://www.cottonwoodbutte.org"
+  },
+  {
+    "slug": "cranor-ski-hill",
+    "name": "Cranor Ski Hill",
+    "state": "CO",
+    "website_url": "https://www.gunnisonco.gov"
+  },
+  {
+    "slug": "crested-butte",
+    "name": "Crested Butte Mountain Resort",
+    "state": "CO",
+    "website_url": "https://www.skicb.com"
+  },
+  {
+    "slug": "crosscut-sports-center",
+    "name": "Crosscut Mountain Sports Center",
+    "state": "MT",
+    "website_url": "https://www.crosscutmt.org/"
+  },
+  {
+    "slug": "crystal-ridge",
+    "name": "Crystal Ridge",
+    "state": "WI",
+    "website_url": "https://crystalridge.com/"
+  },
+  {
+    "slug": "dog-creek-lodge-nordic-center",
+    "name": "Dog Creek Lodge & Nordic Center",
+    "state": "MT",
+    "website_url": "http://www.dogcreeklodge.com"
+  },
+  {
+    "slug": "echo-valley",
+    "name": "Echo Valley Ski Area",
+    "state": "WA",
+    "website_url": "https://skiechovalley.com/"
+  },
+  {
+    "slug": "eldora",
+    "name": "Eldora Mountain Resort",
+    "state": "CO",
+    "website_url": "https://www.eldora.com"
+  },
+  {
+    "slug": "granby-ranch",
+    "name": "Granby Ranch",
+    "state": "CO",
+    "website_url": "https://www.granbyranch.com"
+  },
+  {
+    "slug": "grand-targhee",
+    "name": "Grand Targhee Resort",
+    "state": "WY",
+    "website_url": "https://www.grandtarghee.com"
+  },
+  {
+    "slug": "granite-gorge",
+    "name": "Granite Gorge",
+    "state": "NH",
+    "website_url": "https://www.granitegorge.com"
+  },
+  {
+    "slug": "granite-peak",
+    "name": "Granite Peak Ski Area",
+    "state": "WI",
+    "website_url": "https://www.skigranitepeak.com"
+  },
+  {
+    "slug": "great-divide",
+    "name": "Great Divide",
+    "state": "MT",
+    "website_url": "https://www.skigd.com"
+  },
+  {
+    "slug": "great-glen-trails-outdoor-center",
+    "name": "Great Glen Trails Outdoor Center",
+    "state": "NH",
+    "website_url": "https://greatglentrails.com/cross-country-skiing/?_gl=1%2Aqitcvz%2A_up%2AMQ..%2A_gs%2AMQ..&gclid=CjwKCAiAkvDMBhBMEiwAnUA9BZ6kNL4vegv6BQD_C82hd7pI8lI1ty6BH6gkk6SHvR7OfZLV-E40MBoCbe4QAvD_BwE&gbraid=0AAAAApFtTRt_XANX2BB0O-CyvlwPep5xO"
+  },
+  {
+    "slug": "haymaker-nordic-center",
+    "name": "Haymaker Nordic Center",
+    "state": "CO",
+    "website_url": "https://nordicski.net/haymaker-nordic-center/"
+  },
+  {
+    "slug": "heavenly-mountain-resort",
+    "name": "Heavenly Mountain Resort",
+    "state": "CA",
+    "website_url": "https://www.skiheavenly.com"
+  },
+  {
+    "slug": "hermon-mountain",
+    "name": "Hermon Mountain",
+    "state": "ME",
+    "website_url": "https://www.skihermonmountain.com"
+  },
+  {
+    "slug": "hesperus-ski-area",
+    "name": "Hesperus Ski Area",
+    "state": "CO",
+    "website_url": "https://www.ski-hesperus.com"
+  },
+  {
+    "slug": "hidden-valley-mo",
+    "name": "Hidden Valley Ski Resort (MO)",
+    "state": "MO",
+    "website_url": "https://www.hiddenvalleyski.com"
+  },
+  {
+    "slug": "high-point-xc-center",
+    "name": "High Point XC Ski Center",
+    "state": "NJ",
+    "website_url": "https://www.xcskihighpoint.com/home"
+  }
+]

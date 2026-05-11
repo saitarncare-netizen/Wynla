@@ -1,0 +1,392 @@
+[
+  {
+    "slug": "snowmass",
+    "trails_total": 94,
+    "difficulty_pct": {
+      "beginner": 6,
+      "intermediate": 50,
+      "advanced": 18,
+      "expert": 32
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Snowmass_(ski_area)",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia gives 94 total runs; difficulty breakdown rounded from 6.4/50/18.1/31.9%."
+  },
+  {
+    "slug": "snowriver",
+    "trails_total": 74,
+    "difficulty_pct": {
+      "beginner": 14,
+      "intermediate": 30,
+      "advanced": 37,
+      "expert": 20
+    },
+    "source_url": "https://www.onthesnow.com/michigan/snowriver-mountain-resort/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "OnTheSnow lists 74 runs with 14/30/37/20% split; Wikipedia mentions 70 trails total across two areas without unified difficulty."
+  },
+  {
+    "slug": "snowshoe-mountain",
+    "trails_total": 60,
+    "difficulty_pct": {
+      "beginner": 40,
+      "intermediate": 33,
+      "advanced": 25,
+      "expert": 2
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Snowshoe_Mountain",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia gives 60 slopes/trails; difficulty percentages from OnTheSnow / resort sources (40/33/25/2)."
+  },
+  {
+    "slug": "snowstar",
+    "trails_total": 15,
+    "difficulty_pct": {
+      "beginner": 13,
+      "intermediate": 20,
+      "advanced": 27,
+      "expert": 40
+    },
+    "source_url": "https://www.onthesnow.com/illinois/ski-snowstar-winter-sports-park/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "No Wikipedia article; OnTheSnow lists 15 trails with 13/20/27/40% difficulty split."
+  },
+  {
+    "slug": "snowy-range",
+    "trails_total": 27,
+    "difficulty_pct": {
+      "beginner": 26,
+      "intermediate": 44,
+      "advanced": 30,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Snowy_Range_Ski_Area",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia gives 27 runs; only 3-tier classification available (7 novice / 12 intermediate / 8 expert); no separate expert tier."
+  },
+  {
+    "slug": "soda-springs",
+    "trails_total": 19,
+    "difficulty_pct": {
+      "beginner": 53,
+      "intermediate": 16,
+      "advanced": 32,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Soda_Springs_Mountain_Resort",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia gives 19 trails with 53/16/32% difficulty split; no separate expert category."
+  },
+  {
+    "slug": "soldier-hollow",
+    "trails_total": 14,
+    "difficulty_pct": {
+      "beginner": 44,
+      "intermediate": 25,
+      "advanced": 31,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Soldier_Hollow",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia gives 14 trails; difficulty percentages (44/25/31) from Nordic Pulse trail length (km); Nordic center, no expert tier."
+  },
+  {
+    "slug": "soldier-mountain",
+    "trails_total": 36,
+    "difficulty_pct": {
+      "beginner": 28,
+      "intermediate": 25,
+      "advanced": 47,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Soldier_Mountain",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia gives 36 runs with 28/25/47% difficulty split; no separate expert tier."
+  },
+  {
+    "slug": "solitude",
+    "trails_total": 82,
+    "difficulty_pct": {
+      "beginner": 10,
+      "intermediate": 40,
+      "advanced": 50,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Solitude_Mountain_Resort",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia notes inconsistency (66 vs 80 trails); current resort sources cite 82 named runs with 10/40/50% split (advanced+expert combined)."
+  },
+  {
+    "slug": "song-mountain",
+    "trails_total": 24,
+    "difficulty_pct": {
+      "beginner": 58,
+      "intermediate": 29,
+      "advanced": 13,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/new-york/song-mountain/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "No Wikipedia article for Song Mountain NY ski resort; OnTheSnow lists 24 trails with 58/29/13% split."
+  },
+  {
+    "slug": "spirit-mountain",
+    "trails_total": 22,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Spirit_Mountain_(ski_area)",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia gives 22 skiing trails; no difficulty breakdown found in Wikipedia or quick searches."
+  },
+  {
+    "slug": "spout-springs",
+    "trails_total": 17,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 35,
+      "advanced": 30,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Spout_Springs_Ski_Area",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia gives 17 runs with 35/35/30% difficulty split; no separate expert tier."
+  },
+  {
+    "slug": "spring-mountain",
+    "trails_total": 8,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/pennsylvania/spring-mountain-ski-area/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "No Wikipedia article; OnTheSnow + multiple sources cite 8 trails; no specific difficulty percentages found."
+  },
+  {
+    "slug": "spruce-mountain-ski-area",
+    "trails_total": 11,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://skimaine.com/sprucemountain/",
+    "source_site": "skimaine",
+    "notes": "No Wikipedia article; Ski Maine Association lists 11 trails; no published difficulty percentage breakdown found."
+  },
+  {
+    "slug": "steamboat",
+    "trails_total": 165,
+    "difficulty_pct": {
+      "beginner": 14,
+      "intermediate": 42,
+      "advanced": 44,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Steamboat_Ski_Resort",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia/resort give 165 trails currently (older 182/297 figures exist); 14/42/44 difficulty split from current sources."
+  },
+  {
+    "slug": "steamboat-touring-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://nordicski.net/",
+    "source_site": "nordicski.net",
+    "notes": "Nordic/cross-country center; ~15-24 km of groomed trails total but no enumerated trail count or published difficulty percentages."
+  },
+  {
+    "slug": "stevens-pass",
+    "trails_total": 37,
+    "difficulty_pct": {
+      "beginner": 11,
+      "intermediate": 54,
+      "advanced": 35,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Stevens_Pass_Ski_Area",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia gives 37 major runs with 11/54/35% difficulty split; advanced+expert combined."
+  },
+  {
+    "slug": "stowe-mountain-resort",
+    "trails_total": 116,
+    "difficulty_pct": {
+      "beginner": 16,
+      "intermediate": 55,
+      "advanced": 29,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Stowe_Mountain_Resort",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia gives 116 trails with 16/55/29% split; advanced+expert combined."
+  },
+  {
+    "slug": "stratton-mountain",
+    "trails_total": 99,
+    "difficulty_pct": {
+      "beginner": 40,
+      "intermediate": 35,
+      "advanced": 25,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Stratton_Mountain_Resort",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia gives 99 trails with 40/35/25% split (easy/intermediate/advanced); no separate expert tier."
+  },
+  {
+    "slug": "sugar-bowl-resort",
+    "trails_total": 103,
+    "difficulty_pct": {
+      "beginner": 15,
+      "intermediate": 41,
+      "advanced": 31,
+      "expert": 12
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Sugar_Bowl_Ski_Resort",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia article exists; resort sources give 103 trails with 15/41/31/12% split."
+  },
+  {
+    "slug": "sugar-mountain-resort",
+    "trails_total": 21,
+    "difficulty_pct": {
+      "beginner": 34,
+      "intermediate": 52,
+      "advanced": 14,
+      "expert": null
+    },
+    "source_url": "https://skisugar.com/sugar-mountain-stats/",
+    "source_site": "skisugar",
+    "notes": "No clear Wikipedia article for ski resort; resort official site gives 21 trails with 34/52/14% split."
+  },
+  {
+    "slug": "sugarbush",
+    "trails_total": 111,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 45,
+      "advanced": 35,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Sugarbush_Resort",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia gives 111 trails with 20/45/35% split (24/51/36 by count)."
+  },
+  {
+    "slug": "sugarloaf",
+    "trails_total": 174,
+    "difficulty_pct": {
+      "beginner": 23,
+      "intermediate": 31,
+      "advanced": 25,
+      "expert": 21
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Sugarloaf_(ski_resort)",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia gives 174 marked trails/glades with full 4-tier 23/31/25/21% split."
+  },
+  {
+    "slug": "summit-ski-area",
+    "trails_total": 3,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.fs.usda.gov/r06/mthood/recreation/timberline-summit-pass-ski-area",
+    "source_site": "usda.gov",
+    "notes": "Small ski area (Timberline's Summit Pass), 3 ski trails and 1 lift; no published difficulty percentages."
+  },
+  {
+    "slug": "sun-valley",
+    "trails_total": 75,
+    "difficulty_pct": {
+      "beginner": 36,
+      "intermediate": 42,
+      "advanced": 22,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Bald_Mountain_(Idaho)",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia (Bald Mtn) gives 75 runs with 36/42/22% split; other sources cite higher trail counts (120+) including Dollar Mtn."
+  },
+  {
+    "slug": "sunburst",
+    "trails_total": 11,
+    "difficulty_pct": {
+      "beginner": 17,
+      "intermediate": 50,
+      "advanced": 33,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/wisconsin/sunburst/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "No Wikipedia article; OnTheSnow lists 11 trails (same resort as sunburst-area) with 17/50/33% split."
+  },
+  {
+    "slug": "sunburst-area",
+    "trails_total": 11,
+    "difficulty_pct": {
+      "beginner": 17,
+      "intermediate": 50,
+      "advanced": 33,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/wisconsin/sunburst/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "Same resort as 'sunburst' slug (Sunburst Winter Sports Park, WI); 11 trails with 17/50/33% split."
+  },
+  {
+    "slug": "sundance",
+    "trails_total": 44,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 40,
+      "advanced": 40,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Sundance_Mountain_Resort",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia gives 44 runs with 20/40/40% split; no separate expert tier."
+  },
+  {
+    "slug": "sunday-river",
+    "trails_total": 135,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 36,
+      "advanced": 19,
+      "expert": 12
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Sunday_River_(ski_resort)",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia gives 135 trails (intro mentions 139) with full 4-tier 33/36/19/12% split."
+  },
+  {
+    "slug": "sundown-mountain",
+    "trails_total": 21,
+    "difficulty_pct": {
+      "beginner": 40,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/iowa/sundown-mountain/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "No Wikipedia article; resort/OnTheSnow cite 21 trails; only 40% beginner figure published, no complete breakdown found."
+  }
+]

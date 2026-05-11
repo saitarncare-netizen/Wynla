@@ -1,0 +1,392 @@
+[
+  {
+    "slug": "sunlight-mountain",
+    "name": "Sunlight Mountain Resort",
+    "state": "CO",
+    "website_url": "https://www.sunlightmtn.com",
+    "current_total_trails": 77,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "sunrise-park-resort",
+    "name": "Sunrise Park Resort",
+    "state": "AZ",
+    "website_url": "https://www.sunriseskipark.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "swain-resort",
+    "name": "Swain Resort",
+    "state": "NY",
+    "website_url": "https://www.swain.com",
+    "current_total_trails": 35,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "swiss-valley",
+    "name": "Swiss Valley Ski & Snowboard Area",
+    "state": "MI",
+    "website_url": "https://www.skiswissvalley.com",
+    "current_total_trails": 12,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "tahoe-donner-downhill",
+    "name": "Tahoe Donner Downhill Ski Area",
+    "state": "CA",
+    "website_url": "https://www.tahoedonner.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "tamarack",
+    "name": "Tamarack Resort",
+    "state": "ID",
+    "website_url": "https://www.tamarackidaho.com",
+    "current_total_trails": 50,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "taos-ski-valley",
+    "name": "Taos Ski Valley",
+    "state": "NM",
+    "website_url": "https://www.skitaos.com",
+    "current_total_trails": 110,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "telluride",
+    "name": "Telluride Ski Resort",
+    "state": "CO",
+    "website_url": "https://www.tellurideskiresort.com",
+    "current_total_trails": 127,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "tenney-mountain",
+    "name": "Tenney Mountain",
+    "state": "NH",
+    "website_url": "https://www.tenneymtn.com",
+    "current_total_trails": 53,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "terry-peak",
+    "name": "Terry Peak Ski Area",
+    "state": "SD",
+    "website_url": "https://www.terrypeak.com",
+    "current_total_trails": 30,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "teton-pass",
+    "name": "Teton Pass Ski Area",
+    "state": "MT",
+    "website_url": "https://www.skitetonmt.com/",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "the-highlands",
+    "name": "The Highlands (Boyne Highlands)",
+    "state": "MI",
+    "website_url": "https://www.highlandsatharborsprings.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "the-omni-homestead-resort",
+    "name": "The Omni Homestead Resort",
+    "state": "VA",
+    "website_url": "https://www.omnihotels.com/hotels/homestead-virginia",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "the-rock-snowpark",
+    "name": "The Rock Snowpark",
+    "state": "WI",
+    "website_url": "https://www.therocksnowpark.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "the-summit-at-snoqualmie",
+    "name": "The Summit at Snoqualmie",
+    "state": "WA",
+    "website_url": "https://www.summitatsnoqualmie.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "thrill-hills",
+    "name": "Thrill Hills",
+    "state": "ND",
+    "website_url": "https://skithrillhills.com/",
+    "current_total_trails": 10,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "thunder-ridge-ski-area",
+    "name": "Thunder Ridge Ski Area",
+    "state": "NY",
+    "website_url": "https://thunderridgeski.com",
+    "current_total_trails": 23,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "timber-ridge",
+    "name": "Timber Ridge Ski Area",
+    "state": "MI",
+    "website_url": "https://www.skitimberridge.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": 47,
+      "intermediate": 33,
+      "advanced": 20,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "timberline-lodge",
+    "name": "Timberline Lodge Ski Area",
+    "state": "OR",
+    "website_url": "https://www.timberlinelodge.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "timberline-mountain",
+    "name": "Timberline Mountain",
+    "state": "WV",
+    "website_url": "https://timberlinemountain.com",
+    "current_total_trails": 22,
+    "current_difficulty_pct": {
+      "beginner": 43,
+      "intermediate": 29,
+      "advanced": 19,
+      "expert": 10
+    }
+  },
+  {
+    "slug": "titcomb-mountain",
+    "name": "Titcomb Mountain",
+    "state": "ME",
+    "website_url": "https://www.titcombmountain.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "titus-mountain",
+    "name": "Titus Mountain",
+    "state": "NY",
+    "website_url": "https://www.titusmountain.com",
+    "current_total_trails": 53,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "trapp-family-lodge",
+    "name": "Trapp Family Lodge",
+    "state": "VT",
+    "website_url": "https://www.trappfamily.com/skiing-snowshoeing.htm",
+    "current_total_trails": 24,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "treetops-resort",
+    "name": "Treetops Resort",
+    "state": "MI",
+    "website_url": "https://www.treetops.com",
+    "current_total_trails": 25,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "trollhaugen",
+    "name": "Trollhaugen",
+    "state": "WI",
+    "website_url": "https://www.trollhaugen.com",
+    "current_total_trails": 30,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "turner-mountain",
+    "name": "Turner Mountain Ski Resort",
+    "state": "MT",
+    "website_url": "https://www.skiturner.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "turpin-meadow-ranch",
+    "name": "Turpin Meadow Ranch",
+    "state": "WY",
+    "website_url": "https://turpinmeadowranch.com/web-cam/",
+    "current_total_trails": 7,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "tussey-mountain",
+    "name": "Tussey Mountain",
+    "state": "PA",
+    "website_url": "https://www.tusseymountain.com",
+    "current_total_trails": 8,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "tyrol-basin",
+    "name": "Tyrol Basin",
+    "state": "WI",
+    "website_url": "https://www.tyrolbasin.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "tyrol-basin-and-snowboard",
+    "name": "Tyrol Basin Ski and Snowboard",
+    "state": "WI",
+    "website_url": "https://www.tyrolbasin.com",
+    "current_total_trails": 24,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  }
+]

@@ -1,0 +1,272 @@
+[
+  {
+    "slug": "mystic-mountain",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.nemacolin.com",
+    "website_alive": true,
+    "source_url": "https://www.nemacolin.com",
+    "notes": "Nemacolin Resort homepage alive; site is general resort marketing covering accommodations/dining/activities with no mention of Mystic Mountain ski area, trail counts, or difficulty breakdowns."
+  },
+  {
+    "slug": "nashoba-valley-ski-area",
+    "trails_total": 17,
+    "difficulty_pct": { "beginner": 20, "intermediate": 50, "advanced": 30, "expert": 0 },
+    "website_url": "https://skinashoba.com",
+    "website_alive": true,
+    "source_url": "https://skinashoba.com/trail-map/",
+    "notes": "Trail map page lists 17 trails with 20% beginner / 50% intermediate / 30% advanced; no expert category."
+  },
+  {
+    "slug": "nordic-mountain",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.nordicmountain.com",
+    "website_alive": true,
+    "source_url": "https://www.nordicmountain.com/mountain-info/trail-maps",
+    "notes": "Site alive (end-of-season banner). Trail Maps page describes terrain for Beginners / Intermediate / Advanced / Park Riders but does not publish trail counts or difficulty percentages."
+  },
+  {
+    "slug": "nordic-valley",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.nordicvalley.com",
+    "website_alive": false,
+    "source_url": "https://www.nordicvalley.com",
+    "notes": "Domain nordicvalley.com is now occupied by a Korean sports-streaming site (Spotalk); not the Utah ski resort. Official site no longer resolves to ski resort content."
+  },
+  {
+    "slug": "north-cascade-heli",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://heli-ski.com/",
+    "website_alive": true,
+    "source_url": "https://heli-ski.com/",
+    "notes": "Site alive. Heli-skiing operator covering 300,000 acres of backcountry; no defined named runs or difficulty classifications (consistent with heli-ski model)."
+  },
+  {
+    "slug": "northeast-slopes",
+    "trails_total": 12,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.northeastslopes.org",
+    "website_alive": true,
+    "source_url": "https://www.northeastslopes.org",
+    "notes": "Site alive (community ski hill). States '12 trails spread across 35+ acres'; no published difficulty percentages."
+  },
+  {
+    "slug": "northern-maine-community-trails",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.nmctrails.org/",
+    "website_alive": true,
+    "source_url": "https://www.nmctrails.org/",
+    "notes": "Site alive (Nordic / multi-use community trails nonprofit). Mentions '35+ miles of trails' and '750+ acres protected'; no alpine-style trail count or difficulty percentages."
+  },
+  {
+    "slug": "northstar-california",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.northstarcalifornia.com",
+    "website_alive": true,
+    "source_url": "https://www.northstarcalifornia.com",
+    "notes": "Vail Resorts SPA shell returned a generic 'system cannot process your request' error on homepage and about-the-mountain endpoints; data not extractable from public HTML (rendered client-side). Site treated as alive."
+  },
+  {
+    "slug": "norway-mountain",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.norwaymountain.com",
+    "website_alive": false,
+    "source_url": "https://www.norwaymountain.com",
+    "notes": "Homepage returned HTTP 522 (origin connection failure); /skiing/ also 522. Resort historically closed; website not reachable during fetch."
+  },
+  {
+    "slug": "nubs-nob",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.nubsnob.com",
+    "website_alive": true,
+    "source_url": "https://www.nubsnob.com/trail-maps/",
+    "notes": "Site alive (extensive conditions reports). Trail Maps page provides downhill and Nordic maps as images only; no published total trail count or difficulty percentages in text."
+  },
+  {
+    "slug": "oak-mountain",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.oakmountainski.com",
+    "website_alive": true,
+    "source_url": "https://www.oakmountainski.com/the-mountain/trailmap",
+    "notes": "Site alive. /the-mountain/trailmap page references a trail map but does not publish trail count or difficulty percentages as text."
+  },
+  {
+    "slug": "ober-mountain",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.obermountain.com",
+    "website_alive": true,
+    "source_url": "https://www.obermountain.com",
+    "notes": "Site alive (Ober Gatlinburg). Homepage covers attractions/dining/activities; trail count and difficulty breakdown not published in extractable HTML. /skiing-snowboarding and /snow-ski-park subpaths returned 404."
+  },
+  {
+    "slug": "oglebay-resort",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://oglebay.com",
+    "website_alive": true,
+    "source_url": "https://oglebay.com",
+    "notes": "Site alive (resort). Mentions Winter Sports but no specific ski trail count or difficulty breakdown published; /winter-fun and /winter-sports returned 404."
+  },
+  {
+    "slug": "okemo-mountain-resort",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.okemo.com",
+    "website_alive": true,
+    "source_url": "https://www.okemo.com",
+    "notes": "Vail Resorts SPA shell returned generic 'system cannot process your request' error on homepage and about-the-mountain endpoint; data not extractable from public HTML (rendered client-side). Site treated as alive."
+  },
+  {
+    "slug": "otis-ridge",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://otisridge.com",
+    "website_alive": true,
+    "source_url": "https://otisridge.com/trailmap/",
+    "notes": "Site alive (small MA ski area). Trailmap page offers a downloadable PDF; trail count and difficulty percentages not published as text."
+  },
+  {
+    "slug": "otsego-resort",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.otsegoresort.com",
+    "website_alive": true,
+    "source_url": "https://otsegoclub.com/",
+    "notes": "www.otsegoresort.com 301-redirects to otsegoclub.com (alive). Homepage references skiing/snowboarding amenities but does not publish trail count or difficulty percentages."
+  },
+  {
+    "slug": "pajarito-mountain",
+    "trails_total": 53,
+    "difficulty_pct": { "beginner": 20, "intermediate": 50, "advanced": 30, "expert": 0 },
+    "website_url": "https://www.skipajarito.com",
+    "website_alive": true,
+    "source_url": "https://www.pajarito.ski/mountain-stats/",
+    "notes": "skipajarito.com 301-redirects to pajarito.ski. Mountain Stats page publishes 'Trails: 53 (20% easy, 50% intermediate, 30% difficult)'; no expert tier breakout."
+  },
+  {
+    "slug": "palisades-tahoe",
+    "trails_total": 288,
+    "difficulty_pct": { "beginner": 25, "intermediate": 43, "advanced": 24, "expert": 9 },
+    "website_url": "https://www.palisadestahoe.com",
+    "website_alive": true,
+    "source_url": "https://www.palisadestahoe.com/footer/mountain-statistics",
+    "notes": "Mountain Statistics page publishes 288 trails total with 25% beginner / 43% intermediate / 24% advanced / 9% expert."
+  },
+  {
+    "slug": "paoli-peaks",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.paolipeaks.com",
+    "website_alive": true,
+    "source_url": "https://www.paolipeaks.com",
+    "notes": "Vail Resorts SPA shell returned generic 'system cannot process your request' error on homepage and about-the-mountain endpoint; data not extractable from public HTML (rendered client-side). Site treated as alive."
+  },
+  {
+    "slug": "park-city",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.parkcitymountain.com",
+    "website_alive": true,
+    "source_url": "https://www.parkcitymountain.com",
+    "notes": "Vail Resorts SPA shell returned generic 'system cannot process your request' error on homepage and about-the-mountain endpoint; data not extractable from public HTML (rendered client-side). Site treated as alive."
+  },
+  {
+    "slug": "pats-peak",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.patspeak.com",
+    "website_alive": true,
+    "source_url": "https://www.patspeak.com",
+    "notes": "Homepage returned HTTP 403 (bot-blocked) during fetch; site otherwise known to be operational. Data not extractable via WebFetch."
+  },
+  {
+    "slug": "paul-bunyan-hill",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://skipaulbunyan.com/",
+    "website_alive": true,
+    "source_url": "https://skipaulbunyan.com/",
+    "notes": "Site alive (community ski hill, Lakewood WI). Homepage covers activities/amenities but does not publish trail count or difficulty percentages."
+  },
+  {
+    "slug": "pebble-creek",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.pebblecreekskiarea.com",
+    "website_alive": true,
+    "source_url": "https://www.pebblecreekskiarea.com/the-mountain/trails-grooming/",
+    "notes": "Site alive. Trails & Grooming page lists sections (Aspen Area, Upper Mountain Runs, Mid Mountain Runs) with difficulty icons but does not publish aggregated trail count or difficulty percentages as text."
+  },
+  {
+    "slug": "peek-n-peak",
+    "trails_total": 26,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.pknpk.com",
+    "website_alive": true,
+    "source_url": "https://www.pknpk.com",
+    "notes": "Homepage states '26 trails and slopes of varying difficulty levels' plus 3 terrain parks; no published difficulty percentage breakdown."
+  },
+  {
+    "slug": "perfect-north",
+    "trails_total": 23,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.perfectnorth.com",
+    "website_alive": true,
+    "source_url": "https://www.perfectnorth.com",
+    "notes": "Homepage publishes '23 trails'; no published difficulty percentage breakdown."
+  },
+  {
+    "slug": "pico-mountain",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.picomountain.com",
+    "website_alive": true,
+    "source_url": "https://www.picomountain.com",
+    "notes": "Site alive. Homepage and /the-mountain/trail-map link to maps and lifts/trails report but trail count and difficulty percentages are not published in extractable HTML."
+  },
+  {
+    "slug": "pine-knob",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.pineknobskiresort.com",
+    "website_alive": true,
+    "source_url": "https://www.pineknobskiresort.com",
+    "notes": "Site alive but homepage and /the-mountain subpaths returned empty/no extractable HTML content via WebFetch (likely SPA rendering)."
+  },
+  {
+    "slug": "pine-mountain",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.pinemountainresort.com",
+    "website_alive": true,
+    "source_url": "https://www.pinemountainresort.com",
+    "notes": "Site alive. Homepage references 'classic slopes, exciting jumps, scenic trails, and convenient lifts' but does not publish trail count or difficulty breakdown."
+  },
+  {
+    "slug": "plain-valley-trails",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.skiplain.com/",
+    "website_alive": true,
+    "source_url": "https://www.skiplain.com/",
+    "notes": "Site alive (Nordic / cross-country). Mentions '25 km of groomed trails' and references beginner/advanced terrain; no alpine-style trail count or difficulty percentage breakdown."
+  },
+  {
+    "slug": "plattekill-mountain",
+    "trails_total": 41,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://plattekill.com",
+    "website_alive": true,
+    "source_url": "https://plattekill.com",
+    "notes": "Homepage publishes '41 exciting trails and 1100ft of vertical'; no published difficulty percentage breakdown."
+  }
+]

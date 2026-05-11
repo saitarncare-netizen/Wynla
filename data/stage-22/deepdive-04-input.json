@@ -1,0 +1,152 @@
+[
+  {
+    "slug": "mohawk-mountain-ski-area",
+    "name": "Mohawk Mountain Ski Area",
+    "state": "CT",
+    "website_url": "https://www.mohawkmtn.com"
+  },
+  {
+    "slug": "monarch-mountain",
+    "name": "Monarch Mountain",
+    "state": "CO",
+    "website_url": "https://www.skimonarch.com"
+  },
+  {
+    "slug": "moose",
+    "name": "Moose Mountain",
+    "state": "AK",
+    "website_url": "https://shredthemoose.com/"
+  },
+  {
+    "slug": "mount-holly",
+    "name": "Mt. Holly",
+    "state": "MI",
+    "website_url": "https://www.skimtholly.com"
+  },
+  {
+    "slug": "mount-itasca",
+    "name": "Mount Itasca",
+    "state": "MN",
+    "website_url": "https://www.mtitasca.com/"
+  },
+  {
+    "slug": "mt-brighton",
+    "name": "Mt. Brighton",
+    "state": "MI",
+    "website_url": "https://www.mtbrighton.com"
+  },
+  {
+    "slug": "mt-hood-skibowl",
+    "name": "Mt. Hood Skibowl",
+    "state": "OR",
+    "website_url": "https://www.skibowl.com"
+  },
+  {
+    "slug": "mt-la-crosse",
+    "name": "Mt La Crosse",
+    "state": "WI",
+    "website_url": "https://mtlacrosse.com/"
+  },
+  {
+    "slug": "mt-lemmon-ski-valley",
+    "name": "Mt. Lemmon Ski Valley",
+    "state": "AZ",
+    "website_url": "https://www.skithelemmon.com"
+  },
+  {
+    "slug": "north-cascade-heli",
+    "name": "North Cascade Heli",
+    "state": "WA",
+    "website_url": "https://heli-ski.com/"
+  },
+  {
+    "slug": "otis-ridge",
+    "name": "Otis Ridge",
+    "state": "MA",
+    "website_url": "https://otisridge.com"
+  },
+  {
+    "slug": "paoli-peaks",
+    "name": "Paoli Peaks",
+    "state": "IN",
+    "website_url": "https://www.paolipeaks.com"
+  },
+  {
+    "slug": "pine-knob",
+    "name": "Pine Knob",
+    "state": "MI",
+    "website_url": "https://www.pineknobskiresort.com"
+  },
+  {
+    "slug": "plain-valley-trails",
+    "name": "Plain Valley Ski Trails",
+    "state": "WA",
+    "website_url": "https://www.skiplain.com/"
+  },
+  {
+    "slug": "pomerelle",
+    "name": "Pomerelle Mountain Resort",
+    "state": "ID",
+    "website_url": "https://pomerelle-mtn.com"
+  },
+  {
+    "slug": "powder-ridge",
+    "name": "Powder Ridge Winter Recreation Area",
+    "state": "MN",
+    "website_url": "https://www.powderridge.com"
+  },
+  {
+    "slug": "powder-ridge-mountain-park",
+    "name": "Powder Ridge Mountain Park & Resort",
+    "state": "CT",
+    "website_url": "https://powderridgepark.com"
+  },
+  {
+    "slug": "powderhouse-hill",
+    "name": "Powderhouse Hill",
+    "state": "ME",
+    "website_url": "https://www.powderhousehill.com"
+  },
+  {
+    "slug": "quarry-road-trails",
+    "name": "Quarry Road Trails",
+    "state": "ME",
+    "website_url": "https://quarryroad.org/"
+  },
+  {
+    "slug": "quechee-club",
+    "name": "Quechee Club",
+    "state": "VT",
+    "website_url": "https://www.quecheeclub.com"
+  },
+  {
+    "slug": "ragged-mountain",
+    "name": "Ragged Mountain",
+    "state": "NH",
+    "website_url": "https://www.raggedmountainresort.com"
+  },
+  {
+    "slug": "rangeley-lakes-trail-center",
+    "name": "Rangeley Lakes Trail Center",
+    "state": "ME",
+    "website_url": null
+  },
+  {
+    "slug": "rikert-nordic-center",
+    "name": "Rikert Nordic Center",
+    "state": "VT",
+    "website_url": "https://www.rikertoutdoor.com/"
+  },
+  {
+    "slug": "rikert-outdoor-center",
+    "name": "Rikert Outdoor Center",
+    "state": "VT",
+    "website_url": "https://www.rikertoutdoor.com"
+  },
+  {
+    "slug": "rotarun",
+    "name": "Rotarun Ski Area",
+    "state": "ID",
+    "website_url": "https://rotarun.com"
+  }
+]

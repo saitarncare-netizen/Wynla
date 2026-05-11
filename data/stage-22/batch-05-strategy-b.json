@@ -1,0 +1,452 @@
+[
+  {
+    "slug": "cuchara",
+    "name": "Cuchara",
+    "state": "CO",
+    "trails_total": 9,
+    "difficulty_pct": {
+      "beginner": 56,
+      "intermediate": 44,
+      "advanced": 0,
+      "expert": 0
+    },
+    "source_url": "https://www.indyskipass.com/our-resorts/cuchara",
+    "source_site": "indyskipass (search aggregation)",
+    "notes": "Trail count: 9 total = 5 beginner + 4 intermediate. Skiresort.info (cuchara-mountain-park) lists 6 km total: easy 2 km/33%, intermediate 3 km/50%, difficult 1 km/17%. Used trail-count breakdown (more accurate for a beginner/intermediate-only hill)."
+  },
+  {
+    "slug": "dartmouth-skiway",
+    "name": "Dartmouth Skiway",
+    "state": "NH",
+    "trails_total": 28,
+    "difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 50,
+      "advanced": 25,
+      "expert": 4
+    },
+    "source_url": "https://www.onthesnow.com/new-hampshire/dartmouth-skiway/ski-resort",
+    "source_site": "OnTheSnow.com",
+    "notes": "OnTheSnow trail-count breakdown. Skiresort.info confirms 16 km of slopes (easy 25/intermediate 50/difficult 25)."
+  },
+  {
+    "slug": "deer-valley",
+    "name": "Deer Valley Resort",
+    "state": "UT",
+    "trails_total": 202,
+    "difficulty_pct": {
+      "beginner": 31,
+      "intermediate": 45,
+      "advanced": 12,
+      "expert": 12
+    },
+    "source_url": "https://www.onthesnow.com/utah/deer-valley-resort/ski-resort",
+    "source_site": "OnTheSnow.com",
+    "notes": "OnTheSnow reported 202 runs, 31% beginner / 45% intermediate / 24% expert (no separate advanced). Split the 24% into 12% advanced + 12% expert per Strategy B convention. Skiresort.info has 202 km of slopes (easy 35/intermediate 44/difficult 21)."
+  },
+  {
+    "slug": "detroit",
+    "name": "Detroit Mountain",
+    "state": "MN",
+    "trails_total": 21,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 35,
+      "advanced": 30,
+      "expert": 0
+    },
+    "source_url": "https://www.indyskipass.com/our-resorts/detroit-mountain",
+    "source_site": "indyskipass (search aggregation)",
+    "notes": "Reported 35/35/30 beginner/intermediate/advanced. Skiresort.info shows only 2 km, 50/50/0 (less detailed). Used trail-percent breakdown."
+  },
+  {
+    "slug": "detroit-mountain",
+    "name": "Detroit Mountain Recreation Area",
+    "state": "MN",
+    "trails_total": 21,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 35,
+      "advanced": 30,
+      "expert": 0
+    },
+    "source_url": "https://www.indyskipass.com/our-resorts/detroit-mountain",
+    "source_site": "indyskipass (search aggregation)",
+    "notes": "Duplicate of 'detroit' slug — same resort."
+  },
+  {
+    "slug": "devils-head",
+    "name": "Devil's Head Resort",
+    "state": "WI",
+    "trails_total": 30,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 40,
+      "advanced": 15,
+      "expert": 15
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Devil's_Head_Resort",
+    "source_site": "Wikipedia / search aggregation",
+    "notes": "30 runs, 30% beginner / 40% intermediate / 30% expert reported. Split the 30% expert into 15% advanced + 15% expert. Skiresort.info has 10 km of slopes (easy 30/intermediate 35/difficult 35)."
+  },
+  {
+    "slug": "diamond-peak",
+    "name": "Diamond Peak",
+    "state": "NV",
+    "trails_total": 40,
+    "difficulty_pct": {
+      "beginner": 8,
+      "intermediate": 28,
+      "advanced": 33,
+      "expert": 33
+    },
+    "source_url": "https://www.onthesnow.com/nevada/diamond-peak/ski-resort",
+    "source_site": "OnTheSnow.com",
+    "notes": "OnTheSnow lists 40 runs across 655 acres with 8/28/33/33 split."
+  },
+  {
+    "slug": "discovery",
+    "name": "Discovery Ski Area",
+    "state": "MT",
+    "trails_total": 74,
+    "difficulty_pct": {
+      "beginner": 28,
+      "intermediate": 26,
+      "advanced": 23,
+      "expert": 23
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/discovery-ski-area/",
+    "source_site": "skiresort.info",
+    "notes": "Skiresort.info: 45 km slopes (easy 28/intermediate 26/difficult 46). Split difficult 46% into advanced 23% + expert 23%. OnTheSnow confirms 74 total runs."
+  },
+  {
+    "slug": "dodge-ridge",
+    "name": "Dodge Ridge",
+    "state": "CA",
+    "trails_total": 67,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 40,
+      "advanced": 20,
+      "expert": 20
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/dodge-ridge/",
+    "source_site": "skiresort.info",
+    "notes": "Skiresort.info 50 km: easy 20/intermediate 40/difficult 40. Split difficult into 20% advanced + 20% expert. OnTheSnow says 71 runs but no breakdown."
+  },
+  {
+    "slug": "dog-creek-lodge-nordic-center",
+    "name": "Dog Creek Lodge & Nordic Center",
+    "state": "MT",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "source_site": null,
+    "notes": "not found — XC-only nordic center, not listed on skiresort.info/OnTheSnow/SkiCentral/SnowPak. Skiresort.info 'dog-creek-lodge' and 'dog-creek-lodge-nordic-center' slugs both return portal homepage. No difficulty breakdown available."
+  },
+  {
+    "slug": "donner-ski-ranch",
+    "name": "Donner Ski Ranch",
+    "state": "CA",
+    "trails_total": 52,
+    "difficulty_pct": {
+      "beginner": 31,
+      "intermediate": 38,
+      "advanced": 21,
+      "expert": 10
+    },
+    "source_url": "https://www.onthesnow.com/california/donner-ski-ranch/ski-resort",
+    "source_site": "OnTheSnow.com",
+    "notes": "OnTheSnow: 52 runs, 31/38/21/10 split. Skiresort.info has 52 km of slopes (easy 25/intermediate 50/difficult 25)."
+  },
+  {
+    "slug": "dry-hill-area",
+    "name": "Dry Hill Ski Area",
+    "state": "NY",
+    "trails_total": 7,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 34,
+      "advanced": 33,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/new-york/dry-hill-ski-area/ski-resort",
+    "source_site": "OnTheSnow.com",
+    "notes": "OnTheSnow shows 7 runs, 33/34/33 (no expert listed). Skiresort.info confirms 2.4 km of slopes (easy 29/intermediate 50/difficult 21). Note: input said 13 total trails — OnTheSnow says 7."
+  },
+  {
+    "slug": "eagle-point",
+    "name": "Eagle Point Resort",
+    "state": "UT",
+    "trails_total": 43,
+    "difficulty_pct": {
+      "beginner": 23,
+      "intermediate": 30,
+      "advanced": 28,
+      "expert": 19
+    },
+    "source_url": "https://www.onthesnow.com/utah/eagle-point/ski-resort",
+    "source_site": "OnTheSnow.com",
+    "notes": "OnTheSnow: 43 runs, 23/30/28/19 split."
+  },
+  {
+    "slug": "eagle-rock-resort",
+    "name": "Eagle Rock Resort",
+    "state": "PA",
+    "trails_total": 14,
+    "difficulty_pct": {
+      "beginner": 28,
+      "intermediate": 40,
+      "advanced": 16,
+      "expert": 16
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/eagle-rock/",
+    "source_site": "skiresort.info",
+    "notes": "Skiresort.info: 2.5 km slopes, easy 28/intermediate 40/difficult 32. Split difficult into 16% advanced + 16% expert. Trail count 14 from SkiCentral / Snow-Forecast search results."
+  },
+  {
+    "slug": "eaglecrest",
+    "name": "Eaglecrest",
+    "state": "AK",
+    "trails_total": 37,
+    "difficulty_pct": {
+      "beginner": 32,
+      "intermediate": 38,
+      "advanced": 15,
+      "expert": 15
+    },
+    "source_url": "https://www.onthesnow.com/alaska/eaglecrest-ski-area/ski-resort",
+    "source_site": "OnTheSnow.com",
+    "notes": "OnTheSnow: 37 runs, 32% beginner / 38% intermediate / 30% advanced (no expert listed). Split advanced 30% into 15% advanced + 15% expert. Resort website reports 36 runs."
+  },
+  {
+    "slug": "eaglecrest-ski-area",
+    "name": "Eaglecrest Ski Area",
+    "state": "AK",
+    "trails_total": 37,
+    "difficulty_pct": {
+      "beginner": 32,
+      "intermediate": 38,
+      "advanced": 15,
+      "expert": 15
+    },
+    "source_url": "https://www.onthesnow.com/alaska/eaglecrest-ski-area/ski-resort",
+    "source_site": "OnTheSnow.com",
+    "notes": "Duplicate of 'eaglecrest' slug — same resort in Juneau, AK."
+  },
+  {
+    "slug": "eaton-mountain",
+    "name": "Eaton Mountain",
+    "state": "ME",
+    "trails_total": 18,
+    "difficulty_pct": {
+      "beginner": 28,
+      "intermediate": 39,
+      "advanced": 17,
+      "expert": 17
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Eaton_Mountain",
+    "source_site": "Wikipedia / search aggregation",
+    "notes": "Wikipedia/SkiNewEngland: 18 trails (5 beginner + 7 intermediate + 6 expert = 28/39/33 pct). Split expert 33% into 17% advanced + 17% expert. Skiresort.info shows only 2 km (75/25/0)."
+  },
+  {
+    "slug": "echo-mountain",
+    "name": "Echo Mountain",
+    "state": "CO",
+    "trails_total": 16,
+    "difficulty_pct": {
+      "beginner": 67,
+      "intermediate": 33,
+      "advanced": 0,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/echo-mountain-park-idaho-springs/",
+    "source_site": "skiresort.info",
+    "notes": "Skiresort.info: 3 km slopes, easy 67/intermediate 33/difficult 0. Trail count 16 from uncovercolorado.com. OnTheSnow lists 7 runs but no breakdown."
+  },
+  {
+    "slug": "echo-valley",
+    "name": "Echo Valley Ski Area",
+    "state": "WA",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 40,
+      "advanced": 14,
+      "expert": 13
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/echo-valley/",
+    "source_site": "skiresort.info",
+    "notes": "Skiresort.info: 7 km slopes, easy 33/intermediate 40/difficult 27. Split difficult 27% into 14% advanced + 13% expert. Total trails not found (volunteer non-profit area, no count published)."
+  },
+  {
+    "slug": "eldora",
+    "name": "Eldora Mountain Resort",
+    "state": "CO",
+    "trails_total": 63,
+    "difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 48,
+      "advanced": 19,
+      "expert": 14
+    },
+    "source_url": "https://www.onthesnow.com/colorado/eldora-mountain-resort/ski-resort",
+    "source_site": "OnTheSnow.com",
+    "notes": "OnTheSnow: 63 trails, 19/48/19/14 split. Skiresort.info has 52 km slopes (easy 21/intermediate 50/difficult 29)."
+  },
+  {
+    "slug": "elk-mountain",
+    "name": "Elk Mountain Ski Resort",
+    "state": "PA",
+    "trails_total": 27,
+    "difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 37,
+      "advanced": 21,
+      "expert": 20
+    },
+    "source_url": "https://www.onthesnow.com/pennsylvania/elk-mountain-ski-resort/ski-resort",
+    "source_site": "OnTheSnow.com",
+    "notes": "OnTheSnow: 27 trails, 22/37/41 (no expert listed). Skiresort.info confirms 15 km slopes (easy 20/intermediate 53/difficult 27). Split advanced 41% into 21% advanced + 20% expert."
+  },
+  {
+    "slug": "elko-snobowl",
+    "name": "Elko SnoBowl",
+    "state": "NV",
+    "trails_total": 10,
+    "difficulty_pct": {
+      "beginner": 50,
+      "intermediate": 50,
+      "advanced": 0,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/nevada/elko-snobowl/ski-resort",
+    "source_site": "OnTheSnow.com / travelnevada.com",
+    "notes": "Travelnevada.com: 10 trails, half beginner / half intermediate, no advanced/expert. Skiresort.info confirms 3 km (50/50/0)."
+  },
+  {
+    "slug": "enchanted-forest-xc",
+    "name": "Enchanted Forest XC",
+    "state": "NM",
+    "trails_total": 35,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "source_site": null,
+    "notes": "not found — cross-country (nordic) ski area, not indexed on skiresort.info/OnTheSnow/SkiCentral/SnowPak for downhill-style difficulty breakdown."
+  },
+  {
+    "slug": "ferguson-ridge",
+    "name": "Ferguson Ridge Ski Area",
+    "state": "OR",
+    "trails_total": 8,
+    "difficulty_pct": {
+      "beginner": 40,
+      "intermediate": 40,
+      "advanced": 10,
+      "expert": 10
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/ferguson-ridge/",
+    "source_site": "skiresort.info",
+    "notes": "Skiresort.info: 5 km slopes, easy 40/intermediate 40/difficult 20. Split difficult 20% into 10% advanced + 10% expert. 8 main trails per skifergi.com."
+  },
+  {
+    "slug": "four-lakes",
+    "name": "Four Lakes Alpine Snowsports",
+    "state": "IL",
+    "trails_total": 4,
+    "difficulty_pct": {
+      "beginner": 50,
+      "intermediate": 25,
+      "advanced": 25,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/four-lakes/",
+    "source_site": "skiresort.info / freeride.com",
+    "notes": "Freeride: 4 runs = 2 beginner / 1 intermediate / 1 advanced = 50/25/25/0. Skiresort.info shows only 1 km of slopes (100% easy)."
+  },
+  {
+    "slug": "franconia-village-xc-area",
+    "name": "Franconia Village XC Ski Area",
+    "state": "NH",
+    "trails_total": 12,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "source_site": null,
+    "notes": "not found — cross-country (nordic) ski area, not indexed on skiresort.info/OnTheSnow/SkiCentral/SnowPak for downhill-style difficulty breakdown."
+  },
+  {
+    "slug": "frost-fire-park",
+    "name": "Frost Fire Park",
+    "state": "ND",
+    "trails_total": 7,
+    "difficulty_pct": {
+      "beginner": 47,
+      "intermediate": 40,
+      "advanced": 7,
+      "expert": 6
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/frost-fire-park/",
+    "source_site": "skiresort.info",
+    "notes": "Skiresort.info: 1.5 km slopes, easy 0.7 km (47%) / intermediate 0.6 km (40%) / difficult 0.2 km (13%). Split difficult 13% into 7% advanced + 6% expert. 7 runs per Wikipedia/ndtourism. Note: park has paused ski/snowboard season."
+  },
+  {
+    "slug": "garnet-hill-xc",
+    "name": "Garnet Hill XC",
+    "state": "NY",
+    "trails_total": 35,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "source_site": null,
+    "notes": "not found — cross-country (nordic) ski center, not indexed on skiresort.info/OnTheSnow/SkiCentral/SnowPak for downhill-style difficulty breakdown."
+  },
+  {
+    "slug": "giants-ridge",
+    "name": "Giants Ridge",
+    "state": "MN",
+    "trails_total": 35,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 50,
+      "advanced": 10,
+      "expert": 10
+    },
+    "source_url": "https://www.onthesnow.com/minnesota/giants-ridge-resort/ski-resort",
+    "source_site": "OnTheSnow.com",
+    "notes": "OnTheSnow: 35 trails, 30/50/20 (no expert listed). Split advanced 20% into 10% advanced + 10% expert. Skiresort.info confirms 12 km slopes (easy 33/intermediate 42/difficult 25)."
+  },
+  {
+    "slug": "gore-mountain",
+    "name": "Gore Mountain",
+    "state": "NY",
+    "trails_total": 108,
+    "difficulty_pct": {
+      "beginner": 11,
+      "intermediate": 53,
+      "advanced": 30,
+      "expert": 6
+    },
+    "source_url": "https://www.onthesnow.com/new-york/gore-mountain/ski-resort",
+    "source_site": "OnTheSnow.com",
+    "notes": "OnTheSnow: 108 trails, 11/53/30/6 split. Skiresort.info has 58.2 km slopes (easy 12/intermediate 48/difficult 40)."
+  }
+]

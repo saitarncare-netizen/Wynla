@@ -1,0 +1,392 @@
+[
+  {
+    "slug": "showdown",
+    "name": "Showdown Montana",
+    "state": "MT",
+    "website_url": "https://showdownmontana.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "sierra-at-tahoe",
+    "name": "Sierra-at-Tahoe",
+    "state": "CA",
+    "website_url": "https://www.sierraattahoe.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": 26,
+      "intermediate": 50,
+      "advanced": 24,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "silver-mountain",
+    "name": "Silver Mountain",
+    "state": "ID",
+    "website_url": "https://www.silvermt.com",
+    "current_total_trails": 83,
+    "current_difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 40,
+      "advanced": 30,
+      "expert": 10
+    }
+  },
+  {
+    "slug": "silverton-mountain",
+    "name": "Silverton Mountain",
+    "state": "CO",
+    "website_url": "https://www.silvertonmountain.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "sipapu",
+    "name": "Sipapu Ski Resort",
+    "state": "NM",
+    "website_url": "https://www.sipapunm.com",
+    "current_total_trails": 43,
+    "current_difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 40,
+      "advanced": 26,
+      "expert": 14
+    }
+  },
+  {
+    "slug": "skaneateles-club",
+    "name": "Skaneateles Ski Club",
+    "state": "NY",
+    "website_url": "https://www.skiskan.com/",
+    "current_total_trails": 7,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "ski-apache",
+    "name": "Ski Apache",
+    "state": "NM",
+    "website_url": "https://www.skiapache.com",
+    "current_total_trails": 55,
+    "current_difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 60,
+      "advanced": 20,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "ski-bradford",
+    "name": "Ski Bradford",
+    "state": "MA",
+    "website_url": "https://skibradford.com",
+    "current_total_trails": 15,
+    "current_difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 27,
+      "advanced": 53,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "ski-brule",
+    "name": "Ski Brule",
+    "state": "MI",
+    "website_url": "https://www.skibrule.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 40,
+      "advanced": 20,
+      "expert": 7
+    }
+  },
+  {
+    "slug": "ski-butternut",
+    "name": "Ski Butternut",
+    "state": "MA",
+    "website_url": "https://www.skibutternut.com",
+    "current_total_trails": 22,
+    "current_difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 62,
+      "advanced": 19,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "ski-cooper",
+    "name": "Ski Cooper",
+    "state": "CO",
+    "website_url": "https://www.skicooper.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": 32,
+      "intermediate": 35,
+      "advanced": 33,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "ski-gull",
+    "name": "Ski Gull",
+    "state": "MN",
+    "website_url": "https://www.skigull.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "ski-santa-fe",
+    "name": "Ski Santa Fe",
+    "state": "NM",
+    "website_url": "https://skisantafe.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 40,
+      "advanced": 40,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "ski-sawmill",
+    "name": "Ski Sawmill",
+    "state": "PA",
+    "website_url": "https://www.skisawmill.com",
+    "current_total_trails": 13,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "ski-sundown",
+    "name": "Ski Sundown",
+    "state": "CT",
+    "website_url": "https://www.skisundown.com",
+    "current_total_trails": 16,
+    "current_difficulty_pct": {
+      "beginner": 53,
+      "intermediate": 24,
+      "advanced": 18,
+      "expert": 6
+    }
+  },
+  {
+    "slug": "ski-ward",
+    "name": "Ski Ward",
+    "state": "MA",
+    "website_url": "https://www.skiward.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "skiland",
+    "name": "Moose Mountain (Skiland)",
+    "state": "AK",
+    "website_url": "https://skiland.org",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 50,
+      "advanced": 30,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "sleeping-giant",
+    "name": "Sleeping Giant Ski Area",
+    "state": "WY",
+    "website_url": "https://www.skisg.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "sleepy-hollow",
+    "name": "Sleepy Hollow Sports Park",
+    "state": "IA",
+    "website_url": "https://www.sleepyhollowsportspark.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "smugglers-notch",
+    "name": "Smugglers' Notch",
+    "state": "VT",
+    "website_url": "https://www.smuggs.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 49,
+      "advanced": 25,
+      "expert": 6
+    }
+  },
+  {
+    "slug": "snow-creek",
+    "name": "Snow Creek",
+    "state": "MO",
+    "website_url": "https://www.skisnowcreek.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "snow-king",
+    "name": "Snow King Mountain",
+    "state": "WY",
+    "website_url": "https://www.snowkingmountain.com",
+    "current_total_trails": 41,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "snow-ridge",
+    "name": "Snow Ridge",
+    "state": "NY",
+    "website_url": "https://www.snowridge.com",
+    "current_total_trails": 33,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "snow-snake",
+    "name": "Snow Snake Mountain",
+    "state": "MI",
+    "website_url": "https://www.snowsnake.net",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "snow-summit",
+    "name": "Snow Summit",
+    "state": "CA",
+    "website_url": "https://www.bigbearmountainresort.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "snow-trails",
+    "name": "Snow Trails",
+    "state": "OH",
+    "website_url": "https://www.snowtrails.com",
+    "current_total_trails": 21,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "snow-valley",
+    "name": "Snow Valley Mountain Resort",
+    "state": "CA",
+    "website_url": "https://www.snow-valley.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": 14,
+      "intermediate": 45,
+      "advanced": 31,
+      "expert": 10
+    }
+  },
+  {
+    "slug": "snowbasin",
+    "name": "Snowbasin",
+    "state": "UT",
+    "website_url": "https://www.snowbasin.com",
+    "current_total_trails": 104,
+    "current_difficulty_pct": {
+      "beginner": 7,
+      "intermediate": 29,
+      "advanced": 34,
+      "expert": 31
+    }
+  },
+  {
+    "slug": "snowbird",
+    "name": "Snowbird",
+    "state": "UT",
+    "website_url": "https://www.snowbird.com",
+    "current_total_trails": 169,
+    "current_difficulty_pct": {
+      "beginner": 27,
+      "intermediate": 38,
+      "advanced": 35,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "snowhaven",
+    "name": "Snowhaven",
+    "state": "ID",
+    "website_url": "https://www.grangevilleidaho.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  }
+]

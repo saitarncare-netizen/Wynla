@@ -1,0 +1,152 @@
+[
+  {
+    "slug": "showdown",
+    "name": "Showdown Montana",
+    "state": "MT",
+    "website_url": "https://showdownmontana.com"
+  },
+  {
+    "slug": "silver-mountain",
+    "name": "Silver Mountain",
+    "state": "ID",
+    "website_url": "https://www.silvermt.com"
+  },
+  {
+    "slug": "silverton-mountain",
+    "name": "Silverton Mountain",
+    "state": "CO",
+    "website_url": "https://www.silvertonmountain.com"
+  },
+  {
+    "slug": "skaneateles-club",
+    "name": "Skaneateles Ski Club",
+    "state": "NY",
+    "website_url": "https://www.skiskan.com/"
+  },
+  {
+    "slug": "sleepy-hollow",
+    "name": "Sleepy Hollow Sports Park",
+    "state": "IA",
+    "website_url": "https://www.sleepyhollowsportspark.com"
+  },
+  {
+    "slug": "snow-summit",
+    "name": "Snow Summit",
+    "state": "CA",
+    "website_url": "https://www.bigbearmountainresort.com"
+  },
+  {
+    "slug": "snow-valley",
+    "name": "Snow Valley Mountain Resort",
+    "state": "CA",
+    "website_url": "https://www.snow-valley.com"
+  },
+  {
+    "slug": "snowhaven",
+    "name": "Snowhaven",
+    "state": "ID",
+    "website_url": "https://www.grangevilleidaho.com"
+  },
+  {
+    "slug": "spout-springs",
+    "name": "Spout Springs Ski Area",
+    "state": "OR",
+    "website_url": "https://spoutspringsskiarea.com"
+  },
+  {
+    "slug": "steamboat-touring-center",
+    "name": "Steamboat Ski Touring Center",
+    "state": "CO",
+    "website_url": "https://nordicski.net/steamboat-ski-touring-center/"
+  },
+  {
+    "slug": "teton-pass",
+    "name": "Teton Pass Ski Area",
+    "state": "MT",
+    "website_url": "https://www.skitetonmt.com/"
+  },
+  {
+    "slug": "the-rock-snowpark",
+    "name": "The Rock Snowpark",
+    "state": "WI",
+    "website_url": "https://www.therocksnowpark.com"
+  },
+  {
+    "slug": "timberline-lodge",
+    "name": "Timberline Lodge Ski Area",
+    "state": "OR",
+    "website_url": "https://www.timberlinelodge.com"
+  },
+  {
+    "slug": "titcomb-mountain",
+    "name": "Titcomb Mountain",
+    "state": "ME",
+    "website_url": "https://www.titcombmountain.com"
+  },
+  {
+    "slug": "trapp-family-lodge",
+    "name": "Trapp Family Lodge",
+    "state": "VT",
+    "website_url": "https://www.trappfamily.com/skiing-snowshoeing.htm"
+  },
+  {
+    "slug": "turner-mountain",
+    "name": "Turner Mountain Ski Resort",
+    "state": "MT",
+    "website_url": "https://www.skiturner.com"
+  },
+  {
+    "slug": "vail",
+    "name": "Vail Ski Resort",
+    "state": "CO",
+    "website_url": "https://www.vail.com"
+  },
+  {
+    "slug": "victor-constant-ski-area",
+    "name": "Victor Constant Ski Area",
+    "state": "NY",
+    "website_url": "https://westpoint.armymwr.com/programs/victor-constant-ski-area"
+  },
+  {
+    "slug": "villa-olivia",
+    "name": "Villa Olivia",
+    "state": "IL",
+    "website_url": "https://www.villaolivia.com"
+  },
+  {
+    "slug": "warner-canyon",
+    "name": "Warner Canyon Ski Area",
+    "state": "OR",
+    "website_url": "https://warnercanyonski.com/"
+  },
+  {
+    "slug": "whaleback-mountain",
+    "name": "Whaleback Mountain",
+    "state": "NH",
+    "website_url": "https://www.whaleback.com"
+  },
+  {
+    "slug": "white-grass-touring",
+    "name": "White Grass Ski Touring",
+    "state": "WV",
+    "website_url": "https://whitegrass.com"
+  },
+  {
+    "slug": "white-pass",
+    "name": "White Pass Ski Area",
+    "state": "WA",
+    "website_url": "https://skiwhitepass.com"
+  },
+  {
+    "slug": "white-pine",
+    "name": "White Pine Ski Resort",
+    "state": "WY",
+    "website_url": "https://www.whitepineski.com"
+  },
+  {
+    "slug": "white-pine-touring-nordic-center",
+    "name": "White Pine Touring Nordic Center",
+    "state": "UT",
+    "website_url": null
+  }
+]

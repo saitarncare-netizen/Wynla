@@ -1,0 +1,272 @@
+[
+  {
+    "slug": "showdown",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://showdownmontana.com",
+    "website_alive": true,
+    "source_url": "https://showdownmontana.com/lodge-mountain-info",
+    "notes": "Site alive; trail count and difficulty pct not published in text (trail map is PDF download only). No fabrication."
+  },
+  {
+    "slug": "sierra-at-tahoe",
+    "trails_total": 50,
+    "difficulty_pct": { "beginner": 25, "intermediate": 50, "advanced": 25, "expert": 0 },
+    "website_url": "https://www.sierraattahoe.com",
+    "website_alive": true,
+    "source_url": "https://sierraattahoe.com/maps-and-stats/",
+    "notes": "50 trails; Easier 25 / More Difficult 50 / Most Difficult 25. Site lists no separate expert tier — placed all 25 'Most Difficult' under advanced."
+  },
+  {
+    "slug": "silver-mountain",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.silvermt.com",
+    "website_alive": true,
+    "source_url": "https://www.silvermt.com/mountain/trail-map",
+    "notes": "Site alive (home, mountain, trail-map pages load); trail count/pct only on downloadable trail-map PDF. /mountain-stats and /stats return 404."
+  },
+  {
+    "slug": "silverton-mountain",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 0, "intermediate": 0, "advanced": 50, "expert": 50 },
+    "website_url": "https://www.silvertonmountain.com",
+    "website_alive": true,
+    "source_url": "https://www.silvertonmountain.com/stats",
+    "notes": "Site explicitly states 'entirely for advanced and expert' / 'no beginner or intermediate terrain'. Total trail count not published (unmarked backcountry-style runs). Split advanced+expert 50/50 from 100% advanced+expert language."
+  },
+  {
+    "slug": "sipapu",
+    "trails_total": 43,
+    "difficulty_pct": { "beginner": 20, "intermediate": 40, "advanced": 40, "expert": 0 },
+    "website_url": "https://www.sipapunm.com",
+    "website_alive": true,
+    "source_url": "https://www.sipapu.ski/trail-map/",
+    "notes": "Domain redirects to sipapu.ski. 43 named trails; site lists three tiers (Green 20 / Blue 40 / Black 40) without separating advanced vs expert — combined as advanced."
+  },
+  {
+    "slug": "skaneateles-club",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.skiskan.com/",
+    "website_alive": true,
+    "source_url": "https://www.skiskan.com/",
+    "notes": "Private club site alive; trail count and difficulty breakdown not published."
+  },
+  {
+    "slug": "ski-apache",
+    "trails_total": 55,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.skiapache.com",
+    "website_alive": true,
+    "source_url": "https://www.skiapache.com/the-mountain",
+    "notes": "Site confirms '55 trails across 750 acres'. Difficulty percentage breakdown not published on site."
+  },
+  {
+    "slug": "ski-bradford",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://skibradford.com",
+    "website_alive": true,
+    "source_url": "https://skibradford.com/trail-map/",
+    "notes": "Site alive; trail count and difficulty pct only on trail map image, not text."
+  },
+  {
+    "slug": "ski-brule",
+    "trails_total": 17,
+    "difficulty_pct": { "beginner": 35, "intermediate": 35, "advanced": 24, "expert": 6 },
+    "website_url": "https://www.skibrule.com",
+    "website_alive": true,
+    "source_url": "http://skibrule.com/brule-mountain/trail-map-stats/",
+    "notes": "Site confirms 17 trails, 35/35/24/6 breakdown verbatim."
+  },
+  {
+    "slug": "ski-butternut",
+    "trails_total": 22,
+    "difficulty_pct": { "beginner": 20, "intermediate": 60, "advanced": 20, "expert": 0 },
+    "website_url": "https://www.skibutternut.com",
+    "website_alive": true,
+    "source_url": "http://skibutternut.com/the-mountain/mountain-info/mountain-stats",
+    "notes": "Domain redirects to http://skibutternut.com. 22 trails; site lists three tiers (no expert)."
+  },
+  {
+    "slug": "ski-cooper",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.skicooper.com",
+    "website_alive": false,
+    "source_url": "https://www.skicooper.com",
+    "notes": "Returned 403 Forbidden on fetch — likely Cloudflare bot block; site may be alive in browser but not fetchable via WebFetch."
+  },
+  {
+    "slug": "ski-gull",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.skigull.com",
+    "website_alive": false,
+    "source_url": "https://www.skigull.com",
+    "notes": "ECONNREFUSED — website appears down/unreachable."
+  },
+  {
+    "slug": "ski-santa-fe",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://skisantafe.com",
+    "website_alive": true,
+    "source_url": "https://skisantafe.com",
+    "notes": "Site alive but in off-season state (Trails: 0 / Lifts: 0). Detailed mountain pages return 404. No trail count or pct found in text."
+  },
+  {
+    "slug": "ski-sawmill",
+    "trails_total": 14,
+    "difficulty_pct": { "beginner": 29, "intermediate": 29, "advanced": 36, "expert": 0 },
+    "website_url": "https://www.skisawmill.com",
+    "website_alive": true,
+    "source_url": "https://skisawmill.com/trail-map/",
+    "notes": "Site lists 14 trails: 4 beginner / 4 intermediate / 5 expert / 1 terrain park. Site uses 'Expert' label only — placed under advanced; rounded to 29/29/36 (sums to 94 due to terrain park exclusion + rounding). Differs from input (13)."
+  },
+  {
+    "slug": "ski-sundown",
+    "trails_total": 17,
+    "difficulty_pct": { "beginner": 53, "intermediate": 23, "advanced": 18, "expert": 6 },
+    "website_url": "https://www.skisundown.com",
+    "website_alive": true,
+    "source_url": "https://skisundown.com/plan-your-trip/trail-map-statistics/",
+    "notes": "17 trails (9 easier + 4 more difficult + 3 most difficult + 1 extremely difficult) = 53/23/18/6. Differs from input total (16) and intermediate (24)."
+  },
+  {
+    "slug": "ski-ward",
+    "trails_total": 9,
+    "difficulty_pct": { "beginner": 33, "intermediate": 33, "advanced": 34, "expert": 0 },
+    "website_url": "https://www.skiward.com",
+    "website_alive": true,
+    "source_url": "https://www.skiward.com/about",
+    "notes": "Site states '9 trails — 3 expert, 3 intermediate, 3 beginner'. Three-tier breakdown; 'expert' label placed in advanced bucket. Rounded to 33/33/34."
+  },
+  {
+    "slug": "skiland",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://skiland.org",
+    "website_alive": false,
+    "source_url": "https://skiland.org",
+    "notes": "ECONNREFUSED — website appears down/unreachable."
+  },
+  {
+    "slug": "sleeping-giant",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.skisg.com",
+    "website_alive": true,
+    "source_url": "https://www.skisg.com",
+    "notes": "Site alive; mentions resort not operating 2024/25 winter for repairs. Trail count and pct not in text."
+  },
+  {
+    "slug": "sleepy-hollow",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.sleepyhollowsportspark.com",
+    "website_alive": true,
+    "source_url": "https://www.sleepyhollowsportspark.com",
+    "notes": "Single 600-foot SnowFlex hill; no trail count or difficulty pct published — site says 'designed for every skill level'."
+  },
+  {
+    "slug": "smugglers-notch",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.smuggs.com",
+    "website_alive": false,
+    "source_url": "https://www.smuggs.com",
+    "notes": "Returned 402 Payment Required — likely paywall/anti-bot. Could not extract data via WebFetch."
+  },
+  {
+    "slug": "snow-creek",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.skisnowcreek.com",
+    "website_alive": true,
+    "source_url": "https://www.skisnowcreek.com",
+    "notes": "Site loads but home page returned generic 'system cannot process' error message — likely SPA shell or temporary outage. No data extractable."
+  },
+  {
+    "slug": "snow-king",
+    "trails_total": 34,
+    "difficulty_pct": { "beginner": 18, "intermediate": 38, "advanced": 44, "expert": 0 },
+    "website_url": "https://www.snowkingmountain.com",
+    "website_alive": true,
+    "source_url": "https://www.snowkingmountain.com/mountain/terrain-statistics/",
+    "notes": "Site states 34 runs: 6 beginner / 13 intermediate / 15 expert. Three-tier; 'expert' label placed in advanced bucket. Differs from input (41)."
+  },
+  {
+    "slug": "snow-ridge",
+    "trails_total": 31,
+    "difficulty_pct": { "beginner": 11, "intermediate": 27, "advanced": 48, "expert": 14 },
+    "website_url": "https://www.snowridge.com",
+    "website_alive": true,
+    "source_url": "https://snowridge.com/trail-mapstats/",
+    "notes": "Site confirms 31 trails; 11/27/48/14 verbatim. Differs from input (33)."
+  },
+  {
+    "slug": "snow-snake",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.snowsnake.net",
+    "website_alive": true,
+    "source_url": "https://snowsnake.net/trail-map/",
+    "notes": "Site alive; trail count and pct only on trail map image, not text."
+  },
+  {
+    "slug": "snow-summit",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.bigbearmountainresort.com",
+    "website_alive": true,
+    "source_url": "https://www.bigbearmountainresort.com",
+    "notes": "Big Bear umbrella site (covers Snow Summit + Bear Mountain) — page was in summer/bike mode at fetch time. Snow Summit-specific winter trail counts and pct not published in text on landing page."
+  },
+  {
+    "slug": "snow-trails",
+    "trails_total": 21,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.snowtrails.com",
+    "website_alive": true,
+    "source_url": "https://www.snowtrails.com",
+    "notes": "Site confirms 21 trails. Difficulty pct breakdown not published in text."
+  },
+  {
+    "slug": "snow-valley",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.snow-valley.com",
+    "website_alive": true,
+    "source_url": "https://www.snow-valley.com",
+    "notes": "Connection issues on fetch (socket closed). Could not extract data via WebFetch in 3 attempts. Treat as alive (domain resolves)."
+  },
+  {
+    "slug": "snowbasin",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.snowbasin.com",
+    "website_alive": true,
+    "source_url": "https://www.snowbasin.com",
+    "notes": "Site alive; off-season state. Mountain/about pages return 404. Live snow report shows '0/23' but '23' is open-trails counter not site-published total. No reliable pct found in text."
+  },
+  {
+    "slug": "snowbird",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.snowbird.com",
+    "website_alive": true,
+    "source_url": "https://www.snowbird.com/the-mountain",
+    "notes": "Site alive (SPA-style); home and /the-mountain pages load but trail-count/pct rendered client-side. /the-mountain/trails/ and /the-mountain/the-stats/ return 404 on WebFetch. Site mentions '2,500 acres / 3,000 vert' only in text."
+  },
+  {
+    "slug": "snowhaven",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.grangevilleidaho.com",
+    "website_alive": true,
+    "source_url": "https://www.grangevilleidaho.com",
+    "notes": "Chamber-of-Commerce style listing for Snowhaven (no dedicated site). Description only — no trail count or pct."
+  }
+]

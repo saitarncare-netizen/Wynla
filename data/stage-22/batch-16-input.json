@@ -1,0 +1,28 @@
+[
+  {
+    "slug": "woodward-park-city",
+    "name": "Woodward Park City",
+    "state": "UT",
+    "website_url": "https://www.woodwardparkcity.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "yellowstone-club",
+    "name": "Yellowstone Club",
+    "state": "MT",
+    "website_url": "https://www.yellowstoneclub.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  }
+]

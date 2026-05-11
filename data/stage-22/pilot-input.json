@@ -1,0 +1,262 @@
+[
+  {
+    "slug": "49-degrees-north",
+    "name": "49 Degrees North Mountain Resort",
+    "state": "WA",
+    "website_url": "https://www.ski49n.com",
+    "current_total_trails": 88,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "afton-alps",
+    "name": "Afton Alps",
+    "state": "MN",
+    "website_url": "https://www.aftonalps.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "alpine-meadows",
+    "name": "Alpine Meadows",
+    "state": "CA",
+    "website_url": "https://www.palisadestahoe.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "alpine-valley-mi",
+    "name": "Alpine Valley Ski Area (MI)",
+    "state": "MI",
+    "website_url": "https://www.skialpinevalley.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "alpine-valley-oh",
+    "name": "Alpine Valley Ski Area (OH)",
+    "state": "OH",
+    "website_url": "https://www.alpinevalleyohio.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "alpine-valley-wi",
+    "name": "Alpine Valley Resort (WI)",
+    "state": "WI",
+    "website_url": "https://www.alpinevalleyresort.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "alta",
+    "name": "Alta Ski Area",
+    "state": "UT",
+    "website_url": "https://www.alta.com",
+    "current_total_trails": 116,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "alyeska-resort",
+    "name": "Alyeska Resort",
+    "state": "AK",
+    "website_url": "https://www.alyeskaresort.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "andes-tower-hills",
+    "name": "Andes Tower Hills",
+    "state": "MN",
+    "website_url": "https://www.andestowerhills.com",
+    "current_total_trails": 16,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "angel-fire-resort",
+    "name": "Angel Fire Resort",
+    "state": "NM",
+    "website_url": "https://www.angelfireresort.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "antelope-butte",
+    "name": "Antelope Butte",
+    "state": "WY",
+    "website_url": "https://www.antelopebutte.org",
+    "current_total_trails": 40,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "anthony-lakes",
+    "name": "Anthony Lakes Mountain Resort",
+    "state": "OR",
+    "website_url": "https://www.anthonylakes.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "appalachian-ski-mountain",
+    "name": "Appalachian Ski Mountain",
+    "state": "NC",
+    "website_url": "https://www.appskimtn.com",
+    "current_total_trails": 13,
+    "current_difficulty_pct": {
+      "beginner": 23,
+      "intermediate": 46,
+      "advanced": 31,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "apple-mountain",
+    "name": "Apple Mountain",
+    "state": "MI",
+    "website_url": "https://www.applemountain.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "arapahoe-basin",
+    "name": "Arapahoe Basin",
+    "state": "CO",
+    "website_url": "https://www.arapahoebasin.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": 7,
+      "intermediate": 20,
+      "advanced": 49,
+      "expert": 24
+    }
+  },
+  {
+    "slug": "arctic-valley",
+    "name": "Arctic Valley Ski Area",
+    "state": "AK",
+    "website_url": "https://skiarctic.net",
+    "current_total_trails": 15,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "arizona-snowbowl",
+    "name": "Arizona Snowbowl",
+    "state": "AZ",
+    "website_url": "https://www.snowbowl.ski",
+    "current_total_trails": 61,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "ascutney-outdoors",
+    "name": "Ascutney Outdoors",
+    "state": "VT",
+    "website_url": "https://www.ascutneyoutdoors.org",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "aspen-highlands",
+    "name": "Aspen Highlands",
+    "state": "CO",
+    "website_url": "https://www.aspensnowmass.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": 0,
+      "intermediate": 23,
+      "advanced": 12,
+      "expert": 65
+    }
+  },
+  {
+    "slug": "aspen-mountain",
+    "name": "Aspen Mountain",
+    "state": "CO",
+    "website_url": "https://www.aspensnowmass.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": 0,
+      "intermediate": 48,
+      "advanced": 26,
+      "expert": 26
+    }
+  }
+]

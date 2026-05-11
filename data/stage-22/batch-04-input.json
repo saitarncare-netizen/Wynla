@@ -1,0 +1,392 @@
+[
+  {
+    "slug": "camelback-mountain-resort",
+    "name": "Camelback Mountain Resort",
+    "state": "PA",
+    "website_url": "https://www.camelbackresort.com",
+    "current_total_trails": 35,
+    "current_difficulty_pct": {
+      "beginner": 40,
+      "intermediate": 26,
+      "advanced": 26,
+      "expert": 9
+    }
+  },
+  {
+    "slug": "camp-10-area",
+    "name": "Camp 10 Ski Area",
+    "state": "WI",
+    "website_url": "https://www.facebook.com/CAMP10SKIAREA",
+    "current_total_trails": 15,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "campgaw-mountain",
+    "name": "Campgaw Mountain",
+    "state": "NJ",
+    "website_url": "https://www.skicampgaw.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "campton-mountain",
+    "name": "Campton Mountain",
+    "state": "NH",
+    "website_url": "https://www.camptonmountain.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "canaan-valley-resort",
+    "name": "Canaan Valley Resort",
+    "state": "WV",
+    "website_url": "https://canaanresort.com",
+    "current_total_trails": 47,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "cannon-mountain",
+    "name": "Cannon Mountain",
+    "state": "NH",
+    "website_url": "https://www.cannonmt.com",
+    "current_total_trails": 98,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "cannonsburg",
+    "name": "Cannonsburg Ski Area",
+    "state": "MI",
+    "website_url": "https://www.cannonsburg.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "cascade-mountain",
+    "name": "Cascade Mountain",
+    "state": "WI",
+    "website_url": "https://www.cascademountain.com",
+    "current_total_trails": 48,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "cataloochee-ski-area",
+    "name": "Cataloochee Ski Area",
+    "state": "NC",
+    "website_url": "https://cataloochee.com",
+    "current_total_trails": 18,
+    "current_difficulty_pct": {
+      "beginner": 44,
+      "intermediate": 39,
+      "advanced": 0,
+      "expert": 17
+    }
+  },
+  {
+    "slug": "catamount-outdoor-family-center",
+    "name": "Catamount Outdoor Family Center",
+    "state": "VT",
+    "website_url": "https://catamountoutdoor.org/",
+    "current_total_trails": 100,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "catamount-ski-area",
+    "name": "Catamount Ski Area",
+    "state": "MA",
+    "website_url": "http://www.catamountski.com",
+    "current_total_trails": 44,
+    "current_difficulty_pct": {
+      "beginner": 36,
+      "intermediate": 38,
+      "advanced": 18,
+      "expert": 9
+    }
+  },
+  {
+    "slug": "chapman-hill",
+    "name": "Chapman Hill Ski Area",
+    "state": "CO",
+    "website_url": "https://www.durangogov.org",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "cherry-peak",
+    "name": "Cherry Peak Resort",
+    "state": "UT",
+    "website_url": "https://www.skithepeak.com",
+    "current_total_trails": 38,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "chestnut-mountain",
+    "name": "Chestnut Mountain Resort",
+    "state": "IL",
+    "website_url": "https://www.chestnutmtn.com",
+    "current_total_trails": 19,
+    "current_difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 61,
+      "advanced": 17,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "china-peak",
+    "name": "China Peak Mountain Resort",
+    "state": "CA",
+    "website_url": "https://www.skichinapeak.com",
+    "current_total_trails": 55,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "christie",
+    "name": "Christie Mountain",
+    "state": "WI",
+    "website_url": "https://www.christiemountain.com/",
+    "current_total_trails": 33,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "christmas-mountain",
+    "name": "Christmas Mountain Village",
+    "state": "WI",
+    "website_url": "https://www.christmasmountainvillage.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "cloudmont-ski-resort",
+    "name": "Cloudmont Ski Resort",
+    "state": "AL",
+    "website_url": "https://ww1.cloudmont.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "cochrans-ski-area",
+    "name": "Cochran's Ski Area",
+    "state": "VT",
+    "website_url": "https://www.cochranskiarea.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "cooper-spur-area",
+    "name": "Cooper Spur Ski Area",
+    "state": "OR",
+    "website_url": "https://www.cooperspur.com",
+    "current_total_trails": 9,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "copper-mountain",
+    "name": "Copper Mountain",
+    "state": "CO",
+    "website_url": "https://www.coppercolorado.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "cottonwood-butte",
+    "name": "Cottonwood Butte",
+    "state": "ID",
+    "website_url": "https://www.cottonwoodbutte.org",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "cranor-ski-hill",
+    "name": "Cranor Ski Hill",
+    "state": "CO",
+    "website_url": "https://www.gunnisonco.gov",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "crested-butte",
+    "name": "Crested Butte Mountain Resort",
+    "state": "CO",
+    "website_url": "https://www.skicb.com",
+    "current_total_trails": 121,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "crosscut-sports-center",
+    "name": "Crosscut Mountain Sports Center",
+    "state": "MT",
+    "website_url": "https://www.crosscutmt.org/",
+    "current_total_trails": 35,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "crotched-mountain",
+    "name": "Crotched Mountain",
+    "state": "NH",
+    "website_url": "https://www.crotchedmountain.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "crystal",
+    "name": "Crystal Mountain",
+    "state": "MI",
+    "website_url": "https://www.crystalmountain.com",
+    "current_total_trails": 59,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "crystal-mountain",
+    "name": "Crystal Mountain",
+    "state": "WA",
+    "website_url": "https://www.crystalmountainresort.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "crystal-mountain-mi",
+    "name": "Crystal Mountain (MI)",
+    "state": "MI",
+    "website_url": "https://www.crystalmountain.com",
+    "current_total_trails": 59,
+    "current_difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 47,
+      "advanced": 31,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "crystal-ridge",
+    "name": "Crystal Ridge",
+    "state": "WI",
+    "website_url": "https://crystalridge.com/",
+    "current_total_trails": 6,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  }
+]

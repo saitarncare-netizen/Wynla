@@ -1,0 +1,30 @@
+[
+  {
+    "slug": "woodward-park-city",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.woodwardparkcity.com",
+    "website_alive": true,
+    "source_url": "https://www.woodwardparkcity.com/explore/trail-mountain-report/",
+    "notes": "Official site is alive but does not publish trail count or difficulty percentages. Site emphasizes terrain parks/freestyle (Main Line, Red's Backyard, Peace Park) rather than traditional named runs. Trail/mountain report page exists but does not expose stats on extracted content."
+  },
+  {
+    "slug": "yellowstone-club",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.yellowstoneclub.com",
+    "website_alive": true,
+    "source_url": "https://yellowstoneclub.com/experiences/ski",
+    "notes": "Official site mentions '100+ runs' and '2,900 acres' but provides no exact trail count or beginner/intermediate/advanced/expert percentage breakdown. Private club — detailed stats gated behind member portal."
+  }
+]

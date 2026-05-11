@@ -1,0 +1,242 @@
+[
+  {
+    "slug": "granby-ranch",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": 30, "intermediate": 50, "advanced": 20, "expert": 0},
+    "source_url": "https://www.skiresort.info/ski-resort/granby-ranch/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info reports km (20km total): Easy 30%, Intermediate 50%, Difficult 20%. OnTheSnow 404 on all slug variations."
+  },
+  {
+    "slug": "grand-targhee",
+    "trails_total": 73,
+    "difficulty_pct": {"beginner": 21, "intermediate": 38, "advanced": 30, "expert": 11},
+    "source_url": "https://www.onthesnow.com/wyoming/grand-targhee-resort/skireport",
+    "source_site": "onthesnow.com",
+    "notes": "OnTheSnow: 73 trails, 21/38/30/11. skiresort.info corroborates intermediate-heavy mix (16/50/34/0 on km basis)."
+  },
+  {
+    "slug": "granite-gorge",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": 50, "intermediate": 33, "advanced": 17, "expert": 0},
+    "source_url": "https://www.skiresort.info/ski-resort/granite-gorge/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info km-based: 6km total, Easy 50%, Intermediate 33%, Difficult 17%. OnTheSnow 404."
+  },
+  {
+    "slug": "granite-peak",
+    "trails_total": 58,
+    "difficulty_pct": {"beginner": 25, "intermediate": 40, "advanced": 35, "expert": 0},
+    "source_url": "https://www.skiresort.info/ski-resort/granite-peak/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info km-based diff: 25/40/35/0 (20km). OnTheSnow gives 58 trails total but no diff breakdown. Input shows 62 trails; OnTheSnow's 58 is close."
+  },
+  {
+    "slug": "great-bear",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": null,
+    "source_site": null,
+    "notes": "No data found. skiresort.info has 'Great Bear Ski Valley' (SD) but not under this slug. OnTheSnow 404. Likely same as great-bear-valley."
+  },
+  {
+    "slug": "great-bear-valley",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": 68, "intermediate": 32, "advanced": 0, "expert": 0},
+    "source_url": "https://www.skiresort.info/ski-resort/great-bear-ski-valley/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info km-based: 3.8km total, Easy 68%, Intermediate 32%, Difficult 0%."
+  },
+  {
+    "slug": "great-divide",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": 20, "intermediate": 40, "advanced": 40, "expert": 0},
+    "source_url": "https://www.skiresort.info/ski-resort/great-divide/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info km-based: 50km total, Easy 20%, Intermediate 40%, Difficult 40%. OnTheSnow page has no terrain stats."
+  },
+  {
+    "slug": "great-glen-trails-outdoor-center",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": null,
+    "source_site": null,
+    "notes": "No data. Cross-country/Nordic-only center, not typically listed in alpine databases."
+  },
+  {
+    "slug": "greek-peak",
+    "trails_total": 55,
+    "difficulty_pct": {"beginner": 36, "intermediate": 29, "advanced": 27, "expert": 9},
+    "source_url": "https://www.onthesnow.com/new-york/greek-peak/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "OnTheSnow: 55 trails (matches input), 36/29/27/9. Input already has 36/29/25/9 — OnTheSnow confirms."
+  },
+  {
+    "slug": "gunstock-mountain-resort",
+    "trails_total": 44,
+    "difficulty_pct": {"beginner": 14, "intermediate": 62, "advanced": 24, "expert": 0},
+    "source_url": "https://www.skiresort.info/ski-resort/gunstock/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info km-based: 40km total, Easy 14%, Intermediate 62%, Difficult 24%. OnTheSnow gives 44 trails (input shows 49)."
+  },
+  {
+    "slug": "hatley-pointe",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": 50, "intermediate": 33, "advanced": 17, "expert": 0},
+    "source_url": "https://www.skiresort.info/ski-resort/hatley-pointe/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info km-based: 6km total, Easy 50%, Intermediate 33%, Difficult 17%. Note input has 27/53/20/0 from primary source — different breakdown."
+  },
+  {
+    "slug": "haymaker-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": null,
+    "source_site": null,
+    "notes": "Nordic center, not in alpine databases. Snowpak rate-limited."
+  },
+  {
+    "slug": "heavenly-mountain-resort",
+    "trails_total": 111,
+    "difficulty_pct": {"beginner": 14, "intermediate": 53, "advanced": 27, "expert": 5},
+    "source_url": "https://www.onthesnow.com/california/heavenly/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "OnTheSnow: 111 trails, 14/53/27/5 (sums 99, rounding). skiresort.info corroborates intermediate-heavy mix (19/45/36/0 on km basis, 94km total)."
+  },
+  {
+    "slug": "hermon-mountain",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": 66, "intermediate": 18, "advanced": 16, "expert": 0},
+    "source_url": "https://www.skiresort.info/ski-resort/hermon-mountain/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info km-based: 3km total, Easy 66%, Intermediate 18%, Difficult 16%. OnTheSnow 404."
+  },
+  {
+    "slug": "hesperus-ski-area",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": null,
+    "source_site": null,
+    "notes": "Not found on skiresort.info or OnTheSnow. Small CO area, likely below db coverage threshold. Snowpak rate-limited."
+  },
+  {
+    "slug": "hidden-valley",
+    "trails_total": 30,
+    "difficulty_pct": {"beginner": 27, "intermediate": 43, "advanced": 30, "expert": 0},
+    "source_url": "https://www.onthesnow.com/pennsylvania/hidden-valley-resort/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "OnTheSnow PA: 30 trails, 27/43/30/0. Confirmed Pennsylvania location."
+  },
+  {
+    "slug": "hidden-valley-mo",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": null,
+    "source_site": null,
+    "notes": "OnTheSnow /missouri/hidden-valley returned default Ontario fallback page (suspicious 14 runs identical to other no-match queries). Not a real match. skiresort.info slug variants all 404."
+  },
+  {
+    "slug": "high-point-xc-center",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": null,
+    "source_site": null,
+    "notes": "Cross-country only, not in alpine databases."
+  },
+  {
+    "slug": "highlands",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": 40, "intermediate": 30, "advanced": 30, "expert": 0},
+    "source_url": "https://www.skiresort.info/ski-resort/the-highlands-at-harbor-springs/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info km-based: 25.7km total, Easy 40%, Intermediate 30%, Difficult 30%. Formerly Boyne Highlands."
+  },
+  {
+    "slug": "hilltop-ski-area",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": 80, "intermediate": 20, "advanced": 0, "expert": 0},
+    "source_url": "https://www.skiresort.info/ski-resort/hilltop-anchorage/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info km-based: 5km total, Easy 80%, Intermediate 20%. Input has 83/8/8/0 from primary."
+  },
+  {
+    "slug": "hoedown-hill",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": null,
+    "source_site": null,
+    "notes": "New small CO area (Windsor). Not yet in skiresort.info or OnTheSnow. Snowpak rate-limited."
+  },
+  {
+    "slug": "hogadon",
+    "trails_total": 28,
+    "difficulty_pct": {"beginner": 7, "intermediate": 32, "advanced": 50, "expert": 11},
+    "source_url": "https://www.onthesnow.com/wyoming/hogadon/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "OnTheSnow: 28 trails, 7/32/50/11."
+  },
+  {
+    "slug": "holiday-mountain",
+    "trails_total": 16,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://www.onthesnow.com/new-york/holiday-mountain/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "OnTheSnow: 16 trails, but no difficulty breakdown disclosed on page."
+  },
+  {
+    "slug": "holiday-valley",
+    "trails_total": 60,
+    "difficulty_pct": {"beginner": 33, "intermediate": 40, "advanced": 27, "expert": 0},
+    "source_url": "https://www.skiresort.info/ski-resort/holiday-valley/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info km-based: 48km total, 33/40/27/0. OnTheSnow gives 60 trails + 40/23/35/2 — different mix; prefer skiresort.info for consistency. Input has 33/33/24/11."
+  },
+  {
+    "slug": "holimont",
+    "trails_total": 55,
+    "difficulty_pct": {"beginner": 20, "intermediate": 30, "advanced": 50, "expert": 0},
+    "source_url": "https://www.skiresort.info/ski-resort/holimont/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info km-based: 20km total, 20/30/50/0. OnTheSnow confirms 55 trails (matches input) with 29/29/42/0."
+  },
+  {
+    "slug": "homestake-lodge",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": null,
+    "source_site": null,
+    "notes": "Nordic center, not in alpine databases. Snowpak rate-limited."
+  },
+  {
+    "slug": "homestead-resort",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": null,
+    "source_site": null,
+    "notes": "Small MI lakeside resort (Glen Arbor). Not in skiresort.info or OnTheSnow."
+  },
+  {
+    "slug": "homewood-mountain-resort",
+    "trails_total": 67,
+    "difficulty_pct": {"beginner": 30, "intermediate": 65, "advanced": 5, "expert": 0},
+    "source_url": "https://www.skiresort.info/ski-resort/homewood-mountain-resort/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info km-based: 20km total, 30/65/5/0. OnTheSnow confirms 67 trails (matches input) with 13/46/36/0."
+  },
+  {
+    "slug": "hoodoo",
+    "trails_total": 36,
+    "difficulty_pct": {"beginner": 19, "intermediate": 42, "advanced": 31, "expert": 8},
+    "source_url": "https://www.onthesnow.com/oregon/hoodoo-ski-area/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "OnTheSnow: 36 trails (matches input), 19/42/31/8."
+  },
+  {
+    "slug": "howelsen-hill",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": 42, "intermediate": 37, "advanced": 21, "expert": 0},
+    "source_url": "https://www.skiresort.info/ski-resort/howelsen-hill-steamboat-springs/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info km-based: 4km total, 42/37/21/0. OnTheSnow gives 17 trails + 20/30/50/0 — conflicting; prefer skiresort.info. Input has 19 trails."
+  }
+]

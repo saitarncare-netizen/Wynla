@@ -1,0 +1,242 @@
+[
+  {
+    "slug": "huff-hills",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": 60, "intermediate": 27, "advanced": 13, "expert": 0},
+    "source_url": "https://www.skiresort.info/ski-resort/huff-hills/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info km-based pct mix (3km total): Easy 60%, Intermediate 27%, Difficult 13%. OnTheSnow 404; skicentral 404; snowpak rate-limited."
+  },
+  {
+    "slug": "hunt-hollow-club",
+    "trails_total": 19,
+    "difficulty_pct": {"beginner": 32, "intermediate": 21, "advanced": 37, "expert": 11},
+    "source_url": "https://www.onthesnow.com/new-york/hunt-hollow-club/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "OnTheSnow: 19 runs, 32/21/37/11. skiresort.info has no page."
+  },
+  {
+    "slug": "hunter-mountain",
+    "trails_total": 68,
+    "difficulty_pct": {"beginner": 25, "intermediate": 29, "advanced": 35, "expert": 10},
+    "source_url": "https://www.onthesnow.com/new-york/hunter-mountain/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "OnTheSnow: 68 runs, 25/29/35/10. skiresort.info reports km-based 25/60/15 (55km total) but uses 3-way mix."
+  },
+  {
+    "slug": "hurricane-ridge",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": 4, "intermediate": 61, "advanced": 35, "expert": 0},
+    "source_url": "https://www.skiresort.info/ski-resort/hurricane-ridge/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info km-based pct mix (2.3km): Easy 4%, Intermediate 61%, Difficult 35%. OnTheSnow 404; snowpak rate-limited."
+  },
+  {
+    "slug": "hyland-hills",
+    "trails_total": 14,
+    "difficulty_pct": {"beginner": 27, "intermediate": 36, "advanced": 36, "expert": 0},
+    "source_url": "https://www.onthesnow.com/minnesota/hyland-ski-snowboard-area/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "OnTheSnow: 14 runs, 27/36/36 (no expert listed; entered as 0). skiresort.info 3-way km mix corroborates 50/33/17."
+  },
+  {
+    "slug": "indianhead-mountain",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": 20, "intermediate": 30, "advanced": 50, "expert": 0},
+    "source_url": "https://www.skiresort.info/ski-resort/indianhead-mountain/",
+    "source_site": "skiresort.info",
+    "notes": "Rebranded as Jackson Creek Summit (part of Snowriver). skiresort.info km-based (10km): Easy 20%, Int 30%, Diff 50%. OnTheSnow now lists combined Snowriver stats (74 runs total, includes Blackjack) - not used to avoid conflation."
+  },
+  {
+    "slug": "jack-frost-mountain",
+    "trails_total": 19,
+    "difficulty_pct": {"beginner": 21, "intermediate": 37, "advanced": 42, "expert": 0},
+    "source_url": "https://www.onthesnow.com/pennsylvania/jack-frost/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "OnTheSnow: 19 runs, 21/37/42 (expert not listed; entered as 0). skiresort.info no page for jack-frost."
+  },
+  {
+    "slug": "jackson-hole",
+    "trails_total": 141,
+    "difficulty_pct": {"beginner": 4, "intermediate": 40, "advanced": 38, "expert": 18},
+    "source_url": "https://www.onthesnow.com/wyoming/jackson-hole/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "OnTheSnow: 141 trails, 4/40/38/18. skiresort.info reports 116km, 14/43/43 (3-way km basis)."
+  },
+  {
+    "slug": "jackson-xc",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": null,
+    "source_site": null,
+    "notes": "Cross-country (Nordic) ski center; not alpine. No alpine difficulty mix applicable. skiresort.info, OnTheSnow alpine endpoints 404/not found."
+  },
+  {
+    "slug": "jay-peak",
+    "trails_total": 82,
+    "difficulty_pct": {"beginner": 19, "intermediate": 35, "advanced": 31, "expert": 15},
+    "source_url": "https://www.onthesnow.com/vermont/jay-peak/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "OnTheSnow: 82 runs, 19/35/31/15. skiresort.info corroborates 20/41/39 (3-way km basis, 76km)."
+  },
+  {
+    "slug": "jiminy-peak",
+    "trails_total": 45,
+    "difficulty_pct": {"beginner": 38, "intermediate": 29, "advanced": 27, "expert": 7},
+    "source_url": "https://www.onthesnow.com/massachusetts/jiminy-peak/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "OnTheSnow: 45 runs, 38/29/27/7. skiresort.info 3-way km basis (9.1km) shows 45/22/33."
+  },
+  {
+    "slug": "june-mountain",
+    "trails_total": 42,
+    "difficulty_pct": {"beginner": 16, "intermediate": 40, "advanced": 28, "expert": 16},
+    "source_url": "https://www.onthesnow.com/california/june-mountain/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "OnTheSnow: 42 runs, 16/40/28/16. skiresort.info corroborates km-basis 15/40/45 (41km)."
+  },
+  {
+    "slug": "kelly-canyon",
+    "trails_total": 51,
+    "difficulty_pct": {"beginner": 33, "intermediate": 42, "advanced": 25, "expert": 0},
+    "source_url": "https://www.skiresort.info/ski-resort/kelly-canyon/",
+    "source_site": "skiresort.info",
+    "notes": "OnTheSnow gives 51 trails count only (no difficulty %). skiresort.info km-based (12km): Easy 33%, Int 42%, Diff 25%. Combined: trails count from OnTheSnow, pct mix from skiresort.info."
+  },
+  {
+    "slug": "keystone",
+    "trails_total": 140,
+    "difficulty_pct": {"beginner": 19, "intermediate": 32, "advanced": 49, "expert": 0},
+    "source_url": "https://www.onthesnow.com/colorado/keystone/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "OnTheSnow: 140 trails, 19/32/49 (expert not separated; entered as 0). skiresort.info 3-way km (135km) corroborates 19/48/33."
+  },
+  {
+    "slug": "killington",
+    "trails_total": 155,
+    "difficulty_pct": {"beginner": 17, "intermediate": 39, "advanced": 30, "expert": 14},
+    "source_url": "https://www.onthesnow.com/vermont/killington-resort/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "OnTheSnow: 155 runs, 17/39/30/14. skiresort.info 3-way km basis (118.4km) corroborates 17/40/43."
+  },
+  {
+    "slug": "king-pine",
+    "trails_total": 17,
+    "difficulty_pct": {"beginner": 44, "intermediate": 31, "advanced": 25, "expert": 0},
+    "source_url": "https://www.onthesnow.com/new-hampshire/king-pine/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "OnTheSnow: 17 runs, 44/31 explicitly; remaining 25% advanced/expert combined (no separate expert pct). Entered as 25 advanced / 0 expert. skiresort.info has no page."
+  },
+  {
+    "slug": "kirkwood-mountain-resort",
+    "trails_total": 84,
+    "difficulty_pct": {"beginner": 10, "intermediate": 30, "advanced": 39, "expert": 21},
+    "source_url": "https://www.onthesnow.com/california/kirkwood/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "OnTheSnow: 84 runs, 10/30/39/21. skiresort.info corroborates 23/46/31 (3-way km basis, 65km)."
+  },
+  {
+    "slug": "kissing-bridge",
+    "trails_total": 39,
+    "difficulty_pct": {"beginner": 25, "intermediate": 27, "advanced": 48, "expert": 0},
+    "source_url": "https://www.skiresort.info/ski-resort/kissing-bridge/",
+    "source_site": "skiresort.info",
+    "notes": "OnTheSnow gives 39 trails count (no pct). skiresort.info km-based (17.8km): Easy 25%, Int 27%, Diff 48%. Combined: count from OnTheSnow, pct from skiresort.info."
+  },
+  {
+    "slug": "labrador-mountain",
+    "trails_total": 23,
+    "difficulty_pct": {"beginner": 36, "intermediate": 35, "advanced": 29, "expert": 0},
+    "source_url": "https://www.skiresort.info/ski-resort/labrador-mountain/",
+    "source_site": "skiresort.info",
+    "notes": "OnTheSnow: 23 trails (no pct). skiresort.info km-based (17km): Easy 36%, Int 35%, Diff 29%. Combined."
+  },
+  {
+    "slug": "lake-city-ski-hill",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": null,
+    "source_site": null,
+    "notes": "Small community ski hill (6 trails/14 acres per other sources). No data on skiresort.info, OnTheSnow, skicentral, or snowpak."
+  },
+  {
+    "slug": "laurel-mountain",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": 49, "intermediate": 37, "advanced": 14, "expert": 0},
+    "source_url": "https://www.skiresort.info/ski-resort/laurel-mountain/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info km-based (8km): Easy 49%, Int 37%, Diff 14%. OnTheSnow 404; snowpak rate-limited (search-snippet only)."
+  },
+  {
+    "slug": "leavenworth-ski-hill",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": 100, "intermediate": 0, "advanced": 0, "expert": 0},
+    "source_url": "https://www.skiresort.info/ski-resort/leavenworth-ski-hill/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info: 1km, 100% Easy. Tiny single-tow ski hill operated by Leavenworth Winter Sports Club. OnTheSnow 404."
+  },
+  {
+    "slug": "leavenworth-winter-sports-club",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": null,
+    "source_site": null,
+    "notes": "Same operator as leavenworth-ski-hill (likely duplicate). skiresort.info, OnTheSnow have no page."
+  },
+  {
+    "slug": "lee-canyon",
+    "trails_total": 29,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://www.onthesnow.com/nevada/lee-canyon/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "OnTheSnow: 29 runs (no difficulty pct displayed). skiresort.info has no page. Snowpak search snippet referenced 10/45/45 but page not directly fetched (rate-limited)."
+  },
+  {
+    "slug": "lees-ski-hill",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": null,
+    "source_site": null,
+    "notes": "Free community single rope-tow hill, 1 beginner run, 75ft vertical. No structured B-source page."
+  },
+  {
+    "slug": "liberty-mountain",
+    "trails_total": 20,
+    "difficulty_pct": {"beginner": 33, "intermediate": 38, "advanced": 14, "expert": 14},
+    "source_url": "https://www.onthesnow.com/pennsylvania/liberty/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "OnTheSnow: 20 trails, 33/38/14/14. skiresort.info 3-way km (9km) corroborates 33/45/22."
+  },
+  {
+    "slug": "little-ski-hill",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": 100, "intermediate": 0, "advanced": 0, "expert": 0},
+    "source_url": "https://www.skiresort.info/ski-resort/little-ski-hill/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info: 1.4km of slopes, 100% Easy. Tiny McCall ID hill. OnTheSnow 404."
+  },
+  {
+    "slug": "little-switzerland",
+    "trails_total": 16,
+    "difficulty_pct": {"beginner": 38, "intermediate": 31, "advanced": 31, "expert": 0},
+    "source_url": "https://www.onthesnow.com/wisconsin/little-switzerland/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "OnTheSnow: 16 runs, 38/31/31 (no expert). skiresort.info 3-way km (3km) corroborates 37/43/20."
+  },
+  {
+    "slug": "loge-glacier",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": null,
+    "source_site": null,
+    "notes": "Cross-country/Nordic property at Izaak Walton Inn area — 30+km groomed XC trails, not alpine. Alpine difficulty mix not applicable. No B-source alpine page."
+  },
+  {
+    "slug": "lookout-pass",
+    "trails_total": 59,
+    "difficulty_pct": {"beginner": 12, "intermediate": 42, "advanced": 37, "expert": 8},
+    "source_url": "https://www.onthesnow.com/montana/lookout-pass-ski-area/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "OnTheSnow: 59 runs, 12/42/37/8. skiresort.info 3-way km (41km) corroborates 15/41/44."
+  }
+]

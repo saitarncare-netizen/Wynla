@@ -1,0 +1,392 @@
+[
+  {
+    "slug": "pomerelle",
+    "trails_total": 32,
+    "difficulty_pct": {
+      "beginner": 28,
+      "intermediate": 46,
+      "advanced": 26,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/pomerelle/",
+    "source_site": "skiresort.info",
+    "notes": "trails_total from OnTheSnow (32 runs). Difficulty from skiresort.info km-distribution (Easy 28%, Intermediate 46%, Difficult 26%). OnTheSnow has no difficulty pct breakdown."
+  },
+  {
+    "slug": "porcupine-mountains",
+    "trails_total": 20,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Porcupine_Mountains_Ski_Area",
+    "source_site": "wikipedia",
+    "notes": "trails_total=20 from Wikipedia. Not indexed on skiresort.info or OnTheSnow. Snowpak rate-limited (429). No difficulty breakdown found."
+  },
+  {
+    "slug": "powder-mountain",
+    "trails_total": 162,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 40,
+      "advanced": 35,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Powder_Mountain",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia says 162 trails with 25/40/35 split (matches resort's official numbers). OnTheSnow lists 172 runs. skiresort.info reports 68 km distributed 25/40/35."
+  },
+  {
+    "slug": "powder-ridge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 49,
+      "intermediate": 37,
+      "advanced": 14,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/powder-ridge/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info reports 4 km of slopes distributed 49/37/14. Trail count not given (input has 13). MN resort. OnTheSnow has no entry."
+  },
+  {
+    "slug": "powder-ridge-mountain-park",
+    "trails_total": 20,
+    "difficulty_pct": {
+      "beginner": 45,
+      "intermediate": 40,
+      "advanced": 15,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/connecticut/powder-ridge-park/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "OnTheSnow: 20 runs, 45/40/15/0 split. CT resort."
+  },
+  {
+    "slug": "powderhorn",
+    "trails_total": 54,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 28,
+      "advanced": 48,
+      "expert": 4
+    },
+    "source_url": "https://www.onthesnow.com/colorado/powderhorn/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "OnTheSnow: 54 runs, 20/28/48/4 distribution. skiresort.info cross-check shows 38 km with 13/39/48 distribution."
+  },
+  {
+    "slug": "powderhouse-hill",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "source_site": null,
+    "notes": "Not found on skiresort.info, OnTheSnow (404), Wikipedia (404), or Snowpak (429 rate-limited). Very small community ski hill in ME."
+  },
+  {
+    "slug": "purgatory",
+    "trails_total": 105,
+    "difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 35,
+      "advanced": 43,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Purgatory_Resort",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia: 105 trails, 22/35/43/0 split. skiresort.info homepage redirect (no entry). OnTheSnow URLs all 404."
+  },
+  {
+    "slug": "quarry-road-trails",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "source_site": null,
+    "notes": "Cross-country/Nordic trails facility in ME. Not indexed on skiresort.info, OnTheSnow (404), Wikipedia (404). Snowpak 429."
+  },
+  {
+    "slug": "quechee-club",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "source_site": null,
+    "notes": "Private club. Not on skiresort.info, OnTheSnow (404), or Wikipedia (404)."
+  },
+  {
+    "slug": "ragged-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 44,
+      "advanced": 36,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/ragged-mountain/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info: 22.5 km of slopes, 20/44/36 km-distribution. Trail count from skiresort.info not extracted; input has 57."
+  },
+  {
+    "slug": "rangeley-lakes-trail-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "source_site": null,
+    "notes": "Nordic/cross-country center in ME. Not on skiresort.info, OnTheSnow (404), Wikipedia. Snowpak 429."
+  },
+  {
+    "slug": "red-lodge",
+    "trails_total": 70,
+    "difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 25,
+      "advanced": 36,
+      "expert": 20
+    },
+    "source_url": "https://www.onthesnow.com/montana/red-lodge-mountain/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "OnTheSnow: 70 runs, 19/25/36/20 split. Matches input. skiresort.info cross-check: 65 km, 17/46/37."
+  },
+  {
+    "slug": "red-river-ski-area",
+    "trails_total": 64,
+    "difficulty_pct": {
+      "beginner": 31,
+      "intermediate": 31,
+      "advanced": 38,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/new-mexico/red-river/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "OnTheSnow: 64 runs, 31/31/38/0. skiresort.info cross-check: 20 km, 35/30/35 km-dist."
+  },
+  {
+    "slug": "rikert-nordic-center",
+    "trails_total": 25,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Rikert_Outdoor_Center",
+    "source_site": "wikipedia",
+    "notes": "Nordic/XC center. Wikipedia: 25 groomed trails by 2012, 55 km total trail length by 2015. No difficulty breakdown available."
+  },
+  {
+    "slug": "rikert-outdoor-center",
+    "trails_total": 25,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Rikert_Outdoor_Center",
+    "source_site": "wikipedia",
+    "notes": "Same facility as rikert-nordic-center (duplicate slug). 25 groomed trails. No difficulty data available."
+  },
+  {
+    "slug": "rotarun",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Rotarun_Ski_Area",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia confirms it exists (1 Poma lift, 475 ft vertical) but does not list trail count or difficulty. Tiny community area in ID."
+  },
+  {
+    "slug": "roundtop-mountain-resort",
+    "trails_total": 18,
+    "difficulty_pct": {
+      "beginner": 28,
+      "intermediate": 22,
+      "advanced": 39,
+      "expert": 11
+    },
+    "source_url": "https://www.onthesnow.com/pennsylvania/roundtop-mountain-resort/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "OnTheSnow: 18 runs across 103 acres, 28/22/39/11 split. Roughly matches input pct (27/32/32/9)."
+  },
+  {
+    "slug": "royal-mountain",
+    "trails_total": 29,
+    "difficulty_pct": {
+      "beginner": 31,
+      "intermediate": 21,
+      "advanced": 17,
+      "expert": 31
+    },
+    "source_url": "https://www.onthesnow.com/new-york/royal-mountain-ski-area/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "OnTheSnow: 29 runs, 31/21/17/31 split. skiresort.info cross-check: 7.5 km, 33/40/27 km-dist."
+  },
+  {
+    "slug": "saddleback",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 18,
+      "intermediate": 36,
+      "advanced": 46,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/saddleback/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info: 22 km, 18/36/46 km-dist. Trail count not on skiresort.info; input has 68. OnTheSnow 404, no Wikipedia article."
+  },
+  {
+    "slug": "sandia-peak",
+    "trails_total": 35,
+    "difficulty_pct": {
+      "beginner": 23,
+      "intermediate": 49,
+      "advanced": 29,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/new-mexico/sandia-peak/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "OnTheSnow: 35 runs, 23/49/29 split. Matches input pct exactly. Confirmed by Wikipedia."
+  },
+  {
+    "slug": "sapphire-valley-resort",
+    "trails_total": 2,
+    "difficulty_pct": {
+      "beginner": 50,
+      "intermediate": 50,
+      "advanced": 0,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/north-carolina/sapphire-valley/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "OnTheSnow: 2 runs, 50/50 split. Tiny NC ski hill. skiresort.info cross-check: 0.5 km, 100% easy."
+  },
+  {
+    "slug": "saskadena-six-area",
+    "trails_total": 28,
+    "difficulty_pct": {
+      "beginner": 18,
+      "intermediate": 50,
+      "advanced": 14,
+      "expert": 18
+    },
+    "source_url": "https://www.onthesnow.com/vermont/suicide-six/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "Saskadena Six (formerly Suicide Six). OnTheSnow: 28 runs, 18/50/14/18. Matches input trail count. skiresort.info: 10.5 km, 33/38/29 km-dist."
+  },
+  {
+    "slug": "schuss-shanty-creek",
+    "trails_total": 42,
+    "difficulty_pct": {
+      "beginner": 29,
+      "intermediate": 26,
+      "advanced": 45,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/michigan/shanty-creek/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "Schuss Mountain at Shanty Creek. OnTheSnow: 42 runs, 29/26/45 split. Same trail set as shanty-creek slug."
+  },
+  {
+    "slug": "schweitzer",
+    "trails_total": 92,
+    "difficulty_pct": {
+      "beginner": 10,
+      "intermediate": 40,
+      "advanced": 35,
+      "expert": 15
+    },
+    "source_url": "https://www.onthesnow.com/idaho/schweitzer/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "OnTheSnow: 92 runs, 10/40/35/15 split. Matches input exactly."
+  },
+  {
+    "slug": "seven-oaks",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "source_site": null,
+    "notes": "Small IA ski/recreation area. Not indexed on skiresort.info, OnTheSnow (404), Wikipedia (404). Snowpak 429."
+  },
+  {
+    "slug": "seven-springs",
+    "trails_total": 40,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 40,
+      "advanced": 15,
+      "expert": 10
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Seven_Springs_Mountain_Resort",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia: 40 trails, 35/40/15/10 split. Matches input pct exactly. OnTheSnow reports 42 runs, 38/36/14/12. skiresort.info: 17 km, 35/41/24."
+  },
+  {
+    "slug": "shanty-creek",
+    "trails_total": 42,
+    "difficulty_pct": {
+      "beginner": 29,
+      "intermediate": 26,
+      "advanced": 45,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/michigan/shanty-creek/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "OnTheSnow: 42 runs, 29/26/45 split. Schuss Mountain is the ski hill at Shanty Creek Resorts."
+  },
+  {
+    "slug": "shawnee-mountain",
+    "trails_total": 23,
+    "difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 50,
+      "advanced": 28,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/shawnee-mountain/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info: 18 km, 22/50/28 km-dist. 23 runs total confirmed by Wikipedia. Matches input trail count."
+  },
+  {
+    "slug": "shawnee-peak",
+    "trails_total": 43,
+    "difficulty_pct": {
+      "beginner": 17,
+      "intermediate": 53,
+      "advanced": 30,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/pleasant-mountain/",
+    "source_site": "skiresort.info",
+    "notes": "Now called Pleasant Mountain. skiresort.info: 23 km, 17/53/30 km-dist. OnTheSnow: 43 runs (input has 44)."
+  }
+]

@@ -1,0 +1,272 @@
+[
+  {
+    "slug": "mount-ashwabay",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.mtashwabay.org",
+    "website_alive": true,
+    "source_url": "https://www.mtashwabay.org",
+    "notes": "Site alive (nonprofit). Mentions 40km Nordic trails and 'beginner and more challenging trails' for alpine; no total run count or difficulty percentages published."
+  },
+  {
+    "slug": "mount-bohemia",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.mtbohemia.com",
+    "website_alive": true,
+    "source_url": "https://www.mtbohemia.com/trail-maps/",
+    "notes": "Site alive. Trail map page lists 4 area maps (Mount Bohemia, Haunted Valley, Middle Earth, Little Boho) as PDFs only; no aggregated trail count or difficulty percentages on site (all-expert ungroomed terrain, no green/blue typical categorization)."
+  },
+  {
+    "slug": "mount-holly",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.skimtholly.com",
+    "website_alive": true,
+    "source_url": "https://www.skimtholly.com/trail-map/",
+    "notes": "Site alive but currently announces CLOSED for 2025-26 season. Trail map exists as image only; no run count or difficulty percentages published."
+  },
+  {
+    "slug": "mount-itasca",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.mtitasca.com/",
+    "website_alive": true,
+    "source_url": "https://www.mtitasca.com/",
+    "notes": "SPA shell - only header rendered, no stats content extractable. Site alive but data not available via fetch."
+  },
+  {
+    "slug": "mount-jefferson-ski-area",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.skimtjefferson.com",
+    "website_alive": false,
+    "source_url": "https://www.skimtjefferson.com",
+    "notes": "Returns HTTP 403 forbidden. Site appears broken or blocking fetches."
+  },
+  {
+    "slug": "mount-kato",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.mountkato.com",
+    "website_alive": true,
+    "source_url": "https://www.mountkato.com",
+    "notes": "Site alive. Homepage shows nav/promo only, /the-mountain returned 404. No trail count or difficulty percentages found on accessible pages."
+  },
+  {
+    "slug": "mount-peter",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://mtpeter.com",
+    "website_alive": true,
+    "source_url": "https://mtpeter.com",
+    "notes": "Site alive. Homepage links to /trail-map but actual map is PDF/image only; no run count or difficulty percentages in HTML."
+  },
+  {
+    "slug": "mount-pisgah",
+    "trails_total": 6,
+    "difficulty_pct": { "beginner": 17, "intermediate": 33, "advanced": 50, "expert": 0 },
+    "website_url": "https://saranaclakeny.gov/mount-pisgah/",
+    "website_alive": true,
+    "source_url": "https://saranaclakeny.gov/mount-pisgah/",
+    "notes": "Municipal page confirms 6 trails: 1 easy, 2 more difficult, 3 most difficult (17/33/50/0). Matches existing data."
+  },
+  {
+    "slug": "mount-snow",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.mountsnow.com",
+    "website_alive": true,
+    "source_url": "https://www.mountsnow.com",
+    "notes": "Vail-owned site returns generic 'system cannot process your request' error on root and sub-pages via fetch. Likely bot/firewall block; data not extractable via WebFetch."
+  },
+  {
+    "slug": "mount-southington",
+    "trails_total": 14,
+    "difficulty_pct": { "beginner": 50, "intermediate": 43, "advanced": 14, "expert": 0 },
+    "website_url": "http://www.mountsouthington.com",
+    "website_alive": true,
+    "source_url": "https://mountsouthington.com/trails-and-conditions",
+    "notes": "Trails-and-conditions page: 14 runs total; 7 green / 6 blue / 2 black (50/43/14/0; expert counted within black). Confirms existing 14-run total."
+  },
+  {
+    "slug": "mount-sunapee",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.mountsunapee.com",
+    "website_alive": true,
+    "source_url": "https://www.mountsunapee.com",
+    "notes": "Vail-owned site returns generic 'system cannot process your request' error on root and sub-pages. Likely bot/firewall block; data not extractable via WebFetch."
+  },
+  {
+    "slug": "mountain-creek",
+    "trails_total": 43,
+    "difficulty_pct": { "beginner": 21, "intermediate": 30, "advanced": 21, "expert": 28 },
+    "website_url": "https://mountaincreek.com",
+    "website_alive": true,
+    "source_url": "https://mountaincreek.com/skiing-riding/mountain-report/",
+    "notes": "Mountain report lists 43 trails: 9 beginner, 13 intermediate, 9 difficult/advanced, 12 freestyle (20.9/30.2/20.9/27.9 -> rounded 21/30/21/28). Differs from current data (46 trails); using site-reported 43."
+  },
+  {
+    "slug": "mountain-high",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.mthigh.com",
+    "website_alive": true,
+    "source_url": "https://www.mthigh.com",
+    "notes": "Site responded with HTTP 303 redirect on root; /the-mountain/trails returned 404. Data not extractable from accessible pages within fetch limit."
+  },
+  {
+    "slug": "mt-abram",
+    "trails_total": 42,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.mtabram.com",
+    "website_alive": true,
+    "source_url": "https://www.mtabram.com",
+    "notes": "Mountain report confirms 42 trails total (matches existing). Difficulty breakdown not in HTML; trail map PDF only."
+  },
+  {
+    "slug": "mt-bachelor",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.mtbachelor.com",
+    "website_alive": true,
+    "source_url": "https://www.mtbachelor.com",
+    "notes": "SPA-style site, homepage and /the-mountain/mountain-stats and /explore-the-mountain/mountain-stats all returned 404 or no data. Currently 'Closed Until Summer'; trail data not extractable via WebFetch."
+  },
+  {
+    "slug": "mt-baker-ski-area",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.mtbaker.us",
+    "website_alive": true,
+    "source_url": "https://www.mtbaker.us/the-mountain/mountain-stats/",
+    "notes": "Mountain Stats page lists snowfall (688in), acreage (1000), lifts (8 quads + 2 handle tows) but no trail count or difficulty percentages. Trail map exists as PDF/image."
+  },
+  {
+    "slug": "mt-baldy",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.mtbaldyresort.com",
+    "website_alive": true,
+    "source_url": "https://www.mtbaldyresort.com",
+    "notes": "SPA shell - only page title rendered ('The Lifts @ Mt Baldy'). /the-mountain returned 404. Data not extractable via WebFetch."
+  },
+  {
+    "slug": "mt-brighton",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.mtbrighton.com",
+    "website_alive": true,
+    "source_url": "https://www.mtbrighton.com",
+    "notes": "Vail-owned site returns generic 'system cannot process your request' error. Likely bot/firewall block; data not extractable via WebFetch."
+  },
+  {
+    "slug": "mt-crescent",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.skicrescent.com",
+    "website_alive": false,
+    "source_url": "https://www.skicrescent.com",
+    "notes": "Domain 301-redirects to explorecrescenthill.com (renamed/rebranded). Original URL not actively serving the ski area site; needs URL update."
+  },
+  {
+    "slug": "mt-eyak",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.mteyak.org/",
+    "website_alive": true,
+    "source_url": "https://www.mteyak.org/",
+    "notes": "SPA shell - only page title rendered. Data not extractable via WebFetch."
+  },
+  {
+    "slug": "mt-holiday",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://mt-holiday.com/ski-and-snowboarding/",
+    "website_alive": true,
+    "source_url": "https://mt-holiday.com/ski-and-snowboarding/",
+    "notes": "Site alive but currently announces snow sports CLOSED, returning 2026-27. Trail map is PDF only; no run count or difficulty percentages in HTML."
+  },
+  {
+    "slug": "mt-hood-meadows",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.skihood.com",
+    "website_alive": true,
+    "source_url": "https://www.skihood.com",
+    "notes": "SPA-style site. Root page returns only navigation/footer; /the-mountain/trails-lifts returned 404. Trail/difficulty data not extractable via WebFetch."
+  },
+  {
+    "slug": "mt-hood-skibowl",
+    "trails_total": 108,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.skibowl.com",
+    "website_alive": true,
+    "source_url": "https://www.skibowl.com",
+    "notes": "Homepage states 108 runs total (71 day + 37 night-lit). Site emphasizes 'most lit black diamond runs in Oregon' but no exact difficulty percentages published."
+  },
+  {
+    "slug": "mt-la-crosse",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://mtlacrosse.com/",
+    "website_alive": true,
+    "source_url": "https://mtlacrosse.com/",
+    "notes": "Site alive. Homepage mentions trail map and terrain park but no run count or difficulty percentages in HTML."
+  },
+  {
+    "slug": "mt-lemmon-ski-valley",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.skithelemmon.com",
+    "website_alive": true,
+    "source_url": "https://www.skithelemmon.com",
+    "notes": "Site alive but focuses on hours, dining, sky ride, gift shop. No trail count or difficulty percentages published."
+  },
+  {
+    "slug": "mt-rose-ski-tahoe",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://skirose.com",
+    "website_alive": true,
+    "source_url": "https://skirose.com/trail-maps/",
+    "notes": "Site alive. Mentions 1,200 acres and 'The Chutes' but trail map is downloadable PDF only; no exact run count or difficulty percentages in HTML."
+  },
+  {
+    "slug": "mt-shasta",
+    "trails_total": 38,
+    "difficulty_pct": { "beginner": 20, "intermediate": 45, "advanced": 35, "expert": 0 },
+    "website_url": "https://www.skipark.com",
+    "website_alive": true,
+    "source_url": "https://www.skipark.com/winter/trail-map-stats",
+    "notes": "Trail-map-stats page: 38 trails, 20% beginner / 45% intermediate / 35% advanced / no expert listed. (Note: existing data has 21/55/24/0 - site now publishes 20/45/35.) This slug and mt-shasta-ski-park share the same website."
+  },
+  {
+    "slug": "mt-shasta-ski-park",
+    "trails_total": 38,
+    "difficulty_pct": { "beginner": 20, "intermediate": 45, "advanced": 35, "expert": 0 },
+    "website_url": "https://www.skipark.com",
+    "website_alive": true,
+    "source_url": "https://www.skipark.com/winter/trail-map-stats",
+    "notes": "Same website as mt-shasta slug (duplicate entry). Trail-map-stats page: 38 trails, 20/45/35/0. Likely dedupe candidate with mt-shasta."
+  },
+  {
+    "slug": "mt-spokane",
+    "trails_total": 53,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.mtspokane.com",
+    "website_alive": true,
+    "source_url": "https://www.mtspokane.com",
+    "notes": "Homepage confirms 53 runs over 1,700 acres with 6 lifts (matches existing). Difficulty breakdown not published in HTML; trail map PDF only."
+  },
+  {
+    "slug": "mt-waterman",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "website_url": "https://www.mtwaterman.org",
+    "website_alive": false,
+    "source_url": "https://www.mtwaterman.org",
+    "notes": "Connection refused (ECONNREFUSED). Site appears down/offline."
+  }
+]

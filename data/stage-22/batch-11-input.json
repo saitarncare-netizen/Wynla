@@ -1,0 +1,392 @@
+[
+  {
+    "slug": "pomerelle",
+    "name": "Pomerelle Mountain Resort",
+    "state": "ID",
+    "website_url": "https://pomerelle-mtn.com",
+    "current_total_trails": 32,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "porcupine-mountains",
+    "name": "Porcupine Mountains Ski Area",
+    "state": "MI",
+    "website_url": "https://www.porkiesfun.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "powder-mountain",
+    "name": "Powder Mountain",
+    "state": "UT",
+    "website_url": "https://www.powdermountain.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 40,
+      "advanced": 35,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "powder-ridge",
+    "name": "Powder Ridge Winter Recreation Area",
+    "state": "MN",
+    "website_url": "https://www.powderridge.com",
+    "current_total_trails": 13,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "powder-ridge-mountain-park",
+    "name": "Powder Ridge Mountain Park & Resort",
+    "state": "CT",
+    "website_url": "https://powderridgepark.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "powderhorn",
+    "name": "Powderhorn Resort",
+    "state": "CO",
+    "website_url": "https://www.powderhorn.com",
+    "current_total_trails": 40,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "powderhouse-hill",
+    "name": "Powderhouse Hill",
+    "state": "ME",
+    "website_url": "https://www.powderhousehill.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "purgatory",
+    "name": "Purgatory Resort",
+    "state": "CO",
+    "website_url": "https://www.purgatoryresort.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 35,
+      "advanced": 43,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "quarry-road-trails",
+    "name": "Quarry Road Trails",
+    "state": "ME",
+    "website_url": "https://quarryroad.org/",
+    "current_total_trails": 22,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "quechee-club",
+    "name": "Quechee Club",
+    "state": "VT",
+    "website_url": "https://www.quecheeclub.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "ragged-mountain",
+    "name": "Ragged Mountain",
+    "state": "NH",
+    "website_url": "https://www.raggedmountainresort.com",
+    "current_total_trails": 57,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "rangeley-lakes-trail-center",
+    "name": "Rangeley Lakes Trail Center",
+    "state": "ME",
+    "website_url": null,
+    "current_total_trails": 35,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "red-lodge",
+    "name": "Red Lodge Mountain",
+    "state": "MT",
+    "website_url": "https://www.redlodgemountain.com",
+    "current_total_trails": 70,
+    "current_difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 26,
+      "advanced": 36,
+      "expert": 20
+    }
+  },
+  {
+    "slug": "red-river-ski-area",
+    "name": "Red River Ski & Summer Area",
+    "state": "NM",
+    "website_url": "https://www.redriverskiarea.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "rikert-nordic-center",
+    "name": "Rikert Nordic Center",
+    "state": "VT",
+    "website_url": "https://www.rikertoutdoor.com/",
+    "current_total_trails": 35,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "rikert-outdoor-center",
+    "name": "Rikert Outdoor Center",
+    "state": "VT",
+    "website_url": "https://www.rikertoutdoor.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "rotarun",
+    "name": "Rotarun Ski Area",
+    "state": "ID",
+    "website_url": "https://rotarun.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "roundtop-mountain-resort",
+    "name": "Roundtop Mountain Resort",
+    "state": "PA",
+    "website_url": "https://www.skiroundtop.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": 27,
+      "intermediate": 32,
+      "advanced": 32,
+      "expert": 9
+    }
+  },
+  {
+    "slug": "royal-mountain",
+    "name": "Royal Mountain",
+    "state": "NY",
+    "website_url": "https://www.royalmountain.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "saddleback",
+    "name": "Saddleback",
+    "state": "ME",
+    "website_url": "https://www.saddlebackmaine.com",
+    "current_total_trails": 68,
+    "current_difficulty_pct": {
+      "beginner": 34,
+      "intermediate": 29,
+      "advanced": 26,
+      "expert": 10
+    }
+  },
+  {
+    "slug": "sandia-peak",
+    "name": "Sandia Peak Ski Area",
+    "state": "NM",
+    "website_url": "https://sandiapeak.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": 23,
+      "intermediate": 49,
+      "advanced": 29,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "sapphire-valley-resort",
+    "name": "Sapphire Valley Resort",
+    "state": "NC",
+    "website_url": "https://sapphirevalleyresorts.com/amenities/ski-sapphire-valley/",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "saskadena-six-area",
+    "name": "Saskadena Six Ski Area",
+    "state": "VT",
+    "website_url": "https://www.saskadenasix.com",
+    "current_total_trails": 28,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "schuss-shanty-creek",
+    "name": "Schuss Mountain at Shanty Creek",
+    "state": "MI",
+    "website_url": "https://www.shantycreek.com",
+    "current_total_trails": 42,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "schweitzer",
+    "name": "Schweitzer Mountain",
+    "state": "ID",
+    "website_url": "https://www.schweitzer.com",
+    "current_total_trails": 92,
+    "current_difficulty_pct": {
+      "beginner": 10,
+      "intermediate": 40,
+      "advanced": 35,
+      "expert": 15
+    }
+  },
+  {
+    "slug": "seven-oaks",
+    "name": "Seven Oaks Recreation",
+    "state": "IA",
+    "website_url": "https://www.sevenoaksrec.com",
+    "current_total_trails": 12,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "seven-springs",
+    "name": "Seven Springs Mountain Resort",
+    "state": "PA",
+    "website_url": "https://www.7springs.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 40,
+      "advanced": 15,
+      "expert": 10
+    }
+  },
+  {
+    "slug": "shanty-creek",
+    "name": "Shanty Creek Resorts",
+    "state": "MI",
+    "website_url": "https://www.shantycreek.com",
+    "current_total_trails": 42,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "shawnee-mountain",
+    "name": "Shawnee Mountain Ski Area",
+    "state": "PA",
+    "website_url": "https://shawneemt.com",
+    "current_total_trails": 23,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "shawnee-peak",
+    "name": "Pleasant Mountain",
+    "state": "ME",
+    "website_url": "https://www.pleasantmountain.com",
+    "current_total_trails": 44,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  }
+]

@@ -1,0 +1,272 @@
+[
+  {
+    "slug": "granby-ranch",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.granbyranch.com",
+    "website_alive": true,
+    "source_url": "https://www.granbyranch.com",
+    "notes": "Homepage links to mountain pages but trail counts and difficulty breakdown not exposed in fetched content."
+  },
+  {
+    "slug": "grand-targhee",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": 10, "intermediate": 45, "advanced": 30, "expert": 15},
+    "website_url": "https://www.grandtarghee.com",
+    "website_alive": true,
+    "source_url": "https://www.grandtarghee.com/the-mountain/mountain-information/mountain-stats",
+    "notes": "Mountain stats page lists winter terrain percentages but no total trail count."
+  },
+  {
+    "slug": "granite-gorge",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.granitegorge.com",
+    "website_alive": false,
+    "source_url": "https://www.granitegorge.com",
+    "notes": "Site returned HTTP 403 Forbidden."
+  },
+  {
+    "slug": "granite-peak",
+    "trails_total": 77,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.skigranitepeak.com",
+    "website_alive": true,
+    "source_url": "https://www.skigranitepeak.com",
+    "notes": "Homepage lists 62 primary + 9 sidecountry + 6 terrain park trails (77 total); no difficulty breakdown found."
+  },
+  {
+    "slug": "great-bear",
+    "trails_total": 14,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.greatbearpark.com",
+    "website_alive": true,
+    "source_url": "https://www.greatbearpark.com",
+    "notes": "Homepage states 14 downhill trails; no difficulty breakdown published."
+  },
+  {
+    "slug": "great-bear-valley",
+    "trails_total": 14,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.greatbearpark.com",
+    "website_alive": true,
+    "source_url": "https://www.greatbearpark.com",
+    "notes": "Same site as great-bear (14 trails); no difficulty breakdown published."
+  },
+  {
+    "slug": "great-divide",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.skigd.com",
+    "website_alive": true,
+    "source_url": "https://www.skigd.com",
+    "notes": "Homepage has marketing content only; mountain/trails sub-pages returned 404."
+  },
+  {
+    "slug": "great-glen-trails-outdoor-center",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://greatglentrails.com/cross-country-skiing/",
+    "website_alive": true,
+    "source_url": "https://greatglentrails.com/cross-country-skiing/",
+    "notes": "XC ski page mentions 'all skiing abilities' but no trail count or difficulty distribution."
+  },
+  {
+    "slug": "greek-peak",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.greekpeak.net",
+    "website_alive": true,
+    "source_url": "https://www.greekpeak.net",
+    "notes": "Current conditions page lists trails by difficulty symbol but no aggregate count; mountain sub-pages 404."
+  },
+  {
+    "slug": "gunstock-mountain-resort",
+    "trails_total": 49,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.gunstock.com",
+    "website_alive": true,
+    "source_url": "https://www.gunstock.com",
+    "notes": "Homepage confirms 49 trails / 227 skiable acres; no difficulty percentages found."
+  },
+  {
+    "slug": "hatley-pointe",
+    "trails_total": 21,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://hatleypointe.com",
+    "website_alive": true,
+    "source_url": "https://hatleypointe.com/the-mountain",
+    "notes": "Site confirms 21 trails / 54 skiable acres; difficulty breakdown not published."
+  },
+  {
+    "slug": "haymaker-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://nordicski.net/haymaker-nordic-center/",
+    "website_alive": true,
+    "source_url": "https://nordicski.net/haymaker-nordic-center/",
+    "notes": "Nordic center page has no trail count or difficulty breakdown in content."
+  },
+  {
+    "slug": "heavenly-mountain-resort",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.skiheavenly.com",
+    "website_alive": false,
+    "source_url": "https://www.skiheavenly.com",
+    "notes": "Site returned system error 'The system cannot process your request' on all attempted paths."
+  },
+  {
+    "slug": "hermon-mountain",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.skihermonmountain.com",
+    "website_alive": true,
+    "source_url": "https://www.skihermonmountain.com",
+    "notes": "Site mentions 'slopes for beginners and experts' but publishes no trail count or breakdown."
+  },
+  {
+    "slug": "hesperus-ski-area",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.ski-hesperus.com",
+    "website_alive": true,
+    "source_url": "https://www.ski-hesperus.com",
+    "notes": "Homepage shows navigation only; no trail stats or difficulty data in fetched content."
+  },
+  {
+    "slug": "hidden-valley",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.hiddenvalleyresort.com",
+    "website_alive": false,
+    "source_url": "https://www.hiddenvalleyresort.com",
+    "notes": "Site returned system error 'The system cannot process your request' on all attempted paths."
+  },
+  {
+    "slug": "hidden-valley-mo",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.hiddenvalleyski.com",
+    "website_alive": false,
+    "source_url": "https://www.hiddenvalleyski.com",
+    "notes": "Site returned system error 'The system cannot process your request' on all attempted paths."
+  },
+  {
+    "slug": "high-point-xc-center",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.xcskihighpoint.com/home",
+    "website_alive": true,
+    "source_url": "https://www.xcskihighpoint.com/home",
+    "notes": "Site closed for season; no trail count or difficulty data exposed on homepage."
+  },
+  {
+    "slug": "highlands",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": null,
+    "website_alive": false,
+    "source_url": null,
+    "notes": "No website_url provided in input."
+  },
+  {
+    "slug": "hilltop-ski-area",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://hilltopskiarea.org",
+    "website_alive": true,
+    "source_url": "https://hilltopskiarea.org",
+    "notes": "Homepage and skiing sub-page lack trail counts or difficulty breakdown."
+  },
+  {
+    "slug": "hoedown-hill",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.hoedownhill.com",
+    "website_alive": true,
+    "source_url": "https://www.hoedownhill.com",
+    "notes": "Homepage names terrain parks but provides no trail count or difficulty percentages."
+  },
+  {
+    "slug": "hogadon",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.hogadon.net",
+    "website_alive": true,
+    "source_url": "https://www.casperwy.gov/explore/hogadon_basin_ski_area/index.php",
+    "notes": "Redirects to City of Casper site; trail info section present but counts and breakdown not in fetched content."
+  },
+  {
+    "slug": "holiday-mountain",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.holidaymtn.com",
+    "website_alive": true,
+    "source_url": "https://www.holidaymtn.com",
+    "notes": "Homepage navigation-only; no trail stats or difficulty data found."
+  },
+  {
+    "slug": "holiday-valley",
+    "trails_total": 69,
+    "difficulty_pct": {"beginner": 35, "intermediate": 20, "advanced": 23, "expert": 1},
+    "website_url": "https://www.holidayvalley.com",
+    "website_alive": true,
+    "source_url": "https://www.holidayvalley.com/snow-report",
+    "notes": "Snow report lists 69 total with counts (24 beg, 14 int, 16 adv, 1 expert) plus glade/park/uphill trails; percentages computed."
+  },
+  {
+    "slug": "holimont",
+    "trails_total": 56,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.holimont.com",
+    "website_alive": true,
+    "source_url": "https://holimont.com/resources/trail-maps/",
+    "notes": "Trail maps page confirms 56 trails / 8 lifts; no difficulty breakdown published."
+  },
+  {
+    "slug": "homestake-lodge",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": null,
+    "website_alive": false,
+    "source_url": null,
+    "notes": "No website_url provided in input."
+  },
+  {
+    "slug": "homestead-resort",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.thehomesteadresort.com",
+    "website_alive": true,
+    "source_url": "https://www.thehomesteadresort.com",
+    "notes": "Lodging-focused homepage; no ski trail data or difficulty info present."
+  },
+  {
+    "slug": "homewood-mountain-resort",
+    "trails_total": 66,
+    "difficulty_pct": {"beginner": 15, "intermediate": 40, "advanced": 30, "expert": 15},
+    "website_url": "https://www.skihomewood.com",
+    "website_alive": true,
+    "source_url": "https://skihomewood.com/trailmap/",
+    "notes": "Trail map page lists 66 runs with full difficulty breakdown."
+  },
+  {
+    "slug": "hoodoo",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "http://skihoodoo.com",
+    "website_alive": true,
+    "source_url": "https://hoodoo.com/",
+    "notes": "Redirects to hoodoo.com; trail map page only shows image, no text-based counts or breakdown."
+  },
+  {
+    "slug": "howelsen-hill",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.steamboatsprings.net",
+    "website_alive": true,
+    "source_url": "https://www.steamboatsprings.net",
+    "notes": "City of Steamboat Springs site; Howelsen Hill section not exposed on homepage and no trail data fetched."
+  }
+]

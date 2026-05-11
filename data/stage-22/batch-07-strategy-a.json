@@ -1,0 +1,422 @@
+[
+  {
+    "slug": "huff-hills",
+    "trails_total": 16,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.huffhills.com",
+    "website_alive": true,
+    "source_url": "https://www.huffhills.com/about",
+    "notes": "About page confirms 16 runs; no difficulty breakdown published. Mentions beginner learning area only."
+  },
+  {
+    "slug": "hunt-hollow-club",
+    "trails_total": 21,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.hunthollow.com/Home",
+    "website_alive": true,
+    "source_url": "https://www.hunthollow.com/Home",
+    "notes": "Homepage states 21 trails; Trails page does not provide difficulty count breakdown (mentions 80 acres and one double black)."
+  },
+  {
+    "slug": "hunter-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.huntermtn.com",
+    "website_alive": true,
+    "source_url": "https://www.huntermtn.com",
+    "notes": "Site redirects to reservations.snow.com which returns 'system cannot process your request' error. Vail-owned SPA shell; mountain stats endpoint not accessible at this time."
+  },
+  {
+    "slug": "hurricane-ridge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://hurricaneridge.com",
+    "website_alive": true,
+    "source_url": "https://hurricaneridge.com",
+    "notes": "Homepage references Ski Area Map and Mountain Stats sections but content not exposed to fetch; difficulty breakdown not published in accessible HTML."
+  },
+  {
+    "slug": "hyland-hills",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.threeriversparks.org",
+    "website_alive": true,
+    "source_url": "https://www.threeriversparks.org/location/hyland-hills-ski-area",
+    "notes": "Three Rivers Parks page references trail map with difficulty ratings but does not publish numeric counts/percentages."
+  },
+  {
+    "slug": "indianhead-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.indianheadmtn.com",
+    "website_alive": false,
+    "source_url": "https://www.indianheadmtn.com",
+    "notes": "Domain dead - 301 redirects to bolzanorestaurant.com/parties (unrelated restaurant). Indianhead merged with Blackjack to form Big Powderhorn area; official URL no longer points to ski resort."
+  },
+  {
+    "slug": "jack-frost-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.jfbb.com",
+    "website_alive": true,
+    "source_url": "https://www.jfbb.com",
+    "notes": "Vail-owned site redirects to reservations.snow.com error page. SPA shell; mountain stats endpoints return system error."
+  },
+  {
+    "slug": "jackson-hole",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.jacksonhole.com",
+    "website_alive": true,
+    "source_url": "https://www.jacksonhole.com",
+    "notes": "Homepage is marketing SPA; trail counts/difficulty not present in accessible HTML. /the-mountain/mountain-stats returns 404 at fetch time."
+  },
+  {
+    "slug": "jackson-xc",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": null,
+    "website_alive": false,
+    "source_url": null,
+    "notes": "No website_url provided in input; cannot fetch."
+  },
+  {
+    "slug": "jay-peak",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.jaypeakresort.com",
+    "website_alive": true,
+    "source_url": "https://www.jaypeakresort.com/skiing-riding/snow-report-maps/trail-map",
+    "notes": "Trail map page exposes a PDF link only; difficulty counts not present in HTML. Mountain-stats endpoint 404."
+  },
+  {
+    "slug": "jiminy-peak",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.jiminypeak.com",
+    "website_alive": true,
+    "source_url": "https://www.jiminypeak.com",
+    "notes": "Homepage emphasizes Mountain Adventure Park summer content; ski trail difficulty breakdown not exposed. Snow widget shows 5/9 trails open but no totals."
+  },
+  {
+    "slug": "june-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.junemountain.com",
+    "website_alive": true,
+    "source_url": "https://www.junemountain.com",
+    "notes": "Homepage mentions 1,500 acres uncrowded slopes and links to Trail Map page, but no numeric trail count or difficulty breakdown in accessible HTML."
+  },
+  {
+    "slug": "kelly-canyon",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://skikelly.com",
+    "website_alive": false,
+    "source_url": "https://skikelly.com",
+    "notes": "ECONNREFUSED on https://skikelly.com - host not responding. Domain may be unreachable."
+  },
+  {
+    "slug": "keystone",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.keystoneresort.com",
+    "website_alive": true,
+    "source_url": "https://www.keystoneresort.com",
+    "notes": "Vail-owned, redirects to reservations.snow.com error page. SPA shell; mountain stats not accessible."
+  },
+  {
+    "slug": "killington",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.killington.com",
+    "website_alive": true,
+    "source_url": "https://www.killington.com",
+    "notes": "Homepage shows bike park stats (35 bike trails) but no winter trail count/difficulty in accessible HTML. /the-mountain/mountain-stats and /the-mountain/about-the-mountain return 404."
+  },
+  {
+    "slug": "king-pine",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.kingpine.com",
+    "website_alive": true,
+    "source_url": "https://www.kingpine.com",
+    "notes": "Homepage references trail map and mountain info, but specific trail counts and difficulty classifications not present in accessible HTML."
+  },
+  {
+    "slug": "kirkwood-mountain-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.kirkwood.com",
+    "website_alive": true,
+    "source_url": "https://www.kirkwood.com",
+    "notes": "Vail-owned, redirects to reservations.snow.com error page. SPA shell; mountain stats not accessible."
+  },
+  {
+    "slug": "kissing-bridge",
+    "trails_total": 39,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.kbski.com",
+    "website_alive": true,
+    "source_url": "https://www.kissingbridge.com/",
+    "notes": "kbski.com 301-redirects to kissingbridge.com. Page references '39 slopes across 700+ acres' and 'terrain for beginner to intermediate riders and challenging slopes for experts' but does not quantify by difficulty category."
+  },
+  {
+    "slug": "labrador-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.labradormtn.com",
+    "website_alive": true,
+    "source_url": "https://www.labradormtn.com",
+    "notes": "Returns HTTP 403 Forbidden to fetcher (likely bot-blocking). Site appears live but content not accessible to WebFetch."
+  },
+  {
+    "slug": "lake-city-ski-hill",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.lakecity.com",
+    "website_alive": false,
+    "source_url": "https://www.lakecity.com",
+    "notes": "lakecity.com returns ECONNREFUSED/inaccessible; this domain is not the ski hill's official site. Lake City Ski Hill is operated by community/Hinsdale County."
+  },
+  {
+    "slug": "laurel-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.laurelmountainski.com",
+    "website_alive": true,
+    "source_url": "https://www.laurelmountainski.com",
+    "notes": "Vail-owned (now operated under Seven Springs/Vail family), redirects to reservations.snow.com error page. SPA shell, data not accessible."
+  },
+  {
+    "slug": "leavenworth-ski-hill",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://skileavenworth.com",
+    "website_alive": true,
+    "source_url": "https://skileavenworth.com",
+    "notes": "Returns HTTP 403 Forbidden to fetcher (bot-blocking). Site appears live but content not accessible to WebFetch."
+  },
+  {
+    "slug": "leavenworth-winter-sports-club",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://skileavenworth.com/webcams",
+    "website_alive": true,
+    "source_url": "https://skileavenworth.com/webcams",
+    "notes": "Same domain as Leavenworth Ski Hill (Leavenworth Winter Sports Club operates the hill). Domain returns HTTP 403 to fetcher."
+  },
+  {
+    "slug": "lee-canyon",
+    "trails_total": 31,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.leecanyonlv.com",
+    "website_alive": true,
+    "source_url": "https://www.leecanyonlv.com/mountain-statistics/",
+    "notes": "Mountain Statistics page lists 31 total trails, 2 chairlifts, 445 acres. Lift descriptions categorize by Easier/Difficult/Advanced but no aggregated trail count by difficulty category is published."
+  },
+  {
+    "slug": "lees-ski-hill",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.cityofouray.com",
+    "website_alive": true,
+    "source_url": "https://www.cityofouray.com",
+    "notes": "cityofouray.com is the city's general site, not a dedicated Lee's Ski Hill page. No trail data present. Lee's Ski Hill is a small community rope-tow operation in Ouray, CO."
+  },
+  {
+    "slug": "liberty-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.libertymountainresort.com",
+    "website_alive": true,
+    "source_url": "https://www.libertymountainresort.com",
+    "notes": "Vail-owned (Snow.com family), redirects to reservations.snow.com error page. SPA shell, data not accessible."
+  },
+  {
+    "slug": "little-ski-hill",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://littleskihill.org",
+    "website_alive": true,
+    "source_url": "https://www.payettelakesskiclub.org/",
+    "notes": "littleskihill.org 301-redirects to payettelakesskiclub.org. Site describes '405 feet of T-bar accessed vertical terrain' but does not publish trail count or difficulty breakdown."
+  },
+  {
+    "slug": "little-switzerland",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.littleswitz.com",
+    "website_alive": true,
+    "source_url": "https://www.littleswitz.com",
+    "notes": "Homepage focuses on chairlift/concert/season pass promos. Trail Map link exists but trail count and difficulty breakdown not in accessible HTML."
+  },
+  {
+    "slug": "loge-glacier",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.logecamps.com/journal/glacier-area-guide",
+    "website_alive": true,
+    "source_url": "https://www.logecamps.com/journal/glacier-area-guide",
+    "notes": "LOGE Glacier is a lodging brand, not an alpine ski area. Page mentions groomed Nordic ski tracks and snowcat experiences; no alpine trail count or difficulty breakdown applies."
+  },
+  {
+    "slug": "lookout-pass",
+    "trails_total": 59,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.skilookout.com",
+    "website_alive": true,
+    "source_url": "https://www.skilookout.com",
+    "notes": "Homepage confirms '59 trails', 1,023 skiable acres, 1,650 ft vertical. Difficulty breakdown not provided in accessible HTML."
+  }
+]

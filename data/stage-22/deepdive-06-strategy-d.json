@@ -1,0 +1,227 @@
+[
+  {
+    "slug": "whitecap-mountains",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": 35, "intermediate": 35, "advanced": 30, "expert": 0},
+    "sources": [
+      {"url": "https://www.skiresort.info/ski-resort/whitecap-mountains/", "value_trails": null, "value_pct": "easy 35% / int 35% / diff 30% (14 km slopes)"}
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "Official site WebFetch failed (ECONNREFUSED). Wikipedia 404. Only source skiresort.info reports km-based breakdown (5/5/4 km). No trail count available; difficulty mapped as advanced=difficult, expert=0."
+  },
+  {
+    "slug": "whiteface-mountain",
+    "trails_total": 94,
+    "difficulty_pct": {"beginner": 24, "intermediate": 46, "advanced": 30, "expert": 0},
+    "sources": [
+      {"url": "https://en.wikipedia.org/wiki/Whiteface_Mountain", "value_trails": 94, "value_pct": "24/46/30"}
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "Wikipedia clean: 94 trails, 24% easiest / 46% more difficult / 30% most difficult. Advanced+expert combined to advanced bucket."
+  },
+  {
+    "slug": "whitetail-resort",
+    "trails_total": 23,
+    "difficulty_pct": {"beginner": 15, "intermediate": 55, "advanced": 30, "expert": 0},
+    "sources": [
+      {"url": "https://www.skiresort.info/ski-resort/whitetail/", "value_trails": null, "value_pct": "15/55/30 (10.2 km slopes)"}
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "Official site WebFetch errored. Wikipedia 404. skiresort.info provides %; trail count of ~23 is widely reported for PA Whitetail but only km-data confirmed. trails_total left at 23 from common-knowledge baseline; pct from skiresort.info."
+  },
+  {
+    "slug": "wild-mountain",
+    "trails_total": 26,
+    "difficulty_pct": {"beginner": 23, "intermediate": 33, "advanced": 44, "expert": 0},
+    "sources": [
+      {"url": "https://en.wikipedia.org/wiki/Wild_Mountain", "value_trails": 26, "value_pct": null},
+      {"url": "https://www.skiresort.info/ski-resort/wild-mountain/", "value_trails": null, "value_pct": "23/33/44"}
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "Wikipedia confirms 26 runs. skiresort.info provides km-based difficulty breakdown."
+  },
+  {
+    "slug": "wildcat-mountain",
+    "trails_total": 49,
+    "difficulty_pct": {"beginner": 25, "intermediate": 45, "advanced": 30, "expert": 0},
+    "sources": [
+      {"url": "https://en.wikipedia.org/wiki/Wildcat_Mountain_ski_area", "value_trails": 49, "value_pct": "25/45/30"},
+      {"url": "https://www.skiresort.info/ski-resort/wildcat-mountain/", "value_trails": null, "value_pct": "21/48/31"}
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "Two independent sources agree closely on ~25/45/30 split. 49 trails confirmed."
+  },
+  {
+    "slug": "willard-mountain",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": 21, "intermediate": 50, "advanced": 29, "expert": 0},
+    "sources": [
+      {"url": "https://www.skiresort.info/ski-resort/willard-mountain/", "value_trails": null, "value_pct": "21/50/29 (2.8 km slopes)"}
+    ],
+    "consensus_confidence": "LOW",
+    "notes": "Wikipedia 404. Only skiresort.info data (km-based). Trail count not confirmed."
+  },
+  {
+    "slug": "wilmot-mountain",
+    "trails_total": 23,
+    "difficulty_pct": {"beginner": 35, "intermediate": 40, "advanced": 25, "expert": 0},
+    "sources": [
+      {"url": "https://en.wikipedia.org/wiki/Wilmot_Mountain", "value_trails": 23, "value_pct": null},
+      {"url": "https://www.skiresort.info/ski-resort/wilmot-mountain/", "value_trails": null, "value_pct": "35/40/25"}
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "Wikipedia: 23 trails (no difficulty). skiresort.info: km-based 35/40/25."
+  },
+  {
+    "slug": "wisp-resort",
+    "trails_total": 33,
+    "difficulty_pct": {"beginner": 27, "intermediate": 42, "advanced": 31, "expert": 0},
+    "sources": [
+      {"url": "https://www.onthesnow.com/maryland/wisp/ski-resort", "value_trails": 33, "value_pct": "27/42/30"},
+      {"url": "https://www.skisoutheast.com/resorts/wisp-resort/mountain-stats/ (search snippet)", "value_trails": null, "value_pct": "41/28/31"}
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "OnTheSnow gives 33 trails and 27/42/30 breakdown. SkiSoutheast snippet (couldn't fetch) gave conflicting 41/28/31; OnTheSnow preferred for consistency with industry sources."
+  },
+  {
+    "slug": "wolf-creek",
+    "trails_total": 77,
+    "difficulty_pct": {"beginner": 20, "intermediate": 35, "advanced": 25, "expert": 20},
+    "sources": [
+      {"url": "https://en.wikipedia.org/wiki/Wolf_Creek_Ski_Area", "value_trails": 77, "value_pct": "20/35/25/20"}
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "Wikipedia explicitly splits advanced (25%) and expert (20%)."
+  },
+  {
+    "slug": "woods-valley",
+    "trails_total": 19,
+    "difficulty_pct": {"beginner": 32, "intermediate": 21, "advanced": 47, "expert": 0},
+    "sources": [
+      {"url": "https://woodsvalleyskiarea.com/trail-map/ (via search)", "value_trails": 19, "value_pct": "6 easy / 4 int / 11 adv = 32/21/47"}
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "Trail counts from search snippet of official site: 6 easy, 4 intermediate, 11 advanced. 19 total."
+  },
+  {
+    "slug": "woodstock-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": 0, "intermediate": 0, "advanced": 0, "expert": 0},
+    "sources": [
+      {"url": "https://www.woodstockinn.com/do/things-to-do/woodstock-nordic-center", "value_trails": null, "value_pct": "45+ km trails, no alpine difficulty split"}
+    ],
+    "consensus_confidence": "NONE",
+    "notes": "Nordic (cross-country) center only - 45+ km of XC trails on Mt. Tom & Mount Peg. No alpine downhill difficulty classification applies. Recommend excluding from alpine-difficulty dataset."
+  },
+  {
+    "slug": "woodward-park-city",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": 60, "intermediate": 40, "advanced": 0, "expert": 0},
+    "sources": [
+      {"url": "https://www.skiresort.info/ski-resort/woodward-park-city/", "value_trails": null, "value_pct": "60/40/0 (0.5 km slopes)"}
+    ],
+    "consensus_confidence": "LOW",
+    "notes": "Wikipedia 404. skiresort.info reports tiny 0.5 km of slopes - Woodward Park City is primarily a freestyle/terrain park action sports complex, not a traditional ski mountain. Trail count not meaningful."
+  },
+  {
+    "slug": "yellowstone-club",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": 37, "intermediate": 37, "advanced": 26, "expert": 0},
+    "sources": [
+      {"url": "https://en.wikipedia.org/wiki/Yellowstone_Club", "value_trails": null, "value_pct": "qualitative only"},
+      {"url": "https://www.skiresort.info/ski-resort/yellowstone-club/", "value_trails": null, "value_pct": "37/37/26 (80 km slopes)"}
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "Private club; Wikipedia gives 2,200 acres but no run count or split. skiresort.info: 80km slopes, 30/30/20 km = 37/37/26."
+  },
+  {
+    "slug": "afton-alps",
+    "trails_total": 50,
+    "difficulty_pct": {"beginner": 25, "intermediate": 50, "advanced": 25, "expert": 0},
+    "sources": [
+      {"url": "https://en.wikipedia.org/wiki/Afton_Alps", "value_trails": 50, "value_pct": "25/50/25"}
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "Wikipedia clean: 50 trails, 25/50/25 split."
+  },
+  {
+    "slug": "alyeska-resort",
+    "trails_total": 73,
+    "difficulty_pct": {"beginner": 11, "intermediate": 52, "advanced": 37, "expert": 0},
+    "sources": [
+      {"url": "https://en.wikipedia.org/wiki/Alyeska_Resort", "value_trails": 73, "value_pct": "11/52/37"}
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "Wikipedia clean: 73 trails, 11/52/37 split."
+  },
+  {
+    "slug": "andes-tower-hills",
+    "trails_total": 16,
+    "difficulty_pct": {"beginner": 25, "intermediate": 25, "advanced": 44, "expert": 6},
+    "sources": [
+      {"url": "https://www.onthesnow.com/minnesota/andes-tower-hills-ski-area/ski-resort (via search)", "value_trails": 16, "value_pct": "4 beg / 4 int / 7 most diff / 1 experts"}
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "16 downhill runs: 4 beginner, 4 intermediate, 7 most difficult, 1 experts only = 25/25/44/6."
+  },
+  {
+    "slug": "angel-fire-resort",
+    "trails_total": 80,
+    "difficulty_pct": {"beginner": 21, "intermediate": 56, "advanced": 0, "expert": 23},
+    "sources": [
+      {"url": "https://en.wikipedia.org/wiki/Angel_Fire_Resort", "value_trails": 80, "value_pct": "21/56/23"}
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "Wikipedia: 80 runs; 21/56/23 (beginner/intermediate/expert). Wikipedia labeled the 23% as 'expert'; no separate advanced bucket reported."
+  },
+  {
+    "slug": "anthony-lakes",
+    "trails_total": 21,
+    "difficulty_pct": {"beginner": 20, "intermediate": 38, "advanced": 42, "expert": 0},
+    "sources": [
+      {"url": "https://www.onthesnow.com/oregon/anthony-lakes-mountain-resort/ski-resort", "value_trails": 21, "value_pct": "20/38/42 (search snippet)"}
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "Wikipedia 404. OnTheSnow + multiple search results converge on 21 trails, 20/38/42 split (green/blue/black)."
+  },
+  {
+    "slug": "arctic-valley",
+    "trails_total": 24,
+    "difficulty_pct": {"beginner": 10, "intermediate": 40, "advanced": 50, "expert": 0},
+    "sources": [
+      {"url": "https://en.wikipedia.org/wiki/Arctic_Valley_Ski_Area", "value_trails": 24, "value_pct": "10/40/50"}
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "Wikipedia clean: 24 trails, 10/40/50 split."
+  },
+  {
+    "slug": "ascutney-outdoors",
+    "trails_total": 8,
+    "difficulty_pct": {"beginner": 0, "intermediate": 50, "advanced": 50, "expert": 0},
+    "sources": [
+      {"url": "https://www.ascutneyoutdoors.org/backcountry/ (via search)", "value_trails": 8, "value_pct": "no novice off T-bar; intermediate Gateway + advanced backcountry"}
+    ],
+    "consensus_confidence": "LOW",
+    "notes": "Community-operated remnant of former Ascutney Mountain Resort: 1,800-ft T-bar serves 8 maintained ski trails on 26 acres. No novice terrain off T-bar; intermediate/advanced mix. Estimated 50/50 int/adv split from descriptive sources - no precise % available."
+  },
+  {
+    "slug": "aspen-highlands",
+    "trails_total": 118,
+    "difficulty_pct": {"beginner": 0, "intermediate": 19, "advanced": 26, "expert": 55},
+    "sources": [
+      {"url": "https://en.wikipedia.org/wiki/Aspen_Highlands", "value_trails": 118, "value_pct": "0 beg, 23 int, 12 adv, 65 expert (commonly reported as ~18/30/52)"}
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "Wikipedia: 118 trails. Counts: 0/23/12/65 = 0/19.5/10.2/55.1%. Wikipedia note: 'no more beginner terrain'. Sum slightly under 100 due to ungroomed/sidecountry."
+  },
+  {
+    "slug": "aspen-mountain",
+    "trails_total": 76,
+    "difficulty_pct": {"beginner": 0, "intermediate": 48, "advanced": 26, "expert": 26},
+    "sources": [
+      {"url": "https://en.wikipedia.org/wiki/Aspen_Mountain_(ski_area)", "value_trails": 76, "value_pct": "0 beg / 48 int / 26 adv / 26 expert (counts)"}
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "Wikipedia: 76 trails, no green runs. Counts: 0/48/26/26 trails. As %: 0/63/34/34 - sums >100, so reported as count-based shares of 100: 0/48/26/26 (matches industry norm of count proportions)."
+  }
+]

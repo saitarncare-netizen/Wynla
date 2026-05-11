@@ -1,0 +1,392 @@
+[
+  {
+    "slug": "mount-ashwabay",
+    "name": "Mt. Ashwabay",
+    "state": "WI",
+    "website_url": "https://www.mtashwabay.org",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "mount-bohemia",
+    "name": "Mount Bohemia",
+    "state": "MI",
+    "website_url": "https://www.mtbohemia.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "mount-holly",
+    "name": "Mt. Holly",
+    "state": "MI",
+    "website_url": "https://www.skimtholly.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "mount-itasca",
+    "name": "Mount Itasca",
+    "state": "MN",
+    "website_url": "https://www.mtitasca.com/",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "mount-jefferson-ski-area",
+    "name": "Mount Jefferson Ski Area",
+    "state": "ME",
+    "website_url": "https://www.skimtjefferson.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "mount-kato",
+    "name": "Mount Kato",
+    "state": "MN",
+    "website_url": "https://www.mountkato.com",
+    "current_total_trails": 19,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "mount-peter",
+    "name": "Mount Peter",
+    "state": "NY",
+    "website_url": "https://mtpeter.com",
+    "current_total_trails": 13,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "mount-pisgah",
+    "name": "Mount Pisgah",
+    "state": "NY",
+    "website_url": "https://saranaclakeny.gov/mount-pisgah/",
+    "current_total_trails": 6,
+    "current_difficulty_pct": {
+      "beginner": 17,
+      "intermediate": 33,
+      "advanced": 50,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "mount-snow",
+    "name": "Mount Snow",
+    "state": "VT",
+    "website_url": "https://www.mountsnow.com",
+    "current_total_trails": 86,
+    "current_difficulty_pct": {
+      "beginner": 16,
+      "intermediate": 66,
+      "advanced": 17,
+      "expert": 1
+    }
+  },
+  {
+    "slug": "mount-southington",
+    "name": "Mount Southington Ski Area",
+    "state": "CT",
+    "website_url": "http://www.mountsouthington.com",
+    "current_total_trails": 14,
+    "current_difficulty_pct": {
+      "beginner": 50,
+      "intermediate": 33,
+      "advanced": 17,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "mount-sunapee",
+    "name": "Mount Sunapee",
+    "state": "NH",
+    "website_url": "https://www.mountsunapee.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": 26,
+      "intermediate": 48,
+      "advanced": 26,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "mountain-creek",
+    "name": "Mountain Creek",
+    "state": "NJ",
+    "website_url": "https://mountaincreek.com",
+    "current_total_trails": 46,
+    "current_difficulty_pct": {
+      "beginner": 18,
+      "intermediate": 62,
+      "advanced": 21,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "mountain-high",
+    "name": "Mountain High",
+    "state": "CA",
+    "website_url": "https://www.mthigh.com",
+    "current_total_trails": 50,
+    "current_difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 42,
+      "advanced": 34,
+      "expert": 3
+    }
+  },
+  {
+    "slug": "mt-abram",
+    "name": "Mt. Abram",
+    "state": "ME",
+    "website_url": "https://www.mtabram.com",
+    "current_total_trails": 42,
+    "current_difficulty_pct": {
+      "beginner": 23,
+      "intermediate": 48,
+      "advanced": 30,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "mt-bachelor",
+    "name": "Mt. Bachelor",
+    "state": "OR",
+    "website_url": "https://www.mtbachelor.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": 15,
+      "intermediate": 35,
+      "advanced": 30,
+      "expert": 20
+    }
+  },
+  {
+    "slug": "mt-baker-ski-area",
+    "name": "Mt. Baker Ski Area",
+    "state": "WA",
+    "website_url": "https://www.mtbaker.us",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": 23,
+      "intermediate": 45,
+      "advanced": 32,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "mt-baldy",
+    "name": "Mt. Baldy Ski Resort",
+    "state": "CA",
+    "website_url": "https://www.mtbaldyresort.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": 15,
+      "intermediate": 31,
+      "advanced": 54,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "mt-brighton",
+    "name": "Mt. Brighton",
+    "state": "MI",
+    "website_url": "https://www.mtbrighton.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "mt-crescent",
+    "name": "Mt. Crescent Ski Area",
+    "state": "IA",
+    "website_url": "https://www.skicrescent.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "mt-eyak",
+    "name": "Mt Eyak",
+    "state": "AK",
+    "website_url": "https://www.mteyak.org/",
+    "current_total_trails": 10,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "mt-holiday",
+    "name": "Mt. Holiday",
+    "state": "MI",
+    "website_url": "https://mt-holiday.com/ski-and-snowboarding/",
+    "current_total_trails": 12,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "mt-hood-meadows",
+    "name": "Mt. Hood Meadows",
+    "state": "OR",
+    "website_url": "https://www.skihood.com",
+    "current_total_trails": 142,
+    "current_difficulty_pct": {
+      "beginner": 15,
+      "intermediate": 40,
+      "advanced": 15,
+      "expert": 30
+    }
+  },
+  {
+    "slug": "mt-hood-skibowl",
+    "name": "Mt. Hood Skibowl",
+    "state": "OR",
+    "website_url": "https://www.skibowl.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "mt-la-crosse",
+    "name": "Mt La Crosse",
+    "state": "WI",
+    "website_url": "https://mtlacrosse.com/",
+    "current_total_trails": 20,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "mt-lemmon-ski-valley",
+    "name": "Mt. Lemmon Ski Valley",
+    "state": "AZ",
+    "website_url": "https://www.skithelemmon.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "mt-rose-ski-tahoe",
+    "name": "Mt. Rose Ski Tahoe",
+    "state": "NV",
+    "website_url": "https://skirose.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 30,
+      "advanced": 40,
+      "expert": 10
+    }
+  },
+  {
+    "slug": "mt-shasta",
+    "name": "Mt. Shasta",
+    "state": "CA",
+    "website_url": "https://www.skipark.com",
+    "current_total_trails": 38,
+    "current_difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 55,
+      "advanced": 24,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "mt-shasta-ski-park",
+    "name": "Mt. Shasta Ski Park",
+    "state": "CA",
+    "website_url": "https://www.skipark.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 55,
+      "advanced": 24,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "mt-spokane",
+    "name": "Mt. Spokane Ski and Snowboard Park",
+    "state": "WA",
+    "website_url": "https://www.mtspokane.com",
+    "current_total_trails": 53,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "mt-waterman",
+    "name": "Mt. Waterman",
+    "state": "CA",
+    "website_url": "https://www.mtwaterman.org",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 19,
+      "advanced": 62,
+      "expert": 0
+    }
+  }
+]

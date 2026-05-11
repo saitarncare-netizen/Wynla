@@ -1,0 +1,392 @@
+[
+  {
+    "slug": "loon-mountain",
+    "name": "Loon Mountain",
+    "state": "NH",
+    "website_url": "https://www.loonmtn.com",
+    "current_total_trails": 73,
+    "current_difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 53,
+      "advanced": 27,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "loppet",
+    "name": "The Loppet",
+    "state": "MN",
+    "website_url": "https://loppet.org/",
+    "current_total_trails": 16,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "lost-trail",
+    "name": "Lost Trail Powder Mountain",
+    "state": "MT",
+    "website_url": "https://www.losttrail.com",
+    "current_total_trails": 69,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "lost-valley",
+    "name": "Lost Valley",
+    "state": "ME",
+    "website_url": "https://www.lostvalleyski.com",
+    "current_total_trails": 22,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "loup-loup",
+    "name": "Loup Loup Ski Bowl",
+    "state": "WA",
+    "website_url": "https://skitheloup.com",
+    "current_total_trails": 14,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "loveland",
+    "name": "Loveland Ski Area",
+    "state": "CO",
+    "website_url": "https://www.skiloveland.com",
+    "current_total_trails": 94,
+    "current_difficulty_pct": {
+      "beginner": 13,
+      "intermediate": 41,
+      "advanced": 46,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "lutsen-mountains",
+    "name": "Lutsen Mountains",
+    "state": "MN",
+    "website_url": "https://www.lutsen.com",
+    "current_total_trails": 95,
+    "current_difficulty_pct": {
+      "beginner": 18,
+      "intermediate": 47,
+      "advanced": 25,
+      "expert": 10
+    }
+  },
+  {
+    "slug": "lyndon-outing-club",
+    "name": "Lyndon Outing Club",
+    "state": "VT",
+    "website_url": "https://www.skilyndon.com/",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "mad-river-glen",
+    "name": "Mad River Glen",
+    "state": "VT",
+    "website_url": "https://www.madriverglen.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "mad-river-mountain",
+    "name": "Mad River Mountain",
+    "state": "OH",
+    "website_url": "https://www.skimadriver.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "magic-mountain",
+    "name": "Magic Mountain",
+    "state": "VT",
+    "website_url": "https://www.magicmtn.com",
+    "current_total_trails": 39,
+    "current_difficulty_pct": {
+      "beginner": 28,
+      "intermediate": 36,
+      "advanced": 26,
+      "expert": 10
+    }
+  },
+  {
+    "slug": "magic-mountain-id",
+    "name": "Magic Mountain Resort",
+    "state": "ID",
+    "website_url": "https://magicmountainresort.com",
+    "current_total_trails": 11,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "mammoth-mountain",
+    "name": "Mammoth Mountain Ski Area",
+    "state": "CA",
+    "website_url": "https://www.mammothmountain.com",
+    "current_total_trails": 178,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "maple-ski-ridge",
+    "name": "Maple Ski Ridge",
+    "state": "NY",
+    "website_url": "https://www.mapleskiridge.com",
+    "current_total_trails": 8,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "maplelag",
+    "name": "Maplelag Resort",
+    "state": "MN",
+    "website_url": "https://www.maplelag.com/",
+    "current_total_trails": 17,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "marquette-mountain",
+    "name": "Marquette Mountain",
+    "state": "MI",
+    "website_url": "https://www.marquettemountain.com",
+    "current_total_trails": 29,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "massanutten-resort",
+    "name": "Massanutten Resort",
+    "state": "VA",
+    "website_url": "https://www.massresort.com",
+    "current_total_trails": 23,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "maverick-mountain",
+    "name": "Maverick Mountain Ski Area",
+    "state": "MT",
+    "website_url": "https://skimaverick.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "mccauley-mountain",
+    "name": "McCauley Mountain",
+    "state": "NY",
+    "website_url": "https://www.mccauleyny.com",
+    "current_total_trails": 21,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "mcintyre-ski-area",
+    "name": "McIntyre Ski Area",
+    "state": "NH",
+    "website_url": "https://www.mcintyreskiarea.com",
+    "current_total_trails": 11,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "meadowlark",
+    "name": "Meadowlark Ski Lodge",
+    "state": "WY",
+    "website_url": "https://www.meadowlarkskilodge.com",
+    "current_total_trails": 14,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "middlebury-snow-bowl",
+    "name": "Middlebury Snow Bowl",
+    "state": "VT",
+    "website_url": "https://www.middleburysnowbowl.com",
+    "current_total_trails": 17,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "minocqua-winter-park",
+    "name": "Minocqua Winter Park",
+    "state": "WI",
+    "website_url": null,
+    "current_total_trails": 30,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "mission-ridge",
+    "name": "Mission Ridge Ski & Board Resort",
+    "state": "WA",
+    "website_url": "https://www.missionridge.com",
+    "current_total_trails": 54,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "mohawk-mountain-ski-area",
+    "name": "Mohawk Mountain Ski Area",
+    "state": "CT",
+    "website_url": "https://www.mohawkmtn.com",
+    "current_total_trails": 27,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "monarch-mountain",
+    "name": "Monarch Mountain",
+    "state": "CO",
+    "website_url": "https://www.skimonarch.com",
+    "current_total_trails": 80,
+    "current_difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 35,
+      "advanced": 36,
+      "expert": 9
+    }
+  },
+  {
+    "slug": "mont-ripley",
+    "name": "Mont Ripley",
+    "state": "MI",
+    "website_url": "https://www.mtu.edu/mont-ripley",
+    "current_total_trails": 25,
+    "current_difficulty_pct": {
+      "beginner": 16,
+      "intermediate": 35,
+      "advanced": 42,
+      "expert": 6
+    }
+  },
+  {
+    "slug": "montage-mountain",
+    "name": "Montage Mountain",
+    "state": "PA",
+    "website_url": "https://www.montagemountainresorts.com",
+    "current_total_trails": 27,
+    "current_difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 46,
+      "advanced": 19,
+      "expert": 15
+    }
+  },
+  {
+    "slug": "montana-snowbowl",
+    "name": "Montana Snowbowl",
+    "state": "MT",
+    "website_url": "https://www.montanasnowbowl.com",
+    "current_total_trails": 39,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "moose",
+    "name": "Moose Mountain",
+    "state": "AK",
+    "website_url": "https://shredthemoose.com/",
+    "current_total_trails": 42,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  }
+]

@@ -1,0 +1,152 @@
+[
+  {
+    "slug": "highlands",
+    "name": "The Highlands",
+    "state": "MI",
+    "website_url": null
+  },
+  {
+    "slug": "hilltop-ski-area",
+    "name": "Hilltop Ski Area",
+    "state": "AK",
+    "website_url": "https://hilltopskiarea.org"
+  },
+  {
+    "slug": "hoedown-hill",
+    "name": "Hoedown Hill",
+    "state": "CO",
+    "website_url": "https://www.hoedownhill.com"
+  },
+  {
+    "slug": "homestake-lodge",
+    "name": "Homestake Lodge",
+    "state": "MT",
+    "website_url": null
+  },
+  {
+    "slug": "homestead-resort",
+    "name": "The Homestead",
+    "state": "MI",
+    "website_url": "https://www.thehomesteadresort.com"
+  },
+  {
+    "slug": "howelsen-hill",
+    "name": "Howelsen Hill Ski Area",
+    "state": "CO",
+    "website_url": "https://www.steamboatsprings.net"
+  },
+  {
+    "slug": "hurricane-ridge",
+    "name": "Hurricane Ridge Ski and Snowboard Area",
+    "state": "WA",
+    "website_url": "https://hurricaneridge.com"
+  },
+  {
+    "slug": "indianhead-mountain",
+    "name": "Indianhead Mountain",
+    "state": "MI",
+    "website_url": "https://www.indianheadmtn.com"
+  },
+  {
+    "slug": "jackson-hole",
+    "name": "Jackson Hole Mountain Resort",
+    "state": "WY",
+    "website_url": "https://www.jacksonhole.com"
+  },
+  {
+    "slug": "jackson-xc",
+    "name": "Jackson XC",
+    "state": "NH",
+    "website_url": null
+  },
+  {
+    "slug": "lake-city-ski-hill",
+    "name": "Lake City Ski Hill",
+    "state": "CO",
+    "website_url": "https://www.lakecity.com"
+  },
+  {
+    "slug": "leavenworth-ski-hill",
+    "name": "Leavenworth Ski Hill",
+    "state": "WA",
+    "website_url": "https://skileavenworth.com"
+  },
+  {
+    "slug": "leavenworth-winter-sports-club",
+    "name": "Leavenworth Winter Sports Club",
+    "state": "WA",
+    "website_url": "https://skileavenworth.com/webcams"
+  },
+  {
+    "slug": "lees-ski-hill",
+    "name": "Lee's Ski Hill",
+    "state": "CO",
+    "website_url": "https://www.cityofouray.com"
+  },
+  {
+    "slug": "little-ski-hill",
+    "name": "Little Ski Hill",
+    "state": "ID",
+    "website_url": "https://littleskihill.org"
+  },
+  {
+    "slug": "loge-glacier",
+    "name": "LOGE Glacier",
+    "state": "MT",
+    "website_url": "https://www.logecamps.com/journal/glacier-area-guide"
+  },
+  {
+    "slug": "loppet",
+    "name": "The Loppet",
+    "state": "MN",
+    "website_url": "https://loppet.org/"
+  },
+  {
+    "slug": "loup-loup",
+    "name": "Loup Loup Ski Bowl",
+    "state": "WA",
+    "website_url": "https://skitheloup.com"
+  },
+  {
+    "slug": "lyndon-outing-club",
+    "name": "Lyndon Outing Club",
+    "state": "VT",
+    "website_url": "https://www.skilyndon.com/"
+  },
+  {
+    "slug": "mad-river-glen",
+    "name": "Mad River Glen",
+    "state": "VT",
+    "website_url": "https://www.madriverglen.com"
+  },
+  {
+    "slug": "magic-mountain",
+    "name": "Magic Mountain",
+    "state": "VT",
+    "website_url": "https://www.magicmtn.com"
+  },
+  {
+    "slug": "maplelag",
+    "name": "Maplelag Resort",
+    "state": "MN",
+    "website_url": "https://www.maplelag.com/"
+  },
+  {
+    "slug": "massanutten-resort",
+    "name": "Massanutten Resort",
+    "state": "VA",
+    "website_url": "https://www.massresort.com"
+  },
+  {
+    "slug": "middlebury-snow-bowl",
+    "name": "Middlebury Snow Bowl",
+    "state": "VT",
+    "website_url": "https://www.middleburysnowbowl.com"
+  },
+  {
+    "slug": "minocqua-winter-park",
+    "name": "Minocqua Winter Park",
+    "state": "WI",
+    "website_url": null
+  }
+]

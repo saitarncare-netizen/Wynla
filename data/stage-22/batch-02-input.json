@@ -1,0 +1,392 @@
+[
+  {
+    "slug": "aspen-snowmass",
+    "name": "Aspen Snowmass",
+    "state": "CO",
+    "website_url": null,
+    "current_total_trails": 94,
+    "current_difficulty_pct": {
+      "beginner": 6,
+      "intermediate": 47,
+      "advanced": 17,
+      "expert": 30
+    }
+  },
+  {
+    "slug": "attitash",
+    "name": "Attitash Mountain Resort",
+    "state": "NH",
+    "website_url": "https://www.attitash.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "badger-mountain-wa",
+    "name": "Badger Mountain Ski Area",
+    "state": "WA",
+    "website_url": "http://www.nwwintersportsman.com/BadgerMt/index2.htm",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "badger-pass",
+    "name": "Badger Pass Ski Area (Yosemite)",
+    "state": "CA",
+    "website_url": "https://www.travelyosemite.com/winter/yosemite-ski-snowboard-area/",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "bear-basin-nordic-center",
+    "name": "Bear Basin Nordic Center",
+    "state": "ID",
+    "website_url": "https://payettelakesskiclub.org/pages/bear-basin-nordic-center",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "bear-creek-mountain-resort",
+    "name": "Bear Creek Mountain Resort",
+    "state": "PA",
+    "website_url": "https://www.bcmountainresort.com",
+    "current_total_trails": 23,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "bear-mountain",
+    "name": "Bear Mountain",
+    "state": "CA",
+    "website_url": "https://www.bigbearmountainresort.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "bear-paw",
+    "name": "Bear Paw Ski Bowl",
+    "state": "MT",
+    "website_url": "https://skibearpaw.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "bear-valley-adventure-company",
+    "name": "Bear Valley Adventure Company",
+    "state": "CA",
+    "website_url": "https://www.bvadventures.com/",
+    "current_total_trails": 38,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "bear-valley-mountain",
+    "name": "Bear Valley Mountain Resort",
+    "state": "CA",
+    "website_url": "https://www.bearvalley.com",
+    "current_total_trails": 75,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "beartooth-basin",
+    "name": "Beartooth Basin Summer Ski Area",
+    "state": "WY",
+    "website_url": "https://www.beartoothbasin.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "beaver-creek",
+    "name": "Beaver Creek Resort",
+    "state": "CO",
+    "website_url": "https://www.beavercreek.com",
+    "current_total_trails": 167,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "beaver-mountain",
+    "name": "Beaver Mountain",
+    "state": "UT",
+    "website_url": "https://www.skithebeav.com",
+    "current_total_trails": 48,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "beech-mountain-resort",
+    "name": "Beech Mountain Resort",
+    "state": "NC",
+    "website_url": "https://www.beechmountainresort.com",
+    "current_total_trails": 17,
+    "current_difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 56,
+      "advanced": 25,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "belleayre-mountain",
+    "name": "Belleayre Mountain",
+    "state": "NY",
+    "website_url": "https://www.belleayre.com",
+    "current_total_trails": 62,
+    "current_difficulty_pct": {
+      "beginner": 32,
+      "intermediate": 43,
+      "advanced": 18,
+      "expert": 7
+    }
+  },
+  {
+    "slug": "berkshire-east",
+    "name": "Berkshire East Mountain Resort",
+    "state": "MA",
+    "website_url": "https://berkshireeast.com",
+    "current_total_trails": 45,
+    "current_difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 35,
+      "advanced": 30,
+      "expert": 4
+    }
+  },
+  {
+    "slug": "bethel-village-trails",
+    "name": "Bethel Village Trails",
+    "state": "ME",
+    "website_url": "https://woodsandtrails.org/",
+    "current_total_trails": 33,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "big-bear-ca",
+    "name": "Big Bear Mountain Resort",
+    "state": "CA",
+    "website_url": null,
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "big-bear-pa",
+    "name": "Ski Big Bear",
+    "state": "PA",
+    "website_url": "https://www.ski-bigbear.com",
+    "current_total_trails": 18,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "big-boulder",
+    "name": "Big Boulder",
+    "state": "PA",
+    "website_url": "https://www.jfbb.com",
+    "current_total_trails": 18,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "big-powderhorn-mountain",
+    "name": "Big Powderhorn Mountain",
+    "state": "MI",
+    "website_url": "https://www.bigpowderhorn.net",
+    "current_total_trails": 45,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "big-rock",
+    "name": "Big Rock",
+    "state": "ME",
+    "website_url": "https://www.bigrockmaine.com",
+    "current_total_trails": 29,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "big-sky",
+    "name": "Big Sky Resort",
+    "state": "MT",
+    "website_url": "https://www.bigskyresort.com",
+    "current_total_trails": 320,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "big-snow-american-dream",
+    "name": "Big Snow American Dream",
+    "state": "NJ",
+    "website_url": "https://www.bigsnowamericandream.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 33,
+      "advanced": 33,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "big-squaw-mountain",
+    "name": "Big Moose Mountain",
+    "state": "ME",
+    "website_url": "https://www.skibigsquaw.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "bittersweet-ski-resort",
+    "name": "Bittersweet Ski Resort",
+    "state": "MI",
+    "website_url": "https://www.skibittersweet.com",
+    "current_total_trails": 20,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "black-area",
+    "name": "Black Mountain Ski Area",
+    "state": "NH",
+    "website_url": "https://www.blackmt.com",
+    "current_total_trails": 45,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "black-mountain-nh",
+    "name": "Black Mountain (NH)",
+    "state": "NH",
+    "website_url": "https://www.blackmt.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "black-mountain-of-maine",
+    "name": "Black Mountain of Maine",
+    "state": "ME",
+    "website_url": "https://www.skiblackmountain.org",
+    "current_total_trails": 31,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "blackjack-mountain",
+    "name": "Blackjack Mountain",
+    "state": "MI",
+    "website_url": "https://www.skiblackjack.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  }
+]

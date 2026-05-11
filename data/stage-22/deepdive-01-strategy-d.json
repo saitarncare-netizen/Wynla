@@ -1,0 +1,280 @@
+[
+  {
+    "slug": "aspen-snowmass",
+    "trails_total": 366,
+    "difficulty_pct": {"beginner": 6, "intermediate": 43, "advanced": 17, "expert": 34},
+    "sources": [
+      {"url": "https://www.skitripadvisors.com/aspensnomwassfourmountainstats", "value_trails": 366, "value_pct": {"beginner": 6, "intermediate": 43, "advanced": 17, "expert": 34}},
+      {"url": "https://en.wikipedia.org/wiki/Snowmass_(ski_area)", "value_trails": 94, "value_pct": null},
+      {"url": "https://en.wikipedia.org/wiki/Buttermilk_(ski_area)", "value_trails": 44, "value_pct": {"beginner": 35, "intermediate": 39, "advanced": 26, "expert": 0}},
+      {"url": "https://en.wikipedia.org/wiki/Aspen_Highlands", "value_trails": 118, "value_pct": null}
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "Combined 4-mountain stats: 366 trails per skitripadvisors. Sum of Wikipedia per-mountain counts (76+44+118+94 ~= 332) also corroborates a ~330-370 trail range. Difficulty pct from combined source."
+  },
+  {
+    "slug": "badger-mountain-wa",
+    "trails_total": 20,
+    "difficulty_pct": null,
+    "sources": [
+      {"url": "https://en.wikipedia.org/wiki/Badger_Mountain_Ski_Area", "value_trails": 20, "value_pct": null},
+      {"url": "http://www.nwwintersportsman.com/BadgerMt/index2.htm", "value_trails": 20, "value_pct": null}
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "Tiny volunteer-run hill near Waterville WA. Wikipedia and skibum.net cite ~20 trails across 3 slopes/lifts. No published difficulty pct - only 'three levels of difficulty'."
+  },
+  {
+    "slug": "badger-pass",
+    "trails_total": 10,
+    "difficulty_pct": {"beginner": 35, "intermediate": 50, "advanced": 15, "expert": 0},
+    "sources": [
+      {"url": "https://en.wikipedia.org/wiki/Badger_Pass_Ski_Area", "value_trails": 10, "value_pct": {"beginner": 35, "intermediate": 50, "advanced": 15, "expert": 0}},
+      {"url": "https://www.onthesnow.com/california/badger-pass/ski-resort", "value_trails": 10, "value_pct": null},
+      {"url": "https://www.explore.com/1498495/skiing-badger-pass-yosemite-national-park/", "value_trails": 10, "value_pct": {"beginner": 35, "intermediate": 50, "advanced": 15, "expert": 0}}
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "Yosemite ski area. 10 downhill runs confirmed across Wikipedia, OnTheSnow, explore.com. Difficulty pct (35/50/15) consistent across two sources."
+  },
+  {
+    "slug": "bear-basin-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "sources": [
+      {"url": "https://payettelakesskiclub.org/pages/bear-basin-nordic-center", "value_trails": null, "value_pct": null},
+      {"url": "https://visitidaho.org/things-to-do/nordic-skiing-snowshoeing/bear-basin-nordic-center/", "value_trails": null, "value_pct": null}
+    ],
+    "consensus_confidence": "NONE",
+    "notes": "Nordic/XC-only center near McCall ID. Published as 30+ km (or 25 km classic/skate + 5 km snowshoe) groomed trails. No per-trail count or alpine-difficulty breakdown applicable."
+  },
+  {
+    "slug": "bear-paw",
+    "trails_total": 24,
+    "difficulty_pct": null,
+    "sources": [
+      {"url": "https://en.wikipedia.org/wiki/Bear_Paw_Ski_Bowl", "value_trails": 24, "value_pct": null},
+      {"url": "https://discoveringmontana.com/ski-resorts/bear-paw-ski-bowl/", "value_trails": 24, "value_pct": null}
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "Bear Paw Ski Bowl near Havre MT, on Rocky Boy Reservation. 24 named runs per Wikipedia (also confirmed by discoveringmontana.com). All trails are 'unrated' - resort does not publish difficulty classifications."
+  },
+  {
+    "slug": "bethel-village-trails",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "sources": [
+      {"url": "https://woodsandtrails.org/", "value_trails": null, "value_pct": null},
+      {"url": "https://www.mainetrailfinder.com/trails/trail/bethel-village-trails", "value_trails": null, "value_pct": null}
+    ],
+    "consensus_confidence": "NONE",
+    "notes": "Nordic/XC-only village trail system in Bethel ME. Published as ~24 km XC ski trails + 9 km fat-bike/snowshoe (35 km total). No alpine trail count or difficulty pct applicable."
+  },
+  {
+    "slug": "black-area",
+    "trails_total": 45,
+    "difficulty_pct": {"beginner": 29, "intermediate": 32, "advanced": 24, "expert": 15},
+    "sources": [
+      {"url": "https://en.wikipedia.org/wiki/Black_Mountain_Ski_Area", "value_trails": 45, "value_pct": null},
+      {"url": "https://www.onthesnow.com/new-hampshire/black-mountain/ski-resort", "value_trails": 68, "value_pct": {"beginner": 29, "intermediate": 32, "advanced": 24, "expert": 15}}
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "Likely duplicate slug for Black Mountain NH (Jackson). Wikipedia: 45 trails + 15 glades (~60). OnTheSnow lists 68 runs incl glades. Used 45 base trail count and OnTheSnow difficulty pct."
+  },
+  {
+    "slug": "black-mountain-nh",
+    "trails_total": 45,
+    "difficulty_pct": {"beginner": 29, "intermediate": 32, "advanced": 24, "expert": 15},
+    "sources": [
+      {"url": "https://en.wikipedia.org/wiki/Black_Mountain_Ski_Area", "value_trails": 45, "value_pct": null},
+      {"url": "https://www.onthesnow.com/new-hampshire/black-mountain/ski-resort", "value_trails": 68, "value_pct": {"beginner": 29, "intermediate": 32, "advanced": 24, "expert": 15}}
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "Black Mountain Jackson NH. Wikipedia 45 + 15 glades; OnTheSnow 68 including glades. Difficulty pct 29/32/24/15 from OnTheSnow."
+  },
+  {
+    "slug": "black-mountain-of-maine",
+    "trails_total": 46,
+    "difficulty_pct": {"beginner": 18, "intermediate": 31, "advanced": 46, "expert": 5},
+    "sources": [
+      {"url": "https://en.wikipedia.org/wiki/Black_Mountain_of_Maine", "value_trails": 46, "value_pct": null},
+      {"url": "https://www.onthesnow.com/maine/black-mountain-of-maine/ski-resort", "value_trails": 38, "value_pct": {"beginner": 18, "intermediate": 31, "advanced": 46, "expert": 5}}
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "Wikipedia: 46 trails (incl 17 glades). OnTheSnow: 38 runs. Pct from OnTheSnow."
+  },
+  {
+    "slug": "blackjack-mountain",
+    "trails_total": 22,
+    "difficulty_pct": {"beginner": 20, "intermediate": 40, "advanced": 40, "expert": 0},
+    "sources": [
+      {"url": "https://www.skicentral.com/blackjack.html", "value_trails": 22, "value_pct": {"beginner": 20, "intermediate": 40, "advanced": 40, "expert": 0}},
+      {"url": "https://snoflo.org/ski-area/blackjack-ski-resort", "value_trails": 22, "value_pct": null}
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "Blackjack Mountain Michigan (now part of Snowriver / Big Snow Resort). 22 downhill runs across 126 acres. Pct 20/40/40 with one double-black expert trail per skicentral."
+  },
+  {
+    "slug": "blue-hills-ski-area",
+    "trails_total": 12,
+    "difficulty_pct": {"beginner": 50, "intermediate": 19, "advanced": 31, "expert": 0},
+    "sources": [
+      {"url": "https://www.onthesnow.com/massachusetts/blue-hills-ski-area/ski-resort", "value_trails": 16, "value_pct": {"beginner": 50, "intermediate": 19, "advanced": 31, "expert": 0}},
+      {"url": "https://en.wikipedia.org/wiki/Blue_Hills_Ski_Area", "value_trails": 12, "value_pct": null}
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "Conflicting trail counts: 8 (snow-online), 9 (snoflo), 12 (Wikipedia: 6 green/5 blue/4 black - implies ~13-15 but listed as 12), 16 (OnTheSnow). Used 12 from Wikipedia breakdown; pct from OnTheSnow."
+  },
+  {
+    "slug": "boston-mills",
+    "trails_total": 7,
+    "difficulty_pct": {"beginner": 17, "intermediate": 33, "advanced": 50, "expert": 0},
+    "sources": [
+      {"url": "https://www.onthesnow.com/ohio/boston-mills/ski-resort", "value_trails": 6, "value_pct": {"beginner": 17, "intermediate": 33, "advanced": 50, "expert": 0}},
+      {"url": "https://en.wikipedia.org/wiki/Boston_Mills/Brandywine_Ski_Resorts", "value_trails": 7, "value_pct": null}
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "Wikipedia lists 7 trails (2 easy, 4 intermediate, 1 expert = ~28/57/14 pct from counts). OnTheSnow says 6 runs, 17/33/50 pct. Used Wikipedia count, OnTheSnow pct (acknowledging slight conflict)."
+  },
+  {
+    "slug": "brandywine",
+    "trails_total": 11,
+    "difficulty_pct": {"beginner": 33, "intermediate": 33, "advanced": 33, "expert": 0},
+    "sources": [
+      {"url": "https://www.onthesnow.com/ohio/brandywine/ski-resort", "value_trails": 9, "value_pct": {"beginner": 33, "intermediate": 33, "advanced": 33, "expert": 0}},
+      {"url": "https://en.wikipedia.org/wiki/Boston_Mills/Brandywine_Ski_Resorts", "value_trails": 7, "value_pct": null}
+    ],
+    "consensus_confidence": "LOW",
+    "notes": "Sister resort to Boston Mills. Wikipedia 7 trails (4 easy/2 intermediate/1 expert). OnTheSnow 9 runs even split. Snowpak 17/33/50. Used Wikipedia 7 + OnTheSnow pct (low confidence due to ~30% conflict)."
+  },
+  {
+    "slug": "breckenridge",
+    "trails_total": 187,
+    "difficulty_pct": {"beginner": 14, "intermediate": 31, "advanced": 19, "expert": 36},
+    "sources": [
+      {"url": "https://en.wikipedia.org/wiki/Breckenridge_Ski_Resort", "value_trails": 187, "value_pct": {"beginner": 14, "intermediate": 31, "advanced": 19, "expert": 36}},
+      {"url": "https://www.skiresort.info/ski-resort/breckenridge/", "value_trails": null, "value_pct": {"beginner": 18, "intermediate": 39, "advanced": 43, "expert": 0}}
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "Breck has 187 trails per Wikipedia. Difficulty 14/31/19/36 per Wikipedia. skiresort.info uses 3-tier metric (18% easy, 39% intermediate, 43% difficult = 19+36 combined) - consistent."
+  },
+  {
+    "slug": "bretton-woods",
+    "trails_total": 102,
+    "difficulty_pct": {"beginner": 25, "intermediate": 40, "advanced": 25, "expert": 10},
+    "sources": [
+      {"url": "https://en.wikipedia.org/wiki/Bretton_Woods_Mountain_Resort", "value_trails": 102, "value_pct": {"beginner": 25, "intermediate": 29, "advanced": 0, "expert": 46}},
+      {"url": "https://www.brettonwoodsvacations.com/blog/a-local-skiers-guide-to-bretton-woods/", "value_trails": null, "value_pct": {"beginner": 25, "intermediate": 40, "advanced": 25, "expert": 10}}
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "Wikipedia: 102 trails with 25/29/46 (3-tier) breakdown. Resort sub-source provides 4-tier 25/40/25/10. Used 4-tier pct since it sums to 100 and matches the resort's published breakdown."
+  },
+  {
+    "slug": "brian-head",
+    "trails_total": 71,
+    "difficulty_pct": {"beginner": 35, "intermediate": 35, "advanced": 20, "expert": 10},
+    "sources": [
+      {"url": "https://en.wikipedia.org/wiki/Brian_Head_Resort", "value_trails": 71, "value_pct": {"beginner": 35, "intermediate": 35, "advanced": 20, "expert": 10}},
+      {"url": "https://www.onthesnow.com/utah/brian-head-resort/ski-resort", "value_trails": 61, "value_pct": {"beginner": 21, "intermediate": 41, "advanced": 28, "expert": 10}}
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "Wikipedia: 71 runs, 35/35/20/10. OnTheSnow: 61 runs, 21/41/28/10. Used Wikipedia for both - aligns with resort's own marketing."
+  },
+  {
+    "slug": "bryce-resort",
+    "trails_total": 12,
+    "difficulty_pct": {"beginner": 33, "intermediate": 50, "advanced": 17, "expert": 0},
+    "sources": [
+      {"url": "https://en.wikipedia.org/wiki/Bryce_Resort", "value_trails": 12, "value_pct": {"beginner": 33, "intermediate": 50, "advanced": 17, "expert": 0}},
+      {"url": "https://www.onthesnow.com/virginia/bryce-resort/ski-resort", "value_trails": 12, "value_pct": {"beginner": 33, "intermediate": 50, "advanced": 17, "expert": 0}}
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "Two sources fully agree: 12 trails, 33/50/17/0. Note: Wikipedia mentions ~35% expansion planned for 2025-26 (4 new trails) but baseline is 12."
+  },
+  {
+    "slug": "buena-vista",
+    "trails_total": 16,
+    "difficulty_pct": {"beginner": 20, "intermediate": 55, "advanced": 25, "expert": 0},
+    "sources": [
+      {"url": "https://www.bvskiarea.com/facts.html", "value_trails": 16, "value_pct": {"beginner": 20, "intermediate": 55, "advanced": 25, "expert": 0}},
+      {"url": "https://www.onthesnow.com/minnesota/buena-vista-ski-area/ski-resort", "value_trails": 17, "value_pct": null}
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "Buena Vista Bemidji MN. Resort site: 16 runs, 20/55/25 pct. OnTheSnow: 17 runs (no pct). Used resort source."
+  },
+  {
+    "slug": "caberfae-peaks",
+    "trails_total": 34,
+    "difficulty_pct": {"beginner": 33, "intermediate": 33, "advanced": 33, "expert": 0},
+    "sources": [
+      {"url": "https://www.michigan.org/property/caberfae-peaks-ski-and-golf-resort", "value_trails": 34, "value_pct": {"beginner": 33, "intermediate": 33, "advanced": 33, "expert": 0}},
+      {"url": "https://www.onthesnow.com/michigan/caberfae-peaks-ski-golf-resort/ski-resort", "value_trails": 27, "value_pct": {"beginner": 26, "intermediate": 37, "advanced": 37, "expert": 0}}
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "Michigan.org/Indy Pass list 34 runs equal split; OnTheSnow 27 runs with 26/37/37. Trail count varies; difficulty roughly even-thirds across sources."
+  },
+  {
+    "slug": "camp-10-area",
+    "trails_total": 15,
+    "difficulty_pct": {"beginner": 40, "intermediate": 40, "advanced": 20, "expert": 0},
+    "sources": [
+      {"url": "https://www.travelwisconsin.com/downhill-skiing-snowboarding/camp-10-ski-area-204094", "value_trails": 15, "value_pct": {"beginner": 40, "intermediate": 40, "advanced": 20, "expert": 0}},
+      {"url": "https://wisconsintrailguide.com/skiing-snowboarding/camp10.html", "value_trails": 15, "value_pct": null}
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "Camp 10 Rhinelander WI. 15 runs confirmed across multiple sources. Pct 40/40/20 per Travel Wisconsin."
+  },
+  {
+    "slug": "campgaw-mountain",
+    "trails_total": 12,
+    "difficulty_pct": {"beginner": 33, "intermediate": 33, "advanced": 25, "expert": 8},
+    "sources": [
+      {"url": "https://en.wikipedia.org/wiki/Campgaw_Mountain", "value_trails": 12, "value_pct": null},
+      {"url": "https://www.onthesnow.com/new-jersey/campgaw-mountain/ski-resort", "value_trails": 12, "value_pct": {"beginner": 33, "intermediate": 33, "advanced": 25, "expert": 8}}
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "12 trails confirmed by Wikipedia and OnTheSnow. Difficulty pct from OnTheSnow."
+  },
+  {
+    "slug": "campton-mountain",
+    "trails_total": 4,
+    "difficulty_pct": null,
+    "sources": [
+      {"url": "https://skimap.org/skiareas/view/3044", "value_trails": 4, "value_pct": null},
+      {"url": "https://camptonmountain.com/", "value_trails": 4, "value_pct": null}
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "Tiny community hill in Campton NH. 4 trails per skimap.org. Difficulty pct not published (mix of green/blue/black per sources but no specific %)."
+  },
+  {
+    "slug": "canaan-valley-resort",
+    "trails_total": 47,
+    "difficulty_pct": {"beginner": 27, "intermediate": 38, "advanced": 35, "expert": 0},
+    "sources": [
+      {"url": "https://en.wikipedia.org/wiki/Canaan_Valley_Resort_State_Park", "value_trails": 47, "value_pct": null},
+      {"url": "https://www.onthesnow.com/west-virginia/canaan-valley-resort/ski-resort", "value_trails": 26, "value_pct": {"beginner": 27, "intermediate": 38, "advanced": 35, "expert": 0}}
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "Wikipedia: 47 trails. OnTheSnow: 26 trails (likely excluding glades/cross-country). Difficulty pct 27/38/35 consistent across OnTheSnow & gettuckered. Used Wikipedia higher count."
+  },
+  {
+    "slug": "cannon-mountain",
+    "trails_total": 97,
+    "difficulty_pct": {"beginner": 14, "intermediate": 52, "advanced": 34, "expert": 0},
+    "sources": [
+      {"url": "https://www.onthesnow.com/new-hampshire/cannon-mountain/ski-resort", "value_trails": 98, "value_pct": {"beginner": 14, "intermediate": 52, "advanced": 34, "expert": 0}},
+      {"url": "https://www.peakrankings.com/content/cannon", "value_trails": 97, "value_pct": {"beginner": 15, "intermediate": 52, "advanced": 33, "expert": 0}}
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "Cannon Mountain NH (state-owned). 97-98 trails and glades. Difficulty 14-15/52/33-34 across OnTheSnow & PeakRankings."
+  },
+  {
+    "slug": "catamount-outdoor-family-center",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "sources": [
+      {"url": "https://skivermont.com/catamount-outdoor-family-center", "value_trails": null, "value_pct": null},
+      {"url": "https://catamountoutdoor.org/winter/cross-country-ski/", "value_trails": null, "value_pct": null}
+    ],
+    "consensus_confidence": "NONE",
+    "notes": "Nordic/XC-only family center in Williston VT. ~35 km groomed XC trails. No alpine trail count or difficulty pct applicable."
+  }
+]

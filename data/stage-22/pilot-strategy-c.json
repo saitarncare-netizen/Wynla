@@ -1,0 +1,162 @@
+[
+  {
+    "slug": "49-degrees-north",
+    "trails_total": 82,
+    "difficulty_pct": {"beginner": 30, "intermediate": 40, "advanced": 25, "expert": 5},
+    "source_url": "https://www.peakrankings.com/content/49-degrees-north",
+    "source_site": "peakrankings",
+    "notes": "PeakRankings: 30% beginner, 40% intermediate, 25% advanced, 5% expert. Wikipedia article for resort name not found (404)."
+  },
+  {
+    "slug": "afton-alps",
+    "trails_total": 50,
+    "difficulty_pct": {"beginner": 25, "intermediate": 50, "advanced": 25, "expert": null},
+    "source_url": "https://en.wikipedia.org/wiki/Afton_Alps",
+    "source_site": "wikipedia",
+    "notes": "Infobox: 50 total, 25% beginner, 50% intermediate, 25% advanced. No expert listed."
+  },
+  {
+    "slug": "alpine-meadows",
+    "trails_total": 100,
+    "difficulty_pct": {"beginner": 25, "intermediate": 40, "advanced": 35, "expert": null},
+    "source_url": "https://en.wikipedia.org/wiki/Alpine_Meadows_(ski_resort)",
+    "source_site": "wikipedia",
+    "notes": "Infobox: 100 trails, 25% beginner, 40% intermediate, 35% advanced. No expert listed."
+  },
+  {
+    "slug": "alpine-valley-mi",
+    "trails_total": 25,
+    "difficulty_pct": {"beginner": 34, "intermediate": 36, "advanced": 30, "expert": null},
+    "source_url": "https://www.snow-forecast.com/resorts/Alpine-Valley-Ski-Area",
+    "source_site": "snow-forecast",
+    "notes": "25 trails (11 beginner, 6 intermediate, 8 advanced). Snow-Forecast: 34/36/30%. Wikipedia article not found."
+  },
+  {
+    "slug": "alpine-valley-oh",
+    "trails_total": 11,
+    "difficulty_pct": {"beginner": 35, "intermediate": 25, "advanced": 50, "expert": null},
+    "source_url": "https://myskisearch.com/na-ski-areas/alpine-valley-ski-mountain-chesterland-oh/",
+    "source_site": "myskisearch",
+    "notes": "11 trails per multiple sources; trail breakdown 35% beginner, 25% intermediate, 50% advanced (sums to 110% per source; kept as-listed)."
+  },
+  {
+    "slug": "alpine-valley-wi",
+    "trails_total": 21,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://www.skiresort.info/ski-resort/alpine-valley-resort-elkhorn/",
+    "source_site": "skiresort.info",
+    "notes": "21 trails confirmed by Travel Wisconsin/skiresort.info. No reliable percentage breakdown found."
+  },
+  {
+    "slug": "alta",
+    "trails_total": 116,
+    "difficulty_pct": {"beginner": 15, "intermediate": 30, "advanced": 55, "expert": null},
+    "source_url": "https://en.wikipedia.org/wiki/Alta_Ski_Area",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia infobox: 116+ trails, 15% easiest, 30% more difficult, 55% most difficult (advanced+expert combined)."
+  },
+  {
+    "slug": "alyeska-resort",
+    "trails_total": 73,
+    "difficulty_pct": {"beginner": 11, "intermediate": 52, "advanced": 37, "expert": null},
+    "source_url": "https://en.wikipedia.org/wiki/Alyeska_Resort",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia infobox: 73 trails, 11% easiest, 52% more difficult, 37% most difficult. No separate expert category."
+  },
+  {
+    "slug": "andes-tower-hills",
+    "trails_total": 16,
+    "difficulty_pct": {"beginner": 25, "intermediate": 25, "advanced": 44, "expert": 6},
+    "source_url": "https://www.indyskipass.com/our-resorts/andes-tower-hills",
+    "source_site": "indyskipass",
+    "notes": "16 downhill runs: 4 beginner, 4 intermediate, 7 most difficult, 1 expert. Wikipedia article not found."
+  },
+  {
+    "slug": "angel-fire-resort",
+    "trails_total": 80,
+    "difficulty_pct": {"beginner": 21, "intermediate": 56, "advanced": null, "expert": 23},
+    "source_url": "https://en.wikipedia.org/wiki/Angel_Fire_Resort",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia infobox: 80 trails, 21% beginner, 56% intermediate, 23% expert. No separate advanced category listed."
+  },
+  {
+    "slug": "antelope-butte",
+    "trails_total": 40,
+    "difficulty_pct": {"beginner": 21, "intermediate": 50, "advanced": 29, "expert": null},
+    "source_url": "https://www.skiresort.info/ski-resort/antelope-butte/",
+    "source_site": "skiresort.info",
+    "notes": "40 trails per input; skiresort.info reports 20.3km of slopes: 21% easy, 50% intermediate, 29% difficult. Wikipedia article not found."
+  },
+  {
+    "slug": "anthony-lakes",
+    "trails_total": 21,
+    "difficulty_pct": {"beginner": 20, "intermediate": 38, "advanced": 42, "expert": null},
+    "source_url": "https://en.wikipedia.org/wiki/Anthony_Lakes_(ski_area)",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia infobox: 21 trails, 20% easiest, 38% more difficult, 42% most difficult."
+  },
+  {
+    "slug": "appalachian-ski-mountain",
+    "trails_total": 13,
+    "difficulty_pct": {"beginner": 23, "intermediate": 46, "advanced": 31, "expert": 0},
+    "source_url": "https://en.wikipedia.org/wiki/Appalachian_Ski_Mountain",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia: 13 ski trails (2 beginner, 6 intermediate, 3 advanced, 0 expert). Matches input."
+  },
+  {
+    "slug": "apple-mountain",
+    "trails_total": 11,
+    "difficulty_pct": {"beginner": 40, "intermediate": 40, "advanced": 20, "expert": null},
+    "source_url": "https://www.michiganskier.com/ski-resort-guide/",
+    "source_site": "michiganskier",
+    "notes": "Michigan Skier guide: 40% novice, 40% intermediate, 20% expert. 11 trails per Snow-Forecast/parksandtrips. Wikipedia article not found."
+  },
+  {
+    "slug": "arapahoe-basin",
+    "trails_total": 145,
+    "difficulty_pct": {"beginner": 7, "intermediate": 20, "advanced": 49, "expert": 24},
+    "source_url": "https://en.wikipedia.org/wiki/Arapahoe_Basin",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia infobox: 145 trails, 7% beginner, 20% intermediate, 49% advanced, 24% expert."
+  },
+  {
+    "slug": "arctic-valley",
+    "trails_total": 24,
+    "difficulty_pct": {"beginner": 10, "intermediate": 40, "advanced": 50, "expert": null},
+    "source_url": "https://en.wikipedia.org/wiki/Arctic_Valley",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia infobox: 24 trails, 10% beginner, 40% intermediate, 50% advanced. No expert category. Input listed 15 trails."
+  },
+  {
+    "slug": "arizona-snowbowl",
+    "trails_total": 55,
+    "difficulty_pct": {"beginner": 37, "intermediate": 42, "advanced": 21, "expert": null},
+    "source_url": "https://en.wikipedia.org/wiki/Arizona_Snowbowl",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia infobox: 55 trails (incl. hike-to), 37% beginner, 42% intermediate, 21% advanced. Input lists 61 (likely newer total)."
+  },
+  {
+    "slug": "ascutney-outdoors",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": null,
+    "source_site": null,
+    "notes": "Ascutney Outdoors operates only a T-bar on a small portion of the former Ascutney Mountain Resort (which closed 2010, had 57 trails). No reliable current trail count or breakdown found."
+  },
+  {
+    "slug": "aspen-highlands",
+    "trails_total": 118,
+    "difficulty_pct": {"beginner": 0, "intermediate": 23, "advanced": 12, "expert": 65},
+    "source_url": "https://en.wikipedia.org/wiki/Aspen_Highlands",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia infobox: 118 trails, 0% beginner, 23% intermediate, 12% advanced, 65% expert. Matches input."
+  },
+  {
+    "slug": "aspen-mountain",
+    "trails_total": 76,
+    "difficulty_pct": {"beginner": 0, "intermediate": 48, "advanced": 26, "expert": 26},
+    "source_url": "https://en.wikipedia.org/wiki/Aspen_Mountain_(ski_area)",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia infobox: 76 trails, 0% beginner, 48% intermediate, 26% advanced, 26% expert. Matches input."
+  }
+]

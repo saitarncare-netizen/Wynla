@@ -1,0 +1,134 @@
+[
+  {
+    "slug": "whitecap-mountains",
+    "name": "Whitecap Mountains",
+    "state": "WI",
+    "website_url": "https://www.skiwhitecap.com"
+  },
+  {
+    "slug": "whiteface-mountain",
+    "name": "Whiteface Mountain",
+    "state": "NY",
+    "website_url": "https://whiteface.com"
+  },
+  {
+    "slug": "whitetail-resort",
+    "name": "Whitetail Resort",
+    "state": "PA",
+    "website_url": "https://www.skiwhitetail.com"
+  },
+  {
+    "slug": "wild-mountain",
+    "name": "Wild Mountain",
+    "state": "MN",
+    "website_url": "https://www.wildmountain.com"
+  },
+  {
+    "slug": "wildcat-mountain",
+    "name": "Wildcat Mountain",
+    "state": "NH",
+    "website_url": "https://www.skiwildcat.com"
+  },
+  {
+    "slug": "willard-mountain",
+    "name": "Willard Mountain",
+    "state": "NY",
+    "website_url": "https://www.willardmountain.com"
+  },
+  {
+    "slug": "wilmot-mountain",
+    "name": "Wilmot Mountain",
+    "state": "WI",
+    "website_url": "https://www.wilmotmountain.com"
+  },
+  {
+    "slug": "wisp-resort",
+    "name": "Wisp Resort",
+    "state": "MD",
+    "website_url": "https://www.wispresort.com"
+  },
+  {
+    "slug": "wolf-creek",
+    "name": "Wolf Creek Ski Area",
+    "state": "CO",
+    "website_url": "https://www.wolfcreekski.com"
+  },
+  {
+    "slug": "woods-valley",
+    "name": "Woods Valley",
+    "state": "NY",
+    "website_url": "https://www.woodsvalleyskiarea.com"
+  },
+  {
+    "slug": "woodstock-nordic-center",
+    "name": "Woodstock Nordic Center",
+    "state": "VT",
+    "website_url": null
+  },
+  {
+    "slug": "woodward-park-city",
+    "name": "Woodward Park City",
+    "state": "UT",
+    "website_url": "https://www.woodwardparkcity.com"
+  },
+  {
+    "slug": "yellowstone-club",
+    "name": "Yellowstone Club",
+    "state": "MT",
+    "website_url": "https://www.yellowstoneclub.com"
+  },
+  {
+    "slug": "afton-alps",
+    "name": "Afton Alps",
+    "state": "MN",
+    "website_url": "https://www.aftonalps.com"
+  },
+  {
+    "slug": "alyeska-resort",
+    "name": "Alyeska Resort",
+    "state": "AK",
+    "website_url": "https://www.alyeskaresort.com"
+  },
+  {
+    "slug": "andes-tower-hills",
+    "name": "Andes Tower Hills",
+    "state": "MN",
+    "website_url": "https://www.andestowerhills.com"
+  },
+  {
+    "slug": "angel-fire-resort",
+    "name": "Angel Fire Resort",
+    "state": "NM",
+    "website_url": "https://www.angelfireresort.com"
+  },
+  {
+    "slug": "anthony-lakes",
+    "name": "Anthony Lakes Mountain Resort",
+    "state": "OR",
+    "website_url": "https://www.anthonylakes.com"
+  },
+  {
+    "slug": "arctic-valley",
+    "name": "Arctic Valley Ski Area",
+    "state": "AK",
+    "website_url": "https://skiarctic.net"
+  },
+  {
+    "slug": "ascutney-outdoors",
+    "name": "Ascutney Outdoors",
+    "state": "VT",
+    "website_url": "https://www.ascutneyoutdoors.org"
+  },
+  {
+    "slug": "aspen-highlands",
+    "name": "Aspen Highlands",
+    "state": "CO",
+    "website_url": "https://www.aspensnowmass.com"
+  },
+  {
+    "slug": "aspen-mountain",
+    "name": "Aspen Mountain",
+    "state": "CO",
+    "website_url": "https://www.aspensnowmass.com"
+  }
+]

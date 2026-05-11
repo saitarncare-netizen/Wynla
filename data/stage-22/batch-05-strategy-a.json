@@ -1,0 +1,422 @@
+[
+  {
+    "slug": "cuchara",
+    "trails_total": 9,
+    "difficulty_pct": {
+      "beginner": 56,
+      "intermediate": 44,
+      "advanced": 0,
+      "expert": 0
+    },
+    "website_url": "https://www.cucharamountainpark.org/",
+    "website_alive": true,
+    "source_url": "https://www.cucharamountainpark.org/pages/mountain-info",
+    "notes": "Mountain info page: 9 trails total (5 beginner, 4 intermediate incl. terrain park, 0 advanced/expert). Counts converted to pct."
+  },
+  {
+    "slug": "dartmouth-skiway",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 50,
+      "advanced": 25,
+      "expert": 0
+    },
+    "website_url": "https://www.skiway.dartmouth.edu",
+    "website_alive": true,
+    "source_url": "https://dartmouthskiway.com/mountain-2/",
+    "notes": "Redirects skiway.dartmouth.edu -> dartmouthskiway.com. Mountain page states 25%/50%/25% beginner/intermediate/expert; site does not split advanced vs expert so mapped 'expert' label to 'advanced' bucket. 104 skiable acres. Trail count not stated."
+  },
+  {
+    "slug": "deer-valley",
+    "trails_total": 202,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.deervalley.com",
+    "website_alive": true,
+    "source_url": "https://www.deervalley.com/explore-the-mountain",
+    "notes": "Explore page lists 202 runs across 4,300 acres, 7 bowls. Difficulty pct not published on accessible pages (interactive grooming map gated)."
+  },
+  {
+    "slug": "detroit",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://detroitmountain.com",
+    "website_alive": true,
+    "source_url": "https://detroitmountain.com",
+    "notes": "Site alive but trail count and difficulty pct only available via downloadable PDF maps (not extractable via fetch). About/winter pages reference 'multiple trails' without numbers."
+  },
+  {
+    "slug": "detroit-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.detroitmountain.com",
+    "website_alive": true,
+    "source_url": "https://www.detroitmountain.com",
+    "notes": "Same site as 'detroit' slug (duplicate). Trail stats only in downloadable PDF maps."
+  },
+  {
+    "slug": "devils-head",
+    "trails_total": 30,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 40,
+      "advanced": 30,
+      "expert": 0
+    },
+    "website_url": "https://www.devilsheadresort.com",
+    "website_alive": true,
+    "source_url": "https://www.devilsheadresort.com/ski-resort-mountain-sauk-merrimac-wi-wisconsin/",
+    "notes": "Resort landing page states 30 runs with 30% beginner / 40% intermediate / 30% advanced. No expert tier."
+  },
+  {
+    "slug": "diamond-peak",
+    "trails_total": 40,
+    "difficulty_pct": {
+      "beginner": 18,
+      "intermediate": 46,
+      "advanced": 36,
+      "expert": 0
+    },
+    "website_url": "https://www.diamondpeak.com",
+    "website_alive": true,
+    "source_url": "https://www.diamondpeak.com/the-mountain/trail-map/",
+    "notes": "Trail map page: 40 named runs, 18%/46%/36% beginner/intermediate/advanced. No separate expert tier."
+  },
+  {
+    "slug": "discovery",
+    "trails_total": 67,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 25,
+      "advanced": 25,
+      "expert": 30
+    },
+    "website_url": "https://www.skidiscovery.com",
+    "website_alive": true,
+    "source_url": "https://www.skidiscovery.com/the-mountain",
+    "notes": "Mountain page: 67 trails, 20% beginner / 25% intermediate / 25% advanced / 30% expert."
+  },
+  {
+    "slug": "dodge-ridge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.dodgeridge.com",
+    "website_alive": true,
+    "source_url": "https://www.dodgeridge.com",
+    "notes": "dodgeridge.com auto-redirects to summer.dodgeridge.com (off-season). Trail map page shows image only, no numeric stats accessible via fetch."
+  },
+  {
+    "slug": "dog-creek-lodge-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "http://www.dogcreeklodge.com",
+    "website_alive": true,
+    "source_url": "http://www.dogcreeklodge.com",
+    "notes": "Nordic XC center. Site mentions 27-30km of groomed nordic trails but no per-trail count or difficulty breakdown published."
+  },
+  {
+    "slug": "donner-ski-ranch",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.donnerskiranch.com",
+    "website_alive": true,
+    "source_url": "https://www.donnerskiranch.com/explore",
+    "notes": "Explore/trail map page only provides PDF/JPEG trail map; no numeric stats in HTML. 500+ acres, 6 chairlifts mentioned."
+  },
+  {
+    "slug": "dry-hill-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.skidryhill.com/",
+    "website_alive": true,
+    "source_url": "https://www.skidryhill.com/",
+    "notes": "Site alive. Inner trail list mentions ~12 named features but mixes lodge/patrol with runs and uses split labels (e.g. 'beginner-to-intermediate'); no clean total or pct extractable."
+  },
+  {
+    "slug": "eagle-point",
+    "trails_total": 43,
+    "difficulty_pct": {
+      "beginner": 26,
+      "intermediate": 44,
+      "advanced": 30,
+      "expert": 0
+    },
+    "website_url": "https://www.eaglepointresort.com",
+    "website_alive": true,
+    "source_url": "https://www.eaglepointresort.com/mountain-stats/",
+    "notes": "Mountain stats: 43 runs total (11 beginner, 19 intermediate, 13 advanced, 0 expert). Counts converted to pct (rounded)."
+  },
+  {
+    "slug": "eagle-rock-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.eaglerockresort.com",
+    "website_alive": false,
+    "source_url": "https://www.eaglerockresort.com",
+    "notes": "ECONNREFUSED — domain not resolving / server down at time of fetch."
+  },
+  {
+    "slug": "eaglecrest",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://skieaglecrest.com",
+    "website_alive": true,
+    "source_url": "https://skieaglecrest.com/info/",
+    "notes": "Info page mountain-stats widget shows placeholder zeros for beginner/intermediate/expert pct and marked trails — appears not populated. 1620' vertical, 640+ acres."
+  },
+  {
+    "slug": "eaglecrest-ski-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://skieaglecrest.com",
+    "website_alive": true,
+    "source_url": "https://skieaglecrest.com/info/",
+    "notes": "Duplicate of 'eaglecrest' slug. Same source — stats widget shows placeholder zeros."
+  },
+  {
+    "slug": "eaton-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.eatonmountain.com",
+    "website_alive": true,
+    "source_url": "https://www.eatonmountain.com",
+    "notes": "Homepage and sub-pages return empty/sparse content via fetch (likely SPA shell). No trail data extractable."
+  },
+  {
+    "slug": "echo-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.echomntn.com",
+    "website_alive": true,
+    "source_url": "https://www.echomntn.com",
+    "notes": "Homepage and /mountain, /about, /about-us, /the-mountain all return empty content via fetch (likely SPA shell). No data extractable."
+  },
+  {
+    "slug": "echo-valley",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://skiechovalley.com/",
+    "website_alive": true,
+    "source_url": "https://skiechovalley.com/",
+    "notes": "Trail map only available as image. Site mentions 3 rope tows + 1400ft Poma lift but no trail count or difficulty pct in HTML."
+  },
+  {
+    "slug": "eldora",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.eldora.com",
+    "website_alive": true,
+    "source_url": "https://www.eldora.com",
+    "notes": "Site alive. /the-mountain, /the-mountain/trail-map, /mountain-stats, /things-to-do all return 404 or empty SPA shell via fetch. No trail data extractable from HTML."
+  },
+  {
+    "slug": "elk-mountain",
+    "trails_total": 27,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.elkskier.com",
+    "website_alive": true,
+    "source_url": "https://www.elkskier.com",
+    "notes": "Homepage confirms 27 trails / 180 skiable acres. Difficulty breakdown not published in HTML (trail map page returned 508)."
+  },
+  {
+    "slug": "elko-snobowl",
+    "trails_total": 10,
+    "difficulty_pct": {
+      "beginner": 50,
+      "intermediate": 50,
+      "advanced": 0,
+      "expert": 0
+    },
+    "website_url": "https://www.elkocity.com/snobowl/",
+    "website_alive": true,
+    "source_url": "https://www.elkocity.com/snobowl/",
+    "notes": "City page: 10 trails, half beginner / half intermediate, no advanced or expert terrain."
+  },
+  {
+    "slug": "enchanted-forest-xc",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://enchantedforestxc.com/",
+    "website_alive": true,
+    "source_url": "https://enchantedforestxc.com/",
+    "notes": "Nordic XC area: 30km classic/skate + 15km snowshoe + 5km dog. No per-trail count or difficulty breakdown published."
+  },
+  {
+    "slug": "ferguson-ridge",
+    "trails_total": 8,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://skifergi.com",
+    "website_alive": true,
+    "source_url": "https://skifergi.com/the-mountain",
+    "notes": "Mountain page: 8 runs, described as 'mostly green and blue with a few short black runs' — no numeric pct given. No expert tier."
+  },
+  {
+    "slug": "four-lakes",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.fourlakessnowsports.com/",
+    "website_alive": true,
+    "source_url": "https://www.fourlakessnowsports.com/",
+    "notes": "Site alive but no trail count or difficulty breakdown published. Mentions 7 tow ropes and 'beginner areas available'."
+  },
+  {
+    "slug": "franconia-village-xc-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.franconiainn.com/xc-ski",
+    "website_alive": true,
+    "source_url": "https://www.franconiainn.com/xc-ski",
+    "notes": "Nordic XC area at Franconia Inn: 30km of trails ranging beginner-to-expert. Per-difficulty breakdown not published."
+  },
+  {
+    "slug": "frost-fire-park",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.frostfirepark.org",
+    "website_alive": true,
+    "source_url": "https://www.frostfirepark.org",
+    "notes": "Site alive (homepage loads). /skiing and /winter return 404. No trail count or pct breakdown on accessible pages."
+  },
+  {
+    "slug": "garnet-hill-xc",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.garnet-hill.com/outdoor-center/webcam/",
+    "website_alive": true,
+    "source_url": "https://www.garnet-hill.com/outdoor-center/",
+    "notes": "Nordic XC: 50km of trails. No per-trail count or difficulty pct breakdown published."
+  },
+  {
+    "slug": "giants-ridge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.giantsridge.com",
+    "website_alive": true,
+    "source_url": "https://www.giantsridge.com",
+    "notes": "Site responds but blocks WebFetch with HTTP 403 (likely bot/firewall protection). Cannot extract data via this method."
+  },
+  {
+    "slug": "gore-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://goremountain.com",
+    "website_alive": true,
+    "source_url": "https://goremountain.com",
+    "notes": "Site responds but blocks WebFetch with HTTP 403 on all sub-pages (the-mountain, trail-map, etc.) — likely ORDA/Cloudflare bot protection. Cannot extract data via this method."
+  }
+]

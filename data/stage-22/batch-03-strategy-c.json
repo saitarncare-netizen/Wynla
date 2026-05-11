@@ -1,0 +1,452 @@
+[
+  {
+    "slug": "blacktail",
+    "name": "Blacktail Mountain Ski Area",
+    "state": "MT",
+    "trails_total": 26,
+    "difficulty_pct": {
+      "beginner": 15,
+      "intermediate": 65,
+      "advanced": null,
+      "expert": 20
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Blacktail_Mountain_Ski_Area",
+    "source_site": "wikipedia",
+    "notes": "Infobox: 26 runs, 15% beginner, 65% intermediate, 20% expert. Body text conflicts (15/70/15 advanced); infobox used."
+  },
+  {
+    "slug": "blue-hills-ski-area",
+    "name": "Blue Hills Ski Area",
+    "state": "MA",
+    "trails_total": 12,
+    "difficulty_pct": {
+      "beginner": 50,
+      "intermediate": 42,
+      "advanced": 33,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Blue_Hills_Ski_Area",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia text: 12 trails (6 green / 5 blue / 4 black). Pcts sum >100; expert nulled. Infobox said 8 trails conflicting."
+  },
+  {
+    "slug": "blue-knob",
+    "name": "Blue Knob All Seasons Resort",
+    "state": "PA",
+    "trails_total": 34,
+    "difficulty_pct": {
+      "beginner": 18,
+      "intermediate": 15,
+      "advanced": 41,
+      "expert": 26
+    },
+    "source_url": "https://www.onthesnow.com/pennsylvania/blue-knob/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "Wikipedia 404 for Blue Knob ski resort article. OnTheSnow via web search: 18% beginner, 15% intermediate, 41% advanced, 26% expert / 34 trails."
+  },
+  {
+    "slug": "blue-mountain-resort",
+    "name": "Blue Mountain Resort",
+    "state": "PA",
+    "trails_total": 40,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 10,
+      "advanced": 30,
+      "expert": 7
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Blue_Mountain_Ski_Area",
+    "source_site": "wikipedia",
+    "notes": "Infobox: 14 easier, 4 more difficult, 12 most difficult, 3 extremely difficult, 7 terrain park (out of 40 total). Pcts approximate; expert kept since sum non-100 already excludes park."
+  },
+  {
+    "slug": "bluewood",
+    "name": "Ski Bluewood",
+    "state": "WA",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Bluewood",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia URL returned plant species article (Haematoxylum campechianum), not the ski resort. No data extracted."
+  },
+  {
+    "slug": "bogus-basin",
+    "name": "Bogus Basin",
+    "state": "ID",
+    "trails_total": 90,
+    "difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 45,
+      "advanced": 33,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Bogus_Basin",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia infobox: 90 runs, 22% easiest, 45% more difficult, 33% most difficult. No expert tier shown."
+  },
+  {
+    "slug": "bolton-valley",
+    "name": "Bolton Valley",
+    "state": "VT",
+    "trails_total": 71,
+    "difficulty_pct": {
+      "beginner": 34,
+      "intermediate": 38,
+      "advanced": 23,
+      "expert": 6
+    },
+    "source_url": "https://www.onthesnow.com/vermont/bolton-valley/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "Wikipedia infobox lacks difficulty breakdown (71 trails confirmed). OnTheSnow via web search: 34/38/23/6 sums to 101 (rounding)."
+  },
+  {
+    "slug": "boreal-mountain-resort",
+    "name": "Boreal Mountain Resort",
+    "state": "CA",
+    "trails_total": 41,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 55,
+      "advanced": 15,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Boreal_Mountain_Resort",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia infobox: 41 runs, 30% beginner, 55% intermediate, 15% advanced."
+  },
+  {
+    "slug": "boston-mills",
+    "name": "Boston Mills Ski Resort",
+    "state": "OH",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 17,
+      "intermediate": 33,
+      "advanced": 50,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/ohio/boston-mills/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "Boston Mills/Brandywine combined for 18 trails on Wikipedia; specific Boston Mills count not extractable. OnTheSnow via search: 17/33/50."
+  },
+  {
+    "slug": "bottineau-winter-park",
+    "name": "Bottineau Winter Park",
+    "state": "ND",
+    "trails_total": 9,
+    "difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 33,
+      "advanced": 44,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Bottineau_Winter_Park",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia infobox: 9 trails, 2 green / 3 blue / 4 black."
+  },
+  {
+    "slug": "bousquet-mountain",
+    "name": "Bousquet Mountain",
+    "state": "MA",
+    "trails_total": 24,
+    "difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 9,
+      "advanced": 26,
+      "expert": 22
+    },
+    "source_url": "https://www.onthesnow.com/massachusetts/bousquet-ski-area/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "Wikipedia infobox: 24 trails (no pcts). OnTheSnow via web search: 21/9/26/22 (sums to 78, partial data only)."
+  },
+  {
+    "slug": "boyne-mountain",
+    "name": "Boyne Mountain Resort",
+    "state": "MI",
+    "trails_total": 60,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Boyne_Mountain",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia infobox: 60 runs. No difficulty pcts in Wikipedia or web search results."
+  },
+  {
+    "slug": "brandywine",
+    "name": "Brandywine Ski Resort",
+    "state": "OH",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 27,
+      "intermediate": 27,
+      "advanced": 46,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/ohio/brandywine/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "Wikipedia 404 for Brandywine standalone. OnTheSnow via web search: 27/27/46. Combined BMBW Wikipedia says 18 trails total for both resorts."
+  },
+  {
+    "slug": "breckenridge",
+    "name": "Breckenridge Ski Resort",
+    "state": "CO",
+    "trails_total": 187,
+    "difficulty_pct": {
+      "beginner": 14,
+      "intermediate": 31,
+      "advanced": 19,
+      "expert": 36
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Breckenridge_Ski_Resort",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia infobox: 187 trails, 14/31/19/36."
+  },
+  {
+    "slug": "bretton-woods",
+    "name": "Bretton Woods",
+    "state": "NH",
+    "trails_total": 102,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 29,
+      "advanced": null,
+      "expert": 46
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Bretton_Woods_Mountain_Resort",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia infobox: 102 trails, 25% beginner, 29% intermediate, 46% expert. No advanced tier shown."
+  },
+  {
+    "slug": "brian-head",
+    "name": "Brian Head Resort",
+    "state": "UT",
+    "trails_total": 71,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 35,
+      "advanced": 20,
+      "expert": 10
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Brian_Head_Resort",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia infobox: 71 runs, 35/35/20/10."
+  },
+  {
+    "slug": "bridger-bowl",
+    "name": "Bridger Bowl Ski Area",
+    "state": "MT",
+    "trails_total": 75,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Bridger_Bowl_Ski_Area",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia infobox: 75 runs (no pcts). Web search gave 3+ conflicting breakdowns (20/30/50, 25/35/40, 12/28/18/42), too inconsistent to use."
+  },
+  {
+    "slug": "brighton",
+    "name": "Brighton Resort",
+    "state": "UT",
+    "trails_total": 66,
+    "difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 40,
+      "advanced": 39,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Brighton_Ski_Resort",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia infobox: 66 trails, 21% beginner, 40% intermediate, 39% expert/advanced combined."
+  },
+  {
+    "slug": "bristol-mountain",
+    "name": "Bristol Mountain",
+    "state": "NY",
+    "trails_total": 35,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 49,
+      "advanced": 18,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Bristol_Mountain_Ski_Resort",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia: 35 trails, 33% Novice, 49% Intermediate, 18% Advanced."
+  },
+  {
+    "slug": "bromley-mountain",
+    "name": "Bromley Mountain",
+    "state": "VT",
+    "trails_total": 47,
+    "difficulty_pct": {
+      "beginner": 32,
+      "intermediate": 37,
+      "advanced": 31,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Bromley_Mountain",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia infobox: 47 trails, 32% beginner, 37% intermediate, 31% advanced."
+  },
+  {
+    "slug": "bruce-mound-winter-sports-area",
+    "name": "Bruce Mound Winter Sports Area",
+    "state": "WI",
+    "trails_total": 10,
+    "difficulty_pct": {
+      "beginner": 17,
+      "intermediate": 17,
+      "advanced": 63,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/wisconsin/bruce-mound/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "Wikipedia 404. OnTheSnow via web search: 10 trails, 17/17/63 (sums to 97, rounding)."
+  },
+  {
+    "slug": "brundage-mountain",
+    "name": "Brundage Mountain",
+    "state": "ID",
+    "trails_total": 46,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 50,
+      "advanced": 30,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Brundage_Mountain",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia infobox: 46 runs, 20% beginner, 50% intermediate, 30% advanced."
+  },
+  {
+    "slug": "bryce-resort",
+    "name": "Bryce Resort",
+    "state": "VA",
+    "trails_total": 12,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 50,
+      "advanced": 17,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Bryce_Resort",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia infobox: 12 trails, 33% easiest, 50% more difficult, 17% most difficult."
+  },
+  {
+    "slug": "buck-hill",
+    "name": "Buck Hill",
+    "state": "MN",
+    "trails_total": 16,
+    "difficulty_pct": {
+      "beginner": 38,
+      "intermediate": 38,
+      "advanced": 25,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Buck_Hill",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia infobox: 16 runs, 6 green / 6 blue / 4 black."
+  },
+  {
+    "slug": "buena-vista",
+    "name": "Buena Vista Ski Area",
+    "state": "MN",
+    "trails_total": 16,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.bvskiarea.com/",
+    "source_site": "resort",
+    "notes": "Wikipedia article lacks operational data. Web search confirms 16 downhill runs. No difficulty breakdown found."
+  },
+  {
+    "slug": "buffalo-ski-club",
+    "name": "Buffalo Ski Club",
+    "state": "NY",
+    "trails_total": 38,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 35,
+      "advanced": 30,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/new-york/buffalo-ski-club-ski-area/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "Wikipedia 404. OnTheSnow via web search: 38 trails, 30/35/30 (sums to 95). Sources conflict on total (38 vs 43)."
+  },
+  {
+    "slug": "burke-mountain",
+    "name": "Burke Mountain",
+    "state": "VT",
+    "trails_total": 55,
+    "difficulty_pct": {
+      "beginner": 11,
+      "intermediate": 47,
+      "advanced": 33,
+      "expert": 9
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Burke_Mountain_Resort",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia: 55 ski trails + 15 glades, 11/47/33/9."
+  },
+  {
+    "slug": "buttermilk",
+    "name": "Buttermilk",
+    "state": "CO",
+    "trails_total": 44,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 39,
+      "advanced": 26,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Buttermilk_(ski_area)",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia infobox: 44 trails, 35% beginner, 39% intermediate, 26% advanced."
+  },
+  {
+    "slug": "caberfae-peaks",
+    "name": "Caberfae Peaks",
+    "state": "MI",
+    "trails_total": 34,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 33,
+      "advanced": 33,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/michigan/caberfae-peaks-ski-golf-resort/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "Wikipedia infobox: 34 trails (no pcts; OnTheSnow says 27). OnTheSnow via web search: 33/33/33 even split."
+  },
+  {
+    "slug": "camden-snow-bowl",
+    "name": "Camden Snow Bowl",
+    "state": "ME",
+    "trails_total": 15,
+    "difficulty_pct": {
+      "beginner": 13,
+      "intermediate": 55,
+      "advanced": 32,
+      "expert": 0
+    },
+    "source_url": "https://camdensnowbowl.com/ski-trail-map/",
+    "source_site": "resort",
+    "notes": "Wikipedia infobox: 15 trails (no pcts). Web search (per resort/OnTheSnow): 13% Beginner, 55% Intermediate, 32% Advanced."
+  }
+]

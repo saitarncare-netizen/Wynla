@@ -1,0 +1,392 @@
+[
+  {
+    "slug": "cuchara",
+    "name": "Cuchara",
+    "state": "CO",
+    "website_url": "https://www.cucharamountainpark.org/",
+    "current_total_trails": 9,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "dartmouth-skiway",
+    "name": "Dartmouth Skiway",
+    "state": "NH",
+    "website_url": "https://www.skiway.dartmouth.edu",
+    "current_total_trails": 28,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "deer-valley",
+    "name": "Deer Valley Resort",
+    "state": "UT",
+    "website_url": "https://www.deervalley.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "detroit",
+    "name": "Detroit Mountain",
+    "state": "MN",
+    "website_url": "https://detroitmountain.com",
+    "current_total_trails": 21,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "detroit-mountain",
+    "name": "Detroit Mountain Recreation Area",
+    "state": "MN",
+    "website_url": "https://www.detroitmountain.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "devils-head",
+    "name": "Devil's Head Resort",
+    "state": "WI",
+    "website_url": "https://www.devilsheadresort.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "diamond-peak",
+    "name": "Diamond Peak",
+    "state": "NV",
+    "website_url": "https://www.diamondpeak.com",
+    "current_total_trails": 28,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "discovery",
+    "name": "Discovery Ski Area",
+    "state": "MT",
+    "website_url": "https://www.skidiscovery.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "dodge-ridge",
+    "name": "Dodge Ridge",
+    "state": "CA",
+    "website_url": "https://www.dodgeridge.com",
+    "current_total_trails": 67,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "dog-creek-lodge-nordic-center",
+    "name": "Dog Creek Lodge & Nordic Center",
+    "state": "MT",
+    "website_url": "http://www.dogcreeklodge.com",
+    "current_total_trails": 25,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "donner-ski-ranch",
+    "name": "Donner Ski Ranch",
+    "state": "CA",
+    "website_url": "https://www.donnerskiranch.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": 31,
+      "intermediate": 38,
+      "advanced": 31,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "dry-hill-area",
+    "name": "Dry Hill Ski Area",
+    "state": "NY",
+    "website_url": "https://www.skidryhill.com/",
+    "current_total_trails": 13,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "eagle-point",
+    "name": "Eagle Point Resort",
+    "state": "UT",
+    "website_url": "https://www.eaglepointresort.com",
+    "current_total_trails": 40,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "eagle-rock-resort",
+    "name": "Eagle Rock Resort",
+    "state": "PA",
+    "website_url": "https://www.eaglerockresort.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "eaglecrest",
+    "name": "Eaglecrest",
+    "state": "AK",
+    "website_url": "https://skieaglecrest.com",
+    "current_total_trails": 36,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "eaglecrest-ski-area",
+    "name": "Eaglecrest Ski Area",
+    "state": "AK",
+    "website_url": "https://skieaglecrest.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "eaton-mountain",
+    "name": "Eaton Mountain",
+    "state": "ME",
+    "website_url": "https://www.eatonmountain.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": 28,
+      "intermediate": 39,
+      "advanced": 33,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "echo-mountain",
+    "name": "Echo Mountain",
+    "state": "CO",
+    "website_url": "https://www.echomntn.com",
+    "current_total_trails": 8,
+    "current_difficulty_pct": {
+      "beginner": 23,
+      "intermediate": 46,
+      "advanced": 31,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "echo-valley",
+    "name": "Echo Valley Ski Area",
+    "state": "WA",
+    "website_url": "https://skiechovalley.com/",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "eldora",
+    "name": "Eldora Mountain Resort",
+    "state": "CO",
+    "website_url": "https://www.eldora.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "elk-mountain",
+    "name": "Elk Mountain Ski Resort",
+    "state": "PA",
+    "website_url": "https://www.elkskier.com",
+    "current_total_trails": 27,
+    "current_difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 37,
+      "advanced": 41,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "elko-snobowl",
+    "name": "Elko SnoBowl",
+    "state": "NV",
+    "website_url": "https://www.elkocity.com/snobowl/",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "enchanted-forest-xc",
+    "name": "Enchanted Forest XC",
+    "state": "NM",
+    "website_url": "https://enchantedforestxc.com/",
+    "current_total_trails": 35,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "ferguson-ridge",
+    "name": "Ferguson Ridge Ski Area",
+    "state": "OR",
+    "website_url": "https://skifergi.com",
+    "current_total_trails": 8,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "four-lakes",
+    "name": "Four Lakes Alpine Snowsports",
+    "state": "IL",
+    "website_url": "https://www.fourlakessnowsports.com/",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "franconia-village-xc-area",
+    "name": "Franconia Village XC Ski Area",
+    "state": "NH",
+    "website_url": "https://www.franconiainn.com/xc-ski?_gl=1%2Ax38lyk%2A_up%2AMQ..%2A_ga%2ANDkyNTk4NzA3LjE3NzE4NjgxNzg.%2A_ga_JJJ2MYL08H%2AczE3NzE4NjgxNzckbzEkZzEkdDE3NzE4Njg2MjEkajUwJGwwJGgw%2A_gs%2AMQ..%2A_ga_46TC8C9QG1%2AczE3NzE4NjgxNzckbzEkZzAkdDE3NzE4Njg2MjEkajUwJGwwJGgw%2A_ga_GHTCZD51QN%2AczE3NzE4NjgxNzckbzEkZzEkdDE3NzE4Njg2MjEkajUwJGwwJGgw&gclid=CjwKCAiAkvDMBhBMEiwAnUA9BRh1ssFpmvh_5RU37IVnwaOOmiRc4XPs1H1vqSpgO_KOlAiiLuEf-RoCXu8QAvD_BwE&gbraid=0AAAAAoSUQgGz6jre7ZbKctx5sQvgIJhjS",
+    "current_total_trails": 12,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "frost-fire-park",
+    "name": "Frost Fire Park",
+    "state": "ND",
+    "website_url": "https://www.frostfirepark.org",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": 40,
+      "intermediate": 30,
+      "advanced": 30,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "garnet-hill-xc",
+    "name": "Garnet Hill XC",
+    "state": "NY",
+    "website_url": "https://www.garnet-hill.com/outdoor-center/webcam/",
+    "current_total_trails": 35,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "giants-ridge",
+    "name": "Giants Ridge",
+    "state": "MN",
+    "website_url": "https://www.giantsridge.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "gore-mountain",
+    "name": "Gore Mountain",
+    "state": "NY",
+    "website_url": "https://goremountain.com",
+    "current_total_trails": 110,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  }
+]

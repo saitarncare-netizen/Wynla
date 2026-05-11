@@ -1,0 +1,392 @@
+[
+  {
+    "slug": "mystic-mountain",
+    "trails_total": 6,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skipa.com/play/by-name/mystic-mountain-at-nemacolin",
+    "source_site": "skipa.com",
+    "notes": "SkiPA lists 6 slopes for Mystic Mountain at Nemacolin. No percentage breakdown found in PA/Nemacolin/snow-forecast sources; trail names span beginner (Geronimo, First Step), intermediate (Nose Dive, Grizzly Run), expert (Cliffhanger, Showboat) but no quantified split."
+  },
+  {
+    "slug": "nashoba-valley-ski-area",
+    "trails_total": 17,
+    "difficulty_pct": {
+      "beginner": 24,
+      "intermediate": 47,
+      "advanced": 29,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Nashoba_Valley_Ski_Area",
+    "source_site": "wikipedia.org",
+    "notes": "Wikipedia trail enumeration: 4 green (24%), 8 blue (47%), 5 black (29%). Matches existing difficulty values; trail count newly confirmed."
+  },
+  {
+    "slug": "nordic-mountain",
+    "trails_total": 16,
+    "difficulty_pct": {
+      "beginner": 31,
+      "intermediate": 46,
+      "advanced": 23,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/wisconsin/nordic-mountain/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "OnTheSnow reports 31/46/23 beginner/intermediate/advanced split across 16 trails. No expert tier listed; consistent with the resort's small footprint."
+  },
+  {
+    "slug": "nordic-valley",
+    "trails_total": 40,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 30,
+      "advanced": 37,
+      "expert": 13
+    },
+    "source_url": "https://www.visitutah.com/places-to-go/utah-ski-resorts/nordic-valley",
+    "source_site": "visitutah.com",
+    "notes": "Visit Utah / OnTheSnow: 40 trails with 20/30/38/13 split; rebalanced to 20/30/37/13 to sum to 100."
+  },
+  {
+    "slug": "north-cascade-heli",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://heli-ski.com/about",
+    "source_site": "heli-ski.com",
+    "notes": "Heli-ski operation across 300,000-acre permit area with run vertical 1,500-4,000 ft; no enumerated trail count or beginner/intermediate/advanced/expert breakdown applicable. Operation is advanced/expert-only by nature."
+  },
+  {
+    "slug": "northeast-slopes",
+    "trails_total": 12,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Northeast_Slopes",
+    "source_site": "wikipedia.org",
+    "notes": "Wikipedia infobox lists 12 trails; no difficulty breakdown available. Volunteer-run community hill with two rope tows + T-bar."
+  },
+  {
+    "slug": "northern-maine-community-trails",
+    "trails_total": 16,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.nmctrails.org/",
+    "source_site": "nmctrails.org",
+    "notes": "No Wikipedia page; web search did not return a difficulty breakdown. Existing trail count retained."
+  },
+  {
+    "slug": "northstar-california",
+    "trails_total": 100,
+    "difficulty_pct": {
+      "beginner": 13,
+      "intermediate": 60,
+      "advanced": 27,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Northstar_California",
+    "source_site": "wikipedia.org",
+    "notes": "Wikipedia: 100 trails, 13/60/27 beginner/intermediate/advanced; no expert tier reported. Matches existing percentages."
+  },
+  {
+    "slug": "norway-mountain",
+    "trails_total": 17,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/michigan/norway-mountain/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "Sources describe 16-17 trails 'evenly distributed' across beginner/intermediate/expert with no precise percentages quantified."
+  },
+  {
+    "slug": "nubs-nob",
+    "trails_total": 53,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 50,
+      "advanced": 20,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/michigan/nubs-nob-ski-area/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "OnTheSnow / Parks & Trips: 248 acres rated 30% easiest, 50% more difficult, 20% most difficult. No separate expert tier."
+  },
+  {
+    "slug": "oak-mountain",
+    "trails_total": 22,
+    "difficulty_pct": {
+      "beginner": 45,
+      "intermediate": 27,
+      "advanced": 28,
+      "expert": 0
+    },
+    "source_url": "https://oakmountainski.com/",
+    "source_site": "oakmountainski.com",
+    "notes": "Search reports 10 easy, 6 medium, 6 difficult of 22 trails (45/27/27 raw; rebalanced advanced to 28% to sum to 100). NYSkiBlog separately cites 14 ski runs but the 22-trail figure aligns with current trail map."
+  },
+  {
+    "slug": "ober-mountain",
+    "trails_total": 11,
+    "difficulty_pct": {
+      "beginner": 27,
+      "intermediate": 55,
+      "advanced": 18,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Ober_Gatlinburg",
+    "source_site": "wikipedia.org",
+    "notes": "Wikipedia: 11 trails (existing data showed 10) with 3 green / 6 blue / 2 black. Percentages match existing."
+  },
+  {
+    "slug": "oglebay-resort",
+    "trails_total": 1,
+    "difficulty_pct": {
+      "beginner": 100,
+      "intermediate": 0,
+      "advanced": 0,
+      "expert": 0
+    },
+    "source_url": "https://oglebay.com/explore/winter-sports/",
+    "source_site": "oglebay.com",
+    "notes": "Oglebay operates a single beginner-friendly scenic slope (185 ft vertical, 275 yd). No multi-trail breakdown applies."
+  },
+  {
+    "slug": "okemo-mountain-resort",
+    "trails_total": 123,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Okemo_Mountain_Resort",
+    "source_site": "wikipedia.org",
+    "notes": "Wikipedia: 123 trails; difficulty described as 'almost evenly divided between novice, intermediate, and advanced/expert' but no exact percentages — leaving null to avoid fabrication."
+  },
+  {
+    "slug": "otis-ridge",
+    "trails_total": 11,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Otis_Ridge",
+    "source_site": "wikipedia.org",
+    "notes": "Wikipedia: 11 trails; no difficulty breakdown available."
+  },
+  {
+    "slug": "otsego-resort",
+    "trails_total": 32,
+    "difficulty_pct": {
+      "beginner": 36,
+      "intermediate": 24,
+      "advanced": 40,
+      "expert": 0
+    },
+    "source_url": "https://otsegoclub.com/mountain-information/",
+    "source_site": "otsegoclub.com",
+    "notes": "Resort/OnTheSnow: 32 runs (Wikipedia/Snow-Forecast cite 28-36 variants). Split 36/24/38 advanced rebalanced to 40 to sum to 100. No expert tier."
+  },
+  {
+    "slug": "pajarito-mountain",
+    "trails_total": 44,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 50,
+      "advanced": 30,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Pajarito_Mountain_Ski_Area",
+    "source_site": "wikipedia.org",
+    "notes": "Wikipedia: 44 trails (existing was 53) with 20/50/30 beginner/intermediate/advanced. No expert tier."
+  },
+  {
+    "slug": "palisades-tahoe",
+    "trails_total": 177,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 45,
+      "advanced": 30,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Palisades_Tahoe",
+    "source_site": "wikipedia.org",
+    "notes": "Wikipedia infobox: 177+ trails. Multiple sources converge on roughly 25/45/30 beginner/intermediate/advanced. Note: 'advanced' lumps expert per common resort marketing."
+  },
+  {
+    "slug": "paoli-peaks",
+    "trails_total": 17,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 55,
+      "advanced": 20,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Paoli_Peaks",
+    "source_site": "wikipedia.org",
+    "notes": "Wikipedia: 17 runs total, 25% beginner / 55% intermediate / 20% advanced (infobox figure)."
+  },
+  {
+    "slug": "park-city",
+    "trails_total": 348,
+    "difficulty_pct": {
+      "beginner": 15,
+      "intermediate": 54,
+      "advanced": 0,
+      "expert": 31
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Park_City_Mountain_Resort",
+    "source_site": "wikipedia.org",
+    "notes": "Wikipedia: 348 trails (existing had 324) with 15/54/31 beginner/intermediate/expert. Resort uses three-tier (no advanced category)."
+  },
+  {
+    "slug": "pats-peak",
+    "trails_total": 28,
+    "difficulty_pct": {
+      "beginner": 50,
+      "intermediate": 21,
+      "advanced": 12,
+      "expert": 17
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Pat%27s_Peak",
+    "source_site": "wikipedia.org",
+    "notes": "Wikipedia: 28 trails, 50/21/12/17. Existing data had 11/18 swapped — Wikipedia confirms 12% advanced / 17% expert."
+  },
+  {
+    "slug": "paul-bunyan-hill",
+    "trails_total": 14,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.indyskipass.com/our-resorts/paul-bunyan-ski-hill",
+    "source_site": "indyskipass.com",
+    "notes": "Sources describe 'heavily beginner-focused' (~67% beginner) but inconsistent trail counts (6 vs 17) and no precise multi-tier breakdown — withholding pct to avoid fabrication."
+  },
+  {
+    "slug": "pebble-creek",
+    "trails_total": 51,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 35,
+      "advanced": 41,
+      "expert": 4
+    },
+    "source_url": "https://www.pebblecreekskiarea.com",
+    "source_site": "pebblecreekskiarea.com",
+    "notes": "Wikipedia returned 404; existing data retained as no contradicting source found within fetch budget."
+  },
+  {
+    "slug": "peek-n-peak",
+    "trails_total": 27,
+    "difficulty_pct": {
+      "beginner": 16,
+      "intermediate": 61,
+      "advanced": 23,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/new-york/peekn-peak/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "Wikipedia article cites 27 trails (existing was 26). OnTheSnow split: 16/61/23. Other sources show variants; OnTheSnow chosen as primary."
+  },
+  {
+    "slug": "perfect-north",
+    "trails_total": 23,
+    "difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 48,
+      "advanced": 22,
+      "expert": 8
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Perfect_North_Slopes",
+    "source_site": "wikipedia.org",
+    "notes": "Wikipedia trail enumeration (23 total): 5 green (21.7%), 11 blue/blue-diamond (47.8%), 5 advanced black (21.7%), 2 expert/terrain (8.7%). Existing data was 24/52/19/5."
+  },
+  {
+    "slug": "pico-mountain",
+    "trails_total": 58,
+    "difficulty_pct": {
+      "beginner": 13,
+      "intermediate": 45,
+      "advanced": 32,
+      "expert": 10
+    },
+    "source_url": "https://www.peakrankings.com/content/pico",
+    "source_site": "peakrankings.com",
+    "notes": "PeakRankings: 58 trails (matches Wikipedia), 13/45/32/10 split."
+  },
+  {
+    "slug": "pine-knob",
+    "trails_total": 17,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://parksandtrips.com/ski-resort/pkmi-pine-knob/",
+    "source_site": "parksandtrips.com",
+    "notes": "17 trails confirmed. Sources state ~30% beginner / 70% 'more difficult' without a clean intermediate/advanced split — withholding the unknown tiers."
+  },
+  {
+    "slug": "pine-mountain",
+    "trails_total": 35,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 35,
+      "advanced": 30,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/michigan/pine-mountain/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "OnTheSnow primary: 35/35/30 split across 35 trails (existing trail count retained). Conflicting 20/55/25 figure cited elsewhere."
+  },
+  {
+    "slug": "plain-valley-trails",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skiplain.com/",
+    "source_site": "skiplain.com",
+    "notes": "Nordic/XC ski area (25+ km classic/skate tracks, 7 km snowshoe). Alpine difficulty-tier schema (beginner/intermediate/advanced/expert) not applicable; no enumerated 'trails' count published."
+  },
+  {
+    "slug": "plattekill-mountain",
+    "trails_total": 40,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 40,
+      "advanced": 20,
+      "expert": 20
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Plattekill_Mountain",
+    "source_site": "wikipedia.org",
+    "notes": "Wikipedia: 40 trails (existing was 41) with 20/40/20/20. Percentages match existing."
+  }
+]

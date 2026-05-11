@@ -1,0 +1,392 @@
+[
+  {
+    "slug": "huff-hills",
+    "name": "Huff Hills Ski Area",
+    "state": "ND",
+    "website_url": "https://www.huffhills.com",
+    "current_total_trails": 16,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "hunt-hollow-club",
+    "name": "Hunt Hollow Ski Club",
+    "state": "NY",
+    "website_url": "https://www.hunthollow.com/Home",
+    "current_total_trails": 21,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "hunter-mountain",
+    "name": "Hunter Mountain",
+    "state": "NY",
+    "website_url": "https://www.huntermtn.com",
+    "current_total_trails": 67,
+    "current_difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 40,
+      "advanced": 22,
+      "expert": 7
+    }
+  },
+  {
+    "slug": "hurricane-ridge",
+    "name": "Hurricane Ridge Ski and Snowboard Area",
+    "state": "WA",
+    "website_url": "https://hurricaneridge.com",
+    "current_total_trails": 12,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "hyland-hills",
+    "name": "Hyland Hills Ski Area",
+    "state": "MN",
+    "website_url": "https://www.threeriversparks.org",
+    "current_total_trails": 13,
+    "current_difficulty_pct": {
+      "beginner": 27,
+      "intermediate": 36,
+      "advanced": 36,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "indianhead-mountain",
+    "name": "Indianhead Mountain",
+    "state": "MI",
+    "website_url": "https://www.indianheadmtn.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": 36,
+      "intermediate": 25,
+      "advanced": 25,
+      "expert": 14
+    }
+  },
+  {
+    "slug": "jack-frost-mountain",
+    "name": "Jack Frost Mountain",
+    "state": "PA",
+    "website_url": "https://www.jfbb.com",
+    "current_total_trails": 20,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "jackson-hole",
+    "name": "Jackson Hole Mountain Resort",
+    "state": "WY",
+    "website_url": "https://www.jacksonhole.com",
+    "current_total_trails": 131,
+    "current_difficulty_pct": {
+      "beginner": 10,
+      "intermediate": 40,
+      "advanced": 0,
+      "expert": 50
+    }
+  },
+  {
+    "slug": "jackson-xc",
+    "name": "Jackson XC",
+    "state": "NH",
+    "website_url": null,
+    "current_total_trails": 60,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "jay-peak",
+    "name": "Jay Peak",
+    "state": "VT",
+    "website_url": "https://www.jaypeakresort.com",
+    "current_total_trails": 81,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "jiminy-peak",
+    "name": "Jiminy Peak",
+    "state": "MA",
+    "website_url": "https://www.jiminypeak.com",
+    "current_total_trails": 45,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "june-mountain",
+    "name": "June Mountain",
+    "state": "CA",
+    "website_url": "https://www.junemountain.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "kelly-canyon",
+    "name": "Kelly Canyon Ski Resort",
+    "state": "ID",
+    "website_url": "https://skikelly.com",
+    "current_total_trails": 27,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "keystone",
+    "name": "Keystone Resort",
+    "state": "CO",
+    "website_url": "https://www.keystoneresort.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "killington",
+    "name": "Killington",
+    "state": "VT",
+    "website_url": "https://www.killington.com",
+    "current_total_trails": 155,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "king-pine",
+    "name": "King Pine",
+    "state": "NH",
+    "website_url": "https://www.kingpine.com",
+    "current_total_trails": 23,
+    "current_difficulty_pct": {
+      "beginner": 44,
+      "intermediate": 31,
+      "advanced": 25,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "kirkwood-mountain-resort",
+    "name": "Kirkwood Mountain Resort",
+    "state": "CA",
+    "website_url": "https://www.kirkwood.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "kissing-bridge",
+    "name": "Kissing Bridge",
+    "state": "NY",
+    "website_url": "https://www.kbski.com",
+    "current_total_trails": 39,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "labrador-mountain",
+    "name": "Labrador Mountain",
+    "state": "NY",
+    "website_url": "https://www.labradormtn.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "lake-city-ski-hill",
+    "name": "Lake City Ski Hill",
+    "state": "CO",
+    "website_url": "https://www.lakecity.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "laurel-mountain",
+    "name": "Laurel Mountain",
+    "state": "PA",
+    "website_url": "https://www.laurelmountainski.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": 50,
+      "intermediate": 35,
+      "advanced": 15,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "leavenworth-ski-hill",
+    "name": "Leavenworth Ski Hill",
+    "state": "WA",
+    "website_url": "https://skileavenworth.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "leavenworth-winter-sports-club",
+    "name": "Leavenworth Winter Sports Club",
+    "state": "WA",
+    "website_url": "https://skileavenworth.com/webcams",
+    "current_total_trails": 3,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "lee-canyon",
+    "name": "Lee Canyon",
+    "state": "NV",
+    "website_url": "https://www.leecanyonlv.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "lees-ski-hill",
+    "name": "Lee's Ski Hill",
+    "state": "CO",
+    "website_url": "https://www.cityofouray.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "liberty-mountain",
+    "name": "Liberty Mountain",
+    "state": "PA",
+    "website_url": "https://www.libertymountainresort.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": 27,
+      "intermediate": 41,
+      "advanced": 14,
+      "expert": 18
+    }
+  },
+  {
+    "slug": "little-ski-hill",
+    "name": "Little Ski Hill",
+    "state": "ID",
+    "website_url": "https://littleskihill.org",
+    "current_total_trails": 14,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "little-switzerland",
+    "name": "Little Switzerland",
+    "state": "WI",
+    "website_url": "https://www.littleswitz.com",
+    "current_total_trails": 16,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "loge-glacier",
+    "name": "LOGE Glacier",
+    "state": "MT",
+    "website_url": "https://www.logecamps.com/journal/glacier-area-guide",
+    "current_total_trails": 20,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "lookout-pass",
+    "name": "Lookout Pass Ski and Recreation Area",
+    "state": "MT",
+    "website_url": "https://www.skilookout.com",
+    "current_total_trails": 59,
+    "current_difficulty_pct": {
+      "beginner": 13,
+      "intermediate": 42,
+      "advanced": 42,
+      "expert": 2
+    }
+  }
+]

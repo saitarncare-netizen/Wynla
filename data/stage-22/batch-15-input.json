@@ -1,0 +1,392 @@
+[
+  {
+    "slug": "vail",
+    "name": "Vail Ski Resort",
+    "state": "CO",
+    "website_url": "https://www.vail.com",
+    "current_total_trails": 195,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "victor-constant-ski-area",
+    "name": "Victor Constant Ski Area",
+    "state": "NY",
+    "website_url": "https://westpoint.armymwr.com/programs/victor-constant-ski-area",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "villa-olivia",
+    "name": "Villa Olivia",
+    "state": "IL",
+    "website_url": "https://www.villaolivia.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "wachusett-mountain",
+    "name": "Wachusett Mountain",
+    "state": "MA",
+    "website_url": "https://www.wachusett.com",
+    "current_total_trails": 27,
+    "current_difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 63,
+      "advanced": 19,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "warner-canyon",
+    "name": "Warner Canyon Ski Area",
+    "state": "OR",
+    "website_url": "https://warnercanyonski.com/",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "waterville-valley",
+    "name": "Waterville Valley",
+    "state": "NH",
+    "website_url": "https://www.waterville.com",
+    "current_total_trails": 62,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "welch-village",
+    "name": "Welch Village",
+    "state": "MN",
+    "website_url": "https://www.welchvillage.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "west-mountain",
+    "name": "West Mountain",
+    "state": "NY",
+    "website_url": "https://www.westmtn.net",
+    "current_total_trails": 35,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "whaleback-mountain",
+    "name": "Whaleback Mountain",
+    "state": "NH",
+    "website_url": "https://www.whaleback.com",
+    "current_total_trails": 31,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "white-grass-touring",
+    "name": "White Grass Ski Touring",
+    "state": "WV",
+    "website_url": "https://whitegrass.com",
+    "current_total_trails": 44,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "white-pass",
+    "name": "White Pass Ski Area",
+    "state": "WA",
+    "website_url": "https://skiwhitepass.com",
+    "current_total_trails": 45,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "white-pine",
+    "name": "White Pine Ski Resort",
+    "state": "WY",
+    "website_url": "https://www.whitepineski.com",
+    "current_total_trails": 27,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "white-pine-touring-nordic-center",
+    "name": "White Pine Touring Nordic Center",
+    "state": "UT",
+    "website_url": null,
+    "current_total_trails": 5,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "whitecap-mountains",
+    "name": "Whitecap Mountains",
+    "state": "WI",
+    "website_url": "https://www.skiwhitecap.com",
+    "current_total_trails": 48,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "whiteface-mountain",
+    "name": "Whiteface Mountain",
+    "state": "NY",
+    "website_url": "https://whiteface.com",
+    "current_total_trails": 94,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "whitefish",
+    "name": "Whitefish Mountain Resort",
+    "state": "MT",
+    "website_url": "https://skiwhitefish.com",
+    "current_total_trails": 110,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "whitetail-resort",
+    "name": "Whitetail Resort",
+    "state": "PA",
+    "website_url": "https://www.skiwhitetail.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "wild-mountain",
+    "name": "Wild Mountain",
+    "state": "MN",
+    "website_url": "https://www.wildmountain.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "wildcat-mountain",
+    "name": "Wildcat Mountain",
+    "state": "NH",
+    "website_url": "https://www.skiwildcat.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "willamette-pass",
+    "name": "Willamette Pass Resort",
+    "state": "OR",
+    "website_url": "https://www.willamettepass.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "willard-mountain",
+    "name": "Willard Mountain",
+    "state": "NY",
+    "website_url": "https://www.willardmountain.com",
+    "current_total_trails": 20,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "wilmot-mountain",
+    "name": "Wilmot Mountain",
+    "state": "WI",
+    "website_url": "https://www.wilmotmountain.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "windham-mountain",
+    "name": "Windham Mountain",
+    "state": "NY",
+    "website_url": "https://www.windhammountainclub.com",
+    "current_total_trails": 54,
+    "current_difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 46,
+      "advanced": 19,
+      "expert": 13
+    }
+  },
+  {
+    "slug": "winter-park",
+    "name": "Winter Park Resort",
+    "state": "CO",
+    "website_url": "https://www.winterparkresort.com",
+    "current_total_trails": 171,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "wintergreen-resort",
+    "name": "Wintergreen Resort",
+    "state": "VA",
+    "website_url": "https://www.wintergreenresort.com",
+    "current_total_trails": 26,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "winterplace-ski-resort",
+    "name": "Winterplace Ski Resort",
+    "state": "WV",
+    "website_url": "https://www.winterplace.com",
+    "current_total_trails": 28,
+    "current_difficulty_pct": {
+      "beginner": 39,
+      "intermediate": 36,
+      "advanced": 25,
+      "expert": 0
+    }
+  },
+  {
+    "slug": "wisp-resort",
+    "name": "Wisp Resort",
+    "state": "MD",
+    "website_url": "https://www.wispresort.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "wolf-creek",
+    "name": "Wolf Creek Ski Area",
+    "state": "CO",
+    "website_url": "https://www.wolfcreekski.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "woods-valley",
+    "name": "Woods Valley",
+    "state": "NY",
+    "website_url": "https://www.woodsvalleyskiarea.com",
+    "current_total_trails": null,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  },
+  {
+    "slug": "woodstock-nordic-center",
+    "name": "Woodstock Nordic Center",
+    "state": "VT",
+    "website_url": null,
+    "current_total_trails": 48,
+    "current_difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    }
+  }
+]

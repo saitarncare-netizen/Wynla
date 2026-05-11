@@ -1,0 +1,272 @@
+[
+  {
+    "slug": "pomerelle",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://pomerelle-mtn.com",
+    "website_alive": true,
+    "source_url": "https://pomerelle-mtn.com",
+    "notes": "SPA shell; homepage and /the-mountain returned no stats text"
+  },
+  {
+    "slug": "porcupine-mountains",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.porkiesfun.com",
+    "website_alive": false,
+    "source_url": null,
+    "notes": "ECONNREFUSED on homepage and downhill-skiing page"
+  },
+  {
+    "slug": "powder-mountain",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.powdermountain.com",
+    "website_alive": true,
+    "source_url": "https://www.powdermountain.com",
+    "notes": "Homepage mentions 1000+ acres new terrain; no explicit trail count or difficulty pct on homepage; /the-mountain 404"
+  },
+  {
+    "slug": "powder-ridge",
+    "trails_total": 13,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.powderridge.com",
+    "website_alive": true,
+    "source_url": "https://www.powderridge.com/ski-ride/trail-map/",
+    "notes": "Trail map page lists 13 runs (4 easy, 3 intermediate, 6 difficult); no explicit difficulty pct stated; counts not used to compute pct per no-fabrication rule"
+  },
+  {
+    "slug": "powder-ridge-mountain-park",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://powderridgepark.com",
+    "website_alive": false,
+    "source_url": null,
+    "notes": "403 on homepage and /winter/trail-map/"
+  },
+  {
+    "slug": "powderhorn",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.powderhorn.com",
+    "website_alive": false,
+    "source_url": null,
+    "notes": "403 on homepage and /the-mountain/trail-map/"
+  },
+  {
+    "slug": "powderhouse-hill",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.powderhousehill.com",
+    "website_alive": false,
+    "source_url": null,
+    "notes": "Certificate verification error on homepage"
+  },
+  {
+    "slug": "purgatory",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.purgatoryresort.com",
+    "website_alive": true,
+    "source_url": "https://www.purgatory.ski/",
+    "notes": "purgatoryresort.com 301-redirects to purgatory.ski; homepage and trail-maps pages have no explicit stats text (PDF-driven)"
+  },
+  {
+    "slug": "quarry-road-trails",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://quarryroad.org/",
+    "website_alive": true,
+    "source_url": "https://quarryroad.org/",
+    "notes": "Nordic center; 13.3km groomed Nordic + 8km singletrack mentioned; no trail count or alpine-style difficulty pct"
+  },
+  {
+    "slug": "quechee-club",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.quecheeclub.com",
+    "website_alive": false,
+    "source_url": null,
+    "notes": "403 on homepage"
+  },
+  {
+    "slug": "ragged-mountain",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.raggedmountainresort.com",
+    "website_alive": true,
+    "source_url": "https://www.raggedmountainresort.com",
+    "notes": "SPA shell; trail maps and stats not exposed as plain text on homepage; deeper paths 404"
+  },
+  {
+    "slug": "rangeley-lakes-trail-center",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": null,
+    "website_alive": false,
+    "source_url": null,
+    "notes": "No website_url in input"
+  },
+  {
+    "slug": "red-lodge",
+    "trails_total": 70,
+    "difficulty_pct": {"beginner": 19, "intermediate": 25, "advanced": 36, "expert": 20},
+    "website_url": "https://www.redlodgemountain.com",
+    "website_alive": true,
+    "source_url": "https://www.redlodgemountain.com/the-mountain/",
+    "notes": "Mountain Info page Marked Runs section: 70 runs, 19/25/36/20 pct"
+  },
+  {
+    "slug": "red-river-ski-area",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.redriverskiarea.com",
+    "website_alive": true,
+    "source_url": "https://www.redriverskiarea.com",
+    "notes": "SPA shell; homepage descriptive only; trail map page has no explicit text counts"
+  },
+  {
+    "slug": "rikert-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.rikertoutdoor.com/",
+    "website_alive": false,
+    "source_url": null,
+    "notes": "System error page (1-800-842-8062 contact); site appears down. Nordic facility."
+  },
+  {
+    "slug": "rikert-outdoor-center",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.rikertoutdoor.com",
+    "website_alive": false,
+    "source_url": null,
+    "notes": "System error page (1-800-842-8062 contact); site appears down. Nordic facility."
+  },
+  {
+    "slug": "rotarun",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://rotarun.com",
+    "website_alive": true,
+    "source_url": "https://rotarun.com",
+    "notes": "Homepage returned empty body to fetcher; treating as live SPA shell"
+  },
+  {
+    "slug": "roundtop-mountain-resort",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.skiroundtop.com",
+    "website_alive": false,
+    "source_url": null,
+    "notes": "403 on homepage"
+  },
+  {
+    "slug": "royal-mountain",
+    "trails_total": 28,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.royalmountain.com",
+    "website_alive": true,
+    "source_url": "https://www.royalmountain.com/trail-map/stats",
+    "notes": "Stats page lists 19 Alpine + 9 Glades = 28 runs; no difficulty pct stated"
+  },
+  {
+    "slug": "saddleback",
+    "trails_total": 68,
+    "difficulty_pct": {"beginner": 34, "intermediate": 29, "advanced": null, "expert": null},
+    "website_url": "https://www.saddlebackmaine.com",
+    "website_alive": true,
+    "source_url": "https://www.saddlebackmaine.com/the-stats/",
+    "notes": "Stats page: 68 named runs; site states Beginner 34%, Intermediate 29%, combined Advanced/Expert 37% (not split, so adv/exp left null per no-fabrication)"
+  },
+  {
+    "slug": "sandia-peak",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://sandiapeak.com",
+    "website_alive": true,
+    "source_url": "https://sandiapeak.com",
+    "notes": "Homepage focuses on tramway/summer; only South Crest hiking trail mentioned; ski stats not exposed"
+  },
+  {
+    "slug": "sapphire-valley-resort",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://sapphirevalleyresorts.com/amenities/ski-sapphire-valley/",
+    "website_alive": true,
+    "source_url": "https://sapphirevalleyresorts.com/amenities/ski-sapphire-valley/",
+    "notes": "Page mentions 1600 ft main run and learning slope only; no trail count or difficulty pct"
+  },
+  {
+    "slug": "saskadena-six-area",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.saskadenasix.com",
+    "website_alive": true,
+    "source_url": "https://www.saskadenasix.com",
+    "notes": "SPA shell; homepage descriptive only; /the-mountain, /mountain-info, /winter all 404"
+  },
+  {
+    "slug": "schuss-shanty-creek",
+    "trails_total": 42,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.shantycreek.com",
+    "website_alive": true,
+    "source_url": "https://www.shantycreek.com",
+    "notes": "Conditions widget shows 'Trails: 0 of 42' indicating 42 total; no explicit difficulty pct"
+  },
+  {
+    "slug": "schweitzer",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.schweitzer.com",
+    "website_alive": true,
+    "source_url": "https://www.schweitzer.com",
+    "notes": "SPA shell; homepage promo only; stats-info and the-mountain paths 404"
+  },
+  {
+    "slug": "seven-oaks",
+    "trails_total": 12,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.sevenoaksrec.com",
+    "website_alive": true,
+    "source_url": "https://www.sevenoaksrec.com",
+    "notes": "Homepage states 12 runs from beginner to expert; no difficulty pct breakdown"
+  },
+  {
+    "slug": "seven-springs",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.7springs.com",
+    "website_alive": false,
+    "source_url": null,
+    "notes": "System error page on all attempted paths (Vail Resorts platform outage); marking not-alive for this strategy"
+  },
+  {
+    "slug": "shanty-creek",
+    "trails_total": 42,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.shantycreek.com",
+    "website_alive": true,
+    "source_url": "https://www.shantycreek.com",
+    "notes": "Same site as schuss-shanty-creek; conditions widget shows Trails: 0 of 42"
+  },
+  {
+    "slug": "shawnee-mountain",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://shawneemt.com",
+    "website_alive": false,
+    "source_url": null,
+    "notes": "403 on homepage and inner paths"
+  },
+  {
+    "slug": "shawnee-peak",
+    "trails_total": 44,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.pleasantmountain.com",
+    "website_alive": true,
+    "source_url": "https://www.pleasantmountain.com",
+    "notes": "Homepage states 44 Trails and Glades; no difficulty pct breakdown on homepage; deeper paths 404"
+  }
+]

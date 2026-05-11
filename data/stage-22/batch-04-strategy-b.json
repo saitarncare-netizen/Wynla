@@ -1,0 +1,422 @@
+[
+  {
+    "slug": "camelback-mountain-resort",
+    "name": "Camelback Mountain Resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 59,
+      "intermediate": 32,
+      "advanced": 9,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/camelback/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info reports 34 km of slopes (Easy 20 km/59%, Intermediate 11 km/32%, Difficult 3 km/9%); km-based pct, trails_total null"
+  },
+  {
+    "slug": "camp-10-area",
+    "name": "Camp 10 Ski Area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 18,
+      "intermediate": 36,
+      "advanced": 46,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/camp-10/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info reports 2.8 km of slopes (Easy 0.5 km/18%, Intermediate 1 km/36%, Difficult 1.3 km/46%); km-based pct"
+  },
+  {
+    "slug": "campgaw-mountain",
+    "name": "Campgaw Mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 77,
+      "intermediate": 23,
+      "advanced": 0,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/campgaw-mountain/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info reports 1.3 km of slopes (Easy 1 km/77%, Intermediate 0.3 km/23%, Difficult 0 km/0%); km-based pct"
+  },
+  {
+    "slug": "campton-mountain",
+    "name": "Campton Mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 47,
+      "intermediate": 38,
+      "advanced": 15,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/campton-mountain/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info reports 1.3 km of slopes (Easy 0.6 km/47%, Intermediate 0.5 km/38%, Difficult 0.2 km/15%); km-based pct"
+  },
+  {
+    "slug": "canaan-valley-resort",
+    "name": "Canaan Valley Resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 40,
+      "advanced": 30,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/canaan-valley/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info reports 10 km of slopes (Easy 3 km/30%, Intermediate 4 km/40%, Difficult 3 km/30%); km-based pct"
+  },
+  {
+    "slug": "cannon-mountain",
+    "name": "Cannon Mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 50,
+      "advanced": 20,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/cannon-mountain/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info reports 50 km of slopes (Easy 15 km/30%, Intermediate 25 km/50%, Difficult 10 km/20%); km-based pct"
+  },
+  {
+    "slug": "cannonsburg",
+    "name": "Cannonsburg Ski Area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 50,
+      "advanced": 25,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/cannonsburg/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info reports 2 km of slopes (Easy 0.5 km/25%, Intermediate 1 km/50%, Difficult 0.5 km/25%); km-based pct"
+  },
+  {
+    "slug": "cascade-mountain",
+    "name": "Cascade Mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 35,
+      "advanced": 30,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/cascade-mountain/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info reports 14 km of slopes (Easy 5 km/35%, Intermediate 5 km/35%, Difficult 4 km/30%); km-based pct"
+  },
+  {
+    "slug": "cataloochee-ski-area",
+    "name": "Cataloochee Ski Area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 44,
+      "intermediate": 39,
+      "advanced": 17,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/cataloochee/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info reports 5.9 km of slopes (Easy 2.6 km/44%, Intermediate 2.3 km/39%, Difficult 1.0 km/17%); km-based pct"
+  },
+  {
+    "slug": "catamount-outdoor-family-center",
+    "name": "Catamount Outdoor Family Center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "source_site": null,
+    "notes": "not found — Catamount Outdoor Family Center is a 400-acre Nordic/cross-country and mountain-biking center in Williston VT with 35 km of groomed XC trails; not present on skiresort.info, OnTheSnow, SkiCentral, or SnowPak as an alpine resort; no alpine difficulty breakdown available"
+  },
+  {
+    "slug": "catamount-ski-area",
+    "name": "Catamount Ski Area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 53,
+      "intermediate": 27,
+      "advanced": 20,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/catamount/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info reports 15 km of slopes (Easy 8 km/53%, Intermediate 4 km/27%, Difficult 3 km/20%); km-based pct"
+  },
+  {
+    "slug": "chapman-hill",
+    "name": "Chapman Hill Ski Area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 42,
+      "intermediate": 30,
+      "advanced": 28,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/chapman-hill-durango/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info reports 0.7 km of slopes (Easy 0.3 km/42%, Intermediate 0.2 km/30%, Difficult 0.2 km/28%); km-based pct"
+  },
+  {
+    "slug": "cherry-peak",
+    "name": "Cherry Peak Resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 50,
+      "advanced": 25,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/cherry-peak/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info reports 20 km of slopes (Easy 5 km/25%, Intermediate 10 km/50%, Difficult 5 km/25%); km-based pct"
+  },
+  {
+    "slug": "chestnut-mountain",
+    "name": "Chestnut Mountain Resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "source_site": null,
+    "notes": "not found — skiresort.info/chestnut-mountain-resort returns portal homepage (no record); not located on OnTheSnow under that name in time-limited search"
+  },
+  {
+    "slug": "china-peak",
+    "name": "China Peak Mountain Resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 40,
+      "intermediate": 34,
+      "advanced": 26,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/china-peak/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info reports 50 km of slopes (Easy 20 km/40%, Intermediate 17 km/34%, Difficult 13 km/26%); km-based pct"
+  },
+  {
+    "slug": "christie",
+    "name": "Christie Mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 50,
+      "intermediate": 27,
+      "advanced": 23,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/christie-mountain/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info reports 5.6 km of slopes (Easy 2.8 km/50%, Intermediate 1.5 km/27%, Difficult 1.3 km/23%); km-based pct"
+  },
+  {
+    "slug": "christmas-mountain",
+    "name": "Christmas Mountain Village",
+    "trails_total": 16,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/wisconsin/christmas-mountain/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "OnTheSnow lists 16 runs / 40 acres but does not publish a difficulty percentage breakdown; skiresort.info has no entry"
+  },
+  {
+    "slug": "cloudmont-ski-resort",
+    "name": "Cloudmont Ski Resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 100,
+      "intermediate": 0,
+      "advanced": 0,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/cloudmont/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info reports 0.5 km of slopes (Easy 0.5 km/100%, Intermediate 0 km/0%, Difficult 0 km/0%); km-based pct"
+  },
+  {
+    "slug": "cochrans-ski-area",
+    "name": "Cochran's Ski Area",
+    "trails_total": 5,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/vermont/cochrans/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "OnTheSnow narrative description indicates 5 ski trails over 10 acres of mostly beginner/intermediate terrain; no published difficulty percentage breakdown found; skiresort.info has no record"
+  },
+  {
+    "slug": "cooper-spur-area",
+    "name": "Cooper Spur Ski Area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 40,
+      "intermediate": 40,
+      "advanced": 20,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/cooper-spur/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info reports 10 km of slopes (Easy 4 km/40%, Intermediate 4 km/40%, Difficult 2 km/20%); km-based pct"
+  },
+  {
+    "slug": "copper-mountain",
+    "name": "Copper Mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 24,
+      "intermediate": 32,
+      "advanced": 44,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/copper-mountain/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info reports 126 km of slopes (Easy 30 km/24%, Intermediate 40 km/32%, Difficult 56 km/44%); km-based pct"
+  },
+  {
+    "slug": "cottonwood-butte",
+    "name": "Cottonwood Butte",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 2,
+      "intermediate": 54,
+      "advanced": 44,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/cottonwood-butte/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info reports 4.1 km of slopes (Easy 0.1 km/2%, Intermediate 2.2 km/54%, Difficult 1.8 km/44%); km-based pct"
+  },
+  {
+    "slug": "cranor-ski-hill",
+    "name": "Cranor Ski Hill",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "source_site": null,
+    "notes": "not found — skiresort.info/cranor-hill is a 404; parksandtrips.com reports 0 trails and 0% across all categories (placeholder); OnTheSnow has no Cranor Hill page; only narrative says ~4 beginner-friendly runs on 45 acres"
+  },
+  {
+    "slug": "crested-butte",
+    "name": "Crested Butte Mountain Resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 26,
+      "intermediate": 57,
+      "advanced": 17,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/crested-butte/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info reports 121 km of slopes (Easy 31.4 km/26%, Intermediate 69 km/57%, Difficult 20.6 km/17%); km-based pct"
+  },
+  {
+    "slug": "crosscut-sports-center",
+    "name": "Crosscut Mountain Sports Center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "source_site": null,
+    "notes": "not found — Crosscut is a Nordic/cross-country center (~35-45 km of XC trails) near Bozeman MT; not present on skiresort.info, OnTheSnow, SkiCentral, or SnowPak as an alpine resort; no alpine difficulty breakdown available"
+  },
+  {
+    "slug": "crotched-mountain",
+    "name": "Crotched Mountain",
+    "trails_total": 24,
+    "difficulty_pct": {
+      "beginner": 29,
+      "intermediate": 33,
+      "advanced": 38,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/new-hampshire/crotched-mountain/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "OnTheSnow reports 24 trails, 29% beginner / 33% intermediate / 38% advanced; no separate expert percentage published. skiresort.info also lists 8 km (Easy 31% / Int 50% / Diff 19%) but OnTheSnow gives a native 4-bucket count and trails_total."
+  },
+  {
+    "slug": "crystal",
+    "name": "Crystal Mountain",
+    "trails_total": 59,
+    "difficulty_pct": {
+      "beginner": 32,
+      "intermediate": 37,
+      "advanced": 24,
+      "expert": 7
+    },
+    "source_url": "https://www.onthesnow.com/michigan/crystal-mountain/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "Crystal Mountain MI — OnTheSnow reports 59 trails with 32% beginner / 37% intermediate / 24% advanced / 7% expert"
+  },
+  {
+    "slug": "crystal-mountain",
+    "name": "Crystal Mountain",
+    "trails_total": 85,
+    "difficulty_pct": {
+      "beginner": 8,
+      "intermediate": 31,
+      "advanced": 32,
+      "expert": 29
+    },
+    "source_url": "https://www.onthesnow.com/washington/crystal-mountain-wa/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "Crystal Mountain WA — OnTheSnow reports 85 runs with 8% beginner / 31% intermediate / 32% advanced / 29% expert; skiresort.info has no English-slug match"
+  },
+  {
+    "slug": "crystal-mountain-mi",
+    "name": "Crystal Mountain (MI)",
+    "trails_total": 59,
+    "difficulty_pct": {
+      "beginner": 32,
+      "intermediate": 37,
+      "advanced": 24,
+      "expert": 7
+    },
+    "source_url": "https://www.onthesnow.com/michigan/crystal-mountain/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "Crystal Mountain MI duplicate slug — OnTheSnow reports 59 trails with 32% beginner / 37% intermediate / 24% advanced / 7% expert"
+  },
+  {
+    "slug": "crystal-ridge",
+    "name": "Crystal Ridge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 39,
+      "intermediate": 38,
+      "advanced": 23,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/crystal-ridge/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info reports 1.3 km of slopes (Easy 0.5 km/39%, Intermediate 0.5 km/38%, Difficult 0.3 km/23%); km-based pct"
+  }
+]
