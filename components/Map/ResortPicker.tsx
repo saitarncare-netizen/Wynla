@@ -27,6 +27,13 @@ type Props = {
       which one their "How many days?" prompt is asking about, even
       when they've clicked a different one since. */
   pendingSlug?: string | null;
+  /** Resort name for the pendingSlug — used as the label inside the
+      "Confirm [Resort]" sticky footer that appears when a candidate
+      is selected but not yet confirmed. */
+  pendingResortName?: string | null;
+  /** Fires when the user taps the sticky "Confirm [Resort]" footer.
+      Parent advances the wizard from `pick` to `confirm-days`. */
+  onConfirmPending?: () => void;
   /** Current global pass filter. The picker's chip row IS this set —
       toggling a chip in the picker calls onPassFilterChange which
       updates the URL, which feeds back here, which re-renders the
@@ -81,6 +88,8 @@ export default function ResortPicker({
   allResorts,
   alreadyPicked,
   pendingSlug,
+  pendingResortName,
+  onConfirmPending,
   passFilter,
   onPassFilterChange,
   onSelect,
@@ -441,6 +450,32 @@ export default function ResortPicker({
           );
         })}
       </ul>
+
+      {/* Stage 21.3 preview-confirm bar — appears the moment the user
+          taps a row. The map shows the dashed leg + pinned candidate
+          behind. User can keep tapping different rows above to swap
+          the candidate (pendingSlug updates, ring border moves), or
+          tap this footer to lock it in and move to the days step.
+          Only renders when both pendingSlug and onConfirmPending are
+          present, so the header-search picker (no preview-confirm
+          flow) is unaffected. */}
+      {pendingSlug && onConfirmPending && (
+        <div className="shrink-0 border-t border-wn-navy/15 bg-wn-navy/[0.04] px-3 py-2.5">
+          <button
+            type="button"
+            onClick={onConfirmPending}
+            className="flex w-full items-center justify-center gap-2 rounded-lg bg-wn-navy px-4 py-3 text-sm font-semibold text-white transition hover:bg-wn-navy/90 active:scale-[0.98]"
+          >
+            <span aria-hidden="true">✓</span>
+            <span className="truncate">
+              Confirm {pendingResortName ?? pendingSlug}
+            </span>
+          </button>
+          <p className="mt-1 text-center text-[10px] text-wn-charcoal/55">
+            Or tap a different resort above to swap.
+          </p>
+        </div>
+      )}
     </div>
   );
 }

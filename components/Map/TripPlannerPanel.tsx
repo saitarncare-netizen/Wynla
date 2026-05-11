@@ -408,15 +408,14 @@ export default function TripPlannerPanel({
     onPreviewLeg?.(null);
 
     if (targetIndex === "new") {
-      // Stage 21.1 — on mobile the wizard hides the planner sheet while
-      // the picker is open. If we keep the picker open after a pick
-      // (the Stage 19.5 desktop behavior), the user can't see the
-      // confirm card. Close the picker on mobile so the wizard
-      // advances to its `confirm` phase and the planner sheet shows
-      // the day-count prompt. Desktop keeps the picker open as before
-      // — left rail + right panel can coexist.
+      // Stage 21.3 — preview-confirm flow. The picker stays open with
+      // pendingStop set so the user can keep tapping different rows
+      // (each updates the dashed preview leg on the map). A sticky
+      // "Confirm [Resort]" bar inside the picker advances to the
+      // confirm-days phase. Reverts the Stage 21.1 "close on tap"
+      // behavior — that broke the "let me see more candidates"
+      // affordance the user explicitly asked for.
       setPendingStop({ slug, days: Math.max(1, Math.min(remainingDays || 1, 1)) });
-      if (isMobile) setPickerForIndex(null);
     } else {
       // Swap-resort flow: still in-place + closes the picker (single
       // explicit change, no confirm step).
@@ -521,6 +520,17 @@ export default function TripPlannerPanel({
     if (isMobile && pickerForIndex === null && !pendingStop) {
       setPickerForIndex("new");
     }
+  }
+
+  // Stage 21.3 preview-confirm: user has selected a candidate (the
+  // dashed leg is showing on the map). They tap "Confirm [Resort]" in
+  // the picker footer → we close the picker, which transitions the
+  // wizard from `pick` to `confirm-days` (planner sheet appears with
+  // the day-count stepper).
+  function confirmPreviewPick() {
+    if (!pendingStop) return;
+    setPickerForIndex(null);
+    onPreviewLeg?.(null);
   }
   // Wizard "Change trip length" from review → reset to set-days. We
   // keep stops as-is so the user doesn't lose their picks.
@@ -666,8 +676,8 @@ export default function TripPlannerPanel({
                   <div className="flex items-center gap-2">
                     <button
                       type="button"
-                      onClick={() => onDaysChange?.(Math.max(2, days - 1))}
-                      disabled={days <= 2}
+                      onClick={() => onDaysChange?.(Math.max(1, days - 1))}
+                      disabled={days <= 1}
                       className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-white text-2xl font-bold text-wn-navy shadow-sm transition active:scale-95 disabled:opacity-30"
                       aria-label="Fewer days"
                     >
@@ -690,7 +700,7 @@ export default function TripPlannerPanel({
                     </button>
                   </div>
                   <div className="mt-3 flex flex-wrap justify-center gap-1.5">
-                    {[2, 3, 5, 7, 10, 14].map((n) => {
+                    {[1, 2, 3, 5, 7, 10, 14].map((n) => {
                       const active = n === days;
                       return (
                         <button
@@ -983,8 +993,8 @@ export default function TripPlannerPanel({
               >
                 <button
                   type="button"
-                  onClick={() => onDaysChange(Math.max(2, days - 1))}
-                  disabled={days <= 2}
+                  onClick={() => onDaysChange(Math.max(1, days - 1))}
+                  disabled={days <= 1}
                   className="inline-flex h-9 w-9 items-center justify-center rounded-md bg-white/10 text-lg font-bold text-white transition hover:bg-white/20 disabled:opacity-30"
                   aria-label="Fewer days"
                 >
@@ -1006,11 +1016,9 @@ export default function TripPlannerPanel({
                   +
                 </button>
               </div>
-              {/* Preset chips — common trip lengths. Skip 1d since the
-                  planner enforces a 2-day minimum (single-day trips
-                  use the main map's Day-trip filter instead). */}
+              {/* Preset chips — common trip lengths (1d through 14d). */}
               <div className="mt-1.5 flex flex-wrap gap-1">
-                {[2, 3, 5, 7, 10, 14].map((n) => {
+                {[1, 2, 3, 5, 7, 10, 14].map((n) => {
                   const active = n === days;
                   return (
                     <button
@@ -1355,11 +1363,18 @@ export default function TripPlannerPanel({
           allResorts={pickerResorts}
           alreadyPicked={pickedSlugs}
           pendingSlug={pendingStop?.slug}
+          pendingResortName={
+            pendingStop
+              ? candidateBySlug.get(pendingStop.slug)?.name ?? pendingStop.slug
+              : null
+          }
           passFilter={passFilter}
           onPassFilterChange={onPassChange}
           onSelect={handlePicked}
+          onConfirmPending={confirmPreviewPick}
           onClose={() => {
             setPickerForIndex(null);
+            setPendingStop(null);
             onPreviewLeg?.(null);
           }}
           onHover={(slug) => {
