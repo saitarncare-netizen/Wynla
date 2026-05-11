@@ -217,10 +217,9 @@ export default function ResortPicker({
 
   function handleRowClick(slug: string) {
     onSelect(slug);
-    // Stage 20 mobile UX: collapse the sheet so the user can see the
-    // pendingStop card in the trip planner sheet behind. The picker
-    // stays at "collapsed" so they can drag back up to pick another.
-    if (isMobile) setSnap("collapsed");
+    // Stage 21.1 — both call sites (header-search MapPage + trip
+    // planner wizard) close the picker on row tap now, so we no
+    // longer auto-collapse here. The bottom sheet exits cleanly.
   }
 
   function handleTouchStart(e: React.TouchEvent) {

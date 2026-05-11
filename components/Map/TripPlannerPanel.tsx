@@ -408,11 +408,15 @@ export default function TripPlannerPanel({
     onPreviewLeg?.(null);
 
     if (targetIndex === "new") {
-      // Stage 19.5: keep the picker OPEN after a new pick — the user
-      // can change their mind and tap a different row or map pin and
-      // the pendingStop card on the right panel just updates. Closes
-      // automatically on Confirm (commits) or via the picker's X.
+      // Stage 21.1 — on mobile the wizard hides the planner sheet while
+      // the picker is open. If we keep the picker open after a pick
+      // (the Stage 19.5 desktop behavior), the user can't see the
+      // confirm card. Close the picker on mobile so the wizard
+      // advances to its `confirm` phase and the planner sheet shows
+      // the day-count prompt. Desktop keeps the picker open as before
+      // — left rail + right panel can coexist.
       setPendingStop({ slug, days: Math.max(1, Math.min(remainingDays || 1, 1)) });
+      if (isMobile) setPickerForIndex(null);
     } else {
       // Swap-resort flow: still in-place + closes the picker (single
       // explicit change, no confirm step).
