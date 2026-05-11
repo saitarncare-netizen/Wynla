@@ -449,18 +449,18 @@ export default function TripPlannerPanel({
     const committed = { slug: pendingStop.slug, days: pendingStop.days };
     setStops((prev) => [...prev, committed]);
     setPendingStop(null);
-    // Auto-close the picker when this commit fills the last remaining
-    // day of the trip. The user can re-open via "Add stop" if they
-    // want to overrun. Compute against the would-be next stops since
-    // setStops hasn't flushed yet.
+    // Stage 21.4 wizard auto-advance: if there are still days left to
+    // plan, immediately re-open the picker for the next stop so the
+    // user doesn't get dumped on the bare map. If this commit fills
+    // the budget, close the picker → wizard lands on `review`.
     const wouldBeDays = daysPlanned + committed.days;
     if (wouldBeDays >= days) {
       setPickerForIndex(null);
     } else {
-      // Stage 19.6: zoom out to the trip-so-far overview (home +
-      // every confirmed stop) so the user has spatial context
-      // before picking the next one. The camera will zoom back in
-      // once they hover or tap another candidate.
+      setPickerForIndex("new");
+      // Zoom out to the trip-so-far overview so the user has spatial
+      // context before picking the next stop. Camera zooms back in
+      // once they tap/hover another candidate.
       onViewFullRoute?.();
     }
   }
@@ -671,7 +671,7 @@ export default function TripPlannerPanel({
                   Pick the total ski days. You can change this later.
                 </p>
               </header>
-              <div className="flex-1 overflow-y-auto px-4 py-4">
+              <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-4" style={{ touchAction: "pan-y" }}>
                 <div className="rounded-xl border border-wn-charcoal/15 bg-wn-offwhite p-3">
                   <div className="flex items-center gap-2">
                     <button
@@ -774,7 +774,7 @@ export default function TripPlannerPanel({
                     From {fromLabel} · ≈ {formatDriveTime(driveSec)} drive
                   </p>
                 </header>
-                <div className="flex-1 overflow-y-auto px-4 py-4">
+                <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-4" style={{ touchAction: "pan-y" }}>
                   <p className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
                     How many days at {name}?
                   </p>
@@ -858,7 +858,7 @@ export default function TripPlannerPanel({
                   ✓ All {days} days planned · {stops.length} stop{stops.length === 1 ? "" : "s"} · ≈ {formatDriveTime(totalDriveSeconds)} total drive
                 </p>
               </header>
-              <div className="flex-1 overflow-y-auto px-4 py-4">
+              <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-4" style={{ touchAction: "pan-y" }}>
                 <ol className="flex flex-col gap-2">
                   {stops.map((stop, i) => {
                     const r = candidateBySlug.get(stop.slug);
