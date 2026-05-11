@@ -1,0 +1,394 @@
+[
+  {
+    "slug": "mount-ashwabay",
+    "trails_total": 12,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.mtashwabay.org/winter.html",
+    "source_site": "mtashwabay.org (via Travel Wisconsin search)",
+    "notes": "Not on skiresort.info or OnTheSnow. Travel Wisconsin/site references 12 downhill runs; difficulty breakdown not published. Cross-country trail system separate."
+  },
+  {
+    "slug": "mount-bohemia",
+    "trails_total": 105,
+    "difficulty_pct": {
+      "beginner": 2,
+      "intermediate": 2,
+      "advanced": 8,
+      "expert": 88
+    },
+    "source_url": "https://www.onthesnow.com/michigan/mount-bohemia/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "OnTheSnow: 105 runs, 2/2/8/88 (expert-heavy). skiresort.info also has page (13km, 0/23/77 on km basis) corroborating expert orientation."
+  },
+  {
+    "slug": "mount-holly",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 14,
+      "intermediate": 36,
+      "advanced": 50,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mt-holly/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info km-based: 7km total, Easy 14%, Intermediate 36%, Difficult 50%. OnTheSnow 404. Trail count not found."
+  },
+  {
+    "slug": "mount-itasca",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "source_site": null,
+    "notes": "Not on skiresort.info or OnTheSnow. Search results describe trails as Beginner/Intermediate/Advanced/Expert mix but no count or percentages published. Small community hill."
+  },
+  {
+    "slug": "mount-jefferson-ski-area",
+    "trails_total": 12,
+    "difficulty_pct": {
+      "beginner": 32,
+      "intermediate": 42,
+      "advanced": 26,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mt-jefferson/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info km-based: 9.5km, Easy 32%, Intermediate 42%, Difficult 26%. Trail count 12 per OnTheSnow/skimap.org search results."
+  },
+  {
+    "slug": "mount-kato",
+    "trails_total": 19,
+    "difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 37,
+      "advanced": 41,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mount-kato/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info km-based: 12km, Easy 22%, Intermediate 37%, Difficult 41%. Input trail count 19 retained; skiresort.info confirms terrain mix."
+  },
+  {
+    "slug": "mount-peter",
+    "trails_total": 17,
+    "difficulty_pct": {
+      "beginner": 39,
+      "intermediate": 33,
+      "advanced": 28,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/new-york/mount-peter/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "OnTheSnow: 17 runs, 39/33/28/0 (input had 13). skiresort.info also has page (3.8km, 26/53/21 on km basis)."
+  },
+  {
+    "slug": "mount-pisgah",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mt-pisgah/",
+    "source_site": "skiresort.info",
+    "notes": "[SANITIZED — fabrication marker in notes] skiresort.info: 1km total, Easy 100%. Conflicts with input (17/33/50/0). Single community hill; skiresort.info data likely outdated/simplified. Trail count not on database.",
+    "_sanitized": true,
+    "_original_notes": "skiresort.info: 1km total, Easy 100%. Conflicts with input (17/33/50/0). Single community hill; skiresort.info data likely outdated/simplified. Trail count not on database."
+  },
+  {
+    "slug": "mount-snow",
+    "trails_total": 86,
+    "difficulty_pct": {
+      "beginner": 23,
+      "intermediate": 56,
+      "advanced": 14,
+      "expert": 8
+    },
+    "source_url": "https://www.onthesnow.com/vermont/mount-snow/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "OnTheSnow: 86 runs (matches input), 23/56/14/8. skiresort.info corroborates intermediate-heavy (10/77/13 on km basis)."
+  },
+  {
+    "slug": "mount-southington",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 34,
+      "intermediate": 52,
+      "advanced": 14,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mount-southington/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info km-based: 5.8km, Easy 34%, Intermediate 52%, Difficult 14%. OnTheSnow 404. Input has 14 trails."
+  },
+  {
+    "slug": "mount-sunapee",
+    "trails_total": 67,
+    "difficulty_pct": {
+      "beginner": 29,
+      "intermediate": 47,
+      "advanced": 24,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/new-hampshire/mount-sunapee/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "OnTheSnow: 67 runs, 29/47/24/0. skiresort.info corroborates (30km, 27/53/20 on km basis)."
+  },
+  {
+    "slug": "mountain-creek",
+    "trails_total": 46,
+    "difficulty_pct": {
+      "beginner": 17,
+      "intermediate": 57,
+      "advanced": 26,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/new-jersey/mountain-creek-resort/ski-resort",
+    "source_site": "onthesnow.com (via search)",
+    "notes": "OnTheSnow/search: 46 trails (matches input), 17/57/26/0. Slight diff from input (18/62/21/0)."
+  },
+  {
+    "slug": "mountain-high",
+    "trails_total": 59,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 42,
+      "advanced": 34,
+      "expert": 3
+    },
+    "source_url": "https://www.onthesnow.com/california/mountain-high/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "OnTheSnow: 59 runs, 20/42/34/3 (matches input difficulty exactly). Input had 50 trails; OnTheSnow shows 59."
+  },
+  {
+    "slug": "mt-abram",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 24,
+      "intermediate": 48,
+      "advanced": 28,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mt-abram/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info km-based: 14.5km, Easy 24%, Intermediate 48%, Difficult 28%. OnTheSnow 404. Input has 42 trails."
+  },
+  {
+    "slug": "mt-bachelor",
+    "trails_total": 122,
+    "difficulty_pct": {
+      "beginner": 14,
+      "intermediate": 50,
+      "advanced": 25,
+      "expert": 11
+    },
+    "source_url": "https://www.onthesnow.com/oregon/mt-bachelor/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "OnTheSnow: 122 runs, 14/50/25/11. skiresort.info also has page (98.9km, 15/25/60 on km basis - very different distribution)."
+  },
+  {
+    "slug": "mt-baker-ski-area",
+    "trails_total": 38,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 48,
+      "advanced": 32,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mt-baker/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info km-based: 25km, Easy 20%, Intermediate 48%, Difficult 32%. OnTheSnow: 38 trails total (no diff breakdown). Combined."
+  },
+  {
+    "slug": "mt-baldy",
+    "trails_total": 26,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 40,
+      "advanced": 20,
+      "expert": 20
+    },
+    "source_url": "https://www.onthesnow.com/california/mt-baldy/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "OnTheSnow: 26 runs, 20/40/20/20. skiresort.info also has page (20km, 15/30/55 on km basis)."
+  },
+  {
+    "slug": "mt-brighton",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 16,
+      "intermediate": 57,
+      "advanced": 27,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mt-brighton/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info km-based: 6.2km, Easy 16%, Intermediate 57%, Difficult 27%. OnTheSnow 404."
+  },
+  {
+    "slug": "mt-crescent",
+    "trails_total": 11,
+    "difficulty_pct": {
+      "beginner": 18,
+      "intermediate": 45,
+      "advanced": 27,
+      "expert": 9
+    },
+    "source_url": "https://www.onthesnow.com/iowa/mt-crescent-ski-area/ski-resort",
+    "source_site": "onthesnow.com (via search)",
+    "notes": "OnTheSnow/search: 11 runs, 18/45/27/9. skiresort.info has Crescent Hill at 2km (40/40/20 on km basis) which corroborates."
+  },
+  {
+    "slug": "mt-eyak",
+    "trails_total": 10,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 40,
+      "advanced": 40,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mt-eyak/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info km-based: 5km, Easy 20%, Intermediate 40%, Difficult 40%. Input trail count 10 retained."
+  },
+  {
+    "slug": "mt-holiday",
+    "trails_total": 12,
+    "difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 45,
+      "advanced": 33,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mt-holiday/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info km-based: 4.5km, Easy 22%, Intermediate 45%, Difficult 33%. Input trail count 12 retained."
+  },
+  {
+    "slug": "mt-hood-meadows",
+    "trails_total": 87,
+    "difficulty_pct": {
+      "beginner": 15,
+      "intermediate": 50,
+      "advanced": 35,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/oregon/mt-hood-meadows/ski-resort",
+    "source_site": "onthesnow.com + skiresort.info",
+    "notes": "OnTheSnow: 87 runs (input had 142). skiresort.info km-based: 90km, Easy 15%, Intermediate 50%, Difficult 35%. Input diff (15/40/15/30) appears off."
+  },
+  {
+    "slug": "mt-hood-skibowl",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 23,
+      "intermediate": 23,
+      "advanced": 54,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mt-hood-skibowl/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info km-based: 65km, Easy 23%, Intermediate 23%, Difficult 54%. OnTheSnow 404."
+  },
+  {
+    "slug": "mt-la-crosse",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 43,
+      "advanced": 36,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mt-la-crosse/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info km-based: 7km, Easy 21%, Intermediate 43%, Difficult 36%. OnTheSnow 404. Input has 20 trails."
+  },
+  {
+    "slug": "mt-lemmon-ski-valley",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 29,
+      "intermediate": 47,
+      "advanced": 24,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mt-lemmon-ski-valley/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info km-based: 8.5km, Easy 29%, Intermediate 47%, Difficult 24%. OnTheSnow 404."
+  },
+  {
+    "slug": "mt-rose-ski-tahoe",
+    "trails_total": 67,
+    "difficulty_pct": {
+      "beginner": 28,
+      "intermediate": 25,
+      "advanced": 22,
+      "expert": 24
+    },
+    "source_url": "https://www.onthesnow.com/nevada/mt-rose-ski-tahoe/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "OnTheSnow: 67 runs, 28/25/22/24. skiresort.info also has page (60km, 20/30/50 on km basis). Input diff (20/30/40/10) differs notably."
+  },
+  {
+    "slug": "mt-shasta",
+    "trails_total": 38,
+    "difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 35,
+      "advanced": 43,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mt-shasta-ski-park/",
+    "source_site": "skiresort.info",
+    "notes": "Same resort as mt-shasta-ski-park (both at skipark.com). skiresort.info km-based: 23km, Easy 22%, Intermediate 35%, Difficult 43%. Input trail count 38 retained."
+  },
+  {
+    "slug": "mt-shasta-ski-park",
+    "trails_total": 38,
+    "difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 35,
+      "advanced": 43,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mt-shasta-ski-park/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info km-based: 23km, Easy 22%, Intermediate 35%, Difficult 43%. Search results say 38 trails 20/45/35 — close. OnTheSnow 404."
+  },
+  {
+    "slug": "mt-spokane",
+    "trails_total": 55,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 62,
+      "advanced": 13,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/washington/mt-spokane-ski-and-snowboard-park/ski-resort",
+    "source_site": "onthesnow.com + skiresort.info",
+    "notes": "OnTheSnow: 55 trails (input had 53, close). skiresort.info km-based: 26km, Easy 25%, Intermediate 62%, Difficult 13%. OnTheSnow no diff breakdown; skiresort.info used."
+  },
+  {
+    "slug": "mt-waterman",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 20,
+      "advanced": 60,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mt-waterman/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info km-based: 10km, Easy 20%, Intermediate 20%, Difficult 60%. OnTheSnow 404. Input diff (19/19/62/0) matches almost exactly."
+  }
+]

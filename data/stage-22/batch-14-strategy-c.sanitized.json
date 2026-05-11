@@ -1,0 +1,392 @@
+[
+  {
+    "slug": "sunlight-mountain",
+    "trails_total": 67,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 55,
+      "advanced": 20,
+      "expert": 5
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Sunlight_Mountain_Resort",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia states 67 trails with 20/55/20/5 breakdown. Some sources (incl. input) cite 77; kept Wikipedia figure for consistency with difficulty source."
+  },
+  {
+    "slug": "sunrise-park-resort",
+    "trails_total": 67,
+    "difficulty_pct": {
+      "beginner": 46,
+      "intermediate": 28,
+      "advanced": 21,
+      "expert": 4
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Sunrise_Park_Resort",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia: 67 total; 46% beginner, 28% intermediate, single-diamond 21%, double-diamond 4%."
+  },
+  {
+    "slug": "swain-resort",
+    "trails_total": 35,
+    "difficulty_pct": {
+      "beginner": 31,
+      "intermediate": 37,
+      "advanced": 31,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/new-york/swain/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "OnTheSnow: 35 trails total; 31% beginner, 37% intermediate, 31% advanced, 0% expert."
+  },
+  {
+    "slug": "swiss-valley",
+    "trails_total": 10,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 30,
+      "advanced": 40,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/michigan/swiss-valley/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "OnTheSnow lists 10 runs with 30/30/40 split (no expert). Input current_total_trails was 12."
+  },
+  {
+    "slug": "tahoe-donner-downhill",
+    "trails_total": 15,
+    "difficulty_pct": {
+      "beginner": 40,
+      "intermediate": 60,
+      "advanced": 0,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Tahoe_Donner",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia: 15 trails, 40% beginner, 60% intermediate; no advanced/expert listed."
+  },
+  {
+    "slug": "tamarack",
+    "trails_total": 50,
+    "difficulty_pct": {
+      "beginner": 17,
+      "intermediate": 45,
+      "advanced": 38,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Tamarack_Resort",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia: 50 runs; 17% novice, 45% intermediate, 38% advanced. Expert not separately listed."
+  },
+  {
+    "slug": "taos-ski-valley",
+    "trails_total": 110,
+    "difficulty_pct": {
+      "beginner": 24,
+      "intermediate": 25,
+      "advanced": 51,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Taos_Ski_Valley",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia: 110 trails; 24% beginner, 25% intermediate, 51% advanced/expert combined. Not split further."
+  },
+  {
+    "slug": "telluride",
+    "trails_total": 127,
+    "difficulty_pct": {
+      "beginner": 23,
+      "intermediate": 36,
+      "advanced": 41,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Telluride_Ski_Resort",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia: 127 trails; 23% beginner, 36% intermediate, 41% advanced/expert combined."
+  },
+  {
+    "slug": "tenney-mountain",
+    "trails_total": 53,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 43,
+      "advanced": 37,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/new-hampshire/tenney-mountain/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "OnTheSnow: 53 runs; 20% beginner, 43% intermediate, 37% advanced, expert not listed."
+  },
+  {
+    "slug": "terry-peak",
+    "trails_total": 30,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Terry_Peak",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia confirms 30 trails. No reliable difficulty % breakdown found; parksandtrips listed generic 20/60/20 which appears to be boilerplate."
+  },
+  {
+    "slug": "teton-pass",
+    "trails_total": 26,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 35,
+      "advanced": 30,
+      "expert": 0
+    },
+    "source_url": "https://www.bigskyfishing.com/Montana-Info/skiing-teton-pass.php",
+    "source_site": "bigskyfishing",
+    "notes": "Wikipedia confirmed 26 trails. Difficulty 35/35/30 reported by bigskyfishing; second source had 25/35/40 — chose the more detailed source. Some uncertainty."
+  },
+  {
+    "slug": "the-highlands",
+    "trails_total": 55,
+    "difficulty_pct": {
+      "beginner": 40,
+      "intermediate": 29,
+      "advanced": 29,
+      "expert": 2
+    },
+    "source_url": "https://www.onthesnow.com/michigan/boyne-highlands/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "OnTheSnow: 55 runs; 40/29/29/2 split."
+  },
+  {
+    "slug": "the-omni-homestead-resort",
+    "trails_total": 10,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 55,
+      "advanced": 10,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/The_Omni_Homestead_Resort",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia: 10 runs; 35% beginner, 55% intermediate, 10% advanced, no expert."
+  },
+  {
+    "slug": "the-rock-snowpark",
+    "trails_total": 8,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://parksandtrips.com/ski-resort/trwi-the-rock-snowpark/",
+    "source_site": "parksandtrips",
+    "notes": "8 trails total. Only 20% beginner reported explicitly; remaining 80% split between intermediate/expert not detailed."
+  },
+  {
+    "slug": "the-summit-at-snoqualmie",
+    "trails_total": 62,
+    "difficulty_pct": {
+      "beginner": 14,
+      "intermediate": 45,
+      "advanced": 41,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/The_Summit_at_Snoqualmie",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia: 62 combined trails; 14% easiest, 45% more difficult, 41% most difficult (advanced/expert combined)."
+  },
+  {
+    "slug": "thrill-hills",
+    "trails_total": 10,
+    "difficulty_pct": {
+      "beginner": 40,
+      "intermediate": 60,
+      "advanced": 0,
+      "expert": 0
+    },
+    "source_url": "https://www.indyskipass.com/our-resorts/thrill-hills",
+    "source_site": "indyskipass",
+    "notes": "10 trails; 40% beginner, 60% intermediate, 0% advanced."
+  },
+  {
+    "slug": "thunder-ridge-ski-area",
+    "trails_total": 23,
+    "difficulty_pct": {
+      "beginner": 48,
+      "intermediate": 19,
+      "advanced": 33,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Thunder_Ridge_Ski_Area",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia: 23 trails; 48/19/33 split."
+  },
+  {
+    "slug": "timber-ridge",
+    "trails_total": 15,
+    "difficulty_pct": {
+      "beginner": 47,
+      "intermediate": 33,
+      "advanced": 20,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Timber_Ridge_Ski_Area",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia: 15 trails (7 easy, 5 intermediate, 3 advanced). Matches input difficulty_pct."
+  },
+  {
+    "slug": "timberline-lodge",
+    "trails_total": 35,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 50,
+      "advanced": 30,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Timberline_Lodge_ski_area",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia: 35 runs; 20% beginner, 50% intermediate, 30% advanced."
+  },
+  {
+    "slug": "timberline-mountain",
+    "trails_total": 23,
+    "difficulty_pct": {
+      "beginner": 39,
+      "intermediate": 26,
+      "advanced": 17,
+      "expert": 9
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Timberline_Mountain",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia: 23 trails. 9 easier, 6 intermediate, 4 advanced, 2 expert (+ 2 terrain parks). Differs slightly from input."
+  },
+  {
+    "slug": "titcomb-mountain",
+    "trails_total": 16,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 50,
+      "advanced": 25,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Titcomb_Mountain",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia confirms 16 trails. Difficulty 25/50/25 from supporting search sources (Maine Trail Finder etc.)."
+  },
+  {
+    "slug": "titus-mountain",
+    "trails_total": 53,
+    "difficulty_pct": {
+      "beginner": 34,
+      "intermediate": 38,
+      "advanced": 22,
+      "expert": 6
+    },
+    "source_url": "https://www.onthesnow.com/new-york/titus-mountain/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "OnTheSnow: 53 trails; 34/38/22/6 split. Wikipedia lists 52, but OnTheSnow's 53 matches input."
+  },
+  {
+    "slug": "trapp-family-lodge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Trapp_Family_Lodge",
+    "source_site": "wikipedia",
+    "notes": "Cross-country/Nordic only — measured in kilometers (60km groomed of 110km network), not discrete runs. No difficulty % breakdown available. Input's 24 trails appears uncorroborated."
+  },
+  {
+    "slug": "treetops-resort",
+    "trails_total": 28,
+    "difficulty_pct": {
+      "beginner": 14,
+      "intermediate": 29,
+      "advanced": 50,
+      "expert": 7
+    },
+    "source_url": "https://www.onthesnow.com/michigan/treetops-resort/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "OnTheSnow: 28 runs; 14/29/50/7 split. Input said 25; OnTheSnow 28 used as primary source."
+  },
+  {
+    "slug": "trollhaugen",
+    "trails_total": 30,
+    "difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 37,
+      "advanced": 37,
+      "expert": 4
+    },
+    "source_url": "https://www.onthesnow.com/wisconsin/trollhaugen/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "OnTheSnow: 30 runs; 22/37/37/4 split."
+  },
+  {
+    "slug": "turner-mountain",
+    "trails_total": 22,
+    "difficulty_pct": {
+      "beginner": 10,
+      "intermediate": 30,
+      "advanced": 60,
+      "expert": 0
+    },
+    "source_url": "https://www.skiturner.com/the-mountain",
+    "source_site": "skiturner",
+    "notes": "Official site / Tripadvisor: 22 named runs; 10% beginner, 30% intermediate, 60% advanced/black-diamond."
+  },
+  {
+    "slug": "turpin-meadow-ranch",
+    "trails_total": 7,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://turpinmeadowranch.com/adventures/nordic-ski/",
+    "source_site": "turpinmeadowranch",
+    "notes": "Nordic only: 7 connected loops, 20+ km of groomed trail. No difficulty % breakdown published."
+  },
+  {
+    "slug": "tussey-mountain",
+    "trails_total": 8,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 45,
+      "advanced": 25,
+      "expert": 0
+    },
+    "source_url": "https://www.snow-forecast.com/resorts/Tussey-Mountain",
+    "source_site": "snow-forecast",
+    "notes": "Search result: 7 trails reported (or 14 by some sources); difficulty 30/45/25. Input said 8 trails — kept input count. Some uncertainty on totals."
+  },
+  {
+    "slug": "tyrol-basin",
+    "trails_total": 24,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 25,
+      "advanced": 38,
+      "expert": 4
+    },
+    "source_url": "https://www.onthesnow.com/wisconsin/tyrol-basin/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "OnTheSnow: 24 runs; 33/25/38/4 split."
+  },
+  {
+    "slug": "tyrol-basin-and-snowboard",
+    "trails_total": 24,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 25,
+      "advanced": 38,
+      "expert": 4
+    },
+    "source_url": "https://www.onthesnow.com/wisconsin/tyrol-basin/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "Duplicate of tyrol-basin slug (same resort). 24 runs; 33/25/38/4."
+  }
+]

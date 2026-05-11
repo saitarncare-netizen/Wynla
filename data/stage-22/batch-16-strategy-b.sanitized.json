@@ -1,0 +1,28 @@
+[
+  {
+    "slug": "woodward-park-city",
+    "trails_total": 11,
+    "difficulty_pct": {
+      "beginner": 36,
+      "intermediate": 45,
+      "advanced": 18,
+      "expert": 0
+    },
+    "source_url": "https://www.skiutah.com/members/woodward-park-city/",
+    "source_site": "skiutah.com",
+    "notes": "Ski Utah official member page reports 11 runs with 36% beginner / 45% intermediate / 18% advanced (no expert tier). 60+ skiable acres, 349 ft vertical. Sums to 99% due to rounding. Skiresort.info had only 0.5 km slopes listed, not usable. OnTheSnow page 404'd."
+  },
+  {
+    "slug": "yellowstone-club",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 15,
+      "intermediate": 55,
+      "advanced": null,
+      "expert": 30
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/yellowstone-club/",
+    "source_site": "skiresort.info / discoveringmontana.com",
+    "notes": "Skiresort.info reports 80 km slopes: easy 30km (37%), intermediate 30km (37%), difficult 20km (26%) — but in km not run count. Discovering Montana / club summary reports '60+ runs' with 15% beginner / 55% intermediate / 30% expert. No separate advanced/expert split available. Numbers conflict so trails_total left null."
+  }
+]

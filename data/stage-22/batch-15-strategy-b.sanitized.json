@@ -1,0 +1,392 @@
+[
+  {
+    "slug": "vail",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 24,
+      "intermediate": 36,
+      "advanced": 40,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/vail/",
+    "source_site": "skiresort.info",
+    "notes": "234 km of slopes; 24/36/40 easy/intermediate/difficult. 3-bucket source; advanced+expert combined as advanced. trails_total in km not trail count, left null."
+  },
+  {
+    "slug": "victor-constant-ski-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "source_site": null,
+    "notes": "Not found on skiresort.info, OnTheSnow, skicentral. Snowpak rate-limited (429). Small Army MWR slope at West Point; data not available in standard databases."
+  },
+  {
+    "slug": "villa-olivia",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 14,
+      "intermediate": 43,
+      "advanced": 43,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/villa-olivia/",
+    "source_site": "skiresort.info",
+    "notes": "1.4 km of slopes; 14/43/43 easy/intermediate/difficult. 3-bucket source. trails_total in km not count, left null."
+  },
+  {
+    "slug": "wachusett-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 40,
+      "advanced": 30,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/wachusett-mountain/",
+    "source_site": "skiresort.info",
+    "notes": "12 km of slopes; 30/40/30 easy/intermediate/difficult. 3-bucket source. Input has 27 trails and full 4-bucket pct already populated."
+  },
+  {
+    "slug": "warner-canyon",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "source_site": null,
+    "notes": "Not found on skiresort.info, OnTheSnow, skicentral. Snowpak rate-limited (429). Small Oregon community ski area; data not available in standard databases."
+  },
+  {
+    "slug": "waterville-valley",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 14,
+      "intermediate": 64,
+      "advanced": 22,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/waterville-valley/",
+    "source_site": "skiresort.info",
+    "notes": "25 km of slopes; 14/64/22 easy/intermediate/difficult. 3-bucket source."
+  },
+  {
+    "slug": "welch-village",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 34,
+      "intermediate": 33,
+      "advanced": 33,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/welch-village/",
+    "source_site": "skiresort.info",
+    "notes": "6 km of slopes; 34/33/33 easy/intermediate/difficult. 3-bucket source."
+  },
+  {
+    "slug": "west-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 60,
+      "intermediate": 21,
+      "advanced": 19,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/west-mountain/",
+    "source_site": "skiresort.info",
+    "notes": "9.7 km of slopes; 60/21/19 easy/intermediate/difficult. 3-bucket source."
+  },
+  {
+    "slug": "whaleback-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 46,
+      "intermediate": 24,
+      "advanced": 30,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/whaleback/",
+    "source_site": "skiresort.info",
+    "notes": "11.5 km of slopes; 46/24/30 easy/intermediate/difficult. 3-bucket source."
+  },
+  {
+    "slug": "white-grass-touring",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "source_site": null,
+    "notes": "Not found on skiresort.info, OnTheSnow, skicentral. Snowpak rate-limited (429). Cross-country/nordic touring center; data not available in standard databases."
+  },
+  {
+    "slug": "white-pass",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 40,
+      "advanced": 27,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/white-pass/",
+    "source_site": "skiresort.info",
+    "notes": "30 km of slopes; 33/40/27 easy/intermediate/difficult. 3-bucket source."
+  },
+  {
+    "slug": "white-pine",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "source_site": null,
+    "notes": "Not found on skiresort.info (multiple slug attempts), OnTheSnow (404), skicentral. Snowpak rate-limited (429). White Pine Ski Resort (Pinedale, WY); data not in standard databases."
+  },
+  {
+    "slug": "white-pine-touring-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "source_site": null,
+    "notes": "Not found on skiresort.info, OnTheSnow, skicentral. Snowpak rate-limited (429). Nordic center; data not available in standard databases."
+  },
+  {
+    "slug": "whitecap-mountains",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 35,
+      "advanced": 30,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/whitecap-mountains/",
+    "source_site": "skiresort.info",
+    "notes": "14 km of slopes; 35/35/30 easy/intermediate/difficult. 3-bucket source."
+  },
+  {
+    "slug": "whiteface-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "source_site": null,
+    "notes": "skiresort.info redirects to homepage at multiple slug attempts. Did not find on alternate sources within fetch budget. Input has 94 trails count."
+  },
+  {
+    "slug": "whitefish",
+    "trails_total": 111,
+    "difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 50,
+      "advanced": 29,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/whitefish-mountain-resort/",
+    "source_site": "skiresort.info",
+    "notes": "trails_total=111 runs cross-confirmed from OnTheSnow. skiresort.info has 91 km of slopes with 21/50/29 easy/intermediate/difficult 3-bucket."
+  },
+  {
+    "slug": "whitetail-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 15,
+      "intermediate": 55,
+      "advanced": 30,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/whitetail/",
+    "source_site": "skiresort.info",
+    "notes": "10.2 km of slopes; 15/55/30 easy/intermediate/difficult. 3-bucket source."
+  },
+  {
+    "slug": "wild-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 23,
+      "intermediate": 33,
+      "advanced": 44,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/wild-mountain/",
+    "source_site": "skiresort.info",
+    "notes": "4.8 km of slopes; 23/33/44 easy/intermediate/difficult. 3-bucket source."
+  },
+  {
+    "slug": "wildcat-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 48,
+      "advanced": 31,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/wildcat-mountain/",
+    "source_site": "skiresort.info",
+    "notes": "25 km of slopes; 21/48/31 easy/intermediate/difficult. 3-bucket source."
+  },
+  {
+    "slug": "willamette-pass",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 45,
+      "advanced": 34,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/willamette-pass/",
+    "source_site": "skiresort.info",
+    "notes": "29 km of slopes; 21/45/34 easy/intermediate/difficult. 3-bucket source."
+  },
+  {
+    "slug": "willard-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 50,
+      "advanced": 29,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/willard-mountain/",
+    "source_site": "skiresort.info",
+    "notes": "2.8 km of slopes; 21/50/29 easy/intermediate/difficult. 3-bucket source."
+  },
+  {
+    "slug": "wilmot-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 40,
+      "advanced": 25,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/wilmot-mountain/",
+    "source_site": "skiresort.info",
+    "notes": "4 km of slopes; 35/40/25 easy/intermediate/difficult. 3-bucket source."
+  },
+  {
+    "slug": "windham-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 43,
+      "intermediate": 35,
+      "advanced": 22,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/windham-mountain/",
+    "source_site": "skiresort.info",
+    "notes": "46 km of slopes; 43/35/22 easy/intermediate/difficult. 3-bucket source. Input already has 4-bucket pct populated."
+  },
+  {
+    "slug": "winter-park",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 8,
+      "intermediate": 37,
+      "advanced": 55,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/winter-park/",
+    "source_site": "skiresort.info",
+    "notes": "143 km of slopes; 8/37/55 easy/intermediate/difficult. 3-bucket source."
+  },
+  {
+    "slug": "wintergreen-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 40,
+      "advanced": 40,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/wintergreen/",
+    "source_site": "skiresort.info",
+    "notes": "10 km of slopes; 20/40/40 easy/intermediate/difficult. 3-bucket source."
+  },
+  {
+    "slug": "winterplace-ski-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 37,
+      "intermediate": 40,
+      "advanced": 23,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/winterplace/",
+    "source_site": "skiresort.info",
+    "notes": "10 km of slopes; 37/40/23 easy/intermediate/difficult. 3-bucket source. Input already has 4-bucket pct populated."
+  },
+  {
+    "slug": "wisp-resort",
+    "trails_total": 33,
+    "difficulty_pct": {
+      "beginner": 27,
+      "intermediate": 42,
+      "advanced": 30,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/maryland/wisp/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "33 runs / 172 acres per OnTheSnow; 27/42/30 beginner/intermediate/advanced; expert not listed."
+  },
+  {
+    "slug": "wolf-creek",
+    "trails_total": 144,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 35,
+      "advanced": 45,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/wolf-creek/",
+    "source_site": "skiresort.info",
+    "notes": "trails_total=144 runs cross-confirmed from OnTheSnow. skiresort.info has 100 km of slopes with 20/35/45 easy/intermediate/difficult 3-bucket."
+  },
+  {
+    "slug": "woods-valley",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 51,
+      "intermediate": 37,
+      "advanced": 12,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/woods-valley/",
+    "source_site": "skiresort.info",
+    "notes": "4.1 km of slopes; 51/37/12 easy/intermediate/difficult. 3-bucket source."
+  },
+  {
+    "slug": "woodstock-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "source_site": null,
+    "notes": "Not found on skiresort.info, OnTheSnow, skicentral. Snowpak rate-limited (429). Nordic center; data not available in standard databases."
+  }
+]

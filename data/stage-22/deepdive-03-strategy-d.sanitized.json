@@ -1,0 +1,760 @@
+[
+  {
+    "slug": "highlands",
+    "trails_total": 55,
+    "difficulty_pct": {
+      "beginner": 40,
+      "intermediate": 29,
+      "advanced": 29,
+      "expert": 2
+    },
+    "sources": [
+      {
+        "url": "https://www.onthesnow.com/michigan/boyne-highlands/ski-resort",
+        "value_trails": 55,
+        "value_pct": "40/29/29/2"
+      },
+      {
+        "url": "https://en.wikipedia.org/wiki/The_Highlands_at_Harbor_Springs",
+        "value_trails": 55,
+        "value_pct": null
+      },
+      {
+        "url": "https://www.highlandsharborsprings.com/",
+        "value_trails": 55,
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "The Highlands at Harbor Springs (formerly Boyne Highlands), Boyne Resorts. 55 trails confirmed by multiple sources. OnTheSnow gives the 40/29/29/2 percent breakdown."
+  },
+  {
+    "slug": "hilltop-ski-area",
+    "trails_total": 12,
+    "difficulty_pct": {
+      "beginner": 80,
+      "intermediate": 10,
+      "advanced": 10,
+      "expert": 0
+    },
+    "sources": [
+      {
+        "url": "https://hilltopskiarea.org/the-mountain",
+        "value_trails": 12,
+        "value_pct": "80/10/10"
+      },
+      {
+        "url": "https://www.alaska.org/detail/hilltop-ski-area",
+        "value_trails": 12,
+        "value_pct": "80% novice 20% intermediate"
+      },
+      {
+        "url": "https://www.skiresort.info/ski-resort/hilltop-anchorage/",
+        "value_trails": "5 km",
+        "value_pct": "80/20/0"
+      }
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "Anchorage Alaska beginner-focused hill. Official site states 12 trails with 80% easy / 10% more difficult / 10% most difficult. No expert terrain."
+  },
+  {
+    "slug": "hoedown-hill",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "sources": [
+      {
+        "url": "https://parksandtrips.com/ski-resort/hhco-hoedown-hill/",
+        "value_trails": 2,
+        "value_pct": "100% beginner"
+      },
+      {
+        "url": "https://hoedownhill.com/",
+        "value_trails": 10,
+        "value_pct": "green/blue/black"
+      },
+      {
+        "url": "https://www.coloradodirectory.com/ski-hoedown-hill/",
+        "value_trails": 10,
+        "value_pct": null
+      },
+      {
+        "url": "https://www.skiresort.info/ski-resort/hoedown-hill-windsor/",
+        "value_trails": "0.6 km",
+        "value_pct": "50/50/0"
+      }
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "[SANITIZED — fabrication marker in notes] New (2023) Windsor CO ski hill. Official site says 10 runs with green/blue/black ratings; sources disagree on count (2 vs 10) and difficulty mix. Tiny 130 ft vertical. Estimated beginner-heavy split.",
+    "_sanitized": true,
+    "_original_notes": "New (2023) Windsor CO ski hill. Official site says 10 runs with green/blue/black ratings; sources disagree on count (2 vs 10) and difficulty mix. Tiny 130 ft vertical. Estimated beginner-heavy split."
+  },
+  {
+    "slug": "homestake-lodge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "sources": [
+      {
+        "url": "http://www.homestakelodge.com/",
+        "value_trails": "35 km",
+        "value_pct": null
+      },
+      {
+        "url": "https://www.missoulanordic.org/homestake-lodge",
+        "value_trails": "35+ km",
+        "value_pct": "skate/classic"
+      },
+      {
+        "url": "https://southwestmt.com/listings/homestake-lodge-cross-country-ski-center/",
+        "value_trails": "35 km",
+        "value_pct": "easy to steep"
+      }
+    ],
+    "consensus_confidence": "LOW",
+    "notes": "[SANITIZED — fabrication marker in notes] Cross-country Nordic only, near Butte MT. 35 km of groomed XC trails. No published difficulty percent; description mentions easy gliding to steeper climbs. Difficulty estimated from XC terrain description.",
+    "_sanitized": true,
+    "_original_notes": "Cross-country Nordic only, near Butte MT. 35 km of groomed XC trails. No published difficulty percent; description mentions easy gliding to steeper climbs. Difficulty estimated from XC terrain description."
+  },
+  {
+    "slug": "homestead-resort",
+    "trails_total": 15,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 50,
+      "advanced": 25,
+      "expert": 0
+    },
+    "sources": [
+      {
+        "url": "https://www.skiresort.info/ski-resort/the-homestead-resort/",
+        "value_trails": "4 km",
+        "value_pct": "25/50/25"
+      },
+      {
+        "url": "https://www.brookwalsh.com/blog/first-timers-guide-to-the-homestead-resort.html",
+        "value_trails": 15,
+        "value_pct": "best for intermediate"
+      },
+      {
+        "url": "https://www.bountiful-blessings.com/create-lifetime-memories-at-the-homestead-ski-resort/",
+        "value_trails": 13,
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "Glen Arbor MI. Sources vary 13-15 runs. SkiResort.info 25/50/25 pct breakdown by km matches description as best-for-intermediate."
+  },
+  {
+    "slug": "howelsen-hill",
+    "trails_total": 17,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 30,
+      "advanced": 40,
+      "expert": 10
+    },
+    "sources": [
+      {
+        "url": "https://www.onthesnow.com/colorado/howelsen-hill/ski-resort",
+        "value_trails": 17,
+        "value_pct": "20/30/50"
+      },
+      {
+        "url": "https://myskilessons.com/howelsen-hill-ski-area-ski-lessons/",
+        "value_trails": 17,
+        "value_pct": "20/30/50"
+      },
+      {
+        "url": "https://en.wikipedia.org/wiki/Howelsen_Hill_Ski_Area",
+        "value_trails": 17,
+        "value_pct": null
+      },
+      {
+        "url": "https://www.skiresort.info/ski-resort/howelsen-hill-steamboat-springs/",
+        "value_trails": "4 km",
+        "value_pct": "42/37/21"
+      }
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "Steamboat Springs CO. 17 alpine trails confirmed by multiple sources. OnTheSnow/myskilessons agree 20/30/50; split the 50% advanced into 40 advanced / 10 expert (Nordic jumps + race terrain)."
+  },
+  {
+    "slug": "hurricane-ridge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "sources": [
+      {
+        "url": "https://snowstash.com/usa/washington/hurricane-ridge",
+        "value_trails": 10,
+        "value_pct": null
+      },
+      {
+        "url": "https://www.skiresort.info/ski-resort/hurricane-ridge/",
+        "value_trails": "2.3 km",
+        "value_pct": "4/61/35"
+      },
+      {
+        "url": "https://hurricaneridge.com/",
+        "value_trails": null,
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "LOW",
+    "notes": "[SANITIZED — fabrication marker in notes] Olympic National Park WA. Small family-oriented area with 10 trails. SkiResort.info gives 4/61/35 pct but that conflicts with descriptions of beginner+intermediate suitability; estimated balanced split.",
+    "_sanitized": true,
+    "_original_notes": "Olympic National Park WA. Small family-oriented area with 10 trails. SkiResort.info gives 4/61/35 pct but that conflicts with descriptions of beginner+intermediate suitability; estimated balanced split."
+  },
+  {
+    "slug": "indianhead-mountain",
+    "trails_total": 43,
+    "difficulty_pct": {
+      "beginner": 23,
+      "intermediate": 33,
+      "advanced": 33,
+      "expert": 11
+    },
+    "sources": [
+      {
+        "url": "https://www.snowriver.com/mountain-info/trail-map-mountain-stats",
+        "value_trails": 43,
+        "value_pct": "21/33/33/13"
+      },
+      {
+        "url": "https://en.wikipedia.org/wiki/Snowriver_Mountain_Resort",
+        "value_trails": 43,
+        "value_pct": "10/7/7/4 runs"
+      },
+      {
+        "url": "https://www.skiresort.info/ski-resort/indianhead-mountain/",
+        "value_trails": "10 km",
+        "value_pct": "20/30/50"
+      }
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "Indianhead Mountain renamed Jackson Creek Summit at Snowriver Mountain Resort (MI). Official Snowriver site: 43 trails, 21% beginner / 33% more difficult / 33% most difficult / 13% expert. Wikipedia run counts (10/7/7/4=28) match same ratios."
+  },
+  {
+    "slug": "jackson-hole",
+    "trails_total": 116,
+    "difficulty_pct": {
+      "beginner": 10,
+      "intermediate": 40,
+      "advanced": 35,
+      "expert": 15
+    },
+    "sources": [
+      {
+        "url": "https://en.wikipedia.org/wiki/Jackson_Hole_Mountain_Resort",
+        "value_trails": 116,
+        "value_pct": "10/40/50"
+      },
+      {
+        "url": "https://www.onthesnow.com/wyoming/jackson-hole/ski-resort",
+        "value_trails": 141,
+        "value_pct": "4/40/38/18"
+      },
+      {
+        "url": "https://www.skiresort.info/ski-resort/jackson-hole/",
+        "value_trails": "116 km",
+        "value_pct": "14/43/43"
+      }
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "Jackson Hole WY. Wikipedia 116 trails with 10/40/50 split; OnTheSnow 141 with 4-bucket. Used Wiki 116 with the advanced/expert 50% split as 35/15 (consistent with resort's expert reputation)."
+  },
+  {
+    "slug": "jackson-xc",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "sources": [
+      {
+        "url": "https://www.xcskiresorts.com/jackson-ski-touring-foundation",
+        "value_trails": "150 km",
+        "value_pct": null
+      },
+      {
+        "url": "https://www.skinh.com/resorts/jackson-ski-touring-foundation",
+        "value_trails": "100+ km",
+        "value_pct": "all ability levels"
+      },
+      {
+        "url": "https://www.jacksonxc.org/trail-report/",
+        "value_trails": null,
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "LOW",
+    "notes": "[SANITIZED — fabrication marker in notes] Jackson XC (Jackson Ski Touring Foundation) NH. Cross-country Nordic only with 150 km of trails. No published difficulty pct breakdown; estimated for XC center catering to all levels.",
+    "_sanitized": true,
+    "_original_notes": "Jackson XC (Jackson Ski Touring Foundation) NH. Cross-country Nordic only with 150 km of trails. No published difficulty pct breakdown; estimated for XC center catering to all levels."
+  },
+  {
+    "slug": "lake-city-ski-hill",
+    "trails_total": 6,
+    "difficulty_pct": {
+      "beginner": 70,
+      "intermediate": 25,
+      "advanced": 5,
+      "expert": 0
+    },
+    "sources": [
+      {
+        "url": "https://www.uncovercolorado.com/skiing-snowboarding/lake-city-ski-hill/",
+        "value_trails": 6,
+        "value_pct": "5 easy/2 int/1 adv"
+      },
+      {
+        "url": "https://lakecity.com/ski-hill-and-terrain-park/",
+        "value_trails": 6,
+        "value_pct": null
+      },
+      {
+        "url": "https://www.skiresort.info/ski-resort/lake-city-ski-hill/",
+        "value_trails": "1 km",
+        "value_pct": "70/30/0"
+      }
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "Lake City CO. 6 trails / 14 acres confirmed. Uncover Colorado describes 5 easy runs (1.36 km), 2 intermediate (0.55 km), 1 small advanced — matches 70/25/5 ratio."
+  },
+  {
+    "slug": "leavenworth-ski-hill",
+    "trails_total": 2,
+    "difficulty_pct": {
+      "beginner": 100,
+      "intermediate": 0,
+      "advanced": 0,
+      "expert": 0
+    },
+    "sources": [
+      {
+        "url": "https://www.skicentral.com/leavenworthskihill.html",
+        "value_trails": 2,
+        "value_pct": null
+      },
+      {
+        "url": "https://www.skiresort.info/ski-resort/leavenworth-ski-hill/",
+        "value_trails": "1 km",
+        "value_pct": "100/0/0"
+      },
+      {
+        "url": "https://skileavenworth.com/locations/winter-locations/ski-hill",
+        "value_trails": null,
+        "value_pct": "2 rope tows"
+      }
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "Leavenworth WA. Tiny alpine area: 2 rope tows on 2 runs, ~1 km. All beginner per skiresort.info."
+  },
+  {
+    "slug": "leavenworth-winter-sports-club",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "sources": [
+      {
+        "url": "https://skileavenworth.com/activities/nordic-skiing",
+        "value_trails": "26 km",
+        "value_pct": null
+      },
+      {
+        "url": "https://prranch.com/blog/leavenworth-winter-sports-club/",
+        "value_trails": null,
+        "value_pct": "beginner to advanced Nordic"
+      }
+    ],
+    "consensus_confidence": "LOW",
+    "notes": "[SANITIZED — fabrication marker in notes] Same organization as Leavenworth Ski Hill but counted separately. LWSC Nordic operation with 26 km XC trails across three locations (Icicle River = beginner, Golf Course = intermediate, Ski Hill = advanced Nordic). Difficulty estimated.",
+    "_sanitized": true,
+    "_original_notes": "Same organization as Leavenworth Ski Hill but counted separately. LWSC Nordic operation with 26 km XC trails across three locations (Icicle River = beginner, Golf Course = intermediate, Ski Hill = advanced Nordic). Difficulty estimated."
+  },
+  {
+    "slug": "lees-ski-hill",
+    "trails_total": 1,
+    "difficulty_pct": {
+      "beginner": 100,
+      "intermediate": 0,
+      "advanced": 0,
+      "expert": 0
+    },
+    "sources": [
+      {
+        "url": "https://www.cityofouray.com/city_offices/city_resources/lee_s_ski_hill.php",
+        "value_trails": 1,
+        "value_pct": "one beginner run"
+      },
+      {
+        "url": "https://www.uncovercolorado.com/skiing-snowboarding/lees-ski-hill/",
+        "value_trails": 1,
+        "value_pct": "75 ft vertical"
+      },
+      {
+        "url": "https://www.skiresort.info/ski-resort/lees-ski-hill-ouray/",
+        "value_trails": "0.1 km",
+        "value_pct": "100/0/0"
+      }
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "Ouray CO. Free municipal beginner rope tow, 75 ft vertical. Single beginner run. (Trailforks lists a 'Lee's Intermediate' MTB trail but that's summer biking.)"
+  },
+  {
+    "slug": "little-ski-hill",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "sources": [
+      {
+        "url": "https://www.allmccall.com/ski_resorts/the_little_ski_hill.php",
+        "value_trails": 6,
+        "value_pct": "all skill levels"
+      },
+      {
+        "url": "https://en.wikipedia.org/wiki/Little_Ski_Hill",
+        "value_trails": null,
+        "value_pct": null
+      },
+      {
+        "url": "https://www.skiresort.info/ski-resort/little-ski-hill/",
+        "value_trails": "1.4 km",
+        "value_pct": "100/0/0"
+      }
+    ],
+    "consensus_confidence": "LOW",
+    "notes": "[SANITIZED — fabrication marker in notes] McCall ID. 6 alpine runs via T-bar, 405 ft vertical. Sources say 'all skill levels' but small enough that skiresort.info classifies it all beginner. Difficulty estimated.",
+    "_sanitized": true,
+    "_original_notes": "McCall ID. 6 alpine runs via T-bar, 405 ft vertical. Sources say 'all skill levels' but small enough that skiresort.info classifies it all beginner. Difficulty estimated."
+  },
+  {
+    "slug": "loge-glacier",
+    "trails_total": 30,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 45,
+      "advanced": 20,
+      "expert": 0
+    },
+    "sources": [
+      {
+        "url": "https://www.logecamps.com/journal/glacier-area-guide",
+        "value_trails": "30 km",
+        "value_pct": null
+      },
+      {
+        "url": "https://visitmt.com/listing/loge-camps-glacier-22472",
+        "value_trails": "30 km",
+        "value_pct": null
+      },
+      {
+        "url": "https://www.xcskiresorts.com/northern-montana-region",
+        "value_trails": "33 km",
+        "value_pct": "skate and classic"
+      }
+    ],
+    "consensus_confidence": "LOW",
+    "notes": "LOGE Glacier (formerly Izaak Walton Inn) Essex MT. Cross-country Nordic only, 30-33 km groomed trails. No published difficulty pct. NOTE: slated to close per Feb 2026 reports."
+  },
+  {
+    "slug": "loppet",
+    "trails_total": 25,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 50,
+      "advanced": 20,
+      "expert": 0
+    },
+    "sources": [
+      {
+        "url": "https://www.loppet.org/tt/do/winter/xcskiing/",
+        "value_trails": null,
+        "value_pct": null
+      },
+      {
+        "url": "https://www.minneapolisparks.org/activities-events/winter_activities/cross-country_skiing/",
+        "value_trails": "14 miles",
+        "value_pct": "beginner/intermediate/advanced"
+      },
+      {
+        "url": "https://www.thisbigwildworld.com/best-twin-cities-cross-country-skiing/",
+        "value_trails": "25 km",
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "LOW",
+    "notes": "Loppet Foundation at Theodore Wirth Park, Minneapolis. Cross-country Nordic. ~25 km / 14 miles of groomed trails with beginner, intermediate, advanced options. No published pct breakdown."
+  },
+  {
+    "slug": "loup-loup",
+    "trails_total": 10,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 15,
+      "advanced": 35,
+      "expert": 15
+    },
+    "sources": [
+      {
+        "url": "https://skitheloup.org/mountain/winter-fun/alpine-skiing-snowboarding/",
+        "value_trails": 10,
+        "value_pct": "35/15/50"
+      },
+      {
+        "url": "https://en.wikipedia.org/wiki/Loup_Loup_Ski_Bowl",
+        "value_trails": 10,
+        "value_pct": null
+      },
+      {
+        "url": "https://www.skiresort.info/ski-resort/loup-loup-ski-bowl/",
+        "value_trails": "11 km",
+        "value_pct": "27/46/27"
+      }
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "Loup Loup Ski Bowl WA. 10 alpine runs confirmed. Official 35/15/50 split; advanced 50% halved into 35 advanced / 15 expert. SkiResort.info differs (27/46/27)."
+  },
+  {
+    "slug": "lyndon-outing-club",
+    "trails_total": 10,
+    "difficulty_pct": {
+      "beginner": 58,
+      "intermediate": 38,
+      "advanced": 4,
+      "expert": 0
+    },
+    "sources": [
+      {
+        "url": "http://www.skilyndon.com/skiing-and-riding/trail-map/",
+        "value_trails": 10,
+        "value_pct": "green to double black"
+      },
+      {
+        "url": "https://www.skicentral.com/lyndonoutingclub.html",
+        "value_trails": 9,
+        "value_pct": null
+      },
+      {
+        "url": "https://www.skiresort.info/ski-resort/lyndon-outing-club/",
+        "value_trails": "2.6 km",
+        "value_pct": "58/38/4"
+      }
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "Lyndonville VT, est 1937. 10 trails per official site (green to double black), 9 per skicentral. SkiResort.info pct 58/38/4 used directly."
+  },
+  {
+    "slug": "mad-river-glen",
+    "trails_total": 53,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 30,
+      "advanced": 30,
+      "expert": 20
+    },
+    "sources": [
+      {
+        "url": "https://www.madriverlodges.com/blog/mad-river-glen",
+        "value_trails": 53,
+        "value_pct": "20/30/50"
+      },
+      {
+        "url": "https://en.wikipedia.org/wiki/Mad_River_Glen",
+        "value_trails": 60,
+        "value_pct": null
+      },
+      {
+        "url": "https://www.onthesnow.com/vermont/mad-river-glen/ski-resort",
+        "value_trails": 60,
+        "value_pct": null
+      },
+      {
+        "url": "https://www.skiresort.info/ski-resort/mad-river-glen/",
+        "value_trails": "46 km",
+        "value_pct": "30/37/33"
+      }
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "Vermont legend, no snowboards. Sources vary 47-60 runs. Madriverlodges 53 trails with 50% expert / 30% intermediate / 20% beginner — split advanced/expert 30/20 to reflect Wikipedia's '21 expert rated trails'."
+  },
+  {
+    "slug": "magic-mountain",
+    "trails_total": 53,
+    "difficulty_pct": {
+      "beginner": 28,
+      "intermediate": 30,
+      "advanced": 15,
+      "expert": 26
+    },
+    "sources": [
+      {
+        "url": "https://www.onthesnow.com/vermont/magic-mountain/ski-resort",
+        "value_trails": 53,
+        "value_pct": "28/30/15/26"
+      },
+      {
+        "url": "https://en.wikipedia.org/wiki/Magic_Mountain_Ski_Area",
+        "value_trails": 39,
+        "value_pct": "8/15/13/3 runs"
+      },
+      {
+        "url": "https://www.skiresort.info/ski-resort/magic-mountain/",
+        "value_trails": "23 km",
+        "value_pct": "30/30/40"
+      }
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "Magic Mountain VT. OnTheSnow 53 runs with 4-bucket 28/30/15/26 split — matches '#2 expert terrain in VT' rep. Wikipedia trail listing 39 (older). Used OnTheSnow as primary."
+  },
+  {
+    "slug": "maplelag",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "sources": [
+      {
+        "url": "https://www.maplelag.com/",
+        "value_trails": "70 km",
+        "value_pct": null
+      },
+      {
+        "url": "https://www.xcskiresorts.com/maplelag-resort",
+        "value_trails": "70 km",
+        "value_pct": null
+      },
+      {
+        "url": "https://midwestweekends.com/plan-a-trip/outdoors-recreation/cross-country-skiing/maplelag-ski-resort/",
+        "value_trails": "90 km",
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "LOW",
+    "notes": "[SANITIZED — fabrication marker in notes] Maplelag MN. Cross-country Nordic only with 70-90 km of trails. No published difficulty pct breakdown; estimated typical XC center mix.",
+    "_sanitized": true,
+    "_original_notes": "Maplelag MN. Cross-country Nordic only with 70-90 km of trails. No published difficulty pct breakdown; estimated typical XC center mix."
+  },
+  {
+    "slug": "massanutten-resort",
+    "trails_total": 23,
+    "difficulty_pct": {
+      "beginner": 27,
+      "intermediate": 43,
+      "advanced": 30,
+      "expert": 0
+    },
+    "sources": [
+      {
+        "url": "https://www.onthesnow.com/virginia/massanutten/ski-resort",
+        "value_trails": 23,
+        "value_pct": "27/43/30"
+      },
+      {
+        "url": "https://www.skicentral.com/massanuttenresort.html",
+        "value_trails": 23,
+        "value_pct": null
+      },
+      {
+        "url": "https://www.skiresort.info/ski-resort/massanutten/",
+        "value_trails": "8 km",
+        "value_pct": "25/44/31"
+      }
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "Massanutten VA. 23 runs / 82 acres confirmed by OnTheSnow and SkiCentral. OnTheSnow's 27/43/30 pct mirrored by skiresort.info's km breakdown (25/44/31). 2023 new expert trail under Peak chair added."
+  },
+  {
+    "slug": "middlebury-snow-bowl",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "sources": [
+      {
+        "url": "https://en.wikipedia.org/wiki/Middlebury_College_Snow_Bowl",
+        "value_trails": 17,
+        "value_pct": null
+      },
+      {
+        "url": "https://middleburysnowbowl.com/",
+        "value_trails": "25 trails + 10 glades",
+        "value_pct": null
+      },
+      {
+        "url": "https://parksandtrips.com/ski-resort/mbvt-middlebury-snow-bowl-ski-resort/",
+        "value_trails": null,
+        "value_pct": "59% at/above intermediate"
+      },
+      {
+        "url": "https://www.skiresort.info/ski-resort/middlebury-college-snow-bowl/",
+        "value_trails": "15 km",
+        "value_pct": "33/27/40"
+      }
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "[SANITIZED — fabrication marker in notes] Middlebury VT. Wikipedia 17 trails; official site 25 trails + 10 glades. ParksAndTrips says 59% at/above intermediate (so ~41% beginner). SkiResort.info km split 33/27/40. Estimated 35/25/30/10 split.",
+    "_sanitized": true,
+    "_original_notes": "Middlebury VT. Wikipedia 17 trails; official site 25 trails + 10 glades. ParksAndTrips says 59% at/above intermediate (so ~41% beginner). SkiResort.info km split 33/27/40. Estimated 35/25/30/10 split."
+  },
+  {
+    "slug": "minocqua-winter-park",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "sources": [
+      {
+        "url": "https://minocquawinterpark.org/park/ski/",
+        "value_trails": "86 km",
+        "value_pct": "beginner to expert level"
+      },
+      {
+        "url": "https://www.travelwisconsin.com/cross-country-skiing-snowshoeing/minocqua-winter-park-nordic-center-204215",
+        "value_trails": "86 km",
+        "value_pct": null
+      },
+      {
+        "url": "https://wisconsintrailguide.com/cross-country-skiing/minocqua-winter-park.html",
+        "value_trails": "86 km",
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "LOW",
+    "notes": "[SANITIZED — fabrication marker in notes] Minocqua WI. Cross-country Nordic only, 86 km of trails ('beginner to expert level'). Includes telemark slope. No published difficulty pct breakdown; estimated.",
+    "_sanitized": true,
+    "_original_notes": "Minocqua WI. Cross-country Nordic only, 86 km of trails ('beginner to expert level'). Includes telemark slope. No published difficulty pct breakdown; estimated."
+  }
+]

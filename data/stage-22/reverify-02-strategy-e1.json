@@ -1,0 +1,288 @@
+[
+  {
+    "slug": "loup-loup",
+    "trails_total": 14,
+    "difficulty_pct": {
+      "beginner": 43,
+      "intermediate": 7,
+      "advanced": 50,
+      "expert": 0
+    },
+    "source_url": "https://skitheloup.org/conditions/",
+    "exact_quote": "Least Difficult: Peanut Rope Tow, Bunny Hill, Double Z, Loup, Jr. Poma, Ridge | Intermediate: Stairway | Difficult: Terminator, Raceface, Exterminator, Park, Volunteer, Bulldog, Hugh's",
+    "notes": "Official site lists trails grouped by difficulty (Least Difficult / Intermediate / Difficult). Counts: 6 easy + 1 intermediate + 7 difficult = 14 total. Percentages computed from explicit counts (6/14=43%, 1/14=7%, 7/14=50%). No expert/double-black tier published."
+  },
+  {
+    "slug": "maplelag",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic/XC resort — alpine trail difficulty schema not applicable."
+  },
+  {
+    "slug": "middlebury-snow-bowl",
+    "trails_total": 28,
+    "difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 29,
+      "advanced": 50,
+      "expert": 0
+    },
+    "source_url": "https://middleburysnowbowl.com/mountain-info/",
+    "exact_quote": "Easiest: 6 | More Difficult: 8 | Most Difficult: 14",
+    "notes": "Official mountain-info page publishes explicit counts: Easiest 6, More Difficult 8, Most Difficult 14 = 28 trails. Plus 11 separate gladed areas (not included in base trail count). Percentages computed from published counts. No double-black/expert tier explicitly published."
+  },
+  {
+    "slug": "minocqua-winter-park",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic/XC ski area — alpine trail difficulty schema not applicable. No website_url provided in input."
+  },
+  {
+    "slug": "mount-itasca",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Official site (mtitasca.com) returned no extractable trail-count or difficulty data via homepage; sub-pages /winter, /skiing, /skiing-snowboarding, /about, /winter-recreation all returned 404. No explicit published count located within ≤5 fetches."
+  },
+  {
+    "slug": "mt-holiday",
+    "trails_total": 14,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://mt-holiday.com/wp-content/uploads/2024/10/24-25-Mt-Holiday-Trail-Map.pdf",
+    "exact_quote": "Mountain Statistics: Number of Trails 14",
+    "notes": "Official 24-25 trail map PDF explicitly states 'Number of Trails: 14'. PDF uses 3 difficulty symbols (Black Diamond, Blue Square, Green Circle) plus separate Tube Run, but no explicit count-per-difficulty or percentage published in the Mountain Statistics box — only the total."
+  },
+  {
+    "slug": "mt-shasta-ski-park",
+    "trails_total": 38,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 45,
+      "advanced": 35,
+      "expert": 0
+    },
+    "source_url": "https://www.skipark.com/winter/trail-map-stats",
+    "exact_quote": "38 runs ... 20% beginner, 45% intermediate, 35% advanced",
+    "notes": "Official trail-map-stats page publishes total of 38 runs and explicit difficulty percentages 20/45/35. No expert tier published; expert set to 0 per published breakdown."
+  },
+  {
+    "slug": "north-cascade-heli",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Heli-ski operator — no fixed trail network; trail-count schema not applicable."
+  },
+  {
+    "slug": "oglebay-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Multiple candidate sub-pages on oglebay.com (winter-sports, recreation/winter-sports, things-to-do/winter-sports, things-to-do/skiing-snowboarding) returned 404 or contained no trail-count data within ≤5 fetches. No explicit published count located."
+  },
+  {
+    "slug": "plain-valley-trails",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic/XC ski trails facility — alpine trail difficulty schema not applicable."
+  },
+  {
+    "slug": "quarry-road-trails",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic/XC trail center — alpine trail difficulty schema not applicable."
+  },
+  {
+    "slug": "rangeley-lakes-trail-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic/XC trail center — alpine trail difficulty schema not applicable. No website_url provided in input."
+  },
+  {
+    "slug": "rikert-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic ski center — alpine trail difficulty schema not applicable."
+  },
+  {
+    "slug": "rikert-outdoor-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic/XC outdoor center (same facility as rikert-nordic-center) — alpine trail difficulty schema not applicable."
+  },
+  {
+    "slug": "sleepy-hollow",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Single SnowFlex all-weather slope (600 ft) — not a traditional trail network. Official site states 'The unique SnowFlex hill is designed for every skill level' but provides no enumerated trail count or difficulty breakdown."
+  },
+  {
+    "slug": "song-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Official site redirects to skicny.com; homepage and /song/ landing page reference 'So many trails' and link to a trail-map image, but no explicit textual trail count or difficulty percentages are published within ≤5 fetches. Ski-report page showed '14 trails open' as a daily operational figure, not a master total."
+  },
+  {
+    "slug": "spring-mountain",
+    "trails_total": 7,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.springmountainadventures.com/winter/conditions/trail-map",
+    "exact_quote": "Spring Mountain features: 7 Main Trails, Our Beginner Magic Carpet lift, 4 chair Lifts, a Terrain Park, and a Vertical Drop of 428 Feet.",
+    "notes": "Official trail-map page explicitly states 7 Main Trails. Individual trails listed by name (Alpine, Fawn, Buck, Hawk, Drifter, Glacier, Plummet) but no per-trail difficulty classification or percentage breakdown published."
+  },
+  {
+    "slug": "steamboat-touring-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic/XC ski touring center — alpine trail difficulty schema not applicable."
+  },
+  {
+    "slug": "sunburst-area",
+    "trails_total": 9,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 33,
+      "advanced": 0,
+      "expert": 33
+    },
+    "source_url": "https://skisunburst.com/our-hills/",
+    "exact_quote": "Beginner (3 runs): Wunderberg, Zig Zag, Frieda's Run | Intermediate (3 runs): Second Chance, Edelweiss, Ridge Runner | Expert (3 runs): Eco Alley, Werner's Way, The Other Way",
+    "notes": "Official Our Hills page lists a complete trail roster grouped by difficulty: 3 beginner + 3 intermediate + 3 expert = 9 runs. Percentages computed from explicit counts (3/9 each = 33%). No 'advanced' tier published between intermediate and expert."
+  },
+  {
+    "slug": "trapp-family-lodge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic/XC ski center — alpine trail difficulty schema not applicable."
+  },
+  {
+    "slug": "white-pine-touring-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic/XC touring center — alpine trail difficulty schema not applicable. No website_url provided in input."
+  },
+  {
+    "slug": "woodstock-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic ski center — alpine trail difficulty schema not applicable. No website_url provided in input."
+  }
+]

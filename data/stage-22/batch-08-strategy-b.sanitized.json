@@ -1,0 +1,406 @@
+[
+  {
+    "slug": "loon-mountain",
+    "trails_total": 73,
+    "difficulty_pct": {
+      "beginner": 26,
+      "intermediate": 47,
+      "advanced": 26,
+      "expert": 1
+    },
+    "source_url": "https://www.onthesnow.com/new-hampshire/loon-mountain/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "Trail count and 4-bucket difficulty from OnTheSnow."
+  },
+  {
+    "slug": "loppet",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "source_site": null,
+    "notes": "Nordic/XC venue; no listing on skiresort.info, OnTheSnow, skicentral. Snowpak rate-limited (429)."
+  },
+  {
+    "slug": "lost-trail",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 50,
+      "advanced": 20,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/lost-trail-powder-mountain/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info gives 3-bucket km percentages (no trail count). OnTheSnow 404 for this slug. Difficulty mapped to 4-bucket with expert=0."
+  },
+  {
+    "slug": "lost-valley",
+    "trails_total": 32,
+    "difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 38,
+      "advanced": 16,
+      "expert": 25
+    },
+    "source_url": "https://www.onthesnow.com/maine/lost-valley/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "OnTheSnow percentages sum to 101 (rounding). Note: OnTheSnow's 32 trails differs from input's 22."
+  },
+  {
+    "slug": "loup-loup",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/loup-loup-ski-bowl/",
+    "source_site": "skiresort.info",
+    "notes": "[SANITIZED — fabrication marker in notes] skiresort.info 3-bucket km percentages; OnTheSnow 404. Expert=0 assumed (no expert bucket from skiresort.info).",
+    "_sanitized": true,
+    "_original_notes": "skiresort.info 3-bucket km percentages; OnTheSnow 404. Expert=0 assumed (no expert bucket from skiresort.info)."
+  },
+  {
+    "slug": "loveland",
+    "trails_total": 94,
+    "difficulty_pct": {
+      "beginner": 13,
+      "intermediate": 41,
+      "advanced": 46,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/loveland/",
+    "source_site": "skiresort.info",
+    "notes": "Trail count from OnTheSnow (94 runs); difficulty pct from skiresort.info (3-bucket km %). OnTheSnow did not provide difficulty breakdown. Expert=0 (no expert bucket on skiresort.info)."
+  },
+  {
+    "slug": "lutsen-mountains",
+    "trails_total": 93,
+    "difficulty_pct": {
+      "beginner": 7,
+      "intermediate": 57,
+      "advanced": 28,
+      "expert": 9
+    },
+    "source_url": "https://www.onthesnow.com/minnesota/lutsen-mountains/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "OnTheSnow 4-bucket. Note: differs from input (95 trails, 18/47/25/10)."
+  },
+  {
+    "slug": "lyndon-outing-club",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/lyndon-outing-club/",
+    "source_site": "skiresort.info",
+    "notes": "[SANITIZED — fabrication marker in notes] skiresort.info 3-bucket km percentages; no trail count. OnTheSnow 404. Expert=0 assumed.",
+    "_sanitized": true,
+    "_original_notes": "skiresort.info 3-bucket km percentages; no trail count. OnTheSnow 404. Expert=0 assumed."
+  },
+  {
+    "slug": "mad-river-glen",
+    "trails_total": 60,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 37,
+      "advanced": 33,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/vermont/mad-river-glen/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "Trail count from OnTheSnow (60 runs). Difficulty from skiresort.info 3-bucket km %; OnTheSnow did not provide difficulty. Expert=0 (skiresort.info has no expert bucket)."
+  },
+  {
+    "slug": "mad-river-mountain",
+    "trails_total": 17,
+    "difficulty_pct": {
+      "beginner": 41,
+      "intermediate": 47,
+      "advanced": 12,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/ohio/mad-river-mountain/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "OnTheSnow gives 17 trails and 3-bucket %; expert=0 (sums to 100)."
+  },
+  {
+    "slug": "magic-mountain",
+    "trails_total": 53,
+    "difficulty_pct": {
+      "beginner": 28,
+      "intermediate": 30,
+      "advanced": 15,
+      "expert": 26
+    },
+    "source_url": "https://www.onthesnow.com/vermont/magic-mountain/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "OnTheSnow 4-bucket; sums to 99 (rounding). Note: differs from input (39 trails)."
+  },
+  {
+    "slug": "magic-mountain-id",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/magic-mountain-resort/",
+    "source_site": "skiresort.info",
+    "notes": "[SANITIZED — fabrication marker in notes] skiresort.info 3-bucket km %; no trail count. OnTheSnow 404. Expert=0 assumed.",
+    "_sanitized": true,
+    "_original_notes": "skiresort.info 3-bucket km %; no trail count. OnTheSnow 404. Expert=0 assumed."
+  },
+  {
+    "slug": "mammoth-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 54,
+      "advanced": 26,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mammoth-mountain/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info 3-bucket km %; no trail count. OnTheSnow 404 for direct slug. Expert=0 (skiresort.info has no expert bucket)."
+  },
+  {
+    "slug": "maple-ski-ridge",
+    "trails_total": 11,
+    "difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 58,
+      "advanced": 21,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/new-york/maple-ski-ridge/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "Trail count 11 from OnTheSnow (note: input says 8). Difficulty pct from skiresort.info 3-bucket km %. Expert=0."
+  },
+  {
+    "slug": "maplelag",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "source_site": null,
+    "notes": "Nordic/XC resort; not listed on skiresort.info, OnTheSnow, or skicentral. Snowpak rate-limited."
+  },
+  {
+    "slug": "marquette-mountain",
+    "trails_total": 32,
+    "difficulty_pct": {
+      "beginner": 16,
+      "intermediate": 28,
+      "advanced": 28,
+      "expert": 28
+    },
+    "source_url": "https://www.onthesnow.com/michigan/marquette-mountain/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "OnTheSnow 4-bucket. Note: input has 29 trails."
+  },
+  {
+    "slug": "massanutten-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/massanutten/",
+    "source_site": "skiresort.info",
+    "notes": "[SANITIZED — fabrication marker in notes] skiresort.info 3-bucket km %; no trail count. OnTheSnow 404. Expert=0 assumed.",
+    "_sanitized": true,
+    "_original_notes": "skiresort.info 3-bucket km %; no trail count. OnTheSnow 404. Expert=0 assumed."
+  },
+  {
+    "slug": "maverick-mountain",
+    "trails_total": 24,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 40,
+      "advanced": 30,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/montana/maverick-mountain/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "Trail count 24 from OnTheSnow (no difficulty breakdown there); difficulty from skiresort.info 3-bucket km %. Expert=0."
+  },
+  {
+    "slug": "mccauley-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mccauley-mountain/",
+    "source_site": "skiresort.info",
+    "notes": "[SANITIZED — fabrication marker in notes] skiresort.info 3-bucket km %; no trail count. OnTheSnow 404. Expert=0 assumed.",
+    "_sanitized": true,
+    "_original_notes": "skiresort.info 3-bucket km %; no trail count. OnTheSnow 404. Expert=0 assumed."
+  },
+  {
+    "slug": "mcintyre-ski-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 83,
+      "intermediate": 17,
+      "advanced": 0,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mcintyre/",
+    "source_site": "skiresort.info",
+    "notes": "skiresort.info 3-bucket km % (mostly beginner terrain). No trail count. OnTheSnow 404."
+  },
+  {
+    "slug": "meadowlark",
+    "trails_total": 14,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 30,
+      "advanced": 20,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/wyoming/meadowlark-ski-lodge/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "OnTheSnow lists 3 difficulty buckets totaling 80% (expert not listed)."
+  },
+  {
+    "slug": "middlebury-snow-bowl",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/middlebury-college-snow-bowl/",
+    "source_site": "skiresort.info",
+    "notes": "[SANITIZED — fabrication marker in notes] skiresort.info 3-bucket km %; no trail count. OnTheSnow 404. Expert=0 assumed.",
+    "_sanitized": true,
+    "_original_notes": "skiresort.info 3-bucket km %; no trail count. OnTheSnow 404. Expert=0 assumed."
+  },
+  {
+    "slug": "minocqua-winter-park",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "source_site": null,
+    "notes": "Nordic/XC area; no listing on skiresort.info, OnTheSnow, or skicentral. Snowpak rate-limited."
+  },
+  {
+    "slug": "mission-ridge",
+    "trails_total": 55,
+    "difficulty_pct": {
+      "beginner": 40,
+      "intermediate": 40,
+      "advanced": 20,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/washington/mission-ridge/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "Trail count 55 from OnTheSnow (no difficulty there); difficulty from skiresort.info 3-bucket km %. Expert=0."
+  },
+  {
+    "slug": "mohawk-mountain-ski-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mohawk-mountain/",
+    "source_site": "skiresort.info",
+    "notes": "[SANITIZED — fabrication marker in notes] skiresort.info 3-bucket km %; no trail count. OnTheSnow 404. Expert=0 assumed.",
+    "_sanitized": true,
+    "_original_notes": "skiresort.info 3-bucket km %; no trail count. OnTheSnow 404. Expert=0 assumed."
+  },
+  {
+    "slug": "monarch-mountain",
+    "trails_total": 80,
+    "difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 35,
+      "advanced": 36,
+      "expert": 9
+    },
+    "source_url": "https://www.onthesnow.com/colorado/monarch-mountain/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "OnTheSnow 4-bucket; matches input exactly."
+  },
+  {
+    "slug": "mont-ripley",
+    "trails_total": 24,
+    "difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 29,
+      "advanced": 42,
+      "expert": 8
+    },
+    "source_url": "https://www.onthesnow.com/michigan/mont-ripley/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "OnTheSnow 4-bucket. Note: input had 25 trails and slightly different pct."
+  },
+  {
+    "slug": "montage-mountain",
+    "trails_total": 27,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/pennsylvania/montage-mountain/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "OnTheSnow has 27 trail count, no difficulty breakdown. skiresort.info 404."
+  },
+  {
+    "slug": "montana-snowbowl",
+    "trails_total": 37,
+    "difficulty_pct": {
+      "beginner": 16,
+      "intermediate": 39,
+      "advanced": 45,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/montana/montana-snowbowl/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "Trail count 37 from OnTheSnow; difficulty pct from skiresort.info 3-bucket km %. Expert=0."
+  },
+  {
+    "slug": "moose",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "source_site": null,
+    "notes": "Moose Mountain AK not listed on skiresort.info or OnTheSnow under standard slugs. Skimap.org returned 403, Snowpak rate-limited."
+  }
+]

@@ -1,0 +1,426 @@
+[
+  {
+    "slug": "loon-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.loonmtn.com",
+    "website_alive": true,
+    "source_url": "https://www.loonmtn.com",
+    "notes": "Site live (Boyne-owned). Homepage mentions bike park; ski trail-map subpage 404 on guessed paths. Stats not surfaced in fetched HTML (likely behind JS-rendered trail map widget)."
+  },
+  {
+    "slug": "loppet",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://loppet.org/",
+    "website_alive": true,
+    "source_url": "https://loppet.org/",
+    "notes": "Site live. Nordic/XC venue (Theodore Wirth). Homepage links to trail conditions page; numeric counts/difficulty not displayed on home."
+  },
+  {
+    "slug": "lost-trail",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.losttrail.com",
+    "website_alive": true,
+    "source_url": "https://www.losttrail.com",
+    "notes": "[SANITIZED — fabrication marker in notes] Homepage states 'over 60 trails' (approx). No difficulty breakdown on homepage.",
+    "_sanitized": true,
+    "_original_notes": "Homepage states 'over 60 trails' (approx). No difficulty breakdown on homepage."
+  },
+  {
+    "slug": "lost-valley",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.lostvalleyski.com",
+    "website_alive": true,
+    "source_url": "https://www.lostvalleyski.com",
+    "notes": "Domain now serves Lost Valley Brewpub & Event Venue content; ski stats not present on homepage. Possible ownership/site change."
+  },
+  {
+    "slug": "loup-loup",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://skitheloup.com",
+    "website_alive": true,
+    "source_url": "https://skitheloup.org/",
+    "notes": "skitheloup.com 301-redirects to skitheloup.org. Mentions '300 acres of diverse terrain' but no trail count or difficulty breakdown on home."
+  },
+  {
+    "slug": "loveland",
+    "trails_total": 94,
+    "difficulty_pct": {
+      "beginner": 13,
+      "intermediate": 41,
+      "advanced": 46,
+      "expert": 0
+    },
+    "website_url": "https://www.skiloveland.com",
+    "website_alive": true,
+    "source_url": "https://skiloveland.com/the-mountain/trail-map-mountain-stats/",
+    "notes": "Mountain stats page confirms 94 trails, 13% beginner / 41% intermediate / 46% advanced; no separate expert tier on site."
+  },
+  {
+    "slug": "lutsen-mountains",
+    "trails_total": 58,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.lutsen.com",
+    "website_alive": true,
+    "source_url": "https://www.lutsen.com",
+    "notes": "Site shows '58' primary trails (plus 29 sidecountry). Difficulty breakdown not displayed on homepage; trail-map subpage 404."
+  },
+  {
+    "slug": "lyndon-outing-club",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.skilyndon.com/",
+    "website_alive": true,
+    "source_url": "https://www.skilyndon.com/",
+    "notes": "Small community ski hill. Trail map linked but no numeric stats on home; data not surfaced."
+  },
+  {
+    "slug": "mad-river-glen",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.madriverglen.com",
+    "website_alive": true,
+    "source_url": "https://www.madriverglen.com",
+    "notes": "Site live. Homepage shows '0' trails open (off-season). Trail Maps page describes terrain qualitatively (Novice/Intermediate/Expert named trails) but no totals or pct on fetched HTML."
+  },
+  {
+    "slug": "mad-river-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.skimadriver.com",
+    "website_alive": false,
+    "source_url": "https://www.skimadriver.com",
+    "notes": "Site returns 'The system cannot process your request' error. Likely call-center routed / down."
+  },
+  {
+    "slug": "magic-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.magicmtn.com",
+    "website_alive": true,
+    "source_url": "https://www.magicmtn.com",
+    "notes": "Site live. Trail map page references full-resolution PDF; no totals or pct in fetched HTML."
+  },
+  {
+    "slug": "magic-mountain-id",
+    "trails_total": 11,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://magicmountainresort.com",
+    "website_alive": true,
+    "source_url": "https://magicmountainresort.com",
+    "notes": "Site confirms 11 trails / 120 acres. No quantitative difficulty breakdown on homepage."
+  },
+  {
+    "slug": "mammoth-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.mammothmountain.com",
+    "website_alive": true,
+    "source_url": "https://www.mammothmountain.com",
+    "notes": "[SANITIZED — fabrication marker in notes] Homepage shows 178 trails total. Difficulty breakdown not displayed on home (likely JS-rendered widget).",
+    "_sanitized": true,
+    "_original_notes": "Homepage shows 178 trails total. Difficulty breakdown not displayed on home (likely JS-rendered widget)."
+  },
+  {
+    "slug": "maple-ski-ridge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.mapleskiridge.com",
+    "website_alive": true,
+    "source_url": "https://www.mapleskiridge.com",
+    "notes": "Site live. References Ability Level Guide link; numeric trail/difficulty stats not on homepage."
+  },
+  {
+    "slug": "maplelag",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.maplelag.com/",
+    "website_alive": true,
+    "source_url": "https://www.maplelag.com/",
+    "notes": "Nordic resort. Site live; numeric trail stats not present on home (linked trail map page only)."
+  },
+  {
+    "slug": "marquette-mountain",
+    "trails_total": 29,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.marquettemountain.com",
+    "website_alive": true,
+    "source_url": "https://www.marquettemountain.com/the-mountain/trail-map/",
+    "notes": "Trail Map page confirms 29 runs. No numeric difficulty breakdown on site."
+  },
+  {
+    "slug": "massanutten-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.massresort.com",
+    "website_alive": true,
+    "source_url": "https://www.massresort.com",
+    "notes": "Site live. Sub-pages /play/skiing-snowboarding/ 404. Trail stats not on homepage."
+  },
+  {
+    "slug": "maverick-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://skimaverick.com",
+    "website_alive": true,
+    "source_url": "https://skimaverick.com",
+    "notes": "Page returns title only (likely SPA shell); no data in fetched HTML."
+  },
+  {
+    "slug": "mccauley-mountain",
+    "trails_total": 21,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.mccauleyny.com",
+    "website_alive": true,
+    "source_url": "https://www.mccauleyny.com",
+    "notes": "Homepage states 'Twenty-one slopes and trails up to a mile long.' No quantitative difficulty breakdown."
+  },
+  {
+    "slug": "mcintyre-ski-area",
+    "trails_total": 11,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.mcintyreskiarea.com",
+    "website_alive": true,
+    "source_url": "https://www.mcintyreskiarea.com",
+    "notes": "Site confirms 11 trails. Difficulty breakdown not on home."
+  },
+  {
+    "slug": "meadowlark",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.meadowlarkskilodge.com",
+    "website_alive": false,
+    "source_url": "https://www.meadowlarkskilodge.com",
+    "notes": "Connection refused (ECONNREFUSED). Site appears down."
+  },
+  {
+    "slug": "middlebury-snow-bowl",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.middleburysnowbowl.com",
+    "website_alive": true,
+    "source_url": "https://www.middleburysnowbowl.com",
+    "notes": "Site live (navigation hub). Trail stats not displayed on home; linked Trail Map page only."
+  },
+  {
+    "slug": "minocqua-winter-park",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": null,
+    "website_alive": false,
+    "source_url": null,
+    "notes": "No website_url provided in input; skipped per instruction."
+  },
+  {
+    "slug": "mission-ridge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.missionridge.com",
+    "website_alive": true,
+    "source_url": "https://www.missionridge.com",
+    "notes": "Site live. Sub-page /the-mountain/ 404. Trail Maps linked but stats not on home."
+  },
+  {
+    "slug": "mohawk-mountain-ski-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.mohawkmtn.com",
+    "website_alive": true,
+    "source_url": "https://www.mohawkmtn.com",
+    "notes": "Site live but homepage HTML truncated in fetch; stats not extractable."
+  },
+  {
+    "slug": "monarch-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.skimonarch.com",
+    "website_alive": true,
+    "source_url": "https://www.skimonarch.com",
+    "notes": "Site live. Mountain stats link present but data not in fetched HTML (likely JS-rendered)."
+  },
+  {
+    "slug": "mont-ripley",
+    "trails_total": 25,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.mtu.edu/mont-ripley",
+    "website_alive": true,
+    "source_url": "https://www.mtu.edu/mont-ripley",
+    "notes": "Confirms 25 trails / 112 acres. No difficulty breakdown on homepage."
+  },
+  {
+    "slug": "montage-mountain",
+    "trails_total": 26,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.montagemountainresorts.com",
+    "website_alive": true,
+    "source_url": "https://www.montagemountainresorts.com",
+    "notes": "Homepage status widget 'TRAILS: 6 / 26' implies 26 total. No difficulty breakdown on home."
+  },
+  {
+    "slug": "montana-snowbowl",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.montanasnowbowl.com",
+    "website_alive": true,
+    "source_url": "https://www.montanasnowbowl.com",
+    "notes": "Site live. Sub-page /the-mountain/ 404. Trail Map link present; stats not in fetched HTML."
+  },
+  {
+    "slug": "moose",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://shredthemoose.com/",
+    "website_alive": true,
+    "source_url": "https://shredthemoose.com/",
+    "notes": "Site live. Trail map PDF referenced; numeric stats not on homepage."
+  }
+]

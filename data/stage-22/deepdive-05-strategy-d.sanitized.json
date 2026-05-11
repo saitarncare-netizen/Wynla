@@ -1,0 +1,680 @@
+[
+  {
+    "slug": "showdown",
+    "trails_total": 39,
+    "difficulty_pct": {
+      "beginner": 28,
+      "intermediate": 44,
+      "advanced": 28,
+      "expert": 0
+    },
+    "sources": [
+      {
+        "url": "https://en.wikipedia.org/wiki/Showdown_Ski_Area",
+        "value_trails": 39,
+        "value_pct": null
+      },
+      {
+        "url": "https://www.onthesnow.com/montana/showdown-ski-area/ski-resort",
+        "value_trails": 39,
+        "value_pct": {
+          "beginner": 28,
+          "intermediate": 44,
+          "advanced": 28
+        }
+      },
+      {
+        "url": "https://www.bigskyfishing.com/Montana-Info/skiing-showdown.php",
+        "value_trails": 39,
+        "value_pct": {
+          "beginner": 28,
+          "intermediate": 44,
+          "advanced": 28
+        }
+      }
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "Two independent sources (OnTheSnow + Big Sky Fishing) agree on 39 trails / 28-44-28. Wikipedia confirms 39 trails."
+  },
+  {
+    "slug": "silver-mountain",
+    "trails_total": 67,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 40,
+      "advanced": 30,
+      "expert": 10
+    },
+    "sources": [
+      {
+        "url": "https://en.wikipedia.org/wiki/Silver_Mountain_(Idaho)",
+        "value_trails": 67,
+        "value_pct": {
+          "beginner": 20,
+          "intermediate": 40,
+          "advanced": 30,
+          "expert": 10
+        }
+      },
+      {
+        "url": "https://www.skiresort.info/ski-resort/silver-mountain/",
+        "value_trails": null,
+        "value_pct": {
+          "easy": 16,
+          "intermediate": 32,
+          "difficult": 52
+        }
+      }
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "Wikipedia provides 67 trails plus 20/40/30/10 split. Skiresort.info uses km not trail counts; pct differs because they measure piste length not trail count."
+  },
+  {
+    "slug": "silverton-mountain",
+    "trails_total": 69,
+    "difficulty_pct": {
+      "beginner": 0,
+      "intermediate": 0,
+      "advanced": 0,
+      "expert": 100
+    },
+    "sources": [
+      {
+        "url": "https://www.onthesnow.com/colorado/silverton-mountain/ski-resort",
+        "value_trails": 69,
+        "value_pct": {
+          "expert": 100
+        }
+      },
+      {
+        "url": "https://en.wikipedia.org/wiki/Silverton_Mountain",
+        "value_trails": null,
+        "value_pct": null
+      },
+      {
+        "url": "https://silvertonmountain.com/",
+        "value_trails": null,
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "OnTheSnow gives 69 runs / 100% expert. Official site and Wikipedia confirm expert-only no-groomers operation."
+  },
+  {
+    "slug": "skaneateles-club",
+    "trails_total": 4,
+    "difficulty_pct": {
+      "beginner": 45,
+      "intermediate": 40,
+      "advanced": 15,
+      "expert": 0
+    },
+    "sources": [
+      {
+        "url": "https://www.indyskipass.com/our-resorts/skaneateles-ski-club",
+        "value_trails": 4,
+        "value_pct": {
+          "beginner": 1,
+          "intermediate": 3
+        }
+      },
+      {
+        "url": "https://www.iloveny.com/listing/skaneateles-ski-club/134882/",
+        "value_trails": null,
+        "value_pct": {
+          "beginner": 45,
+          "intermediate": 40,
+          "advanced": 15
+        }
+      }
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "Indy Pass cites 4 trails (1 beginner, 3 intermediate); I Love NY tourism site reports 45/40/15 terrain split. Small club hill with tow ropes."
+  },
+  {
+    "slug": "sleepy-hollow",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "sources": [
+      {
+        "url": "https://www.polkcountyiowa.gov/conservation/news-and-announcements/new-year-round-recreation-feature-coming-to-sleepy-hollow-sports-park/",
+        "value_trails": 7,
+        "value_pct": null
+      },
+      {
+        "url": "https://sleepyhollowsportspark.com/",
+        "value_trails": null,
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "LOW",
+    "notes": "[SANITIZED — fabrication marker in notes] Polk County source: 7 snowflex runs (planned expansion to 11). No published difficulty breakdown. Synthetic Snowflex slope, designed for all skill levels per official site - estimated even split beginner/intermediate, no advanced terrain on 600-ft synthetic hill.",
+    "_sanitized": true,
+    "_original_notes": "Polk County source: 7 snowflex runs (planned expansion to 11). No published difficulty breakdown. Synthetic Snowflex slope, designed for all skill levels per official site - estimated even split beginner/intermediate, no advanced terrain on 600-ft synthetic hill."
+  },
+  {
+    "slug": "snow-summit",
+    "trails_total": 31,
+    "difficulty_pct": {
+      "beginner": 10,
+      "intermediate": 65,
+      "advanced": 25,
+      "expert": 0
+    },
+    "sources": [
+      {
+        "url": "https://en.wikipedia.org/wiki/Snow_Summit",
+        "value_trails": 31,
+        "value_pct": {
+          "beginner": 10,
+          "low_intermediate": 25,
+          "intermediate": 40,
+          "advanced": 25
+        }
+      }
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "Wikipedia: 31 trails, 10% beginner, 25% low-intermediate + 40% intermediate (combined 65% intermediate), 25% advanced."
+  },
+  {
+    "slug": "snow-valley",
+    "trails_total": 29,
+    "difficulty_pct": {
+      "beginner": 14,
+      "intermediate": 45,
+      "advanced": 31,
+      "expert": 10
+    },
+    "sources": [
+      {
+        "url": "https://en.wikipedia.org/wiki/Snow_Valley_Mountain_Resort",
+        "value_trails": 29,
+        "value_pct": {
+          "beginner": 14,
+          "intermediate": 45,
+          "advanced": 31,
+          "expert": 10
+        }
+      }
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "Wikipedia provides 29 trails with full 14/45/31/10 breakdown."
+  },
+  {
+    "slug": "snowhaven",
+    "trails_total": 9,
+    "difficulty_pct": {
+      "beginner": 75,
+      "intermediate": 25,
+      "advanced": 0,
+      "expert": 0
+    },
+    "sources": [
+      {
+        "url": "https://en.wikipedia.org/wiki/Snowhaven",
+        "value_trails": 9,
+        "value_pct": {
+          "beginner": 75,
+          "intermediate": 25
+        }
+      }
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "Wikipedia: 9 trails, 75% beginner / 25% intermediate. City of Grangeville official site confirms small surface-lift operation."
+  },
+  {
+    "slug": "spout-springs",
+    "trails_total": 17,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 35,
+      "advanced": 30,
+      "expert": 0
+    },
+    "sources": [
+      {
+        "url": "https://en.wikipedia.org/wiki/Spout_Springs_Ski_Area",
+        "value_trails": 17,
+        "value_pct": {
+          "beginner": 35,
+          "intermediate": 35,
+          "advanced": 30
+        }
+      }
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "Wikipedia: 17 trails / 35-35-30. Closed since 2017-18 season. Other sources cite 11-13 downhill trails inconsistently; using Wikipedia figure as best available."
+  },
+  {
+    "slug": "steamboat-touring-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "sources": [
+      {
+        "url": "https://nordicski.net/",
+        "value_trails": null,
+        "value_pct": null
+      },
+      {
+        "url": "https://www.uncovercolorado.com/cross-country-skiing/steamboat-ski-touring-center/",
+        "value_trails": null,
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "NONE",
+    "notes": "Nordic cross-country center: 15km of groomed trails for novice-to-advanced. No trail-count or difficulty-pct breakdown published. Nordic centers typically don't categorize by alpine difficulty levels."
+  },
+  {
+    "slug": "teton-pass",
+    "trails_total": 26,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "sources": [
+      {
+        "url": "https://en.wikipedia.org/wiki/Teton_Pass_Ski_Area",
+        "value_trails": 26,
+        "value_pct": null
+      },
+      {
+        "url": "https://www.skitetonmt.com/mountain-info/trail-map-statistics",
+        "value_trails": null,
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "LOW",
+    "notes": "Wikipedia: 26 trails. Official site lists 400 acres / 2 lifts / 1000 vert but no difficulty pct. No public source provides difficulty breakdown."
+  },
+  {
+    "slug": "the-rock-snowpark",
+    "trails_total": 8,
+    "difficulty_pct": {
+      "beginner": 39,
+      "intermediate": null,
+      "advanced": null,
+      "expert": 0
+    },
+    "sources": [
+      {
+        "url": "https://grokipedia.com/page/The_Rock_Snowpark",
+        "value_trails": 8,
+        "value_pct": {
+          "beginner": 39
+        }
+      },
+      {
+        "url": "https://www.skiresort.info/ski-resort/the-rock-snowpark/",
+        "value_trails": null,
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "LOW",
+    "notes": "8 trails confirmed (now Crystal Ridge). Only 39% beginner figure available; intermediate/advanced split unclear. Small urban Milwaukee-area hill, bottom 10% NA difficulty."
+  },
+  {
+    "slug": "timberline-lodge",
+    "trails_total": 35,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 50,
+      "advanced": 30,
+      "expert": 0
+    },
+    "sources": [
+      {
+        "url": "https://en.wikipedia.org/wiki/Timberline_Lodge_ski_area",
+        "value_trails": 35,
+        "value_pct": {
+          "beginner": 20,
+          "intermediate": 50,
+          "advanced": 30
+        }
+      }
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "Wikipedia: 35 runs with full 20/50/30 breakdown from resort's own categorization."
+  },
+  {
+    "slug": "titcomb-mountain",
+    "trails_total": 16,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 50,
+      "advanced": 25,
+      "expert": 0
+    },
+    "sources": [
+      {
+        "url": "https://en.wikipedia.org/wiki/Titcomb_Mountain",
+        "value_trails": 16,
+        "value_pct": null
+      },
+      {
+        "url": "https://skimaine.com/titcombmountain/",
+        "value_trails": 16,
+        "value_pct": {
+          "beginner": 25,
+          "intermediate": 50,
+          "advanced": 25
+        }
+      }
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "Ski Maine Association: 16 alpine trails, 25/50/25 split. Wikipedia confirms 16 trails."
+  },
+  {
+    "slug": "trapp-family-lodge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "sources": [
+      {
+        "url": "https://www.vontrappresort.com/skiing-snowshoeing.htm",
+        "value_trails": null,
+        "value_pct": null
+      },
+      {
+        "url": "https://www.xcskiresorts.com/trapp-family-lodge",
+        "value_trails": null,
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "NONE",
+    "notes": "Nordic center: 60km groomed + access to 100km Stowe-area network. No trail-count or difficulty-pct breakdown - Nordic centers typically don't use alpine difficulty categorization."
+  },
+  {
+    "slug": "turner-mountain",
+    "trails_total": 22,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "sources": [
+      {
+        "url": "https://en.wikipedia.org/wiki/Turner_Mountain_(Montana)",
+        "value_trails": 20,
+        "value_pct": null
+      },
+      {
+        "url": "https://www.libbymt.com/areaattractions/turner.htm",
+        "value_trails": 22,
+        "value_pct": null
+      },
+      {
+        "url": "https://roamingmontana.com/turner-mountain-ski-area-libby-mt/",
+        "value_trails": 22,
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "Two recent sources: 22 named runs / 400 acres. Wikipedia older value: 20 trails. Sources confirm mostly intermediate-advanced terrain (no surface tow / no beginner area) but no published pct breakdown."
+  },
+  {
+    "slug": "vail",
+    "trails_total": 193,
+    "difficulty_pct": {
+      "beginner": 18,
+      "intermediate": 29,
+      "advanced": 53,
+      "expert": 0
+    },
+    "sources": [
+      {
+        "url": "https://en.wikipedia.org/wiki/Vail_Ski_Resort",
+        "value_trails": 193,
+        "value_pct": {
+          "beginner": 18,
+          "intermediate": 29,
+          "advanced_expert": 53
+        }
+      }
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "Wikipedia: 193 trails / 18-29-53 split. Vail combines advanced+expert into the 53% category."
+  },
+  {
+    "slug": "victor-constant-ski-area",
+    "trails_total": 4,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "sources": [
+      {
+        "url": "https://westpoint.armymwr.com/programs/victor-constant-ski-area",
+        "value_trails": null,
+        "value_pct": null
+      },
+      {
+        "url": "https://nyskiblog.com/directory/ny-ski-areas/near-nyc/west-point-ski-slope/",
+        "value_trails": null,
+        "value_pct": null
+      },
+      {
+        "url": "https://www.skiresort.info/ski-resort/victor-constant-west-point/",
+        "value_trails": null,
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "LOW",
+    "notes": "Sources confirm 3 main maintained trails + bunny slope (3.5 km total). No published difficulty pct. Small Army MWR ski area at West Point."
+  },
+  {
+    "slug": "villa-olivia",
+    "trails_total": 7,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": 0
+    },
+    "sources": [
+      {
+        "url": "https://bartlettparks.org/villa-olivia/winter-sports/",
+        "value_trails": 7,
+        "value_pct": null
+      },
+      {
+        "url": "https://www.onthesnow.com/illinois/villa-olivia/ski-resort",
+        "value_trails": 7,
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "LOW",
+    "notes": "Bartlett Park District: 7 runs. Most runs easy-to-intermediate with 1 black-diamond. No published pct - small suburban Chicago hill."
+  },
+  {
+    "slug": "warner-canyon",
+    "trails_total": 21,
+    "difficulty_pct": {
+      "beginner": 24,
+      "intermediate": 24,
+      "advanced": 52,
+      "expert": 0
+    },
+    "sources": [
+      {
+        "url": "https://warnercanyonski.com/about",
+        "value_trails": null,
+        "value_pct": null
+      },
+      {
+        "url": "http://warnercanyon.org/the-mountain/statistics/",
+        "value_trails": 21,
+        "value_pct": {
+          "beginner": 5,
+          "intermediate": 5,
+          "advanced": 11
+        }
+      },
+      {
+        "url": "https://en.wikipedia.org/wiki/Warner_Canyon_Ski_Area",
+        "value_trails": 22,
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "Warnercanyon.org statistics page: 5 beginner + 5 intermediate + 11 advanced = 21 trails (24/24/52 pct). Wikipedia lists 22; small variation. Sources note 'mostly intermediate terrain' contradicting the count - using counted trails as the basis."
+  },
+  {
+    "slug": "whaleback-mountain",
+    "trails_total": 30,
+    "difficulty_pct": {
+      "beginner": 28,
+      "intermediate": 39,
+      "advanced": 33,
+      "expert": 0
+    },
+    "sources": [
+      {
+        "url": "https://www.skinh.com/resorts/whaleback-mountain",
+        "value_trails": 30,
+        "value_pct": {
+          "easy": 28,
+          "intermediate": 39,
+          "advanced": 33
+        }
+      },
+      {
+        "url": "https://en.wikipedia.org/wiki/Whaleback_(ski_area)",
+        "value_trails": null,
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "Ski NH official resort listing: 30 trails / 28-39-33 split. Some sources cite 31 (recent additions)."
+  },
+  {
+    "slug": "white-grass-touring",
+    "trails_total": 45,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 55,
+      "advanced": 15,
+      "expert": 0
+    },
+    "sources": [
+      {
+        "url": "https://whitegrass.com/",
+        "value_trails": null,
+        "value_pct": null
+      },
+      {
+        "url": "https://www.xcskiresorts.com/white-grass-touring-center",
+        "value_trails": 45,
+        "value_pct": {
+          "easy": 30,
+          "intermediate": 55,
+          "most_difficult": 15
+        }
+      }
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "xcskiresorts.com: 45 trails / 50km / 30-55-15 split. Official site confirms 50km of trails. Nordic ski touring center in Canaan Valley WV."
+  },
+  {
+    "slug": "white-pass",
+    "trails_total": 45,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 60,
+      "advanced": 20,
+      "expert": 0
+    },
+    "sources": [
+      {
+        "url": "https://en.wikipedia.org/wiki/White_Pass_Ski_Area",
+        "value_trails": 45,
+        "value_pct": {
+          "beginner": 30,
+          "intermediate": 50,
+          "advanced": 20
+        }
+      },
+      {
+        "url": "https://snowstash.com/usa/washington/white-pass/trail-map",
+        "value_trails": 45,
+        "value_pct": {
+          "beginner": 20,
+          "intermediate": 60,
+          "advanced": 20
+        }
+      }
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "Two sources confirm 45 trails. Wikipedia: 30/50/20, SnowStash: 20/60/20 - using SnowStash (more recent) but both agree on advanced at 20%."
+  },
+  {
+    "slug": "white-pine",
+    "trails_total": 25,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 45,
+      "advanced": 30,
+      "expert": 0
+    },
+    "sources": [
+      {
+        "url": "https://en.wikipedia.org/wiki/White_Pine_Ski_Resort",
+        "value_trails": 25,
+        "value_pct": {
+          "beginner": 25,
+          "intermediate": 45,
+          "advanced": 30
+        }
+      },
+      {
+        "url": "https://www.whitepineresort.com/",
+        "value_trails": null,
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "Wikipedia: ~25 trails / 25-45-30. Official site confirms 363 acres family resort but no pct breakdown."
+  },
+  {
+    "slug": "white-pine-touring-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "sources": [
+      {
+        "url": "https://whitepinetouring.com/cross-country-skiing-park-city.php",
+        "value_trails": null,
+        "value_pct": null
+      },
+      {
+        "url": "https://utahnordic.org/white-pine-touring/",
+        "value_trails": null,
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "NONE",
+    "notes": "Nordic Park City center: 20+ km classic/skate ski track with 3K/5K/10K loops for beginner/intermediate/advanced. No trail count or difficulty pct published - Nordic centers typically don't use alpine categorization."
+  }
+]

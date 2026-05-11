@@ -7,13 +7,24 @@ import { readFileSync, writeFileSync, readdirSync, existsSync } from "node:fs";
 import path from "node:path";
 
 const DIR = path.resolve("data/stage-22");
-const files = readdirSync(DIR).filter((f) => /^(pilot|batch-\d+|deepdive-\d+)-strategy-[abcd]\.json$/.test(f));
+// PREFER sanitized files (with fabricated values stripped) when present.
+// Falls back to original .json files for batches not yet sanitized.
+// Strategy IDs accepted: a, b, c, d (original 3 + deep-dive), and the
+// stage-22.5 strict re-verify squad e1, e2, e3, e4, e5.
+const STRAT_RE = /^((?:pilot|batch-\d+|deepdive-\d+|reverify-\d+))-strategy-((?:[abcd]|e[12345]))\.(?:sanitized\.)?json$/;
+const allFiles = readdirSync(DIR);
+const sanitizedFiles = allFiles.filter((f) => /\.sanitized\.json$/.test(f) && STRAT_RE.test(f));
+const sanitizedBase = new Set(sanitizedFiles.map((f) => f.replace(".sanitized.json", "")));
+const files = [
+  ...sanitizedFiles,
+  ...allFiles.filter((f) => STRAT_RE.test(f) && !f.includes(".sanitized.") && !sanitizedBase.has(f.replace(".json", ""))),
+];
 
-// Group by batch id (deep-dives are their own batch ids — that's fine,
-// the consensus merges values per-slug below).
+// Group by batch id (deep-dives + reverify are their own batch ids —
+// that's fine, the consensus merges values per-slug below).
 const byBatch = new Map();
 for (const f of files) {
-  const m = f.match(/^((?:pilot|batch-\d+|deepdive-\d+))-strategy-([abcd])\.json$/);
+  const m = f.match(STRAT_RE);
   if (!m) continue;
   const [, batchId, letter] = m;
   if (!byBatch.has(batchId)) byBatch.set(batchId, {});
@@ -25,11 +36,12 @@ console.log(`Processing ${byBatch.size} batches:`);
 for (const [b] of byBatch) console.log(`  ${b}`);
 
 // Build a slug → list of source records map across ALL batches/strategies.
-// A slug may appear in batch-XX (A/B/C) AND in deepdive-YY (D) — we want
-// to consider all of those when computing consensus.
+// A slug may appear in batch-XX (A/B/C), deepdive-YY (D), AND reverify-ZZ
+// (E1-E5) — consider every source when computing consensus.
+const STRATEGIES = ["a", "b", "c", "d", "e1", "e2", "e3", "e4", "e5"];
 const sourcesBySlug = new Map();
 for (const [batchId, strategies] of byBatch) {
-  for (const letter of ["a", "b", "c", "d"]) {
+  for (const letter of STRATEGIES) {
     const records = strategies[letter] ?? [];
     for (const r of records) {
       if (!r?.slug) continue;
@@ -118,23 +130,15 @@ for (const slug of allSlugs) {
       trailsValue = median(trailsAll);
       trailsConfidence = "MEDIUM";
     } else {
-      // 2 disagree — if one of them is D with HIGH trust, use it
-      if (dTrust && dSrc?.trails_total != null) {
-        trailsValue = dSrc.trails_total;
-        trailsConfidence = "MEDIUM";
-      } else {
-        trailsValue = median(trailsAll);
-        trailsConfidence = "LOW";
-      }
-    }
-  } else if (trailsAll.length === 1) {
-    // single source; trust it MEDIUM only if it's D with HIGH/MEDIUM consensus
-    trailsValue = trailsAll[0];
-    if (dTrust && dSrc?.trails_total === trailsAll[0]) {
-      trailsConfidence = "MEDIUM";
-    } else {
+      // 2 disagree — keep the median but mark LOW so it won't be
+      // written. Don't trust single-source D anymore.
+      trailsValue = median(trailsAll);
       trailsConfidence = "LOW";
     }
+  } else if (trailsAll.length === 1) {
+    // Single source = always LOW. No more deepdive single-source promotion.
+    trailsValue = trailsAll[0];
+    trailsConfidence = "LOW";
   }
 
   // ---- difficulty_pct per level
@@ -171,20 +175,15 @@ for (const slug of allSlugs) {
       if (pctAgree(vs)) {
         value = median(vs);
         conf = "MEDIUM";
-      } else if (dTrust && dSrc?.difficulty_pct?.[lvl] != null) {
-        value = dSrc.difficulty_pct[lvl];
-        conf = "MEDIUM";
       } else {
+        // 2 disagree → LOW (don't trust single-source D).
         value = median(vs);
         conf = "LOW";
       }
     } else if (vs.length === 1) {
+      // Single source = always LOW.
       value = vs[0];
-      if (dTrust && dSrc?.difficulty_pct?.[lvl] === vs[0]) {
-        conf = "MEDIUM";
-      } else {
-        conf = "LOW";
-      }
+      conf = "LOW";
     }
     pctValues[lvl] = value;
     pctConfidence[lvl] = conf;

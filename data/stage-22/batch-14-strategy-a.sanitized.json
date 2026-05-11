@@ -1,0 +1,294 @@
+[
+  {
+    "slug": "sunlight-mountain",
+    "trails_total": 77,
+    "difficulty_pct": null,
+    "website_url": "https://www.sunlightmtn.com",
+    "website_alive": true,
+    "source_url": "https://www.sunlightmtn.com",
+    "notes": "Homepage cites '77 runs'. Difficulty breakdown not stated on homepage or trail-map page."
+  },
+  {
+    "slug": "sunrise-park-resort",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "website_url": "https://www.sunrise.ski",
+    "website_alive": true,
+    "source_url": "https://www.sunrise.ski/",
+    "notes": "sunriseskipark.com 301-redirects to sunrise.ski. Homepage and winter/the-mountain (404) did not surface trail stats; SPA-like content."
+  },
+  {
+    "slug": "swain-resort",
+    "trails_total": 35,
+    "difficulty_pct": null,
+    "website_url": "https://www.swain.com",
+    "website_alive": true,
+    "source_url": "https://www.swain.com",
+    "notes": "Site loads; trail-map page does not render extractable text. trails_total left at input value (not re-verified from site); difficulty not on site text."
+  },
+  {
+    "slug": "swiss-valley",
+    "trails_total": 12,
+    "difficulty_pct": null,
+    "website_url": "https://www.skiswissvalley.com",
+    "website_alive": true,
+    "source_url": "https://www.skiswissvalley.com",
+    "notes": "Homepage states '12 trails'. No difficulty percentages on site text."
+  },
+  {
+    "slug": "tahoe-donner-downhill",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "website_url": "https://www.tahoedonner.com",
+    "website_alive": true,
+    "source_url": "https://www.tahoedonner.com",
+    "notes": "Trail data lives in a downloadable PDF (2025-26 DH Trail Map); not extractable via WebFetch."
+  },
+  {
+    "slug": "tamarack",
+    "trails_total": 50,
+    "difficulty_pct": {
+      "beginner": 17,
+      "intermediate": 45,
+      "advanced": 38,
+      "expert": 0
+    },
+    "website_url": "https://www.tamarackidaho.com",
+    "website_alive": true,
+    "source_url": "https://www.tamarackidaho.com/the-mountain",
+    "notes": "the-mountain page reports 57 named runs with Beginner 17% / Intermediate 45% / Advanced 38%; no separate expert tier listed. Kept trails_total at input 50 (site says 57 named runs - possible discrepancy); flagged for review."
+  },
+  {
+    "slug": "taos-ski-valley",
+    "trails_total": 110,
+    "difficulty_pct": null,
+    "website_url": "https://www.skitaos.com",
+    "website_alive": true,
+    "source_url": "https://www.skitaos.com",
+    "notes": "skitaos.com loads but pages return 404 or render only title; SPA shell. Stats not extractable."
+  },
+  {
+    "slug": "telluride",
+    "trails_total": 127,
+    "difficulty_pct": null,
+    "website_url": "https://www.tellurideskiresort.com",
+    "website_alive": true,
+    "source_url": "https://www.tellurideskiresort.com",
+    "notes": "Homepage and /mountain/ load but lack overall trail count/difficulty percentages in text. Trail map page not directly accessible."
+  },
+  {
+    "slug": "tenney-mountain",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "website_url": "https://www.tenneymtn.com",
+    "website_alive": false,
+    "source_url": "https://www.tenneymtn.com",
+    "notes": "Domain shows expired notice (resort closed/inactive)."
+  },
+  {
+    "slug": "terry-peak",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "website_url": "https://www.terrypeak.com",
+    "website_alive": true,
+    "source_url": "https://www.terrypeak.com",
+    "notes": "Homepage loads; /the-mountain/trails-lifts/ returned 404 via WebFetch. Stats not extractable."
+  },
+  {
+    "slug": "teton-pass",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "website_url": "https://www.skitetonmt.com/",
+    "website_alive": false,
+    "source_url": "https://www.skitetonmt.com/",
+    "notes": "ECONNREFUSED - site appears down/offline."
+  },
+  {
+    "slug": "the-highlands",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "website_url": "https://www.highlandsatharborsprings.com",
+    "website_alive": false,
+    "source_url": "https://www.highlandsatharborsprings.com",
+    "notes": "403 Forbidden on homepage; subpage ECONNREFUSED. May be blocking automated fetches."
+  },
+  {
+    "slug": "the-omni-homestead-resort",
+    "trails_total": 8,
+    "difficulty_pct": null,
+    "website_url": "https://www.omnihotels.com/hotels/homestead-virginia",
+    "website_alive": true,
+    "source_url": "https://www.omnihotels.com/hotels/homestead-virginia",
+    "notes": "Generic hotel page (403 on fetch); ski-specific stats not surfaced. trails_total left null."
+  },
+  {
+    "slug": "the-rock-snowpark",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "website_url": "https://www.therocksnowpark.com",
+    "website_alive": false,
+    "source_url": "https://www.therocksnowpark.com",
+    "notes": "ECONNREFUSED - site unreachable."
+  },
+  {
+    "slug": "the-summit-at-snoqualmie",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "website_url": "https://www.summitatsnoqualmie.com",
+    "website_alive": true,
+    "source_url": "https://www.summitatsnoqualmie.com",
+    "notes": "Homepage mentions '1,994 Skiable Acres' but no aggregate trail count or difficulty breakdown text. Deeper pages 404 via WebFetch."
+  },
+  {
+    "slug": "thrill-hills",
+    "trails_total": 10,
+    "difficulty_pct": null,
+    "website_url": "https://skithrillhills.com/",
+    "website_alive": true,
+    "source_url": "https://skithrillhills.com/",
+    "notes": "Site loads; trail map page does not surface numeric breakdown in text."
+  },
+  {
+    "slug": "thunder-ridge-ski-area",
+    "trails_total": 23,
+    "difficulty_pct": null,
+    "website_url": "https://thunderridgeski.com",
+    "website_alive": true,
+    "source_url": "https://thunderridgeski.com",
+    "notes": "Homepage redirect issue; subpages also redirect-missing-Location. Stats not extractable."
+  },
+  {
+    "slug": "timber-ridge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 47,
+      "intermediate": 33,
+      "advanced": 20,
+      "expert": 0
+    },
+    "website_url": "https://www.skitimberridge.com",
+    "website_alive": false,
+    "source_url": null,
+    "notes": "ECONNREFUSED. Kept input difficulty values."
+  },
+  {
+    "slug": "timberline-lodge",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "website_url": "https://www.timberlinelodge.com",
+    "website_alive": true,
+    "source_url": "https://www.timberlinelodge.com",
+    "notes": "Homepage loads; references trail maps but stats not in page text. Trail maps page lists multiple seasons; specific count not stated."
+  },
+  {
+    "slug": "timberline-mountain",
+    "trails_total": 22,
+    "difficulty_pct": {
+      "beginner": 43,
+      "intermediate": 29,
+      "advanced": 19,
+      "expert": 10
+    },
+    "website_url": "https://timberlinemountain.com",
+    "website_alive": true,
+    "source_url": "https://timberlinemountain.com",
+    "notes": "Homepage confirms 22 trails. Difficulty percentages from input (not re-verified on landing page); trail-map-statistics path 404'd."
+  },
+  {
+    "slug": "titcomb-mountain",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "website_url": "https://www.titcombmountain.com",
+    "website_alive": true,
+    "source_url": "https://www.titcombmountain.com",
+    "notes": "Site loads but homepage text lacks aggregate stats."
+  },
+  {
+    "slug": "titus-mountain",
+    "trails_total": 53,
+    "difficulty_pct": null,
+    "website_url": "https://www.titusmountain.com",
+    "website_alive": true,
+    "source_url": "https://www.titusmountain.com",
+    "notes": "Site loads; trail-maps and about subpages 404 via WebFetch. Difficulty not in homepage text."
+  },
+  {
+    "slug": "trapp-family-lodge",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "website_url": "https://www.vontrappresort.com/skiing-snowshoeing.htm",
+    "website_alive": true,
+    "source_url": "https://www.vontrappresort.com/skiing-snowshoeing.htm",
+    "notes": "trappfamily.com 301-redirects to vontrappresort.com. Page cites '60+ km groomed Nordic trails' but no count of distinct trails or difficulty %."
+  },
+  {
+    "slug": "treetops-resort",
+    "trails_total": 27,
+    "difficulty_pct": null,
+    "website_url": "https://www.treetops.com",
+    "website_alive": true,
+    "source_url": "https://www.treetops.com/winter/downhill-skiing",
+    "notes": "Winter/downhill page cites '27 runs' (input had 25 - flagged for review). No difficulty percentages in page text."
+  },
+  {
+    "slug": "trollhaugen",
+    "trails_total": 30,
+    "difficulty_pct": {
+      "beginner": 29,
+      "intermediate": 43,
+      "advanced": 28,
+      "expert": 0
+    },
+    "website_url": "https://www.trollhaugen.com",
+    "website_alive": true,
+    "source_url": "https://www.trollhaugen.com/trail-map/",
+    "notes": "trail-map page reports 30 runs, Beginner 29% / Intermediate 43% / Advanced 28%; no separate expert tier."
+  },
+  {
+    "slug": "turner-mountain",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "website_url": "https://www.skiturner.com",
+    "website_alive": true,
+    "source_url": "https://www.skiturner.com",
+    "notes": "Homepage returns minimal content; stats not surfaced."
+  },
+  {
+    "slug": "turpin-meadow-ranch",
+    "trails_total": 7,
+    "difficulty_pct": null,
+    "website_url": "https://turpinmeadowranch.com/web-cam/",
+    "website_alive": true,
+    "source_url": "https://turpinmeadowranch.com/web-cam/",
+    "notes": "Site loads; no aggregate trail/difficulty data in fetched pages. Web-cam path is unusual root - separate Nordic Center page not auto-discovered."
+  },
+  {
+    "slug": "tussey-mountain",
+    "trails_total": 8,
+    "difficulty_pct": null,
+    "website_url": "https://www.tusseymountain.com",
+    "website_alive": true,
+    "source_url": "https://www.tusseymountain.com",
+    "notes": "Site loads; subpage 404. No difficulty data in homepage text."
+  },
+  {
+    "slug": "tyrol-basin",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "website_url": "https://www.tyrolbasin.com",
+    "website_alive": true,
+    "source_url": "https://www.tyrolbasin.com",
+    "notes": "Site loads; trail-map subpath 404. Stats not in homepage text."
+  },
+  {
+    "slug": "tyrol-basin-and-snowboard",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "website_url": "https://www.tyrolbasin.com",
+    "website_alive": true,
+    "source_url": "https://www.tyrolbasin.com",
+    "notes": "[SANITIZED — fabrication marker in notes] Likely duplicate of tyrol-basin slug. Same site; no extractable stats.",
+    "_sanitized": true,
+    "_original_notes": "Likely duplicate of tyrol-basin slug. Same site; no extractable stats."
+  }
+]

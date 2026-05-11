@@ -1,0 +1,262 @@
+[
+  {
+    "slug": "49-degrees-north",
+    "trails_total": 88,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 40,
+      "advanced": 30,
+      "expert": null
+    },
+    "source_url": "https://www.peakrankings.com/content/49-degrees-north",
+    "source_site": "peakrankings (via web search)",
+    "notes": "88 runs, 30/40/30 beginner/intermediate/advanced split per PeakRankings; skiresort.info had no detail."
+  },
+  {
+    "slug": "afton-alps",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 36,
+      "intermediate": 38,
+      "advanced": 26,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/afton-alps/",
+    "source_site": "skiresort.info",
+    "notes": "Slope offering: 2.8km easy, 3km intermediate, 2km difficult (total 7.8km)."
+  },
+  {
+    "slug": "alpine-meadows",
+    "trails_total": 100,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 40,
+      "advanced": 35,
+      "expert": null
+    },
+    "source_url": "https://www.tahoeactivities.com/alpine-meadows-at-palisades-tahoe/",
+    "source_site": "tahoeactivities (via web search)",
+    "notes": "100+ runs across 2,400 acres; 25/40/35 split (expert bundled with most-difficult); skiresort.info merged Alpine Meadows with Palisades Tahoe."
+  },
+  {
+    "slug": "alpine-valley-mi",
+    "trails_total": 25,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/michigan/alpine-valley-ski-area/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "25 runs across 100 acres; OnTheSnow listed no difficulty breakdown."
+  },
+  {
+    "slug": "alpine-valley-oh",
+    "trails_total": 8,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 50,
+      "advanced": 25,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/ohio/alpine-valley/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "8 trails across 72 acres; 25/50/25 beginner/intermediate/advanced."
+  },
+  {
+    "slug": "alpine-valley-wi",
+    "trails_total": 21,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 38,
+      "advanced": 29,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/wisconsin/alpine-valley-resort/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "21 runs across 100 acres; 33/38/29 split."
+  },
+  {
+    "slug": "alta",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 15,
+      "intermediate": 30,
+      "advanced": 55,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/alta/",
+    "source_site": "skiresort.info",
+    "notes": "71km of slopes: 11km easy, 21km intermediate, 39km difficult."
+  },
+  {
+    "slug": "alyeska-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 23,
+      "intermediate": 50,
+      "advanced": 27,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/alyeska-resort-girdwood/",
+    "source_site": "skiresort.info",
+    "notes": "62km of slopes: 14km easy, 31km intermediate, 17km difficult."
+  },
+  {
+    "slug": "andes-tower-hills",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 55,
+      "intermediate": 40,
+      "advanced": 5,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/andes-tower-hills/",
+    "source_site": "skiresort.info",
+    "notes": "4km of slopes: 2.2km easy, 1.6km intermediate, 0.2km difficult."
+  },
+  {
+    "slug": "angel-fire-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 54,
+      "intermediate": 37,
+      "advanced": 9,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/angel-fire/",
+    "source_site": "skiresort.info",
+    "notes": "75km of slopes: 40km easy, 28km intermediate, 7km difficult."
+  },
+  {
+    "slug": "antelope-butte",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 50,
+      "advanced": 29,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/antelope-butte/",
+    "source_site": "skiresort.info",
+    "notes": "20.3km of slopes: 4km easy, 10.3km intermediate, 6km difficult."
+  },
+  {
+    "slug": "anthony-lakes",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "source_site": null,
+    "notes": "not found in external dbs (skiresort.info returned portal page; no dedicated entry located)."
+  },
+  {
+    "slug": "appalachian-ski-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 40,
+      "intermediate": 50,
+      "advanced": 10,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/appalachian-ski-mountain/",
+    "source_site": "skiresort.info",
+    "notes": "5km of slopes: 2km easy, 2.5km intermediate, 0.5km difficult."
+  },
+  {
+    "slug": "apple-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 40,
+      "intermediate": 40,
+      "advanced": 20,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/apple-mountain/",
+    "source_site": "skiresort.info",
+    "notes": "2km of slopes: 0.8km easy, 0.8km intermediate, 0.4km difficult. Note: skiresort.info marks resort as shut down."
+  },
+  {
+    "slug": "arapahoe-basin",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 8,
+      "intermediate": 33,
+      "advanced": 59,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/arapahoe-basin/",
+    "source_site": "skiresort.info",
+    "notes": "52km of slopes: 3.5km easy, 17.5km intermediate, 31km difficult."
+  },
+  {
+    "slug": "arctic-valley",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 40,
+      "advanced": 40,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/arctic-valley/",
+    "source_site": "skiresort.info",
+    "notes": "25km of slopes: 5km easy, 10km intermediate, 10km difficult."
+  },
+  {
+    "slug": "arizona-snowbowl",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 32,
+      "intermediate": 44,
+      "advanced": 24,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/arizona-snowbowl/",
+    "source_site": "skiresort.info",
+    "notes": "37km of slopes: 12km easy, 16km intermediate, 9km difficult."
+  },
+  {
+    "slug": "ascutney-outdoors",
+    "trails_total": 8,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.ascutneyoutdoors.org/skiing/",
+    "source_site": "wikipedia / ascutneyoutdoors (via web search)",
+    "notes": "Volunteer-run small ski area on former Ascutney Mtn Resort footprint; 8 T-bar-served trails on 26 acres; no published difficulty mix."
+  },
+  {
+    "slug": "aspen-highlands",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 18,
+      "intermediate": 30,
+      "advanced": 52,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/aspen-highlands/",
+    "source_site": "skiresort.info",
+    "notes": "135km of slopes: 24.3km easy, 40.5km intermediate, 70.2km difficult."
+  },
+  {
+    "slug": "aspen-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 0,
+      "intermediate": 48,
+      "advanced": 52,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/aspen-mountain/",
+    "source_site": "skiresort.info",
+    "notes": "103km of slopes: 0km easy, 49km intermediate, 54km difficult."
+  }
+]

@@ -1,0 +1,394 @@
+[
+  {
+    "slug": "mystic-mountain",
+    "trails_total": 7,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skicentral.com/mysticmountain.html",
+    "source_site": "skicentral",
+    "notes": "skicentral: 7 trails; no difficulty breakdown available. skiresort.info 404; snowpak rate-limited. Ski Magazine/SnoCountry confirm beginner-friendly small hill."
+  },
+  {
+    "slug": "nashoba-valley-ski-area",
+    "trails_total": 17,
+    "difficulty_pct": {
+      "beginner": 17,
+      "intermediate": 52,
+      "advanced": 31,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/massachusetts/nashoba-valley/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "trails_total=17 from OnTheSnow; difficulty_pct from skiresort.info (easy 17%, intermediate 52%, difficult 31% — mapped to beginner/intermediate/advanced)."
+  },
+  {
+    "slug": "nordic-mountain",
+    "trails_total": 16,
+    "difficulty_pct": {
+      "beginner": 31,
+      "intermediate": 46,
+      "advanced": 23,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/nordic-mountain/",
+    "source_site": "skiresort.info",
+    "notes": "trails_total=16 preserved from input (OnTheSnow shows 12); difficulty_pct from skiresort.info."
+  },
+  {
+    "slug": "nordic-valley",
+    "trails_total": 40,
+    "difficulty_pct": {
+      "beginner": 26,
+      "intermediate": 42,
+      "advanced": 32,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/nordic-valley/",
+    "source_site": "skiresort.info",
+    "notes": "trails_total=40 from OnTheSnow (Wolf Creek/Nordic Valley UT); difficulty_pct from skiresort.info."
+  },
+  {
+    "slug": "north-cascade-heli",
+    "trails_total": 124,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://heli-ski.com/terrain",
+    "source_site": "heli-ski.com",
+    "notes": "Heli-ski operator; 124 runs in 300,000-acre permit (about 40 used regularly). No standard difficulty breakdown — all terrain is advanced/expert backcountry."
+  },
+  {
+    "slug": "northeast-slopes",
+    "trails_total": 12,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/northeast-slopes/",
+    "source_site": "skiresort.info",
+    "notes": "trails_total=12 preserved from input; skiresort.info page returned portal stub. No difficulty data found within fetch budget."
+  },
+  {
+    "slug": "northern-maine-community-trails",
+    "trails_total": 16,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.nmctrails.org/",
+    "source_site": "official",
+    "notes": "Nordic cross-country trail network near Presque Isle; trails_total=16 preserved from input. No alpine difficulty breakdown applicable; sources confirm mixed-difficulty XC system."
+  },
+  {
+    "slug": "northstar-california",
+    "trails_total": 100,
+    "difficulty_pct": {
+      "beginner": 13,
+      "intermediate": 60,
+      "advanced": 27,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/california/northstar-california/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "trails_total=100 from OnTheSnow; difficulty_pct preserved from input."
+  },
+  {
+    "slug": "norway-mountain",
+    "trails_total": 17,
+    "difficulty_pct": {
+      "beginner": 31,
+      "intermediate": 44,
+      "advanced": 25,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/norway-mountain/",
+    "source_site": "skiresort.info",
+    "notes": "trails_total=17 preserved from input; difficulty_pct from skiresort.info."
+  },
+  {
+    "slug": "nubs-nob",
+    "trails_total": 53,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/nubs-nob/",
+    "source_site": "skiresort.info",
+    "notes": "trails_total=53 preserved from input; skiresort.info page returned portal stub. No difficulty pct obtained within fetch budget."
+  },
+  {
+    "slug": "oak-mountain",
+    "trails_total": 22,
+    "difficulty_pct": {
+      "beginner": 50,
+      "intermediate": 33,
+      "advanced": 17,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/new-york/oak-mountain/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "trails_total=22 from OnTheSnow; difficulty_pct from skiresort.info."
+  },
+  {
+    "slug": "ober-mountain",
+    "trails_total": 10,
+    "difficulty_pct": {
+      "beginner": 27,
+      "intermediate": 55,
+      "advanced": 18,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/ober-gatlinburg/",
+    "source_site": "skiresort.info",
+    "notes": "trails_total and difficulty_pct preserved from input; skiresort.info confirms similar distribution (11/68/21)."
+  },
+  {
+    "slug": "oglebay-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skicentral.com/oglebay.html",
+    "source_site": "skicentral",
+    "notes": "[SANITIZED — fabrication marker in notes] trails_total=1 from skicentral; difficulty inferred from beginner-only description in multiple sources (single gentle 1km slope). 100% beginner is high-confidence given only one trail.",
+    "_sanitized": true,
+    "_original_notes": "trails_total=1 from skicentral; difficulty inferred from beginner-only description in multiple sources (single gentle 1km slope). 100% beginner is high-confidence given only one trail."
+  },
+  {
+    "slug": "okemo-mountain-resort",
+    "trails_total": 123,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/okemo-mountain-resort/",
+    "source_site": "skiresort.info",
+    "notes": "trails_total=123 preserved from input; skiresort.info returned portal stub. No difficulty pct obtained within fetch budget."
+  },
+  {
+    "slug": "otis-ridge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 32,
+      "intermediate": 41,
+      "advanced": 27,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/otis-ridge/",
+    "source_site": "skiresort.info",
+    "notes": "difficulty_pct from skiresort.info (km-based). No trail count obtained."
+  },
+  {
+    "slug": "otsego-resort",
+    "trails_total": 31,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skicentral.com/otsegoclub.html",
+    "source_site": "skicentral",
+    "notes": "trails_total=31 from skicentral (other sources cite 28-32). No difficulty breakdown available within fetch budget."
+  },
+  {
+    "slug": "pajarito-mountain",
+    "trails_total": 53,
+    "difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 49,
+      "advanced": 30,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/pajarito-mountain/",
+    "source_site": "skiresort.info",
+    "notes": "trails_total and difficulty_pct preserved from input; skiresort.info confirms 31/46/23 split (close)."
+  },
+  {
+    "slug": "palisades-tahoe",
+    "trails_total": 296,
+    "difficulty_pct": {
+      "beginner": 6,
+      "intermediate": 39,
+      "advanced": 33,
+      "expert": 23
+    },
+    "source_url": "https://www.onthesnow.com/california/palisades-tahoe/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "trails_total=296 and difficulty_pct from OnTheSnow."
+  },
+  {
+    "slug": "paoli-peaks",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 39,
+      "intermediate": 46,
+      "advanced": 15,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/paoli-peaks/",
+    "source_site": "skiresort.info",
+    "notes": "difficulty_pct from skiresort.info (km-based). No trail count obtained."
+  },
+  {
+    "slug": "park-city",
+    "trails_total": 324,
+    "difficulty_pct": {
+      "beginner": 8,
+      "intermediate": 41,
+      "advanced": 28,
+      "expert": 23
+    },
+    "source_url": "https://www.onthesnow.com/utah/park-city-mountain-resort/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "trails_total=324 preserved from input (OnTheSnow shows 349); difficulty_pct from OnTheSnow."
+  },
+  {
+    "slug": "pats-peak",
+    "trails_total": 28,
+    "difficulty_pct": {
+      "beginner": 50,
+      "intermediate": 21,
+      "advanced": 11,
+      "expert": 18
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/pats-peak/",
+    "source_site": "skiresort.info",
+    "notes": "trails_total and difficulty_pct preserved from input; skiresort.info shows different km-based split (30/24/46) — input value retained as it has 4-way split."
+  },
+  {
+    "slug": "paul-bunyan-hill",
+    "trails_total": 14,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 20,
+      "advanced": 50,
+      "expert": 0
+    },
+    "source_url": "https://www.indyskipass.com/our-resorts/paul-bunyan-ski-hill",
+    "source_site": "indypass",
+    "notes": "trails_total=14 preserved from input; difficulty_pct from Indy Pass via web search (30/20/50). Other source reports 67% beginner — chose the 3-tier breakdown."
+  },
+  {
+    "slug": "pebble-creek",
+    "trails_total": 51,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 35,
+      "advanced": 41,
+      "expert": 4
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/pebble-creek/",
+    "source_site": "skiresort.info",
+    "notes": "trails_total and difficulty_pct preserved from input; skiresort.info confirms similar split (32/47/21)."
+  },
+  {
+    "slug": "peek-n-peak",
+    "trails_total": 27,
+    "difficulty_pct": {
+      "beginner": 16,
+      "intermediate": 61,
+      "advanced": 23,
+      "expert": 0
+    },
+    "source_url": "https://www.peakrankings.com/content/peek-n-peak",
+    "source_site": "peakrankings",
+    "notes": "trails_total=27 from skicentral/peakrankings (input had 26); difficulty_pct 16/61/23 from PeakRankings citation."
+  },
+  {
+    "slug": "perfect-north",
+    "trails_total": 23,
+    "difficulty_pct": {
+      "beginner": 24,
+      "intermediate": 52,
+      "advanced": 19,
+      "expert": 5
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/perfect-north-slopes/",
+    "source_site": "skiresort.info",
+    "notes": "trails_total and difficulty_pct preserved from input; skiresort.info confirms 40/40/20 km split."
+  },
+  {
+    "slug": "pico-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 18,
+      "intermediate": 46,
+      "advanced": 36,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/pico-mountain/",
+    "source_site": "skiresort.info",
+    "notes": "difficulty_pct from skiresort.info (km-based). OnTheSnow URL 404'd; no trail count obtained."
+  },
+  {
+    "slug": "pine-knob",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 50,
+      "advanced": 30,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/pine-knob/",
+    "source_site": "skiresort.info",
+    "notes": "difficulty_pct from skiresort.info (km-based). No trail count obtained within fetch budget."
+  },
+  {
+    "slug": "pine-mountain",
+    "trails_total": 35,
+    "difficulty_pct": {
+      "beginner": 26,
+      "intermediate": 58,
+      "advanced": 16,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/pine-mountain/",
+    "source_site": "skiresort.info",
+    "notes": "trails_total=35 preserved from input; difficulty_pct from skiresort.info."
+  },
+  {
+    "slug": "plain-valley-trails",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skiplain.com/pvnt",
+    "source_site": "official",
+    "notes": "Nordic XC trail system (25+ km classic/skate); no alpine trail count or standard difficulty breakdown applicable. Sources only describe terrain qualitatively."
+  },
+  {
+    "slug": "plattekill-mountain",
+    "trails_total": 41,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 40,
+      "advanced": 20,
+      "expert": 20
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/plattekill/",
+    "source_site": "skiresort.info",
+    "notes": "trails_total and difficulty_pct preserved from input; skiresort.info confirms 27/37/36 km-based split."
+  }
+]

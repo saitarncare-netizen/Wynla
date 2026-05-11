@@ -1,0 +1,422 @@
+[
+  {
+    "slug": "blacktail",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 15,
+      "intermediate": 65,
+      "advanced": 20,
+      "expert": null
+    },
+    "website_url": "https://blacktailmountain.com",
+    "website_alive": true,
+    "source_url": "https://blacktailmountain.com/the-mountain",
+    "notes": "3-tier breakdown (Easier 15 / More Difficult 65 / Most Difficult 20) on The Mountain page; trail count not stated"
+  },
+  {
+    "slug": "blue-hills-ski-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.bluehillsboston.com",
+    "website_alive": true,
+    "source_url": "https://bluehillsboston.com/mountain-info/",
+    "notes": "Home & mountain-info pages show no trail stats; details only in trail-map AVIF image"
+  },
+  {
+    "slug": "blue-knob",
+    "trails_total": 34,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 35,
+      "advanced": 35,
+      "expert": 10
+    },
+    "website_url": "https://www.blueknob.com",
+    "website_alive": true,
+    "source_url": "https://blueknob.com/",
+    "notes": "Found in homepage footer; 34 trails with 20/35/35/10 difficulty split"
+  },
+  {
+    "slug": "blue-mountain-resort",
+    "trails_total": 40,
+    "difficulty_pct": {
+      "beginner": 38,
+      "intermediate": 10,
+      "advanced": 30,
+      "expert": 8
+    },
+    "website_url": "https://www.skibluemt.com",
+    "website_alive": true,
+    "source_url": "https://www.skibluemt.com/winter-sports/skiing-snowboarding/trail-map/",
+    "notes": "Trail map page lists 15 green / 4 blue / 12 black / 3 double-black (total 34 with terrain park trails; pct of 40 used: 15/40=38, 4/40=10, 12/40=30, 3/40=8)"
+  },
+  {
+    "slug": "bluewood",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 50,
+      "advanced": 25,
+      "expert": 0
+    },
+    "website_url": "https://bluewood.com",
+    "website_alive": true,
+    "source_url": "https://bluewood.com/travel",
+    "notes": "3-tier pct on travel page (Green 25 / Blue 50 / Black 25); no expert tier; trail count not stated"
+  },
+  {
+    "slug": "bogus-basin",
+    "trails_total": 90,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.bogusbasin.org",
+    "website_alive": true,
+    "source_url": "https://bogusbasin.org/your-mountain/maps-statistics/",
+    "notes": "Maps & Statistics page lists 90 named runs (homepage says 86, trail map page says 88) - no difficulty breakdown"
+  },
+  {
+    "slug": "bolton-valley",
+    "trails_total": 71,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.boltonvalley.com",
+    "website_alive": true,
+    "source_url": "https://www.boltonvalley.com/winter/trail-maps-snow-reports/trail-maps/",
+    "notes": "Trail maps page confirms 71 Alpine trails; no difficulty breakdown text - in trail map PDFs only"
+  },
+  {
+    "slug": "boreal-mountain-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.rideboreal.com",
+    "website_alive": true,
+    "source_url": "https://www.rideboreal.com",
+    "notes": "SPA-style site; navigation visible but trail stats not in SSR content"
+  },
+  {
+    "slug": "boston-mills",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.bmbw.com",
+    "website_alive": false,
+    "source_url": "https://www.bmbw.com",
+    "notes": "Vail reservations site error: 'The system cannot process your request' on home and stats pages"
+  },
+  {
+    "slug": "bottineau-winter-park",
+    "trails_total": 8,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.skibwp.com",
+    "website_alive": true,
+    "source_url": "https://skibwp.com/",
+    "notes": "Confirms 8 alpine trails 'beginner to expert' - no specific pct breakdown"
+  },
+  {
+    "slug": "bousquet-mountain",
+    "trails_total": 23,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://bousquetmountain.com",
+    "website_alive": true,
+    "source_url": "https://bousquetmountain.com/statistics/",
+    "notes": "Statistics page confirms 23 trails; difficulty fields exist but all show 0 (placeholder)"
+  },
+  {
+    "slug": "boyne-mountain",
+    "trails_total": 64,
+    "difficulty_pct": {
+      "beginner": 48,
+      "intermediate": 27,
+      "advanced": 22,
+      "expert": 3
+    },
+    "website_url": "https://www.boynemountain.com",
+    "website_alive": true,
+    "source_url": "https://www.boynemountain.com/mountain-stats",
+    "notes": "Mountain Stats page: 64 named runs (65 elsewhere), 48/27/22/3 pct split"
+  },
+  {
+    "slug": "brandywine",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.bmbw.com",
+    "website_alive": false,
+    "source_url": "https://www.bmbw.com",
+    "notes": "Same domain as Boston Mills; Vail reservations site error"
+  },
+  {
+    "slug": "breckenridge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.breckenridge.com",
+    "website_alive": false,
+    "source_url": "https://www.breckenridge.com",
+    "notes": "Vail reservations site error: 'The system cannot process your request'"
+  },
+  {
+    "slug": "bretton-woods",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.brettonwoods.com",
+    "website_alive": true,
+    "source_url": "https://www.brettonwoods.com",
+    "notes": "Home page shows '0 Open Trails' snapshot but no total or difficulty pct; /the-mountain and /winter/mountain return 404"
+  },
+  {
+    "slug": "brian-head",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.brianhead.com",
+    "website_alive": true,
+    "source_url": "https://www.brianhead.com/trail-map/",
+    "notes": "Trail map page links to images only; no text stats on home or trail-map pages"
+  },
+  {
+    "slug": "bridger-bowl",
+    "trails_total": 75,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://bridgerbowl.com",
+    "website_alive": true,
+    "source_url": "https://bridgerbowl.com/mountain/stats",
+    "notes": "Mountain Stats: 75+ named runs plus unmarked terrain; difficulty pct not on stats page"
+  },
+  {
+    "slug": "brighton",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.brightonresort.com",
+    "website_alive": true,
+    "source_url": "https://www.brightonresort.com",
+    "notes": "Home page Mountain Stats shows acres/vert/night trails (30) but no total or difficulty pct; trail-maps page only links to PDFs"
+  },
+  {
+    "slug": "bristol-mountain",
+    "trails_total": 39,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.bristolmountain.com",
+    "website_alive": true,
+    "source_url": "https://www.bristolmountain.com",
+    "notes": "Home page states '39 slopes and trails'; difficulty pct in trail-map PDF only"
+  },
+  {
+    "slug": "bromley-mountain",
+    "trails_total": 47,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.bromley.com",
+    "website_alive": true,
+    "source_url": "https://www.bromley.com",
+    "notes": "Home page confirms 47 trails; difficulty breakdown not on home page text"
+  },
+  {
+    "slug": "bruce-mound-winter-sports-area",
+    "trails_total": 10,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.clarkcountywi.gov/brucemound?fbclid=IwY2xjawGGKnNleHRuA2FlbQIxMAABHVI0TRWfgUqgH2E-x8t200vmclOlQI6wlMJneID4P6hL7n2rBYvFIMewtg_aem___GnBCZLiGgScH-L8YrkfA",
+    "website_alive": true,
+    "source_url": "https://www.clarkcountywi.gov/brucemound",
+    "notes": "Mentions 10 slopes and 6 expert trails; no full difficulty breakdown by skill level"
+  },
+  {
+    "slug": "brundage-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.brundage.com",
+    "website_alive": true,
+    "source_url": "https://www.brundage.com",
+    "notes": "Home page in summer mode (bike trails listed, not winter ski trail stats)"
+  },
+  {
+    "slug": "bryce-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.bryceresort.com",
+    "website_alive": true,
+    "source_url": "https://www.bryceresort.com",
+    "notes": "Home page emphasizes bike park; no winter trail count or difficulty pct in SSR content"
+  },
+  {
+    "slug": "buck-hill",
+    "trails_total": 15,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.buckhill.com",
+    "website_alive": true,
+    "source_url": "https://buckhill.com/skiing-snowboarding/winter-trail-map/",
+    "notes": "Winter trail map page: 15 runs listed by name; difficulty pct not in HTML"
+  },
+  {
+    "slug": "buena-vista",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.bvskiarea.com",
+    "website_alive": true,
+    "source_url": "https://www.bvskiarea.com",
+    "notes": "Home page has no trail count or difficulty pct in SSR content"
+  },
+  {
+    "slug": "buffalo-ski-club",
+    "trails_total": 43,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.buffaloskiclub.com",
+    "website_alive": true,
+    "source_url": "https://buffaloskicenter.com/",
+    "notes": "buffaloskiclub.com 301 redirects to buffaloskicenter.com; header says '43 Slopes & 3 Lodges'; no pct breakdown"
+  },
+  {
+    "slug": "burke-mountain",
+    "trails_total": 53,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.skiburke.com",
+    "website_alive": true,
+    "source_url": "https://www.skiburke.com",
+    "notes": "Home page confirms 53 trails; no difficulty pct in HTML text"
+  },
+  {
+    "slug": "buttermilk",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.aspensnowmass.com",
+    "website_alive": true,
+    "source_url": "https://www.aspensnowmass.com/our-mountains/buttermilk",
+    "notes": "Buttermilk page describes terrain but trail count/pct not in SSR content; trail-map sub-page 404"
+  },
+  {
+    "slug": "caberfae-peaks",
+    "trails_total": 27,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.caberfaepeaks.com",
+    "website_alive": true,
+    "source_url": "https://www.caberfaepeaks.com",
+    "notes": "Home page '0/27 RUNS OPEN' status confirms 27 total; no difficulty breakdown"
+  },
+  {
+    "slug": "camden-snow-bowl",
+    "trails_total": 15,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.camdensnowbowl.com",
+    "website_alive": true,
+    "source_url": "https://www.camdensnowbowl.com",
+    "notes": "Home page lists 15 ski trails, 2 terrain parks, 11 glades; no difficulty pct"
+  }
+]

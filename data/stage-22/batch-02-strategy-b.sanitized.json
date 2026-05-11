@@ -1,0 +1,392 @@
+[
+  {
+    "slug": "aspen-snowmass",
+    "trails_total": 366,
+    "difficulty_pct": {
+      "beginner": 6,
+      "intermediate": 43,
+      "advanced": 17,
+      "expert": 34
+    },
+    "source_url": "https://www.onthesnow.com/colorado/aspen-snowmass/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "366 total runs across all four mountains; full difficulty breakdown listed."
+  },
+  {
+    "slug": "attitash",
+    "trails_total": 73,
+    "difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 49,
+      "advanced": 29,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/new-hampshire/attitash/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "73 runs / 311 acres; OnTheSnow does not list expert percentage."
+  },
+  {
+    "slug": "badger-mountain-wa",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "source_site": null,
+    "notes": "Tiny WA volunteer-run area; not found on skiresort.info, OnTheSnow, SkiCentral, or SnowPak."
+  },
+  {
+    "slug": "badger-pass",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 75,
+      "intermediate": 25,
+      "advanced": 0,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/badger-pass/",
+    "source_site": "skiresort.info",
+    "notes": "Slope offering: 4.5km easy / 1.5km intermediate / 0km difficult (6km total)."
+  },
+  {
+    "slug": "bear-basin-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "source_site": null,
+    "notes": "Nordic XC center (~30km trails) - no difficulty-percentage breakdown found in external dbs."
+  },
+  {
+    "slug": "bear-creek-mountain-resort",
+    "trails_total": 23,
+    "difficulty_pct": {
+      "beginner": 45,
+      "intermediate": 27,
+      "advanced": 27,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/pennsylvania/bear-creek-mountain-resort/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "23 runs / 86 acres; no expert category listed."
+  },
+  {
+    "slug": "bear-mountain",
+    "trails_total": 26,
+    "difficulty_pct": {
+      "beginner": 27,
+      "intermediate": 42,
+      "advanced": 23,
+      "expert": 8
+    },
+    "source_url": "https://www.onthesnow.com/california/bear-mountain/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "26 runs / 198 acres in Big Bear Lake CA."
+  },
+  {
+    "slug": "bear-paw",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 60,
+      "advanced": 10,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/bear-paw-ski-bowl/",
+    "source_site": "skiresort.info",
+    "notes": "Slope offering: 3km easy / 6km intermediate / 1km difficult (10km total)."
+  },
+  {
+    "slug": "bear-valley-adventure-company",
+    "trails_total": 38,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.xcskiresorts.com/bear-valley-cross-country",
+    "source_site": "xcskiresorts.com",
+    "notes": "Nordic XC center: 38 trails / 65+ km; no difficulty percentages published."
+  },
+  {
+    "slug": "bear-valley-mountain",
+    "trails_total": 103,
+    "difficulty_pct": {
+      "beginner": 8,
+      "intermediate": 21,
+      "advanced": 68,
+      "expert": 3
+    },
+    "source_url": "https://www.onthesnow.com/california/bear-valley/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "103 runs / 1,680 acres; advanced-dominated terrain."
+  },
+  {
+    "slug": "beartooth-basin",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 0,
+      "intermediate": 40,
+      "advanced": 60,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/beartooth-basin/",
+    "source_site": "skiresort.info",
+    "notes": "Summer-only ski area: 0/2/3 km easy/int/diff (5km total)."
+  },
+  {
+    "slug": "beaver-creek",
+    "trails_total": 173,
+    "difficulty_pct": {
+      "beginner": 39,
+      "intermediate": 31,
+      "advanced": 24,
+      "expert": 6
+    },
+    "source_url": "https://www.onthesnow.com/colorado/beaver-creek/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "173 total runs; full difficulty breakdown listed."
+  },
+  {
+    "slug": "beaver-mountain",
+    "trails_total": 48,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 40,
+      "advanced": 27,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/beaver-mountain/",
+    "source_site": "skiresort.info",
+    "notes": "Slope offering: 10km easy / 12km intermediate / 8km difficult (30km total); OnTheSnow lists 48 runs."
+  },
+  {
+    "slug": "beech-mountain-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 50,
+      "advanced": 29,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/beech-mountain/",
+    "source_site": "skiresort.info",
+    "notes": "Slope offering: 3km easy / 7km intermediate / 4km difficult (14km total)."
+  },
+  {
+    "slug": "belleayre-mountain",
+    "trails_total": 62,
+    "difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 48,
+      "advanced": 19,
+      "expert": 13
+    },
+    "source_url": "https://www.onthesnow.com/new-york/belleayre/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "62 runs / 175 acres; full difficulty breakdown."
+  },
+  {
+    "slug": "berkshire-east",
+    "trails_total": 43,
+    "difficulty_pct": {
+      "beginner": 28,
+      "intermediate": 42,
+      "advanced": 28,
+      "expert": 2
+    },
+    "source_url": "https://www.onthesnow.com/massachusetts/berkshire-east/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "43 runs / 180 acres; full difficulty breakdown."
+  },
+  {
+    "slug": "bethel-village-trails",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "source_site": null,
+    "notes": "Nordic XC center (~35km trails) - no difficulty-percentage breakdown found in external dbs."
+  },
+  {
+    "slug": "big-bear-ca",
+    "trails_total": 26,
+    "difficulty_pct": {
+      "beginner": 27,
+      "intermediate": 42,
+      "advanced": 23,
+      "expert": 8
+    },
+    "source_url": "https://www.onthesnow.com/california/bear-mountain/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "Big Bear Mountain Resort = Bear Mountain page used; 26 runs / 198 acres."
+  },
+  {
+    "slug": "big-bear-pa",
+    "trails_total": 18,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 33,
+      "advanced": 28,
+      "expert": 6
+    },
+    "source_url": "https://www.onthesnow.com/pennsylvania/big-bear/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "Ski Big Bear at Masthope Mountain: 18 runs."
+  },
+  {
+    "slug": "big-boulder",
+    "trails_total": 16,
+    "difficulty_pct": {
+      "beginner": 38,
+      "intermediate": 19,
+      "advanced": 44,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/pennsylvania/big-boulder/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "16 runs / 55 acres; OnTheSnow lists three categories only."
+  },
+  {
+    "slug": "big-powderhorn-mountain",
+    "trails_total": 44,
+    "difficulty_pct": {
+      "beginner": 27,
+      "intermediate": 41,
+      "advanced": 32,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/michigan/big-powderhorn-mountain/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "44 runs / 253 acres; no expert category listed."
+  },
+  {
+    "slug": "big-rock",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 10,
+      "intermediate": 70,
+      "advanced": 20,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/big-rock/",
+    "source_site": "skiresort.info",
+    "notes": "Slope offering: 2km easy / 14km intermediate / 4km difficult (20km total)."
+  },
+  {
+    "slug": "big-sky",
+    "trails_total": 320,
+    "difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 29,
+      "advanced": 31,
+      "expert": 19
+    },
+    "source_url": "https://www.onthesnow.com/montana/big-sky-resort/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "320 total runs; full difficulty breakdown listed."
+  },
+  {
+    "slug": "big-snow-american-dream",
+    "trails_total": 3,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 33,
+      "advanced": 33,
+      "expert": 0
+    },
+    "source_url": "https://www.peakrankings.com/content/big-snow-american-dream",
+    "source_site": "peakrankings.com",
+    "notes": "Indoor resort: 3 named trails (Lil' Dipper, Switchback, Northern Lights) one per difficulty."
+  },
+  {
+    "slug": "big-squaw-mountain",
+    "trails_total": 29,
+    "difficulty_pct": {
+      "beginner": 37,
+      "intermediate": 37,
+      "advanced": 26,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/big-moose-mountain/",
+    "source_site": "skiresort.info",
+    "notes": "Slope offering: 3km easy / 3km intermediate / 2km difficult (8km total); OnTheSnow lists 29 runs."
+  },
+  {
+    "slug": "bittersweet-ski-resort",
+    "trails_total": 18,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 44,
+      "advanced": 6,
+      "expert": 17
+    },
+    "source_url": "https://www.onthesnow.com/michigan/bittersweet-ski-area/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "18 runs / 100 acres; full breakdown."
+  },
+  {
+    "slug": "black-area",
+    "trails_total": 68,
+    "difficulty_pct": {
+      "beginner": 29,
+      "intermediate": 32,
+      "advanced": 24,
+      "expert": 15
+    },
+    "source_url": "https://www.onthesnow.com/new-hampshire/black-mountain/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "Black Mountain NH: 68 runs / 600 acres; full breakdown."
+  },
+  {
+    "slug": "black-mountain-nh",
+    "trails_total": 68,
+    "difficulty_pct": {
+      "beginner": 29,
+      "intermediate": 32,
+      "advanced": 24,
+      "expert": 15
+    },
+    "source_url": "https://www.onthesnow.com/new-hampshire/black-mountain/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "Same Black Mountain NH page; 68 runs / 600 acres."
+  },
+  {
+    "slug": "black-mountain-of-maine",
+    "trails_total": 38,
+    "difficulty_pct": {
+      "beginner": 18,
+      "intermediate": 31,
+      "advanced": 46,
+      "expert": 5
+    },
+    "source_url": "https://www.onthesnow.com/maine/black-mountain-of-maine/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "38 runs / 600 acres; full difficulty breakdown."
+  },
+  {
+    "slug": "blackjack-mountain",
+    "trails_total": 74,
+    "difficulty_pct": {
+      "beginner": 14,
+      "intermediate": 30,
+      "advanced": 37,
+      "expert": 20
+    },
+    "source_url": "https://www.onthesnow.com/michigan/blackjack-ski-resort/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "Now part of Snowriver Mountain Resort; 74 runs / 370 acres; full breakdown."
+  }
+]

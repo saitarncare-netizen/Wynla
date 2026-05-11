@@ -1,0 +1,28 @@
+[
+  {
+    "slug": "woodward-park-city",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Woodward_Park_City",
+    "source_site": "wikipedia.org",
+    "notes": "No dedicated Wikipedia article found (404). Web search returned descriptive content emphasizing terrain parks/freestyle progression rather than traditional run counts. No fabricated values."
+  },
+  {
+    "slug": "yellowstone-club",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 12,
+      "intermediate": 42,
+      "advanced": 27,
+      "expert": 16
+    },
+    "source_url": "https://bestsnow.net/yclbguid.htm",
+    "source_site": "bestsnow.net (cited via Wikipedia-adjacent search)",
+    "notes": "Wikipedia article on Yellowstone Club describes terrain qualitatively (2,200 acres, Pioneer Ridge double-blacks, intermediate Andesite Mountain) but gives no run count or percentages. Bestsnow.net terrain analysis table reports beginner 12% / intermediate 42% / advanced 27% / expert 16% / varied 3% (sums 100%). Note: data is from 2001 and may not reflect current expanded terrain — flagged in notes for downstream verification."
+  }
+]

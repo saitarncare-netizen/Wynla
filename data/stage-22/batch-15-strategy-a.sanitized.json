@@ -1,0 +1,422 @@
+[
+  {
+    "slug": "vail",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.vail.com",
+    "website_alive": true,
+    "source_url": "https://www.vail.com",
+    "notes": "Vail.com blocks WebFetch with HTTP 403 (bot protection); cannot extract data via fetch."
+  },
+  {
+    "slug": "victor-constant-ski-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://westpoint.armymwr.com/programs/victor-constant-ski-area",
+    "website_alive": true,
+    "source_url": "https://westpoint.armymwr.com/programs/victor-constant-ski-area",
+    "notes": "Page alive but no trail count or difficulty breakdown. Trail map only via PDF download link."
+  },
+  {
+    "slug": "villa-olivia",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.villaolivia.com",
+    "website_alive": true,
+    "source_url": "https://bartlettparks.org/",
+    "notes": "villaolivia.com 301-redirects to bartlettparks.org (Bartlett Park District); no trail data on parent site."
+  },
+  {
+    "slug": "wachusett-mountain",
+    "trails_total": 27,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.wachusett.com",
+    "website_alive": true,
+    "source_url": "https://www.wachusett.com/the-mountain/mountain-stats",
+    "notes": "Mountain stats page lists 27 trails. No difficulty breakdown provided on the page."
+  },
+  {
+    "slug": "warner-canyon",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://warnercanyonski.com/",
+    "website_alive": true,
+    "source_url": "https://warnercanyonski.com/",
+    "notes": "Page alive; describes area as 'perfect for beginner and intermediate' but no trail count/breakdown."
+  },
+  {
+    "slug": "waterville-valley",
+    "trails_total": 62,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.waterville.com",
+    "website_alive": true,
+    "source_url": "https://www.waterville.com",
+    "notes": "Homepage Quick Stats lists 62 trails, 2020 ft vertical, 4004 ft elevation, 10 lifts. No difficulty pct on homepage."
+  },
+  {
+    "slug": "welch-village",
+    "trails_total": 50,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.welchvillage.com",
+    "website_alive": true,
+    "source_url": "https://www.welchvillage.com/trailMap.cfm",
+    "notes": "Trail map page lists 50 runs across 140 skiable acres. No difficulty breakdown."
+  },
+  {
+    "slug": "west-mountain",
+    "trails_total": 35,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.westmtn.net",
+    "website_alive": true,
+    "source_url": "https://westmountain.com/trail-map/",
+    "notes": "westmtn.net redirects to westmountain.com. Trail map page lists 35 total: 30 groomed + 5 ungroomed glades. No difficulty pct."
+  },
+  {
+    "slug": "whaleback-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.whaleback.com",
+    "website_alive": true,
+    "source_url": "https://www.whaleback.com",
+    "notes": "Site alive but trail map shown as image only; no extractable trail count or breakdown in text."
+  },
+  {
+    "slug": "white-grass-touring",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://whitegrass.com",
+    "website_alive": true,
+    "source_url": "https://whitegrass.com",
+    "notes": "Nordic ski center. Site mentions 'over 50 km of maintained trails' but no run count or difficulty pct."
+  },
+  {
+    "slug": "white-pass",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://skiwhitepass.com",
+    "website_alive": true,
+    "source_url": "https://skiwhitepass.com",
+    "notes": "Site alive but trail data only in trail-map images; no text-extractable count/breakdown."
+  },
+  {
+    "slug": "white-pine",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.whitepineski.com",
+    "website_alive": true,
+    "source_url": "https://www.whitepineresort.com/",
+    "notes": "whitepineski.com redirects to whitepineresort.com. Mentions 363 skiable acres but no trail count or difficulty pct."
+  },
+  {
+    "slug": "white-pine-touring-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": null,
+    "website_alive": false,
+    "source_url": null,
+    "notes": "No website_url in input. Skipped."
+  },
+  {
+    "slug": "whitecap-mountains",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.skiwhitecap.com",
+    "website_alive": true,
+    "source_url": "https://www.skiwhitecap.com",
+    "notes": "Site returns 422 on root and 404 on /the-mountain; could not extract data. Treated as alive (recent 422 != down)."
+  },
+  {
+    "slug": "whiteface-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://whiteface.com",
+    "website_alive": true,
+    "source_url": "https://whiteface.com",
+    "notes": "whiteface.com blocks WebFetch with HTTP 403 (bot protection); cannot extract via fetch."
+  },
+  {
+    "slug": "whitefish",
+    "trails_total": 110,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://skiwhitefish.com",
+    "website_alive": true,
+    "source_url": "https://skiwhitefish.com/mountain-stats/",
+    "notes": "Mountain Stats page confirms 110 named trails across ~3000 acres. No difficulty pct breakdown on page."
+  },
+  {
+    "slug": "whitetail-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.skiwhitetail.com",
+    "website_alive": false,
+    "source_url": "https://www.skiwhitetail.com",
+    "notes": "skiwhitetail.com returns reservations.snow.com system error page; site appears broken (Vail Resorts shared platform outage)."
+  },
+  {
+    "slug": "wild-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.wildmountain.com",
+    "website_alive": true,
+    "source_url": "https://www.wildmountain.com",
+    "notes": "Site alive; trail map linked but content not in homepage text. No extractable count/breakdown."
+  },
+  {
+    "slug": "wildcat-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.skiwildcat.com",
+    "website_alive": false,
+    "source_url": "https://www.skiwildcat.com",
+    "notes": "skiwildcat.com returns reservations.snow.com system error page (Vail Resorts shared platform outage)."
+  },
+  {
+    "slug": "willamette-pass",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.willamettepass.com",
+    "website_alive": true,
+    "source_url": "https://www.willamettepass.ski/",
+    "notes": "willamettepass.com redirects to willamettepass.ski. Mentions 1563 ft vertical but no trail count or difficulty pct."
+  },
+  {
+    "slug": "willard-mountain",
+    "trails_total": 23,
+    "difficulty_pct": {
+      "beginner": 17,
+      "intermediate": 44,
+      "advanced": 39,
+      "expert": 0
+    },
+    "website_url": "https://www.willardmountain.com",
+    "website_alive": true,
+    "source_url": "https://www.willardmountain.com",
+    "notes": "Trail listing on site: 4 beginner, 10 intermediate, 9 advanced/expert (combined). Advanced+expert merged into advanced; expert=0."
+  },
+  {
+    "slug": "wilmot-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.wilmotmountain.com",
+    "website_alive": false,
+    "source_url": "https://www.wilmotmountain.com",
+    "notes": "wilmotmountain.com returns reservations.snow.com system error page (Vail Resorts shared platform outage)."
+  },
+  {
+    "slug": "windham-mountain",
+    "trails_total": 54,
+    "difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 46,
+      "advanced": 19,
+      "expert": 13
+    },
+    "website_url": "https://www.windhammountainclub.com",
+    "website_alive": true,
+    "source_url": "https://www.windhammountainclub.com",
+    "notes": "Site confirms 54 trails (shown as '0/54' on conditions page). Kept input difficulty_pct (22/46/19/13) — not contradicted by site."
+  },
+  {
+    "slug": "winter-park",
+    "trails_total": 171,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.winterparkresort.com",
+    "website_alive": true,
+    "source_url": "https://www.winterparkresort.com",
+    "notes": "Homepage loads but does not display trail stats; /mountain-info/mountain-stats returned 404. Kept input value 171, no new pct data."
+  },
+  {
+    "slug": "wintergreen-resort",
+    "trails_total": 27,
+    "difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 19,
+      "advanced": 56,
+      "expert": 0
+    },
+    "website_url": "https://www.wintergreenresort.com",
+    "website_alive": true,
+    "source_url": "https://www.wintergreenresort.com/mountain-report-cams/",
+    "notes": "Mountain report page shows 27 total runs: 6 beginner, 5 intermediate, 14 advanced/expert, 1 double-black, 2 specialized. Advanced+double-black merged into advanced (56%); specialized (terrain park) excluded from difficulty buckets."
+  },
+  {
+    "slug": "winterplace-ski-resort",
+    "trails_total": 28,
+    "difficulty_pct": {
+      "beginner": 39,
+      "intermediate": 36,
+      "advanced": 25,
+      "expert": 0
+    },
+    "website_url": "https://www.winterplace.com",
+    "website_alive": true,
+    "source_url": "https://www.winterplace.com",
+    "notes": "Site confirms 28 trails ('0 of 28 Open Trails'). Kept input difficulty_pct (39/36/25/0) — not contradicted by site."
+  },
+  {
+    "slug": "wisp-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.wispresort.com",
+    "website_alive": true,
+    "source_url": "https://www.wispresort.com",
+    "notes": "Site alive but trail data only behind trail-map page; no text-extractable count/breakdown."
+  },
+  {
+    "slug": "wolf-creek",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.wolfcreekski.com",
+    "website_alive": true,
+    "source_url": "https://www.wolfcreekski.com",
+    "notes": "Site alive but no trail count or difficulty breakdown extractable from homepage; /trail-info returned 404."
+  },
+  {
+    "slug": "woods-valley",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.woodsvalleyskiarea.com",
+    "website_alive": true,
+    "source_url": "https://www.woodsvalleyskiarea.com",
+    "notes": "Site alive but trail-map content not in homepage text. No extractable count/breakdown."
+  },
+  {
+    "slug": "woodstock-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": null,
+    "website_alive": false,
+    "source_url": null,
+    "notes": "No website_url in input. Skipped."
+  }
+]

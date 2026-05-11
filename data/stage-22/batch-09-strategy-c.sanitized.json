@@ -1,0 +1,396 @@
+[
+  {
+    "slug": "mount-ashwabay",
+    "trails_total": 12,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.mtashwabay.org/alpine-skiing--snowboarding.html",
+    "source_site": "mtashwabay.org",
+    "notes": "Wikipedia 404; web search shows 12 alpine runs (317 ft vertical). Difficulty breakdown not found for alpine trails (only cross-country trail-name list)."
+  },
+  {
+    "slug": "mount-bohemia",
+    "trails_total": 95,
+    "difficulty_pct": {
+      "beginner": 0,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Mount_Bohemia",
+    "source_site": "Wikipedia",
+    "notes": "Wikipedia confirms 95 runs, 0 beginner (no green trails), 3 intermediate blue, rest black diamond variants. No published percentage split."
+  },
+  {
+    "slug": "mount-holly",
+    "trails_total": 20,
+    "difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 44,
+      "advanced": 37,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/michigan/mount-holly/ski-resort",
+    "source_site": "OnTheSnow / web search",
+    "notes": "Wikipedia 404. Web search: 20 trails, 22% beginner, 44% intermediate, 37% advanced (rounded; sums to 103%, source-reported)."
+  },
+  {
+    "slug": "mount-itasca",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.mtitasca.com/",
+    "source_site": "mtitasca.com",
+    "notes": "Wikipedia 404. Web search: alpine runs exist (small community area with snow tubing, ski jumps, biathlon), but no published trail count or difficulty breakdown."
+  },
+  {
+    "slug": "mount-jefferson-ski-area",
+    "trails_total": 12,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/maine/mt-jefferson/ski-resort",
+    "source_site": "OnTheSnow / web search",
+    "notes": "Wikipedia 404. Web search: 12 downhill trails, 432 ft vertical. No published difficulty percentages."
+  },
+  {
+    "slug": "mount-kato",
+    "trails_total": 19,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Mount_Kato",
+    "source_site": "Wikipedia",
+    "notes": "Wikipedia confirms 19 trails. No difficulty breakdown published."
+  },
+  {
+    "slug": "mount-peter",
+    "trails_total": 13,
+    "difficulty_pct": {
+      "beginner": 39,
+      "intermediate": 33,
+      "advanced": 28,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/new-york/mount-peter-ski-area/ski-resort",
+    "source_site": "OnTheSnow / web search",
+    "notes": "Wikipedia is a disambiguation page. Web search: 13 trails (matches current). Breakdown 39% beginner / 33% intermediate / 28% advanced from OnTheSnow."
+  },
+  {
+    "slug": "mount-pisgah",
+    "trails_total": 6,
+    "difficulty_pct": {
+      "beginner": 17,
+      "intermediate": 33,
+      "advanced": 50,
+      "expert": 0
+    },
+    "source_url": "https://www.saranaclake.com/alpine-skiing/mt-pisgah-recreation-center",
+    "source_site": "saranaclake.com / web search",
+    "notes": "Wikipedia page is unrelated mountain. Web search confirms 6 trails: 1 green, 2 blue, 3 black (17/33/50). Matches existing values."
+  },
+  {
+    "slug": "mount-snow",
+    "trails_total": 86,
+    "difficulty_pct": {
+      "beginner": 16,
+      "intermediate": 66,
+      "advanced": 17,
+      "expert": 1
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Mount_Snow",
+    "source_site": "Wikipedia",
+    "notes": "Wikipedia confirms 86 trails, 16/66/17/1 breakdown. Matches existing values."
+  },
+  {
+    "slug": "mount-southington",
+    "trails_total": 14,
+    "difficulty_pct": {
+      "beginner": 43,
+      "intermediate": 29,
+      "advanced": 14,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Mount_Southington",
+    "source_site": "Wikipedia",
+    "notes": "Wikipedia: 14 trails (6 green, 4 blue, 2 black; 2 unaccounted in source). Calculated 43/29/14 from raw counts (sums to 86)."
+  },
+  {
+    "slug": "mount-sunapee",
+    "trails_total": 66,
+    "difficulty_pct": {
+      "beginner": 26,
+      "intermediate": 48,
+      "advanced": 26,
+      "expert": 0
+    },
+    "source_url": "https://www.mountsunapee.com/the-mountain/about-the-mountain/mountain-info.aspx",
+    "source_site": "mountsunapee.com / web search",
+    "notes": "Wikipedia article is about the mountain (not the resort) and has no trail data. Web search: 66 trails (some sources say 67). Existing 26/48/26 difficulty kept."
+  },
+  {
+    "slug": "mountain-creek",
+    "trails_total": 46,
+    "difficulty_pct": {
+      "beginner": 17,
+      "intermediate": 57,
+      "advanced": 26,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/new-jersey/mountain-creek-resort/ski-resort",
+    "source_site": "OnTheSnow / web search",
+    "notes": "Wikipedia 404 for ski-resort article. Web search: 46 trails, 17/57/26 breakdown."
+  },
+  {
+    "slug": "mountain-high",
+    "trails_total": 50,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 40,
+      "advanced": 35,
+      "expert": 0
+    },
+    "source_url": "https://www.mthigh.com/site/trails-and-conditions/other/mountain-stats.html",
+    "source_site": "mthigh.com / web search",
+    "notes": "Wikipedia 404 for ski-area article. Web search: 50 trails (existing); 25/40/35 difficulty per visitcalifornia.com."
+  },
+  {
+    "slug": "mt-abram",
+    "trails_total": 40,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 52,
+      "advanced": 28,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/maine/mt-abram-ski-resort/ski-resort",
+    "source_site": "OnTheSnow / web search",
+    "notes": "Wikipedia article (Ski_Mount_Abram) exists but WebFetch returned 404. Web search: 40 trails, 20/52/28 breakdown. Existing value of 42 trails close."
+  },
+  {
+    "slug": "mt-bachelor",
+    "trails_total": 123,
+    "difficulty_pct": {
+      "beginner": 15,
+      "intermediate": 35,
+      "advanced": 30,
+      "expert": 20
+    },
+    "source_url": "https://www.mtbachelor.com",
+    "source_site": "web search (multiple sources)",
+    "notes": "Wikipedia article lacks trail data. Web search reports 123 trails (sources vary 101-123). Existing 15/35/30/20 difficulty retained as closest published split."
+  },
+  {
+    "slug": "mt-baker-ski-area",
+    "trails_total": 31,
+    "difficulty_pct": {
+      "beginner": 24,
+      "intermediate": 45,
+      "advanced": 31,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Mt._Baker_Ski_Area",
+    "source_site": "Wikipedia",
+    "notes": "Wikipedia: 31 runs, 24% easiest / 45% more difficult / 31% most difficult (no separate expert tier)."
+  },
+  {
+    "slug": "mt-baldy",
+    "trails_total": 26,
+    "difficulty_pct": {
+      "beginner": 15,
+      "intermediate": 31,
+      "advanced": 54,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Mount_Baldy_Ski_Lifts",
+    "source_site": "Wikipedia",
+    "notes": "Wikipedia: 26 trails total with 15/31/54 split. Matches existing difficulty values."
+  },
+  {
+    "slug": "mt-brighton",
+    "trails_total": 25,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 40,
+      "advanced": 30,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Mt._Brighton",
+    "source_site": "Wikipedia",
+    "notes": "Wikipedia: 25 trails, 30% beginner / 40% intermediate / 30% advanced-expert combined."
+  },
+  {
+    "slug": "mt-crescent",
+    "trails_total": 10,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 34,
+      "advanced": 33,
+      "expert": 0
+    },
+    "source_url": "https://www.snow-forecast.com/resorts/MtCrescent",
+    "source_site": "snow-forecast.com / web search",
+    "notes": "Wikipedia 404. Web search: ~9-10 trails, 33/34/33 split. Now rebranded as Crescent Hill at Hitchcock."
+  },
+  {
+    "slug": "mt-eyak",
+    "trails_total": 10,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.mteyak.org/",
+    "source_site": "mteyak.org / web search",
+    "notes": "Wikipedia article (Mount_Eyak_Ski_Area) returned 404. Existing 10 trails retained (web search mentions up to 30 runs total including off-piste lines). No published percentage breakdown."
+  },
+  {
+    "slug": "mt-holiday",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/michigan/mount-holiday-ski-area/ski-resort",
+    "source_site": "OnTheSnow / web search",
+    "notes": "[SANITIZED — fabrication marker in notes] Wikipedia 404. Web search: 16 runs, 30/40/30 difficulty split. Existing value (12) likely outdated.",
+    "_sanitized": true,
+    "_original_notes": "Wikipedia 404. Web search: 16 runs, 30/40/30 difficulty split. Existing value (12) likely outdated."
+  },
+  {
+    "slug": "mt-hood-meadows",
+    "trails_total": 87,
+    "difficulty_pct": {
+      "beginner": 15,
+      "intermediate": 40,
+      "advanced": 15,
+      "expert": 30
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Mount_Hood_Meadows",
+    "source_site": "Wikipedia",
+    "notes": "Wikipedia: 87 trails, 15/40/15/30 split. Existing 142 trail figure appears inflated; Wikipedia's 87 is the more commonly cited count."
+  },
+  {
+    "slug": "mt-hood-skibowl",
+    "trails_total": 69,
+    "difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 40,
+      "advanced": 23,
+      "expert": 16
+    },
+    "source_url": "https://www.peakrankings.com/content/mount-hood-skibowl",
+    "source_site": "PeakRankings / web search",
+    "notes": "Wikipedia 404. Web search: 69 trails, 21/40/23/16 split."
+  },
+  {
+    "slug": "mt-la-crosse",
+    "trails_total": 18,
+    "difficulty_pct": {
+      "beginner": 17,
+      "intermediate": 56,
+      "advanced": 22,
+      "expert": 6
+    },
+    "source_url": "https://wisconsintrailguide.com/skiing-snowboarding/mt-lacrosse.html",
+    "source_site": "wisconsintrailguide.com / web search",
+    "notes": "Wikipedia 404. Web search: 18 runs (3 beginner / 10 intermediate / 4 advanced / 1 expert). Calculated 17/56/22/6 from raw counts."
+  },
+  {
+    "slug": "mt-lemmon-ski-valley",
+    "trails_total": 22,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 38,
+      "advanced": 42,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Mount_Lemmon_Ski_Valley",
+    "source_site": "Wikipedia",
+    "notes": "Wikipedia: 22 trails (one section says 21), 20/38/42 split with advanced+expert combined."
+  },
+  {
+    "slug": "mt-rose-ski-tahoe",
+    "trails_total": 70,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 30,
+      "advanced": 40,
+      "expert": 10
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Mt._Rose_Ski_Tahoe",
+    "source_site": "Wikipedia",
+    "notes": "Wikipedia: over 70 trails, 20/30/40/10 split. Matches existing difficulty values."
+  },
+  {
+    "slug": "mt-shasta",
+    "trails_total": 38,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 55,
+      "advanced": 25,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Mt._Shasta_Ski_Park",
+    "source_site": "Wikipedia",
+    "notes": "Wikipedia Mt. Shasta Ski Park: 38 trails, 20/55/25. Existing record (21/55/24) extremely close."
+  },
+  {
+    "slug": "mt-shasta-ski-park",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Mt._Shasta_Ski_Park",
+    "source_site": "Wikipedia",
+    "notes": "[SANITIZED — fabrication marker in notes] Wikipedia: 38 trails, 20/55/25 split. (Note: likely duplicate of mt-shasta slug.)",
+    "_sanitized": true,
+    "_original_notes": "Wikipedia: 38 trails, 20/55/25 split. (Note: likely duplicate of mt-shasta slug.)"
+  },
+  {
+    "slug": "mt-spokane",
+    "trails_total": 52,
+    "difficulty_pct": {
+      "beginner": 23,
+      "intermediate": 32,
+      "advanced": 45,
+      "expert": 0
+    },
+    "source_url": "https://snowstash.com/usa/washington/mt-spokane",
+    "source_site": "snowstash.com / web search",
+    "notes": "Wikipedia 404. Web search: 52 runs (close to existing 53), 23/32/45 split."
+  },
+  {
+    "slug": "mt-waterman",
+    "trails_total": 27,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 20,
+      "advanced": 60,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Mt._Waterman",
+    "source_site": "Wikipedia",
+    "notes": "Wikipedia: 27 trails, 20/20/60 split. Existing record (19/19/62) very close."
+  }
+]

@@ -1,0 +1,452 @@
+[
+  {
+    "slug": "camelback-mountain-resort",
+    "name": "Camelback Mountain Resort",
+    "state": "PA",
+    "trails_total": 35,
+    "difficulty_pct": {
+      "beginner": 39,
+      "intermediate": 26,
+      "advanced": 26,
+      "expert": 9
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Camelback_Mountain_Resort",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia infobox: 35 trails, 39/26/26/9. Sums to 100."
+  },
+  {
+    "slug": "camp-10-area",
+    "name": "Camp 10 Ski Area",
+    "state": "WI",
+    "trails_total": 15,
+    "difficulty_pct": {
+      "beginner": 40,
+      "intermediate": 40,
+      "advanced": 20,
+      "expert": null
+    },
+    "source_url": "https://www.tripadvisor.com/Attraction_Review-g60229-d291920-Reviews-Camp_10_Ski_Area-Rhinelander_Wisconsin.html",
+    "source_site": "tripadvisor",
+    "notes": "Search result: 15 trails, 40% beginner / 40% intermediate / 20% advanced. No expert category."
+  },
+  {
+    "slug": "campgaw-mountain",
+    "name": "Campgaw Mountain",
+    "state": "NJ",
+    "trails_total": 12,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 33,
+      "advanced": 25,
+      "expert": 8
+    },
+    "source_url": "https://www.onthesnow.com/new-jersey/campgaw-mountain/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "12 trails: 33/33/25/8 per OnTheSnow / new-jersey-leisure-guide. Sums 99 (rounding)."
+  },
+  {
+    "slug": "campton-mountain",
+    "name": "Campton Mountain",
+    "state": "NH",
+    "trails_total": 4,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://camptonmountain.com/",
+    "source_site": "official",
+    "notes": "4 trails, 2 lifts, 301 ft vertical. Mostly green to light blue terrain; no percentage breakdown published."
+  },
+  {
+    "slug": "canaan-valley-resort",
+    "name": "Canaan Valley Resort",
+    "state": "WV",
+    "trails_total": 47,
+    "difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 36,
+      "advanced": 43,
+      "expert": 2
+    },
+    "source_url": "https://www.onthesnow.com/west-virginia/canaan-valley-resort/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "OnTheSnow: 47 runs, 19/36/43/2. Sums to 100. Wikipedia had 49 trails but no pcts."
+  },
+  {
+    "slug": "cannon-mountain",
+    "name": "Cannon Mountain",
+    "state": "NH",
+    "trails_total": 73,
+    "difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 47,
+      "advanced": null,
+      "expert": 32
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Cannon_Mountain_Ski_Area",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia infobox: 73 trails + 86ac Mittersill backcountry; 21% beginner, 47% intermediate, 32% expert/advanced combined (mapped to expert). Sums 100."
+  },
+  {
+    "slug": "cannonsburg",
+    "name": "Cannonsburg Ski Area",
+    "state": "MI",
+    "trails_total": 21,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 50,
+      "advanced": 15,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/michigan/cannonsburg/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "OnTheSnow: 21 runs, 35/50/15. Sums to 100. No expert category."
+  },
+  {
+    "slug": "cascade-mountain",
+    "name": "Cascade Mountain",
+    "state": "WI",
+    "trails_total": 48,
+    "difficulty_pct": {
+      "beginner": 38,
+      "intermediate": 24,
+      "advanced": 38,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Cascade_Mountain_(ski_area)",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia: 48 trails, 38/24/38. Sums to 100. No expert category."
+  },
+  {
+    "slug": "cataloochee-ski-area",
+    "name": "Cataloochee Ski Area",
+    "state": "NC",
+    "trails_total": 18,
+    "difficulty_pct": {
+      "beginner": 44,
+      "intermediate": 39,
+      "advanced": 17,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Cataloochee_Ski_Area",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia infobox: 18 trails, 44/39/17. Sums to 100. No expert category."
+  },
+  {
+    "slug": "catamount-outdoor-family-center",
+    "name": "Catamount Outdoor Family Center",
+    "state": "VT",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://catamountoutdoor.org/maps-conditions/",
+    "source_site": "official",
+    "notes": "XC ski/multi-use trail network with ~25 miles of trails; difficulty varies beginner to advanced but no published pct breakdown."
+  },
+  {
+    "slug": "catamount-ski-area",
+    "name": "Catamount Ski Area",
+    "state": "MA",
+    "trails_total": 44,
+    "difficulty_pct": {
+      "beginner": 36,
+      "intermediate": 39,
+      "advanced": 16,
+      "expert": 9
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Catamount_Ski_Area",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia infobox: 44 trails (16 easier / 17 intermediate / 7 advanced / 4 expert). Sums to 100."
+  },
+  {
+    "slug": "chapman-hill",
+    "name": "Chapman Hill Ski Area",
+    "state": "CO",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 16,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.uncovercolorado.com/skiing-snowboarding/chapman-hill-ski-area/",
+    "source_site": "uncovercolorado",
+    "notes": "Tiny municipal hill, ~7 skiable ac, 500 ft vert. Source: 16% beginner, 84% intermediate+expert combined — not granular enough to split."
+  },
+  {
+    "slug": "cherry-peak",
+    "name": "Cherry Peak Resort",
+    "state": "UT",
+    "trails_total": 29,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 45,
+      "advanced": 25,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Cherry_Peak_Resort",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia infobox: 29 trails, 30/45/25. Sums to 100. Note: current_total_trails was 38 — Wikipedia says 29."
+  },
+  {
+    "slug": "chestnut-mountain",
+    "name": "Chestnut Mountain Resort",
+    "state": "IL",
+    "trails_total": 19,
+    "difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 61,
+      "advanced": 17,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/illinois/chestnut-mountain-resort/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "19 trails. Per OnTheSnow trail counts (4B/11I/3A = 21/58/16). Used existing 22/61/17 which sums to 100 and matches input."
+  },
+  {
+    "slug": "china-peak",
+    "name": "China Peak Mountain Resort",
+    "state": "CA",
+    "trails_total": 45,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 50,
+      "advanced": 20,
+      "expert": null
+    },
+    "source_url": "https://www.peakrankings.com/content/china-peak",
+    "source_site": "peakrankings",
+    "notes": "Wikipedia: 45 trails (no pct). Multiple search sources concur: 30/50/20. Sums to 100. No separate expert category."
+  },
+  {
+    "slug": "christie",
+    "name": "Christie Mountain",
+    "state": "WI",
+    "trails_total": 21,
+    "difficulty_pct": {
+      "beginner": 40,
+      "intermediate": 25,
+      "advanced": 35,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/wisconsin/christie-mountain/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "OnTheSnow/Wisconsin trail guide: 21 trails, 40/25/35 (Easier/More/Most). Sums to 100. Input said 33 trails."
+  },
+  {
+    "slug": "christmas-mountain",
+    "name": "Christmas Mountain Village",
+    "state": "WI",
+    "trails_total": 15,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.christmasmountainvillage.com/ski/trail-map",
+    "source_site": "official",
+    "notes": "15 trails over 40 acres. Multiple sources confirm beginner+intermediate+advanced terrain exists but no published percentage breakdown."
+  },
+  {
+    "slug": "cloudmont-ski-resort",
+    "name": "Cloudmont Ski Resort",
+    "state": "AL",
+    "trails_total": 2,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skisoutheast.com/resorts/cloudmont/",
+    "source_site": "skisoutheast",
+    "notes": "2 slopes (1000 ft each), beginner-intermediate level. No pct breakdown; too small to meaningfully split."
+  },
+  {
+    "slug": "cochrans-ski-area",
+    "name": "Cochran's Ski Area",
+    "state": "VT",
+    "trails_total": 8,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Cochran%27s_Ski_Area",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia: 3 lifts, 8 slopes. Easy-to-intermediate terrain, no published pct breakdown."
+  },
+  {
+    "slug": "cooper-spur-area",
+    "name": "Cooper Spur Ski Area",
+    "state": "OR",
+    "trails_total": 10,
+    "difficulty_pct": {
+      "beginner": 40,
+      "intermediate": 60,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://cooperspur.com/downhill-riding/",
+    "source_site": "official",
+    "notes": "Wikipedia infobox: 10 trails (input said 9). Official: 40% beginner, 60% intermediate; no advanced/expert. Sums to 100."
+  },
+  {
+    "slug": "copper-mountain",
+    "name": "Copper Mountain",
+    "state": "CO",
+    "trails_total": 150,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 24,
+      "advanced": 34,
+      "expert": 17
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Copper_Mountain_(Colorado)",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia Statistics section: 150 total, 25/24/34/17. Sums to 100."
+  },
+  {
+    "slug": "cottonwood-butte",
+    "name": "Cottonwood Butte",
+    "state": "ID",
+    "trails_total": 7,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Cottonwood_Butte",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia infobox: 7 trails. No difficulty breakdown published."
+  },
+  {
+    "slug": "cranor-ski-hill",
+    "name": "Cranor Ski Hill",
+    "state": "CO",
+    "trails_total": 4,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.gunnisonco.gov/departments/parks___recreation/cranor_ski_area.php",
+    "source_site": "official",
+    "notes": "1 Poma lift, 4 runs. Beginner-friendly (bunny hill + main slope). No formal pct breakdown."
+  },
+  {
+    "slug": "crested-butte",
+    "name": "Crested Butte Mountain Resort",
+    "state": "CO",
+    "trails_total": 121,
+    "difficulty_pct": {
+      "beginner": 14,
+      "intermediate": 24,
+      "advanced": 25,
+      "expert": 37
+    },
+    "source_url": "https://gunnisoncrestedbutte.com/visit/places-to-go/ski-areas-and-nordic-trails/crested-butte-mountain-resort/",
+    "source_site": "gunnisoncrestedbutte",
+    "notes": "Wikipedia infobox had combined 23/57/20 but multiple sources give detailed 14/24/25/37. Sums to 100."
+  },
+  {
+    "slug": "crosscut-sports-center",
+    "name": "Crosscut Mountain Sports Center",
+    "state": "MT",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.crosscutmt.org/crosscut-winter-trails",
+    "source_site": "official",
+    "notes": "Nordic XC center, ~45km of trails (not lift-served alpine trails). Difficulty levels marked on trail signs; no published aggregate pct."
+  },
+  {
+    "slug": "crotched-mountain",
+    "name": "Crotched Mountain",
+    "state": "NH",
+    "trails_total": 25,
+    "difficulty_pct": {
+      "beginner": 28,
+      "intermediate": 40,
+      "advanced": null,
+      "expert": 32
+    },
+    "source_url": "https://www.onthesnow.com/new-hampshire/crotched-mountain/ski-resort",
+    "source_site": "onthesnow",
+    "notes": "Wikipedia: 25 trails. OnTheSnow/SkiNH: 28/40/32 (beginner/intermediate/expert). Sums to 100. No advanced category split."
+  },
+  {
+    "slug": "crystal",
+    "name": "Crystal Mountain",
+    "state": "MI",
+    "trails_total": 58,
+    "difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 47,
+      "advanced": 31,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Crystal_Mountain_(Michigan)",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia: 58 downhill slopes. No pct in Wikipedia; using input pcts 22/47/31 which sums to 100 (also resort-published)."
+  },
+  {
+    "slug": "crystal-mountain",
+    "name": "Crystal Mountain",
+    "state": "WA",
+    "trails_total": 80,
+    "difficulty_pct": {
+      "beginner": 11,
+      "intermediate": 54,
+      "advanced": 35,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Crystal_Mountain_(Washington)",
+    "source_site": "wikipedia",
+    "notes": "Wikipedia infobox: 80 trails (57 designated), 11/54/35. Sums to 100. No separate expert split."
+  },
+  {
+    "slug": "crystal-mountain-mi",
+    "name": "Crystal Mountain (MI)",
+    "state": "MI",
+    "trails_total": 58,
+    "difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 47,
+      "advanced": 31,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Crystal_Mountain_(Michigan)",
+    "source_site": "wikipedia",
+    "notes": "Duplicate of crystal slug. Wikipedia: 58 downhill slopes; pcts 22/47/31. Sums to 100."
+  },
+  {
+    "slug": "crystal-ridge",
+    "name": "Crystal Ridge",
+    "state": "WI",
+    "trails_total": 6,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://crystalridge.com/mountain-info/trail-map",
+    "source_site": "official",
+    "notes": "Small ski hill in Franklin WI. 6 trails across beginner/intermediate/advanced (per visitbpc), but no published pct breakdown."
+  }
+]

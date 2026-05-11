@@ -1,0 +1,629 @@
+[
+  {
+    "slug": "mohawk-mountain-ski-area",
+    "trails_total": 27,
+    "difficulty_pct": {
+      "beginner": 37,
+      "intermediate": 26,
+      "advanced": 37,
+      "expert": 0
+    },
+    "sources": [
+      {
+        "url": "https://en.wikipedia.org/wiki/Mohawk_Mountain_Ski_Area",
+        "value_trails": 27,
+        "value_pct": null
+      },
+      {
+        "url": "https://www.skiresort.info/ski-resort/mohawk-mountain/",
+        "value_trails": null,
+        "value_pct": "easy 37/int 26/diff 37 (8km)"
+      },
+      {
+        "url": "https://www.onthesnow.com/connecticut/mohawk-mountain/ski-resort",
+        "value_trails": 27,
+        "value_pct": "~20% beginner, 80% more difficult (via search)"
+      }
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "Trail count 27 confirmed by Wikipedia + OnTheSnow. Pct breakdown from skiresort.info only (km-based: 37/26/37); conflicts with vague '20% beg / 80% harder' description. Used skiresort.info pct."
+  },
+  {
+    "slug": "monarch-mountain",
+    "trails_total": 67,
+    "difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 27,
+      "advanced": 38,
+      "expert": 16
+    },
+    "sources": [
+      {
+        "url": "https://www.onthesnow.com/colorado/monarch-mountain/ski-resort",
+        "value_trails": 67,
+        "value_pct": "19/27/38/16"
+      },
+      {
+        "url": "https://en.wikipedia.org/wiki/Monarch_Mountain_(ski_area)",
+        "value_trails": 63,
+        "value_pct": "14/28/27/31"
+      },
+      {
+        "url": "https://www.skiresort.info/ski-resort/monarch/",
+        "value_trails": null,
+        "value_pct": "easy 23/int 40/diff 37 (37km)"
+      }
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "Trail count varies 54-67 across sources; used 67 (OnTheSnow most recent). Pct varies significantly. Used OnTheSnow 4-tier as canonical."
+  },
+  {
+    "slug": "moose",
+    "trails_total": 40,
+    "difficulty_pct": {
+      "beginner": 15,
+      "intermediate": 65,
+      "advanced": 20,
+      "expert": 0
+    },
+    "sources": [
+      {
+        "url": "https://www.indyskipass.com/our-resorts/moose-mountain",
+        "value_trails": 40,
+        "value_pct": "intermediate and advanced terrain"
+      },
+      {
+        "url": "https://parksandtrips.com/ski-resort/mmak-moose-mountain-ski-resort/",
+        "value_trails": 40,
+        "value_pct": "15% beginner, 20% black diamond, ~65% intermediate"
+      }
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "Moose Mountain Alaska - 40 runs confirmed, 750 acres. Pct from parksandtrips: 15 beg / 65 int / 20 adv."
+  },
+  {
+    "slug": "mount-holly",
+    "trails_total": 20,
+    "difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 39,
+      "advanced": 39,
+      "expert": 0
+    },
+    "sources": [
+      {
+        "url": "https://skimtholly.com/",
+        "value_trails": 20,
+        "value_pct": "22/39/39"
+      },
+      {
+        "url": "https://www.skiresort.info/ski-resort/mt-holly/",
+        "value_trails": null,
+        "value_pct": "easy 14/int 36/diff 50 (7km)"
+      },
+      {
+        "url": "https://www.michigan.org/property/mt-holly",
+        "value_trails": 20,
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "20 trails confirmed. Resort-stated pct 22/39/39 used (matches multiple secondary sources); skiresort.info km-based 14/36/50 diverges."
+  },
+  {
+    "slug": "mount-itasca",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "sources": [
+      {
+        "url": "https://www.mtitasca.com/",
+        "value_trails": null,
+        "value_pct": null
+      },
+      {
+        "url": "https://visitgrandrapids.com/explore-outdoors/mt-itasca/",
+        "value_trails": null,
+        "value_pct": null
+      },
+      {
+        "url": "https://skimap.org/skiareas/view/5026",
+        "value_trails": null,
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "NONE",
+    "notes": "Mt. Itasca is a multi-discipline winter sports center (alpine + nordic + jumping + biathlon). Alpine downhill trail count and difficulty breakdown not published by any source. Has 3 lifts but specific run counts unavailable."
+  },
+  {
+    "slug": "mt-brighton",
+    "trails_total": 25,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 40,
+      "advanced": 30,
+      "expert": 0
+    },
+    "sources": [
+      {
+        "url": "https://en.wikipedia.org/wiki/Mount_Brighton",
+        "value_trails": 25,
+        "value_pct": "30/40/30"
+      },
+      {
+        "url": "https://www.mtbrighton.com/the-mountain/about-the-mountain/mountain-info.aspx",
+        "value_trails": 25,
+        "value_pct": "30/40/30"
+      },
+      {
+        "url": "https://www.skiresort.info/ski-resort/mt-brighton/",
+        "value_trails": null,
+        "value_pct": "easy 16/int 57/diff 27 (6.2km)"
+      }
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "25 trails + 30/40/30 confirmed by Wikipedia AND resort official mtbrighton.com."
+  },
+  {
+    "slug": "mt-hood-skibowl",
+    "trails_total": 69,
+    "difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 40,
+      "advanced": 23,
+      "expert": 16
+    },
+    "sources": [
+      {
+        "url": "https://www.onthesnow.com/oregon/mt-hood-ski-bowl/ski-resort",
+        "value_trails": 69,
+        "value_pct": "21/40/23/16"
+      },
+      {
+        "url": "https://snowstash.com/usa/oregon/mt-hood-skibowl",
+        "value_trails": 69,
+        "value_pct": "21/40/23/16"
+      },
+      {
+        "url": "https://www.skiresort.info/ski-resort/mt-hood-skibowl/",
+        "value_trails": null,
+        "value_pct": "easy 23/int 23/diff 54 (65km)"
+      }
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "69 trails + 21/40/23/16 confirmed by 2+ sources (OnTheSnow, SnowStash)."
+  },
+  {
+    "slug": "mt-la-crosse",
+    "trails_total": 18,
+    "difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 43,
+      "advanced": 36,
+      "expert": 0
+    },
+    "sources": [
+      {
+        "url": "https://www.skiresort.info/ski-resort/mt-la-crosse/",
+        "value_trails": null,
+        "value_pct": "easy 21/int 43/diff 36 (7km)"
+      },
+      {
+        "url": "https://mtlacrosse.com/about-us/",
+        "value_trails": 18,
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "18 slopes per resort site (some sources say 20-22). Pct from skiresort.info km-based: 21/43/36."
+  },
+  {
+    "slug": "mt-lemmon-ski-valley",
+    "trails_total": 22,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 38,
+      "advanced": 42,
+      "expert": 0
+    },
+    "sources": [
+      {
+        "url": "https://en.wikipedia.org/wiki/Mount_Lemmon_Ski_Valley",
+        "value_trails": 22,
+        "value_pct": "20/38/42"
+      },
+      {
+        "url": "https://snowstash.com/usa/arizona/mount-lemmon",
+        "value_trails": 22,
+        "value_pct": "20/38/42"
+      },
+      {
+        "url": "https://www.skiresort.info/ski-resort/mt-lemmon-ski-valley/",
+        "value_trails": null,
+        "value_pct": "easy 29/int 47/diff 24 (8.5km)"
+      }
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "22 trails + 20/38/42 confirmed by Wikipedia AND SnowStash."
+  },
+  {
+    "slug": "north-cascade-heli",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "sources": [
+      {
+        "url": "https://heli-ski.com/terrain",
+        "value_trails": 124,
+        "value_pct": "advanced/expert backcountry"
+      },
+      {
+        "url": "https://heli-ski.com/",
+        "value_trails": null,
+        "value_pct": "300,000 acres backcountry"
+      }
+    ],
+    "consensus_confidence": "LOW",
+    "notes": "[SANITIZED — fabrication marker in notes] Heli-ski operation, not a traditional resort - 124 designated runs but only ~40 used regularly. No standard difficulty ratings; all backcountry/advanced. Estimated 50/50 advanced/expert split (typical heli terrain). Operation runs 8 runs/day guaranteed.",
+    "_sanitized": true,
+    "_original_notes": "Heli-ski operation, not a traditional resort - 124 designated runs but only ~40 used regularly. No standard difficulty ratings; all backcountry/advanced. Estimated 50/50 advanced/expert split (typical heli terrain). Operation runs 8 runs/day guaranteed."
+  },
+  {
+    "slug": "otis-ridge",
+    "trails_total": 15,
+    "difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 47,
+      "advanced": 32,
+      "expert": 0
+    },
+    "sources": [
+      {
+        "url": "https://www.onthesnow.com/massachusetts/otis-ridge-ski-area/ski-resort",
+        "value_trails": 15,
+        "value_pct": "21/47/33 (sum 101)"
+      },
+      {
+        "url": "https://www.skiresort.info/ski-resort/otis-ridge/",
+        "value_trails": null,
+        "value_pct": "easy 32/int 41/diff 27 (3.7km)"
+      },
+      {
+        "url": "https://en.wikipedia.org/wiki/Otis_Ridge",
+        "value_trails": 15,
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "15 trails confirmed by Wikipedia + OnTheSnow. Used OnTheSnow pct 21/47/32."
+  },
+  {
+    "slug": "paoli-peaks",
+    "trails_total": 15,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 55,
+      "advanced": 20,
+      "expert": 0
+    },
+    "sources": [
+      {
+        "url": "https://www.onthesnow.com/indiana/paoli-peaks/ski-resort",
+        "value_trails": 15,
+        "value_pct": "25/55/20"
+      },
+      {
+        "url": "https://en.wikipedia.org/wiki/Paoli_Peaks",
+        "value_trails": 15,
+        "value_pct": "25/55/20"
+      },
+      {
+        "url": "https://www.skiresort.info/ski-resort/paoli-peaks/",
+        "value_trails": null,
+        "value_pct": "easy 39/int 46/diff 15 (6.6km)"
+      }
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "15 trails + 25/55/20 confirmed by 2+ sources (Wikipedia + OnTheSnow)."
+  },
+  {
+    "slug": "pine-knob",
+    "trails_total": 17,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 20,
+      "advanced": 40,
+      "expert": 20
+    },
+    "sources": [
+      {
+        "url": "https://en.wikipedia.org/wiki/Pine_Knob_Ski_Resort",
+        "value_trails": 17,
+        "value_pct": null
+      },
+      {
+        "url": "https://parksandtrips.com/ski-resort/pkmi-pine-knob/",
+        "value_trails": 17,
+        "value_pct": "20/20/40/20"
+      },
+      {
+        "url": "https://www.skiresort.info/ski-resort/pine-knob/",
+        "value_trails": null,
+        "value_pct": "easy 20/int 50/diff 30 (5km)"
+      }
+    ],
+    "consensus_confidence": "LOW",
+    "notes": "17 trails per Wikipedia. Two conflicting pct sets: parksandtrips 20/20/40/20 vs skiresort.info 20/50/30. Used parksandtrips for 4-tier."
+  },
+  {
+    "slug": "plain-valley-trails",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "sources": [
+      {
+        "url": "https://leavenworth.org/business/plain-valley-ski-trails/",
+        "value_trails": "25km classic+skate, 7km snowshoe",
+        "value_pct": null
+      },
+      {
+        "url": "https://www.cascadeloop.com/account/plain-valley-ski-trails",
+        "value_trails": "25km",
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "NONE",
+    "notes": "Nordic cross-country center, not alpine. 25 km of trails total but no count of individual named trails or alpine-style difficulty breakdown. Sources describe terrain only as 'easy flat to steeper hill climbs'."
+  },
+  {
+    "slug": "pomerelle",
+    "trails_total": 32,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 50,
+      "advanced": 30,
+      "expert": 0
+    },
+    "sources": [
+      {
+        "url": "https://www.onthesnow.com/idaho/pomerelle-mountain-resort/ski-resort",
+        "value_trails": 32,
+        "value_pct": null
+      },
+      {
+        "url": "https://www.freeride.com/ski-resorts/pomerelle-mountain-resort/",
+        "value_trails": 32,
+        "value_pct": "20/50/30"
+      },
+      {
+        "url": "https://ski-resorts-in-idaho.com/pomerelle-mountain-resort",
+        "value_trails": null,
+        "value_pct": "20/50/30"
+      }
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "32 trails per OnTheSnow. Pct 20/50/30 reported by multiple aggregators."
+  },
+  {
+    "slug": "powder-ridge",
+    "trails_total": 15,
+    "difficulty_pct": null,
+    "sources": [
+      {
+        "url": "https://powderridge.com/",
+        "value_trails": 15,
+        "value_pct": null
+      },
+      {
+        "url": "https://www.skicentral.com/powderridge.html",
+        "value_trails": 15,
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "LOW",
+    "notes": "Powder Ridge Kimball MN - 15 runs confirmed. No specific difficulty percentages published. Sources describe 'beginner, intermediate and advanced' generically."
+  },
+  {
+    "slug": "powder-ridge-mountain-park",
+    "trails_total": 19,
+    "difficulty_pct": {
+      "beginner": 46,
+      "intermediate": 36,
+      "advanced": 18,
+      "expert": 0
+    },
+    "sources": [
+      {
+        "url": "https://en.wikipedia.org/wiki/Powder_Ridge_Ski_Area",
+        "value_trails": 19,
+        "value_pct": null
+      },
+      {
+        "url": "https://www.skiresort.info/ski-resort/powder-ridge-mountain-park-resort/",
+        "value_trails": null,
+        "value_pct": "easy 46/int 36/diff 18 (5.5km)"
+      }
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "19 trails confirmed by Wikipedia. Pct from skiresort.info km-based: 46/36/18."
+  },
+  {
+    "slug": "powderhouse-hill",
+    "trails_total": 3,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 65,
+      "advanced": 0,
+      "expert": 0
+    },
+    "sources": [
+      {
+        "url": "https://en.wikipedia.org/wiki/Powderhouse_Hill_(ski_area)",
+        "value_trails": 3,
+        "value_pct": "35/65"
+      },
+      {
+        "url": "https://skimaine.com/powderhouse-hill/",
+        "value_trails": 3,
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "Tiny community ski area: 3 trails, 35% beginner / 65% intermediate, no advanced. Confirmed by Wikipedia + Ski Maine."
+  },
+  {
+    "slug": "quarry-road-trails",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "sources": [
+      {
+        "url": "https://quarryroad.org/winter-trails",
+        "value_trails": "13.3km Nordic",
+        "value_pct": null
+      },
+      {
+        "url": "https://www.indyskipass.com/our-resorts/quarry-road-trails",
+        "value_trails": "13.3km",
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "NONE",
+    "notes": "Nordic XC trail center: 13.3 km groomed trails. Individual named trails (Charlie's Meadow, River Loop, North Koons, etc.) listed but no total count or alpine-style difficulty breakdown."
+  },
+  {
+    "slug": "quechee-club",
+    "trails_total": 13,
+    "difficulty_pct": null,
+    "sources": [
+      {
+        "url": "https://en.wikipedia.org/wiki/Quechee_Ski_Area",
+        "value_trails": 13,
+        "value_pct": null
+      },
+      {
+        "url": "https://quecheeclub.com/skiquechee",
+        "value_trails": 13,
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "LOW",
+    "notes": "13 trails confirmed. No published difficulty percentages. Resort described as 'family-forward, beginner-friendly' but no quantitative breakdown."
+  },
+  {
+    "slug": "ragged-mountain",
+    "trails_total": 57,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 26,
+      "advanced": 37,
+      "expert": 7
+    },
+    "sources": [
+      {
+        "url": "https://snowstash.com/usa/new-hampshire/ragged-mountain/trail-map",
+        "value_trails": 57,
+        "value_pct": "30/26/37/7"
+      },
+      {
+        "url": "https://en.wikipedia.org/wiki/Ragged_Mountain_Resort",
+        "value_trails": 57,
+        "value_pct": null
+      },
+      {
+        "url": "https://www.skiresort.info/ski-resort/ragged-mountain/",
+        "value_trails": null,
+        "value_pct": "easy 20/int 44/diff 36 (22.5km)"
+      }
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "57 trails confirmed by Wikipedia + SnowStash. 4-tier pct 30/26/37/7 from SnowStash."
+  },
+  {
+    "slug": "rangeley-lakes-trail-center",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "sources": [
+      {
+        "url": "https://rangeleylakestrailscenter.org/",
+        "value_trails": "55km mapped",
+        "value_pct": null
+      },
+      {
+        "url": "https://skimaine.com/rangeleylakestrailcenter/",
+        "value_trails": "67km",
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "NONE",
+    "notes": "Nordic cross-country center: 55-67 km of mapped trails (sources vary). No individual trail count or alpine difficulty pct. Described as 'novice to expert' generically."
+  },
+  {
+    "slug": "rikert-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "sources": [
+      {
+        "url": "https://rikertoutdoor.com/",
+        "value_trails": "55km+",
+        "value_pct": null
+      },
+      {
+        "url": "https://en.wikipedia.org/wiki/Rikert_Outdoor_Center",
+        "value_trails": "55km",
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "NONE",
+    "notes": "Nordic XC center (Middlebury College): 55+ km of trails. No individual trail count or alpine difficulty pct published. Duplicates rikert-outdoor-center entry."
+  },
+  {
+    "slug": "rikert-outdoor-center",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "sources": [
+      {
+        "url": "https://rikertoutdoor.com/",
+        "value_trails": "55km+",
+        "value_pct": null
+      },
+      {
+        "url": "https://en.wikipedia.org/wiki/Rikert_Outdoor_Center",
+        "value_trails": "55km",
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "NONE",
+    "notes": "Nordic XC center: 55+ km of varied scenic trails. No alpine-style trail count or difficulty pct. Same facility as rikert-nordic-center slug — likely duplicate."
+  },
+  {
+    "slug": "rotarun",
+    "trails_total": 9,
+    "difficulty_pct": {
+      "beginner": 24,
+      "intermediate": 43,
+      "advanced": 33,
+      "expert": 0
+    },
+    "sources": [
+      {
+        "url": "https://en.wikipedia.org/wiki/Rotarun_Ski_Area",
+        "value_trails": 9,
+        "value_pct": null
+      },
+      {
+        "url": "https://rotarun.org/",
+        "value_trails": 7,
+        "value_pct": "green/blue/black mix"
+      },
+      {
+        "url": "https://www.skiresort.info/ski-resort/rotarun/",
+        "value_trails": null,
+        "value_pct": "easy 24/int 43/diff 33 (4.6km)"
+      }
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "9 trails per Wikipedia (resort site says 7 named). Pct from skiresort.info km-based: 24/43/33."
+  }
+]

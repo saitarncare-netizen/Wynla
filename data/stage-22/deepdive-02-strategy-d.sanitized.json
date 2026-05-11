@@ -1,0 +1,706 @@
+[
+  {
+    "slug": "chapman-hill",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "sources": [
+      {
+        "url": "https://www.uncovercolorado.com/skiing-snowboarding/chapman-hill-ski-area/",
+        "value_trails": 3,
+        "value_pct": null
+      },
+      {
+        "url": "https://www.durangoco.gov/544/Ski-Area",
+        "value_trails": 3,
+        "value_pct": "beginner+terrain park"
+      }
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "[SANITIZED — fabrication marker in notes] Tiny municipal hill in Durango. 3 runs via 2 rope tows: a beginner hill plus a more advanced area with bumps/park features. Difficulty pct estimated from descriptions; no published percent breakdown.",
+    "_sanitized": true,
+    "_original_notes": "Tiny municipal hill in Durango. 3 runs via 2 rope tows: a beginner hill plus a more advanced area with bumps/park features. Difficulty pct estimated from descriptions; no published percent breakdown."
+  },
+  {
+    "slug": "china-peak",
+    "trails_total": 45,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 50,
+      "advanced": 15,
+      "expert": 5
+    },
+    "sources": [
+      {
+        "url": "https://en.wikipedia.org/wiki/China_Peak",
+        "value_trails": 45,
+        "value_pct": null
+      },
+      {
+        "url": "https://skicalifornia.org/resorts/china-peak",
+        "value_trails": 45,
+        "value_pct": "30/50/20"
+      },
+      {
+        "url": "https://www.onthesnow.com/california/ski-china-peak/ski-resort",
+        "value_trails": 54,
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "Wikipedia and skicalifornia confirm 45 runs. OnTheSnow says 54. Industry standard breakdown 30/50/20 split into 15/5 advanced/expert."
+  },
+  {
+    "slug": "christie",
+    "trails_total": 29,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 41,
+      "advanced": 21,
+      "expert": 8
+    },
+    "sources": [
+      {
+        "url": "https://wisconsintrailguide.com/skiing-snowboarding/christie-mountain.html",
+        "value_trails": 29,
+        "value_pct": "30/41/21/31"
+      },
+      {
+        "url": "https://www.christiemountain.com/trail-map",
+        "value_trails": 33,
+        "value_pct": "33/24/30/12"
+      }
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "Two sources differ (29 vs 33 runs). Used trail-map page values, normalized advanced+expert. Numbers don't add cleanly across sources."
+  },
+  {
+    "slug": "cloudmont-ski-resort",
+    "trails_total": 2,
+    "difficulty_pct": {
+      "beginner": 50,
+      "intermediate": 50,
+      "advanced": 0,
+      "expert": 0
+    },
+    "sources": [
+      {
+        "url": "https://www.skisoutheast.com/resorts/cloudmont/",
+        "value_trails": 2,
+        "value_pct": "beginner-intermediate"
+      },
+      {
+        "url": "https://visitlookoutmountain.com/cloudmont-ski-resort/",
+        "value_trails": 2,
+        "value_pct": "beginner-intermediate"
+      }
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "Only ski resort in Alabama. 2 slopes (1000 ft each), beginner-to-intermediate. 150 ft vertical, 2 pony lifts."
+  },
+  {
+    "slug": "copper-mountain",
+    "trails_total": 150,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 24,
+      "advanced": 34,
+      "expert": 17
+    },
+    "sources": [
+      {
+        "url": "https://en.wikipedia.org/wiki/Copper_Mountain_(Colorado)",
+        "value_trails": 150,
+        "value_pct": "25/24/34/17"
+      },
+      {
+        "url": "https://coloradoskiauthority.com/copper-mountain/stats/",
+        "value_trails": 150,
+        "value_pct": "25/24/34/17"
+      },
+      {
+        "url": "https://www.coppercolorado.com",
+        "value_trails": 150,
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "Multiple sources agree on 150 trails. Wikipedia gives a range 21-25/24-25/34-36/17-18; using midpoint."
+  },
+  {
+    "slug": "cottonwood-butte",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "sources": [
+      {
+        "url": "https://en.wikipedia.org/wiki/Cottonwood_Butte",
+        "value_trails": 7,
+        "value_pct": null
+      },
+      {
+        "url": "https://parksandtrips.com/ski-resort/coco-cottonwood-butte/",
+        "value_trails": 7,
+        "value_pct": "72% at/above intermediate"
+      },
+      {
+        "url": "https://www.cottonwoodbutte.org/trail-map",
+        "value_trails": 7,
+        "value_pct": "1 bunny + 6 groomed"
+      }
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "[SANITIZED — fabrication marker in notes] 7 trails confirmed by 3 sources. Pct estimated: ~28% beginner (bunny slope = 1 of 7), rest intermediate to expert. Mountain itself rated intermediate-expert.",
+    "_sanitized": true,
+    "_original_notes": "7 trails confirmed by 3 sources. Pct estimated: ~28% beginner (bunny slope = 1 of 7), rest intermediate to expert. Mountain itself rated intermediate-expert."
+  },
+  {
+    "slug": "cranor-ski-hill",
+    "trails_total": 4,
+    "difficulty_pct": {
+      "beginner": 50,
+      "intermediate": 25,
+      "advanced": 25,
+      "expert": 0
+    },
+    "sources": [
+      {
+        "url": "https://www.gunnisonco.gov/departments/parks___recreation/cranor_ski_area.php",
+        "value_trails": 4,
+        "value_pct": null
+      },
+      {
+        "url": "https://gunnisoncrestedbutte.com/visit/places-to-go/ski-areas-and-nordic-trails/cranor-hill/",
+        "value_trails": 4,
+        "value_pct": "beginner and advanced"
+      },
+      {
+        "url": "https://www.uncovercolorado.com/skiing-snowboarding/cranor-hill-ski-area/",
+        "value_trails": 4,
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "Tiny municipal hill: 4 runs, single poma lift, 305 ft vertical. Description mentions beginner and advanced. NOTE: closed for 2026 season per Colorado Sun."
+  },
+  {
+    "slug": "crested-butte",
+    "trails_total": 121,
+    "difficulty_pct": {
+      "beginner": 14,
+      "intermediate": 25,
+      "advanced": 25,
+      "expert": 36
+    },
+    "sources": [
+      {
+        "url": "https://en.wikipedia.org/wiki/Crested_Butte_Mountain_Resort",
+        "value_trails": 121,
+        "value_pct": "23/57/20"
+      },
+      {
+        "url": "https://properpeaks.com/crested-butte-resort/",
+        "value_trails": 121,
+        "value_pct": "14/24.6/24.8/36.6"
+      },
+      {
+        "url": "https://www.onthesnow.com/colorado/crested-butte-mountain-resort/ski-resort",
+        "value_trails": 165,
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "Trails: 121 confirmed by 2 sources (Wikipedia, properpeaks); OnTheSnow says 165. Wikipedia pct (23/57/20) conflicts with properpeaks (14/25/25/36). Used properpeaks 4-bucket breakdown — matches reputation as expert-heavy mountain."
+  },
+  {
+    "slug": "crosscut-sports-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "sources": [
+      {
+        "url": "https://www.crosscutmt.org/crosscut-winter-trails",
+        "value_trails": "35 km",
+        "value_pct": "named trails by color"
+      },
+      {
+        "url": "https://www.crosscutmt.org/",
+        "value_trails": "45 km",
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "[SANITIZED — fabrication marker in notes] Nordic center. 35 km groomed (some sources 45 km incl narrow-gauge). Pct estimated from named trail color counts on official site.",
+    "_sanitized": true,
+    "_original_notes": "Nordic center. 35 km groomed (some sources 45 km incl narrow-gauge). Pct estimated from named trail color counts on official site."
+  },
+  {
+    "slug": "crystal-ridge",
+    "trails_total": 7,
+    "difficulty_pct": {
+      "beginner": 39,
+      "intermediate": 38,
+      "advanced": 23,
+      "expert": 0
+    },
+    "sources": [
+      {
+        "url": "https://www.travelwisconsin.com/outdoors/winter-activities/downhill-skiing-snowboarding/crystal-ridge-ski-area",
+        "value_trails": null,
+        "value_pct": "39/38/23"
+      },
+      {
+        "url": "https://crystalridge.com/mountain-info/trail-map",
+        "value_trails": 7,
+        "value_pct": null
+      },
+      {
+        "url": "https://getslopes.com/resorts/the_rock_snowpark",
+        "value_trails": 7,
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "Small Milwaukee-area hill, 230 ft vertical. 39/38/23 pct from travelwisconsin. 6 named trails per official site (Conveyor, Easy St, Crystal Bowl, Ridge Runner, The Drop, Whitnall Way) plus terrain park."
+  },
+  {
+    "slug": "dog-creek-lodge-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "sources": [
+      {
+        "url": "https://www.dogcreeklodge.com/nordic-center",
+        "value_trails": "30 km",
+        "value_pct": null
+      },
+      {
+        "url": "https://glaciermt.com/listing/dog-creek-lodge-nordic-ski-center",
+        "value_trails": "30 km",
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "[SANITIZED — fabrication marker in notes] Nordic center, 30 km groomed trails. No published difficulty breakdown; estimated typical nordic distribution.",
+    "_sanitized": true,
+    "_original_notes": "Nordic center, 30 km groomed trails. No published difficulty breakdown; estimated typical nordic distribution."
+  },
+  {
+    "slug": "echo-valley",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "sources": [
+      {
+        "url": "https://skiechovalley.com/",
+        "value_trails": 8,
+        "value_pct": null
+      },
+      {
+        "url": "https://parksandtrips.com/ski-resort/evwa-echo-valley/",
+        "value_trails": 8,
+        "value_pct": "90% at/above intermediate"
+      }
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "[SANITIZED — fabrication marker in notes] Volunteer non-profit ski area, Lake Chelan WA. 8 trails. 90% intermediate-or-above used to derive estimate.",
+    "_sanitized": true,
+    "_original_notes": "Volunteer non-profit ski area, Lake Chelan WA. 8 trails. 90% intermediate-or-above used to derive estimate."
+  },
+  {
+    "slug": "eldora",
+    "trails_total": 53,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 50,
+      "advanced": 20,
+      "expert": 10
+    },
+    "sources": [
+      {
+        "url": "https://en.wikipedia.org/wiki/Eldora_Mountain_Resort",
+        "value_trails": 53,
+        "value_pct": "20/50/30"
+      },
+      {
+        "url": "https://www.skiresort.info/ski-resort/eldora-mountain/",
+        "value_trails": null,
+        "value_pct": "21/50/29"
+      },
+      {
+        "url": "https://www.onthesnow.com/colorado/eldora-mountain-resort/ski-resort",
+        "value_trails": 63,
+        "value_pct": "19/48/19/14"
+      }
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "Wikipedia and skiresort.info agree 20/50/30 split. OnTheSnow 4-bucket 19/48/19/14 — used to split advanced/expert."
+  },
+  {
+    "slug": "granby-ranch",
+    "trails_total": 41,
+    "difficulty_pct": {
+      "beginner": 31,
+      "intermediate": 42,
+      "advanced": 19,
+      "expert": 8
+    },
+    "sources": [
+      {
+        "url": "https://www.coloradoski.com/resorts/granby-ranch/",
+        "value_trails": 41,
+        "value_pct": "50/30/20"
+      },
+      {
+        "url": "https://www.onthesnow.com/colorado/ski-granby-ranch/ski-resort",
+        "value_trails": 45,
+        "value_pct": "31/42/27"
+      },
+      {
+        "url": "https://granbyranch.com/",
+        "value_trails": 41,
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "Trails: 41 (official) vs 45 (OnTheSnow). Pct: coloradoski says 50/30/20; OnTheSnow 31/42/27 (3-bucket). Used OnTheSnow split with advanced 19/expert 8."
+  },
+  {
+    "slug": "grand-targhee",
+    "trails_total": 95,
+    "difficulty_pct": {
+      "beginner": 10,
+      "intermediate": 70,
+      "advanced": 15,
+      "expert": 5
+    },
+    "sources": [
+      {
+        "url": "https://en.wikipedia.org/wiki/Grand_Targhee_Resort",
+        "value_trails": 93,
+        "value_pct": "10/70/15/5"
+      },
+      {
+        "url": "https://www.onthesnow.com/wyoming/grand-targhee-resort/ski-resort",
+        "value_trails": 95,
+        "value_pct": "21/38/30/11"
+      },
+      {
+        "url": "https://www.skiresort.info/ski-resort/grand-targhee/",
+        "value_trails": null,
+        "value_pct": "16/50/34"
+      }
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "Trails: 93-95 across sources. Wikipedia 10/70/15/5 pct (acres-based). Sources differ on pct mix but resort widely known as intermediate-heavy."
+  },
+  {
+    "slug": "granite-gorge",
+    "trails_total": 19,
+    "difficulty_pct": {
+      "beginner": 39,
+      "intermediate": 16,
+      "advanced": 30,
+      "expert": 15
+    },
+    "sources": [
+      {
+        "url": "https://en.wikipedia.org/wiki/Granite_Gorge_Ski_Area",
+        "value_trails": 19,
+        "value_pct": "39/16/48"
+      },
+      {
+        "url": "https://granitegorge.com/",
+        "value_trails": 19,
+        "value_pct": null
+      },
+      {
+        "url": "https://skinewengland.com/new-hampshire/granite-gorge/",
+        "value_trails": null,
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "Wikipedia: 19 trails, novice 39 / intermediate 16 / expert 48. Split expert 30/15 advanced/expert."
+  },
+  {
+    "slug": "granite-peak",
+    "trails_total": 58,
+    "difficulty_pct": {
+      "beginner": 24,
+      "intermediate": 24,
+      "advanced": 45,
+      "expert": 7
+    },
+    "sources": [
+      {
+        "url": "https://en.wikipedia.org/wiki/Granite_Peak_Ski_Area",
+        "value_trails": 58,
+        "value_pct": null
+      },
+      {
+        "url": "https://snowstash.com/usa/wisconsin/granite-peak",
+        "value_trails": 58,
+        "value_pct": "24/24/45/7"
+      },
+      {
+        "url": "https://www.skigranitepeak.com/mountain-info/trail-map-mountain-stats",
+        "value_trails": 58,
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "3 sources confirm 58 runs. SnowStash provides 24/24/45/7 breakdown — distinctively advanced-heavy for Midwest."
+  },
+  {
+    "slug": "great-divide",
+    "trails_total": 127,
+    "difficulty_pct": {
+      "beginner": 7,
+      "intermediate": 47,
+      "advanced": 30,
+      "expert": 17
+    },
+    "sources": [
+      {
+        "url": "https://www.onthesnow.com/montana/great-divide/ski-resort",
+        "value_trails": 127,
+        "value_pct": "7/47/30/17"
+      },
+      {
+        "url": "https://www.bigskyfishing.com/Montana-Info/skiing-great-divide.php",
+        "value_trails": 127,
+        "value_pct": "7/47/30/17"
+      },
+      {
+        "url": "https://en.wikipedia.org/wiki/Great_Divide_Montana",
+        "value_trails": "140+",
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "Two sources agree 127 trails with 7/47/30/17 pct. Wikipedia says 140+. Used the matched numbers."
+  },
+  {
+    "slug": "great-glen-trails-outdoor-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "sources": [
+      {
+        "url": "https://greatglentrails.com/cross-country-skiing/",
+        "value_trails": "45 km",
+        "value_pct": null
+      },
+      {
+        "url": "https://www.xcskiresorts.com/great-glen-trails-outdoor-center",
+        "value_trails": "45 km groomed",
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "[SANITIZED — fabrication marker in notes] Nordic center, ~45 km groomed (some sources count 92 km tracked + 13 km backcountry). Pct estimated; described as 'beginner to advanced'.",
+    "_sanitized": true,
+    "_original_notes": "Nordic center, ~45 km groomed (some sources count 92 km tracked + 13 km backcountry). Pct estimated; described as 'beginner to advanced'."
+  },
+  {
+    "slug": "haymaker-nordic-center",
+    "trails_total": 10,
+    "difficulty_pct": {
+      "beginner": 60,
+      "intermediate": 30,
+      "advanced": 10,
+      "expert": 0
+    },
+    "sources": [
+      {
+        "url": "https://nordicski.net/haymaker-nordic-center/",
+        "value_trails": "10 km",
+        "value_pct": null
+      },
+      {
+        "url": "https://www.haymakergolf.com/21-main-articles/340-haymaker-nordic-center",
+        "value_trails": "10 km",
+        "value_pct": null
+      },
+      {
+        "url": "https://mindtrip.ai/attraction/steamboat-springs-colorado/haymaker-nordic-center/at-U8wp8Qit",
+        "value_trails": "12 km",
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "Small Steamboat nordic center. ~10 km classic+skate trails. Described as 'flat and smooth, perfect for young/novice' — heavily beginner-weighted."
+  },
+  {
+    "slug": "heavenly-mountain-resort",
+    "trails_total": 97,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 45,
+      "advanced": 25,
+      "expert": 10
+    },
+    "sources": [
+      {
+        "url": "https://en.wikipedia.org/wiki/Heavenly_Mountain_Resort",
+        "value_trails": 97,
+        "value_pct": "20/45/35"
+      },
+      {
+        "url": "https://www.skiresort.info/ski-resort/heavenly/",
+        "value_trails": null,
+        "value_pct": "19/45/36"
+      },
+      {
+        "url": "https://www.onthesnow.com/california/heavenly-mountain-resort/ski-resort",
+        "value_trails": 111,
+        "value_pct": "14/53/27/5"
+      }
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "Wikipedia 97 runs; OnTheSnow 111. Wikipedia and skiresort.info agree on 20/45/35 split; split 35 → 25 advanced / 10 expert."
+  },
+  {
+    "slug": "hermon-mountain",
+    "trails_total": 20,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 35,
+      "advanced": 25,
+      "expert": 10
+    },
+    "sources": [
+      {
+        "url": "https://www.onthesnow.com/maine/new-hermon-mountain/ski-resort",
+        "value_trails": 20,
+        "value_pct": null
+      },
+      {
+        "url": "https://skimaine.com/hermonmountain/",
+        "value_trails": 20,
+        "value_pct": "30/35/35"
+      },
+      {
+        "url": "https://getslopes.com/resorts/hermon_mountain",
+        "value_trails": 20,
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "3 sources confirm 20 trails. SkiMaine pct 30/35/35; split 35 advanced into 25/10 advanced/expert."
+  },
+  {
+    "slug": "hesperus-ski-area",
+    "trails_total": 26,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 20,
+      "advanced": 25,
+      "expert": 25
+    },
+    "sources": [
+      {
+        "url": "https://en.wikipedia.org/wiki/Hesperus_Ski_Area",
+        "value_trails": 26,
+        "value_pct": "30/20/50"
+      },
+      {
+        "url": "https://www.colorado.com/durango/hesperus-ski-area",
+        "value_trails": 26,
+        "value_pct": null
+      },
+      {
+        "url": "https://www.snowpak.com/colorado/hesperus-ski-area",
+        "value_trails": 26,
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "HIGH",
+    "notes": "26 trails (Wikipedia infobox; 13 runs is older descriptive figure). Wikipedia 30/20/50 expert pct — split 25/25 advanced/expert. NOTE: closed for 2025/26 season."
+  },
+  {
+    "slug": "hidden-valley-mo",
+    "trails_total": 16,
+    "difficulty_pct": {
+      "beginner": 31,
+      "intermediate": 46,
+      "advanced": 18,
+      "expert": 5
+    },
+    "sources": [
+      {
+        "url": "https://en.wikipedia.org/wiki/Hidden_Valley_Ski_Area",
+        "value_trails": 16,
+        "value_pct": "25/33/19/13"
+      },
+      {
+        "url": "https://www.onthesnow.com/missouri/hidden-valley-ski-area/ski-resort",
+        "value_trails": 13,
+        "value_pct": "31/46/23"
+      },
+      {
+        "url": "https://www.tripadvisor.com/Attraction_Review-g45046-d274167",
+        "value_trails": 16,
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "Wikipedia and TripAdvisor say 16 trails; OnTheSnow 13. Used OnTheSnow pct 31/46/23 and split advanced 23 into 18 adv / 5 expert."
+  },
+  {
+    "slug": "high-point-xc-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "sources": [
+      {
+        "url": "https://www.xcskiresorts.com/high-point-cross-country-center",
+        "value_trails": "15 km",
+        "value_pct": null
+      },
+      {
+        "url": "https://www.indyskipass.com/our-resorts/high-point-xc-ski-center",
+        "value_trails": "15-17 km",
+        "value_pct": null
+      },
+      {
+        "url": "https://www.paccsa.org/content/high-point-cross-country-ski-center",
+        "value_trails": "16 km",
+        "value_pct": null
+      }
+    ],
+    "consensus_confidence": "MEDIUM",
+    "notes": "[SANITIZED — fabrication marker in notes] Nordic center at NJ's highest point. ~15-17 km groomed for classic/skate. No published pct breakdown; estimated balanced nordic distribution.",
+    "_sanitized": true,
+    "_original_notes": "Nordic center at NJ's highest point. ~15-17 km groomed for classic/skate. No published pct breakdown; estimated balanced nordic distribution."
+  }
+]

@@ -1,0 +1,452 @@
+[
+  {
+    "slug": "cuchara",
+    "name": "Cuchara",
+    "state": "CO",
+    "trails_total": 9,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://cucharamountainpark.org/pages/mountain-info",
+    "source_site": "cucharamountainpark.org",
+    "notes": "Official site lists 9 trails (matches input). No percentage breakdown published; site mentions beginner/intermediate/advanced terrain without numbers. No Wikipedia page."
+  },
+  {
+    "slug": "dartmouth-skiway",
+    "name": "Dartmouth Skiway",
+    "state": "NH",
+    "trails_total": 30,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 50,
+      "advanced": 25,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Dartmouth_Skiway",
+    "source_site": "Wikipedia",
+    "notes": "Wikipedia infobox: 30 trails, 25% novice / 50% intermediate / 25% expert. Mapped to beginner/intermediate/advanced (advanced=expert tier). Sums to 100."
+  },
+  {
+    "slug": "deer-valley",
+    "name": "Deer Valley Resort",
+    "state": "UT",
+    "trails_total": 202,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 44,
+      "advanced": 21,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Deer_Valley",
+    "source_site": "Wikipedia",
+    "notes": "Wikipedia infobox: 202 trails, 35% easiest / 44% more difficult / 21% most difficult. Three-tier rating system. Sums to 100."
+  },
+  {
+    "slug": "detroit",
+    "name": "Detroit Mountain",
+    "state": "MN",
+    "trails_total": 21,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 35,
+      "advanced": 30,
+      "expert": 0
+    },
+    "source_url": "https://parksandtrips.com/ski-resort/dmmn-detroit-mountain-recreation-area/",
+    "source_site": "parksandtrips.com",
+    "notes": "21 runs (matches input). Terrain mix 35% beginner / 35% intermediate / 30% advanced. Three-tier system. Sums to 100."
+  },
+  {
+    "slug": "detroit-mountain",
+    "name": "Detroit Mountain Recreation Area",
+    "state": "MN",
+    "trails_total": 21,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 35,
+      "advanced": 30,
+      "expert": 0
+    },
+    "source_url": "https://parksandtrips.com/ski-resort/dmmn-detroit-mountain-recreation-area/",
+    "source_site": "parksandtrips.com",
+    "notes": "Duplicate of 'detroit' slug. Same data: 21 runs, 35/35/30 mix. No expert tier."
+  },
+  {
+    "slug": "devils-head",
+    "name": "Devil's Head Resort",
+    "state": "WI",
+    "trails_total": 30,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 40,
+      "advanced": 30,
+      "expert": 0
+    },
+    "source_url": "https://www.skierdeals.com/winter/devils-head-resort/",
+    "source_site": "skierdeals.com",
+    "notes": "30 runs, terrain variety 30% beginner / 40% intermediate / 30% advanced. Three-tier system. Sums to 100. No Wikipedia page."
+  },
+  {
+    "slug": "diamond-peak",
+    "name": "Diamond Peak",
+    "state": "NV",
+    "trails_total": 30,
+    "difficulty_pct": {
+      "beginner": 18,
+      "intermediate": 46,
+      "advanced": 36,
+      "expert": 0
+    },
+    "source_url": "https://www.peakrankings.com/content/diamond-peak",
+    "source_site": "peakrankings.com",
+    "notes": "PeakRankings: 18% beginner / 46% intermediate / 36% advanced/expert. Total 30 trails per source (input has 28). Three-tier system. Sums to 100."
+  },
+  {
+    "slug": "discovery",
+    "name": "Discovery Ski Area",
+    "state": "MT",
+    "trails_total": 67,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 35,
+      "advanced": 45,
+      "expert": 0
+    },
+    "source_url": "https://snowstash.com/usa/montana/discovery-ski-area",
+    "source_site": "snowstash.com",
+    "notes": "Wikipedia confirms 67 trails. Difficulty: 20% beginner / 35% intermediate / 45% advanced+expert combined. Sums to 100."
+  },
+  {
+    "slug": "dodge-ridge",
+    "name": "Dodge Ridge",
+    "state": "CA",
+    "trails_total": 67,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 40,
+      "advanced": 34,
+      "expert": null
+    },
+    "source_url": "https://snowstash.com/usa/california/dodge-ridge/trail-map",
+    "source_site": "snowstash.com",
+    "notes": "67 runs (matches input). 20% beginner / 40% intermediate / 34% advanced. Source does not sum to 100 (sums to 94), so expert set to null per rules."
+  },
+  {
+    "slug": "dog-creek-lodge-nordic-center",
+    "name": "Dog Creek Lodge & Nordic Center",
+    "state": "MT",
+    "trails_total": 25,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.dogcreeklodge.com/nordic-center",
+    "source_site": "dogcreeklodge.com",
+    "notes": "Nordic XC center, ~27-30km groomed trails (matches 25 trail input loosely). No per-difficulty percentage published; trails offered for various levels. No Wikipedia."
+  },
+  {
+    "slug": "donner-ski-ranch",
+    "name": "Donner Ski Ranch",
+    "state": "CA",
+    "trails_total": 52,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 50,
+      "advanced": 25,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Donner_Ski_Ranch",
+    "source_site": "Wikipedia",
+    "notes": "Wikipedia infobox: 52 total trails, 25% beginner / 50% intermediate / 25% advanced. Three-tier. Sums to 100. Replaces input's 31/38/31 split."
+  },
+  {
+    "slug": "dry-hill-area",
+    "name": "Dry Hill Ski Area",
+    "state": "NY",
+    "trails_total": 7,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://nyskiblog.com/directory/ny-ski-areas/tug-hill/dry-hill/",
+    "source_site": "nyskiblog.com",
+    "notes": "7 trails per NYSkiBlog (input says 13; named-trail list shows 7). No published percentage breakdown. Trails span beginner to advanced (Suicide, El Cid black; The Face/Bump Run int-adv; Wagon Trail/End Run/Main Trail beg-int; Rock & Roll/Hefti's Hollow int)."
+  },
+  {
+    "slug": "eagle-point",
+    "name": "Eagle Point Resort",
+    "state": "UT",
+    "trails_total": 40,
+    "difficulty_pct": {
+      "beginner": 23,
+      "intermediate": 30,
+      "advanced": 28,
+      "expert": 19
+    },
+    "source_url": "https://www.onthesnow.com/utah/eagle-point/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "40 trails (matches input). Per OnTheSnow: 23% beginner / 30% intermediate / 28% advanced / 19% expert. Four-tier system. Sums to 100. (PeakRankings cites 40 trails with 20/45/35 three-tier alternative.)"
+  },
+  {
+    "slug": "eagle-rock-resort",
+    "name": "Eagle Rock Resort",
+    "state": "PA",
+    "trails_total": 14,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skicentral.com/eaglerock.html",
+    "source_site": "skicentral.com",
+    "notes": "14 trails confirmed. Sources describe a beginner/intermediate-friendly hill but no published percentage breakdown found. No Wikipedia page."
+  },
+  {
+    "slug": "eaglecrest",
+    "name": "Eaglecrest",
+    "state": "AK",
+    "trails_total": 36,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 40,
+      "advanced": 40,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Eaglecrest_Ski_Area",
+    "source_site": "Wikipedia",
+    "notes": "Wikipedia infobox: 36 trails, 20% easiest / 40% more difficult / 40% most difficult. Three-tier. Sums to 100."
+  },
+  {
+    "slug": "eaglecrest-ski-area",
+    "name": "Eaglecrest Ski Area",
+    "state": "AK",
+    "trails_total": 36,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 40,
+      "advanced": 40,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Eaglecrest_Ski_Area",
+    "source_site": "Wikipedia",
+    "notes": "Duplicate of 'eaglecrest' slug. Same Wikipedia data: 36 trails, 20/40/40."
+  },
+  {
+    "slug": "eaton-mountain",
+    "name": "Eaton Mountain",
+    "state": "ME",
+    "trails_total": 18,
+    "difficulty_pct": {
+      "beginner": 28,
+      "intermediate": 39,
+      "advanced": 33,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Eaton_Mountain",
+    "source_site": "Wikipedia",
+    "notes": "Wikipedia: 18 trails (5 beg/7 int/6 expert), 28% / 39% / 33%. Three-tier (article uses 'expert' as black diamond). Sums to 100. Matches input split."
+  },
+  {
+    "slug": "echo-mountain",
+    "name": "Echo Mountain",
+    "state": "CO",
+    "trails_total": 13,
+    "difficulty_pct": {
+      "beginner": 23,
+      "intermediate": 46,
+      "advanced": 31,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Echo_Mountain_Resort",
+    "source_site": "Wikipedia",
+    "notes": "Wikipedia: 13 total (3 easiest / 6 more difficult / 4 most difficult) = 23/46/31. Three-tier. Sums to 100. (Input has 8 trails; Wikipedia value 13 is more recent.)"
+  },
+  {
+    "slug": "echo-valley",
+    "name": "Echo Valley Ski Area",
+    "state": "WA",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://skiechovalley.com/overview",
+    "source_site": "skiechovalley.com",
+    "notes": "Small non-profit ski area, 70 acres of groomed runs. No trail count or difficulty breakdown published. No Wikipedia page."
+  },
+  {
+    "slug": "eldora",
+    "name": "Eldora Mountain Resort",
+    "state": "CO",
+    "trails_total": 53,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 50,
+      "advanced": 30,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Eldora_Mountain_Resort",
+    "source_site": "Wikipedia",
+    "notes": "Wikipedia infobox: 53 trails, 20% easiest / 50% more difficult / 30% most difficult. Three-tier. Sums to 100."
+  },
+  {
+    "slug": "elk-mountain",
+    "name": "Elk Mountain Ski Resort",
+    "state": "PA",
+    "trails_total": 27,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 30,
+      "advanced": 45,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Elk_Mountain_Ski_Area",
+    "source_site": "Wikipedia",
+    "notes": "Wikipedia infobox: 27 trails, 25% beginner / 30% intermediate / 45% advanced. Sums to 100. Slightly different from input (22/37/41)."
+  },
+  {
+    "slug": "elko-snobowl",
+    "name": "Elko SnoBowl",
+    "state": "NV",
+    "trails_total": 10,
+    "difficulty_pct": {
+      "beginner": 50,
+      "intermediate": 40,
+      "advanced": 10,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/nevada/elko-snobowl/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "10 trails: half beginner, 3 intermediate (30%), 1 difficult (10%). Sums to 100 (50/40/10 nominally; rounded - search said half beginner half int-or-above with 3 int + 1 black). No Wikipedia page."
+  },
+  {
+    "slug": "enchanted-forest-xc",
+    "name": "Enchanted Forest XC",
+    "state": "NM",
+    "trails_total": 35,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://enchantedforestxc.com/trail-map/",
+    "source_site": "enchantedforestxc.com",
+    "notes": "Cross-country ski area, 33 km groomed XC trails + 18 km snowshoe + 3 km dog. Trail count loosely matches input 35. No published percentage breakdown by difficulty."
+  },
+  {
+    "slug": "ferguson-ridge",
+    "name": "Ferguson Ridge Ski Area",
+    "state": "OR",
+    "trails_total": 8,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 45,
+      "advanced": 20,
+      "expert": 0
+    },
+    "source_url": "https://www.snow-forecast.com/resorts/FergusonRidge",
+    "source_site": "snow-forecast.com",
+    "notes": "Wikipedia confirms 8 trails. Snow-Forecast terrain mix: 35% beginner / 45% intermediate / 20% advanced. Sums to 100."
+  },
+  {
+    "slug": "four-lakes",
+    "name": "Four Lakes Alpine Snowsports",
+    "state": "IL",
+    "trails_total": 7,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.freeride.com/ski-resorts/four-lakes/",
+    "source_site": "freeride.com",
+    "notes": "Small Chicago-area beginner hill, 7 runs (4 green + 2 beginner + 1 int + 1 adv per Freeride description). No clean percentage published. No Wikipedia."
+  },
+  {
+    "slug": "franconia-village-xc-area",
+    "name": "Franconia Village XC Ski Area",
+    "state": "NH",
+    "trails_total": 12,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.franconiainn.com/xc-ski",
+    "source_site": "franconiainn.com",
+    "notes": "Cross-country ski center, ~30 km groomed trails (beginner to expert). 12 trails per input. No quantitative difficulty percentage published."
+  },
+  {
+    "slug": "frost-fire-park",
+    "name": "Frost Fire Park",
+    "state": "ND",
+    "trails_total": 10,
+    "difficulty_pct": {
+      "beginner": 40,
+      "intermediate": 30,
+      "advanced": 30,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Frost_Fire_Park",
+    "source_site": "Wikipedia",
+    "notes": "Wikipedia infobox: 10 total trails (4 easiest / 3 more difficult / 3 most difficult) = 40/30/30. Three-tier. Sums to 100. Matches input split."
+  },
+  {
+    "slug": "garnet-hill-xc",
+    "name": "Garnet Hill XC",
+    "state": "NY",
+    "trails_total": 35,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.garnet-hill.com/outdoor-center/winter-sports/skiing/",
+    "source_site": "garnet-hill.com",
+    "notes": "Cross-country ski center, 50-55 km groomed trails (35 trail count from input). No published per-difficulty percentage. No Wikipedia."
+  },
+  {
+    "slug": "giants-ridge",
+    "name": "Giants Ridge",
+    "state": "MN",
+    "trails_total": 35,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 50,
+      "advanced": 20,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Giants_Ridge_Golf_and_Ski_Resort",
+    "source_site": "Wikipedia",
+    "notes": "Wikipedia infobox: 35 trails, 30% beginner / 50% intermediate / 20% advanced. Three-tier. Sums to 100."
+  },
+  {
+    "slug": "gore-mountain",
+    "name": "Gore Mountain",
+    "state": "NY",
+    "trails_total": 110,
+    "difficulty_pct": {
+      "beginner": 11,
+      "intermediate": 53,
+      "advanced": 30,
+      "expert": 6
+    },
+    "source_url": "https://www.onthesnow.com/new-york/gore-mountain/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "Wikipedia infobox confirms 110 trails. OnTheSnow four-tier: 11% beginner / 53% intermediate / 30% advanced / 6% expert. Sums to 100."
+  }
+]

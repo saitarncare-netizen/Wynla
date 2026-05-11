@@ -1,0 +1,394 @@
+[
+  {
+    "slug": "huff-hills",
+    "trails_total": 16,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://parksandtrips.com/ski-resort/hhnd-huff-hills/",
+    "source_site": "parksandtrips.com",
+    "notes": "Wikipedia 404. Web sources confirm 16 runs but difficulty breakdown conflicts across sources (one says 30/27/13, another says 40% beginner). Not confident enough to assign percentages."
+  },
+  {
+    "slug": "hunt-hollow-club",
+    "trails_total": 21,
+    "difficulty_pct": {
+      "beginner": 29,
+      "intermediate": 29,
+      "advanced": 42,
+      "expert": 0
+    },
+    "source_url": "https://www.iskiny.com/hunt-hollow-ski-club",
+    "source_site": "iskiny.com",
+    "notes": "Wikipedia 404. SANY (Ski Areas of New York) reports 6 beginner / 6 intermediate / 9 advanced = 21 runs. Computed pct from counts (28.57/28.57/42.86 rounded). Has one double black diamond noted but not broken out separately."
+  },
+  {
+    "slug": "hunter-mountain",
+    "trails_total": 67,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 30,
+      "advanced": 30,
+      "expert": 15
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Hunter_Mountain_(ski_area)",
+    "source_site": "wikipedia.org",
+    "notes": "Wikipedia infobox: 67 trails, 25% beginner, 30% intermediate, 30% advanced, 15% expert. Differs from current input (30/40/22/7)."
+  },
+  {
+    "slug": "hurricane-ridge",
+    "trails_total": 10,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://snowstash.com/usa/washington/hurricane-ridge",
+    "source_site": "snowstash.com",
+    "notes": "Wikipedia article lacks ski-area details. SnowStash reports 10 trails / 250 acres. Three rope-tow zones (beginner, intermediate, advanced) confirmed but no published percentage breakdown."
+  },
+  {
+    "slug": "hyland-hills",
+    "trails_total": 13,
+    "difficulty_pct": {
+      "beginner": 23,
+      "intermediate": 31,
+      "advanced": 31,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Hyland_Hills_Ski_Area",
+    "source_site": "wikipedia.org",
+    "notes": "Wikipedia: 13 trails total (3 beginner, 4 intermediate, 4 advanced, 2 freestyle). Computed pct from counts. Differs from current input (27/36/36/0)."
+  },
+  {
+    "slug": "indianhead-mountain",
+    "trails_total": 28,
+    "difficulty_pct": {
+      "beginner": 18,
+      "intermediate": 36,
+      "advanced": 46,
+      "expert": 0
+    },
+    "source_url": "https://www.skicentral.com/indianhead.html",
+    "source_site": "skicentral.com",
+    "notes": "Now part of Snowriver Mountain Resort (renamed Jackson Creek Summit). Web sources report 28 total: 5 beginner / 10 intermediate / 13 expert-black. Computed pct from counts."
+  },
+  {
+    "slug": "jack-frost-mountain",
+    "trails_total": 20,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 35,
+      "advanced": 45,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/pennsylvania/jack-frost/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "Wikipedia 404. OnTheSnow / DiscoverNEPA report 20-21 trails with Easy 20% / Intermediate 35% / Difficult 45%."
+  },
+  {
+    "slug": "jackson-hole",
+    "trails_total": 116,
+    "difficulty_pct": {
+      "beginner": 10,
+      "intermediate": 40,
+      "advanced": 0,
+      "expert": 50
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Jackson_Hole_Mountain_Resort",
+    "source_site": "wikipedia.org",
+    "notes": "Wikipedia: 116 trails, 10/40/50 (beginner/intermediate/expert). Resort officially reports advanced and expert combined as 50% expert. Trail total differs from current input (131 -> 116)."
+  },
+  {
+    "slug": "jackson-xc",
+    "trails_total": 60,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.jacksonxc.org/",
+    "source_site": "jacksonxc.org",
+    "notes": "Cross-country area. Wikipedia 404. Sources report 50+ trails / 100+ km. No published percentage breakdown for difficulty."
+  },
+  {
+    "slug": "jay-peak",
+    "trails_total": 81,
+    "difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 35,
+      "advanced": 31,
+      "expert": 15
+    },
+    "source_url": "https://www.onthesnow.com/vermont/jay-peak/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "Wikipedia confirms 81 trails but no pct. OnTheSnow: 19/35/31/15. Resort trail map also reports 20/40/40 (no expert split)."
+  },
+  {
+    "slug": "jiminy-peak",
+    "trails_total": 45,
+    "difficulty_pct": {
+      "beginner": 38,
+      "intermediate": 29,
+      "advanced": 27,
+      "expert": 7
+    },
+    "source_url": "https://www.onthesnow.com/massachusetts/jiminy-peak/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "Wikipedia: 45 trails (no pct). OnTheSnow: 38% beginner, 29% intermediate, 27% advanced, 7% expert."
+  },
+  {
+    "slug": "june-mountain",
+    "trails_total": 41,
+    "difficulty_pct": {
+      "beginner": 15,
+      "intermediate": 40,
+      "advanced": 45,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/June_Mountain",
+    "source_site": "wikipedia.org",
+    "notes": "Wikipedia infobox: 41 trails, 15% beginner, 40% intermediate, 45% advanced."
+  },
+  {
+    "slug": "kelly-canyon",
+    "trails_total": 26,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 45,
+      "advanced": 20,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Kelly_Canyon",
+    "source_site": "wikipedia.org",
+    "notes": "Wikipedia: 26 trails (vs input 27), 35/45/20. Slight trail-count discrepancy with input."
+  },
+  {
+    "slug": "keystone",
+    "trails_total": 135,
+    "difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 32,
+      "advanced": 49,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Keystone_Resort",
+    "source_site": "wikipedia.org",
+    "notes": "Wikipedia infobox: 135 trails, 19/32/49. Article body shows 130 with 12/39/49 split — used infobox figure as primary."
+  },
+  {
+    "slug": "killington",
+    "trails_total": 155,
+    "difficulty_pct": {
+      "beginner": 28,
+      "intermediate": 33,
+      "advanced": 39,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Killington_Ski_Resort",
+    "source_site": "wikipedia.org",
+    "notes": "Wikipedia: 155 trails at Killington main, 28/33/39 (advanced encompasses expert)."
+  },
+  {
+    "slug": "king-pine",
+    "trails_total": 17,
+    "difficulty_pct": {
+      "beginner": 44,
+      "intermediate": 31,
+      "advanced": 25,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/King_Pine",
+    "source_site": "wikipedia.org",
+    "notes": "Wikipedia: 17 trails (vs input 23), 44/31/25. Same pct as input but lower trail count."
+  },
+  {
+    "slug": "kirkwood-mountain-resort",
+    "trails_total": 86,
+    "difficulty_pct": {
+      "beginner": 12,
+      "intermediate": 30,
+      "advanced": 38,
+      "expert": 20
+    },
+    "source_url": "https://www.powderhounds.com/USA/California/Kirkwood/Ski-Resort.aspx",
+    "source_site": "powderhounds.com",
+    "notes": "Wikipedia 404. Web sources: 86 runs, 12/30/38/20."
+  },
+  {
+    "slug": "kissing-bridge",
+    "trails_total": 37,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 35,
+      "advanced": 30,
+      "expert": 0
+    },
+    "source_url": "https://www.kissingbridge.com/on-the-slopes",
+    "source_site": "kissingbridge.com",
+    "notes": "Wikipedia 404. Resort reports 13 beginner / 13 intermediate / 11 advanced = 37 runs (vs input 39, close). Computed pct from counts (35.1/35.1/29.7)."
+  },
+  {
+    "slug": "labrador-mountain",
+    "trails_total": 22,
+    "difficulty_pct": {
+      "beginner": 32,
+      "intermediate": 32,
+      "advanced": 36,
+      "expert": 0
+    },
+    "source_url": "https://www.skicny.com/labrador/",
+    "source_site": "skicny.com",
+    "notes": "Wikipedia 404. SkiCNY reports 7 easy / 7 intermediate / 8 advanced-expert = 22 runs. Computed pct from counts (31.8/31.8/36.4)."
+  },
+  {
+    "slug": "lake-city-ski-hill",
+    "trails_total": 6,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.uncovercolorado.com/skiing-snowboarding/lake-city-ski-hill/",
+    "source_site": "uncovercolorado.com",
+    "notes": "Wikipedia 404. Uncover Colorado reports 6 trails / 14 skiable acres. Trail mix described qualitatively (5 easy / 2 intermediate / 1 advanced) but not as official pct."
+  },
+  {
+    "slug": "laurel-mountain",
+    "trails_total": 20,
+    "difficulty_pct": {
+      "beginner": 50,
+      "intermediate": 35,
+      "advanced": 15,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Laurel_Mountain_(Pennsylvania)",
+    "source_site": "wikipedia.org",
+    "notes": "Wikipedia: 20 trails (10 beginner, 7 intermediate, 3 advanced). Matches input pct."
+  },
+  {
+    "slug": "leavenworth-ski-hill",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Leavenworth_Ski_Hill",
+    "source_site": "wikipedia.org",
+    "notes": "Wikipedia mentions only 26 km cross-country trails. No alpine trail count or difficulty pct published."
+  },
+  {
+    "slug": "leavenworth-winter-sports-club",
+    "trails_total": 3,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://skileavenworth.com/",
+    "source_site": "skileavenworth.com",
+    "notes": "Club operates an alpine ski area with two rope tows + magic carpet (very small), plus 26 km of nordic trails. No formal difficulty pct breakdown for the alpine area."
+  },
+  {
+    "slug": "lee-canyon",
+    "trails_total": 27,
+    "difficulty_pct": {
+      "beginner": 15,
+      "intermediate": 45,
+      "advanced": 40,
+      "expert": 0
+    },
+    "source_url": "https://grokipedia.com/page/Lee_Canyon_(ski_resort)",
+    "source_site": "grokipedia.com",
+    "notes": "Wikipedia article has no trail data. Web sources: 27 named trails, 15% beginner / 45% intermediate / 40% advanced."
+  },
+  {
+    "slug": "lees-ski-hill",
+    "trails_total": 1,
+    "difficulty_pct": {
+      "beginner": 100,
+      "intermediate": 0,
+      "advanced": 0,
+      "expert": 0
+    },
+    "source_url": "https://www.uncovercolorado.com/skiing-snowboarding/lees-ski-hill/",
+    "source_site": "uncovercolorado.com",
+    "notes": "Community-operated single rope tow with one beginner run / 75 ft vertical."
+  },
+  {
+    "slug": "liberty-mountain",
+    "trails_total": 22,
+    "difficulty_pct": {
+      "beginner": 27,
+      "intermediate": 41,
+      "advanced": 14,
+      "expert": 18
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Liberty_Mountain_Resort",
+    "source_site": "wikipedia.org",
+    "notes": "Wikipedia: 22 trails total, 27/41/14/18. Matches input pct."
+  },
+  {
+    "slug": "little-ski-hill",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://visitidaho.org/things-to-do/alpine-skiing-snowboarding/the-little-ski-hill/",
+    "source_site": "visitidaho.org",
+    "notes": "[SANITIZED — fabrication marker in notes] Wikipedia mentions only nordic trails. Visit Idaho says alpine area has 6 runs / T-bar / 405 ft vertical (vs input 14). Input number likely includes nordic. No alpine pct breakdown published.",
+    "_sanitized": true,
+    "_original_notes": "Wikipedia mentions only nordic trails. Visit Idaho says alpine area has 6 runs / T-bar / 405 ft vertical (vs input 14). Input number likely includes nordic. No alpine pct breakdown published."
+  },
+  {
+    "slug": "little-switzerland",
+    "trails_total": 16,
+    "difficulty_pct": {
+      "beginner": 38,
+      "intermediate": 31,
+      "advanced": 31,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/wisconsin/little-switzerland/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "Wikipedia 404. OnTheSnow / resort: 16 trails, 38/31/31."
+  },
+  {
+    "slug": "loge-glacier",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://lodgeatwhitefishlake.com/winter-adventures",
+    "source_site": "lodgeatwhitefishlake.com",
+    "notes": "Wikipedia 404. LOGE Glacier (lodging near Glacier NP) offers 30 km of nordic trails — no formal alpine trail count or difficulty pct. Input claim of '20 trails' not corroborated by web sources."
+  },
+  {
+    "slug": "lookout-pass",
+    "trails_total": 52,
+    "difficulty_pct": {
+      "beginner": 14,
+      "intermediate": 42,
+      "advanced": 42,
+      "expert": 2
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Lookout_Pass_Ski_and_Recreation_Area",
+    "source_site": "wikipedia.org",
+    "notes": "Wikipedia: 52 trails (vs input 59), 14/42/42/2 — matches input pct closely (input was 13/42/42/2)."
+  }
+]

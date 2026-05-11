@@ -1,0 +1,183 @@
+[
+  {
+    "slug": "loup-loup",
+    "trails_total": 10,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Loup_Loup_Ski_Bowl",
+    "exact_quote": "The hill has 10 major runs, and 3 lifts, including a quad chair that was moved to Loup Loup from Crystal Mountain.",
+    "notes": "Wikipedia gives only total runs; no difficulty breakdown found in article or regional databases."
+  },
+  {
+    "slug": "maplelag",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article exists. Regional databases provided only ambiguous km counts (70 vs 90 km) and no explicit numeric difficulty breakdown; per strict rule (no estimate/infer), left blank."
+  },
+  {
+    "slug": "middlebury-snow-bowl",
+    "trails_total": 17,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Middlebury_College_Snow_Bowl",
+    "exact_quote": "The Snowbowl has 17 trails and 3 lifts, offering access to more than 700 acres (2.8 km2) of terrain.",
+    "notes": "Wikipedia confirms 17 trails. No difficulty percentages in article; other sources cited Indy Pass but not in approved regional database list."
+  },
+  {
+    "slug": "minocqua-winter-park",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article exists. Regional databases did not return; only operator/official site mentioned 90 km total. No explicit trail-count or difficulty %; left blank."
+  },
+  {
+    "slug": "mount-itasca",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article. Regional databases unavailable; only narrative descriptions (one 4.8k trail, biathlon hilly course). No explicit total trails or difficulty %; left blank."
+  },
+  {
+    "slug": "mt-holiday",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article (404). Only tourism summaries mention '16 runs (beginner to advanced)' without source-grade quote; SkiCentral page did not return clean numeric difficulty %. Left blank per no-infer rule."
+  },
+  {
+    "slug": "mt-shasta-ski-park",
+    "trails_total": 38,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 55,
+      "advanced": 25,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Mount_Shasta_Ski_Park",
+    "exact_quote": "38 total  20% beginner  55% intermediate  25% advanced",
+    "notes": "Wikipedia infobox provides explicit total and percentages. No expert category listed."
+  },
+  {
+    "slug": "north-cascade-heli",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Heli-skiing operator; no Wikipedia article. By nature has no fixed trail count or marked difficulty %; cannot fabricate."
+  },
+  {
+    "slug": "oglebay-resort",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Wikipedia article on Oglebay Park mentions 'a ski slope' but no trail count or difficulty %. Regional databases did not return clean numeric data."
+  },
+  {
+    "slug": "plain-valley-trails",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Small Nordic trail center; no Wikipedia article and no regional database listings with explicit numeric data."
+  },
+  {
+    "slug": "quarry-road-trails",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article (404). No regional database returned explicit numeric trail/difficulty data."
+  },
+  {
+    "slug": "rangeley-lakes-trail-center",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article (404). No regional database returned explicit numeric data."
+  },
+  {
+    "slug": "rikert-nordic-center",
+    "trails_total": 25,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Rikert_Outdoor_Center",
+    "exact_quote": "By 2012, the number of groomed trails had grown to 25",
+    "notes": "Wikipedia article (Rikert Outdoor Center) gives 25 groomed trails by 2012; later mentions 55 km total length by 2015. No difficulty % in article."
+  },
+  {
+    "slug": "rikert-outdoor-center",
+    "trails_total": 25,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Rikert_Outdoor_Center",
+    "exact_quote": "By 2012, the number of groomed trails had grown to 25",
+    "notes": "Same site as Rikert Nordic Center; Wikipedia gives 25 groomed trails by 2012, 55 km by 2015. No difficulty %."
+  },
+  {
+    "slug": "sleepy-hollow",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article (404). No regional database returned explicit numeric data."
+  },
+  {
+    "slug": "song-mountain",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Wikipedia article 'Song Mountain' refers to a different mountain (climbing). No regional database in approved list returned explicit numeric difficulty %; SkiCentral page lacked the breakdown."
+  },
+  {
+    "slug": "spring-mountain",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article (404). Regional databases describe '8 trails' but lack explicit numeric difficulty % with quotable source from approved list."
+  },
+  {
+    "slug": "steamboat-touring-center",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Steamboat Ski Resort Wikipedia article makes no reference to the Nordic/touring center. uncovercolorado page 404. No explicit numeric data from approved sources."
+  },
+  {
+    "slug": "sunburst-area",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article (404). Regional databases in approved list did not return; SkiCentral lists '12 trails' but no clean difficulty % quote."
+  },
+  {
+    "slug": "trapp-family-lodge",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Trapp_Family_Lodge",
+    "exact_quote": "As of 2008, there were 67 kilometres (42 mi) of groomed trails and 100 kilometres (62 mi) of un-groomed trails",
+    "notes": "Wikipedia provides km totals (67 km groomed, 100 km ungroomed) but no individual trail count or difficulty %. Cannot fill trails_total without inference."
+  },
+  {
+    "slug": "white-pine-touring-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article (404). No approved regional database returned explicit numeric data."
+  },
+  {
+    "slug": "woodstock-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article (404). No approved regional database returned explicit numeric data."
+  }
+]

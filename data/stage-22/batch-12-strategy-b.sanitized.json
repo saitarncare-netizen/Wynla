@@ -1,0 +1,392 @@
+[
+  {
+    "slug": "showdown",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 40,
+      "advanced": 30,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/showdown/",
+    "source_site": "skiresort.info",
+    "notes": "20 km of slopes; easy 6 km (30%), intermediate 8 km (40%), difficult 6 km (30%). Trail count not provided (km-based source). Difficult bucket mapped to advanced; no separate expert tier."
+  },
+  {
+    "slug": "sierra-at-tahoe",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 26,
+      "intermediate": 49,
+      "advanced": 25,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/sierra-at-tahoe/",
+    "source_site": "skiresort.info",
+    "notes": "46.5 km of slopes; easy 12 km (26%), intermediate 23 km (49%), difficult 11.5 km (25%). OnTheSnow snow report mentions 46 trails. Difficult bucket -> advanced; no expert tier."
+  },
+  {
+    "slug": "silver-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 16,
+      "intermediate": 32,
+      "advanced": 52,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/silver-mountain/",
+    "source_site": "skiresort.info",
+    "notes": "25 km of slopes; easy 4 km (16%), intermediate 8 km (32%), difficult 13 km (52%). Difficult -> advanced; no expert tier."
+  },
+  {
+    "slug": "silverton-mountain",
+    "trails_total": 69,
+    "difficulty_pct": {
+      "beginner": 0,
+      "intermediate": 0,
+      "advanced": 0,
+      "expert": 100
+    },
+    "source_url": "https://www.onthesnow.com/colorado/silverton-mountain/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "69 trails, 100% expert per OnTheSnow. Skiresort.info reports 100 km of expert-only ski routes."
+  },
+  {
+    "slug": "sipapu",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 17,
+      "intermediate": 39,
+      "advanced": 44,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/sipapu/",
+    "source_site": "skiresort.info",
+    "notes": "18 km of slopes; easy 3 km (17%), intermediate 7 km (39%), difficult 8 km (44%). Difficult -> advanced; no expert tier."
+  },
+  {
+    "slug": "skaneateles-club",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "source_site": null,
+    "notes": "Not found on skiresort.info, OnTheSnow, skicentral, or snowpak (snowpak rate-limited 429). Small private NY club with limited 3rd-party coverage."
+  },
+  {
+    "slug": "ski-apache",
+    "trails_total": 55,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://skicentral.com/skiapache.html",
+    "source_site": "skicentral.com",
+    "notes": "55 trails per skicentral; difficulty breakdown field empty. Skiresort.info has no page; snowpak rate-limited."
+  },
+  {
+    "slug": "ski-bradford",
+    "trails_total": 15,
+    "difficulty_pct": {
+      "beginner": 37,
+      "intermediate": 37,
+      "advanced": 26,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/bradford/",
+    "source_site": "skiresort.info",
+    "notes": "Skiresort.info: 4 km of slopes; easy 1.5 km (37%), intermediate 1.5 km (37%), difficult 1 km (26%). Skicentral confirms 15 trails total. Difficult -> advanced; no expert tier."
+  },
+  {
+    "slug": "ski-brule",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 27,
+      "intermediate": 53,
+      "advanced": 20,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/ski-brule/",
+    "source_site": "skiresort.info",
+    "notes": "7.5 km of slopes; easy 2 km (27%), intermediate 4 km (53%), difficult 1.5 km (20%). Difficult -> advanced; no expert tier."
+  },
+  {
+    "slug": "ski-butternut",
+    "trails_total": 22,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 60,
+      "advanced": 20,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/butternut/",
+    "source_site": "skiresort.info",
+    "notes": "22 km of slopes (skiresort.info); easy 4.4 km (20%), intermediate 13.2 km (60%), difficult 4.4 km (20%). OnTheSnow confirms 22 trails. Difficult -> advanced."
+  },
+  {
+    "slug": "ski-cooper",
+    "trails_total": 64,
+    "difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 27,
+      "advanced": 28,
+      "expert": 27
+    },
+    "source_url": "https://www.onthesnow.com/colorado/ski-cooper/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "64 trails per OnTheSnow; difficulty 19/27/28/27 (sums to 101% due to rounding)."
+  },
+  {
+    "slug": "ski-gull",
+    "trails_total": 10,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://skicentral.com/skigull.html",
+    "source_site": "skicentral.com",
+    "notes": "10 trails per skicentral; difficulty breakdown field empty. No page on skiresort.info; snowpak rate-limited."
+  },
+  {
+    "slug": "ski-santa-fe",
+    "trails_total": 87,
+    "difficulty_pct": {
+      "beginner": 17,
+      "intermediate": 31,
+      "advanced": 46,
+      "expert": 6
+    },
+    "source_url": "https://www.onthesnow.com/new-mexico/ski-santa-fe/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "87 trails per OnTheSnow with full 4-tier difficulty breakdown."
+  },
+  {
+    "slug": "ski-sawmill",
+    "trails_total": 13,
+    "difficulty_pct": {
+      "beginner": 31,
+      "intermediate": 31,
+      "advanced": 38,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/pennsylvania/ski-sawmill/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "13 trails per OnTheSnow; 3-tier (B/I/A) breakdown, no expert."
+  },
+  {
+    "slug": "ski-sundown",
+    "trails_total": 15,
+    "difficulty_pct": {
+      "beginner": 47,
+      "intermediate": 24,
+      "advanced": 29,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/sundown/",
+    "source_site": "skiresort.info",
+    "notes": "Skiresort.info: 5.8 km of slopes; easy 2.7 km (47%), intermediate 1.4 km (24%), difficult 1.7 km (29%). Skicentral lists 15 trails; OnTheSnow lists 17. Difficult -> advanced; no expert."
+  },
+  {
+    "slug": "ski-ward",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 28,
+      "intermediate": 47,
+      "advanced": 25,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/ski-ward/",
+    "source_site": "skiresort.info",
+    "notes": "Ward Hill - Shrewsbury: 2.1 km of slopes; easy 0.6 km (28%), intermediate 1 km (47%), difficult 0.5 km (25%). Note % sums to 100 after rounding."
+  },
+  {
+    "slug": "skiland",
+    "trails_total": 42,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://skicentral.com/moosemountain.html",
+    "source_site": "skicentral.com",
+    "notes": "42 trails per skicentral; no numeric difficulty breakdown but text notes 'terrain is intermediate and advanced so not recommended for beginners'. No skiresort.info page; snowpak rate-limited."
+  },
+  {
+    "slug": "sleeping-giant",
+    "trails_total": 49,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://skicentral.com/sleepinggiantskiarea.html",
+    "source_site": "skicentral.com",
+    "notes": "49 trails per skicentral; difficulty breakdown field empty. No skiresort.info page; snowpak rate-limited."
+  },
+  {
+    "slug": "sleepy-hollow",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "source_site": null,
+    "notes": "Not found on skiresort.info, OnTheSnow, or skicentral. Snowpak rate-limited (429). Small IA sports park with limited 3rd-party coverage."
+  },
+  {
+    "slug": "smugglers-notch",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 18,
+      "intermediate": 52,
+      "advanced": 30,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/smugglers-notch/",
+    "source_site": "skiresort.info",
+    "notes": "78 km of slopes; easy 13 km (18%), intermediate 41 km (52%), difficult 24 km (30%). Difficult -> advanced; no expert tier in skiresort.info schema."
+  },
+  {
+    "slug": "snow-creek",
+    "trails_total": 12,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 58,
+      "advanced": 8,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/missouri/snow-creek/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "OnTheSnow: 12 trails, 33% beginner / 58% intermediate / 8% advanced (sums 99% rounding). Skiresort.info has 3.2 km of slopes with similar 41/56/3 km-split."
+  },
+  {
+    "slug": "snow-king",
+    "trails_total": 16,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://skicentral.com/snowking.html",
+    "source_site": "skicentral.com",
+    "notes": "16 trails per skicentral; difficulty breakdown field empty. Conflicts with current 41 in input - skicentral may be outdated. No skiresort.info page found."
+  },
+  {
+    "slug": "snow-ridge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 10,
+      "intermediate": 40,
+      "advanced": 50,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/snow-ridge/",
+    "source_site": "skiresort.info",
+    "notes": "10 km of slopes; easy 1 km (10%), intermediate 4 km (40%), difficult 5 km (50%). Difficult -> advanced; no expert."
+  },
+  {
+    "slug": "snow-snake",
+    "trails_total": 9,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 22,
+      "advanced": 44,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/michigan/snow-snake-mountain-ski-area/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "9 trails per OnTheSnow; 3-tier breakdown 33/22/44 (sums 99% rounding)."
+  },
+  {
+    "slug": "snow-summit",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 34,
+      "intermediate": 42,
+      "advanced": 24,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/snow-summit/",
+    "source_site": "skiresort.info",
+    "notes": "Snow Summit / Big Bear Lake: 29 km of slopes; easy 10 km (34%), intermediate 12 km (42%), difficult 7 km (24%). Difficult -> advanced; no expert."
+  },
+  {
+    "slug": "snow-trails",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 28,
+      "intermediate": 53,
+      "advanced": 19,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/snow-trails/",
+    "source_site": "skiresort.info",
+    "notes": "5.3 km of slopes; easy 1.5 km (28%), intermediate 2.8 km (53%), difficult 1 km (19%). Difficult -> advanced; no expert."
+  },
+  {
+    "slug": "snow-valley",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 12,
+      "intermediate": 59,
+      "advanced": 29,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/snow-valley/",
+    "source_site": "skiresort.info",
+    "notes": "34 km of slopes; easy 4 km (12%), intermediate 20 km (59%), difficult 10 km (29%). Difficult -> advanced; no expert."
+  },
+  {
+    "slug": "snowbasin",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 50,
+      "advanced": 30,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/snowbasin/",
+    "source_site": "skiresort.info",
+    "notes": "80 km of slopes; easy 16 km (20%), intermediate 40 km (50%), difficult 24 km (30%). Difficult -> advanced; no expert tier per skiresort.info (conflicts with input's 7/29/34/31 4-tier split)."
+  },
+  {
+    "slug": "snowbird",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 27,
+      "intermediate": 38,
+      "advanced": 35,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/snowbird/",
+    "source_site": "skiresort.info",
+    "notes": "103 km of slopes; easy 28 km (27%), intermediate 39 km (38%), difficult 36 km (35%). Difficult -> advanced; no expert."
+  },
+  {
+    "slug": "snowhaven",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 50,
+      "intermediate": 50,
+      "advanced": 0,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/snowhaven/",
+    "source_site": "skiresort.info",
+    "notes": "3 km of slopes; easy 1.5 km (50%), intermediate 1.5 km (50%), no difficult terrain reported."
+  }
+]

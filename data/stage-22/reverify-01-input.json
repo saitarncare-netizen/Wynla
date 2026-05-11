@@ -1,0 +1,140 @@
+[
+  {
+    "slug": "arizona-snowbowl",
+    "name": "Arizona Snowbowl",
+    "state": "AZ",
+    "website_url": "https://www.snowbowl.ski"
+  },
+  {
+    "slug": "ascutney-outdoors",
+    "name": "Ascutney Outdoors",
+    "state": "VT",
+    "website_url": "https://www.ascutneyoutdoors.org"
+  },
+  {
+    "slug": "badger-mountain-wa",
+    "name": "Badger Mountain Ski Area",
+    "state": "WA",
+    "website_url": "http://www.nwwintersportsman.com/BadgerMt/index2.htm"
+  },
+  {
+    "slug": "bear-basin-nordic-center",
+    "name": "Bear Basin Nordic Center",
+    "state": "ID",
+    "website_url": "https://payettelakesskiclub.org/pages/bear-basin-nordic-center"
+  },
+  {
+    "slug": "bethel-village-trails",
+    "name": "Bethel Village Trails",
+    "state": "ME",
+    "website_url": "https://woodsandtrails.org/"
+  },
+  {
+    "slug": "catamount-outdoor-family-center",
+    "name": "Catamount Outdoor Family Center",
+    "state": "VT",
+    "website_url": "https://catamountoutdoor.org/"
+  },
+  {
+    "slug": "chapman-hill",
+    "name": "Chapman Hill Ski Area",
+    "state": "CO",
+    "website_url": "https://www.durangogov.org"
+  },
+  {
+    "slug": "cottonwood-butte",
+    "name": "Cottonwood Butte",
+    "state": "ID",
+    "website_url": "https://www.cottonwoodbutte.org"
+  },
+  {
+    "slug": "crosscut-sports-center",
+    "name": "Crosscut Mountain Sports Center",
+    "state": "MT",
+    "website_url": "https://www.crosscutmt.org/"
+  },
+  {
+    "slug": "dog-creek-lodge-nordic-center",
+    "name": "Dog Creek Lodge & Nordic Center",
+    "state": "MT",
+    "website_url": "http://www.dogcreeklodge.com"
+  },
+  {
+    "slug": "echo-valley",
+    "name": "Echo Valley Ski Area",
+    "state": "WA",
+    "website_url": "https://skiechovalley.com/"
+  },
+  {
+    "slug": "great-glen-trails-outdoor-center",
+    "name": "Great Glen Trails Outdoor Center",
+    "state": "NH",
+    "website_url": "https://greatglentrails.com/cross-country-skiing/?_gl=1%2Aqitcvz%2A_up%2AMQ..%2A_gs%2AMQ..&gclid=CjwKCAiAkvDMBhBMEiwAnUA9BZ6kNL4vegv6BQD_C82hd7pI8lI1ty6BH6gkk6SHvR7OfZLV-E40MBoCbe4QAvD_BwE&gbraid=0AAAAApFtTRt_XANX2BB0O-CyvlwPep5xO"
+  },
+  {
+    "slug": "haymaker-nordic-center",
+    "name": "Haymaker Nordic Center",
+    "state": "CO",
+    "website_url": "https://nordicski.net/haymaker-nordic-center/"
+  },
+  {
+    "slug": "hesperus-ski-area",
+    "name": "Hesperus Ski Area",
+    "state": "CO",
+    "website_url": "https://www.ski-hesperus.com"
+  },
+  {
+    "slug": "high-point-xc-center",
+    "name": "High Point XC Ski Center",
+    "state": "NJ",
+    "website_url": "https://www.xcskihighpoint.com/home"
+  },
+  {
+    "slug": "hoedown-hill",
+    "name": "Hoedown Hill",
+    "state": "CO",
+    "website_url": "https://www.hoedownhill.com"
+  },
+  {
+    "slug": "homestake-lodge",
+    "name": "Homestake Lodge",
+    "state": "MT",
+    "website_url": null
+  },
+  {
+    "slug": "howelsen-hill",
+    "name": "Howelsen Hill Ski Area",
+    "state": "CO",
+    "website_url": "https://www.steamboatsprings.net"
+  },
+  {
+    "slug": "hurricane-ridge",
+    "name": "Hurricane Ridge Ski and Snowboard Area",
+    "state": "WA",
+    "website_url": "https://hurricaneridge.com"
+  },
+  {
+    "slug": "jackson-xc",
+    "name": "Jackson XC",
+    "state": "NH",
+    "website_url": null
+  },
+  {
+    "slug": "leavenworth-winter-sports-club",
+    "name": "Leavenworth Winter Sports Club",
+    "state": "WA",
+    "website_url": "https://skileavenworth.com/webcams"
+  },
+  {
+    "slug": "little-ski-hill",
+    "name": "Little Ski Hill",
+    "state": "ID",
+    "website_url": "https://littleskihill.org"
+  },
+  {
+    "slug": "loge-glacier",
+    "name": "LOGE Glacier",
+    "state": "MT",
+    "website_url": "https://www.logecamps.com/journal/glacier-area-guide"
+  }
+]

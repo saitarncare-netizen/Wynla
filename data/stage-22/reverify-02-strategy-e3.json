@@ -1,0 +1,178 @@
+[
+  {
+    "slug": "loup-loup",
+    "trails_total": 10,
+    "difficulty_pct": {"beginner": 35, "intermediate": 15, "advanced": 50, "expert": null},
+    "source_url": "https://www.skicentral.com/louploupskibowl.html",
+    "exact_quote": "1,240 vertical feet with 10 major runs ranging from beginner to expert",
+    "notes": "skicentral confirms 10 alpine runs; difficulty pct 35/15/50 from indyskipass.com partner page (https://www.indyskipass.com/our-resorts/loup-loup-ski-bowl) quoting 'Beginner: 35%, Intermediate: 15%, Advanced: 50%'. Note: indy page lists 14 runs (likely including auxiliary). Expert not separately broken out."
+  },
+  {
+    "slug": "maplelag",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic/cross-country-only resort. No OnTheSnow page found. Alpine difficulty schema does not apply. 90 km of XC trails per maplelag.com."
+  },
+  {
+    "slug": "middlebury-snow-bowl",
+    "trails_total": 17,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://www.skicentral.com/middleburycollegesnowbowl.html",
+    "exact_quote": "Number of Trails: 17",
+    "notes": "skicentral confirms 17 trails. No difficulty percentage breakdown published on skicentral or OnTheSnow."
+  },
+  {
+    "slug": "minocqua-winter-park",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic/cross-country-only resort. No OnTheSnow or skicentral page found. Alpine schema does not apply. ~90 km of XC trails."
+  },
+  {
+    "slug": "mount-itasca",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Multi-discipline winter sports center (ski jumping, nordic, alpine, biathlon, tubing). No OnTheSnow or dedicated skicentral profile found. No published alpine trail count or difficulty breakdown."
+  },
+  {
+    "slug": "mt-holiday",
+    "trails_total": 12,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://www.onthesnow.com/michigan/mount-holiday-ski-area/ski-resort",
+    "exact_quote": "12 runs in total",
+    "notes": "OnTheSnow lists 12 runs and 45 acres. skicentral lists 14 trails (discrepancy). No difficulty percentage breakdown published on either source."
+  },
+  {
+    "slug": "mt-shasta-ski-park",
+    "trails_total": 38,
+    "difficulty_pct": {"beginner": 20, "intermediate": 45, "advanced": 35, "expert": null},
+    "source_url": "https://www.skipark.com/winter/trail-map-stats",
+    "exact_quote": "Terrain consists of 20% beginner, 45% intermediate, 35% advanced",
+    "notes": "Official resort site quotes 38 trails and 20/45/35 split. OnTheSnow lists 44 trails (discrepancy — official site authoritative). No expert category broken out separately."
+  },
+  {
+    "slug": "north-cascade-heli",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Heli-skiing operator — not a resort with trails. Trail count and difficulty percentages do not apply."
+  },
+  {
+    "slug": "oglebay-resort",
+    "trails_total": 1,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://www.skicentral.com/oglebay.html",
+    "exact_quote": "Number of Trails: 1",
+    "notes": "skicentral reports 1 trail. Very small beginner-focused area; no difficulty breakdown published."
+  },
+  {
+    "slug": "plain-valley-trails",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic/cross-country-only resort. No OnTheSnow or skicentral page. Alpine schema does not apply."
+  },
+  {
+    "slug": "quarry-road-trails",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic/cross-country-only trail center in Maine. No OnTheSnow or skicentral page. Alpine schema does not apply."
+  },
+  {
+    "slug": "rangeley-lakes-trail-center",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic/cross-country-only trail center. No OnTheSnow or skicentral page. Alpine schema does not apply."
+  },
+  {
+    "slug": "rikert-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic/cross-country-only center. No OnTheSnow or skicentral page. Alpine schema does not apply."
+  },
+  {
+    "slug": "rikert-outdoor-center",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic/cross-country-only center (duplicate of rikert-nordic-center). No OnTheSnow or skicentral page. Alpine schema does not apply."
+  },
+  {
+    "slug": "sleepy-hollow",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "All-weather SnowFlex synthetic tubing/sledding hill in Des Moines, IA. No OnTheSnow or skicentral page. Not a traditional ski area — schema does not apply."
+  },
+  {
+    "slug": "song-mountain",
+    "trails_total": 24,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://www.skicentral.com/songmountain.html",
+    "exact_quote": "700 ft vertical, 5 lifts, 24 trails, and 100 skiable acres",
+    "notes": "skicentral confirms 24 trails. OnTheSnow also confirms '24 runs in total'. No difficulty percentage breakdown published on either source."
+  },
+  {
+    "slug": "spring-mountain",
+    "trails_total": 8,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://www.skicentral.com/springmountain.html",
+    "exact_quote": "The ski area has 8 trails, two snow tubing runs, four lifts, a terrain park and half-pipe",
+    "notes": "skicentral reports 8 trails. OnTheSnow reports 9 runs (minor discrepancy). No difficulty percentage breakdown published on either."
+  },
+  {
+    "slug": "steamboat-touring-center",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic/cross-country-only touring center. No OnTheSnow or skicentral page. Alpine schema does not apply."
+  },
+  {
+    "slug": "sunburst-area",
+    "trails_total": 11,
+    "difficulty_pct": {"beginner": 18, "intermediate": 55, "advanced": 18, "expert": 9},
+    "source_url": "https://www.onthesnow.com/wisconsin/sunburst/ski-resort",
+    "exact_quote": "11 total runs with 18% beginner runs, 55% intermediate runs, 18% advanced runs, and 9% expert runs",
+    "notes": "OnTheSnow gives full breakdown. skicentral lists 12 trails (minor discrepancy). Used OnTheSnow for the explicit percentage quote."
+  },
+  {
+    "slug": "trapp-family-lodge",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic/cross-country-only resort. No OnTheSnow or skicentral alpine page. Alpine schema does not apply."
+  },
+  {
+    "slug": "white-pine-touring-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic/cross-country-only center. No OnTheSnow or skicentral page. Alpine schema does not apply."
+  },
+  {
+    "slug": "woodstock-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic/cross-country-only center. No OnTheSnow or skicentral page. Alpine schema does not apply."
+  }
+]

@@ -1,0 +1,301 @@
+[
+  {
+    "slug": "arizona-snowbowl",
+    "trails_total": 61,
+    "difficulty_pct": {
+      "beginner": 27,
+      "intermediate": 39,
+      "advanced": 21,
+      "expert": 11
+    },
+    "source_url": "https://www.onthesnow.com/arizona/arizona-snowbowl/ski-resort",
+    "exact_quote": "Beginners Runs 27% Intermediate Runs 39% Advanced Runs 21% Expert Runs 11% Runs in Total 61",
+    "notes": "OnTheSnow resort overview lists 61 total runs and a four-tier difficulty split."
+  },
+  {
+    "slug": "ascutney-outdoors",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "not found on OnTheSnow or skicentral"
+  },
+  {
+    "slug": "badger-mountain-wa",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "not found on OnTheSnow or skicentral"
+  },
+  {
+    "slug": "bear-basin-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "not found on OnTheSnow or skicentral"
+  },
+  {
+    "slug": "bethel-village-trails",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "SkiCentral's Bethel Nordic Ski Center page lists 'Number of Trails: 0' with no difficulty breakdown, so no value recorded."
+  },
+  {
+    "slug": "catamount-outdoor-family-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "not found on OnTheSnow or skicentral"
+  },
+  {
+    "slug": "chapman-hill",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "not found on OnTheSnow or skicentral"
+  },
+  {
+    "slug": "cottonwood-butte",
+    "trails_total": 7,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skicentral.com/cottonwoodbutte.html",
+    "exact_quote": "Number of Trails 7",
+    "notes": "SkiCentral resort page lists 7 trails in Mountain Statistics; no difficulty breakdown shown."
+  },
+  {
+    "slug": "crosscut-sports-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "not found on OnTheSnow or skicentral"
+  },
+  {
+    "slug": "dog-creek-lodge-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "not found on OnTheSnow or skicentral"
+  },
+  {
+    "slug": "echo-valley",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "not found on OnTheSnow or skicentral"
+  },
+  {
+    "slug": "great-glen-trails-outdoor-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "OnTheSnow only references Great Glen in news articles; no resort overview page exists. Not on skicentral."
+  },
+  {
+    "slug": "haymaker-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "OnTheSnow only references Haymaker in a news article; no resort overview page exists. Not on skicentral."
+  },
+  {
+    "slug": "hesperus-ski-area",
+    "trails_total": 13,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skicentral.com/skihesperus.html",
+    "exact_quote": "Number of Trails 13",
+    "notes": "SkiCentral Mountain Statistics lists 13 trails; difficulty breakdown is blank on the page."
+  },
+  {
+    "slug": "high-point-xc-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "SkiCentral's High Point Cross Country Ski Center page lists 'Number of Trails: 0' with no breakdown, so no value recorded."
+  },
+  {
+    "slug": "hoedown-hill",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "not found on OnTheSnow or skicentral"
+  },
+  {
+    "slug": "homestake-lodge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "SkiCentral's Homestake Lodge page lists 'Number of Trails: 0' with no breakdown, so no value recorded."
+  },
+  {
+    "slug": "howelsen-hill",
+    "trails_total": 17,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 30,
+      "advanced": 50,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/colorado/howelsen-hill/ski-resort",
+    "exact_quote": "Beginners Runs 20% Intermediate Runs 30% Advanced Runs 50% Runs in Total 17",
+    "notes": "OnTheSnow resort overview lists 17 total runs with a three-tier split; page does not list an expert category."
+  },
+  {
+    "slug": "hurricane-ridge",
+    "trails_total": 10,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skicentral.com/hurricaneridge.html",
+    "exact_quote": "Number of Trails 10",
+    "notes": "SkiCentral Mountain Statistics lists 10 trails; no difficulty breakdown on the page."
+  },
+  {
+    "slug": "jackson-xc",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "not found on OnTheSnow or skicentral"
+  },
+  {
+    "slug": "leavenworth-winter-sports-club",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "SkiCentral's Leavenworth Ski Hill page lists 'Number of Trails: 2' but that count appears to refer only to lifts/rope tows and lacks difficulty data, so no value recorded."
+  },
+  {
+    "slug": "little-ski-hill",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "not found on OnTheSnow or skicentral"
+  },
+  {
+    "slug": "loge-glacier",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "not found on OnTheSnow or skicentral"
+  }
+]

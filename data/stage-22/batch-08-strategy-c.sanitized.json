@@ -1,0 +1,392 @@
+[
+  {
+    "slug": "loon-mountain",
+    "trails_total": 73,
+    "difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 53,
+      "advanced": 28,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Loon_Mountain_Ski_Resort",
+    "source_site": "wikipedia.org",
+    "notes": "Wiki gives 19% beginner / 53% intermediate / 28% expert (3-category). Mapped 28% to advanced bucket; no separate expert category in source."
+  },
+  {
+    "slug": "loppet",
+    "trails_total": 16,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 45,
+      "advanced": 20,
+      "expert": null
+    },
+    "source_url": "https://www.indyskipass.com/our-resorts/the-loppet",
+    "source_site": "indyskipass.com",
+    "notes": "Cross-country resort. 35/45/20 (3-category beginner/intermediate/advanced); no expert level."
+  },
+  {
+    "slug": "lost-trail",
+    "trails_total": 60,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 60,
+      "advanced": 20,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Lost_Trail_Powder_Mountain",
+    "source_site": "wikipedia.org",
+    "notes": "Wiki says '60+ trails' with 3-category breakdown 20/60/20; no expert bucket. Input had 69 trails."
+  },
+  {
+    "slug": "lost-valley",
+    "trails_total": 31,
+    "difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 38,
+      "advanced": 28,
+      "expert": 12
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Lost_Valley_Ski_Area",
+    "source_site": "wikipedia.org",
+    "notes": "Wiki reports 31 trails incl. glades (input had 22). 4-category breakdown."
+  },
+  {
+    "slug": "loup-loup",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Loup_Loup_Ski_Bowl",
+    "source_site": "wikipedia.org",
+    "notes": "No precise breakdown found. Wiki says 10 major runs; web sources cite 20% easy / 80% more difficult only — insufficient detail to fabricate intermediate/advanced/expert split."
+  },
+  {
+    "slug": "loveland",
+    "trails_total": 94,
+    "difficulty_pct": {
+      "beginner": 13,
+      "intermediate": 41,
+      "advanced": 46,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Loveland_Ski_Area",
+    "source_site": "wikipedia.org",
+    "notes": "Wiki 13/41/46 (3-category, advanced/expert combined). Same as input."
+  },
+  {
+    "slug": "lutsen-mountains",
+    "trails_total": 95,
+    "difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 49,
+      "advanced": 26,
+      "expert": 11
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Lutsen_Mountains",
+    "source_site": "wikipedia.org",
+    "notes": "Wiki 4-category counts: 18/47/25/10 trails out of 95 = 19/49/26/11%."
+  },
+  {
+    "slug": "lyndon-outing-club",
+    "trails_total": 10,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://skivermont.com/lyndon-outing-club",
+    "source_site": "skivermont.com",
+    "notes": "10 marked trails ranging from greens to double-black; described as 'mostly upper beginner and intermediate.' No percentage breakdown published."
+  },
+  {
+    "slug": "mad-river-glen",
+    "trails_total": 47,
+    "difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 34,
+      "advanced": null,
+      "expert": 45
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Mad_River_Glen",
+    "source_site": "wikipedia.org",
+    "notes": "Sources give 10 novice + 16 intermediate + 21 expert = 47 categorized trails (21/34/45 in 3 buckets). Resort is famous for expert terrain; treating 21 'expert' trails as expert bucket, advanced left null."
+  },
+  {
+    "slug": "mad-river-mountain",
+    "trails_total": 20,
+    "difficulty_pct": {
+      "beginner": 22,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Mad_River_Mountain",
+    "source_site": "wikipedia.org",
+    "notes": "Wiki says 20 trails; OnTheSnow cites 22% easy / 78% more difficult only — insufficient detail to split intermediate/advanced/expert."
+  },
+  {
+    "slug": "magic-mountain",
+    "trails_total": 39,
+    "difficulty_pct": {
+      "beginner": 28,
+      "intermediate": 36,
+      "advanced": 26,
+      "expert": 10
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Magic_Mountain_Ski_Area",
+    "source_site": "wikipedia.org",
+    "notes": "Wiki confirms 39 trails. No explicit % in Wiki; keeping current input percentages which align with resort's published stats."
+  },
+  {
+    "slug": "magic-mountain-id",
+    "trails_total": 11,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 25,
+      "advanced": 20,
+      "expert": 25
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Magic_Mountain_Resort",
+    "source_site": "wikipedia.org",
+    "notes": "Wiki: 30% easiest / 25% more difficult / 20% most difficult / 25% experts only."
+  },
+  {
+    "slug": "mammoth-mountain",
+    "trails_total": 175,
+    "difficulty_pct": {
+      "beginner": 15,
+      "intermediate": 48,
+      "advanced": 37,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Mammoth_Mountain_Ski_Area",
+    "source_site": "wikipedia.org",
+    "notes": "Wiki gives 175 named trails (input had 178); 3-category 15/48/37; no separate expert bucket."
+  },
+  {
+    "slug": "maple-ski-ridge",
+    "trails_total": 8,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 38,
+      "advanced": 37,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/new-york/maple-ski-ridge/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "OnTheSnow via web search: 25/38/37 (3-category, no expert)."
+  },
+  {
+    "slug": "maplelag",
+    "trails_total": 17,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 55,
+      "advanced": 10,
+      "expert": null
+    },
+    "source_url": "https://www.indyskipass.com/our-resorts/maplelag-resort",
+    "source_site": "indyskipass.com",
+    "notes": "Cross-country resort; 35/55/10 (3-category, no expert)."
+  },
+  {
+    "slug": "marquette-mountain",
+    "trails_total": 25,
+    "difficulty_pct": {
+      "beginner": 15,
+      "intermediate": 50,
+      "advanced": 35,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Marquette_Mountain",
+    "source_site": "wikipedia.org",
+    "notes": "Wiki: 25 trails (input had 29) and 15/50/35 (3-category)."
+  },
+  {
+    "slug": "massanutten-resort",
+    "trails_total": 23,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 35,
+      "advanced": 35,
+      "expert": 0
+    },
+    "source_url": "https://www.skisoutheast.com/resorts/massanutten-resort/mountain-stats/",
+    "source_site": "skisoutheast.com",
+    "notes": "Trail count from input. SkiSoutheast: 30/35/35 (3-category, no expert)."
+  },
+  {
+    "slug": "maverick-mountain",
+    "trails_total": 24,
+    "difficulty_pct": {
+      "beginner": 27,
+      "intermediate": 37,
+      "advanced": 18,
+      "expert": 18
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Maverick_Mountain_Ski_Area",
+    "source_site": "wikipedia.org",
+    "notes": "Wiki: 24 runs, 27/37/18/18 (4-category)."
+  },
+  {
+    "slug": "mccauley-mountain",
+    "trails_total": 21,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/McCauley_Mountain_(New_York)",
+    "source_site": "wikipedia.org",
+    "notes": "Wiki confirms 21 trails. No published percentage breakdown found in either Wiki or web search."
+  },
+  {
+    "slug": "mcintyre-ski-area",
+    "trails_total": 9,
+    "difficulty_pct": {
+      "beginner": 90,
+      "intermediate": 10,
+      "advanced": 0,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/McIntyre_Ski_Area",
+    "source_site": "wikipedia.org",
+    "notes": "Wiki: 9 trails (input had 11); 90% beginner / 10% intermediate; no advanced or expert."
+  },
+  {
+    "slug": "meadowlark",
+    "trails_total": 14,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/wyoming/meadowlark-ski-lodge/ski-resort",
+    "source_site": "onthesnow.com",
+    "notes": "Sources conflict (OnTheSnow lists 16 beg + 24 int + 24 adv with 20 runs total, which doesn't add up). No reliable breakdown."
+  },
+  {
+    "slug": "middlebury-snow-bowl",
+    "trails_total": 17,
+    "difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 44,
+      "advanced": 35,
+      "expert": null
+    },
+    "source_url": "https://www.indyskipass.com/our-resorts/middlebury-snowbowl",
+    "source_site": "indyskipass.com",
+    "notes": "Indy/web: 21/44/35 (3-category, no expert)."
+  },
+  {
+    "slug": "minocqua-winter-park",
+    "trails_total": 30,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://minocquawinterpark.org/",
+    "source_site": "minocquawinterpark.org",
+    "notes": "Nordic-only park, 90km trails described as 'wide range beginner to expert' with no published percentage breakdown."
+  },
+  {
+    "slug": "mission-ridge",
+    "trails_total": 54,
+    "difficulty_pct": {
+      "beginner": 10,
+      "intermediate": 60,
+      "advanced": 30,
+      "expert": 0
+    },
+    "source_url": "https://parksandtrips.com/ski-resort/mrwa-mission-ridge-ski-resort/",
+    "source_site": "parksandtrips.com",
+    "notes": "Web: 10/60/30 (3-category)."
+  },
+  {
+    "slug": "mohawk-mountain-ski-area",
+    "trails_total": 27,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Mohawk_Mountain_Ski_Area",
+    "source_site": "wikipedia.org",
+    "notes": "Wiki confirms 27 trails; no precise % breakdown found (sources only say '80% intermediate and above')."
+  },
+  {
+    "slug": "monarch-mountain",
+    "trails_total": 63,
+    "difficulty_pct": {
+      "beginner": 14,
+      "intermediate": 28,
+      "advanced": 27,
+      "expert": 31
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Monarch_Mountain_(ski_area)",
+    "source_site": "wikipedia.org",
+    "notes": "Wiki: 63 trails (input had 80); 14/28/27/31 4-category."
+  },
+  {
+    "slug": "mont-ripley",
+    "trails_total": 31,
+    "difficulty_pct": {
+      "beginner": 16,
+      "intermediate": 35,
+      "advanced": 42,
+      "expert": 6
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Mont_Ripley",
+    "source_site": "wikipedia.org",
+    "notes": "Wiki: 31 trails (input had 25); 16/35/42/6 4-category (note: sums to 99 in source)."
+  },
+  {
+    "slug": "montage-mountain",
+    "trails_total": 27,
+    "difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 46,
+      "advanced": 19,
+      "expert": 15
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Montage_Mountain",
+    "source_site": "wikipedia.org",
+    "notes": "Wiki infobox: 19/46/19/15. (Article body cites different 35/30/20/15; kept infobox values matching input.)"
+  },
+  {
+    "slug": "montana-snowbowl",
+    "trails_total": 39,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 40,
+      "advanced": 40,
+      "expert": 0
+    },
+    "source_url": "https://www.indyskipass.com/our-resorts/montana-snowbowl",
+    "source_site": "indyskipass.com",
+    "notes": "Wiki confirms 39 trails; web cites 20/40/40 3-category breakdown."
+  },
+  {
+    "slug": "moose",
+    "trails_total": 40,
+    "difficulty_pct": {
+      "beginner": 10,
+      "intermediate": 45,
+      "advanced": 45,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Moose_Mountain_(Alaska)",
+    "source_site": "wikipedia.org",
+    "notes": "Wiki: 40 runs 'intermediate and advanced terrain'; web sources give 10/45/45 3-category. Input listed 42."
+  }
+]

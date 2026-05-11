@@ -1,0 +1,301 @@
+[
+  {
+    "slug": "arizona-snowbowl",
+    "trails_total": 55,
+    "difficulty_pct": {
+      "beginner": 37,
+      "intermediate": 42,
+      "advanced": 21,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Arizona_Snowbowl",
+    "exact_quote": "55 (Including hike-to terrain) – 37% easiest – 42% more difficult – 21% most difficult",
+    "notes": "Wikipedia infobox explicitly lists trail count and difficulty percentages."
+  },
+  {
+    "slug": "ascutney-outdoors",
+    "trails_total": 8,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Ascutney_Mountain_Resort",
+    "exact_quote": "eight maintained ski trails covering 26 acres",
+    "notes": "Wikipedia describes current Ascutney Outdoors community operation; no difficulty percentages published for current operation."
+  },
+  {
+    "slug": "badger-mountain-wa",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Wikipedia Badger Mountain article mentions ski area existence but no trail count; no regional source found with explicit numeric data."
+  },
+  {
+    "slug": "bear-basin-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article; operator site lists 25 km trail distance only, no trail count or difficulty percentages."
+  },
+  {
+    "slug": "bethel-village-trails",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article; no regional source with explicit numeric trail data."
+  },
+  {
+    "slug": "catamount-outdoor-family-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Wikipedia article exists but contains no trail count or difficulty data; operator XC page not accessible."
+  },
+  {
+    "slug": "chapman-hill",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Wikipedia Chapman Hill article is about Western Australia, not the Durango CO ski area; no other verifiable source."
+  },
+  {
+    "slug": "cottonwood-butte",
+    "trails_total": 7,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Cottonwood_Butte",
+    "exact_quote": "Trails: 7",
+    "notes": "Wikipedia infobox explicitly states 7 trails; no difficulty percentages published."
+  },
+  {
+    "slug": "crosscut-sports-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article; operator site lists kilometers only, no trail count or difficulty breakdown."
+  },
+  {
+    "slug": "dog-creek-lodge-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article; no regional source with explicit numeric trail data."
+  },
+  {
+    "slug": "echo-valley",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Wikipedia article exists but lists only acres and lifts; no trail count or difficulty percentages."
+  },
+  {
+    "slug": "great-glen-trails-outdoor-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article; operator site lists 45 km trail distance only, no trail count or difficulty percentages."
+  },
+  {
+    "slug": "haymaker-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article; no regional source with explicit numeric trail data."
+  },
+  {
+    "slug": "hesperus-ski-area",
+    "trails_total": 26,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 20,
+      "advanced": null,
+      "expert": 50
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Hesperus_Ski_Area",
+    "exact_quote": "26 – 30% easiest – 20% more difficult – 50% experts only",
+    "notes": "Wikipedia infobox lists 26 trails with explicit percentages; article body shows discrepancy (13 runs) but infobox is authoritative source."
+  },
+  {
+    "slug": "high-point-xc-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article; operator trails page not accessible (404)."
+  },
+  {
+    "slug": "hoedown-hill",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article found; no regional source with explicit numeric trail data."
+  },
+  {
+    "slug": "homestake-lodge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article; no regional source with explicit numeric trail data."
+  },
+  {
+    "slug": "howelsen-hill",
+    "trails_total": 17,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Howelsen_Hill_Ski_Area",
+    "exact_quote": "Trails: 17 alpine, 9 nordic",
+    "notes": "Wikipedia infobox lists 17 alpine trails (plus 9 nordic separately); no difficulty percentages published."
+  },
+  {
+    "slug": "hurricane-ridge",
+    "trails_total": 10,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Hurricane_Ridge_Ski_and_Snowboard_Area",
+    "exact_quote": "Trails 10",
+    "notes": "Wikipedia infobox explicitly lists 10 trails; no difficulty percentages published."
+  },
+  {
+    "slug": "jackson-xc",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article for Jackson XC / Jackson Ski Touring Foundation; no accessible regional source with explicit numeric trail data."
+  },
+  {
+    "slug": "leavenworth-winter-sports-club",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article; no regional source with explicit numeric trail data."
+  },
+  {
+    "slug": "little-ski-hill",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Wikipedia article mentions 18.6 miles of XC trails and 405 ft vertical alpine T-bar terrain but no explicit trail count or difficulty percentages."
+  },
+  {
+    "slug": "loge-glacier",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article; LOGE Glacier is a lodging operator near Glacier National Park, not a ski area with its own published trail stats."
+  }
+]

@@ -1,0 +1,134 @@
+[
+  {
+    "slug": "loup-loup",
+    "name": "Loup Loup Ski Bowl",
+    "state": "WA",
+    "website_url": "https://skitheloup.com"
+  },
+  {
+    "slug": "maplelag",
+    "name": "Maplelag Resort",
+    "state": "MN",
+    "website_url": "https://www.maplelag.com/"
+  },
+  {
+    "slug": "middlebury-snow-bowl",
+    "name": "Middlebury Snow Bowl",
+    "state": "VT",
+    "website_url": "https://www.middleburysnowbowl.com"
+  },
+  {
+    "slug": "minocqua-winter-park",
+    "name": "Minocqua Winter Park",
+    "state": "WI",
+    "website_url": null
+  },
+  {
+    "slug": "mount-itasca",
+    "name": "Mount Itasca",
+    "state": "MN",
+    "website_url": "https://www.mtitasca.com/"
+  },
+  {
+    "slug": "mt-holiday",
+    "name": "Mt. Holiday",
+    "state": "MI",
+    "website_url": "https://mt-holiday.com/ski-and-snowboarding/"
+  },
+  {
+    "slug": "mt-shasta-ski-park",
+    "name": "Mt. Shasta Ski Park",
+    "state": "CA",
+    "website_url": "https://www.skipark.com"
+  },
+  {
+    "slug": "north-cascade-heli",
+    "name": "North Cascade Heli",
+    "state": "WA",
+    "website_url": "https://heli-ski.com/"
+  },
+  {
+    "slug": "oglebay-resort",
+    "name": "Oglebay Resort",
+    "state": "WV",
+    "website_url": "https://oglebay.com"
+  },
+  {
+    "slug": "plain-valley-trails",
+    "name": "Plain Valley Ski Trails",
+    "state": "WA",
+    "website_url": "https://www.skiplain.com/"
+  },
+  {
+    "slug": "quarry-road-trails",
+    "name": "Quarry Road Trails",
+    "state": "ME",
+    "website_url": "https://quarryroad.org/"
+  },
+  {
+    "slug": "rangeley-lakes-trail-center",
+    "name": "Rangeley Lakes Trail Center",
+    "state": "ME",
+    "website_url": null
+  },
+  {
+    "slug": "rikert-nordic-center",
+    "name": "Rikert Nordic Center",
+    "state": "VT",
+    "website_url": "https://www.rikertoutdoor.com/"
+  },
+  {
+    "slug": "rikert-outdoor-center",
+    "name": "Rikert Outdoor Center",
+    "state": "VT",
+    "website_url": "https://www.rikertoutdoor.com"
+  },
+  {
+    "slug": "sleepy-hollow",
+    "name": "Sleepy Hollow Sports Park",
+    "state": "IA",
+    "website_url": "https://www.sleepyhollowsportspark.com"
+  },
+  {
+    "slug": "song-mountain",
+    "name": "Song Mountain",
+    "state": "NY",
+    "website_url": "https://www.songmountain.com"
+  },
+  {
+    "slug": "spring-mountain",
+    "name": "Spring Mountain",
+    "state": "PA",
+    "website_url": "https://www.springmountainadventures.com"
+  },
+  {
+    "slug": "steamboat-touring-center",
+    "name": "Steamboat Ski Touring Center",
+    "state": "CO",
+    "website_url": "https://nordicski.net/steamboat-ski-touring-center/"
+  },
+  {
+    "slug": "sunburst-area",
+    "name": "Sunburst Ski Area",
+    "state": "WI",
+    "website_url": "https://skisunburst.com/"
+  },
+  {
+    "slug": "trapp-family-lodge",
+    "name": "Trapp Family Lodge",
+    "state": "VT",
+    "website_url": "https://www.trappfamily.com/skiing-snowshoeing.htm"
+  },
+  {
+    "slug": "white-pine-touring-nordic-center",
+    "name": "White Pine Touring Nordic Center",
+    "state": "UT",
+    "website_url": null
+  },
+  {
+    "slug": "woodstock-nordic-center",
+    "name": "Woodstock Nordic Center",
+    "state": "VT",
+    "website_url": null
+  }
+]
