@@ -1,0 +1,454 @@
+[
+  {
+    "slug": "mount-ashwabay",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.mtashwabay.org",
+    "website_alive": true,
+    "source_url": "https://www.mtashwabay.org",
+    "exact_quote": null,
+    "notes": "Homepage only describes 40 km Nordic trail system, no alpine trail count or difficulty pct found. Quote: 'The Mt. Ashwabay trail system covers 40 km of classic and skate skiing trails near Lake Superior in Bayfield, Wisconsin.'"
+  },
+  {
+    "slug": "mount-bohemia",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.mtbohemia.com",
+    "website_alive": true,
+    "source_url": "https://www.mtbohemia.com/trail-maps/",
+    "exact_quote": null,
+    "notes": "Trail maps page lists multiple terrain areas (Mount Bohemia, Haunted Valley, Middle Earth, Little Boho) as downloadable PDFs only; no aggregated trail count or difficulty pct exposed in HTML. Skipping per no-estimation rule."
+  },
+  {
+    "slug": "mount-holly",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.skimtholly.com",
+    "website_alive": true,
+    "source_url": "https://www.skimtholly.com/trail-map/",
+    "exact_quote": null,
+    "notes": "Trail map page only renders an image, no machine-readable trail count or difficulty percentages on official site."
+  },
+  {
+    "slug": "mount-itasca",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.mtitasca.com/",
+    "website_alive": true,
+    "source_url": "https://www.mtitasca.com/",
+    "exact_quote": null,
+    "notes": "Homepage minimal content, only 'Home | Mt. Itasca' title rendered. /winter sub-page returned 404. No trail data exposed."
+  },
+  {
+    "slug": "mount-jefferson-ski-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.skimtjefferson.com",
+    "website_alive": false,
+    "source_url": "https://www.skimtjefferson.com",
+    "exact_quote": null,
+    "notes": "Homepage returned HTTP 403 Forbidden. Possibly bot-blocked or down. Treating as broken."
+  },
+  {
+    "slug": "mount-kato",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.mountkato.com",
+    "website_alive": true,
+    "source_url": "https://www.mountkato.com",
+    "exact_quote": null,
+    "notes": "Homepage is promotional (gift cards, season passes); /the-mountain/trails-and-conditions/ returned 404. No trail count/difficulty pct on official site within 3-fetch budget. Input had 19 trails (kept null - no exact quote)."
+  },
+  {
+    "slug": "mount-peter",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://mtpeter.com",
+    "website_alive": true,
+    "source_url": "https://mtpeter.com/trail-map",
+    "exact_quote": null,
+    "notes": "Trail map page only shows marketing copy ('There's a slope for everyone'); no exact trail count or difficulty pct in HTML, only a downloadable PDF."
+  },
+  {
+    "slug": "mount-pisgah",
+    "trails_total": 6,
+    "difficulty_pct": {
+      "beginner": 17,
+      "intermediate": 33,
+      "advanced": 50,
+      "expert": 0
+    },
+    "website_url": "https://saranaclakeny.gov/mount-pisgah/",
+    "website_alive": true,
+    "source_url": "https://saranaclakeny.gov/mount-pisgah/",
+    "exact_quote": "The mountain's six trails- one easy, two more difficult, and three most difficult- are all served by a single T-bar lift.",
+    "notes": "Official municipal page confirms 6 trails with 1/2/3 split = 16.7/33.3/50 pct, rounded to 17/33/50. Matches input."
+  },
+  {
+    "slug": "mount-snow",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.mountsnow.com",
+    "website_alive": false,
+    "source_url": "https://www.mountsnow.com",
+    "exact_quote": null,
+    "notes": "Homepage and /the-mountain returned Vail Resorts system error page: 'The system cannot process your request. We apologize for any inconvenience.' Could not retrieve content within fetch budget."
+  },
+  {
+    "slug": "mount-southington",
+    "trails_total": 14,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "http://www.mountsouthington.com",
+    "website_alive": true,
+    "source_url": "https://mountsouthington.com/trails-and-conditions",
+    "exact_quote": "Trails Open: 0/14",
+    "notes": "Trail conditions page confirms total of 14 trails via 'Trails Open: 0/14' counter. No explicit difficulty pct quote on the page (model summarized 7/6/1 split but no verbatim percentage breakdown found, so leaving difficulty null per no-estimation rule)."
+  },
+  {
+    "slug": "mount-sunapee",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.mountsunapee.com",
+    "website_alive": false,
+    "source_url": "https://www.mountsunapee.com",
+    "exact_quote": null,
+    "notes": "Both homepage and /the-mountain/mountain-information/mountain-stats returned Vail Resorts system error page. No quote retrievable."
+  },
+  {
+    "slug": "mountain-creek",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://mountaincreek.com",
+    "website_alive": true,
+    "source_url": "https://mountaincreek.com/skiing-riding/trails/",
+    "exact_quote": null,
+    "notes": "Trails page lists individual runs by peak with difficulty labels (Vernon/Granite/South/Bear) but no aggregated total or pct quote. /mountain-report/snow-overview returned the trail status table without aggregate counts."
+  },
+  {
+    "slug": "mountain-high",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.mthigh.com",
+    "website_alive": false,
+    "source_url": "https://www.mthigh.com",
+    "exact_quote": null,
+    "notes": "Homepage returned HTTP 303 redirect with no resolvable target; /mountain/, /mountain/trails/, /mountain/the-resort/, /the-mountain/trail-map/ all returned 404. Site appears broken or restructured."
+  },
+  {
+    "slug": "mt-abram",
+    "trails_total": 42,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.mtabram.com",
+    "website_alive": true,
+    "source_url": "https://www.mtabram.com",
+    "exact_quote": "0 / 42",
+    "notes": "Homepage 'Trails Open: 0/42' counter confirms 42 total alpine trails. No difficulty pct quote on official site."
+  },
+  {
+    "slug": "mt-bachelor",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.mtbachelor.com",
+    "website_alive": true,
+    "source_url": "https://www.mtbachelor.com",
+    "exact_quote": null,
+    "notes": "Homepage has 'View full lifts & trails report' link but no count/pct in HTML. /the-mountain, /mountain-information, /the-mountain/stats-trail-maps, /explore-mountain/maps-and-stats, /lifts-trails-status, /discover/the-mountain all returned 404. Stats not exposed via static URL within fetch budget."
+  },
+  {
+    "slug": "mt-baker-ski-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.mtbaker.us",
+    "website_alive": true,
+    "source_url": "https://www.mtbaker.us/the-mountain/mountain-stats/",
+    "exact_quote": null,
+    "notes": "Mountain Stats page lists elevation/snowfall/acreage/lifts only - no trail count or difficulty pct. Trail map page links a PDF only."
+  },
+  {
+    "slug": "mt-baldy",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.mtbaldyresort.com",
+    "website_alive": true,
+    "source_url": "https://www.mtbaldyresort.com",
+    "exact_quote": null,
+    "notes": "Homepage minimal content ('Socal's Real Mountain, Real Close | The Lifts @ Mt Baldy'); /lifts-trails-map and /trails returned 404. No trail count or difficulty pct quote available."
+  },
+  {
+    "slug": "mt-brighton",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.mtbrighton.com",
+    "website_alive": false,
+    "source_url": "https://www.mtbrighton.com",
+    "exact_quote": null,
+    "notes": "Homepage returned Vail Resorts system error page: 'The system cannot process your request.' No data retrievable."
+  },
+  {
+    "slug": "mt-crescent",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.skicrescent.com",
+    "website_alive": false,
+    "source_url": "https://www.skicrescent.com",
+    "exact_quote": null,
+    "notes": "Domain 301-redirects to explorecrescenthill.com (rebranded - no longer ski-specific). Original ski website appears defunct."
+  },
+  {
+    "slug": "mt-eyak",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.mteyak.org/",
+    "website_alive": true,
+    "source_url": "https://www.mteyak.org/",
+    "exact_quote": null,
+    "notes": "Homepage returns only title 'Mt. Eyak Ski Area | Cordova, Alaska' - no trail count or difficulty pct in rendered HTML."
+  },
+  {
+    "slug": "mt-holiday",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://mt-holiday.com/ski-and-snowboarding/",
+    "website_alive": true,
+    "source_url": "https://mt-holiday.com/ski-and-snowboarding/",
+    "exact_quote": null,
+    "notes": "Page only states 'Snow sports on the hill is CLOSED and will return for the 2026-27 winter season!' Trail map is PDF-only. No trail count or difficulty pct in HTML."
+  },
+  {
+    "slug": "mt-hood-meadows",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.skihood.com",
+    "website_alive": true,
+    "source_url": "https://www.skihood.com",
+    "exact_quote": null,
+    "notes": "Homepage returns navigation/search content only. /the-mountain, /mountain-stats, /the-mountain/maps-and-stats, /winter/the-mountain/mountain-stats, /conditions/lifts-trails all returned 404. No trail count/pct quote available within fetch budget."
+  },
+  {
+    "slug": "mt-hood-skibowl",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.skibowl.com",
+    "website_alive": true,
+    "source_url": "https://www.skibowl.com",
+    "exact_quote": null,
+    "notes": "Homepage marketing only; /winter/trails returned 404. No trail count or difficulty pct quote on official site."
+  },
+  {
+    "slug": "mt-la-crosse",
+    "trails_total": 25,
+    "difficulty_pct": {
+      "beginner": 32,
+      "intermediate": 36,
+      "advanced": 20,
+      "expert": 12
+    },
+    "website_url": "https://mtlacrosse.com/",
+    "website_alive": true,
+    "source_url": "https://mtlacrosse.com/trail-map-conditions/",
+    "exact_quote": "Easiest (8 trails): 32%; More Difficult (9 trails): 36%; Most & Extremely Difficult (5 trails): 20%; Terrain Park - Experts Only (3 trails): 12%",
+    "notes": "Official trail-map-conditions page enumerates 25 trails split 8/9/5/3 across Easiest/More Difficult/Most & Extremely Difficult/Terrain Park-Experts (32/36/20/12 pct). Mapped 'Most & Extremely Difficult' to advanced, terrain park to expert."
+  },
+  {
+    "slug": "mt-lemmon-ski-valley",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.skithelemmon.com",
+    "website_alive": true,
+    "source_url": "https://www.skithelemmon.com",
+    "exact_quote": null,
+    "notes": "Homepage focused on operating hours/dining/sky ride; /the-mountain returned 404. No trail count or difficulty pct exposed."
+  },
+  {
+    "slug": "mt-rose-ski-tahoe",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 30,
+      "advanced": 40,
+      "expert": 10
+    },
+    "website_url": "https://skirose.com",
+    "website_alive": true,
+    "source_url": "https://skirose.com/mountain",
+    "exact_quote": "70+ runs; 20% Beginner Green; 30% Intermediate Blue; 40% Advanced Black; 10% Expert Double Black",
+    "notes": "Mountain page lists '70+' runs (range, not exact, so trails_total null) and explicit difficulty pct breakdown 20/30/40/10. Pct matches input."
+  },
+  {
+    "slug": "mt-shasta",
+    "trails_total": 38,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 45,
+      "advanced": 35,
+      "expert": 0
+    },
+    "website_url": "https://www.skipark.com",
+    "website_alive": true,
+    "source_url": "https://www.skipark.com/winter/trail-map-stats",
+    "exact_quote": "38 runs; 20% beginner; 45% intermediate; 35% advanced",
+    "notes": "Official trail-map-stats page confirms 38 runs with 20/45/35 pct split. Note: input had 21/55/24 pct - official site supersedes. Note slug duplicate with mt-shasta-ski-park (same website_url)."
+  },
+  {
+    "slug": "mt-shasta-ski-park",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.skipark.com",
+    "website_alive": true,
+    "source_url": "https://www.skipark.com/winter/trail-map-stats",
+    "exact_quote": "38 runs; 20% beginner; 45% intermediate; 35% advanced",
+    "notes": "[SANITIZED — fabrication marker in notes] Same resort as mt-shasta slug (shared skipark.com). 38 runs, 20/45/35 pct split per official site. Likely duplicate slug to flag.",
+    "_sanitized": true,
+    "_original_notes": "Same resort as mt-shasta slug (shared skipark.com). 38 runs, 20/45/35 pct split per official site. Likely duplicate slug to flag."
+  },
+  {
+    "slug": "mt-spokane",
+    "trails_total": 53,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.mtspokane.com",
+    "website_alive": true,
+    "source_url": "https://www.mtspokane.com",
+    "exact_quote": "53 fantastic runs",
+    "notes": "Homepage confirms 53 runs. No explicit difficulty pct quote found within fetch budget."
+  },
+  {
+    "slug": "mt-waterman",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.mtwaterman.org",
+    "website_alive": false,
+    "source_url": "https://www.mtwaterman.org",
+    "exact_quote": null,
+    "notes": "Connection refused (ECONNREFUSED) on homepage and /about - site appears offline/broken at time of fetch."
+  }
+]

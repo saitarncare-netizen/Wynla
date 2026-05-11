@@ -1,0 +1,301 @@
+[
+  {
+    "slug": "arizona-snowbowl",
+    "trails_total": 61,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.snowbowl.ski/trail-maps/",
+    "exact_quote": "Arizona Snowbowl offers a total of 61 trails. 54 trails are serviced by eight lifts for skiers and snowboarders of all ability levels",
+    "notes": "Official trail-maps page states 61 trails; no difficulty percentages published on official site."
+  },
+  {
+    "slug": "ascutney-outdoors",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.ascutneyoutdoors.org",
+    "exact_quote": "",
+    "notes": "Official site does not publish alpine trail count or difficulty breakdown."
+  },
+  {
+    "slug": "badger-mountain-wa",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "http://www.nwwintersportsman.com/BadgerMt/index2.htm",
+    "exact_quote": "",
+    "notes": "Official site unreachable (self-signed certificate error); no published data accessed."
+  },
+  {
+    "slug": "bear-basin-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://payettelakesskiclub.org/pages/bear-basin-nordic-center",
+    "exact_quote": "",
+    "notes": "Nordic center, no published alpine breakdown; site lists 25 km of groomed XC trails but no count or difficulty percentages."
+  },
+  {
+    "slug": "bethel-village-trails",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://woodsandtrails.org/",
+    "exact_quote": "",
+    "notes": "Multi-use trail network (Inland Woods + Trails); official site does not publish alpine trail count or difficulty breakdown."
+  },
+  {
+    "slug": "catamount-outdoor-family-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://catamountoutdoor.org/",
+    "exact_quote": "",
+    "notes": "Nordic/XC center, official site does not publish trail count or difficulty percentages."
+  },
+  {
+    "slug": "chapman-hill",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.durangoco.gov/544/Ski-Area",
+    "exact_quote": "",
+    "notes": "Official city of Durango page for Chapman Hill does not publish trail count or difficulty breakdown."
+  },
+  {
+    "slug": "cottonwood-butte",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.cottonwoodbutte.org",
+    "exact_quote": "",
+    "notes": "Official site mentions four major groomed runs and unspecified powder trails but no explicit total or difficulty percentages."
+  },
+  {
+    "slug": "crosscut-sports-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.crosscutmt.org/",
+    "exact_quote": "",
+    "notes": "Nordic/XC and singletrack center, no published alpine breakdown."
+  },
+  {
+    "slug": "dog-creek-lodge-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "http://www.dogcreeklodge.com",
+    "exact_quote": "",
+    "notes": "Nordic center, no published alpine breakdown; site lists ~27-30 km of groomed nordic trails without difficulty percentages."
+  },
+  {
+    "slug": "echo-valley",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://skiechovalley.com/",
+    "exact_quote": "",
+    "notes": "Official site does not publish trail count or difficulty breakdown."
+  },
+  {
+    "slug": "great-glen-trails-outdoor-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://greatglentrails.com/cross-country-skiing/",
+    "exact_quote": "",
+    "notes": "Nordic/XC center, no published alpine breakdown or numeric difficulty percentages."
+  },
+  {
+    "slug": "haymaker-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://nordicski.net/haymaker-nordic-center/",
+    "exact_quote": "",
+    "notes": "Nordic center, no published alpine breakdown or trail count."
+  },
+  {
+    "slug": "hesperus-ski-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.ski-hesperus.com",
+    "exact_quote": "",
+    "notes": "Official site does not publish trail count or difficulty percentages on accessible pages."
+  },
+  {
+    "slug": "high-point-xc-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.xcskihighpoint.com/home",
+    "exact_quote": "",
+    "notes": "Nordic/XC center, no published alpine breakdown or trail count."
+  },
+  {
+    "slug": "hoedown-hill",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.hoedownhill.com",
+    "exact_quote": "",
+    "notes": "Official site links to a trail map image but does not publish trail count or difficulty percentages in text."
+  },
+  {
+    "slug": "homestake-lodge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "",
+    "exact_quote": "",
+    "notes": "No website_url provided in input; no official source to verify."
+  },
+  {
+    "slug": "howelsen-hill",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://steamboatsprings.net/131/Howelsen-Hill-Ski-Area",
+    "exact_quote": "",
+    "notes": "Official City of Steamboat Springs page for Howelsen Hill does not publish trail count or difficulty percentages."
+  },
+  {
+    "slug": "hurricane-ridge",
+    "trails_total": 10,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.hurricaneridge.com/ski-area-info/",
+    "exact_quote": "Trails: 10",
+    "notes": "Official ski-area-info page states Trails: 10; no difficulty percentages published."
+  },
+  {
+    "slug": "jackson-xc",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "",
+    "exact_quote": "",
+    "notes": "No website_url provided in input; Nordic XC center, no published alpine breakdown."
+  },
+  {
+    "slug": "leavenworth-winter-sports-club",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://skileavenworth.com/",
+    "exact_quote": "",
+    "notes": "Official site returned 403; no published data accessed."
+  },
+  {
+    "slug": "little-ski-hill",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://littleskihill.org",
+    "exact_quote": "",
+    "notes": "Official site returned 422; about page 404; no published data accessed."
+  },
+  {
+    "slug": "loge-glacier",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.logecamps.com/journal/glacier-area-guide",
+    "exact_quote": "",
+    "notes": "Lodging property, not an alpine ski operator; references nearby 30 km of groomed nordic tracks without breakdown."
+  }
+]

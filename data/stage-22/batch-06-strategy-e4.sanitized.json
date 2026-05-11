@@ -1,0 +1,394 @@
+[
+  {
+    "slug": "granby-ranch",
+    "trails_total": 45,
+    "difficulty_pct": {
+      "beginner": 31,
+      "intermediate": 42,
+      "advanced": null,
+      "expert": 27
+    },
+    "source_url": "https://www.onthesnow.com/colorado/ski-granby-ranch/ski-resort",
+    "exact_quote": "Beginners Runs · 31% Intermediate Runs · 42% Expert Runs · 27%",
+    "notes": "OnTheSnow lists 45 trails with 31/42/27 split (no separate advanced category). Wikipedia article 404."
+  },
+  {
+    "slug": "grand-targhee",
+    "trails_total": 93,
+    "difficulty_pct": {
+      "beginner": 10,
+      "intermediate": 70,
+      "advanced": 15,
+      "expert": 5
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Grand_Targhee_Resort",
+    "exact_quote": "Its 2,602 acres of terrain is rated 10% beginner, 70% intermediate, 15% advanced, and 5% expert.",
+    "notes": "Wikipedia. 93 runs, full 4-way split."
+  },
+  {
+    "slug": "granite-gorge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article. No regional source with explicit numbers found within fetch budget."
+  },
+  {
+    "slug": "granite-peak",
+    "trails_total": 68,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 40,
+      "advanced": 25,
+      "expert": 10
+    },
+    "source_url": "https://www.skigranitepeak.com/mountain-info/trail-map-mountain-stats",
+    "exact_quote": "68 Trails ... Beginner: 25% Intermediate: 40% Advanced: 25% Expert: 10%",
+    "notes": "Resort site (official stats). Wikipedia gives 58 runs only, no percentages."
+  },
+  {
+    "slug": "great-bear",
+    "trails_total": 14,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Great_Bear_Recreation_Park",
+    "exact_quote": "In the winter, the park features 14 downhill ski trails with 3 lifts (quad chairlift, magic carpet, and handle tow)",
+    "notes": "Wikipedia confirms 14 trails. No difficulty percentages in Wikipedia."
+  },
+  {
+    "slug": "great-bear-valley",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Great_Bear_Recreation_Park",
+    "exact_quote": "In the winter, the park features 14 downhill ski trails with 3 lifts (quad chairlift, magic carpet, and handle tow)",
+    "notes": "[SANITIZED — fabrication marker in notes] Same facility as great-bear (Great Bear Ski Valley = Great Bear Recreation Park). Likely duplicate.",
+    "_sanitized": true,
+    "_original_notes": "Same facility as great-bear (Great Bear Ski Valley = Great Bear Recreation Park). Likely duplicate."
+  },
+  {
+    "slug": "great-divide",
+    "trails_total": 140,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Great_Divide_Ski_Area",
+    "exact_quote": "140 trails accessing 1,500 acres",
+    "notes": "Wikipedia mentions both 'over 140' and '140 trails'. No difficulty percentages in source."
+  },
+  {
+    "slug": "great-glen-trails-outdoor-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic XC center. No Wikipedia article. Sources describe trails in km, not as numbered runs with explicit percentages."
+  },
+  {
+    "slug": "greek-peak",
+    "trails_total": 55,
+    "difficulty_pct": {
+      "beginner": 36,
+      "intermediate": 29,
+      "advanced": 25,
+      "expert": 9
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Greek_Peak",
+    "exact_quote": "Greek Peak has 55 named trails as of 2025.",
+    "notes": "Wikipedia confirms 55 trails with 20 easier / 16 more-difficult / 14 most-difficult / 5 expert (= 36/29/25/9 pct). Matches input."
+  },
+  {
+    "slug": "gunstock-mountain-resort",
+    "trails_total": 55,
+    "difficulty_pct": {
+      "beginner": 12,
+      "intermediate": 61,
+      "advanced": null,
+      "expert": 27
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Gunstock_Mountain_Resort",
+    "exact_quote": "55 12% Novice 61% Intermediate 27% Expert",
+    "notes": "Wikipedia infobox. Total 55 (input says 49 - Wikipedia more recent). 3-way split, no separate advanced."
+  },
+  {
+    "slug": "hatley-pointe",
+    "trails_total": 23,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Hatley_Pointe",
+    "exact_quote": "23 [trails] – 4 beginner, 8 intermediate, 3 advanced",
+    "notes": "Wikipedia. Counts (4+8+3=15) don't sum to 23 - article inconsistent. Keep trails_total per infobox; difficulty left null because raw counts conflict."
+  },
+  {
+    "slug": "haymaker-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic XC center. No Wikipedia article. Trails described in km, no explicit named trail count or percentage breakdown."
+  },
+  {
+    "slug": "heavenly-mountain-resort",
+    "trails_total": 97,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 45,
+      "advanced": 35,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Heavenly_Mountain_Resort",
+    "exact_quote": "97 total 20% Easier 45% More Difficult 35% Most Difficult",
+    "notes": "Wikipedia infobox. 3-way split (no separate expert)."
+  },
+  {
+    "slug": "hermon-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Wikipedia article exists only for Mount Hermon (Israel), unrelated. No Wikipedia article for Hermon Mountain ME with explicit numbers."
+  },
+  {
+    "slug": "hesperus-ski-area",
+    "trails_total": 13,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 20,
+      "advanced": null,
+      "expert": 50
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Hesperus_Ski_Area",
+    "exact_quote": "Ski Hesperus has 13 runs, of which 30% are beginner difficulty, 20% are intermediate and 50% are of expert difficulty.",
+    "notes": "Wikipedia. Article also has 26 in infobox - using narrative 13 with explicit quote. 3-way split."
+  },
+  {
+    "slug": "hidden-valley",
+    "trails_total": 26,
+    "difficulty_pct": {
+      "beginner": 28,
+      "intermediate": 41,
+      "advanced": 31,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Hidden_Valley_Resort_(Pennsylvania)",
+    "exact_quote": "26 slopes and trails ... categorized as 28% beginner, 41% intermediate, and 31% advanced",
+    "notes": "Wikipedia. Hidden Valley PA (Vail-owned). 3-way split."
+  },
+  {
+    "slug": "hidden-valley-mo",
+    "trails_total": 16,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 33,
+      "advanced": 19,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Hidden_Valley_Ski_Area",
+    "exact_quote": "16 total 25% beginner 33% intermediate 19% advanced 13% terrain parks",
+    "notes": "Wikipedia infobox. Hidden Valley MO (Wildwood). Percentages sum to 90% with 13% terrain parks; advanced 19% kept as-is per quote."
+  },
+  {
+    "slug": "high-point-xc-center",
+    "trails_total": 6,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic XC. No Wikipedia article. Regional sources cite 60/15/25 split, but not from required source list with explicit quote."
+  },
+  {
+    "slug": "highlands",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Wikipedia 'The Highlands at Harbor Springs' exists but provides only Trails: 55 with no difficulty percentages."
+  },
+  {
+    "slug": "hilltop-ski-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 80,
+      "intermediate": 10,
+      "advanced": null,
+      "expert": 10
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Hilltop_Ski_Area",
+    "exact_quote": "easy (80%) to more difficult (10%) to most difficult (10%)",
+    "notes": "Wikipedia. Trail count given as '5 or 6' in infobox (input says 12) - kept null due to ambiguity. Difficulty 3-way split."
+  },
+  {
+    "slug": "hoedown-hill",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "New ski area (opened 2024). No Wikipedia article. Regional sources describe terrain ('one green, couple blue, 5-6 black') but no explicit total or percentage."
+  },
+  {
+    "slug": "hogadon",
+    "trails_total": 28,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 40,
+      "advanced": null,
+      "expert": 40
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Hogadon_Ski_Area",
+    "exact_quote": "The mountain features 28 trails of varying difficulty ... Of those trails, 20% are beginner, 40% are intermediate and 40% are expert ski terrain.",
+    "notes": "Wikipedia. 3-way split."
+  },
+  {
+    "slug": "holiday-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Holiday Mountain (Monticello NY). Wikipedia article exists only for unrelated music duo. No explicit numbers from required source list."
+  },
+  {
+    "slug": "holiday-valley",
+    "trails_total": 58,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Holiday_Valley_(ski_resort)",
+    "exact_quote": "Trails: 58 total",
+    "notes": "Wikipedia infobox lists 58 trails (article body says 60). No difficulty percentages in Wikipedia."
+  },
+  {
+    "slug": "holimont",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article found at HoliMont or HoliMont_Ski_Area or Holimont (all 404). Required-source list yielded no explicit numbers."
+  },
+  {
+    "slug": "homestake-lodge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic XC lodge. No Wikipedia article. Trails described in km only (35+km), no explicit numbered-trail total or percentage breakdown."
+  },
+  {
+    "slug": "homestead-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "The Homestead (Glen Arbor MI). No Wikipedia article. Sources mention 15 runs but not from required source list with explicit percentages."
+  },
+  {
+    "slug": "homewood-mountain-resort",
+    "trails_total": 60,
+    "difficulty_pct": {
+      "beginner": 15,
+      "intermediate": 50,
+      "advanced": 35,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Homewood_Mountain_Resort",
+    "exact_quote": "60 total 15% beginner 50% intermediate 35% advanced",
+    "notes": "Wikipedia infobox. 3-way split. Input had 67 trails - using Wikipedia 60."
+  },
+  {
+    "slug": "hoodoo",
+    "trails_total": 34,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 39,
+      "advanced": null,
+      "expert": 41
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Hoodoo_Ski_Area",
+    "exact_quote": "34 runs total ... 20% Easiest 39% Difficult 41% Most Difficult",
+    "notes": "Wikipedia. 3-way split. Input said 36 - Wikipedia gives 34."
+  },
+  {
+    "slug": "howelsen-hill",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Howelsen_Hill",
+    "exact_quote": "17 alpine ... 9 nordic",
+    "notes": "Wikipedia. 17 alpine + 9 nordic = 26 (input says 19). Counts inconsistent; difficulty percentages not in Wikipedia."
+  }
+]

@@ -1,0 +1,392 @@
+[
+  {
+    "slug": "loon-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.loonmtn.com",
+    "exact_quote": null,
+    "notes": "Official site loonmtn.com — homepage and tried subpaths (/the-mountain, /explore-the-mountain, /winter, /discover-loon/mountain-stats, /about/mountain-information, /the-experience/mountain-stats) all 404 or did not contain trail count and difficulty breakdown. No verified stats found within 5-fetch budget."
+  },
+  {
+    "slug": "loppet",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://loppet.org/",
+    "exact_quote": "connecting over 40,000 people to the outdoors every year",
+    "notes": "Nordic/cross-country (and broader outdoors) venue, not alpine. Per STRICT instructions, Nordic→null."
+  },
+  {
+    "slug": "lost-trail",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.losttrail.com",
+    "exact_quote": "Enjoy over 60 trails, family-friendly rates, and exceptional snow conditions.",
+    "notes": "Official site states 'over 60 trails' (vague, not a fixed count) and 'a ski and snowboard experience from beginner to advanced' but provides no difficulty percentages. Tried /mountain-info, /the-mountain — no detailed stats. Leaving null per STRICT (no explicit count or pct)."
+  },
+  {
+    "slug": "lost-valley",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.lostvalleyski.com",
+    "exact_quote": null,
+    "notes": "Official site lostvalleyski.com homepage and /ski-snowboard subpath did not state total trails or difficulty pct. No verified data within fetch budget."
+  },
+  {
+    "slug": "loup-loup",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://skitheloup.org/",
+    "exact_quote": "300 acres of diverse terrain",
+    "notes": "Site moved from skitheloup.com (301 redirect) to skitheloup.org. Page references '300 acres of diverse terrain' and mentions alpine, snowboard and Nordic skiing — but no explicit trail count or difficulty pct on landing page."
+  },
+  {
+    "slug": "loveland",
+    "trails_total": 94,
+    "difficulty_pct": {
+      "beginner": 13,
+      "intermediate": 41,
+      "advanced": 46,
+      "expert": 0
+    },
+    "source_url": "https://www.skiloveland.com/trail-map-mountain-stats/",
+    "exact_quote": "94 ... 13% Beginner 41% Intermediate and 46% Advanced",
+    "notes": "Official trail-map & mountain stats page confirms 94 trails with 13% Beginner, 41% Intermediate, 46% Advanced. No separate expert bucket published — combined into advanced; matches input."
+  },
+  {
+    "slug": "lutsen-mountains",
+    "trails_total": 95,
+    "difficulty_pct": {
+      "beginner": 18,
+      "intermediate": 47,
+      "advanced": 25,
+      "expert": 10
+    },
+    "source_url": "https://www.lutsen.com/mountain-info/trail-map-mountain-stats",
+    "exact_quote": "95 runs across four peaks ... Beginner: 18% Intermediate: 47% Most Difficult: 25% Expert: 10%",
+    "notes": "Official mountain-info/trail-map-mountain-stats page confirms 95 runs with the four-bucket breakdown 18/47/25/10. Matches input exactly."
+  },
+  {
+    "slug": "lyndon-outing-club",
+    "trails_total": 10,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skilyndon.com/skiing-and-riding/trails-and-lifts/",
+    "exact_quote": "All of the terrains are natural with limited grooming.",
+    "notes": "Official trails-and-lifts page lists 10 named trails (Dub Hill, Apple Orchard, Face, Crossover, Bunny Hop, Beattie Way, Wheeler's Way, Lion's Den, Zitz Mark, Mixer). No difficulty breakdown published."
+  },
+  {
+    "slug": "mad-river-glen",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.madriverglen.com/the-mountain/trail-map/",
+    "exact_quote": "the most challenging skiing in the East, bar none",
+    "notes": "Official trail-map page describes terrain qualitatively (Novice/Intermediate/Expert categories with named trails) but publishes neither a total trail count nor difficulty percentages. Other tried subpaths returned 404."
+  },
+  {
+    "slug": "mad-river-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skimadriver.com",
+    "exact_quote": "The system cannot process your request. We apologize for any inconvenience.",
+    "notes": "Official site skimadriver.com returned a system error page — no trail data accessible at time of fetch."
+  },
+  {
+    "slug": "magic-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.magicmtn.com/trail-map",
+    "exact_quote": "classic winding 60's-era beginner and intermediate trails",
+    "notes": "Official trail-map page only links a full-resolution PDF for the map; no numeric trail count or difficulty pct in HTML text. Subpaths /the-mountain/trail-map etc. 404."
+  },
+  {
+    "slug": "magic-mountain-id",
+    "trails_total": 22,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://magicmountainresort.com/trails/",
+    "exact_quote": "22 trails ... Novice: 4 trails ... Intermediate: 9 trails ... Advanced: 9 trails",
+    "notes": "Official trails page lists 22 named trails (4 novice / 9 intermediate / 9 advanced). Homepage separately states '11 trails across 120 acres' — conflicts. Using trails-page count of 22 named runs. No expert bucket. Counts give 18/41/41 — but site does not publish percentages and the two pages conflict on totals; leaving difficulty pct null pending reconciliation."
+  },
+  {
+    "slug": "mammoth-mountain",
+    "trails_total": 180,
+    "difficulty_pct": {
+      "beginner": 13,
+      "intermediate": 28,
+      "advanced": 20,
+      "expert": 39
+    },
+    "source_url": "https://www.mammothmountain.com/on-the-mountain/winter-trail-map",
+    "exact_quote": "180 ... Easiest: 13% Slightly Difficult: 28% Difficult: 20% Very Difficult: 24% Extremely Difficult: 15%",
+    "notes": "Official winter-trail-map page confirms 180 named trails (homepage said 178 — using trail-map page as authoritative). Mammoth uses 5 buckets: Easiest 13% / Slightly Difficult 28% / Difficult 20% / Very Difficult 24% / Extremely Difficult 15%. Mapped to 4-bucket schema: beginner=Easiest 13, intermediate=Slightly Difficult 28, advanced=Difficult 20, expert=Very Difficult + Extremely Difficult = 39."
+  },
+  {
+    "slug": "maple-ski-ridge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.mapleskiridge.com",
+    "exact_quote": null,
+    "notes": "Official site mapleskiridge.com homepage did not display trail count or difficulty breakdown; /levelguide referenced but not fetched within budget."
+  },
+  {
+    "slug": "maplelag",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.maplelag.com/",
+    "exact_quote": "A Family Owned and Operated Destination Cross-Country Ski Center",
+    "notes": "Nordic/cross-country ski center — not alpine. Per STRICT instructions, Nordic→null."
+  },
+  {
+    "slug": "marquette-mountain",
+    "trails_total": 29,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.marquettemountain.com/the-mountain/trail-map/",
+    "exact_quote": "Our 29 trails are strategically designed to challenge experts while providing a safe learning environment for newcomers",
+    "notes": "Official trail-map page confirms 29 trails total. No difficulty percentages published."
+  },
+  {
+    "slug": "massanutten-resort",
+    "trails_total": 23,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.massresort.com/play/snow-sports/hours-rates",
+    "exact_quote": "23 runs ... 2,922 ft. elevation ... 83 skiable acres ... 7 lifts",
+    "notes": "Official massresort.com snow-sports hours-rates page confirms 23 runs but does not publish difficulty pct."
+  },
+  {
+    "slug": "maverick-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://skimaverick.com",
+    "exact_quote": null,
+    "notes": "Official site skimaverick.com homepage returned only the title; /trails, /the-mountain, /about subpaths 404. No verifiable trail data."
+  },
+  {
+    "slug": "mccauley-mountain",
+    "trails_total": 21,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.mccauleyny.com",
+    "exact_quote": "Twenty-one slopes and trails up to a mile long.",
+    "notes": "Official site mccauleyny.com states 21 slopes/trails. Mentions 'long cruisers to steep bumps and glades, to double-black diamond challengers' but no difficulty pct."
+  },
+  {
+    "slug": "mcintyre-ski-area",
+    "trails_total": 11,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.mcintyreskiarea.com/trail-map/",
+    "exact_quote": "11 trails ... Discover a variety of easy greens, sharpen your skills with our blue intermediate trails and explore the magic of glade skiing.",
+    "notes": "Official trail-map page confirms 11 trails. Mentions green, blue, and glade terrain but no numeric difficulty breakdown."
+  },
+  {
+    "slug": "meadowlark",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.meadowlarkskilodge.com",
+    "exact_quote": null,
+    "notes": "Official site meadowlarkskilodge.com fetch returned ECONNREFUSED — site unreachable at time of verification."
+  },
+  {
+    "slug": "middlebury-snow-bowl",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://middleburysnowbowl.com/trail-map/",
+    "exact_quote": "a ski resort trail map showing terrain difficulty, lifts, and amenities",
+    "notes": "Official trail-map page links a PDF map but no numeric trail count or difficulty pct in HTML text."
+  },
+  {
+    "slug": "minocqua-winter-park",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Input has website_url=null. Minocqua Winter Park is a Nordic/cross-country ski venue in Wisconsin, not alpine. Per STRICT (no official site provided + Nordic), leaving null."
+  },
+  {
+    "slug": "mission-ridge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.missionridge.com/maps/",
+    "exact_quote": "more than 70 designated runs",
+    "notes": "Official maps page states 'more than 70 designated runs' across 2,000 acres (vague, not a specific count). No difficulty pct published. Input's 54 not confirmed by official site."
+  },
+  {
+    "slug": "mohawk-mountain-ski-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.mohawkmtn.com",
+    "exact_quote": null,
+    "notes": "Official site mohawkmtn.com pages (homepage, /the-mountain, /the-mountain/snow-report, /trails) all returned truncated content or 404 — could not verify trail count or difficulty pct within fetch budget."
+  },
+  {
+    "slug": "monarch-mountain",
+    "trails_total": 80,
+    "difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 34,
+      "advanced": 35,
+      "expert": 8
+    },
+    "source_url": "https://skimonarch.com/hours-stats/",
+    "exact_quote": "Total Trails: 80 ... Green (Easiest): 15 trails / 19% Blue (More Difficult): 27 trails / 34% Black (Most Difficult): 28 trails / 35% Double Black (Extreme): 7 trails / 8% Terrain Parks: 3 / 4%",
+    "notes": "Official hours-stats page confirms 80 trails total. Difficulty: Green 19%, Blue 34%, Black 35%, Double Black 8% (+ 4% terrain parks separately). Schema mapping: beginner=19, intermediate=34, advanced=35, expert=8. Slightly differs from input's 19/35/36/9."
+  },
+  {
+    "slug": "mont-ripley",
+    "trails_total": 25,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.mtu.edu/mont-ripley",
+    "exact_quote": "Twenty-five challenging trails, terrain park, tubing park, 440' vertical drop over 112 acres",
+    "notes": "Official MTU Mont Ripley page confirms 25 trails. No difficulty percentages published on the official page."
+  },
+  {
+    "slug": "montage-mountain",
+    "trails_total": 26,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 45,
+      "advanced": 35,
+      "expert": 0
+    },
+    "source_url": "https://www.montagemountainresorts.com/trails/",
+    "exact_quote": "TRAILS: 6 / 26 ... Beginner: 20% Intermediate: 45% Advanced: 35%",
+    "notes": "Official trails page shows '6/26' trail status and three-bucket pct 20/45/35 (no separate expert bucket on official site). Marketing copy elsewhere says '27 of the best trails' — 26 is the operational count. Site combines advanced+expert into 35%."
+  },
+  {
+    "slug": "montana-snowbowl",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.montanasnowbowl.com",
+    "exact_quote": null,
+    "notes": "Official site montanasnowbowl.com homepage, /the-mountain, /about, /winter-information either 404 or do not state trail count and difficulty pct in HTML text — data appears only inside the linked PDF trail map."
+  },
+  {
+    "slug": "moose",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://shredthemoose.com/",
+    "exact_quote": "With 1,300 feet of vertical, most of Moose Mountain ski and snowboard terrain is intermediate and advanced and not recommended for beginners.",
+    "notes": "Official shredthemoose.com site describes terrain qualitatively (mostly intermediate/advanced) but does not publish a numeric trail count or difficulty pct on the site; trail map is PDF-only."
+  }
+]

@@ -1,0 +1,242 @@
+[
+  {
+    "slug": "mystic-mountain",
+    "trails_total": 7,
+    "difficulty_pct": null,
+    "source_url": "https://www.skicentral.com/mysticmountain.html",
+    "exact_quote": "Number of Trails: 7",
+    "notes": "skicentral: trail count only; OnTheSnow page returns 404; no difficulty breakdown found"
+  },
+  {
+    "slug": "nashoba-valley-ski-area",
+    "trails_total": 17,
+    "difficulty_pct": {"beginner": 24, "intermediate": 47, "advanced": 29, "expert": 0},
+    "source_url": "https://www.onthesnow.com/massachusetts/nashoba-valley/ski-resort",
+    "exact_quote": "Beginners Runs 24% Intermediate Runs 47% Advanced Runs 29%",
+    "notes": "OnTheSnow: 17 runs across 52 acres; no expert category listed (treated as 0)"
+  },
+  {
+    "slug": "nordic-mountain",
+    "trails_total": 12,
+    "difficulty_pct": {"beginner": 33, "intermediate": 42, "advanced": 25, "expert": 0},
+    "source_url": "https://www.onthesnow.com/wisconsin/nordic-mountain/ski-resort",
+    "exact_quote": "Beginners Runs 33% Intermediate Runs 42% Advanced Runs 25% Runs in Total 12",
+    "notes": "OnTheSnow lists 12 (current_total_trails was 16); no expert category"
+  },
+  {
+    "slug": "nordic-valley",
+    "trails_total": 23,
+    "difficulty_pct": null,
+    "source_url": "https://www.skicentral.com/nordicvalley.html",
+    "exact_quote": "Number of Trails: 23",
+    "notes": "skicentral: trail count only; OnTheSnow URL variants returned 404; no difficulty data"
+  },
+  {
+    "slug": "north-cascade-heli",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Heli-ski operation, not a resort with marked trails; no OnTheSnow/skicentral page"
+  },
+  {
+    "slug": "northeast-slopes",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Small community rope-tow operation; no OnTheSnow/skicentral page found"
+  },
+  {
+    "slug": "northern-maine-community-trails",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Community trails system; no OnTheSnow/skicentral page found"
+  },
+  {
+    "slug": "northstar-california",
+    "trails_total": 100,
+    "difficulty_pct": {"beginner": 13, "intermediate": 60, "advanced": 27, "expert": 0},
+    "source_url": "https://www.onthesnow.com/california/northstar-california/ski-resort",
+    "exact_quote": "Beginners Runs 13% Intermediate Runs 60% Advanced Runs 27% Runs in Total 100",
+    "notes": "OnTheSnow: 100 total; no expert category listed"
+  },
+  {
+    "slug": "norway-mountain",
+    "trails_total": 17,
+    "difficulty_pct": {"beginner": 6, "intermediate": 33, "advanced": 33, "expert": 28},
+    "source_url": "https://www.onthesnow.com/michigan/norway-mountain/ski-resort",
+    "exact_quote": "Beginners Runs 6% Intermediate Runs 33% Advanced Runs 33% Expert Runs 28% Runs in Total 17",
+    "notes": "OnTheSnow: 17 runs across 186 acres; full 4-category breakdown"
+  },
+  {
+    "slug": "nubs-nob",
+    "trails_total": 53,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/michigan/nubs-nob/ski-resort",
+    "exact_quote": "53",
+    "notes": "OnTheSnow + skicentral both list 53 total; no difficulty percentages on either page"
+  },
+  {
+    "slug": "oak-mountain",
+    "trails_total": 22,
+    "difficulty_pct": {"beginner": 45, "intermediate": 27, "advanced": 18, "expert": 9},
+    "source_url": "https://www.onthesnow.com/new-york/oak-mountain/ski-resort",
+    "exact_quote": "Beginners Runs 45% Intermediate Runs 27% Advanced Runs 18% Expert Runs 9% Runs in Total 22",
+    "notes": "OnTheSnow: full 4-category breakdown; sums to 99% (rounding)"
+  },
+  {
+    "slug": "ober-mountain",
+    "trails_total": 10,
+    "difficulty_pct": null,
+    "source_url": "https://www.skicentral.com/obergatlinburg.html",
+    "exact_quote": "10",
+    "notes": "skicentral lists 10 trails; OnTheSnow URL variants 404; no difficulty breakdown found"
+  },
+  {
+    "slug": "oglebay-resort",
+    "trails_total": 1,
+    "difficulty_pct": null,
+    "source_url": "https://www.skicentral.com/oglebay.html",
+    "exact_quote": "Number of Trails: 1",
+    "notes": "skicentral: trail count only (likely outdated/incomplete); no difficulty data"
+  },
+  {
+    "slug": "okemo-mountain-resort",
+    "trails_total": 127,
+    "difficulty_pct": {"beginner": 33, "intermediate": 38, "advanced": 21, "expert": 9},
+    "source_url": "https://www.onthesnow.com/vermont/okemo-mountain-resort/ski-resort",
+    "exact_quote": "Beginners Runs 33% Intermediate Runs 38% Advanced Runs 21% Expert Runs 9% Runs in Total 127",
+    "notes": "OnTheSnow: full 4-category breakdown; sums to 101% (rounding)"
+  },
+  {
+    "slug": "otis-ridge",
+    "trails_total": 10,
+    "difficulty_pct": null,
+    "source_url": "https://www.skicentral.com/otisridge.html",
+    "exact_quote": "Number of Trails: 10",
+    "notes": "skicentral: trail count only; no difficulty data found"
+  },
+  {
+    "slug": "otsego-resort",
+    "trails_total": 31,
+    "difficulty_pct": null,
+    "source_url": "https://www.skicentral.com/otsegoclub.html",
+    "exact_quote": "31 slopes",
+    "notes": "skicentral: '31 slopes, and 5 chair lifts including a high speed quad'; no difficulty data"
+  },
+  {
+    "slug": "pajarito-mountain",
+    "trails_total": 53,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/new-mexico/pajarito-mountain/ski-resort",
+    "exact_quote": "53",
+    "notes": "OnTheSnow: total trails confirmed at 53; no difficulty percentages on page"
+  },
+  {
+    "slug": "palisades-tahoe",
+    "trails_total": 296,
+    "difficulty_pct": {"beginner": 6, "intermediate": 39, "advanced": 33, "expert": 23},
+    "source_url": "https://www.onthesnow.com/california/palisades-tahoe/ski-resort",
+    "exact_quote": "296",
+    "notes": "OnTheSnow: 296 total; difficulty Beginners 6% Intermediate 39% Advanced 33% Expert 23%"
+  },
+  {
+    "slug": "paoli-peaks",
+    "trails_total": 15,
+    "difficulty_pct": {"beginner": 53, "intermediate": 40, "advanced": 7, "expert": 0},
+    "source_url": "https://www.onthesnow.com/indiana/paoli-peaks/ski-resort",
+    "exact_quote": "Beginners Runs 53% Intermediate Runs 40% Advanced Runs 7% Runs in Total 15",
+    "notes": "OnTheSnow: 15 trails; no expert category"
+  },
+  {
+    "slug": "park-city",
+    "trails_total": 349,
+    "difficulty_pct": {"beginner": 8, "intermediate": 41, "advanced": 28, "expert": 23},
+    "source_url": "https://www.onthesnow.com/utah/park-city-mountain/ski-resort",
+    "exact_quote": "Beginners Runs 8% Intermediate Runs 41% Advanced Runs 28% Expert Runs 23% Runs in Total 349",
+    "notes": "OnTheSnow: 349 total (current was 324); full 4-category breakdown"
+  },
+  {
+    "slug": "pats-peak",
+    "trails_total": 28,
+    "difficulty_pct": {"beginner": 50, "intermediate": 21, "advanced": 14, "expert": 14},
+    "source_url": "https://www.onthesnow.com/new-hampshire/pats-peak/ski-resort",
+    "exact_quote": "Beginners 50% Intermediate 21% Advanced 14% Expert 14%",
+    "notes": "OnTheSnow: 28 runs across 115 acres; differs from current (11/18 -> 14/14)"
+  },
+  {
+    "slug": "paul-bunyan-hill",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No OnTheSnow page found; small Wisconsin community hill; skicentral coverage absent"
+  },
+  {
+    "slug": "pebble-creek",
+    "trails_total": 54,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/idaho/pebble-creek-ski-area/ski-resort",
+    "exact_quote": "54",
+    "notes": "OnTheSnow + skicentral both list 54 trails (current was 51); no difficulty breakdown shown"
+  },
+  {
+    "slug": "peek-n-peak",
+    "trails_total": 27,
+    "difficulty_pct": null,
+    "source_url": "https://www.skicentral.com/peeknpeak.html",
+    "exact_quote": "27",
+    "notes": "skicentral lists 27 trails (current was 26); no difficulty breakdown"
+  },
+  {
+    "slug": "perfect-north",
+    "trails_total": 23,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/indiana/perfect-north-slopes/ski-resort",
+    "exact_quote": "23",
+    "notes": "OnTheSnow: 23 runs across 100 acres; no difficulty percentages on page"
+  },
+  {
+    "slug": "pico-mountain",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "OnTheSnow URL variants returned 404; skicentral 404; no data captured"
+  },
+  {
+    "slug": "pine-knob",
+    "trails_total": 17,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/michigan/pine-knob-ski-resort/ski-resort",
+    "exact_quote": "17",
+    "notes": "OnTheSnow: 17 runs in total; no difficulty percentages on page"
+  },
+  {
+    "slug": "pine-mountain",
+    "trails_total": 35,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/michigan/pine-mountain/ski-resort",
+    "exact_quote": "35",
+    "notes": "OnTheSnow: 35 runs in total; no difficulty percentages on page"
+  },
+  {
+    "slug": "plain-valley-trails",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic/cross-country trails system; no OnTheSnow/skicentral page found"
+  },
+  {
+    "slug": "plattekill-mountain",
+    "trails_total": 38,
+    "difficulty_pct": {"beginner": 20, "intermediate": 40, "advanced": 0, "expert": 20},
+    "source_url": "https://www.onthesnow.com/new-york/plattekill-mountain/ski-resort",
+    "exact_quote": "Beginners Runs 20% Intermediate Runs 40% Expert Runs 20% Runs in Total 38",
+    "notes": "OnTheSnow: 38 total (current was 41); only 3 categories listed (sums to 80%, advanced missing)"
+  }
+]

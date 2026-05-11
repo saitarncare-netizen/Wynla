@@ -1,0 +1,28 @@
+[
+  {
+    "slug": "woodward-park-city",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 60,
+      "intermediate": 40,
+      "advanced": 0,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/woodward-park-city/",
+    "exact_quote": "Easy 0.3 km (60%), Intermediate 0.2 km (40%), Difficult 0 km (0%)",
+    "notes": "skiresort.info slope breakdown by km %. Total 0.5 km; no difficult terrain. trails_total left null per spec."
+  },
+  {
+    "slug": "yellowstone-club",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 37,
+      "intermediate": 37,
+      "advanced": 26,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/yellowstone-club/",
+    "exact_quote": "Easy: 30 km (37%) Intermediate: 30 km (37%) Difficult: 20 km (26%)",
+    "notes": "skiresort.info slope breakdown by km %. Total 80 km slopes + 20 km ski routes. Difficult mapped to advanced; expert=0 (skiresort.info uses 3-tier scale). trails_total left null per spec."
+  }
+]

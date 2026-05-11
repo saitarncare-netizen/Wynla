@@ -1,0 +1,262 @@
+[
+  {
+    "slug": "49-degrees-north",
+    "trails_total": 82,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 40,
+      "advanced": 25,
+      "expert": 5
+    },
+    "source_url": "https://en.wikipedia.org/wiki/49_Degrees_North_Ski_Area",
+    "exact_quote": "82 – 30% easiest – 40% more difficult – 25% most difficult – 5% experts only",
+    "notes": "Wikipedia infobox; double-black-diamond mapped to expert. Input total was 88; Wikipedia explicit number is 82."
+  },
+  {
+    "slug": "afton-alps",
+    "trails_total": 50,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 50,
+      "advanced": 25,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Afton_Alps",
+    "exact_quote": "50 total / green - 25% beginner / blue - 50% intermediate / black - 25% advanced",
+    "notes": "Wikipedia infobox. No expert category listed; body text mentions 36 trails but infobox specifies 50."
+  },
+  {
+    "slug": "alpine-meadows",
+    "trails_total": 100,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 40,
+      "advanced": 35,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Alpine_Meadows_(ski_resort)",
+    "exact_quote": "100 total / green - 25% beginner / blue - 40% intermediate / black - 35% advanced",
+    "notes": "Wikipedia infobox for standalone Alpine Meadows article. No expert category. Now operates as Alpine side of Palisades Tahoe."
+  },
+  {
+    "slug": "alpine-valley-mi",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article exists for Alpine Valley Michigan (White Lake). Approved fallback sources (skinewengland, skicolorado, powderhounds, parksandtrips, uncovercolorado, snow-online) do not provide explicit trail-count difficulty percentages. snow-online reports 25 slopes but does not give difficulty percentage breakdown. Cannot fill from explicit numbers per spec."
+  },
+  {
+    "slug": "alpine-valley-oh",
+    "trails_total": 9,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Alpine_Valley_Ski_Area",
+    "exact_quote": "Alpine Valley offers a variety of 9 trails for skiers and snowboarders. ... Trail levels range from a beginner's bunny hill, to the expert terrain park",
+    "notes": "Wikipedia article (Ohio resort in Munson Township, Geauga County). Does not provide difficulty percentage breakdown."
+  },
+  {
+    "slug": "alpine-valley-wi",
+    "trails_total": 21,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Alpine_Valley_Resort_(Wisconsin)",
+    "exact_quote": "21",
+    "notes": "Wikipedia infobox trails value (21). Article does not include a difficulty percentage breakdown."
+  },
+  {
+    "slug": "alta",
+    "trails_total": 116,
+    "difficulty_pct": {
+      "beginner": 15,
+      "intermediate": 30,
+      "advanced": 55,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Alta_Ski_Area",
+    "exact_quote": "116+ total / green 15% easiest / blue 30% more difficult / black 55% most difficult",
+    "notes": "Wikipedia infobox. Three-tier breakdown only; no separate expert category. Listed as 116+; using 116."
+  },
+  {
+    "slug": "alyeska-resort",
+    "trails_total": 73,
+    "difficulty_pct": {
+      "beginner": 11,
+      "intermediate": 52,
+      "advanced": 37,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Alyeska_Resort",
+    "exact_quote": "73 / green - 11% easiest / blue - 52% more difficult / black - 37% most difficult",
+    "notes": "Wikipedia infobox. Three-tier breakdown; no expert category."
+  },
+  {
+    "slug": "andes-tower-hills",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Wikipedia page returned 404 (no article). Approved fallback sources did not surface in initial searches with explicit trail count and difficulty percentages. Input retains 16 total trails (unverified)."
+  },
+  {
+    "slug": "angel-fire-resort",
+    "trails_total": 80,
+    "difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 56,
+      "advanced": null,
+      "expert": 23
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Angel_Fire_Resort",
+    "exact_quote": "80 / 21% Beginner / 56% Intermediate / 23% Expert",
+    "notes": "Wikipedia infobox. Three-tier breakdown (Beginner/Intermediate/Expert); no Advanced subcategory."
+  },
+  {
+    "slug": "antelope-butte",
+    "trails_total": 30,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 36,
+      "advanced": null,
+      "expert": 39
+    },
+    "source_url": "https://parksandtrips.com/ski-resort/abwy-antelope-butte-mountain/",
+    "exact_quote": "Antelope Butte Mountain has a total of 30 ski trails ... 25% Beginner, 36% Intermediate, 39% Expert",
+    "notes": "No Wikipedia article. Parksandtrips (approved fallback). Three-tier breakdown (Beginner/Intermediate/Expert). Input had 40 trails; explicit source says 30."
+  },
+  {
+    "slug": "anthony-lakes",
+    "trails_total": 21,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 38,
+      "advanced": 42,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Anthony_Lakes_(ski_area)",
+    "exact_quote": "21 / 20% easiest / 38% more difficult / 42% most difficult",
+    "notes": "Wikipedia infobox. Three-tier breakdown; no expert category."
+  },
+  {
+    "slug": "appalachian-ski-mountain",
+    "trails_total": 13,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Appalachian_Ski_Mountain",
+    "exact_quote": "The mountain offers 13 ski trails consisting of 2 beginner, 6 intermediate, 3 advanced trails, and 4 terrain parks.",
+    "notes": "Wikipedia article. Counts (2/6/3) sum to 11 trails out of 13; percentages cannot be computed without ambiguity. Input already has explicit percentages (23/46/31/0)."
+  },
+  {
+    "slug": "apple-mountain",
+    "trails_total": 12,
+    "difficulty_pct": {
+      "beginner": 40,
+      "intermediate": 40,
+      "advanced": null,
+      "expert": 20
+    },
+    "source_url": "https://parksandtrips.com/ski-resort/ammi-apple-mountain/",
+    "exact_quote": "Apple Mountain has a total of 12 ski trails ... 40% of its trails are rated as 'beginner-level'. 40% trails are rated as intermediate ... Expert: 20%",
+    "notes": "No Wikipedia article. Parksandtrips (approved fallback). Three-tier breakdown (no separate advanced)."
+  },
+  {
+    "slug": "arapahoe-basin",
+    "trails_total": 145,
+    "difficulty_pct": {
+      "beginner": 7,
+      "intermediate": 20,
+      "advanced": 49,
+      "expert": 24
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Arapahoe_Basin",
+    "exact_quote": "Trails: 145 total (7% easiest, 20% intermediate, 49% advanced, 24% expert)",
+    "notes": "Wikipedia article. Full four-tier breakdown matches input percentages."
+  },
+  {
+    "slug": "arctic-valley",
+    "trails_total": 24,
+    "difficulty_pct": {
+      "beginner": 10,
+      "intermediate": 40,
+      "advanced": 50,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Arctic_Valley",
+    "exact_quote": "24 / green - 10% Beginner / blue - 40% Intermediate / black - 50% Advanced",
+    "notes": "Wikipedia infobox. Three-tier breakdown; no expert category. Input had 15 trails; Wikipedia explicit number is 24."
+  },
+  {
+    "slug": "arizona-snowbowl",
+    "trails_total": 55,
+    "difficulty_pct": {
+      "beginner": 37,
+      "intermediate": 42,
+      "advanced": 21,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Arizona_Snowbowl",
+    "exact_quote": "55 (Including hike-to terrain) / green - 37% easiest / blue - 42% more difficult / black - 21% most difficult",
+    "notes": "Wikipedia infobox. Three-tier breakdown; no expert category. Input had 61 trails; Wikipedia explicit number is 55."
+  },
+  {
+    "slug": "ascutney-outdoors",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article for current Ascutney Outdoors (community-run T-bar operation). The Wikipedia article 'Ascutney Mountain Resort' refers to the closed 2010 resort, not the current operation. Official site states '8 trails' but no difficulty percentage breakdown. Approved fallbacks did not provide explicit difficulty data."
+  },
+  {
+    "slug": "aspen-highlands",
+    "trails_total": 118,
+    "difficulty_pct": {
+      "beginner": 0,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Aspen_Highlands",
+    "exact_quote": "118 total / green - 0 Beginner / blue - 23 Intermediate / black - 12 Advanced / double-black - 65 Expert",
+    "notes": "Wikipedia infobox lists counts (not percentages): 0/23/12/65 of 118. Computed pcts (0/19/10/55) leave 18 unclassified. Input has (0/23/12/65) which appears to take counts as percentages. Reporting raw counts only; pct cannot be derived unambiguously."
+  },
+  {
+    "slug": "aspen-mountain",
+    "trails_total": 76,
+    "difficulty_pct": {
+      "beginner": 0,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Aspen_Mountain_(ski_area)",
+    "exact_quote": "76 total / green - 0 Beginner / blue - 48 Intermediate / black - 26 Advanced",
+    "notes": "Wikipedia infobox lists counts (not percentages): 0/48/26 of 76 (sums to 74, 2 unclassified). Cannot compute unambiguous percentages. Input has (0/48/26/26) which treats counts as percentages plus duplicates advanced as expert; not validated by quote."
+  }
+]

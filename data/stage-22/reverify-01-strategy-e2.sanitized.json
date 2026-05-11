@@ -1,0 +1,301 @@
+[
+  {
+    "slug": "arizona-snowbowl",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 32,
+      "intermediate": 44,
+      "advanced": 24,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/arizona-snowbowl/",
+    "exact_quote": "Easy 12 km (32 %) Intermediate 16 km (44 %) Difficult 9 km (24 %)",
+    "notes": "skiresort.info uses 3-tier km percentages; no run count or expert tier listed."
+  },
+  {
+    "slug": "ascutney-outdoors",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "not on skiresort.info (tried /ascutney-outdoors/ and /ascutney/; both returned homepage)."
+  },
+  {
+    "slug": "badger-mountain-wa",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 40,
+      "intermediate": 47,
+      "advanced": 13,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/badger-mountain/",
+    "exact_quote": "Easy 0.6 km (40 %) Intermediate 0.7 km (47 %) Difficult 0.2 km (13 %)",
+    "notes": "Page confirmed as Badger Mountain, Washington State, USA; 3-tier km percentages, no run count."
+  },
+  {
+    "slug": "bear-basin-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "not on skiresort.info (nordic/XC center, no page)."
+  },
+  {
+    "slug": "bethel-village-trails",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "not on skiresort.info (XC trail network, no page)."
+  },
+  {
+    "slug": "catamount-outdoor-family-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "not on skiresort.info (nordic/XC center)."
+  },
+  {
+    "slug": "chapman-hill",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 42,
+      "intermediate": 30,
+      "advanced": 28,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/chapman-hill-durango/",
+    "exact_quote": "Easy 0.3 km (42 %) Intermediate 0.2 km (30 %) Difficult 0.2 km (28 %)",
+    "notes": "Page slug is chapman-hill-durango; 3-tier km percentages, no run count."
+  },
+  {
+    "slug": "cottonwood-butte",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 2,
+      "intermediate": 54,
+      "advanced": 44,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/cottonwood-butte/",
+    "exact_quote": "Easy 0.1 km (2 %) Intermediate 2.2 km (54 %) Difficult 1.8 km (44 %)",
+    "notes": "skiresort.info 3-tier km percentages; no run count or expert tier listed."
+  },
+  {
+    "slug": "crosscut-sports-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "not on skiresort.info (nordic/XC center)."
+  },
+  {
+    "slug": "dog-creek-lodge-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "not on skiresort.info (nordic center, no page)."
+  },
+  {
+    "slug": "echo-valley",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 40,
+      "advanced": 27,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/echo-valley/",
+    "exact_quote": "Easy 2.3 km (33 %) Intermediate 2.8 km (40 %) Difficult 1.9 km (27 %)",
+    "notes": "skiresort.info 3-tier km percentages; no run count or expert tier listed."
+  },
+  {
+    "slug": "great-glen-trails-outdoor-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "not on skiresort.info (XC outdoor center)."
+  },
+  {
+    "slug": "haymaker-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "not on skiresort.info (nordic center, no page)."
+  },
+  {
+    "slug": "hesperus-ski-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 50,
+      "advanced": 20,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/hesperus-ski-area/",
+    "exact_quote": "Easy 3 km (30 %) Intermediate 5 km (50 %) Difficult 2 km (20 %)",
+    "notes": "skiresort.info 3-tier km percentages; no run count or expert tier listed."
+  },
+  {
+    "slug": "high-point-xc-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "not on skiresort.info (XC center, no page)."
+  },
+  {
+    "slug": "hoedown-hill",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "not on skiresort.info."
+  },
+  {
+    "slug": "homestake-lodge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "not on skiresort.info (nordic lodge)."
+  },
+  {
+    "slug": "howelsen-hill",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 42,
+      "intermediate": 37,
+      "advanced": 21,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/howelsen-hill/",
+    "exact_quote": "Easy 1.7 km (42 %) Intermediate 1.5 km (37 %) Difficult 0.8 km (21 %)",
+    "notes": "skiresort.info 3-tier km percentages; no run count or expert tier listed."
+  },
+  {
+    "slug": "hurricane-ridge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 4,
+      "intermediate": 61,
+      "advanced": 35,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/hurricane-ridge/",
+    "exact_quote": "Easy 0.1 km (4 %) Intermediate 1.4 km (61 %) Difficult 0.8 km (35 %)",
+    "notes": "skiresort.info 3-tier km percentages; no run count or expert tier listed."
+  },
+  {
+    "slug": "jackson-xc",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "not on skiresort.info (tried /jackson-xc/ and /jackson-ski-touring/; XC center)."
+  },
+  {
+    "slug": "leavenworth-winter-sports-club",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "not on skiresort.info."
+  },
+  {
+    "slug": "little-ski-hill",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 100,
+      "intermediate": 0,
+      "advanced": 0,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/little-ski-hill/",
+    "exact_quote": "Easy 1.4 km (100 %) Intermediate 0 km (0 %) Difficult 0 km (0 %)",
+    "notes": "skiresort.info shows all-beginner terrain (1.4 km); no run count or expert tier."
+  },
+  {
+    "slug": "loge-glacier",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "not on skiresort.info (lodging brand, not a ski area)."
+  }
+]

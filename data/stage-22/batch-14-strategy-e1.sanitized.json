@@ -1,0 +1,452 @@
+[
+  {
+    "slug": "sunlight-mountain",
+    "trails_total": 77,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.sunlightmtn.com",
+    "website_alive": true,
+    "source_url": "https://www.sunlightmtn.com/mountain/trail-map/",
+    "exact_quote": "With 77 trails spread across 740 acres, Sunlight Mountain Resort offers something for every skill level.",
+    "notes": "Trail count confirmed. No difficulty percentage breakdown provided on official site."
+  },
+  {
+    "slug": "sunrise-park-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.sunrise.ski/",
+    "website_alive": true,
+    "source_url": "https://www.sunrise.ski/",
+    "exact_quote": "",
+    "notes": "Site redirects sunriseskipark.com -> sunrise.ski. No trail counts or difficulty percentages found on homepage. /winter/the-mountain returned 404."
+  },
+  {
+    "slug": "swain-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.swain.com",
+    "website_alive": true,
+    "source_url": "https://swain.com/trail-map/",
+    "exact_quote": "",
+    "notes": "Trail map is image-only (Swain-Trail-Map-2019web.jpg). Trail report shows '0 open trails' as season ended. No textual trail count or difficulty breakdown on official site."
+  },
+  {
+    "slug": "swiss-valley",
+    "trails_total": 12,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.skiswissvalley.com",
+    "website_alive": true,
+    "source_url": "https://www.skiswissvalley.com",
+    "exact_quote": "12 trails",
+    "notes": "Trail count confirmed. Site mentions 'mixed terrain for all abilities' but no difficulty percentage breakdown."
+  },
+  {
+    "slug": "tahoe-donner-downhill",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.tahoedonner.com",
+    "website_alive": true,
+    "source_url": "https://www.tahoedonner.com/amenities/amenities/downhill-ski/mountain/trail-map/",
+    "exact_quote": "",
+    "notes": "Trail map only available as PDF (2025-26-DH-Trail-Map-v7.pdf). No textual trail count or difficulty breakdown on HTML pages."
+  },
+  {
+    "slug": "tamarack",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.tamarackidaho.com",
+    "website_alive": true,
+    "source_url": "https://www.tamarackidaho.com",
+    "exact_quote": "2,800 vertical feet of skiable terrain spread over 1,610 acres, with runs and trails suitable for beginners and seasoned pros alike.",
+    "notes": "Site states 1,610+ acres of lift-accessible terrain. /winter/mountain/trail-map returned 404. No trail count or difficulty percentages on official site."
+  },
+  {
+    "slug": "taos-ski-valley",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.skitaos.com",
+    "website_alive": true,
+    "source_url": "https://www.skitaos.com",
+    "exact_quote": "",
+    "notes": "Homepage and /the-mountain/ returned only page titles - JS-rendered content not extractable via WebFetch. /the-mountain/trail-map/ and /mountain-stats/ returned 404."
+  },
+  {
+    "slug": "telluride",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.tellurideskiresort.com",
+    "website_alive": true,
+    "source_url": "https://tellurideskiresort.com/mountain/",
+    "exact_quote": "",
+    "notes": "Homepage and /mountain/ accessible but no trail count or difficulty breakdown in HTML content. /mountain-stats/ returned 404."
+  },
+  {
+    "slug": "tenney-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.tenneymtn.com",
+    "website_alive": false,
+    "source_url": "https://www.tenneymtn.com",
+    "exact_quote": "This domain is expired. If you are the owner and you want to renew it please contact your registrar.",
+    "notes": "Domain expired. Website is dead."
+  },
+  {
+    "slug": "terry-peak",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.terrypeak.com",
+    "website_alive": true,
+    "source_url": "https://terrypeak.com/the-mountain/trails-lifts/",
+    "exact_quote": "",
+    "notes": "Trail page lists individual runs by difficulty but provides no aggregate count or percentage breakdown."
+  },
+  {
+    "slug": "teton-pass",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.skitetonmt.com/",
+    "website_alive": true,
+    "source_url": "https://www.skitetonmt.com/mountain-info/trail-map-statistics",
+    "exact_quote": "400 skiable acres",
+    "notes": "Mountain stats show 400 skiable acres, 2 lifts, 1000 vertical feet. No trail count or difficulty percentage breakdown in HTML (referenced TP_trailmap-2010.pdf)."
+  },
+  {
+    "slug": "the-highlands",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.highlandsatharborsprings.com",
+    "website_alive": false,
+    "source_url": "https://www.highlandsatharborsprings.com",
+    "exact_quote": "",
+    "notes": "Homepage ECONNREFUSED; /the-mountain/trails/ ECONNREFUSED. Website appears down or refuses connections."
+  },
+  {
+    "slug": "the-omni-homestead-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.omnihotels.com/hotels/homestead-virginia",
+    "website_alive": true,
+    "source_url": "https://www.omnihotels.com/hotels/homestead-virginia/things-to-do/ski",
+    "exact_quote": "",
+    "notes": "Ski page returned HTTP 403 (blocked). Main hotel domain is alive but ski subpage inaccessible to fetcher."
+  },
+  {
+    "slug": "the-rock-snowpark",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.therocksnowpark.com",
+    "website_alive": false,
+    "source_url": "https://www.therocksnowpark.com",
+    "exact_quote": "",
+    "notes": "Homepage ECONNREFUSED on multiple attempts. Site appears down."
+  },
+  {
+    "slug": "the-summit-at-snoqualmie",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.summitatsnoqualmie.com",
+    "website_alive": true,
+    "source_url": "https://www.summitatsnoqualmie.com",
+    "exact_quote": "",
+    "notes": "Homepage accessible but classifier blocked content extraction. /the-mountain and /the-mountain/trail-maps returned 404."
+  },
+  {
+    "slug": "thrill-hills",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://skithrillhills.com/",
+    "website_alive": true,
+    "source_url": "https://skithrillhills.com/",
+    "exact_quote": "Whether you're a beginner or a seasoned snow enthusiast, our slopes have something for everyone.",
+    "notes": "No trail count or difficulty percentages on homepage. Trail map page exists at /trail-map/ but data not in HTML."
+  },
+  {
+    "slug": "thunder-ridge-ski-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://thunderridgeski.com",
+    "website_alive": true,
+    "source_url": "https://thunderridgeski.com",
+    "exact_quote": "",
+    "notes": "Homepage redirect missing Location header (HTTP issue). /mountain/ also redirect issue. Site reachable in browser but not via WebFetch."
+  },
+  {
+    "slug": "timber-ridge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.skitimberridge.com",
+    "website_alive": false,
+    "source_url": "https://www.skitimberridge.com",
+    "exact_quote": "",
+    "notes": "Homepage ECONNREFUSED. Site appears down."
+  },
+  {
+    "slug": "timberline-lodge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.timberlinelodge.com",
+    "website_alive": true,
+    "source_url": "https://www.timberlinelodge.com/mountain/trail-map",
+    "exact_quote": "",
+    "notes": "Trail map page describes trails as 'gentle beginner green lines to challenging technical black runs' but provides no count or percentage breakdown. Vertical drop 4,540 ft cited."
+  },
+  {
+    "slug": "timberline-mountain",
+    "trails_total": 22,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://timberlinemountain.com",
+    "website_alive": true,
+    "source_url": "https://timberlinemountain.com",
+    "exact_quote": "With 22 trails including 2 terrain parks, you'll find a great mix of diverse terrain and something for everyone.",
+    "notes": "Trail count confirmed. Difficulty percentage breakdown not disclosed on official site."
+  },
+  {
+    "slug": "titcomb-mountain",
+    "trails_total": 16,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.titcombmountain.com",
+    "website_alive": true,
+    "source_url": "https://www.titcombmountain.com/the-mountain/trail-maps",
+    "exact_quote": "16 alpine trails for all skill levels, from beginner to expert.",
+    "notes": "Alpine trail count confirmed (16). No difficulty percentage breakdown. Also has 16+ km Nordic trails."
+  },
+  {
+    "slug": "titus-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.titusmountain.com",
+    "website_alive": true,
+    "source_url": "https://www.titusmountain.com",
+    "exact_quote": "",
+    "notes": "Homepage accessible but no trail count or difficulty percentages in HTML. /the-mountain returned 404."
+  },
+  {
+    "slug": "trapp-family-lodge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.vontrappresort.com/skiing-snowshoeing.htm",
+    "website_alive": true,
+    "source_url": "https://www.vontrappresort.com/skiing-snowshoeing.htm",
+    "exact_quote": "we have over 60 kilometers of groomed Nordic ski trails and access to miles of backcountry trails suitable for cross country skiers of all ages and abilities.",
+    "notes": "Site redirects trappfamily.com -> vontrappresort.com. Nordic resort (60+ km groomed, 25 mi backcountry). No individual trail count or difficulty percentages."
+  },
+  {
+    "slug": "treetops-resort",
+    "trails_total": 28,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.treetops.com",
+    "website_alive": true,
+    "source_url": "https://www.treetops.com/skiing-and-snowboarding/",
+    "exact_quote": "Treetops is home to 28 different ski and snowboard runs.",
+    "notes": "Trail count is 28 per official site (input said 25). No difficulty percentage breakdown provided."
+  },
+  {
+    "slug": "trollhaugen",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.trollhaugen.com",
+    "website_alive": true,
+    "source_url": "https://www.trollhaugen.com",
+    "exact_quote": "",
+    "notes": "Homepage and /winter/the-resort/trail-map/ accessible but trail data only in PDF map ('New Trail Map 2023-2024'). No HTML count or difficulty percentages."
+  },
+  {
+    "slug": "turner-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.skiturner.com",
+    "website_alive": true,
+    "source_url": "https://www.skiturner.com",
+    "exact_quote": "",
+    "notes": "Homepage returned only 'Home' content (JS-rendered or minimal). No trail data extractable."
+  },
+  {
+    "slug": "turpin-meadow-ranch",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://turpinmeadowranch.com/web-cam/",
+    "website_alive": true,
+    "source_url": "https://turpinmeadowranch.com",
+    "exact_quote": "20 km of groomed Nordic ski track, 5 miles of dedicated fat bike single track",
+    "notes": "Nordic cross-country ranch (20 km groomed). No individual trail count or difficulty percentages."
+  },
+  {
+    "slug": "tussey-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.tusseymountain.com",
+    "website_alive": true,
+    "source_url": "https://tusseymountain.com/trail-maps",
+    "exact_quote": "",
+    "notes": "Trail map page is image-only. No textual trail count or difficulty breakdown on official site."
+  },
+  {
+    "slug": "tyrol-basin",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.tyrolbasin.com",
+    "website_alive": true,
+    "source_url": "https://tyrolbasin.com/map/",
+    "exact_quote": "",
+    "notes": "Trail map page only shows image with DOWNLOAD MAP PDF link. No textual trail count or difficulty percentages in HTML."
+  },
+  {
+    "slug": "tyrol-basin-and-snowboard",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.tyrolbasin.com",
+    "website_alive": true,
+    "source_url": "https://tyrolbasin.com/map/",
+    "exact_quote": "",
+    "notes": "Duplicate slug of tyrol-basin. Same official site - no textual trail count or difficulty percentages in HTML."
+  }
+]

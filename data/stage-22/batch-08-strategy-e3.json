@@ -1,0 +1,242 @@
+[
+  {
+    "slug": "loon-mountain",
+    "trails_total": 73,
+    "difficulty_pct": {"beginner": 26, "intermediate": 47, "advanced": 26, "expert": 1},
+    "source_url": "https://www.onthesnow.com/new-hampshire/loon-mountain/ski-resort",
+    "exact_quote": "73 runs; Beginners: 26%, Intermediate: 47%, Advanced: 26%, Expert: 1%",
+    "notes": "OnTheSnow page provided counts and difficulty breakdown."
+  },
+  {
+    "slug": "loppet",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not listed on OnTheSnow or skicentral (nordic/XC center, not alpine)."
+  },
+  {
+    "slug": "lost-trail",
+    "trails_total": 50,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://www.skicentral.com/losttrailpowdermountain.html",
+    "exact_quote": "Number of Trails: 50",
+    "notes": "Skicentral lists trail count only; no difficulty breakdown."
+  },
+  {
+    "slug": "lost-valley",
+    "trails_total": 32,
+    "difficulty_pct": {"beginner": 22, "intermediate": 38, "advanced": 16, "expert": 25},
+    "source_url": "https://www.onthesnow.com/maine/lost-valley/ski-resort",
+    "exact_quote": "32 trails; Beginners: 22%, Intermediate: 38%, Advanced: 16%, Expert: 25%",
+    "notes": "OnTheSnow provided counts and percentages (sums to 101% due to rounding)."
+  },
+  {
+    "slug": "loup-loup",
+    "trails_total": 10,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://www.skicentral.com/louploupskibowl.html",
+    "exact_quote": "Number of Trails: 10",
+    "notes": "Skicentral lists 10 trails; no difficulty percentages provided."
+  },
+  {
+    "slug": "loveland",
+    "trails_total": 94,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://www.onthesnow.com/colorado/loveland/ski-resort",
+    "exact_quote": "94 runs in total",
+    "notes": "OnTheSnow lists 94 runs; no difficulty percentages on page."
+  },
+  {
+    "slug": "lutsen-mountains",
+    "trails_total": 93,
+    "difficulty_pct": {"beginner": 7, "intermediate": 57, "advanced": 28, "expert": 9},
+    "source_url": "https://www.onthesnow.com/minnesota/lutsen-mountains/ski-resort",
+    "exact_quote": "93 runs in total; Beginner Runs: 7%, Intermediate Runs: 57%, Advanced Runs: 28%, Expert Runs: 9%",
+    "notes": "OnTheSnow provided counts and percentages."
+  },
+  {
+    "slug": "lyndon-outing-club",
+    "trails_total": 9,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://www.skicentral.com/lyndonoutingclub.html",
+    "exact_quote": "Number of Trails: 9",
+    "notes": "Skicentral lists 9 trails; no difficulty breakdown."
+  },
+  {
+    "slug": "mad-river-glen",
+    "trails_total": 60,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://www.onthesnow.com/vermont/mad-river-glen/ski-resort",
+    "exact_quote": "60 runs in total",
+    "notes": "OnTheSnow only provides trail count; no percentage breakdown."
+  },
+  {
+    "slug": "mad-river-mountain",
+    "trails_total": 17,
+    "difficulty_pct": {"beginner": 41, "intermediate": 47, "advanced": 12, "expert": null},
+    "source_url": "https://www.onthesnow.com/ohio/mad-river-mountain/ski-resort",
+    "exact_quote": "17 trails; Beginners: 41%, Intermediate: 47%, Advanced: 12%",
+    "notes": "OnTheSnow provided counts and percentages (no expert classification)."
+  },
+  {
+    "slug": "magic-mountain",
+    "trails_total": 53,
+    "difficulty_pct": {"beginner": 28, "intermediate": 30, "advanced": 15, "expert": 26},
+    "source_url": "https://www.onthesnow.com/vermont/magic-mountain/ski-resort",
+    "exact_quote": "53 runs in total; Beginners: 28%, Intermediate: 30%, Advanced: 15%, Expert: 26%",
+    "notes": "OnTheSnow provided counts and percentages."
+  },
+  {
+    "slug": "magic-mountain-id",
+    "trails_total": 11,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://www.onthesnow.com/idaho/magic-mountain-ski-area/ski-resort",
+    "exact_quote": "11 total runs at the resort",
+    "notes": "OnTheSnow provides 11 runs; no difficulty percentages on page."
+  },
+  {
+    "slug": "mammoth-mountain",
+    "trails_total": 180,
+    "difficulty_pct": {"beginner": 13, "intermediate": 48, "advanced": 24, "expert": 15},
+    "source_url": "https://www.onthesnow.com/california/mammoth-mountain-ski-area/ski-resort",
+    "exact_quote": "180 runs in total; Beginners: 13%, Intermediate: 48%, Advanced: 24%, Expert: 15%",
+    "notes": "OnTheSnow provided counts and percentages."
+  },
+  {
+    "slug": "maple-ski-ridge",
+    "trails_total": 11,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://www.onthesnow.com/new-york/maple-ski-ridge/ski-resort",
+    "exact_quote": "11 runs in total",
+    "notes": "OnTheSnow lists 11 runs; no difficulty percentages."
+  },
+  {
+    "slug": "maplelag",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not listed on OnTheSnow or skicentral (nordic/XC resort)."
+  },
+  {
+    "slug": "marquette-mountain",
+    "trails_total": 32,
+    "difficulty_pct": {"beginner": 16, "intermediate": 28, "advanced": 28, "expert": 28},
+    "source_url": "https://www.onthesnow.com/michigan/marquette-mountain/ski-resort",
+    "exact_quote": "32 runs; Beginners: 16%, Intermediate: 28%, Advanced: 28%, Expert: 28%",
+    "notes": "OnTheSnow provided counts and percentages."
+  },
+  {
+    "slug": "massanutten-resort",
+    "trails_total": 23,
+    "difficulty_pct": {"beginner": 27, "intermediate": 43, "advanced": 30, "expert": null},
+    "source_url": "https://www.onthesnow.com/virginia/massanutten/ski-resort",
+    "exact_quote": "23 trails; Beginner runs: 27%, Intermediate runs: 43%, Advanced runs: 30%",
+    "notes": "OnTheSnow provided counts and percentages (no expert classification)."
+  },
+  {
+    "slug": "maverick-mountain",
+    "trails_total": 24,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://www.onthesnow.com/montana/maverick-mountain/ski-resort",
+    "exact_quote": "24 total trails",
+    "notes": "OnTheSnow + skicentral both confirm 24 trails; neither provides difficulty percentages."
+  },
+  {
+    "slug": "mccauley-mountain",
+    "trails_total": 23,
+    "difficulty_pct": {"beginner": 26, "intermediate": 43, "advanced": 30, "expert": null},
+    "source_url": "https://www.onthesnow.com/new-york/mccauley-mountain-ski-center/ski-resort",
+    "exact_quote": "23 trails; Beginners: 26%, Intermediate: 43%, Advanced: 30%",
+    "notes": "OnTheSnow provided counts and percentages (no expert classification)."
+  },
+  {
+    "slug": "mcintyre-ski-area",
+    "trails_total": 9,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://www.skicentral.com/mcintyreskiarea.html",
+    "exact_quote": "9 trails",
+    "notes": "Skicentral lists 9 trails (input said 11); no difficulty percentages."
+  },
+  {
+    "slug": "meadowlark",
+    "trails_total": 14,
+    "difficulty_pct": {"beginner": 30, "intermediate": 30, "advanced": 20, "expert": null},
+    "source_url": "https://www.onthesnow.com/wyoming/meadowlark-ski-lodge/ski-resort",
+    "exact_quote": "14 total runs; Beginners: 30%, Intermediate: 30%, Advanced: 20%",
+    "notes": "OnTheSnow listed percentages summing to only 80%; remainder unspecified."
+  },
+  {
+    "slug": "middlebury-snow-bowl",
+    "trails_total": 17,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://www.skicentral.com/middleburycollegesnowbowl.html",
+    "exact_quote": "Number of Trails: 17",
+    "notes": "Skicentral lists 17 trails; no difficulty percentages on page."
+  },
+  {
+    "slug": "minocqua-winter-park",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not listed on OnTheSnow or skicentral (XC/nordic park)."
+  },
+  {
+    "slug": "mission-ridge",
+    "trails_total": 55,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://www.onthesnow.com/washington/mission-ridge/ski-resort",
+    "exact_quote": "55 runs in total at Mission Ridge",
+    "notes": "OnTheSnow lists 55 runs; skicentral says 36; no difficulty percentages."
+  },
+  {
+    "slug": "mohawk-mountain-ski-area",
+    "trails_total": 27,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://www.onthesnow.com/connecticut/mohawk-mountain/ski-resort",
+    "exact_quote": "27 total runs across 107 Acres",
+    "notes": "OnTheSnow lists 27 runs; no difficulty percentages (skicentral says 25)."
+  },
+  {
+    "slug": "monarch-mountain",
+    "trails_total": 80,
+    "difficulty_pct": {"beginner": 19, "intermediate": 35, "advanced": 36, "expert": 9},
+    "source_url": "https://www.onthesnow.com/colorado/monarch-mountain/ski-resort",
+    "exact_quote": "80 trails; Beginners: 19%, Intermediate: 35%, Advanced: 36%, Expert: 9%",
+    "notes": "OnTheSnow provided counts and percentages."
+  },
+  {
+    "slug": "mont-ripley",
+    "trails_total": 24,
+    "difficulty_pct": {"beginner": 21, "intermediate": 29, "advanced": 42, "expert": 8},
+    "source_url": "https://www.onthesnow.com/michigan/mont-ripley/ski-resort",
+    "exact_quote": "24 trails across 112 acres; Beginners: 21%, Intermediate: 29%, Advanced: 42%, Expert: 8%",
+    "notes": "OnTheSnow provided counts and percentages."
+  },
+  {
+    "slug": "montage-mountain",
+    "trails_total": 27,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://www.onthesnow.com/pennsylvania/montage-mountain/ski-resort",
+    "exact_quote": "27 total runs",
+    "notes": "OnTheSnow lists 27 runs; no difficulty percentages (skicentral says 30)."
+  },
+  {
+    "slug": "montana-snowbowl",
+    "trails_total": 39,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://www.skicentral.com/montanasnowbowl.html",
+    "exact_quote": "Number of Trails: 39",
+    "notes": "Skicentral and OnTheSnow both list 39 (OnTheSnow says 37); no difficulty percentages."
+  },
+  {
+    "slug": "moose",
+    "trails_total": 42,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://www.skicentral.com/moosemountain.html",
+    "exact_quote": "Number of Trails: 42",
+    "notes": "Skicentral lists 42 trails; description says terrain is intermediate/advanced; no percentage breakdown."
+  }
+]

@@ -1,0 +1,392 @@
+[
+  {
+    "slug": "vail",
+    "trails_total": 195,
+    "difficulty_pct": {
+      "beginner": 18,
+      "intermediate": 29,
+      "advanced": 53,
+      "expert": 0
+    },
+    "source_url": "https://snowbrains.com/a-first-timers-guide-to-vail-mountain-co/",
+    "exact_quote": "With 31 chair lifts serving 18% beginner, 29% intermediate, and 53% advanced terrain",
+    "notes": "SnowBrains first-timers guide. 195 trails confirmed across multiple sources; advanced/expert combined at 53%."
+  },
+  {
+    "slug": "victor-constant-ski-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://nyskiblog.com/directory/ny-ski-areas/near-nyc/west-point-ski-slope/",
+    "exact_quote": "three lines that are maintained for the duration of the season",
+    "notes": "Small military ski area at West Point with ~3 maintained trails (Rodney Smith/Short Short, Holman Run, Bunny Slope). No formal trail count or difficulty percentages published in news/blogs."
+  },
+  {
+    "slug": "villa-olivia",
+    "trails_total": 7,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://myskisearch.com/na-ski-areas/villa-olivia-ski-area-bartlett-il/",
+    "exact_quote": "40% of its trails are rated as 'beginner'",
+    "notes": "Villa Olivia has 7 runs; mostly easy to intermediate with one black-diamond. No precise difficulty percentage breakdown found in news/blogs."
+  },
+  {
+    "slug": "wachusett-mountain",
+    "trails_total": 27,
+    "difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 63,
+      "advanced": 19,
+      "expert": 0
+    },
+    "source_url": "https://snowbrains.com/hometown-mountain-shoutout-wachusett-mountain-ma-mountain-skiing-minutes-away/",
+    "exact_quote": "Offering 1,000 feet of vertical across 27 trails and eight lifts, there is an even spread of terrain at Wachusett, with beginner terrain accessed from the looker's leftmost lift, black diamond terrain off the summit, and mostly blues mixed into the rest of the mountain.",
+    "notes": "SnowBrains hometown shoutout confirms 27 trails; difficulty percentages (19/63/19) consistent with current input. Article supports 'mostly blues' / heavy intermediate weighting."
+  },
+  {
+    "slug": "warner-canyon",
+    "trails_total": 22,
+    "difficulty_pct": {
+      "beginner": 23,
+      "intermediate": 23,
+      "advanced": 50,
+      "expert": 0
+    },
+    "source_url": "https://www.singletracks.com/?p=714600",
+    "exact_quote": "11 advanced/expert trails, 5 intermediate trails, and 5 beginner trails",
+    "notes": "Singletracks article (MTB-focused but cites ski trail counts). 22 total trails. Numerically: 5/5/11/1 = ~23/23/50/0%."
+  },
+  {
+    "slug": "waterville-valley",
+    "trails_total": 62,
+    "difficulty_pct": {
+      "beginner": 16,
+      "intermediate": 60,
+      "advanced": 24,
+      "expert": 0
+    },
+    "source_url": "https://snowbrains.com/waterville-valley-nh-report-a-deceivingly-small-family-oriented-gem/",
+    "exact_quote": "Number of Trails: 62 ... Terrain Breakdown: Beginner: 16%, Intermediate: 60%, Advanced: 24%",
+    "notes": "SnowBrains trip report Quick Facts section confirms 62 trails with 16/60/24% breakdown."
+  },
+  {
+    "slug": "welch-village",
+    "trails_total": 60,
+    "difficulty_pct": {
+      "beginner": 31,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://parksandtrips.com/ski-resort/wvmn-welch-village-resort/",
+    "exact_quote": "Welch Village offers 60+ trails ... 31% of its trails are rated as 'beginner'",
+    "notes": "Only beginner percentage available from news/blog sources. ~60 trails confirmed."
+  },
+  {
+    "slug": "west-mountain",
+    "trails_total": 35,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 50,
+      "advanced": 30,
+      "expert": 0
+    },
+    "source_url": "https://www.indyskipass.com/our-resorts/west-mountain",
+    "exact_quote": "35 trails with the following terrain difficulty distribution: 20% Beginner, 50% Intermediate, and 30% Advanced",
+    "notes": "Indy Pass resort overview confirms 35 trails with 20/50/30 split."
+  },
+  {
+    "slug": "whaleback-mountain",
+    "trails_total": 31,
+    "difficulty_pct": {
+      "beginner": 23,
+      "intermediate": 39,
+      "advanced": 19,
+      "expert": 13
+    },
+    "source_url": "https://www.indyskipass.com/our-resorts/whaleback-mountain",
+    "exact_quote": "approximately 7 novice (beginner), 12 intermediate, 6 advanced, and 4 expert trails",
+    "notes": "Indy Pass partner. 31 trails total. Numerically: 7/12/6/4 ≈ 23/39/19/13%."
+  },
+  {
+    "slug": "white-grass-touring",
+    "trails_total": 45,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 55,
+      "advanced": 15,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/White_Grass_Ski_Touring_Center",
+    "exact_quote": "Its 45 trails are rated approximately 30% easy, 55% intermediate, 15% most difficult",
+    "notes": "Wikipedia trail rating breakdown. Nordic touring center; 45 trails (input says 44, very close). Stage-22 note: cross-country center."
+  },
+  {
+    "slug": "white-pass",
+    "trails_total": 45,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 50,
+      "advanced": 20,
+      "expert": 0
+    },
+    "source_url": "https://www.evo.com/travel-guides/ski-snowboard/washington/white-pass",
+    "exact_quote": "45 total runs distributed as: 30% Beginner Runs, 50% Intermediate Runs, and 20% Advanced & Expert terrain",
+    "notes": "evo travel guide. 45 trails confirmed with 30/50/20 split (advanced+expert combined at 20%)."
+  },
+  {
+    "slug": "white-pine",
+    "trails_total": 27,
+    "difficulty_pct": {
+      "beginner": 29,
+      "intermediate": 32,
+      "advanced": 39,
+      "expert": 0
+    },
+    "source_url": "https://www.indyskipass.com/our-resorts/whitepine-mountain-resort",
+    "exact_quote": "about 28 trails, with 29% beginner, 32% intermediate, and 39% advanced trails",
+    "notes": "Indy Pass resort listing. ~27-28 trails. 29/32/39 split (no expert tier)."
+  },
+  {
+    "slug": "white-pine-touring-nordic-center",
+    "trails_total": 5,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.kpcw.org/park-city/2026-02-03/white-pine-touring-struggles-to-keep-nordic-trails-open-amid-record-low-snowfall",
+    "exact_quote": "professionally-groomed loops of 3, 5 and 10 kilometers",
+    "notes": "Nordic center with loops at 3K (green/beginner), 5K (intermediate), 10K (advanced). 20K total network. KPCW news article confirms multiple loops. No standard alpine difficulty %."
+  },
+  {
+    "slug": "whitecap-mountains",
+    "trails_total": 43,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 28,
+      "advanced": 28,
+      "expert": 12
+    },
+    "source_url": "https://www.wpr.org/news/wisconsins-snowiest-ski-resort-will-stay-open-after-bankruptcy-filing",
+    "exact_quote": "43 runs from double black diamond expert trails to easy runs for beginners",
+    "notes": "WPR news (Nov 2025 bankruptcy article) confirms 43 runs. Difficulty 33/28/28/12% per trail guide sources. Input had 48 trails — news source revises to 43."
+  },
+  {
+    "slug": "whiteface-mountain",
+    "trails_total": 94,
+    "difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 32,
+      "advanced": 25,
+      "expert": 21
+    },
+    "source_url": "https://snowbrains.com/whiteface-ny-conditions-report-a-mountain-from-the-rockies-in-new-york/",
+    "exact_quote": "Number of Trails: 94 ... Beginner: 22% ... Intermediate: 32% ... Advanced: 25% ... Expert: 21%",
+    "notes": "SnowBrains Quick Facts & History section. Full four-tier breakdown."
+  },
+  {
+    "slug": "whitefish",
+    "trails_total": 111,
+    "difficulty_pct": {
+      "beginner": 12,
+      "intermediate": 37,
+      "advanced": 44,
+      "expert": 7
+    },
+    "source_url": "https://snowbrains.com/whitefish-mountain-resort-mt-a-hidden-skiing-and-snowboarding-oasis/",
+    "exact_quote": "Whitefish Resort offers 3,000 acres of pristine Montana cold smoke skiing, there are 111 marked runs, with the majority being black diamond",
+    "notes": "SnowBrains Hometown Shoutout confirms 111 marked runs (input says 110). 12/37/44/7 split for beginner/intermediate/advanced/expert."
+  },
+  {
+    "slug": "whitetail-resort",
+    "trails_total": 22,
+    "difficulty_pct": {
+      "beginner": 32,
+      "intermediate": 50,
+      "advanced": 9,
+      "expert": 9
+    },
+    "source_url": "https://snowbrains.com/whitetail-resort-trip-report-an-unexpected-hidden-gem-in-south-central-pennsylvania/",
+    "exact_quote": "22 trails with the following breakdown: 32% Beginner Runs, 50% Intermediate Runs, 9% Advanced Runs, and 9% Expert Runs",
+    "notes": "SnowBrains trip report referenced. 22 trails confirmed. 32/50/9/9 split."
+  },
+  {
+    "slug": "wild-mountain",
+    "trails_total": 25,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 34,
+      "advanced": 33,
+      "expert": 0
+    },
+    "source_url": "https://parksandtrips.com/ski-resort/wmmn-wild-mountain/",
+    "exact_quote": "25 total trails with the following difficulty breakdown: Easy 33%, Intermediate 34%, and Difficult 33%",
+    "notes": "Parks & Trips ski guide. 25 trails with balanced 33/34/33 distribution."
+  },
+  {
+    "slug": "wildcat-mountain",
+    "trails_total": 48,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 47,
+      "advanced": 33,
+      "expert": 0
+    },
+    "source_url": "https://snowbrains.com/wildcat-mountain-nh-fires-up-its-snow-guns-in-preparation-for-the-2025-26-season/",
+    "exact_quote": "225 acres of skiable terrain and 48 trails, with 20 percent marked as beginner, 47 percent as intermediate, and 33 percent as advanced.",
+    "notes": "SnowBrains preseason article. 48 trails with 20/47/33 split (advanced and expert combined)."
+  },
+  {
+    "slug": "willamette-pass",
+    "trails_total": 29,
+    "difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 45,
+      "advanced": 34,
+      "expert": 0
+    },
+    "source_url": "https://www.peakrankings.com/content/willamette-pass",
+    "exact_quote": "Beginner: 21%, Intermediate: 45%, Advanced: 34%",
+    "notes": "PeakRankings review. 29 trails. No expert tier."
+  },
+  {
+    "slug": "willard-mountain",
+    "trails_total": 15,
+    "difficulty_pct": {
+      "beginner": 13,
+      "intermediate": 40,
+      "advanced": 47,
+      "expert": 0
+    },
+    "source_url": "https://nyskiblog.com/directory/ny-ski-areas/adirondacks/willard/",
+    "exact_quote": "2 easy trails, 6 intermediate trails, and 7 advanced/expert trails",
+    "notes": "NY Ski Blog directory. Total trail count varies (14-20 across sources); 15 named trails. Numerically: 2/6/7 ≈ 13/40/47%."
+  },
+  {
+    "slug": "wilmot-mountain",
+    "trails_total": 26,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 33,
+      "advanced": 33,
+      "expert": 0
+    },
+    "source_url": "https://parksandtrips.com/ski-resort/wmwi-wilmot-mountain/",
+    "exact_quote": "33% Beginner Runs, 33% Intermediate Runs, and 33% Advanced Runs",
+    "notes": "Parks & Trips ski guide. 26 trails with balanced 33/33/33 distribution (rounded)."
+  },
+  {
+    "slug": "windham-mountain",
+    "trails_total": 54,
+    "difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 46,
+      "advanced": 19,
+      "expert": 13
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Windham_Mountain_Club",
+    "exact_quote": "12 beginner trails, 25 intermediate trails, 10 advanced trails, and 7 expert trails out of 54 total trails",
+    "notes": "Wikipedia trail breakdown. 12/25/10/7 = ~22/46/19/13%. Matches current input values."
+  },
+  {
+    "slug": "winter-park",
+    "trails_total": 166,
+    "difficulty_pct": {
+      "beginner": 23,
+      "intermediate": 50,
+      "advanced": 21,
+      "expert": 29
+    },
+    "source_url": "https://snowbrains.com/winter-park-co-trip-report-a-destination-ski-resort-aiming-to-strike-the-perfect-balance-with-high-stakes/",
+    "exact_quote": "166 ... Beginner: 23% ... Intermediate: 50% ... Advanced: 21% ... Expert: 29%",
+    "notes": "SnowBrains trip report Quick Facts. Total reported as 166 marked trails (vs input 171). Note: percentages sum >100% which suggests overlap in classification on SnowBrains side."
+  },
+  {
+    "slug": "wintergreen-resort",
+    "trails_total": 26,
+    "difficulty_pct": {
+      "beginner": 23,
+      "intermediate": 35,
+      "advanced": 42,
+      "expert": 0
+    },
+    "source_url": "https://www.skierdeals.com/winter/wintergreen-skiing/",
+    "exact_quote": "26 trails across 129 acres, broken down roughly as 23% beginner, 35% intermediate, and 42% advanced",
+    "notes": "SkierDeals travel guide. 26 trails with 23/35/42 split (no expert tier)."
+  },
+  {
+    "slug": "winterplace-ski-resort",
+    "trails_total": 28,
+    "difficulty_pct": {
+      "beginner": 40,
+      "intermediate": 35,
+      "advanced": 25,
+      "expert": 0
+    },
+    "source_url": "https://snowbrains.com/winterplace-ski-resort-wv-keeps-the-winter-fun-rolling-into-march/",
+    "exact_quote": "Number of Trails: 28 Slopes and two Terrain Park ... Slope Difficulty: Easiest – 40%; Intermediate – 35%; Advanced – 25%",
+    "notes": "SnowBrains article. 28 slopes (matches input) with 40/35/25 split. Input had 39/36/25 (similar but rounded differently)."
+  },
+  {
+    "slug": "wisp-resort",
+    "trails_total": 34,
+    "difficulty_pct": {
+      "beginner": 41,
+      "intermediate": 28,
+      "advanced": 31,
+      "expert": 0
+    },
+    "source_url": "https://www.skisoutheast.com/resorts/wisp-resort/mountain-stats/",
+    "exact_quote": "Beginner: 41% Intermediate: 28% Advanced: 31%",
+    "notes": "SkiSoutheast regional ski news/stats site. 34 trails. 41/28/31% breakdown."
+  },
+  {
+    "slug": "wolf-creek",
+    "trails_total": 144,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 35,
+      "advanced": 25,
+      "expert": 20
+    },
+    "source_url": "https://snowbrains.com/wolf-creek-ski-area-co-conditions-report-strong-early-season-conditions-as-the-85th-season-ramps-up/",
+    "exact_quote": "144 named trails",
+    "notes": "SnowBrains conditions report confirms 144 named trails (revises older 133 figure). Difficulty 20/35/25/20% per LocalFreshies/PeakRankings (SnowBrains doesn't publish % breakdown in this report)."
+  },
+  {
+    "slug": "woods-valley",
+    "trails_total": 21,
+    "difficulty_pct": {
+      "beginner": 29,
+      "intermediate": 19,
+      "advanced": 52,
+      "expert": 0
+    },
+    "source_url": "https://nyskiblog.com/directory/ny-ski-areas/central-ny/woods-valley/",
+    "exact_quote": "6 easy trails, 4 intermediate trails, and 11 advanced/expert trails",
+    "notes": "NY Ski Blog directory. 21 trails. 6/4/11 ≈ 29/19/52%."
+  },
+  {
+    "slug": "woodstock-nordic-center",
+    "trails_total": 48,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 50,
+      "advanced": 20,
+      "expert": 0
+    },
+    "source_url": "https://www.indyskipass.com/our-resorts/woodstock-nordic-center",
+    "exact_quote": "30% Beginner, 50% Intermediate, and 20% Advanced",
+    "notes": "Indy Pass partner page. 48 trails (45 km of total nordic trail length). 30/50/20 split for nordic center."
+  }
+]

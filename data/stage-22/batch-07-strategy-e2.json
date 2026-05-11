@@ -1,0 +1,392 @@
+[
+  {
+    "slug": "huff-hills",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 60,
+      "intermediate": 27,
+      "advanced": 13,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/huff-hills/",
+    "exact_quote": "Total: 3 km | Easy 1.8 km (60 %) | Intermediate 0.8 km (27 %) | Difficult 0.4 km (13 %)",
+    "notes": "km-based % from skiresort.info; trails_total not listed; expert not reported"
+  },
+  {
+    "slug": "hunt-hollow-club",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 40,
+      "intermediate": 40,
+      "advanced": 20,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/hunt-hollow-ski-club/",
+    "exact_quote": "Total: 5 km | Easy 2 km (40 %) | Intermediate 2 km (40 %) | Difficult 1 km (20 %)",
+    "notes": "km-based % from skiresort.info; trails_total not listed; expert not reported"
+  },
+  {
+    "slug": "hunter-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 60,
+      "advanced": 15,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/hunter-mountain/",
+    "exact_quote": "Total: 55 km | Easy 13.8 km (25 %) | Intermediate 33 km (60 %) | Difficult 8.2 km (15 %)",
+    "notes": "km-based % from skiresort.info; trails_total not listed; expert not reported"
+  },
+  {
+    "slug": "hurricane-ridge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 4,
+      "intermediate": 61,
+      "advanced": 35,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/hurricane-ridge/",
+    "exact_quote": "Total: 2.3 km | Easy 0.1 km (4 %) | Intermediate 1.4 km (61 %) | Difficult 0.8 km (35 %)",
+    "notes": "km-based % from skiresort.info; trails_total not listed; expert not reported"
+  },
+  {
+    "slug": "hyland-hills",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 50,
+      "intermediate": 33,
+      "advanced": 17,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/hyland-hills/",
+    "exact_quote": "Total: 1.2 km | Easy 0.6 km (50 %) | Intermediate 0.4 km (33 %) | Difficult 0.2 km (17 %)",
+    "notes": "km-based % from skiresort.info; trails_total not listed; expert not reported"
+  },
+  {
+    "slug": "indianhead-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "NOT FOUND on skiresort.info; tried /indianhead-mountain-bigsnow-resort/, /indianhead/, /indianhead-mountain-resort/ — all redirect to homepage"
+  },
+  {
+    "slug": "jack-frost-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 50,
+      "intermediate": 46,
+      "advanced": 4,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/jack-frost-mountain/",
+    "exact_quote": "Easy 6 km (50 %) Intermediate 5.5 km (46 %) Difficult 0.5 km (4 %)",
+    "notes": "km-based % from skiresort.info; trails_total not listed; expert not reported"
+  },
+  {
+    "slug": "jackson-hole",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 14,
+      "intermediate": 43,
+      "advanced": 43,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/jackson-hole/",
+    "exact_quote": "For skiing and snowboarding, there are 116 km of slopes available. | Easy 16 km (14 %) | Intermediate 50 km (43 %) | Difficult 50 km (43 %)",
+    "notes": "km-based % from skiresort.info; trails_total not listed; expert not reported"
+  },
+  {
+    "slug": "jackson-xc",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "NOT FOUND on skiresort.info; tried /jackson-xc/, /jackson-ski-touring/, /jackson-cross-country/ — all redirect to homepage (Nordic-only XC area unlikely indexed)"
+  },
+  {
+    "slug": "jay-peak",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 41,
+      "advanced": 39,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/jay-peak/",
+    "exact_quote": "For skiing and snowboarding, there are 76 km of slopes available. | Easy 15 km (20 %) | Intermediate 31 km (41 %) | Difficult 30 km (39 %)",
+    "notes": "km-based % from skiresort.info; trails_total not listed; expert not reported"
+  },
+  {
+    "slug": "jiminy-peak",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 45,
+      "intermediate": 22,
+      "advanced": 33,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/jiminy-peak/",
+    "exact_quote": "Total: 9.1 km | Easy 4.1 km (45 %) | Intermediate 2 km (22 %) | Difficult 3 km (33 %)",
+    "notes": "km-based % from skiresort.info; trails_total not listed; expert not reported"
+  },
+  {
+    "slug": "june-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 15,
+      "intermediate": 40,
+      "advanced": 45,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/june-mountain/",
+    "exact_quote": "For skiing and snowboarding, there are 41 km of slopes available. | Easy 6.2 km (15 %) | Intermediate 16.4 km (40 %) | Difficult 18.4 km (45 %)",
+    "notes": "km-based % from skiresort.info; trails_total not listed; expert not reported"
+  },
+  {
+    "slug": "kelly-canyon",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 42,
+      "advanced": 25,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/kelly-canyon/",
+    "exact_quote": "Total: 12 km | Easy 4 km (33 %) | Intermediate 5 km (42 %) | Difficult 3 km (25 %)",
+    "notes": "km-based % from skiresort.info; trails_total not listed; expert not reported"
+  },
+  {
+    "slug": "keystone",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 48,
+      "advanced": 33,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/keystone/",
+    "exact_quote": "135 km of slopes and 100 km of ski routes | Easy 25 km (19 %) | Intermediate 65 km (48 %) | Difficult 45 km (33 %)",
+    "notes": "km-based % from skiresort.info; trails_total not listed; expert not reported"
+  },
+  {
+    "slug": "killington",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 17,
+      "intermediate": 40,
+      "advanced": 43,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/killington/",
+    "exact_quote": "For skiing and snowboarding, there are 118.4 km of slopes available. | Easy 20 km (17 %) | Intermediate 47.4 km (40 %) | Difficult 51 km (43 %)",
+    "notes": "km-based % from skiresort.info; trails_total not listed; expert not reported"
+  },
+  {
+    "slug": "king-pine",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "NOT FOUND on skiresort.info; tried /king-pine/, /king-pine-ski-area-purity-springs-resort/, /king-pine-purity-spring/ — all redirect to homepage"
+  },
+  {
+    "slug": "kirkwood-mountain-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 23,
+      "intermediate": 46,
+      "advanced": 31,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/kirkwood/",
+    "exact_quote": "For skiing and snowboarding, there are 65 km of slopes available. | Easy 15 km (23 %) | Intermediate 30 km (46 %) | Difficult 20 km (31 %)",
+    "notes": "km-based % from skiresort.info; trails_total not listed; expert not reported"
+  },
+  {
+    "slug": "kissing-bridge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 27,
+      "advanced": 48,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/kissing-bridge/",
+    "exact_quote": "Total: 17.8 km | Easy 4.5 km (25 %) | Intermediate 4.8 km (27 %) | Difficult 8.5 km (48 %)",
+    "notes": "km-based % from skiresort.info; trails_total not listed; expert not reported"
+  },
+  {
+    "slug": "labrador-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 36,
+      "intermediate": 35,
+      "advanced": 29,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/labrador-mountain/",
+    "exact_quote": "Total: 17 km | Easy 6 km (36 %) | Intermediate 6 km (35 %) | Difficult 5 km (29 %)",
+    "notes": "km-based % from skiresort.info; trails_total not listed; expert not reported"
+  },
+  {
+    "slug": "lake-city-ski-hill",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 70,
+      "intermediate": 30,
+      "advanced": 0,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/lake-city-ski-hill/",
+    "exact_quote": "Total: 1 km | Easy 0.7 km (70 %) | Intermediate 0.3 km (30 %) | Difficult 0 km (0 %)",
+    "notes": "km-based % from skiresort.info; trails_total not listed; expert reported as 0 (Difficult = 0)"
+  },
+  {
+    "slug": "laurel-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 49,
+      "intermediate": 37,
+      "advanced": 14,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/laurel-mountain/",
+    "exact_quote": "Total: 8 km | Easy 4 km (49 %) | Intermediate 3 km (37 %) | Difficult 1 km (14 %)",
+    "notes": "km-based % from skiresort.info; trails_total not listed; expert not reported"
+  },
+  {
+    "slug": "leavenworth-ski-hill",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 100,
+      "intermediate": 0,
+      "advanced": 0,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/leavenworth-ski-hill/",
+    "exact_quote": "Total: 1 km | Easy 1 km (100 %) | Intermediate 0 km (0 %) | Difficult 0 km (0 %)",
+    "notes": "km-based % from skiresort.info; trails_total not listed; expert reported as 0 (Difficult = 0)"
+  },
+  {
+    "slug": "leavenworth-winter-sports-club",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "NOT FOUND on skiresort.info as distinct entry; likely same as Leavenworth Ski Hill (operated by Leavenworth Winter Sports Club)"
+  },
+  {
+    "slug": "lee-canyon",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "NOT FOUND on skiresort.info; tried /lee-canyon/ and /lee-canyon-las-vegas-ski-snowboard-resort/ — both redirect to homepage"
+  },
+  {
+    "slug": "lees-ski-hill",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 100,
+      "intermediate": 0,
+      "advanced": 0,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/lees-ski-hill-ouray/",
+    "exact_quote": "For skiing and snowboarding, there are 0.1 km of slopes available. | Easy 0.1 km (100 %) | Intermediate 0 km (0 %) | Difficult 0 km (0 %)",
+    "notes": "km-based % from skiresort.info; trails_total not listed; expert reported as 0 (Difficult = 0)"
+  },
+  {
+    "slug": "liberty-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 45,
+      "advanced": 22,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/liberty-mountain/",
+    "exact_quote": "For skiing and snowboarding, there are 9 km of slopes available. | Easy 3 km (33 %) | Intermediate 4 km (45 %) | Difficult 2 km (22 %)",
+    "notes": "km-based % from skiresort.info; trails_total not listed; expert not reported"
+  },
+  {
+    "slug": "little-ski-hill",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 100,
+      "intermediate": 0,
+      "advanced": 0,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/little-ski-hill/",
+    "exact_quote": "Total: 1.4 km | Easy 1.4 km (100 %) | Intermediate 0 km (0 %) | Difficult 0 km (0 %)",
+    "notes": "km-based % from skiresort.info; trails_total not listed; expert reported as 0 (Difficult = 0)"
+  },
+  {
+    "slug": "little-switzerland",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 37,
+      "intermediate": 43,
+      "advanced": 20,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/little-switzerland/",
+    "exact_quote": "Total: 3 km | Easy 1.1 km (37 %) | Intermediate 1.3 km (43 %) | Difficult 0.6 km (20 %)",
+    "notes": "km-based % from skiresort.info; trails_total not listed; expert not reported"
+  },
+  {
+    "slug": "loge-glacier",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "NOT FOUND on skiresort.info; tried /loge-glacier/ and /loge-camps-glacier/ — both redirect to homepage (LOGE Glacier is a lodge near Whitefish, not a separate indexed resort)"
+  },
+  {
+    "slug": "lookout-pass",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 15,
+      "intermediate": 41,
+      "advanced": 44,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/lookout-pass/",
+    "exact_quote": "For skiing and snowboarding, there are 41 km of slopes available. | Easy 6 km (15 %) | Intermediate 17 km (41 %) | Difficult 18 km (44 %)",
+    "notes": "km-based % from skiresort.info; trails_total not listed; expert not reported"
+  }
+]

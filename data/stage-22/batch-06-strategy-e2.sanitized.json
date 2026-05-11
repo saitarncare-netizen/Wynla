@@ -1,0 +1,392 @@
+[
+  {
+    "slug": "granby-ranch",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 50,
+      "advanced": 20,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/granby-ranch/",
+    "exact_quote": "Total: 20 km | Easy 6 km (30 %) | Intermediate 10 km (50 %) | Difficult 4 km (20 %)",
+    "notes": "Difficulty % from km distribution. Expert null (no explicit expert category)."
+  },
+  {
+    "slug": "grand-targhee",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 16,
+      "intermediate": 50,
+      "advanced": 34,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/grand-targhee/",
+    "exact_quote": "57 km of slopes | Easy 9.1 km (16 %) | Intermediate 28.7 km (50 %) | Difficult 19.2 km (34 %)",
+    "notes": "Difficulty % from km distribution. Expert null (no explicit expert category)."
+  },
+  {
+    "slug": "granite-gorge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 50,
+      "intermediate": 33,
+      "advanced": 17,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/granite-gorge/",
+    "exact_quote": "Total: 6 km | Easy 3 km (50 %) | Intermediate 2 km (33 %) | Difficult 1 km (17 %)",
+    "notes": "Difficulty % from km distribution. Expert null (no explicit expert category)."
+  },
+  {
+    "slug": "granite-peak",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 40,
+      "advanced": 35,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/granite-peak/",
+    "exact_quote": "Total: 20 km | Easy: 5 km (25%) | Intermediate: 8 km (40%) | Difficult: 7 km (35%)",
+    "notes": "Difficulty % from km distribution. Expert null (no explicit expert category)."
+  },
+  {
+    "slug": "great-bear",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info (tried great-bear, great-bear-recreation-park, great-bear-sioux-falls)."
+  },
+  {
+    "slug": "great-bear-valley",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info (likely duplicate of great-bear; shares website)."
+  },
+  {
+    "slug": "great-divide",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 40,
+      "advanced": 40,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/great-divide/",
+    "exact_quote": "Total: 50 km | Easy: 10 km (20 %) | Intermediate: 20 km (40 %) | Difficult: 20 km (40 %)",
+    "notes": "Difficulty % from km distribution. Expert null (no explicit expert category)."
+  },
+  {
+    "slug": "great-glen-trails-outdoor-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info (cross-country/nordic center; likely not in database)."
+  },
+  {
+    "slug": "greek-peak",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 47,
+      "intermediate": 21,
+      "advanced": 32,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/greek-peak/",
+    "exact_quote": "Total: 19 km | Easy 9 km (47 %) | Intermediate 4 km (21 %) | Difficult 6 km (32 %)",
+    "notes": "Difficulty % from km distribution. Expert null (no explicit expert category)."
+  },
+  {
+    "slug": "gunstock-mountain-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 14,
+      "intermediate": 62,
+      "advanced": 24,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/gunstock/",
+    "exact_quote": "Total: 40 km | Easy 5 km (14 %) | Intermediate 25 km (62 %) | Difficult 10 km (24 %)",
+    "notes": "Difficulty % from km distribution. Expert null (no explicit expert category)."
+  },
+  {
+    "slug": "hatley-pointe",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 50,
+      "intermediate": 33,
+      "advanced": 17,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/hatley-pointe/",
+    "exact_quote": "Total: 6 km | Easy 3 km (50 %) | Intermediate 2 km (33 %) | Difficult 1 km (17 %)",
+    "notes": "Difficulty % from km distribution. Expert null (no explicit expert category)."
+  },
+  {
+    "slug": "haymaker-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info (cross-country/nordic center; likely not in database)."
+  },
+  {
+    "slug": "heavenly-mountain-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 45,
+      "advanced": 36,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/heavenly/",
+    "exact_quote": "94 km of slopes and 40 km of ski routes | Easy 18 km (19 %) | Intermediate 42 km (45 %) | Difficult 34 km (36 %)",
+    "notes": "Difficulty % from km distribution (slopes only). Expert null (no explicit expert category)."
+  },
+  {
+    "slug": "hermon-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 66,
+      "intermediate": 18,
+      "advanced": 16,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/hermon-mountain/",
+    "exact_quote": "Total: 3 km | Easy 2 km (66 %) | Intermediate 0.5 km (18 %) | Difficult 0.5 km (16 %)",
+    "notes": "Difficulty % from km distribution. Expert null (no explicit expert category)."
+  },
+  {
+    "slug": "hesperus-ski-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 50,
+      "advanced": 20,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/hesperus-ski-area/",
+    "exact_quote": "Total: 10 km | Easy: 3 km (30 %) | Intermediate: 5 km (50 %) | Difficult: 2 km (20 %)",
+    "notes": "Difficulty % from km distribution. Expert null (no explicit expert category)."
+  },
+  {
+    "slug": "hidden-valley",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 45,
+      "intermediate": 33,
+      "advanced": 22,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/hidden-valley-pa/",
+    "exact_quote": "9 km of slopes | Easy 4 km (45 %) | Intermediate 3 km (33 %) | Difficult 2 km (22 %)",
+    "notes": "Difficulty % from km distribution. Expert null (no explicit expert category)."
+  },
+  {
+    "slug": "hidden-valley-mo",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info (tried hidden-valley-missouri, hidden-valley-eureka)."
+  },
+  {
+    "slug": "high-point-xc-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info (cross-country center; likely not in database)."
+  },
+  {
+    "slug": "highlands",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info (tried the-highlands-harbor-springs, highlands-harbor-springs)."
+  },
+  {
+    "slug": "hilltop-ski-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 80,
+      "intermediate": 20,
+      "advanced": 0,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/hilltop-anchorage/",
+    "exact_quote": "5 km of slopes | Easy: 4 km (80 %) | Intermediate: 1 km (20 %) | Difficult: 0 km (0 %)",
+    "notes": "Difficulty % from km distribution. Advanced 0 explicit. Expert null (no explicit expert category)."
+  },
+  {
+    "slug": "hoedown-hill",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info."
+  },
+  {
+    "slug": "hogadon",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info (tried hogadon-basin)."
+  },
+  {
+    "slug": "holiday-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info (tried holiday-mountain, holiday-mountain-fun-park, holiday-mountain-monticello)."
+  },
+  {
+    "slug": "holiday-valley",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 40,
+      "advanced": 27,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/holiday-valley/",
+    "exact_quote": "48 km of slopes | Easy 16 km (33 %) | Intermediate 19 km (40 %) | Difficult 13 km (27 %)",
+    "notes": "Difficulty % from km distribution. Expert null (no explicit expert category)."
+  },
+  {
+    "slug": "holimont",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 30,
+      "advanced": 50,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/holimont/",
+    "exact_quote": "Total: 20 km | Easy 4 km (20 %) | Intermediate 6 km (30 %) | Difficult 10 km (50 %)",
+    "notes": "Difficulty % from km distribution. Expert null (no explicit expert category)."
+  },
+  {
+    "slug": "homestake-lodge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info (nordic/cross-country lodge; likely not in database)."
+  },
+  {
+    "slug": "homestead-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 52,
+      "intermediate": 41,
+      "advanced": 7,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/the-homestead/",
+    "exact_quote": "2.9 km of slopes | Easy 1.5 km (52 %) | Intermediate 1.2 km (41 %) | Difficult 0.2 km (7 %)",
+    "notes": "WARNING: skiresort.info entry is The Omni Homestead (VA), but input slug is for The Homestead in MI. Possible mismatch — verify resort identity. Difficulty % from km distribution. Expert null."
+  },
+  {
+    "slug": "homewood-mountain-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info (tried homewood, homewood-mountain, homewood-resort, homewood-resort-lake-tahoe)."
+  },
+  {
+    "slug": "hoodoo",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 47,
+      "advanced": 18,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/hoodoo-ski-area/",
+    "exact_quote": "Total: 17 km | Easy 6 km (35 %) | Intermediate 8 km (47 %) | Difficult 3 km (18 %)",
+    "notes": "Difficulty % from km distribution. Expert null (no explicit expert category)."
+  },
+  {
+    "slug": "howelsen-hill",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 42,
+      "intermediate": 37,
+      "advanced": 21,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/howelsen-hill-steamboat-springs/",
+    "exact_quote": "4 km | Easy 1.7 km (42 %) | Intermediate 1.5 km (37 %) | Difficult 0.8 km (21 %)",
+    "notes": "Difficulty % from km distribution. Expert null (no explicit expert category)."
+  }
+]

@@ -1,0 +1,317 @@
+[
+  {
+    "slug": "showdown",
+    "trails_total": 39,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Showdown_Ski_Area",
+    "exact_quote": "39 trails are available at Showdown Ski Area",
+    "notes": "Wikipedia gives trail count only; no difficulty percentages provided. Only narrative mentions specific runs (Glory Hole, Teds Tumble)."
+  },
+  {
+    "slug": "sierra-at-tahoe",
+    "trails_total": 46,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 50,
+      "advanced": 25,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Sierra-at-Tahoe",
+    "exact_quote": "46 total 25% beginner 50% intermediate 25% advanced",
+    "notes": "Wikipedia infobox; three-category breakdown (no expert)."
+  },
+  {
+    "slug": "silver-mountain",
+    "trails_total": 67,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 40,
+      "advanced": 30,
+      "expert": 10
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Silver_Mountain_Resort",
+    "exact_quote": "20% beginner, 40% intermediate, 30% advanced, and 10% expert",
+    "notes": "Wikipedia infobox lists 67 trails; Mountain statistics mention 81 named trails. Difficulty matches input."
+  },
+  {
+    "slug": "silverton-mountain",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Silverton_Mountain",
+    "exact_quote": "There are no groomed runs and no cut trails.",
+    "notes": "Silverton has no trails per se; backcountry/heli terrain for advanced/expert only. Wikipedia explicitly states no cut trails — N/A for our schema."
+  },
+  {
+    "slug": "sipapu",
+    "trails_total": 41,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 40,
+      "advanced": 25,
+      "expert": 15
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Sipapu_(ski_area)",
+    "exact_quote": "There are 41 trails and 6 lifts ... 20% beginner...40% intermediate...25% advanced...15% expert",
+    "notes": "Wikipedia infobox/article."
+  },
+  {
+    "slug": "skaneateles-club",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article for Skaneateles Ski Club. Town article does not mention it. No regional DB data found via Wikipedia route."
+  },
+  {
+    "slug": "ski-apache",
+    "trails_total": 55,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 60,
+      "advanced": 20,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Ski_Apache",
+    "exact_quote": "55 total 20% beginner 60% intermediate 20% advanced",
+    "notes": "Wikipedia infobox; three-category breakdown (no expert)."
+  },
+  {
+    "slug": "ski-bradford",
+    "trails_total": 15,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 27,
+      "advanced": 53,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Ski_Bradford",
+    "exact_quote": "Ski Bradford consists of 3 green circles or easy, 4 blue squares or intermediate trails and 8 black diamonds or difficult.",
+    "notes": "Counts (3/4/8) of 15 yield 20/27/53 — matches input."
+  },
+  {
+    "slug": "ski-brule",
+    "trails_total": 17,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Ski_Brule",
+    "exact_quote": "The trails include one double black diamond, three black diamonds, six blue squares, five green circles, and a 30-acre terrain park consisting of two trails.",
+    "notes": "Wikipedia gives counts: 5 green + 6 blue + 3 black + 1 double-black = 15 trails (or 17 total counting park). Article does not state explicit percentages."
+  },
+  {
+    "slug": "ski-butternut",
+    "trails_total": 22,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Ski_Butternut",
+    "exact_quote": "The mountain has 22 trails",
+    "notes": "Wikipedia confirms 22 trails (matches input); article provides no difficulty percentage breakdown."
+  },
+  {
+    "slug": "ski-cooper",
+    "trails_total": 60,
+    "difficulty_pct": {
+      "beginner": 31,
+      "intermediate": 35,
+      "advanced": 34,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Ski_Cooper",
+    "exact_quote": "60 total ... 31% beginner ... 35% intermediate ... 34% advanced/expert",
+    "notes": "Wikipedia infobox. Article elsewhere mentions 64 runs — using infobox number (60) as primary."
+  },
+  {
+    "slug": "ski-gull",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article exists for Ski Gull. No data."
+  },
+  {
+    "slug": "ski-santa-fe",
+    "trails_total": 88,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 40,
+      "advanced": 40,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Ski_Santa_Fe",
+    "exact_quote": "88 total ... 20% beginner ... 40% intermediate ... 40% advanced",
+    "notes": "Wikipedia infobox; three-category breakdown. Difficulty matches input."
+  },
+  {
+    "slug": "ski-sawmill",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article exists for Ski Sawmill. No data."
+  },
+  {
+    "slug": "ski-sundown",
+    "trails_total": 17,
+    "difficulty_pct": {
+      "beginner": 53,
+      "intermediate": 23,
+      "advanced": 18,
+      "expert": 6
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Ski_Sundown",
+    "exact_quote": "Easiest 53% More Difficult 23% Most Difficult: 18% Extremely Difficult: 6%",
+    "notes": "Wikipedia confirms 17 trails (input has 16); difficulty matches input within 1pp on intermediate."
+  },
+  {
+    "slug": "ski-ward",
+    "trails_total": 9,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 33,
+      "advanced": 0,
+      "expert": 33
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Ski_Ward",
+    "exact_quote": "Beginner: 3, Intermediate: 3, Expert: 3",
+    "notes": "Wikipedia counts: 3/3/3 of 9 = 33/33/33; no advanced bucket reported, all top-tier classified as Expert."
+  },
+  {
+    "slug": "skiland",
+    "trails_total": 40,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Moose_Mountain_(Alaska)",
+    "exact_quote": "40 runs of intermediate and advanced terrain and 1300 vertical feet",
+    "notes": "Wikipedia gives trail count (40); no explicit percentages — only mentions intermediate/advanced terrain with short rope tow for beginners."
+  },
+  {
+    "slug": "sleeping-giant",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article found for Sleeping Giant Ski Area (WY). No data."
+  },
+  {
+    "slug": "sleepy-hollow",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article exists for Sleepy Hollow Sports Park (IA). No data."
+  },
+  {
+    "slug": "smugglers-notch",
+    "trails_total": 78,
+    "difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 50,
+      "advanced": 25,
+      "expert": 6
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Smugglers%27_Notch_Resort",
+    "exact_quote": "78 19% Easy 50% Intermediate 25% Difficult 6% Extremely difficult",
+    "notes": "Wikipedia infobox. Intermediate 50 vs input 49 (within 1pp)."
+  },
+  {
+    "slug": "snow-creek",
+    "trails_total": 12,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Snow_Creek_(ski_resort)",
+    "exact_quote": "11 trails including 1 advanced and 2 easy.",
+    "notes": "Wikipedia infobox lists 12 trails; article body says 11 with 1 advanced, 2 easy. No explicit difficulty percentages."
+  },
+  {
+    "slug": "snow-king",
+    "trails_total": 35,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Snow_King_Mountain",
+    "exact_quote": "Trails: 35",
+    "notes": "Wikipedia gives trail count only (35; input had 41); no difficulty percentages provided."
+  },
+  {
+    "slug": "snow-ridge",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article exists for Snow Ridge ski area (NY). No data."
+  },
+  {
+    "slug": "snow-snake",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article exists for Snow Snake Mountain (MI). No data."
+  },
+  {
+    "slug": "snow-summit",
+    "trails_total": 31,
+    "difficulty_pct": {
+      "beginner": 10,
+      "intermediate": 65,
+      "advanced": 25,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Snow_Summit",
+    "exact_quote": "31 total... 10% beginner... 25% low intermediate... 40% intermediate... 25% advanced",
+    "notes": "Wikipedia: 10/25/40/25. Combined low-intermediate + intermediate = 65% intermediate."
+  },
+  {
+    "slug": "snow-trails",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article exists for Snow Trails (OH). No data."
+  },
+  {
+    "slug": "snow-valley",
+    "trails_total": 29,
+    "difficulty_pct": {
+      "beginner": 14,
+      "intermediate": 45,
+      "advanced": 31,
+      "expert": 10
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Snow_Valley_Mountain_Resort",
+    "exact_quote": "29 total 14% easiest 45% More difficult 31% Most difficult 10% Experts only",
+    "notes": "Wikipedia infobox. Difficulty matches input exactly."
+  },
+  {
+    "slug": "snowbasin",
+    "trails_total": 104,
+    "difficulty_pct": {
+      "beginner": 7,
+      "intermediate": 29,
+      "advanced": 34,
+      "expert": 31
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Snowbasin",
+    "exact_quote": "Total runs: 104 Run ratings: 7 easier, 30 more difficult, 35 most difficult, 32 expert only",
+    "notes": "Wikipedia counts: 7/30/35/32 of 104 = 7/29/34/31. Matches input exactly."
+  },
+  {
+    "slug": "snowbird",
+    "trails_total": 169,
+    "difficulty_pct": {
+      "beginner": 27,
+      "intermediate": 38,
+      "advanced": 35,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Snowbird,_Utah",
+    "exact_quote": "169 trails: 27% easiest, 38% more difficult, 35% most difficult",
+    "notes": "Wikipedia confirms input exactly. Three-category breakdown (advanced + expert combined into 35%)."
+  },
+  {
+    "slug": "snowhaven",
+    "trails_total": 9,
+    "difficulty_pct": {
+      "beginner": 75,
+      "intermediate": 25,
+      "advanced": 0,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Snowhaven",
+    "exact_quote": "There are two surface lifts, a T-bar and a rope tow, serving 9 trails... terrain is rated 75% beginner and 25% intermediate.",
+    "notes": "Wikipedia confirms 9 trails with 75/25 split."
+  }
+]

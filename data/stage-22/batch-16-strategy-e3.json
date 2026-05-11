@@ -1,0 +1,28 @@
+[
+  {
+    "slug": "woodward-park-city",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "STRICT mode (OnTheSnow + skicentral) — no data found. OnTheSnow has no dedicated resort page for Woodward Park City; it is referenced only as a Park City area indoor sports/action sports facility (quote from onthesnow.com/utah/ski-resorts: 'Woodward Park City is also located here for indoor sports.'). Tried URLs: onthesnow.com/utah/woodward-park-city/skiresort (404), /ski-resort (404), /woodward-park-city (404), /woodward-park-city/skireport (404). skicentral.com/woodwardparkcity-stats.html returns 404 and Woodward Park City is not listed on skicentral.com/utah.html. 4-fetch cap reached for strict sources."
+  },
+  {
+    "slug": "yellowstone-club",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "STRICT mode (OnTheSnow + skicentral) — no data found. Yellowstone Club is a private members-only resort and is not indexed on either source. OnTheSnow montana resorts list references it only in FAQ as 'the exclusive 15,200-acre Yellowstone Club ... private resort' with no dedicated stats page. Tried URLs: onthesnow.com/montana/yellowstone-club/skiresort (404), /ski-resort (404), /yellowstone-club (404), /yellowstone-club/skireport (404). skicentral.com/yellowstoneclub-stats.html returns 404 and Yellowstone Club is not listed on skicentral.com/montana.html. 4-fetch cap reached for strict sources."
+  }
+]

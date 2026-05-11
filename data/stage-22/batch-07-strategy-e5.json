@@ -1,0 +1,242 @@
+[
+  {
+    "slug": "huff-hills",
+    "trails_total": 16,
+    "difficulty_pct": { "beginner": 25, "intermediate": 25, "advanced": 50, "expert": null },
+    "source_url": "https://www.indyskipass.com/our-resorts/huff-hills-ski-area",
+    "exact_quote": "16 trails ... 25% Beginner, 25% Intermediate, 50% Advanced",
+    "notes": "Indy Pass resort partner page (press-kit style). 3-bucket model; expert null."
+  },
+  {
+    "slug": "hunt-hollow-club",
+    "trails_total": 21,
+    "difficulty_pct": { "beginner": 32, "intermediate": 21, "advanced": 48, "expert": null },
+    "source_url": "https://www.indyskipass.com/our-resorts/hunt-hollow-ski-club",
+    "exact_quote": "21 trails ... 32% Beginner, 21% Intermediate, 48% Advanced",
+    "notes": "Indy Pass resort partner page. Total 32+21+48=101 (rounding). 3-bucket; expert null."
+  },
+  {
+    "slug": "hunter-mountain",
+    "trails_total": 67,
+    "difficulty_pct": { "beginner": 25, "intermediate": 30, "advanced": 30, "expert": 15 },
+    "source_url": "https://snowbrains.com/hunter-mountain-ny-has-started-making-snow-for-the-2025-26-season/",
+    "exact_quote": "67 Trails: 15% Expert, 30% Advanced, 30% Intermediate, 25% Beginner",
+    "notes": "SnowBrains Quick Facts. 4-bucket model with explicit expert split."
+  },
+  {
+    "slug": "hurricane-ridge",
+    "trails_total": 12,
+    "difficulty_pct": { "beginner": 20, "intermediate": 40, "advanced": 40, "expert": null },
+    "source_url": "https://www.indyskipass.com/our-resorts/hurricane-ridge",
+    "exact_quote": "12 trails ... 20% Beginner, 40% Intermediate, 40% Advanced",
+    "notes": "Indy Pass resort partner page. 3-bucket; expert null."
+  },
+  {
+    "slug": "hyland-hills",
+    "trails_total": 13,
+    "difficulty_pct": { "beginner": 30, "intermediate": 35, "advanced": 35, "expert": null },
+    "source_url": "https://www.indyskipass.com/our-resorts/hyland-hills",
+    "exact_quote": "13 ... 30% Beginner, 35% Intermediate, 35% Advanced",
+    "notes": "Indy Pass resort partner page. 3-bucket; expert null. Note: differs from input pct (input had 27/36/36/0)."
+  },
+  {
+    "slug": "indianhead-mountain",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Resort rebranded to Jackson Creek Summit / Snowriver in 2022. SnowBrains articles cover acquisition but no explicit qualifying quote with both trail count and pct breakdown for Indianhead specifically."
+  },
+  {
+    "slug": "jack-frost-mountain",
+    "trails_total": 20,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": "https://snowbrains.com/pennsylvanias-epic-pass-playground-how-all-8-resorts-stack-up/",
+    "exact_quote": "Jack Frost (100 acres, 600-foot drop, 20 trails)",
+    "notes": "SnowBrains article confirms 20 trails but provides no difficulty pct breakdown for Jack Frost."
+  },
+  {
+    "slug": "jackson-hole",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Multiple SnowBrains JHMR articles reviewed; none present a Quick Facts table with explicit trail count + difficulty pct in qualifying news/press source."
+  },
+  {
+    "slug": "jackson-xc",
+    "trails_total": 60,
+    "difficulty_pct": { "beginner": 50, "intermediate": 25, "advanced": 25, "expert": null },
+    "source_url": "https://www.indyskipass.com/our-resorts/jackson-xc",
+    "exact_quote": "60 trails ... 100km ... 50% Beginner, 25% Intermediate, 25% Advanced",
+    "notes": "Indy Pass resort partner page. Nordic XC area. 3-bucket; expert null."
+  },
+  {
+    "slug": "jay-peak",
+    "trails_total": 81,
+    "difficulty_pct": { "beginner": 20, "intermediate": 40, "advanced": 40, "expert": null },
+    "source_url": "https://snowbrains.com/jay-peak-vt-report-west-coast-snowfall-east-coast-skiing/",
+    "exact_quote": "Number of Trails: 81 ... Terrain Breakdown: Beginner: 20%, Intermediate: 40%, Advanced: 40%",
+    "notes": "SnowBrains Quick Facts. 3-bucket; expert null."
+  },
+  {
+    "slug": "jiminy-peak",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "SnowBrains and StormSkiing articles reference 45 trails but neither provides a complete trails+pct breakdown in a single qualifying quote."
+  },
+  {
+    "slug": "june-mountain",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "SnowBrains 'California's Best Kept Secret' and 'Chasing Second Season' articles describe terrain but do not give explicit trail count + pct breakdown in qualifying quote."
+  },
+  {
+    "slug": "kelly-canyon",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "SnowBrains Kelly Canyon report cites 51 runs but no difficulty pct breakdown. No qualifying combined quote found."
+  },
+  {
+    "slug": "keystone",
+    "trails_total": 140,
+    "difficulty_pct": { "beginner": 12, "intermediate": 39, "advanced": 49, "expert": null },
+    "source_url": "https://snowbrains.com/keystone-resort-co-tests-snowguns-in-preparation-for-the-start-of-the-2025-26-season/",
+    "exact_quote": "Trails: 140 ... Beginner Terrain: 12%, Intermediate Terrain: 39%, Advanced Terrain: 49%",
+    "notes": "SnowBrains 'Keystone Resort Mountain Stats' section. 3-bucket; expert null. Note: trail count differs from other sources (131 elsewhere)."
+  },
+  {
+    "slug": "killington",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Multiple SnowBrains Killington articles reviewed; none present a Quick Facts table with explicit trail count + pct breakdown together in a qualifying quote."
+  },
+  {
+    "slug": "king-pine",
+    "trails_total": 23,
+    "difficulty_pct": { "beginner": 50, "intermediate": 30, "advanced": 20, "expert": null },
+    "source_url": "https://www.indyskipass.com/our-resorts/king-pine",
+    "exact_quote": "Trails: 23 ... Beginner: 50%, Intermediate: 30%, Advanced: 20%",
+    "notes": "Indy Pass resort partner page. 3-bucket; expert null. Note: pct differs significantly from input (44/31/25/0)."
+  },
+  {
+    "slug": "kirkwood-mountain-resort",
+    "trails_total": 86,
+    "difficulty_pct": { "beginner": 12, "intermediate": 30, "advanced": 38, "expert": 20 },
+    "source_url": "https://snowbrains.com/hometown-mountain-shoutout-kirkwood-ca-the-wood/",
+    "exact_quote": "Trails: 86 (12% Beginner, 30% Intermediate, 38% Advanced, 20% Expert)",
+    "notes": "SnowBrains Mountain Stats section. 4-bucket model."
+  },
+  {
+    "slug": "kissing-bridge",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "StormSkiing article on Kissing Bridge ownership change discusses 22 trails snowmaking expansion but no qualifying combined trail count + pct breakdown."
+  },
+  {
+    "slug": "labrador-mountain",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not on Indy Pass. No qualifying SnowBrains/press quote with both trail count and difficulty pct found."
+  },
+  {
+    "slug": "lake-city-ski-hill",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "SnowBrains 'Colorado's 6 City Run Ski Areas' article covers Lake City but contains no explicit trail count or pct quote."
+  },
+  {
+    "slug": "laurel-mountain",
+    "trails_total": 19,
+    "difficulty_pct": { "beginner": 52, "intermediate": 36, "advanced": 16, "expert": null },
+    "source_url": "https://snowbrains.com/laurel-mountain-skiing-pennsylvanias-only-private-ski-club/",
+    "exact_quote": "Trails: 19 ... Beginner Terrain: 52%, Intermediate Terrain: 36%, Advanced Terrain: 16%",
+    "notes": "SnowBrains Quick Facts and History section. 3-bucket; expert null. Differs from input (50/35/15/0)."
+  },
+  {
+    "slug": "leavenworth-ski-hill",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Same Leavenworth Winter Sports Club operation as separate slug below. No qualifying news/press quote with both trail count and pct breakdown."
+  },
+  {
+    "slug": "leavenworth-winter-sports-club",
+    "trails_total": 3,
+    "difficulty_pct": { "beginner": 33, "intermediate": 33, "advanced": 33, "expert": null },
+    "source_url": "https://www.indyskipass.com/our-resorts/leavenworth-winter-sports-club",
+    "exact_quote": "3 trails ... 33% Beginner, 33% Intermediate, 33% Advanced",
+    "notes": "Indy Pass resort partner page (alpine section). 3-bucket; expert null. Trails value matches input."
+  },
+  {
+    "slug": "lee-canyon",
+    "trails_total": 31,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": "https://snowbrains.com/lee-canyon-nv-launches-7-lift-ticket-deal-ahead-of-winter-season/",
+    "exact_quote": "about 31 trails that range from beginner to expert",
+    "notes": "SnowBrains confirms 31 trails. No explicit difficulty pct breakdown given."
+  },
+  {
+    "slug": "lees-ski-hill",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Tiny community ski hill in Ouray. No qualifying news/press quote with explicit trail count + pct breakdown."
+  },
+  {
+    "slug": "liberty-mountain",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "SnowBrains 'Hometown Mountain Shoutout' article mentions 16 runs but lacks explicit difficulty pct breakdown in qualifying quote."
+  },
+  {
+    "slug": "little-ski-hill",
+    "trails_total": 14,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": "https://www.indyskipass.com/our-resorts/little-ski-hill",
+    "exact_quote": "Trails: 14",
+    "notes": "Indy Pass resort partner page confirms 14 trails. No explicit difficulty pct breakdown on page."
+  },
+  {
+    "slug": "little-switzerland",
+    "trails_total": 16,
+    "difficulty_pct": { "beginner": 30, "intermediate": 40, "advanced": 30, "expert": null },
+    "source_url": "https://www.indyskipass.com/our-resorts/little-switzerland",
+    "exact_quote": "Trails: 16 ... 30% Beginner, 40% Intermediate, 30% Advanced",
+    "notes": "Indy Pass resort partner page. 3-bucket; expert null. Matches input trail count."
+  },
+  {
+    "slug": "loge-glacier",
+    "trails_total": 20,
+    "difficulty_pct": { "beginner": 45, "intermediate": 45, "advanced": 10, "expert": null },
+    "source_url": "https://www.indyskipass.com/our-resorts/loge-glacier",
+    "exact_quote": "20 trails ... 30km ... 45% Beginner, 45% Intermediate, 10% Advanced",
+    "notes": "Indy Pass resort partner page (Cross Country / Nordic). 3-bucket; expert null. Matches input trail count."
+  },
+  {
+    "slug": "lookout-pass",
+    "trails_total": 59,
+    "difficulty_pct": { "beginner": 20, "intermediate": 50, "advanced": 20, "expert": 10 },
+    "source_url": "https://skilookout.com/media-kit/",
+    "exact_quote": "59 named runs ... 20% easiest, 50% intermediate, 20% advanced, 10% expert",
+    "notes": "Lookout Pass official Media Kit (press kit). 4-bucket model. Differs from input pct."
+  }
+]

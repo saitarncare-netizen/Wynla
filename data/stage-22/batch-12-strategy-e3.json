@@ -1,0 +1,242 @@
+[
+  {
+    "slug": "showdown",
+    "trails_total": 39,
+    "difficulty_pct": {"beginner": 28, "intermediate": 44, "advanced": 28, "expert": 0},
+    "source_url": "https://www.onthesnow.com/montana/showdown-ski-area/ski-resort",
+    "exact_quote": "Beginners Runs 28% Intermediate Runs 44% Advanced Runs 28% Runs in Total 39",
+    "notes": "OnTheSnow; no expert category listed."
+  },
+  {
+    "slug": "sierra-at-tahoe",
+    "trails_total": 47,
+    "difficulty_pct": {"beginner": 21, "intermediate": 32, "advanced": 26, "expert": 21},
+    "source_url": "https://www.onthesnow.com/california/sierra-at-tahoe/ski-resort",
+    "exact_quote": "Beginners 21% Intermediate 32% Advanced 26% Expert 21% Runs in Total 47",
+    "notes": "OnTheSnow terrain section."
+  },
+  {
+    "slug": "silver-mountain",
+    "trails_total": 81,
+    "difficulty_pct": {"beginner": 20, "intermediate": 40, "advanced": 30, "expert": 10},
+    "source_url": "https://www.onthesnow.com/idaho/silver-mountain/ski-resort",
+    "exact_quote": "81 runs in total at Silver Mountain",
+    "notes": "OnTheSnow has 81 trails (vs current 83); difficulty pct from Silver Mountain external sources (20/40/30/10) matches current data."
+  },
+  {
+    "slug": "silverton-mountain",
+    "trails_total": 69,
+    "difficulty_pct": {"beginner": 0, "intermediate": 0, "advanced": 0, "expert": 100},
+    "source_url": "https://www.onthesnow.com/colorado/silverton-mountain/ski-resort",
+    "exact_quote": "69 total runs at the resort. Expert Runs: 100%",
+    "notes": "OnTheSnow; expert-only ski area, no groomed runs."
+  },
+  {
+    "slug": "sipapu",
+    "trails_total": 44,
+    "difficulty_pct": {"beginner": 21, "intermediate": 40, "advanced": 26, "expert": 14},
+    "source_url": "https://www.onthesnow.com/new-mexico/sipapu-ski-and-summer-resort/ski-resort",
+    "exact_quote": "44 total runs at the resort",
+    "notes": "OnTheSnow confirms 44 trails (vs current 43). Difficulty pct breakdown not on OnTheSnow page; keeping current values (21/40/26/14)."
+  },
+  {
+    "slug": "skaneateles-club",
+    "trails_total": 7,
+    "difficulty_pct": {"beginner": 45, "intermediate": 40, "advanced": 15, "expert": 0},
+    "source_url": "https://www.indyskipass.com/our-resorts/skaneateles-ski-club",
+    "exact_quote": "The terrain is distributed as 45% Beginner, 40% Intermediate, and 15% Advanced",
+    "notes": "OnTheSnow has no profile page for Skaneateles. Indy Pass listing used; trails count kept at 7 (existing)."
+  },
+  {
+    "slug": "ski-apache",
+    "trails_total": 55,
+    "difficulty_pct": {"beginner": 20, "intermediate": 60, "advanced": 0, "expert": 20},
+    "source_url": "https://skiapache.com/mountain-info/",
+    "exact_quote": "Trails & Runs: 55; Terrain Levels 20% Beginner 60% Intermediate 20% Expert",
+    "notes": "Official Ski Apache site; no advanced category, all higher-difficulty mapped to expert. OnTheSnow confirms 55 trails."
+  },
+  {
+    "slug": "ski-bradford",
+    "trails_total": 15,
+    "difficulty_pct": {"beginner": 10, "intermediate": 80, "advanced": 10, "expert": 0},
+    "source_url": "https://www.onthesnow.com/massachusetts/bradford-ski-area/ski-resort",
+    "exact_quote": "Beginners Runs 10% Intermediate Runs 80% Advanced Runs 10% Runs in Total 15",
+    "notes": "OnTheSnow; differs from current (20/27/53/0)."
+  },
+  {
+    "slug": "ski-brule",
+    "trails_total": 17,
+    "difficulty_pct": {"beginner": 35, "intermediate": 35, "advanced": 24, "expert": 6},
+    "source_url": "https://www.onthesnow.com/michigan/ski-brule/ski-resort",
+    "exact_quote": "Beginners 35% Intermediate 35% Advanced 24% Expert 6%; 17 runs across 150 acres",
+    "notes": "OnTheSnow."
+  },
+  {
+    "slug": "ski-butternut",
+    "trails_total": 22,
+    "difficulty_pct": {"beginner": 36, "intermediate": 36, "advanced": 27, "expert": 0},
+    "source_url": "https://www.onthesnow.com/massachusetts/ski-butternut/ski-resort",
+    "exact_quote": "Beginners 36% Intermediate 36% Advanced 27%; 22 runs across 100 acres",
+    "notes": "OnTheSnow; no expert category."
+  },
+  {
+    "slug": "ski-cooper",
+    "trails_total": 64,
+    "difficulty_pct": {"beginner": 19, "intermediate": 27, "advanced": 28, "expert": 27},
+    "source_url": "https://www.onthesnow.com/colorado/ski-cooper/ski-resort",
+    "exact_quote": "Beginners Runs 19% Intermediate Runs 27% Advanced Runs 28% Expert Runs 27% Runs in Total 64",
+    "notes": "OnTheSnow."
+  },
+  {
+    "slug": "ski-gull",
+    "trails_total": 10,
+    "difficulty_pct": {"beginner": 40, "intermediate": 30, "advanced": 0, "expert": 30},
+    "source_url": "https://www.skicentral.com/skigull.html",
+    "exact_quote": "Number of Trails: 10",
+    "notes": "skicentral has trail count only. Difficulty pct from Mt Ski Gull external listing (12 runs: 40% beginner / 30% intermediate / 30% expert)."
+  },
+  {
+    "slug": "ski-santa-fe",
+    "trails_total": 87,
+    "difficulty_pct": {"beginner": 17, "intermediate": 31, "advanced": 46, "expert": 6},
+    "source_url": "https://www.onthesnow.com/new-mexico/ski-santa-fe/ski-resort",
+    "exact_quote": "87 runs across 660 acres; Beginners 17% Intermediate 31% Advanced 46% Expert 6%",
+    "notes": "OnTheSnow."
+  },
+  {
+    "slug": "ski-sawmill",
+    "trails_total": 13,
+    "difficulty_pct": {"beginner": 31, "intermediate": 31, "advanced": 38, "expert": 0},
+    "source_url": "https://www.onthesnow.com/pennsylvania/ski-sawmill/ski-resort",
+    "exact_quote": "Beginners Runs 31% Intermediate Runs 31% Advanced Runs 38% Runs in Total 13",
+    "notes": "OnTheSnow."
+  },
+  {
+    "slug": "ski-sundown",
+    "trails_total": 17,
+    "difficulty_pct": {"beginner": 53, "intermediate": 24, "advanced": 18, "expert": 6},
+    "source_url": "https://www.onthesnow.com/connecticut/ski-sundown/ski-resort",
+    "exact_quote": "17 trails; Beginners 53% Intermediate 24% Advanced 18% Expert 6%",
+    "notes": "OnTheSnow; current value was 16 trails."
+  },
+  {
+    "slug": "ski-ward",
+    "trails_total": 9,
+    "difficulty_pct": {"beginner": 33, "intermediate": 33, "advanced": 0, "expert": 33},
+    "source_url": "https://www.onthesnow.com/massachusetts/ski-ward/ski-resort",
+    "exact_quote": "Beginners Runs: 33% Intermediate Runs: 33% Expert Runs: 33%; 9 runs in total across 45 acres",
+    "notes": "OnTheSnow; no advanced category."
+  },
+  {
+    "slug": "skiland",
+    "trails_total": 40,
+    "difficulty_pct": {"beginner": 15, "intermediate": 65, "advanced": 20, "expert": 0},
+    "source_url": "https://www.indyskipass.com/our-resorts/moose-mountain",
+    "exact_quote": "40 runs of intermediate and advanced terrain. 15-percent of the mountain rates as green for beginners and 20-percent as black diamond for advanced skiers, leaving well over 60-percent of Moose Mountain rating blue for intermediate skiers",
+    "notes": "OnTheSnow has no profile for Moose Mountain/Skiland AK; Indy Pass source. Trail count 40 (vs current null)."
+  },
+  {
+    "slug": "sleeping-giant",
+    "trails_total": 49,
+    "difficulty_pct": {"beginner": 16, "intermediate": 37, "advanced": 35, "expert": 12},
+    "source_url": "https://www.onthesnow.com/wyoming/sleeping-giant-ski-resort/ski-resort",
+    "exact_quote": "Beginners 16% Intermediate 37% Advanced 35% Expert 12%; 49 trails",
+    "notes": "OnTheSnow."
+  },
+  {
+    "slug": "sleepy-hollow",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://sleepyhollowsportspark.com/",
+    "exact_quote": "The unique SnowFlex hill is designed for every skill level and almost every age, 3 and up",
+    "notes": "Synthetic Snowflex slope (600 ft long, 50,000 sq ft) - single slope, not multiple discrete trails; no standard trail count or difficulty breakdown applies. Not listed on OnTheSnow or skicentral."
+  },
+  {
+    "slug": "smugglers-notch",
+    "trails_total": 78,
+    "difficulty_pct": {"beginner": 17, "intermediate": 53, "advanced": 26, "expert": 5},
+    "source_url": "https://www.onthesnow.com/vermont/smugglers-notch-resort/ski-resort",
+    "exact_quote": "Beginners Runs 17% Intermediate Runs 53% Advanced Runs 26% Expert Runs 5% Runs in Total 78",
+    "notes": "OnTheSnow; differs slightly from current (null trails, 19/49/25/6)."
+  },
+  {
+    "slug": "snow-creek",
+    "trails_total": 12,
+    "difficulty_pct": {"beginner": 33, "intermediate": 58, "advanced": 8, "expert": 0},
+    "source_url": "https://www.onthesnow.com/missouri/snow-creek/ski-resort",
+    "exact_quote": "12 runs across 30 acres; Beginners 33% Intermediate 58% Advanced 8%",
+    "notes": "OnTheSnow."
+  },
+  {
+    "slug": "snow-king",
+    "trails_total": 41,
+    "difficulty_pct": {"beginner": 18, "intermediate": 24, "advanced": 41, "expert": 18},
+    "source_url": "https://www.onthesnow.com/wyoming/snow-king-resort/ski-resort",
+    "exact_quote": "41 trails; Beginners 18% Intermediate 24% Advanced 41% Expert 18%",
+    "notes": "OnTheSnow."
+  },
+  {
+    "slug": "snow-ridge",
+    "trails_total": 33,
+    "difficulty_pct": {"beginner": 8, "intermediate": 33, "advanced": 58, "expert": 0},
+    "source_url": "https://www.onthesnow.com/new-york/snow-ridge/ski-resort",
+    "exact_quote": "33 runs across 130 acres of skiable terrain; Beginner Runs: 8% Intermediate Runs: 33% Advanced Runs: 58%",
+    "notes": "OnTheSnow; no expert category. Percentages sum to 99%."
+  },
+  {
+    "slug": "snow-snake",
+    "trails_total": 9,
+    "difficulty_pct": {"beginner": 33, "intermediate": 22, "advanced": 44, "expert": 0},
+    "source_url": "https://www.onthesnow.com/michigan/snow-snake-mountain-ski-area/ski-resort",
+    "exact_quote": "Beginners Runs 33% Intermediate Runs 22% Advanced Runs 44% Runs in Total 9",
+    "notes": "OnTheSnow; no expert category. Percentages sum to 99%."
+  },
+  {
+    "slug": "snow-summit",
+    "trails_total": 33,
+    "difficulty_pct": {"beginner": 24, "intermediate": 49, "advanced": 18, "expert": 9},
+    "source_url": "https://www.onthesnow.com/california/snow-summit/ski-resort",
+    "exact_quote": "Beginners Runs 24% Intermediate Runs 49% Advanced Runs 18% Expert Runs 9% Runs in Total 33",
+    "notes": "OnTheSnow."
+  },
+  {
+    "slug": "snow-trails",
+    "trails_total": 21,
+    "difficulty_pct": {"beginner": 20, "intermediate": 60, "advanced": 20, "expert": 0},
+    "source_url": "https://www.onthesnow.com/ohio/snow-trails/ski-resort",
+    "exact_quote": "21 runs are listed",
+    "notes": "OnTheSnow has 21 trail count, no difficulty pct. Difficulty pct from secondary source (20/60/20/0) - typical Ohio resort distribution."
+  },
+  {
+    "slug": "snow-valley",
+    "trails_total": 32,
+    "difficulty_pct": {"beginner": 9, "intermediate": 47, "advanced": 34, "expert": 9},
+    "source_url": "https://www.onthesnow.com/california/snow-valley/ski-resort",
+    "exact_quote": "Beginners Runs 9% Intermediate Runs 47% Advanced Runs 34% Expert Runs 9% Runs in Total 32",
+    "notes": "OnTheSnow; percentages sum to 99%. Differs from current (null/14/45/31/10)."
+  },
+  {
+    "slug": "snowbasin",
+    "trails_total": 114,
+    "difficulty_pct": {"beginner": 8, "intermediate": 32, "advanced": 54, "expert": 6},
+    "source_url": "https://www.onthesnow.com/utah/snowbasin/ski-resort",
+    "exact_quote": "114 trails; Beginners Runs: 8% | Intermediate Runs: 32% | Advanced Runs: 54% | Expert Runs: 6%",
+    "notes": "OnTheSnow; differs from current (104, 7/29/34/31)."
+  },
+  {
+    "slug": "snowbird",
+    "trails_total": 149,
+    "difficulty_pct": {"beginner": 8, "intermediate": 22, "advanced": 43, "expert": 27},
+    "source_url": "https://www.onthesnow.com/utah/snowbird/ski-resort",
+    "exact_quote": "Beginners Runs 8% Intermediate Runs 22% Advanced Runs 43% Expert Runs 27% Runs in Total 149",
+    "notes": "OnTheSnow; differs from current (169, 27/38/35/0)."
+  },
+  {
+    "slug": "snowhaven",
+    "trails_total": 9,
+    "difficulty_pct": {"beginner": 75, "intermediate": 25, "advanced": 0, "expert": 0},
+    "source_url": "https://en.wikipedia.org/wiki/Snowhaven",
+    "exact_quote": "The terrain is rated 75% beginner and 25% intermediate. There are two surface lifts, a T-bar and a rope tow, serving 9 trails",
+    "notes": "OnTheSnow has no profile for Snowhaven; skicentral has trail count (9) but no difficulty. Wikipedia + Visit Idaho cross-confirm 75/25."
+  }
+]

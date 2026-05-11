@@ -1,0 +1,262 @@
+[
+  {
+    "slug": "49-degrees-north",
+    "trails_total": 90,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/washington/49-degrees-north/skireport",
+    "exact_quote": "90 marked trails",
+    "notes": "OnTheSnow skireport gives total trail count only; no difficulty percentages disclosed on overview or skireport pages. SkiCentral 404."
+  },
+  {
+    "slug": "afton-alps",
+    "trails_total": 48,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/minnesota/afton-alps/skireport",
+    "exact_quote": "With 48 trails, four terrain parks and 18 chairlifts",
+    "notes": "OnTheSnow skireport says 48 trails; ski-resort page conflicts (33 trails / 36% beg, 39% int, 24% adv) so excluded due to inconsistency. SkiCentral page does not provide difficulty breakdown."
+  },
+  {
+    "slug": "alpine-meadows",
+    "trails_total": 100,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skicentral.com/alpinemeadows.html",
+    "exact_quote": "Number of Trails: 100",
+    "notes": "OnTheSnow standalone Alpine Meadows page 404s (merged into Palisades Tahoe). SkiCentral lists trail total only; no difficulty percentages."
+  },
+  {
+    "slug": "alpine-valley-mi",
+    "trails_total": 25,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skicentral.com/alpinevalleymichigan.html",
+    "exact_quote": "Number of Trails: 25",
+    "notes": "OnTheSnow lists only 8 trails (conflicts with SkiCentral 25). No difficulty percentages from either source. Used SkiCentral as more detailed page."
+  },
+  {
+    "slug": "alpine-valley-oh",
+    "trails_total": 7,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skicentral.com/alpinevalley.html",
+    "exact_quote": "Number of Trails: 7",
+    "notes": "OnTheSnow Ohio skireport lists 8 trails; SkiCentral lists 7. No difficulty percentages on either source."
+  },
+  {
+    "slug": "alpine-valley-wi",
+    "trails_total": 20,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skicentral.com/alpinevalleyresort.html",
+    "exact_quote": "Number of Trails: 20",
+    "notes": "OnTheSnow Wisconsin skireport lists only 8 trails (conflicts); SkiCentral page lists 20 (with a separate 12-slope mention). No difficulty percentages."
+  },
+  {
+    "slug": "alta",
+    "trails_total": 118,
+    "difficulty_pct": {
+      "beginner": 15,
+      "intermediate": 30,
+      "advanced": 55,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/utah/alta-ski-area/skireport",
+    "exact_quote": "118 trails ... 15% beginner ... 30% intermediate ... 55% advanced runs",
+    "notes": "OnTheSnow alta-ski-area page (alta/skireport 404). Expert tier not separately listed; total 100%."
+  },
+  {
+    "slug": "alyeska-resort",
+    "trails_total": 76,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skicentral.com/alyeska.html",
+    "exact_quote": "76",
+    "notes": "Both OnTheSnow and SkiCentral list 76 trails; neither provides difficulty percentages."
+  },
+  {
+    "slug": "andes-tower-hills",
+    "trails_total": 15,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skicentral.com/andestowerhills.html",
+    "exact_quote": "15",
+    "notes": "OnTheSnow ski-resort page 404. SkiCentral lists 15 trails; no difficulty percentages."
+  },
+  {
+    "slug": "angel-fire-resort",
+    "trails_total": 86,
+    "difficulty_pct": {
+      "beginner": 24,
+      "intermediate": 22,
+      "advanced": 21,
+      "expert": 3
+    },
+    "source_url": "https://www.onthesnow.com/new-mexico/angel-fire-resort/skireport",
+    "exact_quote": "86 trails served by 7 lifts ... 24% beginner ... 22% intermediate ... 21% advanced ... 3% expert runs",
+    "notes": "OnTheSnow skireport. Note: ski-resort overview separately reports 95 trails / 22-53-21-4; used skireport per task priority. Numbers sum to 70%; included as exact-quote per page."
+  },
+  {
+    "slug": "antelope-butte",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "OnTheSnow skireport and ski-resort both 404. SkiCentral 404. No data from authorized sources."
+  },
+  {
+    "slug": "anthony-lakes",
+    "trails_total": 21,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 38,
+      "advanced": null,
+      "expert": 42
+    },
+    "source_url": "https://www.onthesnow.com/oregon/anthony-lakes-mountain-resort/skireport",
+    "exact_quote": "Their 21 runs are suited for all abilities, with 20% Beginner, 38% Intermediate and 42% Expert",
+    "notes": "Only three difficulty tiers listed (no advanced tier separately on this source); sums to 100%."
+  },
+  {
+    "slug": "appalachian-ski-mountain",
+    "trails_total": 9,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 33,
+      "advanced": 33,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/north-carolina/appalachian-ski-mtn/ski-resort",
+    "exact_quote": "9 ... Beginners: 33% ... Intermediate: 33% ... Advanced: 33%",
+    "notes": "OnTheSnow ski-resort overview. Note: conflicts with input (13 trails) and skicentral (12). No expert tier."
+  },
+  {
+    "slug": "apple-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "OnTheSnow skireport has no trail/difficulty data. SkiCentral 404 for applemountain.html. No data from authorized sources."
+  },
+  {
+    "slug": "arapahoe-basin",
+    "trails_total": 147,
+    "difficulty_pct": {
+      "beginner": 7,
+      "intermediate": 20,
+      "advanced": 49,
+      "expert": 24
+    },
+    "source_url": "https://www.onthesnow.com/colorado/arapahoe-basin-ski-area/skireport",
+    "exact_quote": "The terrain is rated 7% beginner, 20% intermediate, 49% advanced and 24% expert",
+    "notes": "OnTheSnow arapahoe-basin-ski-area page. 147 runs, sums to 100%."
+  },
+  {
+    "slug": "arctic-valley",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "OnTheSnow skireport 404. SkiCentral arcticvalley.html 404. No data from authorized sources."
+  },
+  {
+    "slug": "arizona-snowbowl",
+    "trails_total": 61,
+    "difficulty_pct": {
+      "beginner": 27,
+      "intermediate": 39,
+      "advanced": 21,
+      "expert": 11
+    },
+    "source_url": "https://www.onthesnow.com/arizona/arizona-snowbowl/ski-resort",
+    "exact_quote": "61 ... Beginner: 27% ... Intermediate: 39% ... Advanced: 21% ... Expert: 11%",
+    "notes": "OnTheSnow ski-resort overview. SkiCentral lists 32 trails (conflict). Sums to 98%."
+  },
+  {
+    "slug": "ascutney-outdoors",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "OnTheSnow skireport and ski-resort both 404. SkiCentral ascutney.html 404. No data from authorized sources."
+  },
+  {
+    "slug": "aspen-highlands",
+    "trails_total": 144,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skicentral.com/aspenhighlands.html",
+    "exact_quote": "144",
+    "notes": "OnTheSnow only has combined Aspen Snowmass page (skireport for aspen-highlands 404). SkiCentral has 144 trails but no difficulty percentages."
+  },
+  {
+    "slug": "aspen-mountain",
+    "trails_total": 76,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skicentral.com/aspen.html",
+    "exact_quote": "76",
+    "notes": "OnTheSnow only has combined Aspen Snowmass page (skireport for aspen-mountain 404). SkiCentral has 76 trails (matching Aspen Mountain / Ajax) but no difficulty percentages."
+  }
+]

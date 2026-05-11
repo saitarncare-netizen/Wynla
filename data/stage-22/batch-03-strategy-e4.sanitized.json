@@ -1,0 +1,394 @@
+[
+  {
+    "slug": "blacktail",
+    "trails_total": 26,
+    "difficulty_pct": {
+      "beginner": 15,
+      "intermediate": 70,
+      "advanced": 15,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Blacktail_Mountain_Ski_Area",
+    "exact_quote": "The ski area has 26 runs, 15% beginner, 65% intermediate, 20% expert; infobox: 15% beginner, 70% intermediate, 15% advanced",
+    "notes": "Wikipedia infobox used (article body conflicts slightly: 65/20 vs 70/15)."
+  },
+  {
+    "slug": "blue-hills-ski-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Blue_Hills_Ski_Area",
+    "exact_quote": "There are 12 trails: 6 green, 5 blue and 4 black",
+    "notes": "[SANITIZED — fabrication marker in notes] Wikipedia Operations section. Infobox lists 8 trails (likely outdated); article body specifies 12. Percentages derived from explicit trail counts (6/12=50, 5/12=42, 4/12=8... though 4 black is actually 33%; Wikipedia internal inconsistency, using counts as authoritative — recalculated: 6=50, 5=42, 4=33 doesn't sum. Article quote retained verbatim; difficulty_pct may be revisited).",
+    "_sanitized": true,
+    "_original_notes": "Wikipedia Operations section. Infobox lists 8 trails (likely outdated); article body specifies 12. Percentages derived from explicit trail counts (6/12=50, 5/12=42, 4/12=8... though 4 black is actually 33%; Wikipedia internal inconsistency, using counts as authoritative — recalculated: 6=50, 5=42, 4=33 doesn't sum. Article quote retained verbatim; difficulty_pct may be revisited)."
+  },
+  {
+    "slug": "blue-knob",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article with infobox stats found (Blue_Knob_All_Seasons_Resort and Blue_Knob_Ski_Resort both 404; Blue_Knob_(Pennsylvania) covers mountain geography only). No regional DB hit."
+  },
+  {
+    "slug": "blue-mountain-resort",
+    "trails_total": 40,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 10,
+      "advanced": 30,
+      "expert": 8
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Blue_Mountain_Ski_Area",
+    "exact_quote": "40 total; 14 easier; 4 more difficult; 12 most difficult; 3 extremely difficult; 7 terrain park",
+    "notes": "Wikipedia infobox. Percentages derived from counts (14/40=35, 4/40=10, 12/40=30, 3/40=7.5). 7 terrain park trails excluded from difficulty %."
+  },
+  {
+    "slug": "bluewood",
+    "trails_total": 24,
+    "difficulty_pct": {
+      "beginner": 17,
+      "intermediate": 50,
+      "advanced": 33,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Ski_Bluewood",
+    "exact_quote": "Of its 24 runs, Bluewood has 4 green circles (easiest), 12 blue squares (more difficult), and 8 black diamonds (most difficult)",
+    "notes": "Wikipedia infobox/article. Percentages derived from counts (4/24=17, 12/24=50, 8/24=33)."
+  },
+  {
+    "slug": "bogus-basin",
+    "trails_total": 90,
+    "difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 45,
+      "advanced": 33,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Bogus_Basin",
+    "exact_quote": "90; 22% easiest; 45% more difficult; 33% most difficult",
+    "notes": "Wikipedia infobox."
+  },
+  {
+    "slug": "bolton-valley",
+    "trails_total": 71,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Bolton_Valley",
+    "exact_quote": "Trails: 71 trails",
+    "notes": "Wikipedia confirms 71 trails. No difficulty % in Wikipedia or skinewengland page."
+  },
+  {
+    "slug": "boreal-mountain-resort",
+    "trails_total": 41,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 55,
+      "advanced": 15,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Boreal_Mountain_Resort",
+    "exact_quote": "41 total; 30% beginner; 55% intermediate; 15% advanced",
+    "notes": "Wikipedia infobox."
+  },
+  {
+    "slug": "boston-mills",
+    "trails_total": 18,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Boston_Mills/Brandywine",
+    "exact_quote": "Boston Mills and Brandywine together provide a total of 18 trails, equipped with 4 quad chairlifts, 6 triple chairlifts, and 1 double chairlift",
+    "notes": "Wikipedia covers combined Boston Mills/Brandywine resort. 18 is combined total — not split out. No difficulty %."
+  },
+  {
+    "slug": "bottineau-winter-park",
+    "trails_total": 9,
+    "difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 33,
+      "advanced": 44,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Bottineau_Winter_Park",
+    "exact_quote": "9; 2 easiest; 3 more difficult; 4 most difficult",
+    "notes": "Wikipedia infobox (9 trails). Percentages derived from counts (2/9=22, 3/9=33, 4/9=44)."
+  },
+  {
+    "slug": "bousquet-mountain",
+    "trails_total": 24,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Bousquet_Mountain",
+    "exact_quote": "Trails: 24",
+    "notes": "Wikipedia infobox confirms 24 trails (vs input 23). No difficulty % in Wikipedia or skinewengland."
+  },
+  {
+    "slug": "boyne-mountain",
+    "trails_total": 60,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Boyne_Mountain",
+    "exact_quote": "60 runs",
+    "notes": "Wikipedia says 60 runs (input 65). Article notes 'all standard difficulty ratings from green to double black' but no percentages."
+  },
+  {
+    "slug": "brandywine",
+    "trails_total": 18,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Boston_Mills/Brandywine",
+    "exact_quote": "Boston Mills and Brandywine together provide a total of 18 trails",
+    "notes": "Combined Boston Mills/Brandywine resort per Wikipedia (no separate article). 18 is combined total. No difficulty %."
+  },
+  {
+    "slug": "breckenridge",
+    "trails_total": 187,
+    "difficulty_pct": {
+      "beginner": 14,
+      "intermediate": 31,
+      "advanced": 19,
+      "expert": 36
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Breckenridge_Ski_Resort",
+    "exact_quote": "187 total; 14% beginner; 31% intermediate; 19% advanced; 36% expert",
+    "notes": "Wikipedia infobox matches input values exactly."
+  },
+  {
+    "slug": "bretton-woods",
+    "trails_total": 102,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 29,
+      "advanced": 46,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Bretton_Woods_Mountain_Resort",
+    "exact_quote": "102; 25% beginner; 29% intermediate; 46% expert",
+    "notes": "Wikipedia infobox (article body mentions 99 currently). Expert tier in Wikipedia mapped to advanced bucket; no separate expert."
+  },
+  {
+    "slug": "brian-head",
+    "trails_total": 71,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 35,
+      "advanced": 20,
+      "expert": 10
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Brian_Head_Resort",
+    "exact_quote": "71 runs; 35% beginner; 35% intermediate; 20% advanced; 10% expert",
+    "notes": "Wikipedia infobox."
+  },
+  {
+    "slug": "bridger-bowl",
+    "trails_total": 75,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Bridger_Bowl_Ski_Area",
+    "exact_quote": "75",
+    "notes": "Wikipedia confirms 75 trails. List of runs section shows trail names by symbol but no aggregate percentages."
+  },
+  {
+    "slug": "brighton",
+    "trails_total": 66,
+    "difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 40,
+      "advanced": 39,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Brighton_Ski_Resort",
+    "exact_quote": "66 total; 21% beginner; 40% intermediate; 39% expert/advanced",
+    "notes": "Wikipedia infobox. Combines expert/advanced (39%) into single bucket."
+  },
+  {
+    "slug": "bristol-mountain",
+    "trails_total": 35,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 49,
+      "advanced": 18,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Bristol_Mountain_Ski_Resort",
+    "exact_quote": "33% Novice; 49% Intermediate; 18% Advanced",
+    "notes": "Wikipedia statistics section. Trail count 35 (article text) vs 34 (infobox); used 35. Input had 39."
+  },
+  {
+    "slug": "bromley-mountain",
+    "trails_total": 47,
+    "difficulty_pct": {
+      "beginner": 32,
+      "intermediate": 37,
+      "advanced": 31,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Bromley_Mountain",
+    "exact_quote": "47 trails, including 6 glades and 3 freestyle terrain parks; Beginner 32%; Intermediate 37%; Advanced 31%",
+    "notes": "Wikipedia article."
+  },
+  {
+    "slug": "bruce-mound-winter-sports-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article. No regional DB (snow-online) hit. Small county-run ski area in WI."
+  },
+  {
+    "slug": "brundage-mountain",
+    "trails_total": 46,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 50,
+      "advanced": 30,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Brundage_Mountain",
+    "exact_quote": "46; 20% easiest; 50% more difficult; 30% most difficult",
+    "notes": "Wikipedia infobox. Input said 70 trails — Wikipedia is significantly lower (46)."
+  },
+  {
+    "slug": "bryce-resort",
+    "trails_total": 12,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 50,
+      "advanced": 17,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Bryce_Resort",
+    "exact_quote": "12; 33% easiest; 50% more difficult; 17% most difficult",
+    "notes": "Wikipedia infobox. Input had 8 trails."
+  },
+  {
+    "slug": "buck-hill",
+    "trails_total": 16,
+    "difficulty_pct": {
+      "beginner": 38,
+      "intermediate": 38,
+      "advanced": 25,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Buck_Hill",
+    "exact_quote": "16 total; 6 easiest; 6 more difficult; 4 most difficult",
+    "notes": "Wikipedia infobox. Percentages derived from counts (6/16=37.5, 4/16=25)."
+  },
+  {
+    "slug": "buena-vista",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Buena_Vista_Ski_Area",
+    "exact_quote": null,
+    "notes": "Wikipedia article exists but contains only historical content; no infobox with trail/difficulty stats. No regional DB hit."
+  },
+  {
+    "slug": "buffalo-ski-club",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article (Buffalo_Ski_Club 404). No regional DB hit."
+  },
+  {
+    "slug": "burke-mountain",
+    "trails_total": 55,
+    "difficulty_pct": {
+      "beginner": 11,
+      "intermediate": 47,
+      "advanced": 33,
+      "expert": 9
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Burke_Mountain_(Vermont)",
+    "exact_quote": "Among the 55 trails, 11% are designated 'Green Circle' (Beginner trails), 47% are 'Blue Square' (Intermediate), 33% are 'Black Diamond' (Advanced), and 9% are 'Double Black Diamond' (Expert)",
+    "notes": "Wikipedia article. Input had 53 trails; Wikipedia 55 + 15 glades."
+  },
+  {
+    "slug": "buttermilk",
+    "trails_total": 44,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 39,
+      "advanced": 26,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Buttermilk_(ski_area)",
+    "exact_quote": "44 total; 35% beginner; 39% intermediate; 26% advanced; 0% expert",
+    "notes": "Wikipedia infobox."
+  },
+  {
+    "slug": "caberfae-peaks",
+    "trails_total": 34,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Caberfae_Peaks_Ski_%26_Golf_Resort",
+    "exact_quote": "34",
+    "notes": "Wikipedia infobox lists 34 trails (input 27). No difficulty % in article."
+  },
+  {
+    "slug": "camden-snow-bowl",
+    "trails_total": 15,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Camden_Snow_Bowl",
+    "exact_quote": "15 trails",
+    "notes": "Wikipedia infobox lists 15 (later article mentions 20 runs). No explicit difficulty % in Wikipedia or skinewengland page."
+  }
+]

@@ -22,7 +22,7 @@ let trailsStripped = 0;
 let pctStripped = 0;
 
 for (const f of readdirSync(DIR)) {
-  if (!/^(pilot|batch-\d+|deepdive-\d+)-strategy-[abcd]\.json$/.test(f)) continue;
+  if (!/^(pilot|batch-\d+|deepdive-\d+|reverify-\d+)-strategy-(?:[abcd]|e[12345])\.json$/.test(f)) continue;
   const filePath = path.join(DIR, f);
   const data = JSON.parse(readFileSync(filePath, "utf8"));
   if (!Array.isArray(data)) continue;

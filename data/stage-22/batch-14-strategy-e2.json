@@ -1,0 +1,242 @@
+[
+  {
+    "slug": "sunlight-mountain",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 20, "intermediate": 55, "advanced": 25, "expert": 0 },
+    "source_url": "https://www.skiresort.info/ski-resort/sunlight-mountain/",
+    "exact_quote": "Easy slopes: 4 km (20 %); Intermediate slopes: 11 km (55 %); Difficult slopes: 5 km (25 %); Total 20 km",
+    "notes": "Sunlight Mountain Resort, CO. Difficulty from km %; advanced = difficult, expert = 0."
+  },
+  {
+    "slug": "sunrise-park-resort",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": "https://www.skiresort.info/ski-resort/sunrise-park-resort/",
+    "exact_quote": "",
+    "notes": "Not found on skiresort.info via tried slugs (sunrise-park-resort, sunrise-park-arizona, sunrise-park, sunrise). Page returned no piste statistics or wrong resort (Mountain High North)."
+  },
+  {
+    "slug": "swain-resort",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 31, "intermediate": 37, "advanced": 32, "expert": 0 },
+    "source_url": "https://www.skiresort.info/ski-resort/swain/",
+    "exact_quote": "Easy slopes: 3.6 km (31 %); Intermediate slopes: 4.2 km (37 %); Difficult slopes: 3.7 km (32 %); Total 11.5 km",
+    "notes": "Swain Resort, NY. Difficulty from km %; advanced = difficult, expert = 0."
+  },
+  {
+    "slug": "swiss-valley",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 61, "intermediate": 22, "advanced": 17, "expert": 0 },
+    "source_url": "https://www.skiresort.info/ski-resort/swiss-valley/",
+    "exact_quote": "Easy slopes: 1.1 km (61 %); Intermediate slopes: 0.4 km (22 %); Difficult slopes: 0.3 km (17 %); Total 1.8 km",
+    "notes": "Swiss Valley, MI. Difficulty from km %; advanced = difficult, expert = 0."
+  },
+  {
+    "slug": "tahoe-donner-downhill",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 43, "intermediate": 57, "advanced": 0, "expert": 0 },
+    "source_url": "https://www.skiresort.info/ski-resort/tahoe-donner/",
+    "exact_quote": "Easy slopes: 6 km (43 %); Intermediate slopes: 8 km (57 %); Difficult slopes: 0 km (0 %); Total 14 km",
+    "notes": "Tahoe Donner Downhill, CA. Difficulty from km %; advanced = difficult, expert = 0."
+  },
+  {
+    "slug": "tamarack",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 28, "intermediate": 47, "advanced": 25, "expert": 0 },
+    "source_url": "https://www.skiresort.info/ski-resort/tamarack-resort/",
+    "exact_quote": "Easy slopes: 12 km (28 %); Intermediate slopes: 20 km (47 %); Difficult slopes: 10 km (25 %); Total 42 km",
+    "notes": "Tamarack Resort, ID. Difficulty from km %; advanced = difficult, expert = 0."
+  },
+  {
+    "slug": "taos-ski-valley",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 24, "intermediate": 25, "advanced": 51, "expert": 0 },
+    "source_url": "https://www.skiresort.info/ski-resort/taos/",
+    "exact_quote": "Easy slopes: 27 km (24 %); Intermediate slopes: 28 km (25 %); Difficult slopes: 58 km (51 %); Total 113 km",
+    "notes": "Taos Ski Valley, NM. Difficulty from km %; advanced = difficult, expert = 0."
+  },
+  {
+    "slug": "telluride",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 9, "intermediate": 58, "advanced": 33, "expert": 0 },
+    "source_url": "https://www.skiresort.info/ski-resort/telluride/",
+    "exact_quote": "Easy slopes: 6.7 km (9 %); Intermediate slopes: 51.7 km (58 %); Difficult slopes: 29.8 km (33 %); Total 88.2 km",
+    "notes": "Telluride Ski Resort, CO. Difficulty from km %; advanced = difficult, expert = 0."
+  },
+  {
+    "slug": "tenney-mountain",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 20, "intermediate": 53, "advanced": 27, "expert": 0 },
+    "source_url": "https://www.skiresort.info/ski-resort/tenney-mountain/",
+    "exact_quote": "Easy slopes: 3 km (20 %); Intermediate slopes: 8 km (53 %); Difficult slopes: 4 km (27 %); Total 15 km",
+    "notes": "Tenney Mountain, NH. Difficulty from km %; advanced = difficult, expert = 0."
+  },
+  {
+    "slug": "terry-peak",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 29, "intermediate": 45, "advanced": 26, "expert": 0 },
+    "source_url": "https://www.skiresort.info/ski-resort/terry-peak/",
+    "exact_quote": "Easy slopes: 4.7 km (29 %); Intermediate slopes: 7.2 km (45 %); Difficult slopes: 4.1 km (26 %); Total 16 km",
+    "notes": "Terry Peak Ski Area, SD. Difficulty from km %; advanced = difficult, expert = 0."
+  },
+  {
+    "slug": "teton-pass",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 40, "intermediate": 33, "advanced": 27, "expert": 0 },
+    "source_url": "https://www.skiresort.info/ski-resort/teton-pass/",
+    "exact_quote": "Easy slopes: 6 km (40 %); Intermediate slopes: 5 km (33 %); Difficult slopes: 4 km (27 %); Total 15 km",
+    "notes": "Teton Pass Ski Area, MT. Difficulty from km %; advanced = difficult, expert = 0."
+  },
+  {
+    "slug": "the-highlands",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 40, "intermediate": 30, "advanced": 30, "expert": 0 },
+    "source_url": "https://www.skiresort.info/ski-resort/the-highlands-boyne-highlands/",
+    "exact_quote": "Easy slopes: 10.3 km (40 %); Intermediate slopes: 7.7 km (30 %); Difficult slopes: 7.7 km (30 %); Total 25.7 km",
+    "notes": "The Highlands (Boyne Highlands), MI. Difficulty from km %; advanced = difficult, expert = 0."
+  },
+  {
+    "slug": "the-omni-homestead-resort",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 52, "intermediate": 41, "advanced": 7, "expert": 0 },
+    "source_url": "https://www.skiresort.info/ski-resort/omni-homestead-resort/",
+    "exact_quote": "Easy slopes: 1.5 km (52 %); Intermediate slopes: 1.2 km (41 %); Difficult slopes: 0.2 km (7 %); Total 2.9 km",
+    "notes": "The Omni Homestead Resort, VA. Difficulty from km %; advanced = difficult, expert = 0."
+  },
+  {
+    "slug": "the-rock-snowpark",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 39, "intermediate": 38, "advanced": 23, "expert": 0 },
+    "source_url": "https://www.skiresort.info/ski-resort/the-rock-snowpark/",
+    "exact_quote": "Easy slopes: 0.5 km (39 %); Intermediate slopes: 0.5 km (38 %); Difficult slopes: 0.3 km (23 %); Total 1.3 km",
+    "notes": "The Rock Snowpark (formerly Crystal Ridge), WI. Difficulty from km %; advanced = difficult, expert = 0."
+  },
+  {
+    "slug": "the-summit-at-snoqualmie",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 19, "intermediate": 49, "advanced": 32, "expert": 0 },
+    "source_url": "https://www.skiresort.info/ski-resort/the-summit-at-snoqualmie/",
+    "exact_quote": "Easy slopes: 5.2 km (19 %); Intermediate slopes: 13.7 km (49 %); Difficult slopes: 9 km (32 %); Total 27.9 km",
+    "notes": "The Summit at Snoqualmie, WA. Difficulty from km %; advanced = difficult, expert = 0."
+  },
+  {
+    "slug": "thrill-hills",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": "https://www.skiresort.info/ski-resort/thrill-hills/",
+    "exact_quote": "",
+    "notes": "Not found on skiresort.info; tried slug returned no piste statistics. Small ND ski area likely not in skiresort.info database."
+  },
+  {
+    "slug": "thunder-ridge-ski-area",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 43, "intermediate": 24, "advanced": 33, "expert": 0 },
+    "source_url": "https://www.skiresort.info/ski-resort/thunder-ridge/",
+    "exact_quote": "Easy slopes: 1.8 km (43 %); Intermediate slopes: 1 km (24 %); Difficult slopes: 1.4 km (33 %); Total 4.2 km",
+    "notes": "Thunder Ridge Ski Area, NY. Difficulty from km %; advanced = difficult, expert = 0."
+  },
+  {
+    "slug": "timber-ridge",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 37, "intermediate": 49, "advanced": 14, "expert": 0 },
+    "source_url": "https://www.skiresort.info/ski-resort/timber-ridge/",
+    "exact_quote": "Easy slopes: 1.2 km (37 %); Intermediate slopes: 1.6 km (49 %); Difficult slopes: 0.4 km (14 %); Total 3.2 km",
+    "notes": "Timber Ridge Ski Area, MI. Difficulty from km %; advanced = difficult, expert = 0."
+  },
+  {
+    "slug": "timberline-lodge",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 26, "intermediate": 48, "advanced": 26, "expert": 0 },
+    "source_url": "https://www.skiresort.info/ski-resort/timberline/",
+    "exact_quote": "Easy slopes: 8 km (26 %); Intermediate slopes: 15 km (48 %); Difficult slopes: 8 km (26 %); Total 31 km",
+    "notes": "Timberline Lodge Ski Area, OR (Mt Hood). Difficulty from km %; advanced = difficult, expert = 0."
+  },
+  {
+    "slug": "timberline-mountain",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 34, "intermediate": 33, "advanced": 33, "expert": 0 },
+    "source_url": "https://www.skiresort.info/ski-resort/timberline-mountain/",
+    "exact_quote": "Easy slopes: 6 km (34 %); Intermediate slopes: 6 km (33 %); Difficult slopes: 6 km (33 %); Total 18 km",
+    "notes": "Timberline Mountain, WV. Difficulty from km %; advanced = difficult, expert = 0."
+  },
+  {
+    "slug": "titcomb-mountain",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 23, "intermediate": 25, "advanced": 52, "expert": 0 },
+    "source_url": "https://www.skiresort.info/ski-resort/titcomb-mountain/",
+    "exact_quote": "Easy slopes: 1 km (23 %); Intermediate slopes: 1.1 km (25 %); Difficult slopes: 2.3 km (52 %); Total 4.4 km",
+    "notes": "Titcomb Mountain, ME. Difficulty from km %; advanced = difficult, expert = 0."
+  },
+  {
+    "slug": "titus-mountain",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 37, "intermediate": 37, "advanced": 26, "expert": 0 },
+    "source_url": "https://www.skiresort.info/ski-resort/titus-mountain/",
+    "exact_quote": "Easy slopes: 10 km (37 %); Intermediate slopes: 10 km (37 %); Difficult slopes: 7 km (26 %); Total 27 km",
+    "notes": "Titus Mountain, NY. Difficulty from km %; advanced = difficult, expert = 0."
+  },
+  {
+    "slug": "trapp-family-lodge",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": "https://www.skiresort.info/ski-resort/trapp-family-lodge/",
+    "exact_quote": "",
+    "notes": "Not found on skiresort.info via tried slugs (trapp-family-lodge, trapp-family-lodge-cross-country-ski, trapp-family-lodge-stowe). Cross-country area in VT — likely not catalogued."
+  },
+  {
+    "slug": "treetops-resort",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 7, "intermediate": 43, "advanced": 50, "expert": 0 },
+    "source_url": "https://www.skiresort.info/ski-resort/treetops/",
+    "exact_quote": "Easy slopes: 0.3 km (7 %); Intermediate slopes: 1.9 km (43 %); Difficult slopes: 2.2 km (50 %); Total 4.4 km",
+    "notes": "Treetops Resort, MI. Difficulty from km %; advanced = difficult, expert = 0."
+  },
+  {
+    "slug": "trollhaugen",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 51, "intermediate": 31, "advanced": 18, "expert": 0 },
+    "source_url": "https://www.skiresort.info/ski-resort/trollhaugen/",
+    "exact_quote": "Easy slopes: 2.5 km (51 %); Intermediate slopes: 1.5 km (31 %); Difficult slopes: 0.9 km (18 %); Total 4.9 km",
+    "notes": "Trollhaugen, WI. Difficulty from km %; advanced = difficult, expert = 0."
+  },
+  {
+    "slug": "turner-mountain",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 15, "intermediate": 40, "advanced": 45, "expert": 0 },
+    "source_url": "https://www.skiresort.info/ski-resort/turner-mountain/",
+    "exact_quote": "Easy slopes: 2.1 km (15 %); Intermediate slopes: 5.5 km (40 %); Difficult slopes: 6.2 km (45 %); Total 13.8 km",
+    "notes": "Turner Mountain Ski Resort, MT. Difficulty from km %; advanced = difficult, expert = 0."
+  },
+  {
+    "slug": "turpin-meadow-ranch",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": "https://www.skiresort.info/ski-resort/turpin-meadow-ranch/",
+    "exact_quote": "",
+    "notes": "Not found on skiresort.info via tried slugs (turpin-meadow-ranch, turpin-meadow). Cross-country/cat-ski ranch in WY — likely not catalogued."
+  },
+  {
+    "slug": "tussey-mountain",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 50, "intermediate": 40, "advanced": 10, "expert": 0 },
+    "source_url": "https://www.skiresort.info/ski-resort/tussey-mountain/",
+    "exact_quote": "Easy slopes: 1.5 km (50 %); Intermediate slopes: 1.2 km (40 %); Difficult slopes: 0.3 km (10 %); Total 3 km",
+    "notes": "Tussey Mountain, PA. Difficulty from km %; advanced = difficult, expert = 0."
+  },
+  {
+    "slug": "tyrol-basin",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 30, "intermediate": 35, "advanced": 35, "expert": 0 },
+    "source_url": "https://www.skiresort.info/ski-resort/tyrol-basin/",
+    "exact_quote": "Easy slopes: 1.2 km (30 %); Intermediate slopes: 1.5 km (35 %); Difficult slopes: 1.5 km (35 %); Total 4.2 km",
+    "notes": "Tyrol Basin, WI. Difficulty from km %; advanced = difficult, expert = 0."
+  },
+  {
+    "slug": "tyrol-basin-and-snowboard",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 30, "intermediate": 35, "advanced": 35, "expert": 0 },
+    "source_url": "https://www.skiresort.info/ski-resort/tyrol-basin/",
+    "exact_quote": "Easy slopes: 1.2 km (30 %); Intermediate slopes: 1.5 km (35 %); Difficult slopes: 1.5 km (35 %); Total 4.2 km",
+    "notes": "Tyrol Basin Ski and Snowboard, WI — likely duplicate of tyrol-basin. Same skiresort.info page."
+  }
+]

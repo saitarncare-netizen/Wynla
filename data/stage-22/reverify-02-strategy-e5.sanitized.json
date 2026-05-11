@@ -1,0 +1,193 @@
+[
+  {
+    "slug": "loup-loup",
+    "trails_total": 10,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Loup_Loup_Ski_Bowl",
+    "exact_quote": "The hill has 10 major runs, and 3 lifts, including a quad chair that was moved to Loup Loup from Crystal Mountain.",
+    "notes": "Wikipedia confirms 10 runs; no explicit difficulty breakdown found from news/blog sources."
+  },
+  {
+    "slug": "maplelag",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic resort measured in km (90 km cited by xcskiresorts.com) not trail count. No explicit difficulty pct in news sources."
+  },
+  {
+    "slug": "middlebury-snow-bowl",
+    "trails_total": 17,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Middlebury_College_Snow_Bowl",
+    "exact_quote": "The Snowbowl has 17 trails and 3 lifts, offering access to more than 700 acres (2.8 km2) of terrain.",
+    "notes": "Sources conflict: Wikipedia says 17, Middlebury Athletics says 28. Using more conservative Wikipedia figure. No difficulty pct found."
+  },
+  {
+    "slug": "minocqua-winter-park",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://minocquawinterpark.org/park/ski/",
+    "exact_quote": "86 km of World-Class Groomed Ski Trails Within Our 6,500 Acre Park!",
+    "notes": "Nordic park measured in km (86 km), not trail count. Source mentions 'beginner to expert level ski options' but no explicit pct."
+  },
+  {
+    "slug": "mount-itasca",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://visitgrandrapids.com/area-attractions-directory/listing/mount-itasca/",
+    "exact_quote": "Approximately 13 down hill runs service the recreational skiers and snowboarders at Mount Itasca.",
+    "notes": "[SANITIZED — fabrication marker in notes] Word 'approximately' present but explicit number 13 given. No difficulty breakdown in news/blog sources.",
+    "_sanitized": true,
+    "_original_notes": "Word 'approximately' present but explicit number 13 given. No difficulty breakdown in news/blog sources."
+  },
+  {
+    "slug": "mt-holiday",
+    "trails_total": 12,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/michigan/mount-holiday-ski-area/ski-resort",
+    "exact_quote": "12 runs in total",
+    "notes": "OnTheSnow lists 12; traversecity.com says 16. Used OnTheSnow as more authoritative ski-data source. No difficulty pct."
+  },
+  {
+    "slug": "mt-shasta-ski-park",
+    "trails_total": 38,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 45,
+      "advanced": 35
+    },
+    "source_url": "https://www.skipark.com/winter/trail-map-stats",
+    "exact_quote": "38 trails ... Terrain consists of 20% beginner, 45% intermediate, 35% advanced",
+    "notes": "Official resort source confirms both trail count and difficulty pct."
+  },
+  {
+    "slug": "north-cascade-heli",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Heli operation, not a resort with marked trails. Sources cite '~124 runs' loosely; no explicit verified count or difficulty pct."
+  },
+  {
+    "slug": "oglebay-resort",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Single beginner slope described as '1 km slope' / '815-foot slope'; no explicit trail count or difficulty pct in news sources."
+  },
+  {
+    "slug": "plain-valley-trails",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic trails measured in km (25 km classic/skate). No explicit trail count or difficulty pct in news sources."
+  },
+  {
+    "slug": "quarry-road-trails",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic center measured in km (13.3 km cited). No explicit trail count or difficulty pct from news/blog sources."
+  },
+  {
+    "slug": "rangeley-lakes-trail-center",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic center measured in km (55 km). No explicit trail count or difficulty pct in news/blog sources."
+  },
+  {
+    "slug": "rikert-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://rikertoutdoor.com/roc-information-stats/",
+    "exact_quote": "Rikert Outdoor Center features over 55 kilometers of professionally groomed trails",
+    "notes": "Nordic center measured in km (55 km), not trail count. No difficulty pct in news sources."
+  },
+  {
+    "slug": "rikert-outdoor-center",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://rikertoutdoor.com/roc-information-stats/",
+    "exact_quote": "Rikert Outdoor Center features over 55 kilometers of professionally groomed trails",
+    "notes": "Duplicate of rikert-nordic-center (same facility). Nordic center, km-based, no difficulty pct."
+  },
+  {
+    "slug": "sleepy-hollow",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Single synthetic Snowflex slope (50,000 sq ft, 600 ft long), not a multi-trail resort. No explicit trail count."
+  },
+  {
+    "slug": "song-mountain",
+    "trails_total": 24,
+    "difficulty_pct": {
+      "beginner": 37.5,
+      "intermediate": 41.7,
+      "advanced": 20.8
+    },
+    "source_url": "https://nyskiblog.com/directory/ny-ski-areas/central-ny/song-mountain/",
+    "exact_quote": "Total Trails: 24 ... Easy Trails: 9 ... Intermediate Trails: 10 ... Advanced/Expert Trails: 5",
+    "notes": "NY Ski Blog directory confirms 24 trails with 9/10/5 split, computed as 37.5/41.7/20.8 pct."
+  },
+  {
+    "slug": "spring-mountain",
+    "trails_total": 8,
+    "difficulty_pct": null,
+    "source_url": "https://springmountainadventures.com/snow-sports/skiing/",
+    "exact_quote": "Spring Mountain has 8 trails, two snow tubing runs, four lifts, and a terrain park",
+    "notes": "Official resort confirms 8 trails. No difficulty pct in news/blog sources."
+  },
+  {
+    "slug": "steamboat-touring-center",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic center measured in km (15+ km). No explicit trail count or difficulty pct in news sources."
+  },
+  {
+    "slug": "sunburst-area",
+    "trails_total": 11,
+    "difficulty_pct": {
+      "beginner": 18,
+      "intermediate": 55,
+      "advanced": 18,
+      "expert": 9
+    },
+    "source_url": "https://www.onthesnow.com/wisconsin/sunburst/ski-resort",
+    "exact_quote": "11 runs in total ... Beginners Runs: 18% ... Intermediate Runs: 55% ... Advanced Runs: 18% ... Expert Runs: 9%",
+    "notes": "OnTheSnow confirms 11 trails with explicit pct breakdown. Official site shows 9 named trails, but OnTheSnow's 11 is the more-cited figure."
+  },
+  {
+    "slug": "trapp-family-lodge",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://www.vontrappresort.com/skiing-snowshoeing.htm",
+    "exact_quote": "The purchase of this pass offers unlimited access to over 60 kilometers of cross-country, snowshoe, and back-country ski trails on our 2,500 acres.",
+    "notes": "Nordic resort measured in km (60+ km groomed). No explicit trail count or difficulty pct."
+  },
+  {
+    "slug": "white-pine-touring-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic center measured in km (20+ km). No explicit trail count or difficulty pct in news sources."
+  },
+  {
+    "slug": "woodstock-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic center measured in km (45+ km). No explicit trail count or difficulty pct in news sources."
+  }
+]

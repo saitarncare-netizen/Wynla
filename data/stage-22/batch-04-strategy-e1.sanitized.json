@@ -1,0 +1,392 @@
+[
+  {
+    "slug": "camelback-mountain-resort",
+    "trails_total": 39,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.camelbackresort.com/trail-map",
+    "exact_quote": "Navigate all 39 trails, lifts, and terrain with ease using our complete Camelback Mountain trail map.",
+    "notes": "Trail count confirmed on trail-map page; difficulty breakdown not published as percentages."
+  },
+  {
+    "slug": "camp-10-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Facebook-only presence (no official website); no published stats to verify."
+  },
+  {
+    "slug": "campgaw-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skicampgaw.com/the-mountain/",
+    "exact_quote": "8 BEGINNER/INTERMEDIATE TRAILS",
+    "notes": "Site only lists 8 beginner/intermediate trails; no total trail count nor full difficulty percentage breakdown published."
+  },
+  {
+    "slug": "campton-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://camptonmountain.com/trails/",
+    "exact_quote": "Campton Mountain offers beginner and intermediate skiing with quick access from parking lot to lift in minutes-without long lift lines.",
+    "notes": "Site only describes terrain qualitatively; no trail count or difficulty percentages published."
+  },
+  {
+    "slug": "canaan-valley-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://canaanresort.com",
+    "exact_quote": null,
+    "notes": "Homepage and winter pages return 404 or no stats; trail data not published in extracted content."
+  },
+  {
+    "slug": "cannon-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.cannonmt.com",
+    "exact_quote": null,
+    "notes": "Stats pages return 404; homepage only describes trails qualitatively, no count or percentages found."
+  },
+  {
+    "slug": "cannonsburg",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.cannonsburg.com",
+    "exact_quote": null,
+    "notes": "Homepage and winter pages contain no explicit trail count or difficulty percentages."
+  },
+  {
+    "slug": "cascade-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.cascademountain.com/trail-map/",
+    "exact_quote": null,
+    "notes": "Trail map page only contains a map image; no textual trail count or difficulty percentage published."
+  },
+  {
+    "slug": "cataloochee-ski-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://cataloochee.com/the-mountain/trail-map/",
+    "exact_quote": null,
+    "notes": "Trail map page only contains the trail-map image; no textual trail count or difficulty percentage breakdown in published content."
+  },
+  {
+    "slug": "catamount-outdoor-family-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://catamountoutdoor.org/maps-conditions/",
+    "exact_quote": null,
+    "notes": "Nordic/MTB center; specific trail count and difficulty percentage breakdown only available in downloadable PDF, not as published text."
+  },
+  {
+    "slug": "catamount-ski-area",
+    "trails_total": 44,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 42,
+      "advanced": 23,
+      "expert": 0
+    },
+    "source_url": "https://www.catamountski.com/winter/the-mountain/trail-map",
+    "exact_quote": "TRAILS: 44 trails: 16 Green, 18 Blue, and 10 Black; TRAIL RATINGS: 35% Green Circle, 42% Blue Square, 23% Black Diamond/Double Black Diamond",
+    "notes": "Catamount lumps advanced + expert together as 23% Black Diamond/Double Black Diamond; placed under 'advanced'; expert set to 0 since not separately published."
+  },
+  {
+    "slug": "chapman-hill",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "City-of-Durango run hill; no official-site stats page identified for trail count or difficulty percentages."
+  },
+  {
+    "slug": "cherry-peak",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skithepeak.com",
+    "exact_quote": null,
+    "notes": "Mountain-info pages unreachable (ECONNREFUSED); homepage variants unavailable - no published numbers extracted."
+  },
+  {
+    "slug": "chestnut-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.chestnutmtn.com",
+    "exact_quote": null,
+    "notes": "Homepage and the-mountain pages do not publish trail count or difficulty percentages."
+  },
+  {
+    "slug": "china-peak",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skichinapeak.com/trail-map",
+    "exact_quote": null,
+    "notes": "Only a downloadable trail-map image; no textual count or percentages on official site."
+  },
+  {
+    "slug": "christie",
+    "trails_total": 33,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.christiemountain.com/",
+    "exact_quote": "33 TRAILS + A LIFETIME OF MEMORIES.",
+    "notes": "Homepage states 33 trails; no difficulty percentage breakdown published (only qualitative reference to eleven easier trails and double black diamonds)."
+  },
+  {
+    "slug": "christmas-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.christmasmountainvillage.com",
+    "exact_quote": null,
+    "notes": "Trail count and difficulty breakdown not published in homepage content."
+  },
+  {
+    "slug": "cloudmont-ski-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Site SSL/cert error (ERR_TLS_CERT_ALTNAME_INVALID) — site unreachable via standard fetch; no data extracted."
+  },
+  {
+    "slug": "cochrans-ski-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.cochranskiarea.com",
+    "exact_quote": null,
+    "notes": "Homepage does not publish trail count or difficulty percentage breakdown."
+  },
+  {
+    "slug": "cooper-spur-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.cooperspur.com",
+    "exact_quote": null,
+    "notes": "Homepage and winter pages do not publish explicit trail count or difficulty percentages."
+  },
+  {
+    "slug": "copper-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.coppercolorado.com",
+    "exact_quote": null,
+    "notes": "Reservations system error pages on attempted mountain-stats URLs; no published trail count or difficulty percentages retrieved from the-mountain pages."
+  },
+  {
+    "slug": "cottonwood-butte",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.cottonwoodbutte.org",
+    "exact_quote": "We offer four major groomed runs and several powder filled trails",
+    "notes": "Only qualitative terrain description; no precise trail count or difficulty percentage breakdown published."
+  },
+  {
+    "slug": "cranor-ski-hill",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Gunnison-county listed page returned 404; no official site stats published."
+  },
+  {
+    "slug": "crested-butte",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skicb.com",
+    "exact_quote": null,
+    "notes": "Mountain-stats endpoint returns system error; the-mountain and about pages 404 or unavailable. No textual stats retrieved."
+  },
+  {
+    "slug": "crosscut-sports-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.crosscutmt.org/",
+    "exact_quote": "Crosscut offers 15 miles of single-track trails for mountain biking, hiking, trail running, and e-mountain biking.",
+    "notes": "Nordic/MTB center; only mileage is published, not trail count or difficulty percentage."
+  },
+  {
+    "slug": "crotched-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.crotchedmountain.com",
+    "exact_quote": null,
+    "notes": "Site unreachable (ECONNREFUSED) on attempted fetches; no published numbers retrieved."
+  },
+  {
+    "slug": "crystal",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.crystalmountain.com",
+    "exact_quote": "Navigating over 85 runs and 2,600 acres",
+    "notes": "Crystal Mountain MI homepage mentions '85 runs' (this language differs from input's 59 trails — not a verified percentage). No explicit textual percentage breakdown found on extracted pages."
+  },
+  {
+    "slug": "crystal-mountain",
+    "trails_total": 57,
+    "difficulty_pct": {
+      "beginner": 11,
+      "intermediate": 54,
+      "advanced": 35,
+      "expert": 0
+    },
+    "source_url": "https://www.crystalmountainresort.com/the-mountain/mountain-stats",
+    "exact_quote": "57 Designated Trails / Advanced/Expert – 35% / Intermediate – 54% / Beginner – 11%",
+    "notes": "Crystal Mountain WA lumps Advanced/Expert as 35%; placed under 'advanced', expert set to 0 since not separately published."
+  },
+  {
+    "slug": "crystal-mountain-mi",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.crystalmountain.com",
+    "exact_quote": "Navigating over 85 runs and 2,600 acres",
+    "notes": "Same site as 'crystal' slug; only '85 runs' phrase published, no difficulty percentage breakdown in extracted content."
+  },
+  {
+    "slug": "crystal-ridge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://crystalridge.com/",
+    "exact_quote": null,
+    "notes": "Homepage and subpages do not publish explicit trail count or difficulty percentage breakdown."
+  }
+]

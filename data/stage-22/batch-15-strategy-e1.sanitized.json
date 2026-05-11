@@ -1,0 +1,458 @@
+[
+  {
+    "slug": "vail",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.vail.com",
+    "website_alive": true,
+    "source_url": "https://www.vail.com",
+    "exact_quote": null,
+    "notes": "Site returns 403 to WebFetch on multiple stats subpaths (likely bot protection); could not extract trails/difficulty without rendering."
+  },
+  {
+    "slug": "victor-constant-ski-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://westpoint.armymwr.com/programs/victor-constant-ski-area",
+    "website_alive": true,
+    "source_url": "https://westpoint.armymwr.com/programs/victor-constant-ski-area",
+    "exact_quote": null,
+    "notes": "Official page accessible but contains only a downloadable Trail Map PDF link; no trail count or difficulty text on page."
+  },
+  {
+    "slug": "villa-olivia",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://bartlettparks.org/villa-olivia/",
+    "website_alive": true,
+    "source_url": "https://bartlettparks.org/villa-olivia/",
+    "exact_quote": null,
+    "notes": "villaolivia.com redirects to bartlettparks.org. Slope Map page exists but content is image/PDF-based; no trail count or difficulty text available."
+  },
+  {
+    "slug": "wachusett-mountain",
+    "trails_total": 27,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.wachusett.com",
+    "website_alive": true,
+    "source_url": "https://www.wachusett.com/the-mountain/mountain-stats/",
+    "exact_quote": "Trails: 27",
+    "notes": "Mountain Stats page confirms 27 trails; difficulty breakdown is on trail-map image only (no text-extractable percentages)."
+  },
+  {
+    "slug": "warner-canyon",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://warnercanyonski.com/",
+    "website_alive": true,
+    "source_url": "https://warnercanyonski.com/",
+    "exact_quote": "perfect for beginner and intermediate skiers and snowboarders",
+    "notes": "Site alive; only descriptive language available, no numeric trail count or difficulty percentages on official site."
+  },
+  {
+    "slug": "waterville-valley",
+    "trails_total": 62,
+    "difficulty_pct": {
+      "beginner": 15,
+      "intermediate": 59,
+      "advanced": 23,
+      "expert": 3
+    },
+    "website_url": "https://www.waterville.com",
+    "website_alive": true,
+    "source_url": "https://www.waterville.com/mountain-stats",
+    "exact_quote": "Total Trails : 62 ... Novice: 15% ... Intermediate: 59% ... Advanced: 23% ... Expert: 3%",
+    "notes": "Official Mountain Stats page provides both trail count (62) and full difficulty breakdown."
+  },
+  {
+    "slug": "welch-village",
+    "trails_total": 50,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.welchvillage.com",
+    "website_alive": true,
+    "source_url": "https://www.welchvillage.com/trailMap.cfm",
+    "exact_quote": "50",
+    "notes": "Official Trail Map / Stats page lists 50 trails on 140 acres; no text-extractable difficulty breakdown (PDF map only)."
+  },
+  {
+    "slug": "west-mountain",
+    "trails_total": 35,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://westmountain.com",
+    "website_alive": true,
+    "source_url": "https://westmountain.com/trail-maps/",
+    "exact_quote": "Trails: 35/30 Groomed/5 Ungroomed Glades",
+    "notes": "westmtn.net redirects to westmountain.com. Trail Maps page confirms 35 trails (30 groomed + 5 glades); no difficulty percentages in text."
+  },
+  {
+    "slug": "whaleback-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.whaleback.com",
+    "website_alive": true,
+    "source_url": "https://www.whaleback.com/trail-map",
+    "exact_quote": null,
+    "notes": "Site alive; Trail Map page shows map image only with no extractable trail count or difficulty percentages in text."
+  },
+  {
+    "slug": "white-grass-touring",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://whitegrass.com",
+    "website_alive": true,
+    "source_url": "https://whitegrass.com",
+    "exact_quote": "over 50 km of maintained trails",
+    "notes": "Nordic touring center; official site lists 50 km of trails (distance, not count) with no difficulty breakdown in text."
+  },
+  {
+    "slug": "white-pass",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://skiwhitepass.com",
+    "website_alive": true,
+    "source_url": "https://skiwhitepass.com/the-mountain",
+    "exact_quote": "White Pass provides terrain for skiers and riders of every ability",
+    "notes": "Site alive; The Mountain & Trail Maps pages exist but neither contains text-extractable trail count or difficulty percentages."
+  },
+  {
+    "slug": "white-pine",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.whitepineresort.com",
+    "website_alive": true,
+    "source_url": "https://www.whitepineresort.com/",
+    "exact_quote": "363 skiable acres",
+    "notes": "whitepineski.com redirects to whitepineresort.com. Homepage cites 363 skiable acres; no trail count or difficulty percentages in text on accessible pages."
+  },
+  {
+    "slug": "white-pine-touring-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": null,
+    "website_alive": false,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No website_url provided in input; not researched per STRICT rules requiring official site."
+  },
+  {
+    "slug": "whitecap-mountains",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.skiwhitecap.com",
+    "website_alive": false,
+    "source_url": "https://www.skiwhitecap.com",
+    "exact_quote": null,
+    "notes": "skiwhitecap.com returns ECONNREFUSED on all attempts; site appears down."
+  },
+  {
+    "slug": "whiteface-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://whiteface.com",
+    "website_alive": true,
+    "source_url": "https://whiteface.com",
+    "exact_quote": null,
+    "notes": "Site returns 403 to WebFetch on all subpaths (bot protection); could not extract trails/difficulty data."
+  },
+  {
+    "slug": "whitefish",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://skiwhitefish.com",
+    "website_alive": true,
+    "source_url": "https://skiwhitefish.com",
+    "exact_quote": "110 named trails spanning roughly 3,000 acres",
+    "notes": "[SANITIZED — fabrication marker in notes] Official site confirms 110 named trails on ~3,000 acres; difficulty breakdown not in text on accessible pages (likely on trail map image only).",
+    "_sanitized": true,
+    "_original_notes": "Official site confirms 110 named trails on ~3,000 acres; difficulty breakdown not in text on accessible pages (likely on trail map image only)."
+  },
+  {
+    "slug": "whitetail-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.skiwhitetail.com",
+    "website_alive": false,
+    "source_url": "https://www.skiwhitetail.com",
+    "exact_quote": "The system cannot process your request. We apologize for any inconvenience.",
+    "notes": "All skiwhitetail.com pages return a system error message; site appears non-functional for content delivery."
+  },
+  {
+    "slug": "wild-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.wildmountain.com",
+    "website_alive": true,
+    "source_url": "https://www.wildmountain.com",
+    "exact_quote": null,
+    "notes": "Site alive; homepage covers summer/winter activities generally but no text-extractable trail count or difficulty data found on accessible pages."
+  },
+  {
+    "slug": "wildcat-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.skiwildcat.com",
+    "website_alive": false,
+    "source_url": "https://www.skiwildcat.com",
+    "exact_quote": "The system cannot process your request. We apologize for any inconvenience.",
+    "notes": "skiwildcat.com returns system error message on all attempts; site appears non-functional."
+  },
+  {
+    "slug": "willamette-pass",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.willamettepass.ski",
+    "website_alive": true,
+    "source_url": "https://www.willamettepass.ski/",
+    "exact_quote": "1,563 feet of vertical terrain",
+    "notes": "willamettepass.com redirects to willamettepass.ski; homepage provides vertical/snowfall stats but no trail count or difficulty percentages in text."
+  },
+  {
+    "slug": "willard-mountain",
+    "trails_total": 23,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.willardmountain.com",
+    "website_alive": true,
+    "source_url": "https://www.willardmountain.com",
+    "exact_quote": "23 total runs",
+    "notes": "Official site lists 23 runs (4 green, 11 blue, 8 black). Difficulty counts available but no explicit beginner/intermediate/advanced/expert percentages given."
+  },
+  {
+    "slug": "wilmot-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.wilmotmountain.com",
+    "website_alive": false,
+    "source_url": "https://www.wilmotmountain.com",
+    "exact_quote": "The system cannot process your request. We apologize for any inconvenience.",
+    "notes": "wilmotmountain.com returns system error on all attempts; site appears non-functional for content delivery (Vail Resorts reservation system error)."
+  },
+  {
+    "slug": "windham-mountain",
+    "trails_total": 54,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.windhammountainclub.com",
+    "website_alive": true,
+    "source_url": "https://www.windhammountainclub.com/the-mountain",
+    "exact_quote": "54 total trails ... 1,600 vertical feet ... 285 acres",
+    "notes": "Official site confirms 54 trails; difficulty percentages not in text on accessible pages (only on downloadable trail map)."
+  },
+  {
+    "slug": "winter-park",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.winterparkresort.com",
+    "website_alive": true,
+    "source_url": "https://www.winterparkresort.com/the-mountain/mountain-information",
+    "exact_quote": null,
+    "notes": "Mountain Information page exists but trail counts and difficulty breakdown are only on downloadable trail map PDF; not in extractable text."
+  },
+  {
+    "slug": "wintergreen-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.wintergreenresort.com",
+    "website_alive": true,
+    "source_url": "https://www.wintergreenresort.com/safety-stats/",
+    "exact_quote": "27 runs ... Beginner: 23% ... Intermediate: 45% ... Advanced: 32% ... Skiable Acres: 129 total",
+    "notes": "[SANITIZED — fabrication marker in notes] Safety + Stats page provides full breakdown: 27 trails, 23/45/32 split. No expert category listed (assumed 0).",
+    "_sanitized": true,
+    "_original_notes": "Safety + Stats page provides full breakdown: 27 trails, 23/45/32 split. No expert category listed (assumed 0)."
+  },
+  {
+    "slug": "winterplace-ski-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.winterplace.com",
+    "website_alive": true,
+    "source_url": "https://www.winterplace.com/mountain/mountain-facts",
+    "exact_quote": "28 slopes plus 2 terrain parks ... Easiest: 40% ... Intermediate: 35% ... Advanced: 25%",
+    "notes": "[SANITIZED — fabrication marker in notes] Mountain Facts page provides 28 slopes and 40/35/25 difficulty split. No expert category (assumed 0).",
+    "_sanitized": true,
+    "_original_notes": "Mountain Facts page provides 28 slopes and 40/35/25 difficulty split. No expert category (assumed 0)."
+  },
+  {
+    "slug": "wisp-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.wispresort.com",
+    "website_alive": true,
+    "source_url": "https://www.wispresort.com",
+    "exact_quote": null,
+    "notes": "Site alive; accessible pages cover lodging/activities/coaster but no trail count or difficulty percentages in extractable text on tried subpaths."
+  },
+  {
+    "slug": "wolf-creek",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.wolfcreekski.com",
+    "website_alive": true,
+    "source_url": "https://www.wolfcreekski.com",
+    "exact_quote": "the most snow in Colorado",
+    "notes": "Site alive but homepage focuses on season closure; no text-extractable trail count or difficulty percentages on accessible pages (third-party data unreliable per STRICT rules)."
+  },
+  {
+    "slug": "woods-valley",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.woodsvalleyskiarea.com",
+    "website_alive": true,
+    "source_url": "https://www.woodsvalleyskiarea.com",
+    "exact_quote": null,
+    "notes": "Homepage alive; no trail count or difficulty text on accessible pages (trail data only on downloadable trail map)."
+  },
+  {
+    "slug": "woodstock-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.woodstockinn.com/do/things-to-do/woodstock-nordic-center/conditions",
+    "website_alive": true,
+    "source_url": "https://www.woodstockinn.com/do/things-to-do/woodstock-nordic-center/conditions",
+    "exact_quote": null,
+    "notes": "Original input had website_url=null; located official page on woodstockinn.com. Two trail systems (Mt. Tom + Mt. Peg) but trail count and difficulty only on downloadable maps / Nordic Pulse platform, not in text."
+  }
+]

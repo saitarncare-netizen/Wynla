@@ -1,0 +1,394 @@
+[
+  {
+    "slug": "aspen-snowmass",
+    "trails_total": 366,
+    "difficulty_pct": {
+      "beginner": 6,
+      "intermediate": 43,
+      "advanced": 17,
+      "expert": 34
+    },
+    "source_url": "https://www.onthesnow.com/colorado/aspen-snowmass/ski-resort",
+    "exact_quote": "Beginners Runs 6% Intermediate Runs 43% Advanced Runs 17% Expert Runs 34%; 366 trails",
+    "notes": "OnTheSnow resort guide — full percentage breakdown and total trail count present."
+  },
+  {
+    "slug": "attitash",
+    "trails_total": 73,
+    "difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 49,
+      "advanced": 29,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/new-hampshire/attitash/ski-resort",
+    "exact_quote": "Runs in Total 73; Beginners Runs: 22%, Intermediate Runs: 49%, Advanced Runs: 29%",
+    "notes": "OnTheSnow only lists three tiers (no expert %). Skicentral lists 67 trails — using OnTheSnow's 73."
+  },
+  {
+    "slug": "badger-mountain-wa",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on OnTheSnow or Skicentral (both 404). Tiny WA community area."
+  },
+  {
+    "slug": "badger-pass",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Yosemite Badger Pass not found on OnTheSnow or Skicentral (404 on both)."
+  },
+  {
+    "slug": "bear-basin-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic center, not listed on OnTheSnow alpine database."
+  },
+  {
+    "slug": "bear-creek-mountain-resort",
+    "trails_total": 23,
+    "difficulty_pct": {
+      "beginner": 45,
+      "intermediate": 27,
+      "advanced": 27,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/pennsylvania/bear-creek-mountain-resort/ski-resort",
+    "exact_quote": "23 runs in total; Beginners: 45%, Intermediate: 27%, Advanced: 27%",
+    "notes": "OnTheSnow lists three tiers; no expert percentage given."
+  },
+  {
+    "slug": "bear-mountain",
+    "trails_total": 26,
+    "difficulty_pct": {
+      "beginner": 27,
+      "intermediate": 42,
+      "advanced": 23,
+      "expert": 8
+    },
+    "source_url": "https://www.onthesnow.com/california/bear-mountain/ski-resort",
+    "exact_quote": "Beginners Runs 27% Intermediate Runs 42% Advanced Runs 23% Expert Runs 8% Runs in Total 26",
+    "notes": "OnTheSnow Bear Mountain (Big Bear sister mountain) — full breakdown present."
+  },
+  {
+    "slug": "bear-paw",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on OnTheSnow or Skicentral (both 404). Tiny MT community hill."
+  },
+  {
+    "slug": "bear-valley-adventure-company",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic/adventure company, not in OnTheSnow alpine database."
+  },
+  {
+    "slug": "bear-valley-mountain",
+    "trails_total": 103,
+    "difficulty_pct": {
+      "beginner": 8,
+      "intermediate": 21,
+      "advanced": 68,
+      "expert": 3
+    },
+    "source_url": "https://www.onthesnow.com/california/bear-valley/ski-resort",
+    "exact_quote": "Beginners Runs 8% Intermediate Runs 21% Advanced Runs 68% Expert Runs 3% Runs in Total 103",
+    "notes": "Full breakdown on OnTheSnow guide. Unusual advanced-heavy mix but explicit on page."
+  },
+  {
+    "slug": "beartooth-basin",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Summer-only ski area not listed on OnTheSnow or Skicentral."
+  },
+  {
+    "slug": "beaver-creek",
+    "trails_total": 173,
+    "difficulty_pct": {
+      "beginner": 39,
+      "intermediate": 31,
+      "advanced": 24,
+      "expert": 6
+    },
+    "source_url": "https://www.onthesnow.com/colorado/beaver-creek/ski-resort",
+    "exact_quote": "Beginners Runs: 39%, Intermediate Runs: 31%, Advanced Runs: 24%, Expert Runs: 6%; 173 total trails",
+    "notes": "OnTheSnow lists 173 (vs current 167 in input). Used 173 per source."
+  },
+  {
+    "slug": "beaver-mountain",
+    "trails_total": 48,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/utah/beaver-mountain/ski-resort",
+    "exact_quote": "48 trails",
+    "notes": "OnTheSnow lists trail count only; no difficulty percentages on page."
+  },
+  {
+    "slug": "beech-mountain-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Both OnTheSnow URL variants returned 404. Skicentral page not found."
+  },
+  {
+    "slug": "belleayre-mountain",
+    "trails_total": 62,
+    "difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 48,
+      "advanced": 19,
+      "expert": 13
+    },
+    "source_url": "https://www.onthesnow.com/new-york/belleayre/ski-resort",
+    "exact_quote": "Beginners Runs 19% Intermediate Runs 48% Advanced Runs 19% Expert Runs 13% Runs in Total 62",
+    "notes": "OnTheSnow guide — full breakdown. Differs slightly from current input (32/43/18/7)."
+  },
+  {
+    "slug": "berkshire-east",
+    "trails_total": 43,
+    "difficulty_pct": {
+      "beginner": 28,
+      "intermediate": 42,
+      "advanced": 28,
+      "expert": 2
+    },
+    "source_url": "https://www.onthesnow.com/massachusetts/berkshire-east/ski-resort",
+    "exact_quote": "Total Trails: 43; Beginners: 28%, Intermediate: 42%, Advanced: 28%, Expert: 2%",
+    "notes": "OnTheSnow guide. Differs from current input (45 trails / 30/35/30/4)."
+  },
+  {
+    "slug": "bethel-village-trails",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic/cross-country trails network, not in OnTheSnow alpine database."
+  },
+  {
+    "slug": "big-bear-ca",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Big Bear Mountain Resort umbrella; OnTheSnow lists components (Bear Mountain, Snow Summit) separately. No combined-resort page found."
+  },
+  {
+    "slug": "big-bear-pa",
+    "trails_total": 18,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 33,
+      "advanced": 28,
+      "expert": 6
+    },
+    "source_url": "https://www.onthesnow.com/california/big-bear/ski-resort",
+    "exact_quote": "18 runs in total; Beginners: 33%, Intermediate: 33%, Advanced: 28%, Expert: 6%",
+    "notes": "OnTheSnow CA path actually returned Ski Big Bear PA data (matches the 18 trails in input). Caution: URL state may be unstable."
+  },
+  {
+    "slug": "big-boulder",
+    "trails_total": 16,
+    "difficulty_pct": {
+      "beginner": 38,
+      "intermediate": 19,
+      "advanced": 44,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/pennsylvania/big-boulder/ski-resort",
+    "exact_quote": "Total Trails: 16; Beginners: 38%, Intermediate: 19%, Advanced: 44%",
+    "notes": "OnTheSnow lists 16 trails (vs current 18 in input). Three tiers only; no expert percentage."
+  },
+  {
+    "slug": "big-powderhorn-mountain",
+    "trails_total": 44,
+    "difficulty_pct": {
+      "beginner": 27,
+      "intermediate": 41,
+      "advanced": 32,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/michigan/big-powderhorn-mountain/ski-resort",
+    "exact_quote": "44 runs across 253 acres; Beginners: 27%, Intermediate: 41%, Advanced: 32%",
+    "notes": "OnTheSnow lists 44 trails (current input has 45). No expert percentage on page."
+  },
+  {
+    "slug": "big-rock",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "OnTheSnow URL variants 404. Skicentral lists 35 trails but no difficulty breakdown — not used because table label only with no values."
+  },
+  {
+    "slug": "big-sky",
+    "trails_total": 320,
+    "difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 29,
+      "advanced": 31,
+      "expert": 19
+    },
+    "source_url": "https://www.onthesnow.com/montana/big-sky-resort/ski-resort",
+    "exact_quote": "Beginners Runs 21% Intermediate Runs 29% Advanced Runs 31% Expert Runs 19% Runs in Total 320",
+    "notes": "Full breakdown on OnTheSnow guide."
+  },
+  {
+    "slug": "big-snow-american-dream",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Indoor ski venue not listed on OnTheSnow or Skicentral."
+  },
+  {
+    "slug": "big-squaw-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Big Moose Mountain (formerly Big Squaw) — not found on OnTheSnow or Skicentral."
+  },
+  {
+    "slug": "bittersweet-ski-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Both OnTheSnow URL variants 404. Skicentral 404."
+  },
+  {
+    "slug": "black-area",
+    "trails_total": 68,
+    "difficulty_pct": {
+      "beginner": 29,
+      "intermediate": 32,
+      "advanced": 24,
+      "expert": 15
+    },
+    "source_url": "https://www.onthesnow.com/new-hampshire/black-mountain/ski-resort",
+    "exact_quote": "Total Trails: 68 runs; Beginners: 29%, Intermediate: 32%, Advanced: 24%, Expert: 15%",
+    "notes": "OnTheSnow Black Mountain NH guide. Note: this is the same resort as black-mountain-nh — input slug 'black-area' appears to also reference Black Mountain NH (45 trails in input differs from OTS's 68)."
+  },
+  {
+    "slug": "black-mountain-nh",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/new-hampshire/black-mountain/ski-resort",
+    "exact_quote": "Total Trails: 68 runs; Beginners: 29%, Intermediate: 32%, Advanced: 24%, Expert: 15%",
+    "notes": "[SANITIZED — fabrication marker in notes] OnTheSnow Black Mountain NH guide — full breakdown. Likely duplicate of 'black-area' slug.",
+    "_sanitized": true,
+    "_original_notes": "OnTheSnow Black Mountain NH guide — full breakdown. Likely duplicate of 'black-area' slug."
+  },
+  {
+    "slug": "black-mountain-of-maine",
+    "trails_total": 38,
+    "difficulty_pct": {
+      "beginner": 18,
+      "intermediate": 31,
+      "advanced": 46,
+      "expert": 5
+    },
+    "source_url": "https://www.onthesnow.com/maine/black-mountain-of-maine/ski-resort",
+    "exact_quote": "Runs in Total: 38; Beginners Runs: 18%, Intermediate Runs: 31%, Advanced Runs: 46%, Expert Runs: 5%",
+    "notes": "OnTheSnow lists 38 trails (current input 31). Full breakdown present."
+  },
+  {
+    "slug": "blackjack-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Blackjack MI is now part of Snowriver Mountain Resort (merged with Indianhead). OnTheSnow returns combined Snowriver data (74 trails total, includes Indianhead), not standalone Blackjack — values not isolatable to Blackjack alone, so left null."
+  }
+]

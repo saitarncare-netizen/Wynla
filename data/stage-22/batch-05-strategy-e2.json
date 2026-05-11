@@ -1,0 +1,327 @@
+[
+  {
+    "slug": "cuchara",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://www.skiresort.info/ski-resort/cuchara/",
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info; fetch returned portal homepage rather than resort detail page."
+  },
+  {
+    "slug": "dartmouth-skiway",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 50,
+      "advanced": 25,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/dartmouth-skiway/",
+    "exact_quote": "Easy 4 km (25 %) Intermediate 8 km (50 %) Difficult 4 km (25 %)",
+    "notes": "Total 16 km of slopes. Percentages from km breakdown."
+  },
+  {
+    "slug": "deer-valley",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 44,
+      "advanced": 21,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/deer-valley/",
+    "exact_quote": "Easy 72 km (35 %) Intermediate 90 km (44 %) Difficult 40 km (21 %)",
+    "notes": "Total 202 km of slopes. Percentages directly from source."
+  },
+  {
+    "slug": "detroit",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://www.skiresort.info/ski-resort/detroit/",
+    "exact_quote": null,
+    "notes": "Slug not found on skiresort.info; fetch returned portal page. (Possibly duplicate of detroit-mountain.)"
+  },
+  {
+    "slug": "detroit-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 50,
+      "intermediate": 50,
+      "advanced": 0,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/detroit-mountain/",
+    "exact_quote": "Easy 1 km (50 %) Intermediate 1 km (50 %) Difficult 0 km (0 %)",
+    "notes": "Total 2 km of slopes."
+  },
+  {
+    "slug": "devils-head",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 35,
+      "advanced": 35,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/devils-head/",
+    "exact_quote": "Easy 3 km (30 %) Intermediate 3.5 km (35 %) Difficult 3.5 km (35 %)",
+    "notes": "Total 10 km of slopes."
+  },
+  {
+    "slug": "diamond-peak",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 12,
+      "intermediate": 49,
+      "advanced": 39,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/diamond-peak/",
+    "exact_quote": "Easy 2 km (12 %) Intermediate 8 km (49 %) Difficult 6.3 km (39 %)",
+    "notes": "Total 16.3 km of slopes."
+  },
+  {
+    "slug": "discovery",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://www.skiresort.info/ski-resort/discovery/",
+    "exact_quote": null,
+    "notes": "Slug not found on skiresort.info; fetch returned portal page."
+  },
+  {
+    "slug": "dodge-ridge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 40,
+      "advanced": 40,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/dodge-ridge/",
+    "exact_quote": "Easy 10 km (20 %) Intermediate 20 km (40 %) Difficult 20 km (40 %)",
+    "notes": "Total 50 km of slopes."
+  },
+  {
+    "slug": "dog-creek-lodge-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://www.skiresort.info/ski-resort/dog-creek-lodge-nordic-center/",
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info; fetch returned portal page. Likely XC-only, not listed."
+  },
+  {
+    "slug": "donner-ski-ranch",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 50,
+      "advanced": 25,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/donner-ski-ranch/",
+    "exact_quote": "Easy 13 km (25 %) Intermediate 26 km (50 %) Difficult 13 km (25 %)",
+    "notes": "Total 52 km of slopes."
+  },
+  {
+    "slug": "dry-hill-area",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://www.skiresort.info/ski-resort/dry-hill-area/",
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info; fetch returned portal page."
+  },
+  {
+    "slug": "eagle-point",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 45,
+      "advanced": 25,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/eagle-point/",
+    "exact_quote": "Easy 6 km (30 %) Intermediate 9 km (45 %) Difficult 5 km (25 %)",
+    "notes": "Total 20 km of slopes."
+  },
+  {
+    "slug": "eagle-rock-resort",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://www.skiresort.info/ski-resort/eagle-rock-resort/",
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info; fetch returned portal page."
+  },
+  {
+    "slug": "eaglecrest",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://www.skiresort.info/ski-resort/eaglecrest/",
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info; fetch returned portal page."
+  },
+  {
+    "slug": "eaglecrest-ski-area",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://www.skiresort.info/ski-resort/eaglecrest-ski-area/",
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info; fetch returned portal page. (Possibly duplicate of eaglecrest.)"
+  },
+  {
+    "slug": "eaton-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 75,
+      "intermediate": 25,
+      "advanced": 0,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/eaton-mountain/",
+    "exact_quote": "Easy 1.5 km (75 %) Intermediate 0.5 km (25 %) Difficult 0 km (0 %)",
+    "notes": "Total 2 km of slopes."
+  },
+  {
+    "slug": "echo-mountain",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://www.skiresort.info/ski-resort/echo-mountain/",
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info; fetch returned portal page."
+  },
+  {
+    "slug": "echo-valley",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 40,
+      "advanced": 27,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/echo-valley/",
+    "exact_quote": "Easy 2.3 km (33 %) Intermediate 2.8 km (40 %) Difficult 1.9 km (27 %)",
+    "notes": "Total 7 km of slopes."
+  },
+  {
+    "slug": "eldora",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://www.skiresort.info/ski-resort/eldora/",
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info; fetch returned portal page."
+  },
+  {
+    "slug": "elk-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 53,
+      "advanced": 27,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/elk-mountain/",
+    "exact_quote": "Easy 3 km (20 %) Intermediate 8 km (53 %) Difficult 4 km (27 %)",
+    "notes": "Total 15 km of slopes."
+  },
+  {
+    "slug": "elko-snobowl",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 50,
+      "intermediate": 50,
+      "advanced": 0,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/elko-snobowl/",
+    "exact_quote": "Easy: 1.5 km (50%), Intermediate: 1.5 km (50%), Difficult: 0 km (0%)",
+    "notes": "Total 3 km of slopes."
+  },
+  {
+    "slug": "enchanted-forest-xc",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://www.skiresort.info/ski-resort/enchanted-forest-xc/",
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info; fetch returned portal page. (XC-only resort.)"
+  },
+  {
+    "slug": "ferguson-ridge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 40,
+      "intermediate": 40,
+      "advanced": 20,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/ferguson-ridge/",
+    "exact_quote": "Easy 2 km (40 %) Intermediate 2 km (40 %) Difficult 1 km (20 %)",
+    "notes": "Total 5 km of slopes."
+  },
+  {
+    "slug": "four-lakes",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 100,
+      "intermediate": 0,
+      "advanced": 0,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/four-lakes/",
+    "exact_quote": "Easy 1 km (100 %) Intermediate 0 km (0 %) Difficult 0 km (0 %)",
+    "notes": "Total 1 km of slopes."
+  },
+  {
+    "slug": "franconia-village-xc-area",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://www.skiresort.info/ski-resort/franconia-village-xc-area/",
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info; fetch returned portal page. (XC-only resort.)"
+  },
+  {
+    "slug": "frost-fire-park",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 47,
+      "intermediate": 40,
+      "advanced": 13,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/frost-fire-park/",
+    "exact_quote": "Easy 0.7 km (47 %) Intermediate 0.6 km (40 %) Difficult 0.2 km (13 %)",
+    "notes": "Total 1.5 km of slopes."
+  },
+  {
+    "slug": "garnet-hill-xc",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://www.skiresort.info/ski-resort/garnet-hill-xc/",
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info; fetch returned portal page. (XC-only resort.)"
+  },
+  {
+    "slug": "giants-ridge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 42,
+      "advanced": 25,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/giants-ridge/",
+    "exact_quote": "Easy 4 km (33 %) Intermediate 5 km (42 %) Difficult 3 km (25 %)",
+    "notes": "Total 12 km of slopes."
+  },
+  {
+    "slug": "gore-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 12,
+      "intermediate": 48,
+      "advanced": 40,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/gore-mountain/",
+    "exact_quote": "Easy 6.7 km (12 %) Intermediate 28.2 km (48 %) Difficult 23.3 km (40 %)",
+    "notes": "Total 58.2 km of slopes."
+  }
+]

@@ -1,0 +1,28 @@
+[
+  {
+    "slug": "woodward-park-city",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://snowbrains.com/year-round-action-sports-park-city-utah/",
+    "exact_quote": "the Mountain Park will provide tubing and lift access to a network of terrain parks including a half-pipe, a Woodward Peace Park, and multiple progression and performance parks",
+    "notes": "SnowBrains press coverage describes Woodward Park City as a terrain-park-focused mountain (half-pipe, Peace Park, progression/performance parks) without giving a discrete trail count or beginner/intermediate/advanced/expert split. KPCW (regional news, 2025-09-29) and Park Record press releases similarly omit numeric trail counts and difficulty percentages. No news/press source provides a quantified trails_total or difficulty_pct for Woodward Park City."
+  },
+  {
+    "slug": "yellowstone-club",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 12,
+      "intermediate": 42,
+      "advanced": 27,
+      "expert": 19
+    },
+    "source_url": "https://bestsnow.net/yclbguid.htm",
+    "exact_quote": "Yellow 3% | Black 16% | Red 27% | Blue 42% | Green 12%",
+    "notes": "BestSnow.net regional ski guide reports Variability-Index difficulty distribution: Green 12% (beginner), Blue 42% (intermediate), Red 27% (advanced), Black 16% + Yellow 3% = 19% (expert/double-black). No exact trails_total provided in this source. SnowBrains press coverage states '2,900 skiable acres and 2,700ft of vertical drop' but no run count; the often-cited '100+ runs' figure appears only in marketing copy, not in a quotable news/press total. Difficulty_pct sums to 100."
+  }
+]

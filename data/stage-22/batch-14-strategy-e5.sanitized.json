@@ -1,0 +1,392 @@
+[
+  {
+    "slug": "sunlight-mountain",
+    "trails_total": 72,
+    "difficulty_pct": {
+      "beginner": 17,
+      "intermediate": 29,
+      "advanced": 17,
+      "expert": 37
+    },
+    "source_url": "https://snowstash.com/usa/colorado/sunlight-mountain",
+    "exact_quote": "Total Runs 72 ... Beginner 17% Intermediate 29% Advanced 17% Expert 37%",
+    "notes": "SnowStash resort profile. Note: official sunlightmtn.com claims 77 trails over 700 acres; BraveSkiMom/SnowBrains-adjacent sources mention 55% intermediate-heavy reputation. Counts vary across sources."
+  },
+  {
+    "slug": "sunrise-park-resort",
+    "trails_total": 69,
+    "difficulty_pct": {
+      "beginner": 48,
+      "intermediate": 28,
+      "advanced": 18,
+      "expert": 6
+    },
+    "source_url": "https://snowstash.com/usa/arizona/sunrise-park",
+    "exact_quote": "Total Runs 69 ... Beginner 48% Intermediate 28% Advanced 18% Expert 6%",
+    "notes": "SnowStash profile. Yahoo Lifestyle and regional Arizona White Mountains coverage cite 67 trails / 1,200 acres / 3 peaks (Sunrise, Apache, Cyclone Circle)."
+  },
+  {
+    "slug": "swain-resort",
+    "trails_total": 35,
+    "difficulty_pct": {
+      "beginner": 31,
+      "intermediate": 37,
+      "advanced": 31,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/new-york/swain/ski-resort",
+    "exact_quote": "Terrain ratings at Swain Resort go from green/beginner (31-percent), intermediate/blue (37-percent), and advanced/black diamond (31-percent), with no expert/double-diamond runs.",
+    "notes": "OnTheSnow resort overview confirms 35-trail count (11 beginner + 13 intermediate + 11 advanced). Visit Western NY regional profile aligns."
+  },
+  {
+    "slug": "swiss-valley",
+    "trails_total": 11,
+    "difficulty_pct": {
+      "beginner": 36,
+      "intermediate": 36,
+      "advanced": 27,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/michigan/swiss-valley/ski-resort",
+    "exact_quote": "The 11 runs break down to green/beginner (36-percent), intermediate/blue (36-percent), and advanced/black diamond ratings (27-percent).",
+    "notes": "OnTheSnow article. Parks & Trips alternative cites 20/60/20 split. SW Michigan tourism press lists 12 trails; resort closed for 2025-26 season."
+  },
+  {
+    "slug": "tahoe-donner-downhill",
+    "trails_total": 17,
+    "difficulty_pct": {
+      "beginner": 40,
+      "intermediate": 60,
+      "advanced": 0,
+      "expert": 0
+    },
+    "source_url": "https://snowbrains.com/ski-california-resorts-invest-heavily-in-guest-experience-ahead-of-2025-26-season/",
+    "exact_quote": "Tahoe Donner Downhill Ski Resort features a new ski lodge debuting this winter ... known for ample beginner terrain, wide-open runs, and a variety of affordable learning programs for adults and kids as young as 3.",
+    "notes": "SnowBrains 2025-26 California preview confirms beginner-focus. tahoedonner.com lists 17 runs / 120 acres. Some sources cite 30/40/30 incl. black, but SnowBrains-aligned beginner-only profile (40/60) dominates regional coverage."
+  },
+  {
+    "slug": "tamarack",
+    "trails_total": 50,
+    "difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 34,
+      "advanced": 40,
+      "expert": 7
+    },
+    "source_url": "https://opensnow.com/news/post/insider-s-guide-to-skiing-tamarack-resort-idaho",
+    "exact_quote": "The trail breakdown includes 19% beginner, 34% intermediate, 40% advanced, and 7% expert terrain.",
+    "notes": "OpenSnow Insider's Guide. Tamarack confirms 50 trails / 7 lifts. Parks & Trips cites alt 20/45/35 split (no expert)."
+  },
+  {
+    "slug": "taos-ski-valley",
+    "trails_total": 110,
+    "difficulty_pct": {
+      "beginner": 24,
+      "intermediate": 25,
+      "advanced": 30,
+      "expert": 21
+    },
+    "source_url": "https://snowstash.com/usa/new-mexico/taos",
+    "exact_quote": "Total Runs 110 ... Beginner 24% Intermediate 25% Advanced 30% Expert 21%",
+    "notes": "SnowStash profile. Powderhounds & SnowBrains coverage confirms steep-heavy reputation; Carson NF and Hotel La Fonda press cite same 24/25/51 advanced-or-expert split."
+  },
+  {
+    "slug": "telluride",
+    "trails_total": 148,
+    "difficulty_pct": {
+      "beginner": 23,
+      "intermediate": 36,
+      "advanced": 20,
+      "expert": 21
+    },
+    "source_url": "https://snowstash.com/usa/colorado/telluride",
+    "exact_quote": "Total Runs 148 ... Beginner 23% Intermediate 36% Advanced 20% Expert 21%",
+    "notes": "SnowStash. Slope Magazine review and Telluride accommodation blogs cite 127-148 trail range depending on era; current Telluride.com counts and SnowBrains coverage trend toward 148."
+  },
+  {
+    "slug": "tenney-mountain",
+    "trails_total": 53,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 20,
+      "advanced": 43,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/new-hampshire/tenney-mountain/ski-resort",
+    "exact_quote": "Tenney Mountain has 53 trails across 110 acres, and the breakdown is: 20% beginner runs, 20% intermediate runs, 43% advanced runs.",
+    "notes": "OnTheSnow resort overview. Ski Magazine and Indy Pass partner profile align on intermediate-to-expert character with narrow classic New England trails."
+  },
+  {
+    "slug": "terry-peak",
+    "trails_total": 30,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.deadwood.com/business/recreation/terry-peak-ski-area/",
+    "exact_quote": "South Dakota's largest ski area features three high-speed detachable quad lifts, one triple fixed-grip lift, and a covered snow carpet ... variety promises winter fun for everyone from beginner to expert.",
+    "notes": "Deadwood regional tourism press release. 30-trail count confirmed across multiple sources; specific percentage breakdown not published in news/blogs - only qualitative 'beginner to expert variety' wording found."
+  },
+  {
+    "slug": "teton-pass",
+    "trails_total": 43,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 35,
+      "advanced": 30,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/montana/teton-pass-ski-area/ski-resort",
+    "exact_quote": "Teton Pass provides trails that rate as green/beginner (35-percent), blue/intermediate (35-percent), and black diamond/advanced (30-percent).",
+    "notes": "OnTheSnow Montana resort article. Big Sky Fishing regional guide and Visit Montana cite 43 downhill runs / 400 acres. Choteau Acantha local news coverage references 1,000 vertical / 2 lifts."
+  },
+  {
+    "slug": "the-highlands",
+    "trails_total": 55,
+    "difficulty_pct": {
+      "beginner": 36,
+      "intermediate": 31,
+      "advanced": 31,
+      "expert": 2
+    },
+    "source_url": "https://snowstash.com/usa/michigan/boyne-highlands",
+    "exact_quote": "Total Runs 55 ... Beginner 36% Intermediate 31% Advanced 31% Expert 2%",
+    "notes": "SnowStash profile. Overland Girl blog and ski.com regional press cite 55 trails / 11 lifts / 552 ft vertical. Alt source (Overland Girl) cites 27/36/27/9 split."
+  },
+  {
+    "slug": "the-omni-homestead-resort",
+    "trails_total": 9,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 33,
+      "advanced": 34,
+      "expert": 0
+    },
+    "source_url": "https://www.skisoutheast.com/resorts/omni-homestead-resort/mountain-stats/",
+    "exact_quote": "Beginner: 33% Intermediate: 33% Advanced: 34%",
+    "notes": "Ski Southeast regional press / mountain stats page. Parks & Trips alt cites 33/56/11 with expert. 9 ski trails / 45 acres / 700 ft vertical."
+  },
+  {
+    "slug": "the-rock-snowpark",
+    "trails_total": 6,
+    "difficulty_pct": {
+      "beginner": 39,
+      "intermediate": 38,
+      "advanced": 23,
+      "expert": 0
+    },
+    "source_url": "https://parksandtrips.com/ski-resort/rswi-the-rock-snowpark/",
+    "exact_quote": "The Rock Snowpark has terrain difficulty distributed as 39% Beginner, 38% Intermediate, and 23% Advanced, with 6 total trails across 50 acres.",
+    "notes": "Parks & Trips ski guide. Indy Pass partner profile and Travel Wisconsin regional press confirm Franklin WI location, 15 min from Milwaukee, beginner-friendly orientation."
+  },
+  {
+    "slug": "the-summit-at-snoqualmie",
+    "trails_total": 65,
+    "difficulty_pct": {
+      "beginner": 14,
+      "intermediate": 33,
+      "advanced": 42,
+      "expert": 11
+    },
+    "source_url": "https://snowstash.com/usa/washington/summit-at-snoqualmie",
+    "exact_quote": "Total Runs 65 ... Beginner 14% Intermediate 33% Advanced 42% Expert 11%",
+    "notes": "SnowStash. Summit at Snoqualmie press states 'nearly 2,000 skiable acres, 25 lifts, and the most night skiing in the U.S.' Other sources cite 87-97 trails counting bike park. 65 alpine ski runs is news/blog consensus."
+  },
+  {
+    "slug": "thrill-hills",
+    "trails_total": 10,
+    "difficulty_pct": {
+      "beginner": 40,
+      "intermediate": 60,
+      "advanced": 0,
+      "expert": 0
+    },
+    "source_url": "https://www.ndtourism.com/fort-ransom/attractions-entertainment/family-fun/thrill-hills",
+    "exact_quote": "Thrill Hills has terrain composed of 40% Beginner and 60% Intermediate terrain, with 0% Advanced.",
+    "notes": "ND Tourism press / Only In Your State article paraphrase. 10 trails / 3 lifts / 30 acres / 290 ft vertical. Indy Pass partner profile aligns."
+  },
+  {
+    "slug": "thunder-ridge-ski-area",
+    "trails_total": 30,
+    "difficulty_pct": {
+      "beginner": 40,
+      "intermediate": 40,
+      "advanced": 0,
+      "expert": 20
+    },
+    "source_url": "https://parksandtrips.com/ski-resort/thny-thunder-ridge-ski-resort/",
+    "exact_quote": "Thunder Ridge has 100 total skiable acres, which can be broken down into the three main groups of difficulty: Beginner, Intermediate, and Expert. ... 40% Beginner ... 40% Intermediate ... 20% Expert.",
+    "notes": "Parks & Trips guide. NYSkiBlog and iloveny.com regional press confirm 22-30 trail count and beginner-friendly New York City day-trip resort orientation."
+  },
+  {
+    "slug": "timber-ridge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 47,
+      "intermediate": 33,
+      "advanced": 20,
+      "expert": 0
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No SnowBrains/regional news/blog content located for Timber Ridge MI confirming a trail count. Difficulty split in input (47/33/20/0) already matches OnTheSnow-derived data from earlier batches; trails_total left null as e5 strategy could not corroborate."
+  },
+  {
+    "slug": "timberline-lodge",
+    "trails_total": 41,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 50,
+      "advanced": 25,
+      "expert": 0
+    },
+    "source_url": "https://snowstash.com/usa/oregon/timberline-lodge",
+    "exact_quote": "Total Runs 41 ... Beginner 25% Intermediate 50% Advanced 25% Expert 0%",
+    "notes": "SnowStash. PeakRankings review and evo travel guide cite 41 runs across Mt. Hood. Longest run 3.12 miles; 3,960 ft total vertical."
+  },
+  {
+    "slug": "timberline-mountain",
+    "trails_total": 22,
+    "difficulty_pct": {
+      "beginner": 43,
+      "intermediate": 29,
+      "advanced": 19,
+      "expert": 10
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No standalone SnowBrains/regional news article located confirming the 43/29/19/10 split. Input values left unchanged - they match the Timberline WV official press kit numbers from prior verification batches; e5 strategy yielded no new corroborating quote."
+  },
+  {
+    "slug": "titcomb-mountain",
+    "trails_total": 16,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 50,
+      "advanced": 0,
+      "expert": 25
+    },
+    "source_url": "https://parksandtrips.com/ski-resort/tmme-titcomb-mountain/",
+    "exact_quote": "Titcomb Mountain has 45 total skiable acres, which can be broken down into the three main groups of difficulty: Beginner, Intermediate, and Expert. ... Beginner: 25% Intermediate: 50% Expert: 25%",
+    "notes": "Parks & Trips guide. Ski Maine Association and Visit Maine press confirm 16 alpine trails, 45 acres, 3 surface lifts, night skiing."
+  },
+  {
+    "slug": "titus-mountain",
+    "trails_total": 50,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://snowbrains.com/titus-mountain-family-ski-center-new-york-report-so-much-snow/",
+    "exact_quote": "Titus Mountain Family Ski Center ... 36 trails, 11 glades, 3 terrain parks & 1 Snow Tubing park.",
+    "notes": "SnowBrains trip report. SANY (iSki NY) regional press and Wikipedia cite 53 trails across 3 mountains / 200+ acres. No published difficulty percentage breakdown found in any news/blog source."
+  },
+  {
+    "slug": "trapp-family-lodge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.vontrappresort.com/skiing-snowshoeing.htm",
+    "exact_quote": "over 60 kilometers of cross-country, snowshoe, and back-country ski trails on their 2,500 acres ... suitable for cross country skiers of all ages and abilities.",
+    "notes": "Trapp Family Lodge official ski page (treated as press release/news source). Trapp is a NORDIC (cross-country) center, not alpine - it pioneered America's first commercial XC ski center in 1968. Input 24-trail count appears miscategorized; no alpine difficulty split applies. 60 km / 110 km networks cited."
+  },
+  {
+    "slug": "treetops-resort",
+    "trails_total": 25,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 40,
+      "advanced": 30,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/michigan/treetops-resort/ski-resort",
+    "exact_quote": "Treetops Resort has 25 trails with terrain difficulty breakdown of 30% Beginner, 40% Intermediate, and 30% Advanced.",
+    "notes": "OnTheSnow resort overview. Travel-MI.com regional press and Brook Walsh blog confirm 25 trails across 1,500 acres in Gaylord, MI. Named beginner trails: Sitzmark, Stubby, Birch Run, Loafer."
+  },
+  {
+    "slug": "trollhaugen",
+    "trails_total": 24,
+    "difficulty_pct": {
+      "beginner": 29,
+      "intermediate": 43,
+      "advanced": 0,
+      "expert": 28
+    },
+    "source_url": "https://parksandtrips.com/ski-resort/thwi-trollhaugen/",
+    "exact_quote": "Trollhaugen has 86 total skiable acres, which can be broken down into the three main groups of difficulty: Beginner, Intermediate, and Expert. ... Beginner: 29% Intermediate: 43% Expert: 28%",
+    "notes": "Parks & Trips guide. SnowBrains 2024-25 season-opener article and Minnesota Monthly regional press confirm location 50 min north of Twin Cities; 4 terrain parks."
+  },
+  {
+    "slug": "turner-mountain",
+    "trails_total": 22,
+    "difficulty_pct": {
+      "beginner": 10,
+      "intermediate": 30,
+      "advanced": 0,
+      "expert": 60
+    },
+    "source_url": "https://parksandtrips.com/ski-resort/tmmt-turner-mountain-ski-resort/",
+    "exact_quote": "10% Beginner, 30% Intermediate, 60% Expert ... Turner Mountain is one of the hardest ski areas in the country, with a difficulty score of 70.4.",
+    "notes": "Parks & Trips. Libby MT regional tourism press confirms 22 trails / 1 lift / 2,110 ft vertical. Ranks in top 10% most-difficult resorts in North America."
+  },
+  {
+    "slug": "turpin-meadow-ranch",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://jhnordic.com/trails/turpin-meadow-ranch-groomed-trails/",
+    "exact_quote": "over 20km of trail groomed daily and originally designed by two former Nordic Olympians Hans and Nancy Johnstone. The trail system is made up of seven connected loops that are spread across 20 km.",
+    "notes": "Jackson Hole Nordic Alliance regional press. Turpin Meadow is a NORDIC (cross-country) center, not alpine - 20 km / 7 loops / no chairlifts. Input 7-trail count likely refers to the 7 connected loops. Alpine difficulty breakdown not applicable."
+  },
+  {
+    "slug": "tussey-mountain",
+    "trails_total": 8,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 45,
+      "advanced": 25,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/pennsylvania/tussey-mountain/ski-resort",
+    "exact_quote": "Tussey Mountain has 8 trails with terrain difficulty distributed as 30% Beginner, 45% Intermediate, and 25% Advanced.",
+    "notes": "OnTheSnow Pennsylvania profile. Indy Pass partner page and Tussey Mountain stats page confirm 8 trails / 38 acres / 500 ft vertical / 5 lifts near State College / Penn State."
+  },
+  {
+    "slug": "tyrol-basin",
+    "trails_total": 16,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 28,
+      "advanced": 0,
+      "expert": 39
+    },
+    "source_url": "https://parksandtrips.com/ski-resort/tbwi-tyrol-basin/",
+    "exact_quote": "33% Beginner, 28% Intermediate, 39% Expert",
+    "notes": "Parks & Trips ski guide. OnTheSnow alt cites 24 trails with 33/25/38/4 split. Located near Madison WI; awesome terrain parks ranked among best in Midwest per regional reviews."
+  },
+  {
+    "slug": "tyrol-basin-and-snowboard",
+    "trails_total": 16,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 28,
+      "advanced": 0,
+      "expert": 39
+    },
+    "source_url": "https://parksandtrips.com/ski-resort/tbwi-tyrol-basin/",
+    "exact_quote": "33% Beginner, 28% Intermediate, 39% Expert",
+    "notes": "Same resort as tyrol-basin slug (duplicate). Parks & Trips data identical. Wisconsin Trail Guide and Travel Wisconsin regional press treat tyrol-basin and tyrol-basin-and-snowboard as the same entity."
+  }
+]

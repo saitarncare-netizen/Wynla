@@ -1,0 +1,28 @@
+[
+  {
+    "slug": "woodward-park-city",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 60,
+      "intermediate": 40,
+      "advanced": 0,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/woodward-park-city/",
+    "exact_quote": "Total: 0.5 km\n\nEasy\n\n0.3 km\n\n(60 %)\n\nIntermediate\n\n0.2 km\n\n(40 %)\n\nDifficult\n\n0 km\n\n(0 %)",
+    "notes": "Wikipedia article (en.wikipedia.org/wiki/Woodward_Park_City) returned 404 — no article exists. SkiCentral does not list this resort. Skiresort.info reports slope length in km rather than trail count, so trails_total is null. Woodward Park City is primarily an action-sports / freestyle training facility (terrain parks, halfpipes, indoor training), not a traditional alpine resort, which explains the very small 0.5 km of groomed slopes and the absence of a conventional trail count in regional databases. Difficulty % derived from skiresort.info slope-length breakdown (Easy→beginner, Intermediate→intermediate, Difficult→advanced/expert split 0/0). Source classifies difficulty by slope distance, not by individual trail count."
+  },
+  {
+    "slug": "yellowstone-club",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 37,
+      "intermediate": 37,
+      "advanced": 26,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/yellowstone-club/",
+    "exact_quote": "Total: 80 km\n\nEasy\n\n30 km\n\n(37 %)\n\nIntermediate\n\n30 km\n\n(37 %)\n\nDifficult\n\n20 km\n\n(26 %)",
+    "notes": "Wikipedia (en.wikipedia.org/wiki/Yellowstone_Club) confirms private-club status and mentions '2200 acres for skiing' plus Pioneer Ridge 'double black expert runs and challenging chutes', but provides no trail count or % breakdown. SkiCentral Montana listing does not include Yellowstone Club (private members-only club, often omitted from public directories). Powderhounds returned 403. Skiresort.info reports slope length in km rather than trail count, so trails_total is null. Difficulty % from skiresort.info slope-length breakdown (Easy→beginner, Intermediate→intermediate, Difficult mapped to advanced; expert kept 0 since source only provides 3-tier split). Source classifies difficulty by slope distance, not individual trail count."
+  }
+]

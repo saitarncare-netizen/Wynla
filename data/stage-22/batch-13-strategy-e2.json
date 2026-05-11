@@ -1,0 +1,242 @@
+[
+  {
+    "slug": "snowmass",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 5, "intermediate": 48, "advanced": 24, "expert": 23 },
+    "source_url": "https://www.skiresort.info/ski-resort/snowmass/",
+    "exact_quote": "Easy 12 km (5 %) Intermediate 114 km (48 %) Difficult 111 km (47 %)",
+    "notes": "Total 237 km. Difficult 47% split evenly between advanced (24) and expert (23) to preserve sum=100."
+  },
+  {
+    "slug": "snowriver",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info (tried snowriver, big-snow-snowriver, snowriver-mountain, snowriver-mountain-resort)."
+  },
+  {
+    "slug": "snowshoe-mountain",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 46, "intermediate": 35, "advanced": 10, "expert": 9 },
+    "source_url": "https://www.skiresort.info/ski-resort/snowshoe-mountain/",
+    "exact_quote": "Easy 14 km (46 %) Intermediate 11 km (35 %) Difficult 6 km (19 %)",
+    "notes": "Total 31 km. Difficult 19% split advanced (10) and expert (9)."
+  },
+  {
+    "slug": "snowstar",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 14, "intermediate": 37, "advanced": 25, "expert": 24 },
+    "source_url": "https://www.skiresort.info/ski-resort/snowstar/",
+    "exact_quote": "Easy 0.5 km (14 %) Intermediate 1.5 km (37 %) Difficult 2 km (49 %)",
+    "notes": "Total 4 km. Difficult 49% split advanced (25) and expert (24)."
+  },
+  {
+    "slug": "snowy-range",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 27, "intermediate": 55, "advanced": 9, "expert": 9 },
+    "source_url": "https://www.skiresort.info/ski-resort/snowy-range/",
+    "exact_quote": "Easy 4.5 km (27 %) Intermediate 9 km (55 %) Difficult 3 km (18 %)",
+    "notes": "Total 16.5 km. Difficult 18% split advanced (9) and expert (9)."
+  },
+  {
+    "slug": "soda-springs",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 30, "intermediate": 50, "advanced": 10, "expert": 10 },
+    "source_url": "https://www.skiresort.info/ski-resort/soda-springs/",
+    "exact_quote": "Easy 3 km (30 %) Intermediate 5 km (50 %) Difficult 2 km (20 %)",
+    "notes": "Total 10 km. Difficult 20% split advanced (10) and expert (10)."
+  },
+  {
+    "slug": "soldier-hollow",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info (tried soldier-hollow, soldier-hollow-nordic-center, soldier-hollow-cross-country-skiing). Soldier Hollow is a Nordic/cross-country venue and likely not indexed."
+  },
+  {
+    "slug": "soldier-mountain",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 36, "intermediate": 32, "advanced": 16, "expert": 16 },
+    "source_url": "https://www.skiresort.info/ski-resort/soldier-mountain/",
+    "exact_quote": "Easy 9 km (36 %), Intermediate 8 km (32 %), Difficult 8 km (32 %)",
+    "notes": "Total 25 km. Difficult 32% split advanced (16) and expert (16)."
+  },
+  {
+    "slug": "solitude",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 10, "intermediate": 40, "advanced": 25, "expert": 25 },
+    "source_url": "https://www.skiresort.info/ski-resort/solitude/",
+    "exact_quote": "Easy 6.4 km (10 %) Intermediate 25.6 km (40 %) Difficult 32 km (50 %)",
+    "notes": "Total 64 km. Difficult 50% split advanced (25) and expert (25)."
+  },
+  {
+    "slug": "song-mountain",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 35, "intermediate": 46, "advanced": 10, "expert": 9 },
+    "source_url": "https://www.skiresort.info/ski-resort/song-mountain/",
+    "exact_quote": "Easy 4.5 km (35 %), Intermediate 6 km (46 %), Difficult 2.5 km (19 %)",
+    "notes": "Total 13 km. Difficult 19% split advanced (10) and expert (9)."
+  },
+  {
+    "slug": "spirit-mountain",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 36, "intermediate": 46, "advanced": 9, "expert": 9 },
+    "source_url": "https://www.skiresort.info/ski-resort/spirit-mountain/",
+    "exact_quote": "Easy 4 km (36 %) Intermediate 5 km (46 %) Difficult 2 km (18 %)",
+    "notes": "Total 11 km. Difficult 18% split advanced (9) and expert (9)."
+  },
+  {
+    "slug": "spout-springs",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 31, "intermediate": 52, "advanced": 9, "expert": 8 },
+    "source_url": "https://www.skiresort.info/ski-resort/spout-springs/",
+    "exact_quote": "Easy 3 km (31 %) Intermediate 5 km (52 %) Difficult 1.5 km (17 %)",
+    "notes": "Total 9.5 km. Difficult 17% split advanced (9) and expert (8). Resort noted as temporarily closed."
+  },
+  {
+    "slug": "spring-mountain",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 47, "intermediate": 29, "advanced": 12, "expert": 12 },
+    "source_url": "https://www.skiresort.info/ski-resort/spring-mountain/",
+    "exact_quote": "Easy 4 km (47 %) Intermediate 2.5 km (29 %) Difficult 2 km (24 %)",
+    "notes": "Total 8.5 km. Difficult 24% split advanced (12) and expert (12)."
+  },
+  {
+    "slug": "spruce-mountain-ski-area",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info (tried spruce-mountain, spruce-mountain-ski-area)."
+  },
+  {
+    "slug": "steamboat",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 15, "intermediate": 58, "advanced": 14, "expert": 13 },
+    "source_url": "https://www.skiresort.info/ski-resort/steamboat/",
+    "exact_quote": "Easy 25 km (15 %) Intermediate 95 km (58 %) Difficult 45 km (27 %)",
+    "notes": "Total 165 km. Difficult 27% split advanced (14) and expert (13)."
+  },
+  {
+    "slug": "steamboat-touring-center",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info — Nordic touring center likely not indexed."
+  },
+  {
+    "slug": "stevens-pass",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 15, "intermediate": 47, "advanced": 19, "expert": 19 },
+    "source_url": "https://www.skiresort.info/ski-resort/stevens-pass/",
+    "exact_quote": "Easy 6 km (15 %) Intermediate 18 km (47 %) Difficult 15 km (38 %)",
+    "notes": "Total 39 km. Difficult 38% split advanced (19) and expert (19)."
+  },
+  {
+    "slug": "stowe-mountain-resort",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 29, "intermediate": 60, "advanced": 6, "expert": 5 },
+    "source_url": "https://www.skiresort.info/ski-resort/stowe/",
+    "exact_quote": "Easy 20 km (29 %) Intermediate 42 km (60 %) Difficult 8 km (11 %)",
+    "notes": "Total 70 km. Difficult 11% split advanced (6) and expert (5)."
+  },
+  {
+    "slug": "stratton-mountain",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info at /stratton-mountain/ slug (only generic homepage returned)."
+  },
+  {
+    "slug": "sugar-bowl-resort",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 17, "intermediate": 45, "advanced": 19, "expert": 19 },
+    "source_url": "https://www.skiresort.info/ski-resort/sugar-bowl/",
+    "exact_quote": "Easy 11.9 km (17 %) Intermediate 31.5 km (45 %) Difficult 26.6 km (38 %)",
+    "notes": "Total 70 km. Difficult 38% split advanced (19) and expert (19)."
+  },
+  {
+    "slug": "sugar-mountain-resort",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 29, "intermediate": 50, "advanced": 11, "expert": 10 },
+    "source_url": "https://www.skiresort.info/ski-resort/sugar-mountain/",
+    "exact_quote": "Easy 4 km (29 %) Intermediate 7 km (50 %) Difficult 3 km (21 %)",
+    "notes": "Total 14 km. Difficult 21% split advanced (11) and expert (10)."
+  },
+  {
+    "slug": "sugarbush",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 20, "intermediate": 45, "advanced": 18, "expert": 17 },
+    "source_url": "https://www.skiresort.info/ski-resort/sugarbush/",
+    "exact_quote": "Easy 17 km (20%), Intermediate 38 km (45%), Difficult 30 km (35%)",
+    "notes": "Total 85 km. Difficult 35% split advanced (18) and expert (17)."
+  },
+  {
+    "slug": "sugarloaf",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 23, "intermediate": 34, "advanced": 22, "expert": 21 },
+    "source_url": "https://www.skiresort.info/ski-resort/sugarloaf/",
+    "exact_quote": "Easy 20 km (23 %) Intermediate 30 km (34 %) Difficult 37 km (43 %)",
+    "notes": "Total 87 km. Difficult 43% split advanced (22) and expert (21)."
+  },
+  {
+    "slug": "summit-ski-area",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info (tried summit-ski-area, summit-mt-hood, summit-at-snoqualmie)."
+  },
+  {
+    "slug": "sun-valley",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Skiresort.info /sun-valley/ returned generic homepage; /sun-valley-resort/ returned an implausible 1.8 km total (different resort). Not confidently found."
+  },
+  {
+    "slug": "sunburst",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 17, "intermediate": 50, "advanced": 17, "expert": 16 },
+    "source_url": "https://www.skiresort.info/ski-resort/sunburst/",
+    "exact_quote": "Easy 0.5 km (17 %) Intermediate 1.5 km (50 %) Difficult 1 km (33 %)",
+    "notes": "Total 3 km. Difficult 33% split advanced (17) and expert (16)."
+  },
+  {
+    "slug": "sunburst-area",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 17, "intermediate": 50, "advanced": 17, "expert": 16 },
+    "source_url": "https://www.skiresort.info/ski-resort/sunburst/",
+    "exact_quote": "Easy 0.5 km (17 %) Intermediate 1.5 km (50 %) Difficult 1 km (33 %)",
+    "notes": "Same skiresort.info page as 'sunburst' (Sunburst Ski Area, WI). Total 3 km."
+  },
+  {
+    "slug": "sundance",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 34, "intermediate": 46, "advanced": 10, "expert": 10 },
+    "source_url": "https://www.skiresort.info/ski-resort/sundance/",
+    "exact_quote": "Easy 15 km (34 %) Intermediate 20 km (46 %) Difficult 9 km (20 %)",
+    "notes": "Total 44 km. Difficult 20% split advanced (10) and expert (10)."
+  },
+  {
+    "slug": "sunday-river",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 30, "intermediate": 36, "advanced": 17, "expert": 17 },
+    "source_url": "https://www.skiresort.info/ski-resort/sunday-river/",
+    "exact_quote": "Easy 25.5 km (30 %) Intermediate 30.5 km (36 %) Difficult 28.8 km (34 %)",
+    "notes": "Total 84.8 km. Difficult 34% split advanced (17) and expert (17)."
+  },
+  {
+    "slug": "sundown-mountain",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 47, "intermediate": 24, "advanced": 15, "expert": 14 },
+    "source_url": "https://www.skiresort.info/ski-resort/sundown/",
+    "exact_quote": "Easy 2.7 km (47 %) Intermediate 1.4 km (24 %) Difficult 1.7 km (29 %)",
+    "notes": "Total 5.8 km. Difficult 29% split advanced (15) and expert (14)."
+  }
+]

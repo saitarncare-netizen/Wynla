@@ -1,0 +1,242 @@
+[
+  {
+    "slug": "blacktail",
+    "trails_total": 27,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/montana/blacktail-mountain-ski-area/ski-resort",
+    "exact_quote": "27 runs in total",
+    "notes": "OnTheSnow shows total runs but no difficulty percentages on page; skicentral lists 24 trails with no difficulty breakdown"
+  },
+  {
+    "slug": "blue-hills-ski-area",
+    "trails_total": 16,
+    "difficulty_pct": {"beginner": 50, "intermediate": 19, "advanced": 31, "expert": 0},
+    "source_url": "https://www.onthesnow.com/massachusetts/blue-hills-ski-area/ski-resort",
+    "exact_quote": "Beginners 50% Intermediate 19% Advanced 31% Runs in Total 16",
+    "notes": "OnTheSnow; no expert category listed"
+  },
+  {
+    "slug": "blue-knob",
+    "trails_total": 34,
+    "difficulty_pct": {"beginner": 15, "intermediate": 41, "advanced": 26, "expert": 18},
+    "source_url": "https://www.onthesnow.com/pennsylvania/blue-knob/ski-resort",
+    "exact_quote": "Beginners Runs 15% Intermediate Runs 41% Advanced Runs 26% Expert Runs 18% Runs in Total 34",
+    "notes": "OnTheSnow"
+  },
+  {
+    "slug": "blue-mountain-resort",
+    "trails_total": 43,
+    "difficulty_pct": {"beginner": 28, "intermediate": 37, "advanced": 16, "expert": 19},
+    "source_url": "https://www.onthesnow.com/pennsylvania/blue-mountain/ski-resort",
+    "exact_quote": "Beginners 28% Intermediate 37% Advanced 16% Expert 19% Runs in Total 43",
+    "notes": "OnTheSnow"
+  },
+  {
+    "slug": "bluewood",
+    "trails_total": 26,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/washington/bluewood/ski-resort",
+    "exact_quote": "26 trails",
+    "notes": "OnTheSnow shows trails total but no difficulty breakdown; skicentral also lacks difficulty data"
+  },
+  {
+    "slug": "bogus-basin",
+    "trails_total": 92,
+    "difficulty_pct": {"beginner": 10, "intermediate": 46, "advanced": 35, "expert": 10},
+    "source_url": "https://www.onthesnow.com/idaho/bogus-basin/ski-resort",
+    "exact_quote": "Beginners 10% Intermediate 46% Advanced 35% Expert 10% Runs in Total 92",
+    "notes": "OnTheSnow; totals sum to 101% (rounding)"
+  },
+  {
+    "slug": "bolton-valley",
+    "trails_total": 71,
+    "difficulty_pct": {"beginner": 34, "intermediate": 38, "advanced": 23, "expert": 6},
+    "source_url": "https://www.onthesnow.com/vermont/bolton-valley/ski-resort",
+    "exact_quote": "Beginners Runs 34% Intermediate Runs 38% Advanced Runs 23% Expert Runs 6% Runs in Total 71",
+    "notes": "OnTheSnow; sums to 101% (rounding)"
+  },
+  {
+    "slug": "boreal-mountain-resort",
+    "trails_total": 34,
+    "difficulty_pct": {"beginner": 46, "intermediate": 11, "advanced": 34, "expert": 9},
+    "source_url": "https://www.onthesnow.com/california/boreal/ski-resort",
+    "exact_quote": "Beginners Runs 46% Intermediate Runs 11% Advanced Runs 34% Expert Runs 9% Runs in Total 34",
+    "notes": "OnTheSnow"
+  },
+  {
+    "slug": "boston-mills",
+    "trails_total": 6,
+    "difficulty_pct": {"beginner": 17, "intermediate": 33, "advanced": 50, "expert": 0},
+    "source_url": "https://www.onthesnow.com/ohio/boston-mills/ski-resort",
+    "exact_quote": "Beginners 17% Intermediate 33% Advanced 50% Runs in Total 6",
+    "notes": "OnTheSnow; no expert category listed"
+  },
+  {
+    "slug": "bottineau-winter-park",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not listed on OnTheSnow or skicentral with explicit numbers"
+  },
+  {
+    "slug": "bousquet-mountain",
+    "trails_total": 22,
+    "difficulty_pct": {"beginner": 9, "intermediate": 26, "advanced": 22, "expert": 43},
+    "source_url": "https://www.onthesnow.com/massachusetts/bousquet-ski-area/ski-resort",
+    "exact_quote": "Beginners 9% Intermediate 26% Advanced 22% Expert 43% Runs in Total 22",
+    "notes": "OnTheSnow"
+  },
+  {
+    "slug": "boyne-mountain",
+    "trails_total": 65,
+    "difficulty_pct": {"beginner": 48, "intermediate": 28, "advanced": 22, "expert": 3},
+    "source_url": "https://www.onthesnow.com/michigan/boyne-mountain-resort/ski-resort",
+    "exact_quote": "Beginners Runs: 48%, Intermediate Runs: 28%, Advanced Runs: 22%, Expert Runs: 3% Runs in Total: 65",
+    "notes": "OnTheSnow; sums to 101% (rounding)"
+  },
+  {
+    "slug": "brandywine",
+    "trails_total": 9,
+    "difficulty_pct": {"beginner": 33, "intermediate": 33, "advanced": 33, "expert": 0},
+    "source_url": "https://www.onthesnow.com/ohio/brandywine/ski-resort",
+    "exact_quote": "Beginners Runs 33% Intermediate Runs 33% Advanced Runs 33% Runs in Total 9",
+    "notes": "OnTheSnow; no expert category listed; sums to 99% (rounding)"
+  },
+  {
+    "slug": "breckenridge",
+    "trails_total": 188,
+    "difficulty_pct": {"beginner": 12, "intermediate": 21, "advanced": 27, "expert": 40},
+    "source_url": "https://www.onthesnow.com/colorado/breckenridge/ski-resort",
+    "exact_quote": "Beginners 12% Intermediate 21% Advanced 27% Expert 40% Runs in Total 188",
+    "notes": "OnTheSnow"
+  },
+  {
+    "slug": "bretton-woods",
+    "trails_total": 100,
+    "difficulty_pct": {"beginner": 25, "intermediate": 40, "advanced": 25, "expert": 10},
+    "source_url": "https://www.onthesnow.com/new-hampshire/bretton-woods/ski-resort",
+    "exact_quote": "Beginners Runs 25% Intermediate Runs 40% Advanced Runs 25% Expert Runs 10% Runs in Total 100",
+    "notes": "OnTheSnow"
+  },
+  {
+    "slug": "brian-head",
+    "trails_total": 61,
+    "difficulty_pct": {"beginner": 21, "intermediate": 41, "advanced": 28, "expert": 10},
+    "source_url": "https://www.onthesnow.com/utah/brian-head-resort/ski-resort",
+    "exact_quote": "Beginners 21% Intermediate 41% Advanced 28% Expert 10% Runs in Total 61",
+    "notes": "OnTheSnow"
+  },
+  {
+    "slug": "bridger-bowl",
+    "trails_total": 105,
+    "difficulty_pct": {"beginner": 12, "intermediate": 28, "advanced": 18, "expert": 42},
+    "source_url": "https://www.onthesnow.com/montana/bridger-bowl/ski-resort",
+    "exact_quote": "Beginners 12% Intermediate 28% Advanced 18% Expert 42% Runs in Total 105",
+    "notes": "OnTheSnow"
+  },
+  {
+    "slug": "brighton",
+    "trails_total": 67,
+    "difficulty_pct": {"beginner": 24, "intermediate": 36, "advanced": 27, "expert": 13},
+    "source_url": "https://www.onthesnow.com/utah/brighton-resort/ski-resort",
+    "exact_quote": "Beginners Runs 24% Intermediate Runs 36% Advanced Runs 27% Expert Runs 13% Runs in Total 67",
+    "notes": "OnTheSnow"
+  },
+  {
+    "slug": "bristol-mountain",
+    "trails_total": 40,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/new-york/bristol-mountain/ski-resort",
+    "exact_quote": "40 runs in total",
+    "notes": "OnTheSnow shows total but no difficulty percentages; skicentral lists 35 trails with no difficulty breakdown"
+  },
+  {
+    "slug": "bromley-mountain",
+    "trails_total": 47,
+    "difficulty_pct": {"beginner": 30, "intermediate": 36, "advanced": 32, "expert": 2},
+    "source_url": "https://www.onthesnow.com/vermont/bromley-mountain/ski-resort",
+    "exact_quote": "Beginners 30% Intermediate 36% Advanced 32% Expert 2% Runs in Total 47",
+    "notes": "OnTheSnow"
+  },
+  {
+    "slug": "bruce-mound-winter-sports-area",
+    "trails_total": 12,
+    "difficulty_pct": {"beginner": 17, "intermediate": 17, "advanced": 50, "expert": 16},
+    "source_url": "https://www.onthesnow.com/wisconsin/bruce-mound/ski-resort",
+    "exact_quote": "Beginners 17% Intermediate 17% Advanced 50% Expert 16% Runs in Total 12",
+    "notes": "OnTheSnow"
+  },
+  {
+    "slug": "brundage-mountain",
+    "trails_total": 69,
+    "difficulty_pct": {"beginner": 23, "intermediate": 32, "advanced": 20, "expert": 25},
+    "source_url": "https://www.onthesnow.com/idaho/brundage-mountain-resort/ski-resort",
+    "exact_quote": "Beginners Runs 23% Intermediate Runs 32% Advanced Runs 20% Expert Runs 25% Runs in Total 69",
+    "notes": "OnTheSnow"
+  },
+  {
+    "slug": "bryce-resort",
+    "trails_total": 12,
+    "difficulty_pct": {"beginner": 33, "intermediate": 50, "advanced": 17, "expert": 0},
+    "source_url": "https://www.onthesnow.com/virginia/bryce-resort/ski-resort",
+    "exact_quote": "Beginners 33% Intermediate 50% Advanced 17% Runs in Total 12",
+    "notes": "OnTheSnow; no expert category listed"
+  },
+  {
+    "slug": "buck-hill",
+    "trails_total": 16,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/minnesota/buck-hill/ski-resort",
+    "exact_quote": "16 total runs",
+    "notes": "OnTheSnow shows total but no difficulty percentages; skicentral 404"
+  },
+  {
+    "slug": "buena-vista",
+    "trails_total": 17,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/minnesota/buena-vista-ski-area/ski-resort",
+    "exact_quote": "Runs in Total: 17",
+    "notes": "OnTheSnow shows total but no difficulty percentages"
+  },
+  {
+    "slug": "buffalo-ski-club",
+    "trails_total": 43,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/new-york/buffalo-ski-club-ski-area/ski-resort",
+    "exact_quote": "43 runs",
+    "notes": "OnTheSnow shows total but no difficulty percentages; skicentral confirms 43 trails but no difficulty breakdown"
+  },
+  {
+    "slug": "burke-mountain",
+    "trails_total": 56,
+    "difficulty_pct": {"beginner": 8, "intermediate": 48, "advanced": 33, "expert": 12},
+    "source_url": "https://www.onthesnow.com/vermont/burke-mountain/ski-resort",
+    "exact_quote": "Beginners 8% Intermediate 48% Advanced 33% Expert 12% Runs in Total 56",
+    "notes": "OnTheSnow; sums to 101% (rounding)"
+  },
+  {
+    "slug": "buttermilk",
+    "trails_total": 44,
+    "difficulty_pct": null,
+    "source_url": "https://www.skicentral.com/buttermilk.html",
+    "exact_quote": "Number of Trails: 44",
+    "notes": "OnTheSnow URL 404; skicentral confirms 44 trails but no difficulty breakdown"
+  },
+  {
+    "slug": "caberfae-peaks",
+    "trails_total": 27,
+    "difficulty_pct": {"beginner": 26, "intermediate": 37, "advanced": 37, "expert": 0},
+    "source_url": "https://www.onthesnow.com/michigan/caberfae-peaks-ski-golf-resort/ski-resort",
+    "exact_quote": "Beginners 26% Intermediate 37% Advanced 37% Runs in Total 27",
+    "notes": "OnTheSnow; no expert category listed"
+  },
+  {
+    "slug": "camden-snow-bowl",
+    "trails_total": 20,
+    "difficulty_pct": {"beginner": 20, "intermediate": 70, "advanced": 10, "expert": 0},
+    "source_url": "https://www.onthesnow.com/maine/camden-snow-bowl/ski-resort",
+    "exact_quote": "Beginners Runs 20% Intermediate Runs 70% Advanced Runs 10% Runs in Total 20",
+    "notes": "OnTheSnow; no expert category listed"
+  }
+]

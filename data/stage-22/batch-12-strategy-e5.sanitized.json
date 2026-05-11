@@ -1,0 +1,384 @@
+[
+  {
+    "slug": "showdown",
+    "trails_total": 39,
+    "difficulty_pct": {
+      "beginner": 28,
+      "intermediate": 44,
+      "advanced": 28,
+      "expert": 0
+    },
+    "source_url": "https://parksandtrips.com/ski-resort/smmt-showdown-montana/",
+    "exact_quote": "Showdown Montana has 39 total runs with 28% beginner runs, 44% intermediate runs, and 28% advanced runs.",
+    "notes": "Parks & Trips guide; Showdown press releases page not specific on splits. SnowBrains feature mentions 640 acres only."
+  },
+  {
+    "slug": "sierra-at-tahoe",
+    "trails_total": 47,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 50,
+      "advanced": 25,
+      "expert": 0
+    },
+    "source_url": "https://snowstash.com/usa/california/sierra-at-tahoe",
+    "exact_quote": "Total Runs: 47 ... Beginner: 25% Intermediate: 50% Advanced: 25% Expert: 0%",
+    "notes": "SnowStash resort profile (post-Caldor recovery). SnowBrains confirms 46-trail network reopened 100%."
+  },
+  {
+    "slug": "silver-mountain",
+    "trails_total": 80,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 40,
+      "advanced": 30,
+      "expert": 10
+    },
+    "source_url": "https://snowstash.com/usa/idaho/silver-mountain",
+    "exact_quote": "Total Runs: 80 ... Beginner: 20%, Intermediate: 40%, Advanced: 30%, Expert: 10%",
+    "notes": "SnowStash matches current input split exactly. SnowBrains 2025-26 article: '80 trails, including 73 named trails plus glades'."
+  },
+  {
+    "slug": "silverton-mountain",
+    "trails_total": 69,
+    "difficulty_pct": {
+      "beginner": 0,
+      "intermediate": 0,
+      "advanced": 0,
+      "expert": 100
+    },
+    "source_url": "https://snowbrains.com/the-9-most-challenging-ski-resorts-in-north-america/",
+    "exact_quote": "100% of the trails at Silverton Mountain are rated 'expert' or harder, which is only the first thing that makes it one of the most unique and challenging ski areas.",
+    "notes": "SnowBrains '9 Most Challenging' article. Trail count 69 confirmed across multiple sources including Wikipedia/OnTheSnow."
+  },
+  {
+    "slug": "sipapu",
+    "trails_total": 42,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 40,
+      "advanced": 25,
+      "expert": 15
+    },
+    "source_url": "https://snowstash.com/usa/new-mexico/sipapu",
+    "exact_quote": "Total Runs: 42 ... Beginner: 20% Intermediate: 40% Advanced: 25% Expert: 15%",
+    "notes": "SnowStash; aligns closely with current 43-trail input. SnowBrains Lift 3 announcement references '43 Named Trails'."
+  },
+  {
+    "slug": "skaneateles-club",
+    "trails_total": 7,
+    "difficulty_pct": {
+      "beginner": 45,
+      "intermediate": 40,
+      "advanced": 15,
+      "expert": 0
+    },
+    "source_url": "https://www.indyskipass.com/our-resorts/skaneateles-ski-club",
+    "exact_quote": "7 Trails ... 45% Beginner 40% Intermediate 15% Advanced",
+    "notes": "Indy Pass partner profile; matches input trail count."
+  },
+  {
+    "slug": "ski-apache",
+    "trails_total": 55,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 60,
+      "advanced": 20,
+      "expert": 0
+    },
+    "source_url": "https://snowbrains.com/hometown-mountain-shoutout-ski-apache-new-mexico/",
+    "exact_quote": "55 total ... 20% beginner / 60% intermediate / 20% advanced",
+    "notes": "SnowBrains Hometown Mountain Shoutout. Matches input exactly."
+  },
+  {
+    "slug": "ski-bradford",
+    "trails_total": 15,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 27,
+      "advanced": 53,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Ski_Bradford",
+    "exact_quote": "Ski Bradford consists of 3 green circles or easy, 4 blue squares or intermediate trails and 8 black diamonds or difficult.",
+    "notes": "Wikipedia counts (3/4/8=15) confirm current 20/27/53 split; no recent press release with explicit percentages found."
+  },
+  {
+    "slug": "ski-brule",
+    "trails_total": 17,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 40,
+      "advanced": 20,
+      "expert": 7
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Ski_Brule",
+    "exact_quote": "Ski Brule has seventeen ski runs ... the trails include one double black diamond, three black diamonds, six blue squares, five green circles, and a 30-acre terrain park consisting of two trails.",
+    "notes": "Wikipedia/news confirm 17 runs (current input null on trails). Splits derived from same source align with current pct input."
+  },
+  {
+    "slug": "ski-butternut",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/massachusetts/ski-butternut/ski-resort",
+    "exact_quote": "Beginners runs comprise 36%, intermediate runs 36%, and advanced runs 27% of the total 22 runs.",
+    "notes": "[SANITIZED — fabrication marker in notes] OnTheSnow profile differs from current input 19/62/19; OnTheSnow likely most current.",
+    "_sanitized": true,
+    "_original_notes": "OnTheSnow profile differs from current input 19/62/19; OnTheSnow likely most current."
+  },
+  {
+    "slug": "ski-cooper",
+    "trails_total": 64,
+    "difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 27,
+      "advanced": 31,
+      "expert": 25
+    },
+    "source_url": "https://www.peakrankings.com/content/ski-cooper",
+    "exact_quote": "Trails: 64 ... Beginner: 19% Intermediate: 27% Advanced/Expert: 54%",
+    "notes": "PeakRankings review; combined adv/exp split 54% allocated 31/25 from Uncover Colorado source (18/26/32/24)."
+  },
+  {
+    "slug": "ski-gull",
+    "trails_total": 12,
+    "difficulty_pct": null,
+    "source_url": "https://www.brainerd.com/winter/skigull/",
+    "exact_quote": "Mount Ski Gull offers a triple chair lift, bunny hill magic carpet, terrain park tow rope, light runs and 12 ski/snowboard runs.",
+    "notes": "Brainerd CVB; no explicit difficulty splits in news sources."
+  },
+  {
+    "slug": "ski-santa-fe",
+    "trails_total": 86,
+    "difficulty_pct": {
+      "beginner": 16,
+      "intermediate": 32,
+      "advanced": 47,
+      "expert": 5
+    },
+    "source_url": "https://snowstash.com/usa/new-mexico/santa-fe",
+    "exact_quote": "Total Runs: 86 ... Beginner: 16% Intermediate: 32% Advanced: 47% Expert: 5%",
+    "notes": "SnowStash; differs significantly from current 20/40/40/0 input. Official site says 90 trails, Wikipedia 88, OTS 83."
+  },
+  {
+    "slug": "ski-sawmill",
+    "trails_total": 13,
+    "difficulty_pct": {
+      "beginner": 31,
+      "intermediate": 31,
+      "advanced": 38,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/pennsylvania/ski-sawmill/ski-resort",
+    "exact_quote": "Ski Sawmill has 13 trails across 15 acres. The terrain breakdown includes: 31% beginner runs, 31% intermediate runs, and 38% advanced runs",
+    "notes": "OnTheSnow; matches input trail count of 13."
+  },
+  {
+    "slug": "ski-sundown",
+    "trails_total": 17,
+    "difficulty_pct": {
+      "beginner": 53,
+      "intermediate": 24,
+      "advanced": 18,
+      "expert": 6
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Ski_Sundown",
+    "exact_quote": "There are 17 trails, 16 of which are lighted for nighttime skiing ... nine of the trails are easier, four are intermediate and three are most difficult and one is extremely difficult.",
+    "notes": "Wikipedia counts (9/4/3/1=17) confirm current 53/24/18/6 split. Input had 16 trails - actual is 17."
+  },
+  {
+    "slug": "ski-ward",
+    "trails_total": 9,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 33,
+      "advanced": 33,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/massachusetts/ski-ward/ski-resort",
+    "exact_quote": "33% Beginner Runs, 33% Intermediate Runs, and 33% Expert Runs, with a total of 9 runs",
+    "notes": "OnTheSnow profile; Ski Ward has 9 trails evenly distributed."
+  },
+  {
+    "slug": "skiland",
+    "trails_total": 42,
+    "difficulty_pct": {
+      "beginner": 10,
+      "intermediate": 45,
+      "advanced": 45,
+      "expert": 0
+    },
+    "source_url": "https://www.indyskipass.com/our-resorts/moose-mountain",
+    "exact_quote": "42 ... 10% Beginner ... 45% Intermediate ... 45% Advanced",
+    "notes": "Indy Pass profile for Moose Mountain Alaska (Skiland is separate listing per input but typically refers to nearby Mt. Aurora Skiland). Trail count differs from Travel Alaska's '40 trails' figure."
+  },
+  {
+    "slug": "sleeping-giant",
+    "trails_total": 48,
+    "difficulty_pct": {
+      "beginner": 15,
+      "intermediate": 37,
+      "advanced": 35,
+      "expert": 13
+    },
+    "source_url": "https://snowstash.com/usa/wyoming/sleeping-giant",
+    "exact_quote": "Total Runs: 48 ... Beginner: 15% Intermediate: 37% Advanced: 35% Expert: 13%",
+    "notes": "SnowStash; matches Cody Yellowstone tourism source citing 49 trails and 15/38/35/13 split. SnowBrains coverage of ownership transition has no trail stats."
+  },
+  {
+    "slug": "sleepy-hollow",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://sleepyhollowsportspark.com/",
+    "exact_quote": "The park offers a distinctive winter adventure on its Snowflex hill—a sprawling 50,000-square-foot, 600-foot-long synthetic slope built for skiing and snowboarding year-round.",
+    "notes": "Single Snowflex synthetic slope, not traditional trail count. Axios article calls it 'world's largest all-weather tubing hill'."
+  },
+  {
+    "slug": "smugglers-notch",
+    "trails_total": 78,
+    "difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 50,
+      "advanced": 31,
+      "expert": 0
+    },
+    "source_url": "https://www.peakrankings.com/content/smugglers-notch",
+    "exact_quote": "78 ... Beginner: 19% Intermediate: 50% Advanced/Expert: 31%",
+    "notes": "PeakRankings review. SnowStash gives 17/52/26/5 split; PeakRankings matches current input intermediate skew but combines advanced+expert."
+  },
+  {
+    "slug": "snow-creek",
+    "trails_total": 12,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 60,
+      "advanced": 10,
+      "expert": 0
+    },
+    "source_url": "https://snowbrains.com/hometown-mountain-shoutout-snow-creek-ski-area-in-weston-missouri/",
+    "exact_quote": "12 trails: 30% Green, 60% Blue, and 10% expert (including the terrain park)",
+    "notes": "SnowBrains Hometown Mountain Shoutout. Article labels 10% as 'expert' but listed under terrain park - mapped as advanced for consistency with classification norms."
+  },
+  {
+    "slug": "snow-king",
+    "trails_total": 34,
+    "difficulty_pct": {
+      "beginner": 18,
+      "intermediate": 38,
+      "advanced": 44,
+      "expert": 0
+    },
+    "source_url": "https://www.peakrankings.com/content/snow-king",
+    "exact_quote": "34 ... Beginner: 18% Intermediate: 38% Advanced/Expert: 44%",
+    "notes": "PeakRankings; consistent with Powder Alliance source (6/13/15 trails = 18/38/44%). Input has 41 trails - actual count appears to be 34."
+  },
+  {
+    "slug": "snow-ridge",
+    "trails_total": 33,
+    "difficulty_pct": {
+      "beginner": 11,
+      "intermediate": 30,
+      "advanced": 59,
+      "expert": 0
+    },
+    "source_url": "https://www.indyskipass.com/our-resorts/snow-ridge",
+    "exact_quote": "33 ... 11% Beginner 30% Intermediate 59% Advanced",
+    "notes": "Indy Pass partner page. Resort site lists 22 trails; Indy Pass count includes backcountry/glades."
+  },
+  {
+    "slug": "snow-snake",
+    "trails_total": 12,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 45,
+      "advanced": 10,
+      "expert": 0
+    },
+    "source_url": "https://www.michigan.org/property/snow-snake-ski-golf",
+    "exact_quote": "Winter offers 12 trails with a 210 feet vertical drop, one of the nicest beginner hills in the state, two terrain parks, and a bunny hill with a magic carpet. 30% beginner, 45% intermediate, 10% advanced, 15% terrain park",
+    "notes": "Pure Michigan tourism. 15% terrain park excluded from skill breakdown (sums to 85% of named trails)."
+  },
+  {
+    "slug": "snow-summit",
+    "trails_total": 27,
+    "difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 48,
+      "advanced": 26,
+      "expert": 7
+    },
+    "source_url": "https://snowstash.com/usa/california/snow-summit",
+    "exact_quote": "Total Runs: 27 ... Beginner: 19% Intermediate: 48% Advanced: 26% Expert: 7%",
+    "notes": "SnowStash; resort site says 33 trails. SnowStash splits used for difficulty pct."
+  },
+  {
+    "slug": "snow-trails",
+    "trails_total": 21,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 60,
+      "advanced": 20,
+      "expert": 0
+    },
+    "source_url": "https://www.snowtrails.com/shared/ski-area-facts",
+    "exact_quote": "Trails: 21 ... Beginner 20% Intermediate 60% Advanced: 20%",
+    "notes": "Official Snow Trails press/fact page. Matches input trail count of 21."
+  },
+  {
+    "slug": "snow-valley",
+    "trails_total": 30,
+    "difficulty_pct": {
+      "beginner": 32,
+      "intermediate": 13,
+      "advanced": 41,
+      "expert": 14
+    },
+    "source_url": "https://snowstash.com/usa/california/snow-valley",
+    "exact_quote": "Total Runs: 30 ... Beginner: 32% Intermediate: 13% Advanced: 41% Expert: 14%",
+    "notes": "SnowStash; differs notably from input 14/45/31/10. Note: resort was temporarily closed per Yelp 2026."
+  },
+  {
+    "slug": "snowbasin",
+    "trails_total": 107,
+    "difficulty_pct": {
+      "beginner": 7,
+      "intermediate": 37,
+      "advanced": 47,
+      "expert": 9
+    },
+    "source_url": "https://snowstash.com/usa/utah/snowbasin",
+    "exact_quote": "Total Runs: 107 ... Beginner: 7% Intermediate: 37% Advanced: 47% Expert: 9%",
+    "notes": "SnowStash differs from input 104 trails and 7/29/34/31 split. Resort site says 115 trails."
+  },
+  {
+    "slug": "snowbird",
+    "trails_total": 169,
+    "difficulty_pct": {
+      "beginner": 8,
+      "intermediate": 22,
+      "advanced": 70,
+      "expert": 0
+    },
+    "source_url": "https://www.peakrankings.com/content/snowbird",
+    "exact_quote": "169 ... Beginner: 8% Intermediate: 22% Advanced/Expert: 70%",
+    "notes": "PeakRankings. SnowStash gives 171 trails and 8/25/43/24. PeakRankings matches input trail count of 169. Combined adv+exp 70%."
+  },
+  {
+    "slug": "snowhaven",
+    "trails_total": 9,
+    "difficulty_pct": {
+      "beginner": 75,
+      "intermediate": 25,
+      "advanced": 0,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Snowhaven",
+    "exact_quote": "There are two surface lifts, a T-bar and a rope tow, serving 9 trails. The terrain is rated 75% beginner and 25% intermediate.",
+    "notes": "Wikipedia. SnowBrains coverage confirms 'nine named runs' but no split. KOZE/SnowBrains news on manager transition has no terrain stats."
+  }
+]

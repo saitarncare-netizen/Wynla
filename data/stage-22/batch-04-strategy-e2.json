@@ -1,0 +1,392 @@
+[
+  {
+    "slug": "camelback-mountain-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 59,
+      "intermediate": 32,
+      "advanced": 9,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/camelback/",
+    "exact_quote": "Total: 34 km | Easy: 20 km (59 %) | Intermediate: 11 km (32 %) | Difficult: 3 km (9 %)",
+    "notes": "Found at slug 'camelback' (not 'camelback-mountain-resort'). Difficult mapped to advanced; expert null (no separate expert category)."
+  },
+  {
+    "slug": "camp-10-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 18,
+      "intermediate": 36,
+      "advanced": 46,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/camp-10/",
+    "exact_quote": "Total: 2.8 km of slopes | Easy: 0.5 km (18 %) | Intermediate: 1 km (36 %) | Difficult: 1.3 km (46 %)",
+    "notes": "Found at slug 'camp-10'. Difficult mapped to advanced; expert null."
+  },
+  {
+    "slug": "campgaw-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 77,
+      "intermediate": 23,
+      "advanced": 0,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/campgaw-mountain/",
+    "exact_quote": "1.3 km of slopes available | Easy: 1 km (77 %) | Intermediate: 0.3 km (23 %) | Difficult: 0 km (0 %)",
+    "notes": "Advanced explicitly 0%; expert null (no separate category)."
+  },
+  {
+    "slug": "campton-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 47,
+      "intermediate": 38,
+      "advanced": 15,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/campton-mountain/",
+    "exact_quote": "Total: 1.3 km | Easy: 0.6 km (47%) | Intermediate: 0.5 km (38%) | Difficult: 0.2 km (15%)",
+    "notes": "Difficult mapped to advanced; expert null."
+  },
+  {
+    "slug": "canaan-valley-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 40,
+      "advanced": 30,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/canaan-valley/",
+    "exact_quote": "Total: 10 km | Easy: 3 km (30 %) | Intermediate: 4 km (40 %) | Difficult: 3 km (30 %)",
+    "notes": "Found at slug 'canaan-valley'. Difficult mapped to advanced; expert null."
+  },
+  {
+    "slug": "cannon-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 50,
+      "advanced": 20,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/cannon-mountain/",
+    "exact_quote": "Total: 50 km | Easy 15 km (30 %) | Intermediate 25 km (50 %) | Difficult 10 km (20 %)",
+    "notes": "Difficult mapped to advanced; expert null."
+  },
+  {
+    "slug": "cannonsburg",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 50,
+      "advanced": 25,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/cannonsburg/",
+    "exact_quote": "Total: 2 km | Easy: 0.5 km (25 %) | Intermediate: 1 km (50 %) | Difficult: 0.5 km (25 %)",
+    "notes": "Difficult mapped to advanced; expert null."
+  },
+  {
+    "slug": "cascade-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 35,
+      "advanced": 30,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/cascade-mountain/",
+    "exact_quote": "Total: 14 km | Easy 5 km (35 %) | Intermediate 5 km (35 %) | Difficult 4 km (30 %)",
+    "notes": "Difficult mapped to advanced; expert null."
+  },
+  {
+    "slug": "cataloochee-ski-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 44,
+      "intermediate": 39,
+      "advanced": 17,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/cataloochee/",
+    "exact_quote": "5.9 km of slopes | Easy: 2.6 km (44 %) | Intermediate: 2.3 km (39 %) | Difficult: 1 km (17 %)",
+    "notes": "Found at slug 'cataloochee'. Difficult mapped to advanced; expert null."
+  },
+  {
+    "slug": "catamount-outdoor-family-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info. Tried slugs 'catamount-outdoor-family-center' and 'catamount-outdoor' — both returned portal homepage. Nordic/XC center, likely not listed."
+  },
+  {
+    "slug": "catamount-ski-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 53,
+      "intermediate": 27,
+      "advanced": 20,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/catamount/",
+    "exact_quote": "15 km of slopes | Easy: 8 km (53 %) | Intermediate: 4 km (27 %) | Difficult: 3 km (20 %)",
+    "notes": "Found at slug 'catamount'. Difficult mapped to advanced; expert null."
+  },
+  {
+    "slug": "chapman-hill",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 42,
+      "intermediate": 30,
+      "advanced": 28,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/chapman-hill-durango/",
+    "exact_quote": "0.7 km of slopes available | Easy: 0.3 km (42%) | Intermediate: 0.2 km (30%) | Difficult: 0.2 km (28%)",
+    "notes": "Found at slug 'chapman-hill-durango'. Difficult mapped to advanced; expert null."
+  },
+  {
+    "slug": "cherry-peak",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 50,
+      "advanced": 25,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/cherry-peak/",
+    "exact_quote": "20 km of slopes | Easy: 5 km (25%) | Intermediate: 10 km (50%) | Difficult: 5 km (25%)",
+    "notes": "Difficult mapped to advanced; expert null."
+  },
+  {
+    "slug": "chestnut-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 50,
+      "advanced": 17,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/chestnut-mountain/",
+    "exact_quote": "6 km of slopes | Easy: 2 km (33 %) | Intermediate: 3 km (50 %) | Difficult: 1 km (17 %)",
+    "notes": "Difficult mapped to advanced; expert null."
+  },
+  {
+    "slug": "china-peak",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 40,
+      "intermediate": 34,
+      "advanced": 26,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/china-peak/",
+    "exact_quote": "50 km of slopes | Easy: 20 km (40%) | Intermediate: 17 km (34%) | Difficult: 13 km (26%)",
+    "notes": "Difficult mapped to advanced; expert null."
+  },
+  {
+    "slug": "christie",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 50,
+      "intermediate": 27,
+      "advanced": 23,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/christie-mountain/",
+    "exact_quote": "Total: 5.6 km of slopes | Easy: 2.8 km (50 %) | Intermediate: 1.5 km (27 %) | Difficult: 1.3 km (23 %)",
+    "notes": "Found at slug 'christie-mountain'. Difficult mapped to advanced; expert null."
+  },
+  {
+    "slug": "christmas-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 65,
+      "intermediate": 25,
+      "advanced": 10,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/christmas-mountain/",
+    "exact_quote": "2 km | Easy: 1.3 km (65 %) | Intermediate: 0.5 km (25 %) | Difficult: 0.2 km (10 %)",
+    "notes": "Difficult mapped to advanced; expert null."
+  },
+  {
+    "slug": "cloudmont-ski-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 100,
+      "intermediate": 0,
+      "advanced": 0,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/cloudmont-ski-resort/",
+    "exact_quote": "0.5 km of slopes available | Easy: 0.5 km (100%) | Intermediate: 0 km (0%) | Difficult: 0 km (0%)",
+    "notes": "Beginner-only resort. Intermediate and advanced explicitly 0%; expert null."
+  },
+  {
+    "slug": "cochrans-ski-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 35,
+      "advanced": 35,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/cochran/",
+    "exact_quote": "Total: 2 km | Easy: 0.6 km (30 %) | Intermediate: 0.7 km (35 %) | Difficult: 0.7 km (35 %)",
+    "notes": "Found at slug 'cochran'. Difficult mapped to advanced; expert null."
+  },
+  {
+    "slug": "cooper-spur-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 40,
+      "intermediate": 40,
+      "advanced": 20,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/cooper-spur/",
+    "exact_quote": "Total: 10 km | Easy: 4 km (40 %) | Intermediate: 4 km (40 %) | Difficult: 2 km (20 %)",
+    "notes": "Found at slug 'cooper-spur'. Difficult mapped to advanced; expert null."
+  },
+  {
+    "slug": "copper-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 24,
+      "intermediate": 32,
+      "advanced": 44,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/copper-mountain/",
+    "exact_quote": "126 km of slopes | Easy: 30 km (24 %) | Intermediate: 40 km (32 %) | Difficult: 56 km (44 %)",
+    "notes": "Difficult mapped to advanced; expert null (no separate expert category on skiresort.info)."
+  },
+  {
+    "slug": "cottonwood-butte",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 2,
+      "intermediate": 54,
+      "advanced": 44,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/cottonwood-butte/",
+    "exact_quote": "Total: 4.1 km | Easy: 0.1 km (2%) | Intermediate: 2.2 km (54%) | Difficult: 1.8 km (44%)",
+    "notes": "Difficult mapped to advanced; expert null."
+  },
+  {
+    "slug": "cranor-ski-hill",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info. Tried slugs 'cranor-ski-hill' and 'cranor-hill' — both returned portal homepage. Tiny city-run hill in Gunnison, CO; likely not listed."
+  },
+  {
+    "slug": "crested-butte",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 26,
+      "intermediate": 57,
+      "advanced": 17,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/crested-butte/",
+    "exact_quote": "121 km of slopes | Easy: 31.4 km (26 %) | Intermediate: 69 km (57 %) | Difficult: 20.6 km (17 %)",
+    "notes": "Difficult mapped to advanced; expert null (no separate expert category on skiresort.info even though Crested Butte is famous for extreme terrain)."
+  },
+  {
+    "slug": "crosscut-sports-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info. Tried slugs 'crosscut-sports-center' and 'crosscut-mountain-sports-center' — both returned portal homepage. Nordic/XC center near Bozeman MT; likely not listed."
+  },
+  {
+    "slug": "crotched-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 31,
+      "intermediate": 50,
+      "advanced": 19,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/crotched-mountain/",
+    "exact_quote": "Total: 8 km | Easy: 2.5 km (31 %) | Intermediate: 4 km (50 %) | Difficult: 1.5 km (19 %)",
+    "notes": "Difficult mapped to advanced; expert null."
+  },
+  {
+    "slug": "crystal",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 24,
+      "intermediate": 47,
+      "advanced": 29,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/crystal-mountain-mi/",
+    "exact_quote": "Total: 4.9 km | Easy: 1.2 km (24 %) | Intermediate: 2.3 km (47 %) | Difficult: 1.4 km (29 %)",
+    "notes": "Input slug 'crystal' (MI). Skiresort.info entry is at 'crystal-mountain-mi'. Difficult mapped to advanced; expert null."
+  },
+  {
+    "slug": "crystal-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 16,
+      "intermediate": 54,
+      "advanced": 30,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/crystal-mountain-wa/",
+    "exact_quote": "50 km of slopes | Easy: 8 km (16%) | Intermediate: 27 km (54%) | Difficult: 15 km (30%)",
+    "notes": "Input slug 'crystal-mountain' (WA). Skiresort.info entry is at 'crystal-mountain-wa'. Difficult mapped to advanced; expert null."
+  },
+  {
+    "slug": "crystal-mountain-mi",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 24,
+      "intermediate": 47,
+      "advanced": 29,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/crystal-mountain-mi/",
+    "exact_quote": "Total: 4.9 km | Easy: 1.2 km (24 %) | Intermediate: 2.3 km (47 %) | Difficult: 1.4 km (29 %)",
+    "notes": "Difficult mapped to advanced; expert null."
+  },
+  {
+    "slug": "crystal-ridge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 39,
+      "intermediate": 38,
+      "advanced": 23,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/crystal-ridge/",
+    "exact_quote": "Total: 1.3 km | Easy: 0.5 km (39 %) | Intermediate: 0.5 km (38 %) | Difficult: 0.3 km (23 %)",
+    "notes": "Difficult mapped to advanced; expert null."
+  }
+]

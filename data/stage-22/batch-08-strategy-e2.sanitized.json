@@ -1,0 +1,392 @@
+[
+  {
+    "slug": "loon-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 28,
+      "intermediate": 44,
+      "advanced": 28,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/loon-mountain/",
+    "exact_quote": "Total: 49 km\n\nEasy\n\n14 km\n\n(28 %)\n\nIntermediate\n\n22 km\n\n(44 %)\n\nDifficult\n\n13 km\n\n(28 %)",
+    "notes": "% from km totals; rounds to 100%"
+  },
+  {
+    "slug": "loppet",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info (Nordic/cross-country resort)"
+  },
+  {
+    "slug": "lost-trail",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 50,
+      "advanced": 20,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/lost-trail-powder-mountain/",
+    "exact_quote": "Total: 50 km\n\nEasy\n\n15 km\n\n(30 %)\n\nIntermediate\n\n25 km\n\n(50 %)\n\nDifficult\n\n10 km\n\n(20 %)",
+    "notes": "% from km totals"
+  },
+  {
+    "slug": "lost-valley",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 50,
+      "intermediate": 25,
+      "advanced": 25,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/lost-valley/",
+    "exact_quote": "Total: 2 km\n\nEasy\n\n1 km\n\n(50 %)\n\nIntermediate\n\n0.5 km\n\n(25 %)\n\nDifficult\n\n0.5 km\n\n(25 %)",
+    "notes": "% from km totals"
+  },
+  {
+    "slug": "loup-loup",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 27,
+      "intermediate": 46,
+      "advanced": 27,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/loup-loup-ski-bowl/",
+    "exact_quote": "Total: 11 km\n\nEasy\n\n3 km\n\n(27 %)\n\nIntermediate\n\n5 km\n\n(46 %)\n\nDifficult\n\n3 km\n\n(27 %)",
+    "notes": "% from km totals"
+  },
+  {
+    "slug": "loveland",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 13,
+      "intermediate": 41,
+      "advanced": 46,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/loveland/",
+    "exact_quote": "Total: 93 km\n\nEasy\n\n12 km\n\n(13 %)\n\nIntermediate\n\n38 km\n\n(41 %)\n\nDifficult\n\n43 km\n\n(46 %)",
+    "notes": "% from km totals"
+  },
+  {
+    "slug": "lutsen-mountains",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 47,
+      "advanced": 32,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/lutsen-mountains/",
+    "exact_quote": "Total: 40 km\n\nEasy\n\n8 km\n\n(21 %)\n\nIntermediate\n\n19 km\n\n(47 %)\n\nDifficult\n\n13 km\n\n(32 %)",
+    "notes": "% from km totals"
+  },
+  {
+    "slug": "lyndon-outing-club",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 58,
+      "intermediate": 38,
+      "advanced": 4,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/lyndon-outing-club/",
+    "exact_quote": "Total: 2.6 km\n\nEasy\n\n1.5 km\n\n(58 %)\n\nIntermediate\n\n1 km\n\n(38 %)\n\nDifficult\n\n0.1 km\n\n(4 %)",
+    "notes": "% from km totals"
+  },
+  {
+    "slug": "mad-river-glen",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 37,
+      "advanced": 33,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mad-river-glen/",
+    "exact_quote": "Total: 46 km\n\nEasy\n\n14 km\n\n(30 %)\n\nIntermediate\n\n17 km\n\n(37 %)\n\nDifficult\n\n15 km\n\n(33 %)",
+    "notes": "% from km totals"
+  },
+  {
+    "slug": "mad-river-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 47,
+      "intermediate": 31,
+      "advanced": 22,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mad-river-mountain/",
+    "exact_quote": "Total: 6.3 km\n\nEasy\n\n3 km\n\n(47 %)\n\nIntermediate\n\n2 km\n\n(31 %)\n\nDifficult\n\n1.3 km\n\n(22 %)",
+    "notes": "% from km totals"
+  },
+  {
+    "slug": "magic-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 30,
+      "advanced": 40,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/magic-mountain/",
+    "exact_quote": "Total: 23 km\n\nEasy\n\n7 km\n\n(30 %)\n\nIntermediate\n\n7 km\n\n(30 %)\n\nDifficult\n\n9 km\n\n(40 %)",
+    "notes": "% from km totals; VT location"
+  },
+  {
+    "slug": "magic-mountain-id",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 29,
+      "intermediate": 33,
+      "advanced": 38,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/magic-mountain-resort/",
+    "exact_quote": "Total: 10.5 km\n\nEasy\n\n3 km\n\n(29 %)\n\nIntermediate\n\n3.5 km\n\n(33 %)\n\nDifficult\n\n4 km\n\n(38 %)",
+    "notes": "% from km totals; ID location"
+  },
+  {
+    "slug": "mammoth-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 54,
+      "advanced": 26,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mammoth-mountain/",
+    "exact_quote": "Total: 89.8 km\nEasy: 18.4 km (20%)\nIntermediate: 48.5 km (54%)\nDifficult: 22.9 km (26%)\nAdditional: Ski routes 100 km",
+    "notes": "% from km totals"
+  },
+  {
+    "slug": "maple-ski-ridge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 58,
+      "advanced": 21,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/maple-ski-ridge/",
+    "exact_quote": "Total: 1.4 km\n\nEasy\n\n0.3 km\n\n(21 %)\n\nIntermediate\n\n0.8 km\n\n(58 %)\n\nDifficult\n\n0.3 km\n\n(21 %)",
+    "notes": "% from km totals"
+  },
+  {
+    "slug": "maplelag",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info (Nordic resort)"
+  },
+  {
+    "slug": "marquette-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 15,
+      "intermediate": 50,
+      "advanced": 35,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/marquette-mountain/",
+    "exact_quote": "Total: 10 km\n\nEasy\n\n1.5 km\n\n(15 %)\n\nIntermediate\n\n5 km\n\n(50 %)\n\nDifficult\n\n3.5 km\n\n(35 %)",
+    "notes": "% from km totals"
+  },
+  {
+    "slug": "massanutten-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 44,
+      "advanced": 31,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/massanutten/",
+    "exact_quote": "Total: 8 km\n\nEasy\n\n2 km\n\n(25 %)\n\nIntermediate\n\n3.5 km\n\n(44 %)\n\nDifficult\n\n2.5 km\n\n(31 %)",
+    "notes": "% from km totals"
+  },
+  {
+    "slug": "maverick-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 40,
+      "advanced": 30,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/maverick-mountain/",
+    "exact_quote": "Total: 20 km\n\nEasy\n\n6 km\n\n(30 %)\n\nIntermediate\n\n8 km\n\n(40 %)\n\nDifficult\n\n6 km\n\n(30 %)",
+    "notes": "% from km totals"
+  },
+  {
+    "slug": "mccauley-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 45,
+      "advanced": 22,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mccauley-mountain/",
+    "exact_quote": "Total: 9 km\n\nEasy\n\n3 km\n\n(33 %)\n\nIntermediate\n\n4 km\n\n(45 %)\n\nDifficult\n\n2 km\n\n(22 %)",
+    "notes": "% from km totals"
+  },
+  {
+    "slug": "mcintyre-ski-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 83,
+      "intermediate": 17,
+      "advanced": 0,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mcintyre/",
+    "exact_quote": "Total: 3 km\n\nEasy\n\n2.5 km\n\n(83 %)\n\nIntermediate\n\n0.5 km\n\n(17 %)\n\nDifficult\n\n0 km\n\n(0 %)",
+    "notes": "% from km totals; advanced is 0"
+  },
+  {
+    "slug": "meadowlark",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 40,
+      "advanced": 30,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/meadowlark-ski-lodge/",
+    "exact_quote": "Total: 10 km\n\nEasy\n\n3 km\n\n(30 %)\n\nIntermediate\n\n4 km\n\n(40 %)\n\nDifficult\n\n3 km\n\n(30 %)",
+    "notes": "% from km totals"
+  },
+  {
+    "slug": "middlebury-snow-bowl",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 27,
+      "advanced": 40,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/middlebury-college-snow-bowl/",
+    "exact_quote": "Total: 15 km\n\nEasy\n\n5 km\n\n(33 %)\n\nIntermediate\n\n4 km\n\n(27 %)\n\nDifficult\n\n6 km\n\n(40 %)",
+    "notes": "% from km totals"
+  },
+  {
+    "slug": "minocqua-winter-park",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info (Nordic/cross-country park)"
+  },
+  {
+    "slug": "mission-ridge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 40,
+      "intermediate": 40,
+      "advanced": 20,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mission-ridge/",
+    "exact_quote": "Total: 5 km\n\nEasy\n\n2 km\n\n(40 %)\n\nIntermediate\n\n2 km\n\n(40 %)\n\nDifficult\n\n1 km\n\n(20 %)",
+    "notes": "% from km totals; skiresort.info entry may be for a smaller Saskatchewan resort - verify if mismatch"
+  },
+  {
+    "slug": "mohawk-mountain-ski-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 37,
+      "intermediate": 26,
+      "advanced": 37,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mohawk-mountain/",
+    "exact_quote": "Total: 8 km\n\nEasy\n\n3 km\n\n(37 %)\n\nIntermediate\n\n2 km\n\n(26 %)\n\nDifficult\n\n3 km\n\n(37 %)",
+    "notes": "% from km totals"
+  },
+  {
+    "slug": "monarch-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 23,
+      "intermediate": 40,
+      "advanced": 37,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/monarch/",
+    "exact_quote": "Total: 37 km\n\nEasy\n\n8 km\n\n(23 %)\n\nIntermediate\n\n15 km\n\n(40 %)\n\nDifficult\n\n14 km\n\n(37 %)",
+    "notes": "% from km totals"
+  },
+  {
+    "slug": "mont-ripley",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 29,
+      "intermediate": 32,
+      "advanced": 39,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mont-ripley/",
+    "exact_quote": "Total: 6.9 km\n\nEasy\n\n2 km\n\n(29 %)\n\nIntermediate\n\n2.2 km\n\n(32 %)\n\nDifficult\n\n2.7 km\n\n(39 %)",
+    "notes": "% from km totals"
+  },
+  {
+    "slug": "montage-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info; tried /montage-mountain/ and /montage-mountain-resorts/ and /montage-mountain-pa/"
+  },
+  {
+    "slug": "montana-snowbowl",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 16,
+      "intermediate": 39,
+      "advanced": 45,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/montana-snowbowl/",
+    "exact_quote": "Total: 31 km\n\nEasy\n\n5 km\n\n(16 %)\n\nIntermediate\n\n12 km\n\n(39 %)\n\nDifficult\n\n14 km\n\n(45 %)",
+    "notes": "% from km totals"
+  },
+  {
+    "slug": "moose",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 12,
+      "intermediate": 48,
+      "advanced": 40,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/moose-mountain/",
+    "exact_quote": "Total: 25 km\n\nEasy\n\n3 km\n\n(12 %)\n\nIntermediate\n\n12 km\n\n(48 %)\n\nDifficult\n\n10 km\n\n(40 %)",
+    "notes": "% from km totals"
+  }
+]

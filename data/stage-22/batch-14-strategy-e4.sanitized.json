@@ -1,0 +1,392 @@
+[
+  {
+    "slug": "sunlight-mountain",
+    "trails_total": 67,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 55,
+      "advanced": 20,
+      "expert": 5
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Sunlight_Mountain_Resort",
+    "exact_quote": "67 total / 20% beginner / 55% intermediate / 20% advanced / 5% expert",
+    "notes": "Wikipedia infobox; total differs from input (77 vs 67)."
+  },
+  {
+    "slug": "sunrise-park-resort",
+    "trails_total": 67,
+    "difficulty_pct": {
+      "beginner": 46,
+      "intermediate": 28,
+      "advanced": 25,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Sunrise_Park_Resort",
+    "exact_quote": "Sunrise has 67 trails covering a skiable area of 1,200 acres (4.9 km2).",
+    "notes": "Wikipedia text states 67 trails; difficulty breakdown: 46% beginner, 28% intermediate, 25% advanced/expert combined."
+  },
+  {
+    "slug": "swain-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No dedicated Wikipedia page; List of ski areas confirms existence but provides no stats."
+  },
+  {
+    "slug": "swiss-valley",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia page found with trail/difficulty stats."
+  },
+  {
+    "slug": "tahoe-donner-downhill",
+    "trails_total": 15,
+    "difficulty_pct": {
+      "beginner": 40,
+      "intermediate": 60,
+      "advanced": 0,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Tahoe_Donner",
+    "exact_quote": "15: 40% Beginner, 60% Intermediate",
+    "notes": "Wikipedia: only beginner and intermediate terrain."
+  },
+  {
+    "slug": "tamarack",
+    "trails_total": 50,
+    "difficulty_pct": {
+      "beginner": 17,
+      "intermediate": 45,
+      "advanced": 38,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Tamarack_Resort",
+    "exact_quote": "The terrain for the ski area is rated at 17% novice, 45% intermediate, and 38% advanced.",
+    "notes": "Wikipedia; no expert category called out separately."
+  },
+  {
+    "slug": "taos-ski-valley",
+    "trails_total": 110,
+    "difficulty_pct": {
+      "beginner": 24,
+      "intermediate": 25,
+      "advanced": 51,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Taos_Ski_Valley",
+    "exact_quote": "110 trails with 24% beginner, 25% intermediate, and 51% advanced/expert",
+    "notes": "Wikipedia; advanced/expert combined."
+  },
+  {
+    "slug": "telluride",
+    "trails_total": 127,
+    "difficulty_pct": {
+      "beginner": 23,
+      "intermediate": 36,
+      "advanced": 41,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Telluride_Ski_Resort",
+    "exact_quote": "127 [...] 23% beginner [...] 36% intermediate [...] 41% advanced/expert",
+    "notes": "Wikipedia; advanced/expert combined."
+  },
+  {
+    "slug": "tenney-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Tenney Mountain Wikipedia article references ski area but provides no trail/difficulty stats."
+  },
+  {
+    "slug": "terry-peak",
+    "trails_total": 30,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Terry_Peak",
+    "exact_quote": "30 total",
+    "notes": "Wikipedia confirms 30 runs; no difficulty percentages listed."
+  },
+  {
+    "slug": "teton-pass",
+    "trails_total": 26,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Teton_Pass_Ski_Area",
+    "exact_quote": "26",
+    "notes": "Wikipedia infobox lists 26 trails; no difficulty breakdown."
+  },
+  {
+    "slug": "the-highlands",
+    "trails_total": 55,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Boyne_Highlands",
+    "exact_quote": "Trails 55",
+    "notes": "Wikipedia infobox; no difficulty percentages listed."
+  },
+  {
+    "slug": "the-omni-homestead-resort",
+    "trails_total": 10,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 55,
+      "advanced": 10,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/The_Omni_Homestead_Resort",
+    "exact_quote": "Runs: 10 total / 35% beginner / 55% intermediate / 10% advanced",
+    "notes": "Wikipedia infobox."
+  },
+  {
+    "slug": "the-rock-snowpark",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia page found with trail/difficulty stats."
+  },
+  {
+    "slug": "the-summit-at-snoqualmie",
+    "trails_total": 62,
+    "difficulty_pct": {
+      "beginner": 14,
+      "intermediate": 45,
+      "advanced": 41,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/The_Summit_at_Snoqualmie",
+    "exact_quote": "62 (combined) - 14% easiest - 45% more difficult - 41% most difficult",
+    "notes": "Wikipedia; combined runs across four base areas."
+  },
+  {
+    "slug": "thrill-hills",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia page found."
+  },
+  {
+    "slug": "thunder-ridge-ski-area",
+    "trails_total": 23,
+    "difficulty_pct": {
+      "beginner": 48,
+      "intermediate": 19,
+      "advanced": 33,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Thunder_Ridge_Ski_Area",
+    "exact_quote": "Thunder Ridge Ski area has 23 trails [...] seven black diamonds, five blue squares, and nine green circles. [Infobox: 48% easiest, 19% more difficult, 33% most difficult]",
+    "notes": "Wikipedia; infobox difficulty pct used."
+  },
+  {
+    "slug": "timber-ridge",
+    "trails_total": 15,
+    "difficulty_pct": {
+      "beginner": 47,
+      "intermediate": 33,
+      "advanced": 20,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Timber_Ridge_Ski_Area",
+    "exact_quote": "Timber Ridge has 15 total trails. Seven are easy, five are average, and three are advanced in difficulty.",
+    "notes": "Wikipedia; matches input difficulty pct."
+  },
+  {
+    "slug": "timberline-lodge",
+    "trails_total": 35,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 50,
+      "advanced": 30,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Timberline_Lodge_ski_area",
+    "exact_quote": "beginner 20%, intermediate 50%, advanced 30%",
+    "notes": "Wikipedia; 35 runs."
+  },
+  {
+    "slug": "timberline-mountain",
+    "trails_total": 23,
+    "difficulty_pct": {
+      "beginner": 39,
+      "intermediate": 26,
+      "advanced": 17,
+      "expert": 9
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Timberline_Mountain",
+    "exact_quote": "23 total 9 Easier 6 More Difficult 4 Most Difficult 2 Expert Only 2 terrain parks",
+    "notes": "Wikipedia; close to input pct values."
+  },
+  {
+    "slug": "titcomb-mountain",
+    "trails_total": 16,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Titcomb_Mountain",
+    "exact_quote": "The mountain features a 350' vertical drop, 3 lifts (two T-Bars and a Pony lift), 16 trails, snowmaking and night skiing.",
+    "notes": "Wikipedia; no difficulty breakdown."
+  },
+  {
+    "slug": "titus-mountain",
+    "trails_total": 52,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Titus_Mountain",
+    "exact_quote": "The ski area has 52 trails and glades over three inter-connected mountains",
+    "notes": "Wikipedia; no difficulty breakdown listed."
+  },
+  {
+    "slug": "trapp-family-lodge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Trapp_Family_Lodge",
+    "exact_quote": "As of 2008, there were 67 kilometres (42 mi) of groomed trails and 100 kilometres (62 mi) of un-groomed trails throughout the property.",
+    "notes": "Wikipedia mentions cross-country KM trail network, not downhill alpine runs; no difficulty breakdown."
+  },
+  {
+    "slug": "treetops-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Wikipedia article focuses on golf; no ski trail data."
+  },
+  {
+    "slug": "trollhaugen",
+    "trails_total": 30,
+    "difficulty_pct": {
+      "beginner": 28,
+      "intermediate": 40,
+      "advanced": 22,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Trollhaugen",
+    "exact_quote": "Number of Runs: 30 / Advanced: 22%, Intermediate: 40%, Beginner: 28%",
+    "notes": "Wikipedia infobox."
+  },
+  {
+    "slug": "turner-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia page found at attempted URLs."
+  },
+  {
+    "slug": "turpin-meadow-ranch",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia page found."
+  },
+  {
+    "slug": "tussey-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Tussey_Mountain",
+    "exact_quote": null,
+    "notes": "Wikipedia Tussey Mountain article is about the mountain landform; no ski area trail/difficulty data."
+  },
+  {
+    "slug": "tyrol-basin",
+    "trails_total": 22,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Tyrol_Basin",
+    "exact_quote": "It has runs at beginner, intermediate, advanced and expert level.",
+    "notes": "Wikipedia confirms 22 runs; no percentage breakdown."
+  },
+  {
+    "slug": "tyrol-basin-and-snowboard",
+    "trails_total": 22,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Tyrol_Basin",
+    "exact_quote": "It has runs at beginner, intermediate, advanced and expert level.",
+    "notes": "Duplicate slug of tyrol-basin; same Wikipedia source. 22 runs; no breakdown."
+  }
+]

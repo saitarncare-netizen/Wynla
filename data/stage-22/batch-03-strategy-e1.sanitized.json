@@ -1,0 +1,392 @@
+[
+  {
+    "slug": "blacktail",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 15,
+      "intermediate": 65,
+      "advanced": 20,
+      "expert": 0
+    },
+    "source_url": "https://blacktailmountain.com/the-mountain/",
+    "exact_quote": "15% Easier | 65% More Difficult | 20% Most Difficult",
+    "notes": "3-bucket terrain split (Easier/More Difficult/Most Difficult) mapped to beginner/intermediate/advanced; no expert tier published; total trail count not stated on this page."
+  },
+  {
+    "slug": "blue-hills-ski-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.bluehillsboston.com",
+    "exact_quote": null,
+    "notes": "Official site (homepage + /about) does not publish explicit trail count or difficulty percentages; stats labels visible but numerical values not rendered."
+  },
+  {
+    "slug": "blue-knob",
+    "trails_total": 34,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 35,
+      "advanced": 35,
+      "expert": 10
+    },
+    "source_url": "https://www.blueknob.com",
+    "exact_quote": "We have 34 Trails with a Vertical Drop of 1072' Beginner 20% Intermediate 35% Advanced 35% Expert 10%",
+    "notes": "Sums to 100%."
+  },
+  {
+    "slug": "blue-mountain-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skibluemt.com",
+    "exact_quote": null,
+    "notes": "Homepage and /trail-map do not publish explicit total trail count or difficulty percentages."
+  },
+  {
+    "slug": "bluewood",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://bluewood.com",
+    "exact_quote": null,
+    "notes": "Homepage does not publish explicit total trail count or difficulty percentages; trail-map subpage 404."
+  },
+  {
+    "slug": "bogus-basin",
+    "trails_total": 86,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.bogusbasin.org",
+    "exact_quote": "10 lifts serving 86 runs and 2,600 acres of terrain.",
+    "notes": "Maps-statistics page lists 88 named runs (Alpine map) and 90 named runs (stats), conflicting numbers; homepage value 86 retained. Difficulty percentage breakdown not published."
+  },
+  {
+    "slug": "bolton-valley",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.boltonvalley.com",
+    "exact_quote": null,
+    "notes": "Homepage and mountain-stats subpaths (404) do not publish explicit total trail count or difficulty percentages."
+  },
+  {
+    "slug": "boreal-mountain-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.rideboreal.com",
+    "exact_quote": null,
+    "notes": "Homepage references lift-trail-status subpage but does not publish explicit total trail count or difficulty percentages on accessible pages."
+  },
+  {
+    "slug": "boston-mills",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.bmbw.com",
+    "exact_quote": null,
+    "notes": "Site returned a system error; no trail data accessible. Vail-owned (Peak Resorts portfolio)."
+  },
+  {
+    "slug": "bottineau-winter-park",
+    "trails_total": 8,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skibwp.com",
+    "exact_quote": "We bestow 8 alpine trails ranging from beginner to expert.",
+    "notes": "Total confirmed at 8; difficulty percentage breakdown not published on official site."
+  },
+  {
+    "slug": "bousquet-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://bousquetmountain.com",
+    "exact_quote": null,
+    "notes": "Homepage links to PDF trail map and lift-trail-status pages but does not publish explicit total trail count or difficulty percentages in HTML."
+  },
+  {
+    "slug": "boyne-mountain",
+    "trails_total": 65,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.boynemountain.com",
+    "exact_quote": "65 Trails",
+    "notes": "Trail total confirmed in 'By the Numbers' section; difficulty percentage breakdown not published on homepage."
+  },
+  {
+    "slug": "brandywine",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.bmbw.com",
+    "exact_quote": null,
+    "notes": "Site returned a system error; no trail data accessible. Vail-owned (Peak Resorts portfolio)."
+  },
+  {
+    "slug": "breckenridge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.breckenridge.com",
+    "exact_quote": null,
+    "notes": "breckenridge.com pages (/the-mountain, /mountain) returned system error; no published numbers retrievable. Vail Resorts site."
+  },
+  {
+    "slug": "bretton-woods",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.brettonwoods.com",
+    "exact_quote": null,
+    "notes": "Homepage and the-mountain subpaths (404) do not publish explicit total trail count or difficulty percentages."
+  },
+  {
+    "slug": "brian-head",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.brianhead.com",
+    "exact_quote": null,
+    "notes": "Homepage, /winter, and /trail-map do not publish explicit total trail count or difficulty percentages."
+  },
+  {
+    "slug": "bridger-bowl",
+    "trails_total": 75,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://bridgerbowl.com/mountain",
+    "exact_quote": "Trails: 75 + many unmarked runs",
+    "notes": "Total confirmed; difficulty percentage breakdown not published on stats page (refers users to trail-map image)."
+  },
+  {
+    "slug": "brighton",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.brightonresort.com",
+    "exact_quote": null,
+    "notes": "Homepage and /conditions do not publish explicit total trail count or difficulty percentages; only '30 Night Riding Trails' mentioned, which is subset not total."
+  },
+  {
+    "slug": "bristol-mountain",
+    "trails_total": 39,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.bristolmountain.com",
+    "exact_quote": "39 slopes and trails",
+    "notes": "Total confirmed; difficulty percentage breakdown not published on homepage."
+  },
+  {
+    "slug": "bromley-mountain",
+    "trails_total": 47,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.bromley.com",
+    "exact_quote": "Bromley — The Sun Mountain — features 47 trails, nine lifts, and 360° summit views stretching across the Green Mountains.",
+    "notes": "Total confirmed; difficulty percentage breakdown not published on homepage."
+  },
+  {
+    "slug": "bruce-mound-winter-sports-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.clarkcountywi.gov/brucemound",
+    "exact_quote": null,
+    "notes": "Skipped fetch — county-government page on clarkcountywi.gov is not the type of mountain-stats source likely to contain published trail counts/percentages; only municipal info. No explicit numbers retrieved."
+  },
+  {
+    "slug": "brundage-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.brundage.com",
+    "exact_quote": null,
+    "notes": "Homepage and /the-mountain do not publish explicit total trail count or difficulty percentages on HTML pages reviewed; trail list shows individual trails with difficulty icons but no aggregated count or percentage."
+  },
+  {
+    "slug": "bryce-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.bryceresort.com",
+    "exact_quote": null,
+    "notes": "Homepage and /winter do not publish explicit total trail count or difficulty percentages."
+  },
+  {
+    "slug": "buck-hill",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.buckhill.com",
+    "exact_quote": null,
+    "notes": "Homepage and /winter do not publish explicit total trail count or difficulty percentages on accessible HTML pages."
+  },
+  {
+    "slug": "buena-vista",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.bvskiarea.com",
+    "exact_quote": null,
+    "notes": "Homepage does not publish explicit total trail count or difficulty percentages; multiple subpaths returned 404."
+  },
+  {
+    "slug": "buffalo-ski-club",
+    "trails_total": 43,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://buffaloskicenter.com",
+    "exact_quote": "43 Slopes & 3 Lodges",
+    "notes": "buffaloskiclub.com 301-redirects to buffaloskicenter.com (rebrand). Total confirmed in header; difficulty percentage breakdown not published in HTML."
+  },
+  {
+    "slug": "burke-mountain",
+    "trails_total": 53,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skiburke.com",
+    "exact_quote": "53 trails",
+    "notes": "Homepage cites 53 trails for winter skiing alongside conflicting bike-trail mentions (24/29). Difficulty percentage breakdown not published."
+  },
+  {
+    "slug": "buttermilk",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.aspensnowmass.com/our-mountains/buttermilk",
+    "exact_quote": null,
+    "notes": "Buttermilk page on aspensnowmass.com describes terrain qualitatively (greens, blues, terrain parks) but does not publish explicit total trail count or difficulty percentages."
+  },
+  {
+    "slug": "caberfae-peaks",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.caberfaepeaks.com",
+    "exact_quote": null,
+    "notes": "Homepage shows '0/27 RUNS OPEN' dynamic counter (current conditions, not definitive total); explicit total trail count and difficulty percentages not published on HTML pages reviewed."
+  },
+  {
+    "slug": "camden-snow-bowl",
+    "trails_total": 15,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.camdensnowbowl.com",
+    "exact_quote": "15 SKI TRAILS",
+    "notes": "Total confirmed (also restated as '15 trails, 10 glades'); difficulty percentage breakdown not published on homepage."
+  }
+]

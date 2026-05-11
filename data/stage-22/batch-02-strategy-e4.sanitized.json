@@ -1,0 +1,392 @@
+[
+  {
+    "slug": "aspen-snowmass",
+    "trails_total": 366,
+    "difficulty_pct": {
+      "beginner": 6,
+      "intermediate": 43,
+      "advanced": 17,
+      "expert": 34
+    },
+    "source_url": "https://www.onthesnow.com/colorado/aspen-snowmass/ski-resort",
+    "exact_quote": "366 runs in total. Beginners Runs: 6%, Intermediate Runs: 43%, Advanced Runs: 17%, Expert Runs: 34%",
+    "notes": "Combined 4-mountain complex (Snowmass+Aspen Mtn+Highlands+Buttermilk). Input value 94 was Snowmass alone."
+  },
+  {
+    "slug": "attitash",
+    "trails_total": 68,
+    "difficulty_pct": {
+      "beginner": 29,
+      "intermediate": 44,
+      "advanced": 27,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Attitash_Mountain_Resort",
+    "exact_quote": "Trails and glades: 68; most difficult 27%; more difficult 44%; easiest 29%",
+    "notes": "Wikipedia infobox. No expert tier reported separately."
+  },
+  {
+    "slug": "badger-mountain-wa",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 31,
+      "intermediate": 19,
+      "advanced": 35,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Badger_Mountain_Ski_Area",
+    "exact_quote": "31% easiest, 19% more difficult, 15% mixed difficulty, 35% most difficult",
+    "notes": "Wikipedia infobox lists trails as '5-7?' (not a firm count). Difficulty includes a 15% 'mixed' bucket — omitted from numeric breakdown."
+  },
+  {
+    "slug": "badger-pass",
+    "trails_total": 10,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 50,
+      "advanced": 15,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Badger_Pass_Ski_Area",
+    "exact_quote": "10 total; 35% easiest; 50% more difficult; 15% most difficult",
+    "notes": "Wikipedia infobox."
+  },
+  {
+    "slug": "bear-basin-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic center, ~25-30 km groomed XC trails reported by Visit Idaho / Payette Lakes Ski Club, but no explicit trail count or difficulty % from Wikipedia or regional sources."
+  },
+  {
+    "slug": "bear-creek-mountain-resort",
+    "trails_total": 23,
+    "difficulty_pct": {
+      "beginner": 45,
+      "intermediate": 27,
+      "advanced": 27,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/pennsylvania/bear-creek-mountain-resort/ski-resort",
+    "exact_quote": "Bear Creek Mountain Resort has 23 total trails with the following distribution: 45% Beginner Runs, 27% Intermediate Runs, and 27% Advanced Runs",
+    "notes": "Wikipedia says 21 slopes but OnTheSnow has 23 with explicit %s."
+  },
+  {
+    "slug": "bear-mountain",
+    "trails_total": 26,
+    "difficulty_pct": {
+      "beginner": 15,
+      "intermediate": 40,
+      "advanced": 30,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Bear_Mountain_(ski_area)",
+    "exact_quote": "26 total; 15% beginner; 15% low intermediate; 40% intermediate; 30% advanced",
+    "notes": "Wikipedia infobox. 15% 'low intermediate' bucket folded with beginner. (Adjusted: beginner 15, intermediate 55 if combining low-int+int; kept original buckets.)"
+  },
+  {
+    "slug": "bear-paw",
+    "trails_total": 24,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Bear_Paw_Ski_Bowl",
+    "exact_quote": "There are 24 runs that are unrated",
+    "notes": "Wikipedia explicitly states trails are unrated — no difficulty data available."
+  },
+  {
+    "slug": "bear-valley-adventure-company",
+    "trails_total": 38,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.bvadventures.com/cross-country-skiing",
+    "exact_quote": "38 trails and 65+ km of trails groomed for classic and skate skiing",
+    "notes": "Nordic XC center. No %s in Wikipedia/regional sources."
+  },
+  {
+    "slug": "bear-valley-mountain",
+    "trails_total": 75,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 40,
+      "advanced": 35,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Bear_Valley_Mountain_Resort",
+    "exact_quote": "Nine lifts provide access to 75+ runs covering 1,680 skiable acres; 25% beginner, 40% intermediate, 35% advanced",
+    "notes": "Wikipedia infobox."
+  },
+  {
+    "slug": "beartooth-basin",
+    "trails_total": 9,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Beartooth_Basin",
+    "exact_quote": "9",
+    "notes": "Wikipedia infobox lists 9 trails. No difficulty percentages provided (summer-only ski area)."
+  },
+  {
+    "slug": "beaver-creek",
+    "trails_total": 167,
+    "difficulty_pct": {
+      "beginner": 28,
+      "intermediate": 38,
+      "advanced": 34,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Beaver_Creek_Resort",
+    "exact_quote": "Trails: 167 total (28% beginner, 38% intermediate, 34% expert/advanced)",
+    "notes": "Wikipedia infobox. Advanced+expert combined to 34%."
+  },
+  {
+    "slug": "beaver-mountain",
+    "trails_total": 47,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 40,
+      "advanced": 25,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Beaver_Mountain",
+    "exact_quote": "47; 35% easiest; 40% more difficult; 25% most difficult",
+    "notes": "Wikipedia infobox. Input had 48; Wikipedia says 47."
+  },
+  {
+    "slug": "beech-mountain-resort",
+    "trails_total": 17,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Beech_Mountain,_North_Carolina",
+    "exact_quote": "Currently, there are 17 trails and 8 lifts over 95 skiable acres",
+    "notes": "Trail count confirmed by Wikipedia. Difficulty %s in input (19/56/25/0) are preserved — no contradicting authoritative source."
+  },
+  {
+    "slug": "belleayre-mountain",
+    "trails_total": 62,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Belleayre_Mountain",
+    "exact_quote": "The mountain features 62 downhill alpine trails served by 4 chairlifts and 1 gondola",
+    "notes": "Wikipedia confirms 62 trails. Input difficulty %s (32/43/18/7) preserved — Wikipedia article does not provide explicit percentages."
+  },
+  {
+    "slug": "berkshire-east",
+    "trails_total": 45,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 35,
+      "advanced": 30,
+      "expert": 5
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Berkshire_East_Ski_Area",
+    "exact_quote": "30% beginner runs, 35% intermediate, 30% advanced, and 5% expert runs",
+    "notes": "Wikipedia. Input had expert=4; Wikipedia says 5."
+  },
+  {
+    "slug": "bethel-village-trails",
+    "trails_total": 33,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://woodsandtrails.org/winter-trails-center-2/",
+    "exact_quote": "over 35 km of beautifully groomed cross country ski trails",
+    "notes": "Nordic XC trail network — measured in km, not Alpine trail counts. Input value 33 preserved; no authoritative trail count or difficulty % found."
+  },
+  {
+    "slug": "big-bear-ca",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Big Bear Mountain Resort = umbrella for Bear Mountain + Snow Summit + Snow Valley. No single combined trail count/difficulty % published in Wikipedia."
+  },
+  {
+    "slug": "big-bear-pa",
+    "trails_total": 18,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Ski_Big_Bear",
+    "exact_quote": "Ski Big Bear has 18 trails and connectors",
+    "notes": "Wikipedia confirms 18 trails but provides only trail counts by difficulty (6 easiest, 4 more difficult, 4 most difficult, 1 expert, 2 freestyle), not %s as stated by the resort."
+  },
+  {
+    "slug": "big-boulder",
+    "trails_total": 18,
+    "difficulty_pct": {
+      "beginner": 38,
+      "intermediate": 19,
+      "advanced": 44,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/pennsylvania/big-boulder/ski-resort",
+    "exact_quote": "Beginners: 38%, Intermediate: 19%, Advanced: 44%",
+    "notes": "Wikipedia gives 18 trails. OnTheSnow lists 16 trails / 55 acres + the % breakdown. Trail count from Wiki, %s from OnTheSnow."
+  },
+  {
+    "slug": "big-powderhorn-mountain",
+    "trails_total": 45,
+    "difficulty_pct": {
+      "beginner": 27,
+      "intermediate": 41,
+      "advanced": 32,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/michigan/big-powderhorn-mountain/ski-resort",
+    "exact_quote": "Big Powderhorn has 44 total runs with 27% beginner runs, 41% intermediate runs, and 32% advanced runs",
+    "notes": "Wikipedia says 45 trails. OnTheSnow gives %s (cites 44 total)."
+  },
+  {
+    "slug": "big-rock",
+    "trails_total": 29,
+    "difficulty_pct": {
+      "beginner": 18,
+      "intermediate": 58,
+      "advanced": 30,
+      "expert": null
+    },
+    "source_url": "https://www.indyskipass.com/our-resorts/big-rock-mountain",
+    "exact_quote": "58% are intermediate, while 30% are advanced trails, and 18% beginner trails",
+    "notes": "Indy Pass / regional resort directory data; Wikipedia Big Rock article not found."
+  },
+  {
+    "slug": "big-sky",
+    "trails_total": 320,
+    "difficulty_pct": {
+      "beginner": 15,
+      "intermediate": 25,
+      "advanced": 60,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Big_Sky_Resort",
+    "exact_quote": "320+ - 15% beginner - 25% intermediate - 60% advanced",
+    "notes": "Wikipedia infobox. No expert tier separately reported (advanced encompasses)."
+  },
+  {
+    "slug": "big-snow-american-dream",
+    "trails_total": 3,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 33,
+      "advanced": 33,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Big_Snow_American_Dream",
+    "exact_quote": "three distinct skiing routes... 'Lil' Dipper' (beginner), 'Switchback' (intermediate), 'Northern Lights' (advanced)",
+    "notes": "Indoor facility; 3 runs (1 each beginner/intermediate/advanced). Input %s 33/33/33/0 confirmed."
+  },
+  {
+    "slug": "big-squaw-mountain",
+    "trails_total": 14,
+    "difficulty_pct": {
+      "beginner": 14,
+      "intermediate": 78,
+      "advanced": 8,
+      "expert": null
+    },
+    "source_url": "https://skimaine.com/bigsquawmtn/",
+    "exact_quote": "the mountain has 14 trails with 14% beginner, 78% intermediate, and 8% advanced terrain",
+    "notes": "Ski Maine Association. Current open terrain (limited operation vs. historic 33 trails)."
+  },
+  {
+    "slug": "bittersweet-ski-resort",
+    "trails_total": 18,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 44,
+      "advanced": 6,
+      "expert": 17
+    },
+    "source_url": "https://www.onthesnow.com/michigan/bittersweet-ski-area/ski-resort",
+    "exact_quote": "18 runs in total. Beginners Runs: 33%, Intermediate Runs: 44%, Advanced Runs: 6%, Expert Runs: 17%",
+    "notes": "OnTheSnow. Input had trails=20; OnTheSnow says 18."
+  },
+  {
+    "slug": "black-area",
+    "trails_total": 45,
+    "difficulty_pct": {
+      "beginner": 29,
+      "intermediate": 32,
+      "advanced": 24,
+      "expert": 15
+    },
+    "source_url": "https://www.onthesnow.com/new-hampshire/black-mountain/ski-resort",
+    "exact_quote": "68 runs in total. Beginners: 29%, Intermediate: 32%, Advanced: 24%, Expert: 15%",
+    "notes": "Black Mountain Jackson NH. Wikipedia says '45, plus 15 glades' for trail count (kept 45). OnTheSnow counts glades separately to reach 68; %s from OnTheSnow."
+  },
+  {
+    "slug": "black-mountain-nh",
+    "trails_total": 45,
+    "difficulty_pct": {
+      "beginner": 29,
+      "intermediate": 32,
+      "advanced": 24,
+      "expert": 15
+    },
+    "source_url": "https://www.onthesnow.com/new-hampshire/black-mountain/ski-resort",
+    "exact_quote": "68 runs in total. Beginners: 29%, Intermediate: 32%, Advanced: 24%, Expert: 15%",
+    "notes": "Duplicate of black-area (same resort, Jackson NH). Wikipedia: '45, plus 15 glades'."
+  },
+  {
+    "slug": "black-mountain-of-maine",
+    "trails_total": 38,
+    "difficulty_pct": {
+      "beginner": 18,
+      "intermediate": 31,
+      "advanced": 46,
+      "expert": 5
+    },
+    "source_url": "https://www.onthesnow.com/maine/black-mountain-of-maine/ski-resort",
+    "exact_quote": "38 runs in total. Beginners: 18%, Intermediate: 31%, Advanced: 46%, Expert: 5%",
+    "notes": "OnTheSnow. Wikipedia says '46 trails (including 17 glades)'; input said 31. OnTheSnow says 38."
+  },
+  {
+    "slug": "blackjack-mountain",
+    "trails_total": 22,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 40,
+      "advanced": 40,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Snowriver_Mountain_Resort",
+    "exact_quote": "Black River Basin has 22 downhill runs... The runs are 20% Beginner, 40% Intermediate and 40% Expert, with one double black diamond expert trail",
+    "notes": "Now called Black River Basin (part of Snowriver Mountain Resort). Advanced and Expert merged into 40% Expert per source."
+  }
+]

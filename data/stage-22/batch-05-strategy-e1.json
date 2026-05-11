@@ -1,0 +1,392 @@
+[
+  {
+    "slug": "cuchara",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.cucharamountainpark.org/",
+    "exact_quote": null,
+    "notes": "Homepage and /the-mountain (404) checked. No explicit trail count or difficulty percentages published. Site mentions 230 acres + 1,500 ft vertical only."
+  },
+  {
+    "slug": "dartmouth-skiway",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://dartmouthskiway.com/",
+    "exact_quote": null,
+    "notes": "Followed redirects skiway.dartmouth.edu -> sites.dartmouth.edu/skiway -> dartmouthskiway.com. Homepage has no explicit trail count or difficulty percentages; /the-mountain returns 404."
+  },
+  {
+    "slug": "deer-valley",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.deervalley.com",
+    "exact_quote": null,
+    "notes": "Tried /the-mountain/mountain-stats, /the-mountain/trail-maps, /mountain, /explore/mountain-stats, /about/mountain-stats — all 404. Homepage content lacks explicit numbers. Could not retrieve mountain stats page."
+  },
+  {
+    "slug": "detroit",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://detroitmountain.com",
+    "exact_quote": null,
+    "notes": "Homepage, /winter, /the-mountain (ECONNREFUSED/empty) checked. No explicit trail count or difficulty percentages on accessible pages."
+  },
+  {
+    "slug": "detroit-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.detroitmountain.com",
+    "exact_quote": null,
+    "notes": "Same site as detroit slug. No explicit numbers found on accessible pages."
+  },
+  {
+    "slug": "devils-head",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.devilsheadresort.com",
+    "exact_quote": null,
+    "notes": "Homepage, /ski, /winter/mountain-info (404), /winter/mountain-info/ (404) checked. No explicit trail count or difficulty percentages on accessible pages."
+  },
+  {
+    "slug": "diamond-peak",
+    "trails_total": 40,
+    "difficulty_pct": {
+      "beginner": 18,
+      "intermediate": 46,
+      "advanced": 36,
+      "expert": 0
+    },
+    "source_url": "https://www.diamondpeak.com/the-mountain/trail-map/",
+    "exact_quote": "Named Runs: 40 | Beginner: 18% | Intermediate: 46% | Advanced: 36%",
+    "notes": "Resort publishes 3 difficulty levels (no expert tier). Expert=0 by absence."
+  },
+  {
+    "slug": "discovery",
+    "trails_total": 67,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 25,
+      "advanced": 25,
+      "expert": 30
+    },
+    "source_url": "https://www.skidiscovery.com/the-mountain",
+    "exact_quote": "NUMBER OF TRAILS: 67 | BEGINNER: 20% | INTERMEDIATE: 25% | ADVANCED: 25% | EXPERT: 30%",
+    "notes": "Full 4-tier breakdown published in Mountain Stats."
+  },
+  {
+    "slug": "dodge-ridge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.dodgeridge.com",
+    "exact_quote": null,
+    "notes": "Site redirects to summer.dodgeridge.com (offseason). /winter and /the-mountain/trail-map/ accessed — trail map shown as image only, no text-published counts or percentages found."
+  },
+  {
+    "slug": "dog-creek-lodge-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "http://www.dogcreeklodge.com",
+    "exact_quote": null,
+    "notes": "Nordic center — schema nulled per instructions."
+  },
+  {
+    "slug": "donner-ski-ranch",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.donnerskiranch.com",
+    "exact_quote": null,
+    "notes": "Homepage and /explore checked. Site publishes 500+ acres, 1000+ vertical but no explicit trail count or difficulty percentages."
+  },
+  {
+    "slug": "dry-hill-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skidryhill.com/",
+    "exact_quote": null,
+    "notes": "Homepage and /the-mountain (404) checked. No explicit trail count or difficulty percentages published."
+  },
+  {
+    "slug": "eagle-point",
+    "trails_total": 43,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.eaglepointresort.com/mountain-stats/",
+    "exact_quote": "43 diverse runs | 13 Advanced Runs | 19 Intermediate Runs | 11 Beginner Runs",
+    "notes": "Total trails verified at 43. Counts published by difficulty (not percentages); not filling pct fields as schema requires explicit published percentages."
+  },
+  {
+    "slug": "eagle-rock-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.eaglerockresort.com",
+    "exact_quote": null,
+    "notes": "Main domain returned ECONNREFUSED on multiple attempts (homepage, /winter, /skiing, /recreation/skiing-and-snowtubing all unreachable)."
+  },
+  {
+    "slug": "eaglecrest",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://skieaglecrest.com",
+    "exact_quote": null,
+    "notes": "Homepage and /the-mountain/trail-map/ (404) checked. Site states 640+ acres, 1620 ft vertical but no explicit trail count or difficulty percentages."
+  },
+  {
+    "slug": "eaglecrest-ski-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://skieaglecrest.com",
+    "exact_quote": null,
+    "notes": "Duplicate of eaglecrest slug; same findings."
+  },
+  {
+    "slug": "eaton-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.eatonmountain.com",
+    "exact_quote": null,
+    "notes": "Homepage and /skiing, /winter, /ski (all empty/404) checked. Site mentions lifts (3 rope tows + Poma) but no explicit trail count or difficulty percentages."
+  },
+  {
+    "slug": "echo-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.echomntn.com",
+    "exact_quote": null,
+    "notes": "Homepage and /the-mountain, /themountain, /about (404/empty) checked. No explicit trail count or difficulty percentages found on accessible pages."
+  },
+  {
+    "slug": "echo-valley",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://skiechovalley.com/",
+    "exact_quote": null,
+    "notes": "Homepage, /the-mountain/, /about/ (404 page) checked. No explicit trail count or difficulty percentages on accessible pages."
+  },
+  {
+    "slug": "eldora",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.eldora.com",
+    "exact_quote": null,
+    "notes": "Homepage, /the-mountain, /the-mountain/trail-map, /the-mountain/mountain-statistics, /explore-the-mountain/trail-map (all empty/404) checked. Mountain stats not accessible via fetch."
+  },
+  {
+    "slug": "elk-mountain",
+    "trails_total": 27,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.elkskier.com",
+    "exact_quote": "180 acres. 27 trails.",
+    "notes": "Total trails verified at 27 (matches input). No explicit difficulty percentages published."
+  },
+  {
+    "slug": "elko-snobowl",
+    "trails_total": 10,
+    "difficulty_pct": {
+      "beginner": 50,
+      "intermediate": 50,
+      "advanced": 0,
+      "expert": 0
+    },
+    "source_url": "https://www.elkocity.com/snobowl/",
+    "exact_quote": "10 trails comprising the Elko SnoBowl Ski and Bike Park | Half of the mountain's runs rank as beginner, while the other half are designated intermediate.",
+    "notes": "Site explicitly states 50/50 beginner/intermediate split; no advanced/expert terrain."
+  },
+  {
+    "slug": "enchanted-forest-xc",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://enchantedforestxc.com/",
+    "exact_quote": null,
+    "notes": "Nordic/XC ski area — schema nulled per instructions."
+  },
+  {
+    "slug": "ferguson-ridge",
+    "trails_total": 8,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://skifergi.com",
+    "exact_quote": "8 runs",
+    "notes": "Total runs verified at 8. No explicit difficulty percentages published."
+  },
+  {
+    "slug": "four-lakes",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.fourlakessnowsports.com/",
+    "exact_quote": null,
+    "notes": "Site mentions seven tow ropes but no explicit trail count or difficulty percentages."
+  },
+  {
+    "slug": "franconia-village-xc-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.franconiainn.com/xc-ski",
+    "exact_quote": null,
+    "notes": "Cross-country ski area — schema nulled per instructions."
+  },
+  {
+    "slug": "frost-fire-park",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.frostfirepark.org",
+    "exact_quote": null,
+    "notes": "Homepage checked. No explicit trail count or difficulty percentages published on accessible pages."
+  },
+  {
+    "slug": "garnet-hill-xc",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.garnet-hill.com/outdoor-center/",
+    "exact_quote": null,
+    "notes": "Cross-country ski area — schema nulled per instructions."
+  },
+  {
+    "slug": "giants-ridge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.giantsridge.com",
+    "exact_quote": null,
+    "notes": "All requests to giantsridge.com returned 403 Forbidden (homepage, /winter, /winter/the-mountain, /winter/mountain-info/). Site not accessible via WebFetch."
+  },
+  {
+    "slug": "gore-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://goremountain.com",
+    "exact_quote": null,
+    "notes": "All requests to goremountain.com returned 403 Forbidden (homepage, /the-mountain, /the-mountain/mountain-stats, /the-mountain/trail-map). Site not accessible via WebFetch."
+  }
+]

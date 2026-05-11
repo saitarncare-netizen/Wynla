@@ -1,0 +1,242 @@
+[
+  {
+    "slug": "granby-ranch",
+    "trails_total": 43,
+    "difficulty_pct": { "beginner": 25, "intermediate": 35, "advanced": 40, "expert": null },
+    "source_url": "https://snowbrains.com/granby-ranch-co-night-skiing-report-a-different-type-of-colorado-ski-resort/",
+    "exact_quote": "Number of Trails: 43 ... Beginner: 25%, Intermediate: 35%, Advanced: 40%",
+    "notes": "SnowBrains 'Quick Facts & History' section. Source uses 3-bucket model (no expert split); expert left null."
+  },
+  {
+    "slug": "grand-targhee",
+    "trails_total": 97,
+    "difficulty_pct": { "beginner": 10, "intermediate": 70, "advanced": 20, "expert": null },
+    "source_url": "https://www.peakrankings.com/content/grand-targhee",
+    "exact_quote": "Trails: 97 ... Beginner: 10% Intermediate: 70% Advanced/Expert: 20%",
+    "notes": "PeakRankings editorial review. Source bundles Advanced/Expert; recorded combined under advanced, expert null."
+  },
+  {
+    "slug": "granite-gorge",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No qualifying news/blog/press-kit quote found with explicit trail count or difficulty pct for Granite Gorge NH."
+  },
+  {
+    "slug": "granite-peak",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "SnowBrains 2026-27 Ikon Pass article references Granite Peak but gives no explicit trail count or pct breakdown. No PeakRankings page exists."
+  },
+  {
+    "slug": "great-bear",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No qualifying news/blog quote with explicit trail or difficulty pct for Great Bear SD."
+  },
+  {
+    "slug": "great-bear-valley",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Same resort as great-bear SD; no qualifying news/blog quote found."
+  },
+  {
+    "slug": "great-divide",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "SnowBrains coverage references operations but no explicit trail count or pct breakdown."
+  },
+  {
+    "slug": "great-glen-trails-outdoor-center",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "XC-only Nordic center; no qualifying news/blog trail-count or difficulty pct quote found."
+  },
+  {
+    "slug": "greek-peak",
+    "trails_total": 55,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": "https://snowbrains.com/hometown-mountain-shoutout-greek-peak/",
+    "exact_quote": "There are 55 runs in total in the 220 acres of skiable terrain, 175 of which are available for night skiing.",
+    "notes": "SnowBrains Hometown Mountain Shoutout. Trail count quoted; no difficulty pct breakdown in article."
+  },
+  {
+    "slug": "gunstock-mountain-resort",
+    "trails_total": 49,
+    "difficulty_pct": { "beginner": 15, "intermediate": 52, "advanced": 33, "expert": null },
+    "source_url": "https://www.peakrankings.com/content/gunstock",
+    "exact_quote": "Trails: 49 ... Beginner: 15% Intermediate: 52% Advanced/Expert: 33%",
+    "notes": "PeakRankings editorial review. Source bundles Advanced/Expert; expert left null."
+  },
+  {
+    "slug": "hatley-pointe",
+    "trails_total": 21,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": "https://snowbrains.com/think-the-south-cant-ski-hatley-pointes-2025-26-upgrades-might-change-your-mind-about-north-carolina-skiing/",
+    "exact_quote": "Skiers and snowboarders can look forward to six new trails at Hatley Pointe this season, for a total of 21 trails.",
+    "notes": "SnowBrains 2025-26 upgrades article. No difficulty pct in article."
+  },
+  {
+    "slug": "haymaker-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic XC center; no qualifying news/blog explicit trail count or difficulty pct quote found."
+  },
+  {
+    "slug": "heavenly-mountain-resort",
+    "trails_total": 97,
+    "difficulty_pct": { "beginner": 9, "intermediate": 57, "advanced": 34, "expert": null },
+    "source_url": "https://www.peakrankings.com/content/heavenly",
+    "exact_quote": "Trails: 97 ... Beginner: 9% Intermediate: 57% Advanced/Expert: 34%",
+    "notes": "PeakRankings editorial review. Source bundles Advanced/Expert; expert left null."
+  },
+  {
+    "slug": "hermon-mountain",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "SnowBrains 2025 closure article mentions '20 marked trails' but no explicit total + difficulty pct combo qualifying as a clean quote."
+  },
+  {
+    "slug": "hesperus-ski-area",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "SnowBrains closure article gives no explicit trail count or difficulty pct."
+  },
+  {
+    "slug": "hidden-valley",
+    "trails_total": 26,
+    "difficulty_pct": { "beginner": 26, "intermediate": 41, "advanced": 31, "expert": null },
+    "source_url": "https://snowbrains.com/hidden-valley-ski-resort-pa-a-great-place-to-fall-in-love-with-skiing/",
+    "exact_quote": "Trails: 26 ... Beginner Terrain: 26% Intermediate Terrain: 41% Advanced Terrain: 31%",
+    "notes": "SnowBrains feature on Hidden Valley PA. 3-bucket model (no expert); expert null. Pct sums to 98 (per source)."
+  },
+  {
+    "slug": "hidden-valley-mo",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "SnowBrains Hometown Mountain Shoutout for MO mentions '17 trails' but no difficulty pct breakdown in qualifying quoted form."
+  },
+  {
+    "slug": "high-point-xc-center",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "XC-only center; no qualifying news/blog/press-kit explicit quote found."
+  },
+  {
+    "slug": "highlands",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "SnowBrains Boyne-resorts article combines Highlands+Boyne Mtn ('115 downhill runs') — not a standalone Highlands count. No qualifying solo quote found."
+  },
+  {
+    "slug": "hilltop-ski-area",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "SnowBrains Freedom Shred articles focus on events, no trail count or difficulty pct quoted."
+  },
+  {
+    "slug": "hoedown-hill",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "SnowBrains opening article ('New Ski Area in Colorado to Open For Christmas 2023') gives no explicit trail count or pct breakdown."
+  },
+  {
+    "slug": "hogadon",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": 20, "intermediate": 40, "advanced": 40, "expert": null },
+    "source_url": "https://snowbrains.com/for-an-authentic-and-affordable-wyoming-adventure-check-out-these-lesser-known-ski-akreas/",
+    "exact_quote": "20% beginner, 40% intermediate, and 40% expert",
+    "notes": "SnowBrains 'lesser-known Wyoming ski areas' article. Source uses 'expert' as the 3rd bucket — recorded under advanced (the higher of two source labels). Trail count not given in article."
+  },
+  {
+    "slug": "holiday-mountain",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No qualifying SnowBrains or other news/blog explicit quote found for Holiday Mountain NY."
+  },
+  {
+    "slug": "holiday-valley",
+    "trails_total": 83,
+    "difficulty_pct": { "beginner": 38, "intermediate": 28, "advanced": 34, "expert": null },
+    "source_url": "https://www.peakrankings.com/content/holiday-valley",
+    "exact_quote": "Trails: 83 ... Beginner: 38% Intermediate: 28% Advanced/Expert: 34%",
+    "notes": "PeakRankings editorial review. Source bundles Advanced/Expert; expert null."
+  },
+  {
+    "slug": "holimont",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "SnowBrains 'Top 10 Bougie-est Ski Resorts' mentions HoliMont but no explicit trail count or difficulty pct quote."
+  },
+  {
+    "slug": "homestake-lodge",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic XC lodge; no qualifying news/blog quote with explicit trail count or difficulty pct."
+  },
+  {
+    "slug": "homestead-resort",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No qualifying news/blog explicit-quote source found for The Homestead MI."
+  },
+  {
+    "slug": "homewood-mountain-resort",
+    "trails_total": 67,
+    "difficulty_pct": { "beginner": 15, "intermediate": 40, "advanced": 45, "expert": null },
+    "source_url": "https://www.peakrankings.com/content/homewood",
+    "exact_quote": "Trails: 67 ... Beginner: 15% Intermediate: 40% Advanced/Expert: 45%",
+    "notes": "PeakRankings editorial review. Source bundles Advanced/Expert; expert null."
+  },
+  {
+    "slug": "hoodoo",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "SnowBrains opening report references operating status; no explicit trail count or difficulty pct quote."
+  },
+  {
+    "slug": "howelsen-hill",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "SnowBrains 'oldest ski resorts' article is historical; no explicit trail count or difficulty pct quoted."
+  }
+]

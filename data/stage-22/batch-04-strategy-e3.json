@@ -1,0 +1,317 @@
+[
+  {
+    "slug": "camelback-mountain-resort",
+    "trails_total": 39,
+    "difficulty_pct": {
+      "beginner": 39,
+      "intermediate": 26,
+      "advanced": 26,
+      "expert": 9
+    },
+    "source_url": "https://www.onthesnow.com/pennsylvania/camelback-mountain-resort/ski-resort",
+    "exact_quote": "39 runs across 166 acres of skiable terrain; The breakout of trails is 39% beginner, 26% intermediate, 26% advanced and 9% expert.",
+    "notes": "OnTheSnow ski-resort page lists 39 runs; difficulty percentages confirmed via OnTheSnow search excerpt (39/26/26/9)."
+  },
+  {
+    "slug": "camp-10-area",
+    "trails_total": 15,
+    "difficulty_pct": null,
+    "source_url": "https://www.skicentral.com/camp10skinsnowboard.html",
+    "exact_quote": "Total Trails: 15",
+    "notes": "SkiCentral lists 15 trails; no difficulty breakdown on page. OnTheSnow has no dedicated page."
+  },
+  {
+    "slug": "campgaw-mountain",
+    "trails_total": 12,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 33,
+      "advanced": 25,
+      "expert": 8
+    },
+    "source_url": "https://www.onthesnow.com/new-jersey/campgaw-mountain/ski-resort",
+    "exact_quote": "Beginners Runs 33% Intermediate Runs 33% Advanced Runs 25% Expert Runs 8%",
+    "notes": "OnTheSnow: 12 runs across 23 acres."
+  },
+  {
+    "slug": "campton-mountain",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on OnTheSnow or SkiCentral. Small community ski area in Waterville Estates, NH."
+  },
+  {
+    "slug": "canaan-valley-resort",
+    "trails_total": 26,
+    "difficulty_pct": {
+      "beginner": 27,
+      "intermediate": 38,
+      "advanced": 35,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/west-virginia/canaan-valley-resort/ski-resort",
+    "exact_quote": "Beginners Runs 27%, Intermediate Runs 38%, Advanced Runs 35%, Runs in Total 26",
+    "notes": "OnTheSnow lists 26 runs (input had 47, OnTheSnow disagrees); difficulty sums to 100% with no expert category shown."
+  },
+  {
+    "slug": "cannon-mountain",
+    "trails_total": 98,
+    "difficulty_pct": {
+      "beginner": 14,
+      "intermediate": 52,
+      "advanced": 34,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/new-hampshire/cannon-mountain/ski-resort",
+    "exact_quote": "98 runs across 285 acres; Beginners 14%, Intermediate 52%, Advanced 34%",
+    "notes": "OnTheSnow: 98 runs; expert category not listed (advanced=34% likely encompasses expert)."
+  },
+  {
+    "slug": "cannonsburg",
+    "trails_total": 22,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 50,
+      "advanced": 15,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/michigan/cannonsburg/ski-resort",
+    "exact_quote": "22 runs across 100 Acres; Beginners 35%, Intermediate 50%, Advanced 15%",
+    "notes": "OnTheSnow: 22 runs; expert not listed."
+  },
+  {
+    "slug": "cascade-mountain",
+    "trails_total": 48,
+    "difficulty_pct": {
+      "beginner": 39,
+      "intermediate": 39,
+      "advanced": 0,
+      "expert": 22
+    },
+    "source_url": "https://www.onthesnow.com/wisconsin/cascade-mountain/ski-resort",
+    "exact_quote": "Beginners Runs 39% Intermediate Runs 39% Expert Runs 22% Runs in Total 48",
+    "notes": "OnTheSnow: 48 runs; OnTheSnow uses Expert label (not Advanced) — advanced=0."
+  },
+  {
+    "slug": "cataloochee-ski-area",
+    "trails_total": 18,
+    "difficulty_pct": {
+      "beginner": 44,
+      "intermediate": 39,
+      "advanced": 0,
+      "expert": 17
+    },
+    "source_url": "https://www.onthesnow.com/north-carolina/cataloochee-ski-area/ski-resort",
+    "exact_quote": "18 runs across 50 acres; Beginners 44%, Intermediate 39%, Expert 17%",
+    "notes": "OnTheSnow: 18 runs; matches input values."
+  },
+  {
+    "slug": "catamount-outdoor-family-center",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic/XC center, not alpine — no OnTheSnow page. Catamount Outdoor (Williston, VT) is a 35km Nordic trail network."
+  },
+  {
+    "slug": "catamount-ski-area",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "OnTheSnow lists Catamount under NY (catamount-ski-ride-area), not MA. Slug-specific MA page returned 404. Skipping per STRICT rule."
+  },
+  {
+    "slug": "chapman-hill",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Municipal Durango ski area; no OnTheSnow or SkiCentral page found."
+  },
+  {
+    "slug": "cherry-peak",
+    "trails_total": 20,
+    "difficulty_pct": null,
+    "source_url": "http://www.skicentral.com/cherrypeak.html",
+    "exact_quote": "Number of Trails: 20",
+    "notes": "SkiCentral lists 20 trails (input had 38); no difficulty breakdown on page."
+  },
+  {
+    "slug": "chestnut-mountain",
+    "trails_total": 18,
+    "difficulty_pct": {
+      "beginner": 26,
+      "intermediate": 58,
+      "advanced": 16,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/illinois/chestnut-mountain-resort/ski-resort",
+    "exact_quote": "Beginners Runs 26% Intermediate Runs 58% Advanced Runs 16%",
+    "notes": "OnTheSnow: 18 runs across 139 acres (input had 19)."
+  },
+  {
+    "slug": "china-peak",
+    "trails_total": 54,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/california/ski-china-peak/ski-resort",
+    "exact_quote": "54 total runs across 1,400 ac of skiable terrain",
+    "notes": "OnTheSnow: 54 runs; difficulty percentages not published on page."
+  },
+  {
+    "slug": "christie",
+    "trails_total": 29,
+    "difficulty_pct": {
+      "beginner": 41,
+      "intermediate": 21,
+      "advanced": 31,
+      "expert": 7
+    },
+    "source_url": "https://www.onthesnow.com/wisconsin/christie-mountain/ski-resort",
+    "exact_quote": "29 runs across 45 acres; Beginners 41%, Intermediate 21%, Advanced 31%, Expert 7%",
+    "notes": "OnTheSnow: 29 runs (input had 33)."
+  },
+  {
+    "slug": "christmas-mountain",
+    "trails_total": 16,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/wisconsin/christmas-mountain/ski-resort",
+    "exact_quote": "16 runs across 40 acres of skiable terrain",
+    "notes": "OnTheSnow: 16 runs; no difficulty percentages published."
+  },
+  {
+    "slug": "cloudmont-ski-resort",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No OnTheSnow page; SkiCentral 404. Strict: explicit numbers not found in OTS/SC."
+  },
+  {
+    "slug": "cochrans-ski-area",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No OnTheSnow page found for Cochran's (small VT community ski area)."
+  },
+  {
+    "slug": "cooper-spur-area",
+    "trails_total": 10,
+    "difficulty_pct": {
+      "beginner": 40,
+      "intermediate": 60,
+      "advanced": 0,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/oregon/cooper-spur/ski-resort",
+    "exact_quote": "10 runs across 50 skiable acres; Beginners 40%, Intermediate 60%",
+    "notes": "OnTheSnow: 10 runs (input had 9); only beginner/intermediate published."
+  },
+  {
+    "slug": "copper-mountain",
+    "trails_total": 150,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 24,
+      "advanced": 34,
+      "expert": 17
+    },
+    "source_url": "https://www.onthesnow.com/colorado/copper-mountain-resort/ski-resort",
+    "exact_quote": "Beginners Runs 25%, Intermediate Runs 24%, Advanced Runs 34%, Expert Runs 17%",
+    "notes": "OnTheSnow: 150 runs across 2,507 acres."
+  },
+  {
+    "slug": "cottonwood-butte",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No OnTheSnow or SkiCentral page found."
+  },
+  {
+    "slug": "cranor-ski-hill",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Small Gunnison municipal hill; no OnTheSnow page."
+  },
+  {
+    "slug": "crested-butte",
+    "trails_total": 121,
+    "difficulty_pct": null,
+    "source_url": "http://www.skicentral.com/crestedbutte.html",
+    "exact_quote": "Total Trails: 121",
+    "notes": "SkiCentral confirms 121 trails (matches input). OnTheSnow page lists 165 runs but only shows Expert 100% with other categories as dashes — not usable. Difficulty percentages not available with explicit numbers in OTS/SC."
+  },
+  {
+    "slug": "crosscut-sports-center",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic/XC center near Bozeman, MT — not on OnTheSnow."
+  },
+  {
+    "slug": "crotched-mountain",
+    "trails_total": 24,
+    "difficulty_pct": {
+      "beginner": 29,
+      "intermediate": 33,
+      "advanced": 38,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/new-hampshire/crotched-mountain/ski-resort",
+    "exact_quote": "Beginners Runs 29% Intermediate Runs 33% Advanced Runs 38%",
+    "notes": "OnTheSnow: 24 runs across 100 acres; expert not listed."
+  },
+  {
+    "slug": "crystal",
+    "trails_total": 59,
+    "difficulty_pct": {
+      "beginner": 32,
+      "intermediate": 37,
+      "advanced": 24,
+      "expert": 7
+    },
+    "source_url": "https://www.onthesnow.com/michigan/crystal-mountain/ski-resort",
+    "exact_quote": "59 runs across 102 acres; Beginners 32%, Intermediate 37%, Advanced 24%, Expert 7%",
+    "notes": "OnTheSnow Crystal Mountain MI: 59 runs."
+  },
+  {
+    "slug": "crystal-mountain",
+    "trails_total": 85,
+    "difficulty_pct": {
+      "beginner": 8,
+      "intermediate": 31,
+      "advanced": 32,
+      "expert": 29
+    },
+    "source_url": "https://www.onthesnow.com/washington/crystal-mountain-wa/ski-resort",
+    "exact_quote": "85 runs across 2,600 acres of skiable terrain; Beginner 8%, Intermediate 31%, Advanced 32%, Expert 29%",
+    "notes": "OnTheSnow Crystal Mountain WA (crystal-mountain-wa slug): 85 runs."
+  },
+  {
+    "slug": "crystal-mountain-mi",
+    "trails_total": 59,
+    "difficulty_pct": {
+      "beginner": 32,
+      "intermediate": 37,
+      "advanced": 24,
+      "expert": 7
+    },
+    "source_url": "https://www.onthesnow.com/michigan/crystal-mountain/ski-resort",
+    "exact_quote": "59 runs across 102 acres; Beginners 32%, Intermediate 37%, Advanced 24%, Expert 7%",
+    "notes": "OnTheSnow Crystal Mountain MI: 59 runs. Duplicate of 'crystal' slug."
+  },
+  {
+    "slug": "crystal-ridge",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Small Milwaukee, WI tubing/ski hill; no dedicated OnTheSnow page with explicit numbers."
+  }
+]

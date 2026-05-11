@@ -1,0 +1,452 @@
+[
+  {
+    "slug": "pomerelle",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://pomerelle-mtn.com",
+    "website_alive": true,
+    "source_url": "https://pomerelle-mtn.com",
+    "exact_quote": null,
+    "notes": "Homepage and /the-mountain returned empty/no relevant content via WebFetch. /trail-map and /skiing 404. Site appears alive but data not accessible via fetch."
+  },
+  {
+    "slug": "porcupine-mountains",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.porkiesfun.com",
+    "website_alive": false,
+    "source_url": "https://www.porkiesfun.com",
+    "exact_quote": null,
+    "notes": "ECONNREFUSED on both root and /winter/skiing-snowboarding/. Site may be down."
+  },
+  {
+    "slug": "powder-mountain",
+    "trails_total": 163,
+    "difficulty_pct": {
+      "beginner": 15,
+      "intermediate": 29,
+      "advanced": 56,
+      "expert": null
+    },
+    "website_url": "https://www.powdermountain.com",
+    "website_alive": true,
+    "source_url": "https://www.powdermountain.com/mountain",
+    "exact_quote": "Named Runs: 163 ... Beginner: 15% Intermediate: 29% Advanced: 56%",
+    "notes": "Source distinguishes only 3 difficulty levels (no expert tier broken out). Trail map jpg URL: https://images.prismic.io/powdermountain/aTneDXNYClf9oCZT_PM_2526_WinterTrailMap.jpg"
+  },
+  {
+    "slug": "powder-ridge",
+    "trails_total": 13,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.powderridge.com",
+    "website_alive": true,
+    "source_url": "https://powderridge.com/ski-ride/trail-map/",
+    "exact_quote": "13 precisely groomed runs, 3 chairlifts, 3 terrain parks, and full-service restaurant",
+    "notes": "Trail map (jpg, not PDF): https://powderridge.com/wp-content/uploads/2023/09/Powder-Ridge-Trail-Map.jpg. Source lists trails as Easy/Intermediate/Difficult but does not publish percentages; not transcribed to avoid inference."
+  },
+  {
+    "slug": "powder-ridge-mountain-park",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://powderridgepark.com",
+    "website_alive": false,
+    "source_url": "https://powderridgepark.com",
+    "exact_quote": null,
+    "notes": "HTTP 403 Forbidden on WebFetch."
+  },
+  {
+    "slug": "powderhorn",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.powderhorn.com",
+    "website_alive": false,
+    "source_url": "https://www.powderhorn.com",
+    "exact_quote": null,
+    "notes": "HTTP 403 Forbidden on WebFetch."
+  },
+  {
+    "slug": "powderhouse-hill",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.powderhousehill.com",
+    "website_alive": false,
+    "source_url": "https://www.powderhousehill.com",
+    "exact_quote": null,
+    "notes": "SSL certificate verification error."
+  },
+  {
+    "slug": "purgatory",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.purgatory.ski",
+    "website_alive": true,
+    "source_url": "https://www.purgatory.ski/mountain/purgatory-mountain/trail-maps/",
+    "exact_quote": null,
+    "notes": "Redirected from purgatoryresort.com to purgatory.ski. Trail map PDF: https://www.purgatory.ski/wp-content/uploads/sites/2/2025/12/Purgatory_Winter25-26_TrailMap_Website.pdf (binary, could not extract text). Conditions page implies 49 frontside + 6 Columbine + 52 backside = 107 trails but no explicit total or percentages found on visited pages."
+  },
+  {
+    "slug": "quarry-road-trails",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://quarryroad.org",
+    "website_alive": true,
+    "source_url": "https://quarryroad.org/",
+    "exact_quote": "The area offers 13.3 km (8.2 miles) of world-class groomed Nordic ski trails",
+    "notes": "Nordic center reports trail length, not trail count or difficulty percentages."
+  },
+  {
+    "slug": "quechee-club",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.quecheeclub.com",
+    "website_alive": false,
+    "source_url": "https://www.quecheeclub.com",
+    "exact_quote": null,
+    "notes": "HTTP 403 Forbidden on WebFetch."
+  },
+  {
+    "slug": "ragged-mountain",
+    "trails_total": 57,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.raggedmountainresort.com",
+    "website_alive": true,
+    "source_url": "https://www.raggedmountainresort.com/mountain-report-cams/",
+    "exact_quote": "57 trails",
+    "notes": "Trail count confirmed. Source lists Green=9, Blue=13, Black=13, Double Black=3, Terrain Park=3 but does not publish percentages; computing them would be inference, so not filled. Trail map jpg: https://www.raggedmountainresort.com/wp-content/uploads/2023/07/20-21-Ragged-Mtn-Trail-Map.jpg"
+  },
+  {
+    "slug": "rangeley-lakes-trail-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": null,
+    "website_alive": false,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No website_url provided in input."
+  },
+  {
+    "slug": "red-lodge",
+    "trails_total": 70,
+    "difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 25,
+      "advanced": 36,
+      "expert": 20
+    },
+    "website_url": "https://www.redlodgemountain.com",
+    "website_alive": true,
+    "source_url": "https://www.redlodgemountain.com/mountain/the-mountain/",
+    "exact_quote": "70 runs ... Beginner: 19% Intermediate: 25% Advanced: 36% Expert: 20%",
+    "notes": "Trail map PDF: https://www.redlodgemountain.com/wp-content/uploads/RLM-2025-26-Map.pdf. Intermediate updated 26 -> 25 from input."
+  },
+  {
+    "slug": "red-river-ski-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.redriverskiarea.com",
+    "website_alive": true,
+    "source_url": "https://www.redriverskiarea.com/winter/winter-mountain/interactive-trail-map/",
+    "exact_quote": null,
+    "notes": "Site alive but neither homepage nor trail-map page publishes trail count or difficulty percentages in fetchable HTML. PDF maps exist (Combo/Frontside/Backside/Base Camp) but URLs not exposed in returned content."
+  },
+  {
+    "slug": "rikert-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.rikertoutdoor.com/",
+    "website_alive": true,
+    "source_url": "https://rikertoutdoor.com/maps-and-resources/",
+    "exact_quote": "55+ km of trails",
+    "notes": "Nordic center reports trail length, not count or percentages. Trail map PDF: https://rikertoutdoor.com/wp-content/uploads/2025/01/Trail-Map_Rikert_Winter24-25_FOR-PRINTING-2.pdf"
+  },
+  {
+    "slug": "rikert-outdoor-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.rikertoutdoor.com",
+    "website_alive": true,
+    "source_url": "https://rikertoutdoor.com/maps-and-resources/",
+    "exact_quote": "55+ km of trails",
+    "notes": "Duplicate of rikert-nordic-center; same source data. Nordic center reports trail length only."
+  },
+  {
+    "slug": "rotarun",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://rotarun.com",
+    "website_alive": true,
+    "source_url": "https://rotarun.com",
+    "exact_quote": null,
+    "notes": "WebFetch returned empty body; site appears to be SPA/empty shell. No data accessible."
+  },
+  {
+    "slug": "roundtop-mountain-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.skiroundtop.com",
+    "website_alive": false,
+    "source_url": "https://www.skiroundtop.com",
+    "exact_quote": null,
+    "notes": "Returns reservation-system error: 'The system cannot process your request.' Likely Vail-network resort with offline booking system. No trail data fetchable."
+  },
+  {
+    "slug": "royal-mountain",
+    "trails_total": 28,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.royalmountain.com",
+    "website_alive": true,
+    "source_url": "https://www.royalmountain.com/trail-map/stats",
+    "exact_quote": "Trails: 19 Alpine, 9 Glades",
+    "notes": "19 alpine + 9 glades = 28 total. No difficulty percentages published."
+  },
+  {
+    "slug": "saddleback",
+    "trails_total": 68,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.saddlebackmaine.com",
+    "website_alive": true,
+    "source_url": "https://www.saddlebackmaine.com/the-stats/",
+    "exact_quote": "68 named runs ... 23 Green ... 20 Blue ... 18 Black ... 7 Double Black",
+    "notes": "Trail count and per-difficulty counts confirmed. Resort does not publish percentages; converting counts to percentages would be inference, so percentages left null. Trail map PDF: https://www.saddlebackmaine.com/wp-content/uploads/2024/12/Trail-map-web-compress.pdf"
+  },
+  {
+    "slug": "sandia-peak",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://sandiapeak.com",
+    "website_alive": true,
+    "source_url": "https://sandia.ski/trail-map",
+    "exact_quote": null,
+    "notes": "sandiapeak.com is the Tramway page and explicitly redirects ski info to sandia.ski. sandia.ski/trail-map only shows a JPG image; no text trail count or percentages published."
+  },
+  {
+    "slug": "sapphire-valley-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://sapphirevalleyresorts.com/amenities/ski-sapphire-valley/",
+    "website_alive": true,
+    "source_url": "https://sapphirevalleyresorts.com/amenities/ski-sapphire-valley/",
+    "exact_quote": "a 1,600 foot main run with a vertical drop of 200 feet, complete with a state-of-the-art quad-lift, a learning slope, and multiple lane tube park",
+    "notes": "Page describes one main run plus learning slope; no formal trail count or difficulty percentages published."
+  },
+  {
+    "slug": "saskadena-six-area",
+    "trails_total": 28,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.saskadenasix.com",
+    "website_alive": true,
+    "source_url": "https://www.saskadenasix.com/the-mountain/mountain-info",
+    "exact_quote": "2 Lifts. 28 Trails. 60% snowmaking. 90 years of history to call your own.",
+    "notes": "Trail count confirmed. No difficulty percentages published. Trail map PDF (relative): /sites/default/files/2025-11/S6%20Trail%20Map%202025-26.pdf"
+  },
+  {
+    "slug": "schuss-shanty-creek",
+    "trails_total": 42,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.shantycreek.com",
+    "website_alive": true,
+    "source_url": "https://www.shantycreek.com/ski/on-the-snow/",
+    "exact_quote": "0 of 42",
+    "notes": "Conditions page shows '0 of 42' trails open, implying 42 total. Schuss Mountain is one of the resort's ski areas. No difficulty percentages published. Trail map png: https://www.shantycreek.com/wp-content/uploads/2026/01/Shanty-Creek-Resort-Map-scaled.png"
+  },
+  {
+    "slug": "schweitzer",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.schweitzer.com",
+    "website_alive": true,
+    "source_url": "https://www.schweitzer.com/mountain-info/maps",
+    "exact_quote": "2900 acres of lift-serviced winter terrain",
+    "notes": "Schweitzer publishes acreage but the visited pages do not surface a trail count or difficulty percentages. Winter trail map jpg: /-/media/schweitzer/pdfs-and-maps/schweitzer-wintertrailmap-2025-26-1schweitzerbowl-lettersize.jpg"
+  },
+  {
+    "slug": "seven-oaks",
+    "trails_total": 12,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.sevenoaksrec.com",
+    "website_alive": true,
+    "source_url": "https://www.sevenoaksrec.com",
+    "exact_quote": "12 runs varying from beginner to expert",
+    "notes": "Trail count confirmed. No difficulty percentages published."
+  },
+  {
+    "slug": "seven-springs",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.7springs.com",
+    "website_alive": false,
+    "source_url": "https://www.7springs.com",
+    "exact_quote": null,
+    "notes": "Reservation system error on every visited path: 'The system cannot process your request.' Site effectively down."
+  },
+  {
+    "slug": "shanty-creek",
+    "trails_total": 42,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.shantycreek.com",
+    "website_alive": true,
+    "source_url": "https://www.shantycreek.com/ski/on-the-snow/",
+    "exact_quote": "0 of 42",
+    "notes": "Conditions page shows '0 of 42' trails open. No difficulty percentages published. Trail map png: https://www.shantycreek.com/wp-content/uploads/2026/01/Shanty-Creek-Resort-Map-scaled.png"
+  },
+  {
+    "slug": "shawnee-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://shawneemt.com",
+    "website_alive": false,
+    "source_url": "https://shawneemt.com",
+    "exact_quote": null,
+    "notes": "HTTP 403 Forbidden on root and all sub-paths attempted (/ski-area, /trail-map, /skiing-snowboarding/trail-map/, /the-mountain/)."
+  },
+  {
+    "slug": "shawnee-peak",
+    "trails_total": 44,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.pleasantmountain.com",
+    "website_alive": true,
+    "source_url": "https://www.pleasantmountain.com",
+    "exact_quote": "44 Trails and Glades",
+    "notes": "Trail count confirmed (Shawnee Peak rebranded as Pleasant Mountain). No difficulty percentages published."
+  }
+]

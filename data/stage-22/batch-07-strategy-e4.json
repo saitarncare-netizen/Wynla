@@ -1,0 +1,242 @@
+[
+  {
+    "slug": "huff-hills",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article found for Huff Hills Ski Area (ND); strict mode requires Wikipedia/regional with explicit numbers."
+  },
+  {
+    "slug": "hunt-hollow-club",
+    "trails_total": 21,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Hunt_Hollow",
+    "exact_quote": "21 runs",
+    "notes": "Wikipedia confirms trail count; no difficulty breakdown given."
+  },
+  {
+    "slug": "hunter-mountain",
+    "trails_total": 67,
+    "difficulty_pct": {"beginner": 25, "intermediate": 30, "advanced": 30, "expert": 15},
+    "source_url": "https://en.wikipedia.org/wiki/Hunter_Mountain_(ski_area)",
+    "exact_quote": "67, beginner 25%, intermediate 30%, advanced 30%, expert 15%",
+    "notes": "Wikipedia infobox provides full breakdown; differs from input file (30/40/22/7)."
+  },
+  {
+    "slug": "hurricane-ridge",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Hurricane_Ridge",
+    "exact_quote": null,
+    "notes": "Wikipedia article exists but has no explicit trail count or difficulty percentages."
+  },
+  {
+    "slug": "hyland-hills",
+    "trails_total": 13,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Hyland_Hills_Ski_Area",
+    "exact_quote": "13 total — 3 easiest, 4 more difficult, 4 most difficult, 2 Freestyle Terrain",
+    "notes": "Wikipedia gives raw counts not percentages; freestyle parks excluded from standard 4-tier difficulty so % is ambiguous — left null."
+  },
+  {
+    "slug": "indianhead-mountain",
+    "trails_total": 43,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Snowriver_Mountain_Resort",
+    "exact_quote": "There are 10 Beginner Green runs, seven More Difficult Blue runs, seven Most difficult Black runs, and four Expert Double Diamond runs",
+    "notes": "Indianhead is now Jackson Creek Summit at Snowriver. 43 trails listed; counts provided not percentages (10/7/7/4 = 23%/16%/16%/9% does not sum to 100, suggesting unlisted trails) — % left null for strict mode."
+  },
+  {
+    "slug": "jack-frost-mountain",
+    "trails_total": 20,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Jack_Frost_Ski_Resort",
+    "exact_quote": "Trails: 18 (Big Boulder), 20 (Jack Frost)",
+    "notes": "Wikipedia confirms 20 trails for Jack Frost; no difficulty breakdown."
+  },
+  {
+    "slug": "jackson-hole",
+    "trails_total": 116,
+    "difficulty_pct": {"beginner": 10, "intermediate": 40, "advanced": null, "expert": 50},
+    "source_url": "https://en.wikipedia.org/wiki/Jackson_Hole_Mountain_Resort",
+    "exact_quote": "116... 10% easiest... 40% more difficult... 50% most difficult",
+    "notes": "Wikipedia combines advanced+expert as 'most difficult' 50%. Trails 116 differs from input (131)."
+  },
+  {
+    "slug": "jackson-xc",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article found for Jackson XC (NH cross-country)."
+  },
+  {
+    "slug": "jay-peak",
+    "trails_total": 81,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Jay_Peak_Resort",
+    "exact_quote": "81 trails total covering nearly 385 acres of skiable terrain",
+    "notes": "Wikipedia confirms 81 trails; no difficulty breakdown listed."
+  },
+  {
+    "slug": "jiminy-peak",
+    "trails_total": 45,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Jiminy_Peak",
+    "exact_quote": "There are 45 trails and nine lifts, including a six-person, high speed chairlift.",
+    "notes": "Wikipedia confirms 45 trails; no difficulty percentages provided."
+  },
+  {
+    "slug": "june-mountain",
+    "trails_total": 41,
+    "difficulty_pct": {"beginner": 15, "intermediate": 40, "advanced": 45, "expert": 0},
+    "source_url": "https://en.wikipedia.org/wiki/June_Mountain",
+    "exact_quote": "41 total | 15% beginner | 40% intermediate | 45% advanced",
+    "notes": "Wikipedia: no expert tier; advanced=45%."
+  },
+  {
+    "slug": "kelly-canyon",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Wikipedia article for Kelly Canyon Ski Resort returned 404; no strict-mode source."
+  },
+  {
+    "slug": "keystone",
+    "trails_total": 130,
+    "difficulty_pct": {"beginner": 12, "intermediate": 39, "advanced": 49, "expert": null},
+    "source_url": "https://en.wikipedia.org/wiki/Keystone_Resort",
+    "exact_quote": "Trails: 130 total (12% beginner, 39% intermediate, 49% advanced/expert)",
+    "notes": "Wikipedia combines advanced+expert as 49%; infobox conflicts (19/32/49) — used main statistics section."
+  },
+  {
+    "slug": "killington",
+    "trails_total": 155,
+    "difficulty_pct": {"beginner": 28, "intermediate": 33, "advanced": 39, "expert": null},
+    "source_url": "https://en.wikipedia.org/wiki/Killington_Ski_Resort",
+    "exact_quote": "155 trails, 21 lifts, and 1,509 acres (6.1 km2) extending across six interconnected mountain peaks. Beginner (Green Circle): 28%, Intermediate (Blue Square): 33%, Advanced (Black Diamond): 39%",
+    "notes": "Wikipedia: no separate expert tier; 39% advanced/black."
+  },
+  {
+    "slug": "king-pine",
+    "trails_total": 17,
+    "difficulty_pct": {"beginner": 44, "intermediate": 31, "advanced": 25, "expert": 0},
+    "source_url": "https://en.wikipedia.org/wiki/King_Pine",
+    "exact_quote": "King Pine has 45 skiable acres, with six ski lifts and seventeen trails. 44% of King Pine's terrain is designed for novice skiers and riders, and 31% is designated as intermediate.",
+    "notes": "Wikipedia: 17 trails (differs from input 23). Advanced=25% inferred from remainder; no expert."
+  },
+  {
+    "slug": "kirkwood-mountain-resort",
+    "trails_total": 65,
+    "difficulty_pct": {"beginner": 12, "intermediate": 30, "advanced": 58, "expert": null},
+    "source_url": "https://en.wikipedia.org/wiki/Kirkwood_Mountain_Resort",
+    "exact_quote": "65+ total | 12% beginner | 30% intermediate | 58% advanced/expert",
+    "notes": "Wikipedia combines advanced+expert as 58%."
+  },
+  {
+    "slug": "kissing-bridge",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Wikipedia article for Kissing Bridge ski area returned 404 across variants."
+  },
+  {
+    "slug": "labrador-mountain",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No dedicated Wikipedia article; only mentioned in list of US ski areas without trail data."
+  },
+  {
+    "slug": "lake-city-ski-hill",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article for Lake City Ski Hill (CO); town article doesn't mention it."
+  },
+  {
+    "slug": "laurel-mountain",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Laurel_Mountain_State_Park",
+    "exact_quote": null,
+    "notes": "Wikipedia article exists but has no trail count or difficulty breakdown."
+  },
+  {
+    "slug": "leavenworth-ski-hill",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Wikipedia article for Leavenworth Ski Hill returned 404."
+  },
+  {
+    "slug": "leavenworth-winter-sports-club",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Leavenworth_Winter_Sports_Club",
+    "exact_quote": "26 km of cross-country ski trails... two small downhill ski hills",
+    "notes": "No explicit trail count or difficulty percentages on Wikipedia."
+  },
+  {
+    "slug": "lee-canyon",
+    "trails_total": 24,
+    "difficulty_pct": {"beginner": 15, "intermediate": 45, "advanced": 40, "expert": null},
+    "source_url": "https://en.wikipedia.org/wiki/Las_Vegas_Ski_and_Snowboard_Resort",
+    "exact_quote": "24 Trails: 15% easiest, 45% more difficult, 40% most difficult",
+    "notes": "Lee Canyon = former Las Vegas Ski and Snowboard Resort. 'Most difficult' bucket = advanced; no separate expert."
+  },
+  {
+    "slug": "lees-ski-hill",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article for Lee's Ski Hill (Ouray, CO)."
+  },
+  {
+    "slug": "liberty-mountain",
+    "trails_total": 22,
+    "difficulty_pct": {"beginner": 27, "intermediate": 41, "advanced": 14, "expert": 18},
+    "source_url": "https://en.wikipedia.org/wiki/Liberty_Mountain_Resort",
+    "exact_quote": "22 total | 27% beginner | 41% intermediate | 14% advanced | 18% expert",
+    "notes": "Wikipedia confirms full breakdown matching input file."
+  },
+  {
+    "slug": "little-ski-hill",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Little_Ski_Hill",
+    "exact_quote": "18.6 miles (30 km) of groomed cross-country ski trails",
+    "notes": "Wikipedia mentions XC mileage only; no alpine trail count or difficulty breakdown."
+  },
+  {
+    "slug": "little-switzerland",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Wikipedia article for Little Switzerland ski area returned 404."
+  },
+  {
+    "slug": "loge-glacier",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "LOGE Glacier is a lodging brand near Glacier NP, not a ski area with Wikipedia coverage."
+  },
+  {
+    "slug": "lookout-pass",
+    "trails_total": 52,
+    "difficulty_pct": {"beginner": 14, "intermediate": 42, "advanced": 42, "expert": 2},
+    "source_url": "https://en.wikipedia.org/wiki/Lookout_Pass_Ski_and_Recreation_Area",
+    "exact_quote": "52 trails | 14% beginner | 42% intermediate | 42% advanced | 2% expert (double black diamond)",
+    "notes": "Wikipedia: 52 trails (differs from input 59). Full breakdown including 2% double-black expert tier."
+  }
+]

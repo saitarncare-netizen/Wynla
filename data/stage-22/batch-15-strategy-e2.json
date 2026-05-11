@@ -1,0 +1,362 @@
+[
+  {
+    "slug": "vail",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 24,
+      "intermediate": 36,
+      "advanced": 40,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/vail/",
+    "exact_quote": "Easy 57 km (24 %) Intermediate 84 km (36 %) Difficult 93 km (40 %)",
+    "notes": "Percentages from km. Advanced+Expert combined into advanced (40%)."
+  },
+  {
+    "slug": "victor-constant-ski-area",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info"
+  },
+  {
+    "slug": "villa-olivia",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 14,
+      "intermediate": 43,
+      "advanced": 43,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/villa-olivia/",
+    "exact_quote": "Easy: 0.2 km (14 %), Intermediate: 0.6 km (43 %), Difficult: 0.6 km (43 %)",
+    "notes": "Percentages from km."
+  },
+  {
+    "slug": "wachusett-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 40,
+      "advanced": 30,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/wachusett-mountain/",
+    "exact_quote": "Easy 3.6 km (30 %), Intermediate 4.8 km (40 %), Difficult 3.6 km (30 %)",
+    "notes": "Percentages from km."
+  },
+  {
+    "slug": "warner-canyon",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 24,
+      "intermediate": 16,
+      "advanced": 60,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/warner-canyon/",
+    "exact_quote": "Easy: 2.4 km (24%), Intermediate: 1.6 km (16%), Difficult: 5.9 km (60%)",
+    "notes": "Percentages from km."
+  },
+  {
+    "slug": "waterville-valley",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 14,
+      "intermediate": 64,
+      "advanced": 22,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/waterville-valley/",
+    "exact_quote": "Easy 3.5 km (14 %), Intermediate 16 km (64 %), Difficult 5.5 km (22 %)",
+    "notes": "Percentages from km."
+  },
+  {
+    "slug": "welch-village",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 34,
+      "intermediate": 33,
+      "advanced": 33,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/welch-village/",
+    "exact_quote": "Easy 2 km (34 %) Intermediate 2 km (33 %) Difficult 2 km (33 %)",
+    "notes": "Percentages from km."
+  },
+  {
+    "slug": "west-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 60,
+      "intermediate": 21,
+      "advanced": 19,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/west-mountain/",
+    "exact_quote": "Easy 5.9 km (60 %), Intermediate 2.1 km (21 %), Difficult 1.7 km (19 %)",
+    "notes": "Percentages from km."
+  },
+  {
+    "slug": "whaleback-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 46,
+      "intermediate": 24,
+      "advanced": 30,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/whaleback/",
+    "exact_quote": "Easy: 5.2 km (46%), Intermediate: 2.8 km (24%), Difficult: 3.5 km (30%)",
+    "notes": "Percentages from km."
+  },
+  {
+    "slug": "white-grass-touring",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info (nordic/touring center)"
+  },
+  {
+    "slug": "white-pass",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 40,
+      "advanced": 27,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/white-pass/",
+    "exact_quote": "Easy: 10 km (33%), Intermediate: 12 km (40%), Difficult: 8 km (27%)",
+    "notes": "Percentages from km."
+  },
+  {
+    "slug": "white-pine",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 32,
+      "intermediate": 22,
+      "advanced": 46,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/white-pine-pinedale/",
+    "exact_quote": "Easy: 3.7 km (32%), Intermediate: 2.6 km (22%), Difficult: 5.3 km (46%)",
+    "notes": "Percentages from km."
+  },
+  {
+    "slug": "white-pine-touring-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info (nordic center)"
+  },
+  {
+    "slug": "whitecap-mountains",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 35,
+      "advanced": 30,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/whitecap-mountains/",
+    "exact_quote": "Easy: 5 km (35 %), Intermediate: 5 km (35 %), Difficult: 4 km (30 %)",
+    "notes": "Percentages from km."
+  },
+  {
+    "slug": "whiteface-mountain",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info under tested slugs (whiteface, whiteface-mountain-lake-placid, lake-placid-whiteface-mountain). ≤2 fetch limit reached."
+  },
+  {
+    "slug": "whitefish",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 50,
+      "advanced": 29,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/whitefish-mountain-resort/",
+    "exact_quote": "Easy: 18 km (21%), Intermediate: 46 km (50%), Difficult: 27 km (29%)",
+    "notes": "Percentages from km."
+  },
+  {
+    "slug": "whitetail-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 15,
+      "intermediate": 55,
+      "advanced": 30,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/whitetail/",
+    "exact_quote": "Easy 1.5 km (15 %) Intermediate 5.6 km (55 %) Difficult 3.1 km (30 %)",
+    "notes": "Percentages from km."
+  },
+  {
+    "slug": "wild-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 23,
+      "intermediate": 33,
+      "advanced": 44,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/wild-mountain/",
+    "exact_quote": "Easy 1.1 km (23 %) Intermediate 1.6 km (33 %) Difficult 2.1 km (44 %)",
+    "notes": "Percentages from km."
+  },
+  {
+    "slug": "wildcat-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 48,
+      "advanced": 31,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/wildcat-mountain/",
+    "exact_quote": "Easy: 5.2 km (21 %), Intermediate: 12.1 km (48 %), Difficult: 7.7 km (31 %)",
+    "notes": "Percentages from km."
+  },
+  {
+    "slug": "willamette-pass",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 45,
+      "advanced": 34,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/willamette-pass/",
+    "exact_quote": "Easy: 6 km (21 %), Intermediate: 13 km (45 %), Difficult: 10 km (34 %)",
+    "notes": "Percentages from km."
+  },
+  {
+    "slug": "willard-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 50,
+      "advanced": 29,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/willard-mountain/",
+    "exact_quote": "Easy 0.6 km (21 %) Intermediate 1.4 km (50 %) Difficult 0.8 km (29 %)",
+    "notes": "Percentages from km."
+  },
+  {
+    "slug": "wilmot-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 40,
+      "advanced": 25,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/wilmot-mountain/",
+    "exact_quote": "Easy: 1.4 km (35%), Intermediate: 1.6 km (40%), Difficult: 1 km (25%)",
+    "notes": "Percentages from km."
+  },
+  {
+    "slug": "windham-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 43,
+      "intermediate": 35,
+      "advanced": 22,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/windham-mountain/",
+    "exact_quote": "Easy: 20 km (43 %), Intermediate: 16 km (35 %), Difficult: 10 km (22 %)",
+    "notes": "Percentages from km."
+  },
+  {
+    "slug": "winter-park",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 8,
+      "intermediate": 37,
+      "advanced": 55,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/winter-park/",
+    "exact_quote": "Easy: 11 km (8%), Intermediate: 53 km (37%), Difficult: 79 km (55%)",
+    "notes": "Percentages from km."
+  },
+  {
+    "slug": "wintergreen-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 40,
+      "advanced": 40,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/wintergreen-resort/",
+    "exact_quote": "Easy: 2 km (20 %), Intermediate: 4 km (40 %), Difficult: 4 km (40 %)",
+    "notes": "Percentages from km."
+  },
+  {
+    "slug": "winterplace-ski-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 37,
+      "intermediate": 40,
+      "advanced": 23,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/winterplace/",
+    "exact_quote": "Easy 3.7 km (37 %), Intermediate 4 km (40 %), Difficult 2.3 km (23 %)",
+    "notes": "Percentages from km."
+  },
+  {
+    "slug": "wisp-resort",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info under tested slugs (wisp-resort, wisp). ≤2 fetch limit reached."
+  },
+  {
+    "slug": "wolf-creek",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 35,
+      "advanced": 45,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/wolf-creek/",
+    "exact_quote": "Easy 20 km (20 %) Intermediate 35 km (35 %) Difficult 45 km (45 %)",
+    "notes": "Percentages from km."
+  },
+  {
+    "slug": "woods-valley",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 51,
+      "intermediate": 37,
+      "advanced": 12,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/woods-valley/",
+    "exact_quote": "Easy 2.1 km (51 %) Intermediate 1.5 km (37 %) Difficult 0.5 km (12 %)",
+    "notes": "Percentages from km."
+  },
+  {
+    "slug": "woodstock-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info (nordic center)"
+  }
+]

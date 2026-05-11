@@ -1,0 +1,242 @@
+[
+  {
+    "slug": "huff-hills",
+    "trails_total": 16,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://www.huffhills.com/about",
+    "exact_quote": "16 runs, the longest is .75 miles long",
+    "notes": "Trail count verified on /about page. No difficulty percentage breakdown published."
+  },
+  {
+    "slug": "hunt-hollow-club",
+    "trails_total": 21,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://www.hunthollow.com/Home",
+    "exact_quote": "21 Trails",
+    "notes": "Trail count on homepage. No difficulty breakdown found."
+  },
+  {
+    "slug": "hunter-mountain",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://www.huntermtn.com",
+    "exact_quote": null,
+    "notes": "Official site redirects all mountain-stats pages to reservations.snow.com which returns system error. No verifiable explicit numbers obtainable from official site."
+  },
+  {
+    "slug": "hurricane-ridge",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://hurricaneridge.com",
+    "exact_quote": null,
+    "notes": "Mountain stats / ski area map sub-pages all 404 or do not include numeric breakdown. CLOSED FOR THE SEASON banner on homepage."
+  },
+  {
+    "slug": "hyland-hills",
+    "trails_total": 12,
+    "difficulty_pct": {"beginner": 33, "intermediate": 50, "advanced": 17, "expert": 0},
+    "source_url": "https://www.threeriversparks.org/page/hyland-hills-ski-runs-terrain-park",
+    "exact_quote": "4 Easiest runs, 6 More Difficult runs, 2 Most Difficult runs",
+    "notes": "Official Three Rivers Parks page lists 12 ski runs: 4 easiest (33%), 6 more difficult (50%), 2 most difficult (17%). No expert tier."
+  },
+  {
+    "slug": "indianhead-mountain",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://www.indianheadmtn.com",
+    "exact_quote": null,
+    "notes": "Official domain redirects to bolzanorestaurant.com (defunct). Resort merged into Big Powderhorn area; no current official site found."
+  },
+  {
+    "slug": "jack-frost-mountain",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://www.jfbb.com",
+    "exact_quote": null,
+    "notes": "All Vail-owned jfbb.com pages return reservations.snow.com system error. No explicit numbers obtainable from official site."
+  },
+  {
+    "slug": "jackson-hole",
+    "trails_total": 131,
+    "difficulty_pct": {"beginner": 10, "intermediate": 40, "advanced": 0, "expert": 50},
+    "source_url": "https://www.jacksonhole.com/mountain-stats",
+    "exact_quote": "131 named trails on the map ... 50% expert, 40% intermediate and 10% beginner",
+    "notes": "Official mountain-stats page. Resort uses 3-tier breakdown (no separate advanced tier). Sums to 100%."
+  },
+  {
+    "slug": "jackson-xc",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic ski area (XC) - per directive, Nordic facilities skipped. No website_url in input."
+  },
+  {
+    "slug": "jay-peak",
+    "trails_total": 81,
+    "difficulty_pct": {"beginner": 20, "intermediate": 40, "advanced": 40, "expert": 0},
+    "source_url": "https://www.jaypeakresort.com/mountain/",
+    "exact_quote": "81 - 20% Novice, 40% Intermediate, 40% Advanced",
+    "notes": "Official mountain page lists 81 trails/slopes/glades with 3-tier breakdown. No separate expert tier published."
+  },
+  {
+    "slug": "jiminy-peak",
+    "trails_total": 45,
+    "difficulty_pct": {"beginner": 38, "intermediate": 42, "advanced": 13, "expert": 7},
+    "source_url": "https://www.jiminypeak.com/mountain-info/",
+    "exact_quote": "17 Easy, 6 Low Intermediate, 7 Intermediate, 6 High Intermediate, 6 Black Diamond (Advanced), 3 Double Black Diamond (Extremely difficult)",
+    "notes": "Official mountain-info page. Mapped: Easy=beginner (17/45=38%), Low+Mid+High Intermediate = intermediate (19/45=42%), Black Diamond = advanced (6/45=13%), Double Black = expert (3/45=7%)."
+  },
+  {
+    "slug": "june-mountain",
+    "trails_total": 41,
+    "difficulty_pct": {"beginner": 15, "intermediate": 40, "advanced": 45, "expert": 0},
+    "source_url": "https://www.junemountain.com/mountain-information/trail-map",
+    "exact_quote": "41 named trails ... Advanced: 45%, Intermediate: 40%, Beginner: 15%",
+    "notes": "Official trail-map page. 3-tier breakdown, sums to 100%. No expert tier published."
+  },
+  {
+    "slug": "kelly-canyon",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "http://kellycanyonresort.com/",
+    "exact_quote": null,
+    "notes": "Official redirected site (skikelly.com -> kellycanyonresort.com). No explicit trail count or difficulty percentages published on homepage. 5 lifts mentioned."
+  },
+  {
+    "slug": "keystone",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://www.keystoneresort.com",
+    "exact_quote": null,
+    "notes": "All Vail-owned keystoneresort.com mountain-stats pages return reservations.snow.com system error. No explicit numbers obtainable from official site."
+  },
+  {
+    "slug": "killington",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://www.killington.com",
+    "exact_quote": null,
+    "notes": "All explored killington.com mountain-stats/about/trail-map paths return 404 or do not include explicit total trails and difficulty percentages."
+  },
+  {
+    "slug": "king-pine",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://www.kingpine.com",
+    "exact_quote": null,
+    "notes": "Homepage and /the-mountain pages reference trail map image but do not include explicit textual trail count or difficulty percentages."
+  },
+  {
+    "slug": "kirkwood-mountain-resort",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://www.kirkwood.com",
+    "exact_quote": null,
+    "notes": "All Vail-owned kirkwood.com mountain-stats pages return reservations.snow.com system error. No explicit numbers obtainable from official site."
+  },
+  {
+    "slug": "kissing-bridge",
+    "trails_total": 39,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://www.kissingbridge.com",
+    "exact_quote": "With 39 slopes across 700+ acres",
+    "notes": "Trail count verified on official site (kbski.com redirects to kissingbridge.com). No difficulty percentage breakdown published; only generic 'every skill level' language."
+  },
+  {
+    "slug": "labrador-mountain",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://www.labradormtn.com",
+    "exact_quote": null,
+    "notes": "Site returns ECONNREFUSED / 403 across multiple paths; cannot retrieve official data."
+  },
+  {
+    "slug": "lake-city-ski-hill",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://www.lakecity.com",
+    "exact_quote": null,
+    "notes": "Listed website (lakecity.com) returns 403 Forbidden. Operated by Lake City Mountain Recreation; no verifiable explicit numbers obtained."
+  },
+  {
+    "slug": "laurel-mountain",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://www.laurelmountainski.com",
+    "exact_quote": null,
+    "notes": "Site redirects to reservations.snow.com system error page. No explicit numbers obtainable from official site."
+  },
+  {
+    "slug": "leavenworth-ski-hill",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://skileavenworth.com",
+    "exact_quote": null,
+    "notes": "Site returns 403 Forbidden. No verifiable explicit numbers obtainable."
+  },
+  {
+    "slug": "leavenworth-winter-sports-club",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://skileavenworth.com/webcams",
+    "exact_quote": null,
+    "notes": "Same domain as leavenworth-ski-hill (likely duplicate). Site returns 403 Forbidden. Also primarily a Nordic / small alpine club with mixed terrain."
+  },
+  {
+    "slug": "lee-canyon",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://www.leecanyonlv.com",
+    "exact_quote": null,
+    "notes": "Homepage mentions '445 acres of lift-served and hike-to terrain' but no explicit total trail count or difficulty percentages. /winter/trail-map and /winter/trail-map-stats return 404."
+  },
+  {
+    "slug": "lees-ski-hill",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://www.cityofouray.com",
+    "exact_quote": null,
+    "notes": "Community ski hill run by City of Ouray. No dedicated page found at /lees-ski-hill (404). No explicit official numbers."
+  },
+  {
+    "slug": "liberty-mountain",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://www.libertymountainresort.com",
+    "exact_quote": null,
+    "notes": "All Vail-owned libertymountainresort.com mountain-stats pages return reservations.snow.com system error. No explicit numbers obtainable from official site."
+  },
+  {
+    "slug": "little-ski-hill",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://www.payettelakesskiclub.org/",
+    "exact_quote": "405 feet of T-bar accessed vertical terrain",
+    "notes": "littleskihill.org redirects to payettelakesskiclub.org. Only vertical mentioned; no explicit trail count or difficulty percentages on official site."
+  },
+  {
+    "slug": "little-switzerland",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://www.littleswitz.com/mountain-info/little-switz-trail-map",
+    "exact_quote": "beginner, intermediate, and advanced trails as well as three terrain parks",
+    "notes": "Official trail-map page describes terrain in qualitative terms only; no explicit total or percentages published."
+  },
+  {
+    "slug": "loge-glacier",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://www.logecamps.com/journal/glacier-area-guide",
+    "exact_quote": "30 kilometers of scenic trails ideal for mountain biking and hiking in the summer",
+    "notes": "LOGE Glacier is a lodging operation near Glacier NP, not a ski resort. The 30km figure is summer hiking/biking trails. No alpine ski trail data."
+  },
+  {
+    "slug": "lookout-pass",
+    "trails_total": 59,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "source_url": "https://www.skilookout.com",
+    "exact_quote": "59 trails ... 1,023 skiable acres ... 1,650 ft vertical drop",
+    "notes": "Official homepage confirms 59 trails. /trails-and-glades and /mountain-stats sub-paths return 404. No explicit difficulty percentage breakdown found in available pages."
+  }
+]

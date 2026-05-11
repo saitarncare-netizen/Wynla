@@ -1,0 +1,262 @@
+[
+  {
+    "slug": "49-degrees-north",
+    "trails_total": 90,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 40,
+      "advanced": 25,
+      "expert": 5
+    },
+    "source_url": "https://www.ski49n.com/mountain-info/trail-map-stats",
+    "exact_quote": "Marked Trails: 90 30% beginner, 40% intermediate 25% advanced, 5% expert",
+    "notes": "Verified from official ski49n.com mountain-info/trail-map-stats page."
+  },
+  {
+    "slug": "afton-alps",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "aftonalps.com (Vail Resorts) repeatedly returned snow.com error pages ('The system cannot process your request') across all attempted sub-paths (/the-mountain, /the-mountain/mountain-stats, /the-mountain/trail-map, /explore-the-resort/the-mountain). No published numbers retrievable via WebFetch."
+  },
+  {
+    "slug": "alpine-meadows",
+    "trails_total": 109,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 40,
+      "advanced": 25,
+      "expert": 10
+    },
+    "source_url": "https://www.palisadestahoe.com/footer/mountain-statistics",
+    "exact_quote": "Alpine Mountain Facts ... Trail Classification: 25% Beginner, 40% Intermediate, 25% Advanced, 10% Expert ... Total Trails: 109",
+    "notes": "Palisades Tahoe official mountain-statistics page (Alpine Meadows side, branded 'Alpine Mountain Facts')."
+  },
+  {
+    "slug": "alpine-valley-mi",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "skialpinevalley.com homepage, /trail-map/, /about/, and / variants do not publish trail-count or difficulty percentages in text — only trail-map image. No explicit numbers retrievable."
+  },
+  {
+    "slug": "alpine-valley-oh",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "alpinevalleyohio.com (Vail Resorts) returned snow.com error pages on all sub-paths (/, /the-mountain, /skiing, /winter, /about). No published numbers retrievable via WebFetch."
+  },
+  {
+    "slug": "alpine-valley-wi",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "alpinevalleyresort.com homepage, /winter/, /winter/trail-map/ pages show navigation to trail map but no published trail count or difficulty percentages in text content."
+  },
+  {
+    "slug": "alta",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "alta.com/about page mentions '45% of our terrain is suitable for beginner and intermediate skiers' but does not give explicit total-trails number or full per-category breakdown (the Mountain Stats widget renders placeholders only via JS). Per strict rules, partial 45% not assignable to specific bucket; leaving null. Trail map PDF requires pdftoppm to render."
+  },
+  {
+    "slug": "alyeska-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "alyeskaresort.com /, /winter, /winter/the-mountain, /explore-the-resort, /explore-resort/mountain-stats all 404 or omit trail-count/difficulty numbers in retrievable text."
+  },
+  {
+    "slug": "andes-tower-hills",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "andestowerhills.com homepage publishes hours/rates/contact but no explicit trail count or difficulty percentages. /conditions returned 404."
+  },
+  {
+    "slug": "angel-fire-resort",
+    "trails_total": 95,
+    "difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 49,
+      "advanced": 25,
+      "expert": 4
+    },
+    "source_url": "https://www.angelfireresort.com/winter/mountain-stats/",
+    "exact_quote": "95 Trails: 22% Easier | 49% More Difficult | 25% Most Difficult | 4% Most Difficult, use extra caution",
+    "notes": "Mapped resort difficulty labels to standard buckets: Easier=beginner, More Difficult=intermediate, Most Difficult=advanced, Most Difficult use extra caution (double-black)=expert."
+  },
+  {
+    "slug": "antelope-butte",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "skiantelopebutte.com (redirected from antelopebutte.org via antelopebuttefoundation.org) publishes '30+ Trails' which is approximate not an explicit total, and no difficulty percentage breakdown."
+  },
+  {
+    "slug": "anthony-lakes",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "anthonylakes.com/winter/maps-stats/ publishes Vertical: 900ft and Longest Run: 1.5 miles but no explicit total trails or difficulty percentages."
+  },
+  {
+    "slug": "appalachian-ski-mountain",
+    "trails_total": 13,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 50,
+      "advanced": 25,
+      "expert": 0
+    },
+    "source_url": "https://appskimtn.com/mountain-stats",
+    "exact_quote": "Slopes: 13 (3 Easy, 6 More Difficult, 4 Most Difficult) ... Terrain Mix: 25% Easiest, 50% More Difficult, 25% Most Difficult",
+    "notes": "appskimtn.com mountain-stats. Mapped: Easiest=beginner, More Difficult=intermediate, Most Difficult=advanced. No double-black/expert terrain at this resort (set to 0). Note: published 25/50/25 percentages do not exactly match 3/6/4 of 13 (23/46/31), but using the percentages as explicitly published."
+  },
+  {
+    "slug": "apple-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "applemountain.com is now a golf resort with dining/event venues in Freeland, MI; no ski terrain published on current website. Site does not describe an operating ski area."
+  },
+  {
+    "slug": "arapahoe-basin",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "arapahoebasin.com homepage and /field-guide/ publish '147 Open Runs' as denominator under current conditions and '73% advanced-expert terrain' (a combined two-bucket figure not assignable to individual advanced and expert buckets). /the-mountain/mountain-stats and /mountain-info/the-mountain returned 404. Per strict rules, no explicit per-bucket percentages."
+  },
+  {
+    "slug": "arctic-valley",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "skiarctic.net returned HTTP 500 error and could not be fetched."
+  },
+  {
+    "slug": "arizona-snowbowl",
+    "trails_total": 61,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.snowbowl.ski/trail-maps/",
+    "exact_quote": "Arizona Snowbowl offers a total of 61 trails",
+    "notes": "snowbowl.ski/trail-maps/ confirms 61 trails total but does not publish percentage breakdown by difficulty."
+  },
+  {
+    "slug": "ascutney-outdoors",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "ascutneyoutdoors.org publishes '35+ miles of trails' for mountain biking (approximate, not exact) but no explicit alpine-ski trail count or difficulty percentages. This is a community-owned recreation area not a typical alpine ski resort."
+  },
+  {
+    "slug": "aspen-highlands",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "aspensnowmass.com/our-mountains/aspen-highlands and /trail-maps, /mountain-stats, /the-mountain, /stats, /conditions all returned 404 or omitted explicit total-trails and difficulty percentage text (data rendered client-side via JS)."
+  },
+  {
+    "slug": "aspen-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "aspensnowmass.com/our-mountains/aspen-mountain and /trail-maps, /mountain-stats, /the-mountain, /stats, /conditions all returned 404 or omitted explicit total-trails and difficulty percentage text (data rendered client-side via JS)."
+  }
+]

@@ -1,0 +1,32 @@
+[
+  {
+    "slug": "woodward-park-city",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.woodwardparkcity.com",
+    "website_alive": true,
+    "source_url": "https://www.woodwardparkcity.com",
+    "exact_quote": null,
+    "notes": "Homepage mentions 'flowy freeride trails' and 'jumps, berms, banks, wall rides, and organic obstacles' but no trail count or difficulty breakdown. Attempted sub-path /explore/mountain and /mountain-report both 404. No exact quote available for trails_total or difficulty_pct."
+  },
+  {
+    "slug": "yellowstone-club",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.yellowstoneclub.com",
+    "website_alive": true,
+    "source_url": "https://www.yellowstoneclub.com",
+    "exact_quote": "Hit the Private Powder® winter playground covering 2,900 acres.",
+    "notes": "Homepage cites only skiable acreage (2,900 acres), no trail count or difficulty breakdown. Attempted sub-paths /winter and /the-club/skiing both 404. No exact quote available for trails_total or difficulty_pct."
+  }
+]

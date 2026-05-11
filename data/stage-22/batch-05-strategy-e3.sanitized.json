@@ -1,0 +1,301 @@
+[
+  {
+    "slug": "cuchara",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "OnTheSnow and skicentral both returned 404 for Cuchara Mountain Park (CO). No data found from approved sources."
+  },
+  {
+    "slug": "dartmouth-skiway",
+    "trails_total": 28,
+    "difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 50,
+      "advanced": 25,
+      "expert": 4
+    },
+    "source_url": "https://www.onthesnow.com/new-hampshire/dartmouth-skiway/ski-resort",
+    "exact_quote": "Total Trails: 28 runs across 107 Acres; Beginners: 21%; Intermediate: 50%; Advanced: 25%; Expert: 4%",
+    "notes": "OnTheSnow trail count and difficulty breakdown extracted."
+  },
+  {
+    "slug": "deer-valley",
+    "trails_total": 202,
+    "difficulty_pct": {
+      "beginner": 31,
+      "intermediate": 45,
+      "advanced": null,
+      "expert": 24
+    },
+    "source_url": "https://www.onthesnow.com/utah/deer-valley-resort/ski-resort",
+    "exact_quote": "202 runs in total; Beginners: 31%; Intermediate: 45%; Expert: 24%",
+    "notes": "OnTheSnow only lists 3 categories (beginner/intermediate/expert) summing to 100%. Advanced=null."
+  },
+  {
+    "slug": "detroit",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "OnTheSnow and skicentral 404 for Detroit Mountain (MN). Likely duplicate of detroit-mountain slug; no data."
+  },
+  {
+    "slug": "detroit-mountain",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "OnTheSnow and skicentral 404. No data from approved sources."
+  },
+  {
+    "slug": "devils-head",
+    "trails_total": 30,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/wisconsin/devils-head/ski-resort",
+    "exact_quote": "30 runs in total, with 260 ac of skiable terrain and a 1 mi longest run",
+    "notes": "OnTheSnow trail count only; no difficulty percentages listed."
+  },
+  {
+    "slug": "diamond-peak",
+    "trails_total": 40,
+    "difficulty_pct": {
+      "beginner": 8,
+      "intermediate": 28,
+      "advanced": 33,
+      "expert": 33
+    },
+    "source_url": "https://www.onthesnow.com/nevada/diamond-peak/ski-resort",
+    "exact_quote": "40 runs in total; Beginners: 8%; Intermediate: 28%; Advanced: 33%; Expert: 33%",
+    "notes": "OnTheSnow full data."
+  },
+  {
+    "slug": "discovery",
+    "trails_total": 74,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/montana/discovery-ski-area/ski-resort",
+    "exact_quote": "74 total runs at the resort",
+    "notes": "OnTheSnow trail count only; no difficulty percentages."
+  },
+  {
+    "slug": "dodge-ridge",
+    "trails_total": 71,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/california/dodge-ridge/ski-resort",
+    "exact_quote": "71 trails are listed at Dodge Ridge Mountain Resort",
+    "notes": "OnTheSnow trail count only; no difficulty percentages."
+  },
+  {
+    "slug": "dog-creek-lodge-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "OnTheSnow 404 for Dog Creek Lodge & Nordic Center. No data."
+  },
+  {
+    "slug": "donner-ski-ranch",
+    "trails_total": 52,
+    "difficulty_pct": {
+      "beginner": 31,
+      "intermediate": 38,
+      "advanced": 21,
+      "expert": 10
+    },
+    "source_url": "https://www.onthesnow.com/california/donner-ski-ranch/ski-resort",
+    "exact_quote": "52 runs across 505 Acres; Beginners Runs: 31%; Intermediate Runs: 38%; Advanced Runs: 21%; Expert Runs: 10%",
+    "notes": "OnTheSnow full data. Note: existing input has advanced=31, but OnTheSnow shows 21+10 split."
+  },
+  {
+    "slug": "dry-hill-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/new-york/dry-hill-ski-area/ski-resort",
+    "exact_quote": "Runs in Total: 7; Beginners Runs: 33%; Intermediate Runs: 34%; Advanced Runs: 33%",
+    "notes": "[SANITIZED — fabrication marker in notes] OnTheSnow shows 7 runs (vs input 13). Difficulty breakdown captured; expert assumed 0 (sums to 100).",
+    "_sanitized": true,
+    "_original_notes": "OnTheSnow shows 7 runs (vs input 13). Difficulty breakdown captured; expert assumed 0 (sums to 100)."
+  },
+  {
+    "slug": "eagle-point",
+    "trails_total": 43,
+    "difficulty_pct": {
+      "beginner": 23,
+      "intermediate": 30,
+      "advanced": 28,
+      "expert": 19
+    },
+    "source_url": "https://www.onthesnow.com/utah/eagle-point/ski-resort",
+    "exact_quote": "Runs in Total: 43; Beginners Runs: 23%; Intermediate Runs: 30%; Advanced Runs: 28%; Expert Runs: 19%",
+    "notes": "OnTheSnow full data. Note input was 40 trails; OnTheSnow shows 43."
+  },
+  {
+    "slug": "eagle-rock-resort",
+    "trails_total": 13,
+    "difficulty_pct": null,
+    "source_url": "https://skicentral.com/eaglerock.html",
+    "exact_quote": "Number of Trails: 13",
+    "notes": "Skicentral trail count only; no difficulty percentages."
+  },
+  {
+    "slug": "eaglecrest",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/alaska/eaglecrest-ski-area/ski-resort",
+    "exact_quote": "37 runs across 640 ac of skiable terrain; Beginners: 32%; Intermediate: 38%; Advanced: 30%",
+    "notes": "[SANITIZED — fabrication marker in notes] OnTheSnow shows 37 (vs input 36). Three-tier breakdown; expert assumed 0.",
+    "_sanitized": true,
+    "_original_notes": "OnTheSnow shows 37 (vs input 36). Three-tier breakdown; expert assumed 0."
+  },
+  {
+    "slug": "eaglecrest-ski-area",
+    "trails_total": 37,
+    "difficulty_pct": {
+      "beginner": 32,
+      "intermediate": 38,
+      "advanced": 30,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/alaska/eaglecrest-ski-area/ski-resort",
+    "exact_quote": "37 runs across 640 ac of skiable terrain; Beginners: 32%; Intermediate: 38%; Advanced: 30%",
+    "notes": "Same source as eaglecrest slug (duplicate). OnTheSnow full data."
+  },
+  {
+    "slug": "eaton-mountain",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "OnTheSnow and skicentral 404 for Eaton Mountain (ME). No data from approved sources."
+  },
+  {
+    "slug": "echo-mountain",
+    "trails_total": 7,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/colorado/echo-mountain/ski-resort",
+    "exact_quote": "Runs in Total: 7 and lists 60 Acres of skiable terrain",
+    "notes": "OnTheSnow shows 7 runs (vs input 8). No difficulty percentages on OnTheSnow page. Skicentral lists 16 (conflicting)."
+  },
+  {
+    "slug": "echo-valley",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "OnTheSnow and skicentral 404. No data."
+  },
+  {
+    "slug": "eldora",
+    "trails_total": 63,
+    "difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 48,
+      "advanced": 19,
+      "expert": 14
+    },
+    "source_url": "https://www.onthesnow.com/colorado/eldora-mountain-resort/ski-resort",
+    "exact_quote": "63 runs across 680 Ac of skiable terrain; Beginners: 19%; Intermediate: 48%; Advanced: 19%; Expert: 14%",
+    "notes": "OnTheSnow full data."
+  },
+  {
+    "slug": "elk-mountain",
+    "trails_total": 27,
+    "difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 37,
+      "advanced": 41,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/pennsylvania/elk-mountain-ski-resort/ski-resort",
+    "exact_quote": "27 runs across 180 Acres; Beginners: 22%; Intermediate: 37%; Advanced: 41%",
+    "notes": "OnTheSnow confirms existing input."
+  },
+  {
+    "slug": "elko-snobowl",
+    "trails_total": 10,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/nevada/elko-snobowl/ski-resort",
+    "exact_quote": "Runs in Total: 10 and specifies 60 ac of skiable terrain",
+    "notes": "OnTheSnow trail count only; no difficulty percentages."
+  },
+  {
+    "slug": "enchanted-forest-xc",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "OnTheSnow and skicentral 404 for Enchanted Forest XC (NM). XC nordic center; no data from approved sources."
+  },
+  {
+    "slug": "ferguson-ridge",
+    "trails_total": 8,
+    "difficulty_pct": null,
+    "source_url": "https://skicentral.com/fergusonridge.html",
+    "exact_quote": "eight skiable trails ... Number of Trails is 8",
+    "notes": "Skicentral confirms 8 trails; no difficulty breakdown."
+  },
+  {
+    "slug": "four-lakes",
+    "trails_total": 7,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/illinois/four-lakes/ski-resort",
+    "exact_quote": "7 runs are available at the resort",
+    "notes": "OnTheSnow trail count only; no difficulty percentages."
+  },
+  {
+    "slug": "franconia-village-xc-area",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "OnTheSnow and skicentral 404 for Franconia Village XC. Nordic; no data from approved sources."
+  },
+  {
+    "slug": "frost-fire-park",
+    "trails_total": 10,
+    "difficulty_pct": null,
+    "source_url": "https://skicentral.com/frostfire.html",
+    "exact_quote": "10 trail runs open to skiing and snowboarding ... Number of Trails: 10",
+    "notes": "Skicentral trail count; no difficulty breakdown. Input had no trail count and difficulty pct (40/30/30/0) from prior source."
+  },
+  {
+    "slug": "garnet-hill-xc",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "OnTheSnow and skicentral 404 for Garnet Hill XC (NY). Nordic; no data from approved sources."
+  },
+  {
+    "slug": "giants-ridge",
+    "trails_total": 35,
+    "difficulty_pct": null,
+    "source_url": "https://skicentral.com/giantsridge.html",
+    "exact_quote": "35 downhill ski runs",
+    "notes": "Skicentral trail count only; no difficulty percentages."
+  },
+  {
+    "slug": "gore-mountain",
+    "trails_total": 108,
+    "difficulty_pct": {
+      "beginner": 11,
+      "intermediate": 53,
+      "advanced": 30,
+      "expert": 6
+    },
+    "source_url": "https://www.onthesnow.com/new-york/gore-mountain/ski-resort",
+    "exact_quote": "108 total runs across 453 Acres; Beginners: 11%; Intermediate: 53%; Advanced: 30%; Expert: 6%",
+    "notes": "OnTheSnow full data. Input had 110."
+  }
+]

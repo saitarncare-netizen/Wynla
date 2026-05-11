@@ -1,0 +1,322 @@
+[
+  {
+    "slug": "granby-ranch",
+    "trails_total": 45,
+    "difficulty_pct": {
+      "beginner": 31,
+      "intermediate": 42,
+      "advanced": 27,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/colorado/ski-granby-ranch/ski-resort",
+    "exact_quote": "Runs in Total: 45 | Beginners Runs: 31% | Intermediate Runs: 42% | Expert Runs: 27%",
+    "notes": "OnTheSnow uses 3-tier (beginner/intermediate/expert) for Granby Ranch; 'Expert Runs 27%' mapped to advanced."
+  },
+  {
+    "slug": "grand-targhee",
+    "trails_total": 95,
+    "difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 38,
+      "advanced": 30,
+      "expert": 11
+    },
+    "source_url": "https://www.onthesnow.com/wyoming/grand-targhee-resort/ski-resort",
+    "exact_quote": "Runs in Total: 95 | Beginners Runs: 21% | Intermediate Runs: 38% | Advanced Runs: 30% | Expert Runs: 11%",
+    "notes": "OnTheSnow full 4-tier breakdown."
+  },
+  {
+    "slug": "granite-gorge",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/new-hampshire/ski-resorts",
+    "exact_quote": null,
+    "notes": "Not found on OnTheSnow individual resort page (404). Not found on skicentral.com (404). Wikipedia mentions ~14 trails on 50 acres but external sources not allowed."
+  },
+  {
+    "slug": "granite-peak",
+    "trails_total": 58,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/wisconsin/granite-peak-ski-area/ski-resort",
+    "exact_quote": "Runs in Total: 58",
+    "notes": "OnTheSnow lists 58 runs; difficulty breakdown not present. SkiCentral lists 68 trails (https://www.skicentral.com/granitepeak.html) but no difficulty %."
+  },
+  {
+    "slug": "great-bear",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/south-dakota/ski-resorts",
+    "exact_quote": null,
+    "notes": "Not found on OnTheSnow individual page (404). Not found on skicentral.com (404). Same resort as great-bear-valley."
+  },
+  {
+    "slug": "great-bear-valley",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/south-dakota/ski-resorts",
+    "exact_quote": null,
+    "notes": "Not found on OnTheSnow individual page (404). Not found on skicentral.com (404). Likely duplicate of great-bear."
+  },
+  {
+    "slug": "great-divide",
+    "trails_total": 127,
+    "difficulty_pct": {
+      "beginner": 7,
+      "intermediate": 47,
+      "advanced": 30,
+      "expert": 17
+    },
+    "source_url": "https://www.onthesnow.com/montana/great-divide/ski-resort",
+    "exact_quote": "Runs in Total: 127 | Beginners: 7% | Intermediate: 47% | Advanced: 30% | Expert: 17%",
+    "notes": "OnTheSnow full 4-tier breakdown."
+  },
+  {
+    "slug": "great-glen-trails-outdoor-center",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/new-hampshire/ski-resorts",
+    "exact_quote": null,
+    "notes": "Cross-country nordic center; not listed on OnTheSnow (alpine focus). Not found on skicentral.com (404)."
+  },
+  {
+    "slug": "greek-peak",
+    "trails_total": 55,
+    "difficulty_pct": {
+      "beginner": 36,
+      "intermediate": 29,
+      "advanced": 27,
+      "expert": 9
+    },
+    "source_url": "https://www.onthesnow.com/new-york/greek-peak/ski-resort",
+    "exact_quote": "Runs in Total: 55 | Beginners: 36% | Intermediate: 29% | Advanced: 27% | Expert: 9%",
+    "notes": "OnTheSnow full 4-tier breakdown. SkiCentral lists 38 trails (skicentral.com/greekpeak.html) but no difficulty %."
+  },
+  {
+    "slug": "gunstock-mountain-resort",
+    "trails_total": 44,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/new-hampshire/gunstock/ski-resort",
+    "exact_quote": "44 total runs",
+    "notes": "OnTheSnow lists 44 runs; difficulty % not displayed on overview page."
+  },
+  {
+    "slug": "hatley-pointe",
+    "trails_total": 21,
+    "difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 52,
+      "advanced": 14,
+      "expert": 14
+    },
+    "source_url": "https://www.onthesnow.com/north-carolina/wolf-ridge-ski-resort/ski-resort",
+    "exact_quote": "21 runs in total | Beginners: 19% | Intermediate: 52% | Advanced: 14% | Expert: 14%",
+    "notes": "Hatley Pointe formerly Wolf Ridge; OnTheSnow URL still uses wolf-ridge-ski-resort slug."
+  },
+  {
+    "slug": "haymaker-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/colorado/ski-resorts",
+    "exact_quote": null,
+    "notes": "Cross-country nordic center; not on OnTheSnow (alpine focus). Not on skicentral.com (404)."
+  },
+  {
+    "slug": "heavenly-mountain-resort",
+    "trails_total": 111,
+    "difficulty_pct": {
+      "beginner": 14,
+      "intermediate": 53,
+      "advanced": 27,
+      "expert": 5
+    },
+    "source_url": "https://www.onthesnow.com/california/heavenly-mountain-resort/ski-resort",
+    "exact_quote": "111 trails in total | Beginners: 14% | Intermediate: 53% | Advanced: 27% | Expert: 5%",
+    "notes": "OnTheSnow full 4-tier breakdown."
+  },
+  {
+    "slug": "hermon-mountain",
+    "trails_total": 20,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/maine/new-hermon-mountain/ski-resort",
+    "exact_quote": "20 total runs across 70 ac",
+    "notes": "OnTheSnow lists 20 runs (resort named New Hermon Mountain); no difficulty %. SkiCentral also lists 20 (skicentral.com/newhermonmountain.html)."
+  },
+  {
+    "slug": "hesperus-ski-area",
+    "trails_total": 13,
+    "difficulty_pct": null,
+    "source_url": "https://www.skicentral.com/skihesperus.html",
+    "exact_quote": "Number of Trails: 13",
+    "notes": "OnTheSnow Hesperus page not found (404). SkiCentral lists 13 trails; no difficulty %. Resort closed for 2025/26 season."
+  },
+  {
+    "slug": "hidden-valley",
+    "trails_total": 30,
+    "difficulty_pct": {
+      "beginner": 27,
+      "intermediate": 43,
+      "advanced": 30,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/pennsylvania/hidden-valley-resort/ski-resort",
+    "exact_quote": "Beginners Runs 27% Intermediate Runs 43% Advanced Runs 30% Runs in Total 30",
+    "notes": "OnTheSnow 3-tier breakdown for Hidden Valley PA (no expert tier reported)."
+  },
+  {
+    "slug": "hidden-valley-mo",
+    "trails_total": 14,
+    "difficulty_pct": {
+      "beginner": 29,
+      "intermediate": 43,
+      "advanced": 14,
+      "expert": 14
+    },
+    "source_url": "https://www.onthesnow.com/missouri/hidden-valley/ski-resort",
+    "exact_quote": "14 total runs | Beginners: 29% | Intermediate: 43% | Advanced: 14% | Expert: 14%",
+    "notes": "OnTheSnow full 4-tier breakdown for Hidden Valley MO."
+  },
+  {
+    "slug": "high-point-xc-center",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://www.skicentral.com/highpointcrosscountryskicenter.html",
+    "exact_quote": "Number of Trails: 0",
+    "notes": "Cross-country center; not listed on OnTheSnow (alpine focus). SkiCentral page exists but no trail count or difficulty data."
+  },
+  {
+    "slug": "highlands",
+    "trails_total": 55,
+    "difficulty_pct": {
+      "beginner": 40,
+      "intermediate": 29,
+      "advanced": 29,
+      "expert": 2
+    },
+    "source_url": "https://www.onthesnow.com/michigan/boyne-highlands/ski-resort",
+    "exact_quote": "55 total runs | Beginners: 40% | Intermediate: 29% | Advanced: 29% | Expert: 2%",
+    "notes": "The Highlands at Harbor Springs (formerly Boyne Highlands); OnTheSnow URL still uses boyne-highlands slug."
+  },
+  {
+    "slug": "hilltop-ski-area",
+    "trails_total": 12,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/alaska/hilltop-ski-area/ski-resort",
+    "exact_quote": "12 runs in total",
+    "notes": "OnTheSnow lists 12 runs; no per-difficulty % on overview page (only '#1 Beginner Terrain in Alaska' label). SkiCentral lists 13 trails."
+  },
+  {
+    "slug": "hoedown-hill",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/colorado/ski-resorts",
+    "exact_quote": null,
+    "notes": "New resort (opened 2023); not yet on OnTheSnow individual page. Not on skicentral.com (404)."
+  },
+  {
+    "slug": "hogadon",
+    "trails_total": 28,
+    "difficulty_pct": {
+      "beginner": 7,
+      "intermediate": 32,
+      "advanced": 50,
+      "expert": 11
+    },
+    "source_url": "https://www.onthesnow.com/wyoming/hogadon/ski-resort",
+    "exact_quote": "28 total runs | Beginners Runs: 7% | Intermediate Runs: 32% | Advanced Runs: 50% | Expert Runs: 11%",
+    "notes": "OnTheSnow full 4-tier breakdown."
+  },
+  {
+    "slug": "holiday-mountain",
+    "trails_total": 16,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/new-york/holiday-mountain/ski-resort",
+    "exact_quote": "16 runs in total",
+    "notes": "OnTheSnow lists 16 runs; no difficulty %. SkiCentral lists 6 trails (https://www.skicentral.com/holidaymountain.html) but no difficulty %."
+  },
+  {
+    "slug": "holiday-valley",
+    "trails_total": 60,
+    "difficulty_pct": {
+      "beginner": 40,
+      "intermediate": 23,
+      "advanced": 35,
+      "expert": 2
+    },
+    "source_url": "https://www.onthesnow.com/new-york/holiday-valley/ski-resort",
+    "exact_quote": "60 runs in total | Beginners: 40% | Intermediate: 23% | Advanced: 35% | Expert: 2%",
+    "notes": "OnTheSnow full 4-tier breakdown."
+  },
+  {
+    "slug": "holimont",
+    "trails_total": 55,
+    "difficulty_pct": {
+      "beginner": 29,
+      "intermediate": 29,
+      "advanced": 42,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/new-york/holimont-ski-area/ski-resort",
+    "exact_quote": "Runs in Total: 55 | Beginners Runs 29% | Intermediate Runs 29% | Advanced Runs 42%",
+    "notes": "OnTheSnow 3-tier breakdown (no expert tier reported)."
+  },
+  {
+    "slug": "homestake-lodge",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://www.skicentral.com/homestakelodge.html",
+    "exact_quote": "Number of Trails: 0",
+    "notes": "Cross-country nordic lodge (35km groomed). Not on OnTheSnow (alpine focus). SkiCentral page shows 0 trails and no difficulty %."
+  },
+  {
+    "slug": "homestead-resort",
+    "trails_total": 15,
+    "difficulty_pct": {
+      "beginner": 27,
+      "intermediate": 47,
+      "advanced": 27,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/michigan/the-homestead/ski-resort",
+    "exact_quote": "15 trails | Beginners: 27% | Intermediate: 47% | Advanced: 27%",
+    "notes": "OnTheSnow 3-tier breakdown (no expert tier reported)."
+  },
+  {
+    "slug": "homewood-mountain-resort",
+    "trails_total": 67,
+    "difficulty_pct": {
+      "beginner": 13,
+      "intermediate": 46,
+      "advanced": 36,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/california/homewood-mountain-resort/ski-resort",
+    "exact_quote": "67 total runs | Beginner Runs: 13% | Intermediate Runs: 46% | Advanced Runs: 36%",
+    "notes": "OnTheSnow 3-tier breakdown (no expert tier reported)."
+  },
+  {
+    "slug": "hoodoo",
+    "trails_total": 36,
+    "difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 42,
+      "advanced": 31,
+      "expert": 8
+    },
+    "source_url": "https://www.onthesnow.com/oregon/hoodoo-ski-area/ski-resort",
+    "exact_quote": "36 runs in total | Beginners Runs: 19% | Intermediate Runs: 42% | Advanced Runs: 31% | Expert Runs: 8%",
+    "notes": "OnTheSnow full 4-tier breakdown."
+  },
+  {
+    "slug": "howelsen-hill",
+    "trails_total": 17,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 30,
+      "advanced": 50,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/colorado/howelsen-hill/ski-resort",
+    "exact_quote": "17 trails | Beginners: 20% | Intermediate: 30% | Advanced: 50%",
+    "notes": "OnTheSnow 3-tier breakdown (no expert tier reported)."
+  }
+]

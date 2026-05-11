@@ -1,0 +1,262 @@
+[
+  {
+    "slug": "49-degrees-north",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 29,
+      "intermediate": 40,
+      "advanced": 31,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/49-degrees-north-mountain-resort/",
+    "exact_quote": "Total: 68 km / Easy 20 km (29 %) / Intermediate 27 km (40 %) / Difficult 21 km (31 %)",
+    "notes": "skiresort.info uses 3-tier; expert not explicitly reported. Slug variant: 49-degrees-north-mountain-resort"
+  },
+  {
+    "slug": "afton-alps",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 36,
+      "intermediate": 38,
+      "advanced": 26,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/afton-alps/",
+    "exact_quote": "Easy 2.8 km (36 %), Intermediate 3 km (38 %), Difficult 2 km (26 %)",
+    "notes": "skiresort.info uses 3-tier; expert not explicitly reported"
+  },
+  {
+    "slug": "alpine-meadows",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 26,
+      "intermediate": 42,
+      "advanced": 32,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/alpine-meadows/",
+    "exact_quote": "Easy 50 km (26 %), Intermediate 85 km (42 %), Difficult 65 km (32 %)",
+    "notes": "Page covers Palisades Tahoe (combined Alpine Meadows). 200 km slopes + 50 km ski routes. Expert not explicitly reported"
+  },
+  {
+    "slug": "alpine-valley-mi",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "NOT FOUND on skiresort.info. Tried slugs: alpine-valley-mi, alpine-valley-ski-area-milford, alpine-valley-white-lake (latter returned a different resort with 5.4 km). No confident match for MI Alpine Valley"
+  },
+  {
+    "slug": "alpine-valley-oh",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 46,
+      "intermediate": 46,
+      "advanced": 8,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/alpine-valley-ohio/",
+    "exact_quote": "Easy 1.2 km (46 %) Intermediate 1.2 km (46 %) Difficult 0.2 km (8 %)",
+    "notes": "skiresort.info uses 3-tier; expert not explicitly reported. Slug variant: alpine-valley-ohio"
+  },
+  {
+    "slug": "alpine-valley-wi",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 37,
+      "intermediate": 37,
+      "advanced": 26,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/alpine-valley-resort-elkhorn/",
+    "exact_quote": "Easy 1.5 km (37 %), Intermediate 1.5 km (37 %), Difficult 1 km (26 %)",
+    "notes": "skiresort.info uses 3-tier; expert not explicitly reported. Slug variant: alpine-valley-resort-elkhorn"
+  },
+  {
+    "slug": "alta",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 15,
+      "intermediate": 30,
+      "advanced": 55,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/alta/",
+    "exact_quote": "Total: 71 km Easy 11 km (15 %) Intermediate 21 km (30 %) Difficult 39 km (55 %)",
+    "notes": "skiresort.info uses 3-tier; expert not explicitly reported"
+  },
+  {
+    "slug": "alyeska-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 23,
+      "intermediate": 50,
+      "advanced": 27,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/alyeska-resort-girdwood/",
+    "exact_quote": "Easy 14 km (23 %), Intermediate 31 km (50 %), Difficult 17 km (27 %)",
+    "notes": "skiresort.info uses 3-tier; expert not explicitly reported. Slug variant: alyeska-resort-girdwood"
+  },
+  {
+    "slug": "andes-tower-hills",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 55,
+      "intermediate": 40,
+      "advanced": 5,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/andes-tower-hills/",
+    "exact_quote": "Easy 2.2 km (55 %) Intermediate 1.6 km (40 %) Difficult 0.2 km (5 %)",
+    "notes": "skiresort.info uses 3-tier; expert not explicitly reported"
+  },
+  {
+    "slug": "angel-fire-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 54,
+      "intermediate": 37,
+      "advanced": 9,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/angel-fire/",
+    "exact_quote": "Total: 75 km Easy 40 km (54 %) Intermediate 28 km (37 %) Difficult 7 km (9 %)",
+    "notes": "skiresort.info uses 3-tier; expert not explicitly reported. Slug variant: angel-fire"
+  },
+  {
+    "slug": "antelope-butte",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 50,
+      "advanced": 29,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/antelope-butte/",
+    "exact_quote": "Total: 20.3 km Easy 4 km (21 %) Intermediate 10.3 km (50 %) Difficult 6 km (29 %)",
+    "notes": "skiresort.info uses 3-tier; expert not explicitly reported"
+  },
+  {
+    "slug": "anthony-lakes",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 38,
+      "advanced": 42,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/anthony-lakes-mountain-resort/",
+    "exact_quote": "Total: 10 km Easy: 2 km (20%), Intermediate: 3.8 km (38%), Difficult: 4.2 km (42%)",
+    "notes": "skiresort.info uses 3-tier; expert not explicitly reported. Slug variant: anthony-lakes-mountain-resort"
+  },
+  {
+    "slug": "appalachian-ski-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 40,
+      "intermediate": 50,
+      "advanced": 10,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/appalachian-ski-mountain/",
+    "exact_quote": "Total: 5 km Easy 2 km (40 %) Intermediate 2.5 km (50 %) Difficult 0.5 km (10 %)",
+    "notes": "skiresort.info uses 3-tier; expert not explicitly reported"
+  },
+  {
+    "slug": "apple-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 40,
+      "intermediate": 40,
+      "advanced": 20,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/apple-mountain/",
+    "exact_quote": "Total: 2 km Easy 0.8 km (40 %) Intermediate 0.8 km (40 %) Difficult 0.4 km (20 %)",
+    "notes": "Resort marked as shut down on skiresort.info. 3-tier; expert not explicitly reported"
+  },
+  {
+    "slug": "arapahoe-basin",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 8,
+      "intermediate": 33,
+      "advanced": 59,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/arapahoe-basin/",
+    "exact_quote": "Total: 52 km Easy 3.5 km (8 %) Intermediate 17.5 km (33 %) Difficult 31 km (59 %)",
+    "notes": "skiresort.info uses 3-tier; expert not explicitly reported"
+  },
+  {
+    "slug": "arctic-valley",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 40,
+      "advanced": 40,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/arctic-valley/",
+    "exact_quote": "Total: 25 km Easy 5 km (20 %) Intermediate 10 km (40 %) Difficult 10 km (40 %)",
+    "notes": "skiresort.info uses 3-tier; expert not explicitly reported"
+  },
+  {
+    "slug": "arizona-snowbowl",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 32,
+      "intermediate": 44,
+      "advanced": 24,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/arizona-snowbowl/",
+    "exact_quote": "Total: 37 km Easy 12 km (32 %) Intermediate 16 km (44 %) Difficult 9 km (24 %)",
+    "notes": "skiresort.info uses 3-tier; expert not explicitly reported"
+  },
+  {
+    "slug": "ascutney-outdoors",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "NOT FOUND on skiresort.info. Tried slugs: ascutney-outdoors, mount-ascutney, ascutney"
+  },
+  {
+    "slug": "aspen-highlands",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 18,
+      "intermediate": 30,
+      "advanced": 52,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/aspen-highlands/",
+    "exact_quote": "Total: 135 km Easy 24.3 km (18 %) Intermediate 40.5 km (30 %) Difficult 70.2 km (52 %)",
+    "notes": "skiresort.info uses 3-tier; expert not explicitly reported"
+  },
+  {
+    "slug": "aspen-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 0,
+      "intermediate": 48,
+      "advanced": 52,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/aspen-mountain/",
+    "exact_quote": "Easy 0 km (0%) | Intermediate 49 km (48%) | Difficult 54 km (52%)",
+    "notes": "skiresort.info uses 3-tier; easy explicitly 0. Total 103 km. Expert not explicitly reported"
+  }
+]

@@ -1,0 +1,394 @@
+[
+  {
+    "slug": "aspen-snowmass",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 5,
+      "intermediate": 48,
+      "advanced": 47,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/snowmass/",
+    "exact_quote": "Total: 237 km | Easy: 12 km (5 %) | Intermediate: 114 km (48 %) | Difficult: 111 km (47 %)",
+    "notes": "Used Snowmass page (skiresort.info/ski-resort/aspen-snowmass redirects to homepage). Aspen Mountain separately has 103 km Total / 0% Easy / 48% Int / 52% Diff. Used Snowmass as best match for 'Aspen Snowmass'."
+  },
+  {
+    "slug": "attitash",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 47,
+      "advanced": 33,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/attitash-mountain-resort/",
+    "exact_quote": "Total: 37 km | Easy: 7.4 km (20 %) | Intermediate: 17.4 km (47 %) | Difficult: 12.2 km (33 %)",
+    "notes": "Slug on skiresort.info is attitash-mountain-resort."
+  },
+  {
+    "slug": "badger-mountain-wa",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info (tried badger-mountain-wa and badger-mountain-ski-area-wenatchee). Small community ski area."
+  },
+  {
+    "slug": "badger-pass",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 75,
+      "intermediate": 25,
+      "advanced": 0,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/badger-pass/",
+    "exact_quote": "Total: 6 km | Easy: 4.5 km (75 %) | Intermediate: 1.5 km (25 %) | Difficult: 0 km (0 %)",
+    "notes": "Advanced=0% from km data; expert null (km data shows 0 difficult but no separate expert tier on skiresort.info)."
+  },
+  {
+    "slug": "bear-basin-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info (tried bear-basin-nordic-center and bear-basin). Nordic-only center, likely not in skiresort.info downhill database."
+  },
+  {
+    "slug": "bear-creek-mountain-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 40,
+      "advanced": 30,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/bear-creek-mountain-resort/",
+    "exact_quote": "10 km of slopes | Easy: 3 km (30%) | Intermediate: 4 km (40%) | Difficult: 3 km (30%)",
+    "notes": ""
+  },
+  {
+    "slug": "bear-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 29,
+      "intermediate": 42,
+      "advanced": 29,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/bear-mountain/",
+    "exact_quote": "27.2 km of slopes | Easy: 8 km (29%) | Intermediate: 11.2 km (42%) | Difficult: 8 km (29%)",
+    "notes": "Bear Mountain - Big Bear Lake, CA."
+  },
+  {
+    "slug": "bear-paw",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 60,
+      "advanced": 10,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/bear-paw-ski-bowl/",
+    "exact_quote": "Total: 10 km | Easy: 3 km (30%) | Intermediate: 6 km (60%) | Difficult: 1 km (10%)",
+    "notes": "Slug on skiresort.info is bear-paw-ski-bowl."
+  },
+  {
+    "slug": "bear-valley-adventure-company",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info. Nordic/XC operation in Bear Valley CA."
+  },
+  {
+    "slug": "bear-valley-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 41,
+      "advanced": 34,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/bear-valley/",
+    "exact_quote": "Total: 67 km | Easy: 17 km (25%) | Intermediate: 27 km (41%) | Difficult: 23 km (34%)",
+    "notes": "Slug on skiresort.info is bear-valley."
+  },
+  {
+    "slug": "beartooth-basin",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 0,
+      "intermediate": 40,
+      "advanced": 60,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/beartooth-basin/",
+    "exact_quote": "Total: 5 km | Easy 0 km (0 %) | Intermediate 2 km (40 %) | Difficult 3 km (60 %)",
+    "notes": "Summer ski area; beginner=0% explicit."
+  },
+  {
+    "slug": "beaver-creek",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 43,
+      "advanced": 38,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/beaver-creek/",
+    "exact_quote": "Total: 150 km | Easy: 28.5 km (19 %) | Intermediate: 64.5 km (43 %) | Difficult: 57 km (38 %)",
+    "notes": ""
+  },
+  {
+    "slug": "beaver-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 40,
+      "advanced": 27,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/beaver-mountain/",
+    "exact_quote": "Total: 30 km | Easy: 10 km (33 %) | Intermediate: 12 km (40 %) | Difficult: 8 km (27 %)",
+    "notes": ""
+  },
+  {
+    "slug": "beech-mountain-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 50,
+      "advanced": 29,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/beech-mountain/",
+    "exact_quote": "Total: 14 km | Easy: 3 km (21 %) | Intermediate: 7 km (50 %) | Difficult: 4 km (29 %)",
+    "notes": "Slug on skiresort.info is beech-mountain."
+  },
+  {
+    "slug": "belleayre-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 55,
+      "advanced": 20,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/belleayre-mountain/",
+    "exact_quote": "20 km of slopes | Easy: 5 km (25 %) | Intermediate: 11 km (55 %) | Difficult: 4 km (20 %)",
+    "notes": ""
+  },
+  {
+    "slug": "berkshire-east",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 46,
+      "intermediate": 31,
+      "advanced": 23,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/berkshire-east/",
+    "exact_quote": "13 km of slopes available | Easy: 6 km (46 %) | Intermediate: 4 km (31 %) | Difficult: 3 km (23 %)",
+    "notes": ""
+  },
+  {
+    "slug": "bethel-village-trails",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info. Nordic/XC trail network in Bethel ME, not a downhill resort."
+  },
+  {
+    "slug": "big-bear-ca",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info as combined entity. On skiresort.info Big Bear is split into Bear Mountain and Snow Summit pages (see bear-mountain entry above)."
+  },
+  {
+    "slug": "big-bear-pa",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info (tried big-bear-pa and ski-big-bear). Small PA resort."
+  },
+  {
+    "slug": "big-boulder",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 60,
+      "intermediate": 20,
+      "advanced": 20,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/big-boulder/",
+    "exact_quote": "Total: 5 km | Easy: 3 km (60%) | Intermediate: 1 km (20%) | Difficult: 1 km (20%)",
+    "notes": ""
+  },
+  {
+    "slug": "big-powderhorn-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 35,
+      "advanced": 30,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/big-powderhorn-mountain/",
+    "exact_quote": "10 km of slopes available | Easy: 3.5 km (35 %) | Intermediate: 3.5 km (35 %) | Difficult: 3 km (30 %)",
+    "notes": ""
+  },
+  {
+    "slug": "big-rock",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 10,
+      "intermediate": 70,
+      "advanced": 20,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/big-rock/",
+    "exact_quote": "Total: 20 km | Easy: 2 km (10 %) | Intermediate: 14 km (70 %) | Difficult: 4 km (20 %)",
+    "notes": ""
+  },
+  {
+    "slug": "big-sky",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 60,
+      "advanced": 19,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/big-sky-resort/",
+    "exact_quote": "Total: 250 km of slopes | Easy: 53 km (21%) | Intermediate: 150 km (60%) | Difficult: 47 km (19%)",
+    "notes": "Slug on skiresort.info is big-sky-resort."
+  },
+  {
+    "slug": "big-snow-american-dream",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 60,
+      "intermediate": 40,
+      "advanced": 0,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/big-snow-american-dream/",
+    "exact_quote": "Total: 0.5 km | Easy: 0.3 km (60%) | Intermediate: 0.2 km (40%) | Difficult: 0 km (0%)",
+    "notes": "Indoor ski facility; advanced=0% explicit."
+  },
+  {
+    "slug": "big-squaw-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 37,
+      "intermediate": 37,
+      "advanced": 26,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/big-moose-mountain/",
+    "exact_quote": "Total: 8 km | Easy: 3 km (37 %) | Intermediate: 3 km (37 %) | Difficult: 2 km (26 %)",
+    "notes": "Renamed Big Moose Mountain; slug on skiresort.info is big-moose-mountain."
+  },
+  {
+    "slug": "bittersweet-ski-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 43,
+      "intermediate": 43,
+      "advanced": 14,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/bittersweet/",
+    "exact_quote": "7 km of slopes available | Easy: 3 km (43 %) | Intermediate: 3 km (43 %) | Difficult: 1 km (14 %)",
+    "notes": "Slug on skiresort.info is bittersweet."
+  },
+  {
+    "slug": "black-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 50,
+      "intermediate": 33,
+      "advanced": 17,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/black-mountain-jackson/",
+    "exact_quote": "Total: 12 km of slopes | Easy: 6 km (50%) | Intermediate: 4 km (33%) | Difficult: 2 km (17%)",
+    "notes": "Black Mountain - Jackson NH; slug on skiresort.info is black-mountain-jackson."
+  },
+  {
+    "slug": "black-mountain-nh",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/black-mountain-jackson/",
+    "exact_quote": "Total: 12 km of slopes | Easy: 6 km (50%) | Intermediate: 4 km (33%) | Difficult: 2 km (17%)",
+    "notes": "[SANITIZED — fabrication marker in notes] Black Mountain - Jackson NH; same skiresort.info entry as black-area entry. Likely duplicate of black-area in input.",
+    "_sanitized": true,
+    "_original_notes": "Black Mountain - Jackson NH; same skiresort.info entry as black-area entry. Likely duplicate of black-area in input."
+  },
+  {
+    "slug": "black-mountain-of-maine",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info (tried black-mountain-of-maine and black-mountain-maine)."
+  },
+  {
+    "slug": "blackjack-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info (tried blackjack-mountain and blackjack; second returned 'Black River Basin' page which appears to be a different resort entirely)."
+  }
+]

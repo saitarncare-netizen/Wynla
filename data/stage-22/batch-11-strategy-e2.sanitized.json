@@ -1,0 +1,392 @@
+[
+  {
+    "slug": "pomerelle",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 28,
+      "intermediate": 46,
+      "advanced": 26,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/pomerelle/",
+    "exact_quote": "Easy 4 km (28 %) Intermediate 7 km (46 %) Difficult 4 km (26 %)",
+    "notes": "% from km totals (total 15 km)"
+  },
+  {
+    "slug": "porcupine-mountains",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info"
+  },
+  {
+    "slug": "powder-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 40,
+      "advanced": 35,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/powder-mountain/",
+    "exact_quote": "Easy 17 km (25 %) Intermediate 27 km (40 %) Difficult 24 km (35 %)",
+    "notes": "% from km totals (total 68 km)"
+  },
+  {
+    "slug": "powder-ridge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 49,
+      "intermediate": 37,
+      "advanced": 14,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/powder-ridge/",
+    "exact_quote": "Easy 2 km (49 %) Intermediate 1.5 km (37 %) Difficult 0.5 km (14 %)",
+    "notes": "% from km totals (total 4 km) - MN resort"
+  },
+  {
+    "slug": "powder-ridge-mountain-park",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 46,
+      "intermediate": 36,
+      "advanced": 18,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/powder-ridge-mountain-park-resort/",
+    "exact_quote": "Easy 2.5 km (46 %) Intermediate 2 km (36 %) Difficult 1 km (18 %)",
+    "notes": "% from km totals (total 5.5 km) - CT resort"
+  },
+  {
+    "slug": "powderhorn",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 13,
+      "intermediate": 39,
+      "advanced": 48,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/powderhorn/",
+    "exact_quote": "Easy 5 km (13 %) Intermediate 15 km (39 %) Difficult 18 km (48 %)",
+    "notes": "% from km totals (total 38 km)"
+  },
+  {
+    "slug": "powderhouse-hill",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 100,
+      "intermediate": 0,
+      "advanced": 0,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/powderhouse-hill-south-berwick/",
+    "exact_quote": "Easy 0.5 km (100 %) Intermediate 0 km (0 %) Difficult 0 km (0 %)",
+    "notes": "% from km totals (total 0.5 km)"
+  },
+  {
+    "slug": "purgatory",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info"
+  },
+  {
+    "slug": "quarry-road-trails",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info (nordic center)"
+  },
+  {
+    "slug": "quechee-club",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info"
+  },
+  {
+    "slug": "ragged-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 44,
+      "advanced": 36,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/ragged-mountain/",
+    "exact_quote": "Easy 4.5 km (20 %) Intermediate 10 km (44 %) Difficult 8 km (36 %)",
+    "notes": "% from km totals (total 22.5 km)"
+  },
+  {
+    "slug": "rangeley-lakes-trail-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info (nordic trail center)"
+  },
+  {
+    "slug": "red-lodge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 17,
+      "intermediate": 46,
+      "advanced": 37,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/red-lodge-mountain/",
+    "exact_quote": "Easy 11 km (17 %) Intermediate 30 km (46 %) Difficult 24 km (37 %)",
+    "notes": "% from km totals (total 65 km)"
+  },
+  {
+    "slug": "red-river-ski-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 30,
+      "advanced": 35,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/red-river/",
+    "exact_quote": "Easy 7 km (35 %) Intermediate 6 km (30 %) Difficult 7 km (35 %)",
+    "notes": "% from km totals (total 20 km)"
+  },
+  {
+    "slug": "rikert-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info (nordic center)"
+  },
+  {
+    "slug": "rikert-outdoor-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info (nordic center)"
+  },
+  {
+    "slug": "rotarun",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 24,
+      "intermediate": 43,
+      "advanced": 33,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/rotarun/",
+    "exact_quote": "Easy 1.1 km (24 %) Intermediate 2 km (43 %) Difficult 1.5 km (33 %)",
+    "notes": "% from km totals (total 4.6 km)"
+  },
+  {
+    "slug": "roundtop-mountain-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 40,
+      "advanced": 40,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/roundtop/",
+    "exact_quote": "Easy 1.5 km (20 %) Intermediate 3 km (40 %) Difficult 3 km (40 %)",
+    "notes": "% from km totals (total 7.5 km)"
+  },
+  {
+    "slug": "royal-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 40,
+      "advanced": 27,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/royal-mountain/",
+    "exact_quote": "Easy 2.5 km (33 %) Intermediate 3 km (40 %) Difficult 2 km (27 %)",
+    "notes": "% from km totals (total 7.5 km)"
+  },
+  {
+    "slug": "saddleback",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 18,
+      "intermediate": 36,
+      "advanced": 46,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/saddleback/",
+    "exact_quote": "Easy 4 km (18 %) Intermediate 8 km (36 %) Difficult 10 km (46 %)",
+    "notes": "% from km totals (total 22 km)"
+  },
+  {
+    "slug": "sandia-peak",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 64,
+      "advanced": 11,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/sandia-peak/",
+    "exact_quote": "Easy 8 km (25 %) Intermediate 20 km (64 %) Difficult 3 km (11 %)",
+    "notes": "% from km totals (total 31 km)"
+  },
+  {
+    "slug": "sapphire-valley-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 100,
+      "intermediate": 0,
+      "advanced": 0,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/sapphire-valley/",
+    "exact_quote": "Easy 0.5 km (100 %) Intermediate 0 km (0 %) Difficult 0 km (0 %)",
+    "notes": "% from km totals (total 0.5 km)"
+  },
+  {
+    "slug": "saskadena-six-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 38,
+      "advanced": 29,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/saskadena-six/",
+    "exact_quote": "Easy 3.5 km (33 %) Intermediate 4 km (38 %) Difficult 3 km (29 %)",
+    "notes": "% from km totals (total 10.5 km)"
+  },
+  {
+    "slug": "schuss-shanty-creek",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 42,
+      "intermediate": 33,
+      "advanced": 25,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/schuss-mountain-shanty-creek/",
+    "exact_quote": "Easy 5 km (42 %) Intermediate 4 km (33 %) Difficult 3 km (25 %)",
+    "notes": "% from km totals (total 12 km)"
+  },
+  {
+    "slug": "schweitzer",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info (tried /schweitzer/ and /schweitzer-mountain/)"
+  },
+  {
+    "slug": "seven-oaks",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 37,
+      "intermediate": 49,
+      "advanced": 14,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/seven-oaks/",
+    "exact_quote": "Easy 1.5 km (37 %) Intermediate 2 km (49 %) Difficult 0.5 km (14 %)",
+    "notes": "% from km totals (total 4 km)"
+  },
+  {
+    "slug": "seven-springs",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 41,
+      "advanced": 24,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/seven-springs/",
+    "exact_quote": "Easy 6 km (35 %) Intermediate 7 km (41 %) Difficult 4 km (24 %)",
+    "notes": "% from km totals (total 17 km)"
+  },
+  {
+    "slug": "shanty-creek",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found at /shanty-creek/ or /shanty-creek-resorts/ (see schuss-shanty-creek for related Schuss Mountain page)"
+  },
+  {
+    "slug": "shawnee-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 50,
+      "advanced": 28,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/shawnee-mountain/",
+    "exact_quote": "Easy 4 km (22 %) Intermediate 9 km (50 %) Difficult 5 km (28 %)",
+    "notes": "% from km totals (total 18 km)"
+  },
+  {
+    "slug": "shawnee-peak",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 17,
+      "intermediate": 53,
+      "advanced": 30,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/pleasant-mountain/",
+    "exact_quote": "Easy 4 km (17 %) Intermediate 12 km (53 %) Difficult 7 km (30 %)",
+    "notes": "% from km totals (total 23 km) - resort rebranded to Pleasant Mountain"
+  }
+]

@@ -1,0 +1,242 @@
+[
+  {
+    "slug": "cuchara",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Cuchara_Mountain_Resort",
+    "exact_quote": null,
+    "notes": "Wikipedia page returns 404; no regional source consulted within fetch budget provided explicit numbers."
+  },
+  {
+    "slug": "dartmouth-skiway",
+    "trails_total": 30,
+    "difficulty_pct": {"beginner": 25, "intermediate": 50, "advanced": 25, "expert": 0},
+    "source_url": "https://en.wikipedia.org/wiki/Dartmouth_Skiway",
+    "exact_quote": "30 trails from easiest (green circle) to most difficult (black diamond) on over one hundred acres (40 ha) of skiable area. ... 25% Novice, 50% Intermediate, 25% Expert",
+    "notes": "Wikipedia: 30 trails total, 25/50/25 split (Novice/Intermediate/Expert). Mapped Expert->Advanced bucket since only 3 buckets present."
+  },
+  {
+    "slug": "deer-valley",
+    "trails_total": 202,
+    "difficulty_pct": {"beginner": 35, "intermediate": 44, "advanced": 21, "expert": 0},
+    "source_url": "https://en.wikipedia.org/wiki/Deer_Valley",
+    "exact_quote": "202 [trails with] 35% easiest, 44% more difficult, [and] 21% most difficult",
+    "notes": "Wikipedia infobox: 202 trails; 35/44/21 split (easiest/more/most difficult)."
+  },
+  {
+    "slug": "detroit",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Detroit_Mountain_Recreation_Area",
+    "exact_quote": null,
+    "notes": "Wikipedia returns 404 for both 'Detroit_Mountain_Recreation_Area' and 'Detroit_Mountain'. No regional source within budget gave explicit numbers."
+  },
+  {
+    "slug": "detroit-mountain",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Detroit_Mountain_Recreation_Area",
+    "exact_quote": null,
+    "notes": "Duplicate of 'detroit'. Wikipedia 404."
+  },
+  {
+    "slug": "devils-head",
+    "trails_total": 30,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Devil%27s_Head_Resort",
+    "exact_quote": "30",
+    "notes": "Wikipedia infobox lists 30 trails. No explicit difficulty percentages stated; article only says 'They range from very gentle to fairly challenging.'"
+  },
+  {
+    "slug": "diamond-peak",
+    "trails_total": 30,
+    "difficulty_pct": {"beginner": 18, "intermediate": 46, "advanced": 36, "expert": 0},
+    "source_url": "https://en.wikipedia.org/wiki/Diamond_Peak_(ski_area)",
+    "exact_quote": "18% easiest ... 46% more difficult ... 36% most difficult",
+    "notes": "Wikipedia: 30 trails total; 18/46/36 split (easiest/more difficult/most difficult)."
+  },
+  {
+    "slug": "discovery",
+    "trails_total": 67,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Discovery_Ski_Area",
+    "exact_quote": "67",
+    "notes": "Wikipedia infobox: 67 trails. No explicit difficulty percentages; article only describes 'beginner groomed runs to expert bowl skiing.'"
+  },
+  {
+    "slug": "dodge-ridge",
+    "trails_total": 67,
+    "difficulty_pct": {"beginner": 20, "intermediate": 40, "advanced": 34, "expert": 0},
+    "source_url": "https://en.wikipedia.org/wiki/Dodge_Ridge_Ski_Area",
+    "exact_quote": "There are 67 total runs and 12 lifts. ... 20% of the trails are for beginners, and 40% of the trails are marked for intermediate as well as 34% for advanced skiers and snowboarders.",
+    "notes": "Wikipedia body text: 67 runs, 20/40/34 split. (Note: sums to 94%; quoted verbatim from article.) Infobox shows 62 total - conflict noted in article."
+  },
+  {
+    "slug": "dog-creek-lodge-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article (404). XC nordic center; no regional source with explicit difficulty percentages located."
+  },
+  {
+    "slug": "donner-ski-ranch",
+    "trails_total": 52,
+    "difficulty_pct": {"beginner": 25, "intermediate": 50, "advanced": 25, "expert": 0},
+    "source_url": "https://en.wikipedia.org/wiki/Donner_Ski_Ranch",
+    "exact_quote": "25% of its terrain is beginner, 50% intermediate, and 25% advanced, but of the 52 runs 16 are of beginning difficulty, 20 are intermediate, and 16 are advanced.",
+    "notes": "Wikipedia: 52 runs; 25/50/25 split. Replaces input estimates (31/38/31)."
+  },
+  {
+    "slug": "dry-hill-area",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Dry_Hill_Ski_Area",
+    "exact_quote": null,
+    "notes": "Wikipedia returns 404. No regional source consulted within budget."
+  },
+  {
+    "slug": "eagle-point",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Eagle_Point_(ski_resort)",
+    "exact_quote": null,
+    "notes": "Wikipedia returns 404. No regional source with explicit numbers located within budget."
+  },
+  {
+    "slug": "eagle-rock-resort",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Eagle_Rock_Resort",
+    "exact_quote": null,
+    "notes": "Wikipedia returns 404. No regional source with explicit numbers located within budget."
+  },
+  {
+    "slug": "eaglecrest",
+    "trails_total": 36,
+    "difficulty_pct": {"beginner": 20, "intermediate": 40, "advanced": 40, "expert": 0},
+    "source_url": "https://en.wikipedia.org/wiki/Eaglecrest_Ski_Area",
+    "exact_quote": "36 marked alpine runs ... 20% easiest (green circle) ... 40% more difficult (blue square) ... 40% most difficult (black diamond)",
+    "notes": "Wikipedia: 36 alpine runs; 20/40/40 split."
+  },
+  {
+    "slug": "eaglecrest-ski-area",
+    "trails_total": 36,
+    "difficulty_pct": {"beginner": 20, "intermediate": 40, "advanced": 40, "expert": 0},
+    "source_url": "https://en.wikipedia.org/wiki/Eaglecrest_Ski_Area",
+    "exact_quote": "36 marked alpine runs ... 20% easiest (green circle) ... 40% more difficult (blue square) ... 40% most difficult (black diamond)",
+    "notes": "Duplicate of 'eaglecrest'. Wikipedia: 36 alpine runs; 20/40/40 split."
+  },
+  {
+    "slug": "eaton-mountain",
+    "trails_total": 18,
+    "difficulty_pct": {"beginner": 28, "intermediate": 39, "advanced": 33, "expert": 0},
+    "source_url": "https://en.wikipedia.org/wiki/Eaton_Mountain",
+    "exact_quote": "It consist of 5 Beginner trails (28%), 7 intermediate trails (39%) and 6 expert trails (33%).",
+    "notes": "Wikipedia: 18 trails (5+7+6); 28/39/33 split (mapped Wikipedia 'expert' to advanced bucket to match input convention)."
+  },
+  {
+    "slug": "echo-mountain",
+    "trails_total": 13,
+    "difficulty_pct": {"beginner": 23, "intermediate": 46, "advanced": 31, "expert": 0},
+    "source_url": "https://en.wikipedia.org/wiki/Echo_Mountain_Resort",
+    "exact_quote": "13 total – 3 easiest – 6 more difficult – 4 most difficult",
+    "notes": "Wikipedia: 13 trails (3 easiest, 6 more difficult, 4 most difficult). Pct: 23/46/31 matches input estimates."
+  },
+  {
+    "slug": "echo-valley",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Echo_Valley_Ski_Area",
+    "exact_quote": null,
+    "notes": "Wikipedia article exists but lists only acreage and lifts; no trail count or difficulty pct."
+  },
+  {
+    "slug": "eldora",
+    "trails_total": 53,
+    "difficulty_pct": {"beginner": 20, "intermediate": 50, "advanced": 30, "expert": 0},
+    "source_url": "https://en.wikipedia.org/wiki/Eldora_Mountain_Resort",
+    "exact_quote": "20% easiest ... 50% more difficult ... 30% most difficult",
+    "notes": "Wikipedia: 53 trails; 20/50/30 split."
+  },
+  {
+    "slug": "elk-mountain",
+    "trails_total": 27,
+    "difficulty_pct": {"beginner": 22, "intermediate": 37, "advanced": 41, "expert": 0},
+    "source_url": "https://en.wikipedia.org/wiki/Elk_Mountain_Ski_Resort",
+    "exact_quote": "Elk has a 925 ft (282 m) vertical drop, 27 trails (six greens, 10 blues and 11 diamonds) and two terrain parks.",
+    "notes": "Wikipedia: 27 trails (6 green / 10 blue / 11 diamond). Pct from counts: 22/37/41 matches input."
+  },
+  {
+    "slug": "elko-snobowl",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article (404). Small municipal hill; no regional source with explicit numbers located within budget."
+  },
+  {
+    "slug": "enchanted-forest-xc",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article (404). XC area; no regional source with explicit difficulty percentages located within budget."
+  },
+  {
+    "slug": "ferguson-ridge",
+    "trails_total": 8,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Ferguson_Ridge_Ski_Area",
+    "exact_quote": "8",
+    "notes": "Wikipedia infobox: 8 trails. No difficulty percentages provided."
+  },
+  {
+    "slug": "four-lakes",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article (404). Small Illinois hill; no regional source with explicit numbers located."
+  },
+  {
+    "slug": "franconia-village-xc-area",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article (Franconia_Inn 404). XC area; no regional source with explicit numbers located."
+  },
+  {
+    "slug": "frost-fire-park",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article (404). Small ND community hill; no regional source with explicit numbers located. Input pct (40/30/30) unverified."
+  },
+  {
+    "slug": "garnet-hill-xc",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia article (Garnet_Hill_Lodge 404). XC area; no regional source with explicit numbers located."
+  },
+  {
+    "slug": "giants-ridge",
+    "trails_total": 35,
+    "difficulty_pct": {"beginner": 30, "intermediate": 50, "advanced": 20, "expert": 0},
+    "source_url": "https://en.wikipedia.org/wiki/Giants_Ridge",
+    "exact_quote": "30% beginner ... 50% intermediate ... 20% advanced",
+    "notes": "Wikipedia: 35 alpine runs; 30/50/20 split."
+  },
+  {
+    "slug": "gore-mountain",
+    "trails_total": 110,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Gore_Mountain_(ski_resort)",
+    "exact_quote": "110",
+    "notes": "Wikipedia infobox: 110 trails (body text mentions 107 - infobox preferred). No explicit difficulty percentages in article."
+  }
+]

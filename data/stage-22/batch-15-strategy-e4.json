@@ -1,0 +1,392 @@
+[
+  {
+    "slug": "vail",
+    "trails_total": 195,
+    "difficulty_pct": {
+      "beginner": 18,
+      "intermediate": 29,
+      "advanced": 53,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Vail_Ski_Resort",
+    "exact_quote": "195 total / 18% beginner / 29% intermediate / 53% advanced",
+    "notes": "Wikipedia infobox. No expert tier listed; advanced (53%) is highest category."
+  },
+  {
+    "slug": "victor-constant-ski-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No dedicated Wikipedia page. West Point, NY article does not mention ski area details."
+  },
+  {
+    "slug": "villa-olivia",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Bartlett,_Illinois",
+    "exact_quote": "Bartlett is home to Villa Olivia, a year-round resort with special event venue, an 18-hole golf course and winter sports such as skiing, tubing, and snowboarding.",
+    "notes": "No dedicated Wikipedia page; mentioned only briefly in Bartlett, IL article with no trail stats."
+  },
+  {
+    "slug": "wachusett-mountain",
+    "trails_total": 27,
+    "difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 63,
+      "advanced": 19,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Wachusett_Mountain_Ski_Area",
+    "exact_quote": "The resort features 27 trails, ranging in difficulty from easiest (green circle) to most difficult (black diamond).",
+    "notes": "Wikipedia trail table: 5 green / 17 blue / 5 black = 27 trails. Article opening says 25 but infobox/table confirm 27. Matches input."
+  },
+  {
+    "slug": "warner-canyon",
+    "trails_total": 22,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Warner_Canyon_Ski_Area",
+    "exact_quote": "22 trails",
+    "notes": "Wikipedia states 22 trails; no difficulty breakdown provided."
+  },
+  {
+    "slug": "waterville-valley",
+    "trails_total": 62,
+    "difficulty_pct": {
+      "beginner": 15,
+      "intermediate": 59,
+      "advanced": 26,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Waterville_Valley_Resort",
+    "exact_quote": "62 trails, 15% Novice, 59% Intermediate, 26% Expert",
+    "notes": "Wikipedia infobox. Combined advanced/expert at 26%."
+  },
+  {
+    "slug": "welch-village",
+    "trails_total": 50,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Welch_Village",
+    "exact_quote": "50",
+    "notes": "Wikipedia states 50 trails; article mentions beginner/intermediate/expert slopes without percentages."
+  },
+  {
+    "slug": "west-mountain",
+    "trails_total": 31,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 65,
+      "advanced": 25,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/West_Mountain_(ski_area)",
+    "exact_quote": "Number of Trails: 31, beginner 20% intermediate 65% advanced 25%",
+    "notes": "Wikipedia. Differs from input (35); percentages sum >100 in source — likely overlap. No expert tier."
+  },
+  {
+    "slug": "whaleback-mountain",
+    "trails_total": 30,
+    "difficulty_pct": {
+      "beginner": 28,
+      "intermediate": 39,
+      "advanced": 33,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Whaleback_(ski_area)",
+    "exact_quote": "Whaleback has 30 trails on 85 acres (34 ha) of skiable terrain. 28% of the trails are rated as easy, 39% are intermediate, and 33% are advanced.",
+    "notes": "Wikipedia. Differs slightly from input (31 vs 30)."
+  },
+  {
+    "slug": "white-grass-touring",
+    "trails_total": 45,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 55,
+      "advanced": 15,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/White_Grass_Ski_Touring_Center",
+    "exact_quote": "approximately 30% easy, 55% intermediate, 15% most difficult",
+    "notes": "Wikipedia. 45 trails, cross-country/Nordic. Differs from input (44 vs 45)."
+  },
+  {
+    "slug": "white-pass",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/White_Pass,_Washington",
+    "exact_quote": "White Pass Ski Area, at the summit, opened on January 11, 1953",
+    "notes": "No dedicated Wikipedia ski-area page found; White Pass, WA article confirms existence but has no trail stats."
+  },
+  {
+    "slug": "white-pine",
+    "trails_total": 25,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 45,
+      "advanced": 30,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/White_Pine_Ski_Resort",
+    "exact_quote": "Of the trails, 25% are beginner, 45% are intermediate and 30% of the trails are advanced.",
+    "notes": "Wikipedia. 'about 25 trails' — differs from input (27 vs 25)."
+  },
+  {
+    "slug": "white-pine-touring-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No dedicated Wikipedia page found for this UT Nordic center."
+  },
+  {
+    "slug": "whitecap-mountains",
+    "trails_total": 43,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Whitecap_Mountains",
+    "exact_quote": "It has 43 ski runs across 400 acres",
+    "notes": "Wikipedia. 43 runs; no difficulty breakdown. Differs from input (48 vs 43)."
+  },
+  {
+    "slug": "whiteface-mountain",
+    "trails_total": 94,
+    "difficulty_pct": {
+      "beginner": 24,
+      "intermediate": 46,
+      "advanced": 30,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Whiteface_Mountain",
+    "exact_quote": "Whiteface's ski area contains 94 trails stretching over 24 miles (39 km) on 299 acres (121 ha) of land.",
+    "notes": "Wikipedia. 24% easiest / 46% more difficult / 30% most difficult. Matches input."
+  },
+  {
+    "slug": "whitefish",
+    "trails_total": 93,
+    "difficulty_pct": {
+      "beginner": 15,
+      "intermediate": 35,
+      "advanced": 40,
+      "expert": 10
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Whitefish_Mountain_Resort",
+    "exact_quote": "93 / 15% beginner / 35% intermediate / 40% advanced / 10% expert",
+    "notes": "Wikipedia infobox. Differs from input (110 vs 93)."
+  },
+  {
+    "slug": "whitetail-resort",
+    "trails_total": 22,
+    "difficulty_pct": {
+      "beginner": 27,
+      "intermediate": 50,
+      "advanced": 18,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Whitetail_Ski_Resort",
+    "exact_quote": "27% beginner / 50% intermediate / 18% advanced / 5% terrain park",
+    "notes": "Wikipedia infobox. 22 total trails; remaining 5% is terrain park."
+  },
+  {
+    "slug": "wild-mountain",
+    "trails_total": 26,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Wild_Mountain",
+    "exact_quote": "26 runs",
+    "notes": "Wikipedia. 26 winter runs; no difficulty breakdown."
+  },
+  {
+    "slug": "wildcat-mountain",
+    "trails_total": 49,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 45,
+      "advanced": null,
+      "expert": 30
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Wildcat_Mountain_Ski_Area",
+    "exact_quote": "49 trails on 225 acres ... 25% Beginner, 45% Intermediate, 30% Expert",
+    "notes": "Wikipedia infobox. Three-tier breakdown (no separate advanced)."
+  },
+  {
+    "slug": "willamette-pass",
+    "trails_total": 29,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 45,
+      "advanced": 35,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Willamette_Pass_Resort",
+    "exact_quote": "Trails: 29 total - 20% Beginner - 45% Intermediate - 35% Advanced / Expert",
+    "notes": "Wikipedia. Combined advanced/expert at 35%."
+  },
+  {
+    "slug": "willard-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No dedicated Wikipedia page found for Willard Mountain, NY."
+  },
+  {
+    "slug": "wilmot-mountain",
+    "trails_total": 23,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Wilmot_Mountain",
+    "exact_quote": "Trails: 23",
+    "notes": "Wikipedia infobox states 23 trails; no difficulty percentages in article."
+  },
+  {
+    "slug": "windham-mountain",
+    "trails_total": 54,
+    "difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 46,
+      "advanced": 19,
+      "expert": 13
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Windham_Mountain",
+    "exact_quote": "Of the trails 12 are designated beginner, 25 intermediate, 10 advanced, and 7 expert, the longest being 2.37 miles (3.81 km) long.",
+    "notes": "Wikipedia. 12/54=22%, 25/54=46%, 10/54=19%, 7/54=13%. Matches input."
+  },
+  {
+    "slug": "winter-park",
+    "trails_total": 167,
+    "difficulty_pct": {
+      "beginner": 8,
+      "intermediate": 18,
+      "advanced": 19,
+      "expert": 3
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Winter_Park_Resort",
+    "exact_quote": "167 total / 8% beginner / 18% intermediate / 19% advanced / 52% most difficult / 3% expert",
+    "notes": "Wikipedia infobox. Five-tier breakdown; 'most difficult' (52%) treated as advanced subcategory — sum exceeds 100% in source. Differs from input (171 vs 167)."
+  },
+  {
+    "slug": "wintergreen-resort",
+    "trails_total": 26,
+    "difficulty_pct": {
+      "beginner": 23,
+      "intermediate": 35,
+      "advanced": 42,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Wintergreen_Resort",
+    "exact_quote": "Trails: 26 total (23% beginner, 35% intermediate, 42% advanced/expert)",
+    "notes": "Wikipedia. Combined advanced/expert at 42%. Matches input total."
+  },
+  {
+    "slug": "winterplace-ski-resort",
+    "trails_total": 28,
+    "difficulty_pct": {
+      "beginner": 43,
+      "intermediate": 43,
+      "advanced": 14,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Winterplace_Ski_Resort",
+    "exact_quote": "28 total / 43% easiest / 43% more difficult / 14% most difficult",
+    "notes": "Wikipedia infobox. Differs from input pct (39/36/25/0); total matches."
+  },
+  {
+    "slug": "wisp-resort",
+    "trails_total": 34,
+    "difficulty_pct": {
+      "beginner": 29,
+      "intermediate": 41,
+      "advanced": 29,
+      "expert": null
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Wisp_Ski_Resort",
+    "exact_quote": "five trails marked 'easy', ten trails marked 'more difficult', and five trails marked 'most difficult' ... one 'more difficult' trail and five 'most difficult' trails ... five 'easy' trails, three 'more difficult' trails, and one 'most difficult' trail",
+    "notes": "Wikipedia. 34 trails total; 10 easy / 14 intermediate / 10 advanced (29%/41%/29%)."
+  },
+  {
+    "slug": "wolf-creek",
+    "trails_total": 77,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 35,
+      "advanced": 25,
+      "expert": 20
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Wolf_Creek_Ski_Area",
+    "exact_quote": "Trails: 77 total (20% beginner, 35% intermediate, 45% advanced/expert)",
+    "notes": "Wikipedia. Infobox splits 45% advanced/expert into 25% advanced + 20% expert."
+  },
+  {
+    "slug": "woods-valley",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No dedicated Wikipedia page found for Woods Valley Ski Area, NY."
+  },
+  {
+    "slug": "woodstock-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No dedicated Wikipedia page for Woodstock Nordic Center, VT. Saskadena Six (related ski resort) page does not cover the Nordic center."
+  }
+]

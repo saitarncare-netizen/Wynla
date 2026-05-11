@@ -1,0 +1,362 @@
+[
+  {
+    "slug": "blacktail",
+    "trails_total": 26,
+    "difficulty_pct": {
+      "beginner": 15,
+      "intermediate": 70,
+      "advanced": 15,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Blacktail_Mountain_Ski_Area",
+    "exact_quote": "The ski area has 26 runs, 15% beginner, 65% intermediate, 20% expert, and also includes a terrain park.",
+    "notes": "Wikipedia infobox states 26 runs with 15% beginner/70% intermediate/15% advanced; USDA Forest Service confirms 15/70/15 split. Used infobox split for difficulty (15/70/15)."
+  },
+  {
+    "slug": "blue-hills-ski-area",
+    "trails_total": 16,
+    "difficulty_pct": {
+      "beginner": 50,
+      "intermediate": 19,
+      "advanced": 31,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/massachusetts/blue-hills-ski-area/ski-resort",
+    "exact_quote": "Runs in Total: 16 ... Beginners Runs: 50%, Intermediate Runs: 19%, Advanced Runs: 31%",
+    "notes": "OnTheSnow overview gives both trail count and difficulty split."
+  },
+  {
+    "slug": "blue-knob",
+    "trails_total": 34,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 35,
+      "advanced": 35,
+      "expert": 10
+    },
+    "source_url": "https://snowbrains.com/blue-knob-all-season-resort-in-pa-is-getting-ready-for-the-start-of-the-2025-26-season-with-exciting-upgrades/",
+    "exact_quote": "The mid-Atlantic resort boasts 34 slopes and trails, which is a nice number for a mountain of its size ... Beginner terrain: 20%, Intermediate: 35%, Advanced: 35%, Expert: 10%",
+    "notes": "SnowBrains 2025-26 season preview gives both count and 4-tier breakdown."
+  },
+  {
+    "slug": "blue-mountain-resort",
+    "trails_total": 40,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Blue_Mountain_Resort",
+    "exact_quote": "40 total / 14 easier / 4 more difficult / 12 most difficult / 3 extremely difficult / 7 terrain park",
+    "notes": "Wikipedia confirms 40 trails. Difficulty given as counts (14/4/12/3) not percentages; keeping null for difficulty_pct to avoid derived figures (input already has 42/12/36/9)."
+  },
+  {
+    "slug": "bluewood",
+    "trails_total": 24,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Bluewood",
+    "exact_quote": "Trails: 24",
+    "notes": "Wikipedia gives 24 trails (not 25 as in input). No verbatim difficulty percentages found in news/blogs/press sources."
+  },
+  {
+    "slug": "bogus-basin",
+    "trails_total": 90,
+    "difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 45,
+      "advanced": 33,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Bogus_Basin",
+    "exact_quote": "90 ... 22% easiest ... 45% more difficult ... 33% most difficult",
+    "notes": "Wikipedia infobox: 90 trails total with 3-tier split. Mapped 'most difficult' to advanced (no expert tier given)."
+  },
+  {
+    "slug": "bolton-valley",
+    "trails_total": 71,
+    "difficulty_pct": {
+      "beginner": 34,
+      "intermediate": 38,
+      "advanced": 22,
+      "expert": 6
+    },
+    "source_url": "https://snowstash.com/usa/vermont/bolton-valley",
+    "exact_quote": "Total Runs 71 ... Beginner 34% Intermediate 38% Advanced 22% Expert 6%",
+    "notes": "SnowStash directory gives 71 trails and full 4-tier split."
+  },
+  {
+    "slug": "boreal-mountain-resort",
+    "trails_total": 41,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 55,
+      "advanced": 15,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Boreal_Mountain_Resort",
+    "exact_quote": "41 total / 30% beginner / 55% intermediate / 15% advanced",
+    "notes": "Wikipedia spec table gives 41 trails and 3-tier split."
+  },
+  {
+    "slug": "boston-mills",
+    "trails_total": 6,
+    "difficulty_pct": {
+      "beginner": 17,
+      "intermediate": 33,
+      "advanced": 50,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/ohio/boston-mills/ski-resort",
+    "exact_quote": "Runs in Total: 6 ... Beginners Runs: 17%, Intermediate Runs: 33%, Advanced Runs: 50%",
+    "notes": "OnTheSnow provides Boston Mills-specific counts (separate from sister resort Brandywine)."
+  },
+  {
+    "slug": "bottineau-winter-park",
+    "trails_total": 9,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Bottineau_Winter_Park",
+    "exact_quote": "9 ... 2 - easiest ... 3 - more difficult ... 4 - most difficult",
+    "notes": "Wikipedia infobox gives 9 trails with counts (2/3/4) not percentages; input already has 22/33/44 which matches the count-derived split."
+  },
+  {
+    "slug": "bousquet-mountain",
+    "trails_total": 24,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Bousquet_Mountain",
+    "exact_quote": "Trails: 24",
+    "notes": "Wikipedia infobox states 24 trails (input has 23). No verbatim difficulty percentages found in news/blog sources with exact quotes."
+  },
+  {
+    "slug": "boyne-mountain",
+    "trails_total": 60,
+    "difficulty_pct": {
+      "beginner": 48,
+      "intermediate": 27,
+      "advanced": 20,
+      "expert": 5
+    },
+    "source_url": "https://snowstash.com/usa/michigan/boyne-mountain/trail-map",
+    "exact_quote": "Boyne Mountain features 60 ski runs covering 415 acres (167.9 hectares) of terrain ... Beginner 48%, Intermediate 27%, Advanced 20%, Expert 5%",
+    "notes": "SnowStash 2025-26 trail map page gives 60 runs (not 65 in input) with full 4-tier split."
+  },
+  {
+    "slug": "brandywine",
+    "trails_total": 9,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 33,
+      "advanced": 33,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/ohio/brandywine/ski-resort",
+    "exact_quote": "9 total runs ... Beginners Runs 33% Intermediate Runs 33% Advanced Runs 33%",
+    "notes": "OnTheSnow gives 9 trails and even 3-tier split. Brandywine is co-managed with Boston Mills."
+  },
+  {
+    "slug": "breckenridge",
+    "trails_total": 187,
+    "difficulty_pct": {
+      "beginner": 11,
+      "intermediate": 31,
+      "advanced": 24,
+      "expert": 34
+    },
+    "source_url": "https://www.visitbreck.com/blog/planning/breckenridge-ski-resort-overview-terrain-trails-best-time-go",
+    "exact_quote": "With 187 named trails and 34 lifts, there's truly something for every skier and rider at Breckenridge ... Beginner (11%) ... Intermediate (31%) ... Advanced (24%) ... Expert (34%)",
+    "notes": "VisitBreck (official town tourism blog) gives 187 trails and full 4-tier split."
+  },
+  {
+    "slug": "bretton-woods",
+    "trails_total": 102,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 29,
+      "advanced": 46,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Bretton_Woods_Mountain_Resort",
+    "exact_quote": "102 ... 25% Beginner ... 29% Intermediate ... 46% Expert",
+    "notes": "Wikipedia infobox gives 102 trails and 3-tier split. 'Expert' label here maps to advanced+expert combined."
+  },
+  {
+    "slug": "brian-head",
+    "trails_total": 71,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 35,
+      "advanced": 20,
+      "expert": 10
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Brian_Head_Ski_Resort",
+    "exact_quote": "71 ... 35% beginner ... 35% intermediate ... 20% advanced ... 10% expert",
+    "notes": "Wikipedia infobox gives 71 trails and full 4-tier split."
+  },
+  {
+    "slug": "bridger-bowl",
+    "trails_total": 75,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 30,
+      "advanced": 50,
+      "expert": 0
+    },
+    "source_url": "https://www.bigskyfishing.com/Montana-Info/skiing-bridger-bowl.php",
+    "exact_quote": "20% Beginner, 30% intermediate, 50% advanced/expert.",
+    "notes": "BigSkyFishing Montana guide gives 3-tier split. Input has 75 trails (matches PeakRankings/Powderhounds). No exact 4-tier breakdown in news/blog quotes."
+  },
+  {
+    "slug": "brighton",
+    "trails_total": 66,
+    "difficulty_pct": null,
+    "source_url": "https://snowstash.com/usa/utah/brighton-mountain-resort",
+    "exact_quote": "Brighton features 66 ski runs covering 1050 acres (424.9 hectares) of terrain.",
+    "notes": "SnowStash confirms 66 trails. Multiple sources give conflicting difficulty splits (24/36/27/13 vs 21/40/39); no single explicit verbatim quote with full 4-tier breakdown matches a reliable news/blog source."
+  },
+  {
+    "slug": "bristol-mountain",
+    "trails_total": 34,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 49,
+      "advanced": 18,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Bristol_Mountain_Ski_Resort",
+    "exact_quote": "Trails: 34; 33% Novice; 49% Intermediate; 18% Advanced",
+    "notes": "Wikipedia statistics section. Input has 39 trails — Wikipedia/SnowStash says 34."
+  },
+  {
+    "slug": "bromley-mountain",
+    "trails_total": 47,
+    "difficulty_pct": {
+      "beginner": 32,
+      "intermediate": 37,
+      "advanced": 31,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Bromley_Mountain",
+    "exact_quote": "It is home to 47 trails, including 6 glades and 3 freestyle terrain parks ... Beginner: 32% ... Intermediate: 37% ... Advanced: 31%",
+    "notes": "Wikipedia gives 47 trails and 3-tier split. Matches input total."
+  },
+  {
+    "slug": "bruce-mound-winter-sports-area",
+    "trails_total": 12,
+    "difficulty_pct": {
+      "beginner": 17,
+      "intermediate": 17,
+      "advanced": 50,
+      "expert": 16
+    },
+    "source_url": "https://www.onthesnow.com/wisconsin/bruce-mound/ski-resort",
+    "exact_quote": "12 ... Beginners Runs: 17%, Intermediate Runs: 17%, Advanced Runs: 50%, Expert Runs: 16%",
+    "notes": "OnTheSnow gives 12 trails (input has 10) and full 4-tier split."
+  },
+  {
+    "slug": "brundage-mountain",
+    "trails_total": 46,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 50,
+      "advanced": 30,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Brundage_Mountain",
+    "exact_quote": "46 ... 20% easiest ... 50% more difficult ... 30% most difficult",
+    "notes": "Wikipedia infobox shows 46 trails (input has 70 — discrepancy; resort's own Mountain Stats page may list more recent number)."
+  },
+  {
+    "slug": "bryce-resort",
+    "trails_total": 12,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 50,
+      "advanced": 17,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Bryce_Resort",
+    "exact_quote": "12 ... 33% easiest ... 50% more difficult ... 17% most difficult",
+    "notes": "Wikipedia infobox gives 12 trails (input has 8) with 3-tier split. Confirmed by OnTheSnow."
+  },
+  {
+    "slug": "buck-hill",
+    "trails_total": 16,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Buck_Hill",
+    "exact_quote": "16 total / 6 easiest / 6 more difficult / 4 most difficult",
+    "notes": "Wikipedia gives 16 trails with counts (6/6/4) not percentages. Input has null for trails and 38/38/25/0 — counts equal ~37.5/37.5/25, close to input."
+  },
+  {
+    "slug": "buena-vista",
+    "trails_total": 16,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 55,
+      "advanced": 25,
+      "expert": 0
+    },
+    "source_url": "https://www.bvskiarea.com/facts.html",
+    "exact_quote": "16-20% EASIEST / 55% MORE DIFFICULT / 25% MOST DIFFICULT",
+    "notes": "Official resort facts page. 16 runs total. Beginner range 16-20% — used 20% upper bound."
+  },
+  {
+    "slug": "buffalo-ski-club",
+    "trails_total": 43,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 46,
+      "advanced": 34,
+      "expert": 0
+    },
+    "source_url": "https://www.buffaloskicenter.com/",
+    "exact_quote": "43 Slopes & 3 Lodges ... 20 percent beginner, 46 percent intermediate, and 34 percent advanced, which breaks down to 13 novice, 16 intermediate, and 12 expert trails",
+    "notes": "Buffalo Ski Center official site brand + iLoveNY/onthesnow secondary source. 43 trails with 3-tier split."
+  },
+  {
+    "slug": "burke-mountain",
+    "trails_total": 55,
+    "difficulty_pct": {
+      "beginner": 11,
+      "intermediate": 47,
+      "advanced": 33,
+      "expert": 9
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Burke_Mountain_(Vermont)",
+    "exact_quote": "Among the 55 trails, 11% are designated \"Green Circle\" (Beginner trails), 47% are \"Blue Square\" (Intermediate), 33% are \"Black Diamond\" (Advanced), and 9% are \"Double Black Diamond\" (Expert).",
+    "notes": "Wikipedia gives 55 trails (input has 53) with explicit full 4-tier split."
+  },
+  {
+    "slug": "buttermilk",
+    "trails_total": 44,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 39,
+      "advanced": 26,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Buttermilk_(ski_area)",
+    "exact_quote": "44 total / 35% beginner / 39% intermediate / 26% advanced / 0% expert",
+    "notes": "Wikipedia spec table gives 44 trails and full 4-tier split (expert=0)."
+  },
+  {
+    "slug": "caberfae-peaks",
+    "trails_total": 27,
+    "difficulty_pct": {
+      "beginner": 26,
+      "intermediate": 37,
+      "advanced": 37,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/michigan/caberfae-peaks-ski-golf-resort/ski-resort",
+    "exact_quote": "27 ... Beginners Runs: 26%, Intermediate Runs: 37%, Advanced Runs: 37%",
+    "notes": "OnTheSnow gives 27 trails (matches input) and 3-tier split."
+  },
+  {
+    "slug": "camden-snow-bowl",
+    "trails_total": 20,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 70,
+      "advanced": 10,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/maine/camden-snow-bowl/ski-resort",
+    "exact_quote": "20 ... Beginners Runs 20% / Intermediate Runs 70% / Advanced Runs 10%",
+    "notes": "OnTheSnow gives 20 runs (input has 15) with 3-tier split."
+  }
+]

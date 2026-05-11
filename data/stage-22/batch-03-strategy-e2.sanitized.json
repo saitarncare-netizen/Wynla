@@ -1,0 +1,377 @@
+[
+  {
+    "slug": "blacktail",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 64,
+      "advanced": 17,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/blacktail-mountain/",
+    "exact_quote": "17 km of slopes; Easy 3 km (19 %); Intermediate 11 km (64 %); Difficult 3 km (17 %)",
+    "notes": "Slug on skiresort.info is 'blacktail-mountain'. Trails total not given. Difficulty derived from km percentages. No explicit expert/freeride statement."
+  },
+  {
+    "slug": "blue-hills-ski-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 50,
+      "intermediate": 33,
+      "advanced": 17,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/blue-hills/",
+    "exact_quote": "For skiing and snowboarding, there are 3 km of slopes available. Total: 3 km; Easy 1.5 km (50%); Intermediate 1 km (33%); Difficult 0.5 km (17%)",
+    "notes": "Slug on skiresort.info is 'blue-hills'. Trails total not given. Difficulty derived from km percentages. No explicit expert statement."
+  },
+  {
+    "slug": "blue-knob",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 31,
+      "intermediate": 50,
+      "advanced": 19,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/blue-knob/",
+    "exact_quote": "Total: 16 km; Easy 5 km (31 %); Intermediate 8 km (50 %); Difficult 3 km (19 %)",
+    "notes": "Trails total not given on skiresort.info. Difficulty derived from km percentages. No explicit expert statement."
+  },
+  {
+    "slug": "blue-mountain-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 56,
+      "intermediate": 33,
+      "advanced": 11,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/blue-mountain/",
+    "exact_quote": "Total: 18 km; Easy 10 km (56 %); Intermediate 6 km (33 %); Difficult 2 km (11 %)",
+    "notes": "Slug on skiresort.info is 'blue-mountain'. Confirmed as Blue Mountain Resort Palmerton PA. Trails total not given. Difficulty derived from km percentages. No explicit expert statement."
+  },
+  {
+    "slug": "bluewood",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 27,
+      "intermediate": 46,
+      "advanced": 27,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/bluewood/",
+    "exact_quote": "11 km of slopes; Easy 3 km (27%); Intermediate 5 km (46%); Difficult 3 km (27%)",
+    "notes": "Trails total not given. Difficulty derived from km percentages. No explicit expert statement."
+  },
+  {
+    "slug": "bogus-basin",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 44,
+      "advanced": 34,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/bogus-basin/",
+    "exact_quote": "Total: 50 km; Easy 11 km (22 %); Intermediate 22 km (44 %); Difficult 17 km (34 %)",
+    "notes": "Trails total not given. Difficulty derived from km percentages. No explicit expert statement."
+  },
+  {
+    "slug": "bolton-valley",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 50,
+      "intermediate": 33,
+      "advanced": 17,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/bolton-valley/",
+    "exact_quote": "30 km of slopes; Easy 15 km (50%); Intermediate 10 km (33%); Difficult 5 km (17%)",
+    "notes": "Trails total not given. Difficulty derived from km percentages. No explicit expert statement."
+  },
+  {
+    "slug": "boreal-mountain-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 55,
+      "advanced": 15,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/boreal/",
+    "exact_quote": "20 km of slopes; Easy 6 km (30 %); Intermediate 11 km (55 %); Difficult 3 km (15 %)",
+    "notes": "Slug on skiresort.info is 'boreal'. Trails total not given. Difficulty derived from km percentages. No explicit expert statement."
+  },
+  {
+    "slug": "boston-mills",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 34,
+      "intermediate": 33,
+      "advanced": 33,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/boston-mills/",
+    "exact_quote": "1.5 km of slopes; Easy 0.5 km (34 %); Intermediate 0.5 km (33 %); Difficult 0.5 km (33 %)",
+    "notes": "Trails total not given. Difficulty derived from km percentages. No explicit expert statement."
+  },
+  {
+    "slug": "bottineau-winter-park",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 41,
+      "intermediate": 41,
+      "advanced": 18,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/bottineau-winter-park/",
+    "exact_quote": "1.2 km of slopes; Easy 0.5 km (41 %); Intermediate 0.5 km (41 %); Difficult 0.2 km (18 %)",
+    "notes": "Trails total not given. Difficulty derived from km percentages. No explicit expert statement."
+  },
+  {
+    "slug": "bousquet-mountain",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://www.skiresort.info/ski-resort/bousquet-mountain/",
+    "exact_quote": null,
+    "notes": "Page redirects to skiresort.info homepage. No dedicated page found under this slug. Resort not listed on skiresort.info."
+  },
+  {
+    "slug": "boyne-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 29,
+      "intermediate": 41,
+      "advanced": 30,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/boyne-mountain/",
+    "exact_quote": "14 km of slopes; Easy 4.1 km (29 %); Intermediate 5.7 km (41 %); Difficult 4.2 km (30 %)",
+    "notes": "Trails total not given. Difficulty derived from km percentages. No explicit expert statement."
+  },
+  {
+    "slug": "brandywine",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 50,
+      "intermediate": 35,
+      "advanced": 15,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/brandywine/",
+    "exact_quote": "Total: 2 km; Easy 1 km (50 %); Intermediate 0.7 km (35 %); Difficult 0.3 km (15 %)",
+    "notes": "Trails total not given. Difficulty derived from km percentages. No explicit expert statement."
+  },
+  {
+    "slug": "breckenridge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 18,
+      "intermediate": 39,
+      "advanced": 43,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/breckenridge/",
+    "exact_quote": "153 km of slopes; Easy 28 km (18 %); Intermediate 60 km (39 %); Difficult 65 km (43 %); The ski area starts with gentle forest glade runs and becomes steeper as you head up to the bowls, making it interesting even for experts.",
+    "notes": "Trails total not given on skiresort.info. Difficulty derived from km percentages. Designated 'Top for Experts/Freeriders' but no separate expert pct given."
+  },
+  {
+    "slug": "bretton-woods",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 44,
+      "intermediate": 28,
+      "advanced": 28,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/bretton-woods/",
+    "exact_quote": "56 km of slopes; Easy 25 km (44 %); Intermediate 16 km (28 %); Difficult 15 km (28 %)",
+    "notes": "Trails total not given. Difficulty derived from km percentages. No explicit expert statement."
+  },
+  {
+    "slug": "brian-head",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 27,
+      "intermediate": 42,
+      "advanced": 31,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/brian-head/",
+    "exact_quote": "Total: 45 km; Easy 12 km (27 %); Intermediate 19 km (42 %); Difficult 14 km (31 %)",
+    "notes": "Trails total not given. Difficulty derived from km percentages. No explicit expert statement."
+  },
+  {
+    "slug": "bridger-bowl",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://www.skiresort.info/ski-resort/bridger-bowl/",
+    "exact_quote": null,
+    "notes": "Page redirects to skiresort.info homepage. No dedicated page found under this slug. Resort not listed on skiresort.info under standard slug."
+  },
+  {
+    "slug": "brighton",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 40,
+      "advanced": 39,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/brighton/",
+    "exact_quote": "66 km of slopes; Easy 14 km (21%); Intermediate 26.5 km (40%); Difficult 25.5 km (39%); exciting backcountry terrain for freeriding",
+    "notes": "Trails total not given. Difficulty derived from km percentages. Listed 'Top for Experts/Freeriders' but no expert pct given."
+  },
+  {
+    "slug": "bristol-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 50,
+      "advanced": 20,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/bristol-mountain/",
+    "exact_quote": "20 km of slopes; Easy 6 km (30 %); Intermediate 10 km (50 %); Difficult 4 km (20 %)",
+    "notes": "Trails total not given. Difficulty derived from km percentages. No explicit expert statement."
+  },
+  {
+    "slug": "bromley-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 40,
+      "advanced": 27,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/bromley-mountain/",
+    "exact_quote": "Total: 45 km; Easy 15 km (33%); Intermediate 18 km (40%); Difficult 12 km (27%)",
+    "notes": "Trails total not given. Difficulty derived from km percentages. No explicit expert statement."
+  },
+  {
+    "slug": "bruce-mound-winter-sports-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 11,
+      "intermediate": 23,
+      "advanced": 66,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/bruce-mound/",
+    "exact_quote": "Total: 4.2 km; Easy 0.4 km (11 %); Intermediate 1 km (23 %); Difficult 2.8 km (66 %)",
+    "notes": "Slug on skiresort.info is 'bruce-mound'. Trails total not given. Difficulty derived from km percentages. No explicit expert statement."
+  },
+  {
+    "slug": "brundage-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 50,
+      "advanced": 30,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/brundage-mountain/",
+    "exact_quote": "Total: 30 km; Easy 6 km (20 %); Intermediate 15 km (50 %); Difficult 9 km (30 %)",
+    "notes": "Trails total not given. Difficulty derived from km percentages. No explicit expert statement."
+  },
+  {
+    "slug": "bryce-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 40,
+      "intermediate": 56,
+      "advanced": 4,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/bryce-resort/",
+    "exact_quote": "Total: 5 km; Easy 2 km (40 %); Intermediate 2.8 km (56 %); Difficult 0.2 km (4 %)",
+    "notes": "Trails total not given. Difficulty derived from km percentages. No explicit expert statement."
+  },
+  {
+    "slug": "buck-hill",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 55,
+      "intermediate": 36,
+      "advanced": 9,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/buck-hill/",
+    "exact_quote": "Total: 2.2 km; Easy 1.2 km (55 %); Intermediate 0.8 km (36 %); Difficult 0.2 km (9 %)",
+    "notes": "Trails total not given. Difficulty derived from km percentages. No explicit expert statement."
+  },
+  {
+    "slug": "buena-vista",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 54,
+      "advanced": 27,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/buena-vista/",
+    "exact_quote": "2.6 km of slopes; Easy 0.5 km (19%); Intermediate 1.4 km (54%); Difficult 0.7 km (27%)",
+    "notes": "Trails total not given. Difficulty derived from km percentages. No explicit expert statement."
+  },
+  {
+    "slug": "buffalo-ski-club",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 46,
+      "intermediate": 36,
+      "advanced": 18,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/buffalo/",
+    "exact_quote": "Total: 11 km; Easy 5 km (46 %); Intermediate 4 km (36 %); Difficult 2 km (18 %)",
+    "notes": "Slug on skiresort.info is 'buffalo' (confirmed as Buffalo Ski Club NY). Trails total not given. Difficulty derived from km percentages. No explicit expert statement."
+  },
+  {
+    "slug": "burke-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 40,
+      "advanced": 40,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/burke-mountain/",
+    "exact_quote": "Total: 10 km; Easy 2 km (20 %); Intermediate 4 km (40 %); Difficult 4 km (40 %)",
+    "notes": "Trails total not given. Difficulty derived from km percentages. No explicit expert statement."
+  },
+  {
+    "slug": "buttermilk",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://www.skiresort.info/ski-resort/buttermilk/",
+    "exact_quote": null,
+    "notes": "Page redirects to skiresort.info homepage. No dedicated Buttermilk page found under common slug variants (buttermilk, buttermilk-aspen, aspen-buttermilk). Likely covered only under combined Aspen Snowmass listing."
+  },
+  {
+    "slug": "caberfae-peaks",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 36,
+      "intermediate": 46,
+      "advanced": 18,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/caberfae-peaks/",
+    "exact_quote": "Total: 11 km; Easy 4 km (36 %); Intermediate 5 km (46 %); Difficult 2 km (18 %)",
+    "notes": "Trails total not given. Difficulty derived from km percentages. No explicit expert statement."
+  },
+  {
+    "slug": "camden-snow-bowl",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 60,
+      "advanced": 20,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/camden-snow-bowl/",
+    "exact_quote": "Total: 6 km; Easy 1.2 km (20%); Intermediate 3.6 km (60%); Difficult 1.2 km (20%)",
+    "notes": "Trails total not given. Difficulty derived from km percentages. No explicit expert statement."
+  }
+]

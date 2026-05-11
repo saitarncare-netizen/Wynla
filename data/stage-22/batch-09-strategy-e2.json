@@ -1,0 +1,352 @@
+[
+  {
+    "slug": "mount-ashwabay",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://www.skiresort.info/ski-resort/mt-ashwabay/",
+    "exact_quote": null,
+    "notes": "not_found on skiresort.info; URL redirects to homepage"
+  },
+  {
+    "slug": "mount-bohemia",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://www.skiresort.info/ski-resort/mount-bohemia/",
+    "exact_quote": null,
+    "notes": "not_found on skiresort.info; URL redirects to homepage"
+  },
+  {
+    "slug": "mount-holly",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 14,
+      "intermediate": 36,
+      "advanced": 50,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mt-holly/",
+    "exact_quote": "Easy 1 km (14 %), Intermediate 2.5 km (36 %), Difficult 3.5 km (50 %)",
+    "notes": "skiresort.info has 3 difficulty levels; expert null (not present)"
+  },
+  {
+    "slug": "mount-itasca",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://www.skiresort.info/ski-resort/mount-itasca/",
+    "exact_quote": null,
+    "notes": "not_found on skiresort.info; URL redirects to homepage"
+  },
+  {
+    "slug": "mount-jefferson-ski-area",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://www.skiresort.info/ski-resort/mount-jefferson/",
+    "exact_quote": null,
+    "notes": "not_found on skiresort.info; tried /mount-jefferson/ and /mount-jefferson-ski-area/ both redirect to homepage"
+  },
+  {
+    "slug": "mount-kato",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://www.skiresort.info/ski-resort/mount-kato/",
+    "exact_quote": null,
+    "notes": "not_found on skiresort.info; URL redirects to homepage"
+  },
+  {
+    "slug": "mount-peter",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 26,
+      "intermediate": 53,
+      "advanced": 21,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mount-peter/",
+    "exact_quote": "Easy 1 km (26 %) Intermediate 2 km (53 %) Difficult 0.8 km (21 %)",
+    "notes": "skiresort.info has 3 difficulty levels; expert null (not present)"
+  },
+  {
+    "slug": "mount-pisgah",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://www.skiresort.info/ski-resort/mount-pisgah/",
+    "exact_quote": null,
+    "notes": "not_found on skiresort.info; URL redirects to homepage"
+  },
+  {
+    "slug": "mount-snow",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 10,
+      "intermediate": 77,
+      "advanced": 13,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mount-snow/",
+    "exact_quote": "Easy 6 km (10 %) Intermediate 46 km (77 %) Difficult 8 km (13 %)",
+    "notes": "skiresort.info has 3 difficulty levels; expert null (not present)"
+  },
+  {
+    "slug": "mount-southington",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://www.skiresort.info/ski-resort/mount-southington/",
+    "exact_quote": null,
+    "notes": "not_found on skiresort.info; URL redirects to homepage"
+  },
+  {
+    "slug": "mount-sunapee",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 27,
+      "intermediate": 53,
+      "advanced": 20,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mt-sunapee/",
+    "exact_quote": "Easy 8 km (27 %) Intermediate 16 km (53 %) Difficult 6 km (20 %)",
+    "notes": "found at /mt-sunapee/ slug; skiresort.info has 3 difficulty levels; expert null"
+  },
+  {
+    "slug": "mountain-creek",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 17,
+      "intermediate": 58,
+      "advanced": 25,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mountain-creek-vernon/",
+    "exact_quote": "Easy: 4 km (17%), Intermediate: 14 km (58%), Difficult: 6 km (25%)",
+    "notes": "found at /mountain-creek-vernon/ slug; skiresort.info has 3 difficulty levels; expert null"
+  },
+  {
+    "slug": "mountain-high",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 18,
+      "intermediate": 46,
+      "advanced": 36,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mountain-high-resort/",
+    "exact_quote": "Easy 2 km (18 %) Intermediate 5 km (46 %) Difficult 4 km (36 %)",
+    "notes": "found at /mountain-high-resort/ (listed as Mountain High East); skiresort.info has 3 difficulty levels; expert null"
+  },
+  {
+    "slug": "mt-abram",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 24,
+      "intermediate": 48,
+      "advanced": 28,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mt-abram/",
+    "exact_quote": "Easy 3.5 km (24 %) Intermediate 7 km (48 %) Difficult 4 km (28 %)",
+    "notes": "skiresort.info has 3 difficulty levels; expert null (not present)"
+  },
+  {
+    "slug": "mt-bachelor",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 15,
+      "intermediate": 25,
+      "advanced": 60,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mt-bachelor/",
+    "exact_quote": "Easy 14.8 km (15 %) Intermediate 24.7 km (25 %) Difficult 59.4 km (60 %)",
+    "notes": "skiresort.info has 3 difficulty levels; expert null (not present)"
+  },
+  {
+    "slug": "mt-baker-ski-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 48,
+      "advanced": 32,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mt-baker/",
+    "exact_quote": "Easy 5 km (20 %) Intermediate 12 km (48 %) Difficult 8 km (32 %)",
+    "notes": "found at /mt-baker/ slug; skiresort.info has 3 difficulty levels; expert null"
+  },
+  {
+    "slug": "mt-baldy",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 15,
+      "intermediate": 30,
+      "advanced": 55,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mt-baldy/",
+    "exact_quote": "Easy 3 km (15 %) Intermediate 6 km (30 %) Difficult 11 km (55 %)",
+    "notes": "skiresort.info has 3 difficulty levels; expert null (not present)"
+  },
+  {
+    "slug": "mt-brighton",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 16,
+      "intermediate": 57,
+      "advanced": 27,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mt-brighton/",
+    "exact_quote": "Easy 1 km (16 %) Intermediate 3.5 km (57 %) Difficult 1.7 km (27 %)",
+    "notes": "skiresort.info has 3 difficulty levels; expert null (not present)"
+  },
+  {
+    "slug": "mt-crescent",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 40,
+      "intermediate": 40,
+      "advanced": 20,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mt-crescent/",
+    "exact_quote": "Easy 0.8 km (40 %) Intermediate 0.8 km (40 %) Difficult 0.4 km (20 %)",
+    "notes": "page lists alt name 'Crescent Hill'; same Honey Creek IA resort; expert null"
+  },
+  {
+    "slug": "mt-eyak",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 40,
+      "advanced": 40,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mt-eyak/",
+    "exact_quote": "Easy 1 km (20 %) Intermediate 2 km (40 %) Difficult 2 km (40 %)",
+    "notes": "skiresort.info has 3 difficulty levels; expert null (not present)"
+  },
+  {
+    "slug": "mt-holiday",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 45,
+      "advanced": 33,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mt-holiday/",
+    "exact_quote": "Easy 1 km (22 %) Intermediate 2 km (45 %) Difficult 1.5 km (33 %)",
+    "notes": "skiresort.info has 3 difficulty levels; expert null (not present)"
+  },
+  {
+    "slug": "mt-hood-meadows",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 15,
+      "intermediate": 50,
+      "advanced": 35,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mt-hood-meadows/",
+    "exact_quote": "Easy 13.5 km (15 %) Intermediate 45 km (50 %) Difficult 31.5 km (35 %)",
+    "notes": "skiresort.info has 3 difficulty levels; expert null (not present)"
+  },
+  {
+    "slug": "mt-hood-skibowl",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 23,
+      "intermediate": 23,
+      "advanced": 54,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mt-hood-skibowl/",
+    "exact_quote": "Easy 15 km (23 %) Intermediate 15 km (23 %) Difficult 35 km (54 %)",
+    "notes": "skiresort.info has 3 difficulty levels; expert null (not present)"
+  },
+  {
+    "slug": "mt-la-crosse",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 43,
+      "advanced": 36,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mt-la-crosse/",
+    "exact_quote": "Easy 1.5 km (21 %) Intermediate 3 km (43 %) Difficult 2.5 km (36 %)",
+    "notes": "skiresort.info has 3 difficulty levels; expert null (not present)"
+  },
+  {
+    "slug": "mt-lemmon-ski-valley",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 29,
+      "intermediate": 47,
+      "advanced": 24,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mt-lemmon-ski-valley/",
+    "exact_quote": "Easy 2.5 km (29 %) Intermediate 4 km (47 %) Difficult 2 km (24 %)",
+    "notes": "skiresort.info has 3 difficulty levels; expert null (not present)"
+  },
+  {
+    "slug": "mt-rose-ski-tahoe",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 30,
+      "advanced": 50,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mt-rose/",
+    "exact_quote": "Easy 12 km (20 %) Intermediate 18 km (30 %) Difficult 30 km (50 %)",
+    "notes": "found at /mt-rose/ slug; skiresort.info has 3 difficulty levels; expert null"
+  },
+  {
+    "slug": "mt-shasta",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://www.skiresort.info/ski-resort/mount-shasta/",
+    "exact_quote": null,
+    "notes": "not_found at /mount-shasta/ or /mt-shasta/; likely duplicate of mt-shasta-ski-park (same website skipark.com)"
+  },
+  {
+    "slug": "mt-shasta-ski-park",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 35,
+      "advanced": 43,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mt-shasta-ski-park/",
+    "exact_quote": "Easy 5 km (22 %) Intermediate 8 km (35 %) Difficult 10 km (43 %)",
+    "notes": "skiresort.info has 3 difficulty levels; expert null (not present)"
+  },
+  {
+    "slug": "mt-spokane",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 62,
+      "advanced": 13,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mt-spokane/",
+    "exact_quote": "Easy 6.5 km (25 %) Intermediate 16 km (62 %) Difficult 3.5 km (13 %)",
+    "notes": "skiresort.info has 3 difficulty levels; expert null (not present)"
+  },
+  {
+    "slug": "mt-waterman",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 20,
+      "advanced": 60,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mt-waterman/",
+    "exact_quote": "Easy 2 km (20 %) Intermediate 2 km (20 %) Difficult 6 km (60 %)",
+    "notes": "skiresort.info has 3 difficulty levels; expert null (not present)"
+  }
+]

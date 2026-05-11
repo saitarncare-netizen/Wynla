@@ -1,0 +1,454 @@
+[
+  {
+    "slug": "snowmass",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.aspensnowmass.com",
+    "website_alive": true,
+    "source_url": "https://www.aspensnowmass.com/our-mountains/snowmass",
+    "exact_quote": null,
+    "notes": "Official Snowmass page describes terrain qualitatively (\"burly steeps, inviting glades, and endless bumps, jumps, and groomers\") but does not publish total trail count or difficulty percentages. /mountain-stats and /plan-your-trip/trail-and-lift-information returned 404."
+  },
+  {
+    "slug": "snowriver",
+    "trails_total": 53,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.snowriver.com",
+    "website_alive": true,
+    "source_url": "https://www.snowriver.com",
+    "exact_quote": "Primary 0 /53",
+    "notes": "Site shows 53 primary trails (matches input), plus 19 sidecountry and 2 terrain parks = 74 total. No difficulty breakdown published on site."
+  },
+  {
+    "slug": "snowshoe-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.snowshoemtn.com",
+    "website_alive": true,
+    "source_url": "https://www.snowshoemtn.com",
+    "exact_quote": null,
+    "notes": "Homepage loads but /the-mountain/trails-and-lifts, /the-mountain/mountain-information, and /explore-the-mountain/mountain-stats all returned 404. Trail count and difficulty breakdown not extractable from publicly fetched pages."
+  },
+  {
+    "slug": "snowstar",
+    "trails_total": 15,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://skisnowstar.com/",
+    "website_alive": true,
+    "source_url": "https://skisnowstar.com/",
+    "exact_quote": "15 skiing and snowboarding slopes",
+    "notes": "Homepage confirms 15 slopes (matches input). Difficulty breakdown not published on homepage."
+  },
+  {
+    "slug": "snowy-range",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.snowyrangeski.com",
+    "website_alive": false,
+    "source_url": "https://www.snowyrangeski.com",
+    "exact_quote": null,
+    "notes": "Site returned HTTP 403 Forbidden on both root and /the-mountain/trail-and-lift-information/ — appears to block automated WebFetch."
+  },
+  {
+    "slug": "soda-springs",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.skisodasprings.com",
+    "website_alive": true,
+    "source_url": "https://www.skisodasprings.com",
+    "exact_quote": null,
+    "notes": "Site live; full trail report page does not display trail count/difficulty stats in fetched content."
+  },
+  {
+    "slug": "soldier-hollow",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.soldierhollow.org",
+    "website_alive": true,
+    "source_url": "https://www.soldierhollow.org",
+    "exact_quote": null,
+    "notes": "Nordic/cross-country center — homepage and /winter/cross-country-skiing/ pages returned empty fetch content. No trail count or difficulty breakdown extractable."
+  },
+  {
+    "slug": "soldier-mountain",
+    "trails_total": 35,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://soldiermountain.com",
+    "website_alive": true,
+    "source_url": "https://soldiermountain.com",
+    "exact_quote": null,
+    "notes": "Site live but homepage and /trail-map/ (404) did not surface trail stats. Input value of 35 trails retained but not confirmed by exact quote from official site."
+  },
+  {
+    "slug": "solitude",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.solitudemountain.com",
+    "website_alive": true,
+    "source_url": "https://www.solitudemountain.com",
+    "exact_quote": null,
+    "notes": "Homepage loads (mentions lodging/summer ops); /explore-the-mountain/the-mountain/mountain-stats and /the-mountain/about-the-mountain/mountain-stats both 404. Trail/difficulty data not extractable."
+  },
+  {
+    "slug": "song-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.songmountain.com",
+    "website_alive": true,
+    "source_url": "http://www.skicny.com/",
+    "exact_quote": null,
+    "notes": "songmountain.com 301-redirects to skicny.com. Conditions page shows 14 trails open (seasonal snapshot near closing) but does not publish total trail count or difficulty breakdown."
+  },
+  {
+    "slug": "spirit-mountain",
+    "trails_total": 22,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.spiritmt.com",
+    "website_alive": true,
+    "source_url": "https://www.spiritmt.com",
+    "exact_quote": null,
+    "notes": "Homepage lists sample trails by difficulty (moonman=Double Diamond, Knowlton Rocks=Black Diamond, smorgasbord=Blue, happy camper=Green) but no aggregate count or %. /winter/trails-lifts/ returned 404. Input total 22 retained, unconfirmed by quote."
+  },
+  {
+    "slug": "spout-springs",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://spoutspringsskiarea.com",
+    "website_alive": false,
+    "source_url": "https://spoutspringsskiarea.com",
+    "exact_quote": null,
+    "notes": "Domain resolved to Turkish online casino content — not a ski resort website. Original ski-area site appears inactive or hijacked."
+  },
+  {
+    "slug": "spring-mountain",
+    "trails_total": 7,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.springmountainadventures.com",
+    "website_alive": true,
+    "source_url": "https://www.springmountainadventures.com/snowsports/trail-map/",
+    "exact_quote": "7 Main Trails",
+    "notes": "Trail map page confirms 7 Main Trails (Alpine, Fawn, Buck, Hawk, Drifter, Glacier, Plummet). No difficulty percentages published."
+  },
+  {
+    "slug": "spruce-mountain-ski-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.sprucemountain.org",
+    "website_alive": true,
+    "source_url": "https://sprucemountainmaine.wordpress.com/",
+    "exact_quote": null,
+    "notes": "sprucemountain.org 301-redirects to sprucemountainmaine.wordpress.com. WordPress page mentions alpine trails and rope tows but does not specify trail count or difficulty breakdown."
+  },
+  {
+    "slug": "steamboat",
+    "trails_total": 182,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.steamboat.com",
+    "website_alive": true,
+    "source_url": "https://www.steamboat.com/the-mountain/mountain-stats",
+    "exact_quote": "182",
+    "notes": "Mountain stats page confirms 182 trails (matches input) on 3,741 acres. Only qualitative difficulty note: \"3,741 acres of permitted terrain offer a diversity of trails for all levels of ability.\" No % breakdown published."
+  },
+  {
+    "slug": "steamboat-touring-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://nordicski.net/steamboat-ski-touring-center/",
+    "website_alive": true,
+    "source_url": "https://nordicski.net/steamboat-ski-touring-center/",
+    "exact_quote": "over 15 kilometers of meticulously groomed trails",
+    "notes": "Nordic center page states 15+ km of groomed trails but does not enumerate individual trails or difficulty %. Input value of 7 trails not confirmed by quote."
+  },
+  {
+    "slug": "stevens-pass",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.stevenspass.com",
+    "website_alive": false,
+    "source_url": "https://www.stevenspass.com",
+    "exact_quote": null,
+    "notes": "All fetched stevenspass.com URLs returned a reservation-system error page (\"The system cannot process your request\"). Marketing site not reachable via WebFetch — likely behind a reservation/SSO redirect."
+  },
+  {
+    "slug": "stowe-mountain-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.stowe.com",
+    "website_alive": false,
+    "source_url": "https://www.stowe.com",
+    "exact_quote": null,
+    "notes": "All fetched stowe.com URLs returned a reservation-system error page. Vail-operated site appears to block automated WebFetch."
+  },
+  {
+    "slug": "stratton-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.stratton.com",
+    "website_alive": true,
+    "source_url": "https://www.stratton.com",
+    "exact_quote": null,
+    "notes": "Homepage live but /the-mountain/about-the-mountain/mountain-stats and /the-mountain/mountain-stats both 404. Mountain Statistics link referenced (/the-mountain/mountain-statistics) but not fetched within budget. Input total 99 not confirmed."
+  },
+  {
+    "slug": "sugar-bowl-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.sugarbowl.com",
+    "website_alive": true,
+    "source_url": "https://www.sugarbowl.com",
+    "exact_quote": null,
+    "notes": "/mountain-stats and /the-mountain/mountain-stats returned 404. Root redirects to /home but trail breakdown not surfaced. Input total 105 not confirmed by official quote."
+  },
+  {
+    "slug": "sugar-mountain-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.skisugar.com",
+    "website_alive": true,
+    "source_url": "https://www.skisugar.com",
+    "exact_quote": null,
+    "notes": "Homepage live; /the-mountain/ and /about-us/mountain-stats/ returned 404. Trail count/difficulty stats not surfaced."
+  },
+  {
+    "slug": "sugarbush",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.sugarbush.com",
+    "website_alive": true,
+    "source_url": "https://www.sugarbush.com/mountain",
+    "exact_quote": "over 2,000 acres of skiable terrain",
+    "notes": "Mountain page confirms 2,000+ acres and 16 lifts but does not publish specific trail count or difficulty % on fetched pages. /mountain-stats and /the-mountain/maps 404."
+  },
+  {
+    "slug": "sugarloaf",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.sugarloaf.com",
+    "website_alive": true,
+    "source_url": "https://www.sugarloaf.com",
+    "exact_quote": null,
+    "notes": "Homepage live (summer-mode content showing bike park / golf); /the-mountain and /the-mountain/about-the-mountain/mountain-stats 404. Input totals (176 trails; 23/31/25/21 %) not confirmed by an exact quote from a winter-stats page within fetch budget."
+  },
+  {
+    "slug": "summit-ski-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://summitskiarea.com",
+    "website_alive": true,
+    "source_url": "https://www.timberlinelodge.com/mountain/summit-pass",
+    "exact_quote": "Summit Pass offers beginner-friendly terrain",
+    "notes": "summitskiarea.com 301-redirects to Timberline's Summit Pass page. Page describes terrain qualitatively but no trail count or % breakdown published."
+  },
+  {
+    "slug": "sun-valley",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.sunvalley.com",
+    "website_alive": true,
+    "source_url": "https://www.sunvalley.com",
+    "exact_quote": null,
+    "notes": "Winter trails-lifts page returned summer-mode data (12 Bald Mtn + 22 Dollar Mtn trails listed for live status only, not a season-totals breakdown). Input 121 not confirmed by quote within fetch budget."
+  },
+  {
+    "slug": "sunburst",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.skisunburst.com",
+    "website_alive": true,
+    "source_url": "http://skisunburst.com/",
+    "exact_quote": null,
+    "notes": "Live. Homepage mentions \"diverse terrain\" but no specific trail count or difficulty %. NOTE: This entry is a probable duplicate of slug 'sunburst-area' below (same website)."
+  },
+  {
+    "slug": "sunburst-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://skisunburst.com/",
+    "website_alive": true,
+    "source_url": "http://skisunburst.com/",
+    "exact_quote": null,
+    "notes": "[SANITIZED — fabrication marker in notes] Same site as 'sunburst' slug (likely dedupe candidate). Homepage does not surface trail count; input value of 11 retained but unconfirmed.",
+    "_sanitized": true,
+    "_original_notes": "Same site as 'sunburst' slug (likely dedupe candidate). Homepage does not surface trail count; input value of 11 retained but unconfirmed."
+  },
+  {
+    "slug": "sundance",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.sundanceresort.com",
+    "website_alive": true,
+    "source_url": "https://www.sundanceresort.com/winter/",
+    "exact_quote": null,
+    "notes": "Winter page describes terrain park features (Moonrise, Stampede, Maverick) but does not list aggregate trail count or difficulty % on fetched pages. /winter/snow-report-trails-lifts/ returned 404."
+  },
+  {
+    "slug": "sunday-river",
+    "trails_total": 139,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.sundayriver.com",
+    "website_alive": true,
+    "source_url": "https://www.sundayriver.com/the-mountain",
+    "exact_quote": "139 Trails & Glades",
+    "notes": "The Mountain page confirms 139 trails & glades (input value 139 matches). Difficulty % breakdown not published on fetched pages."
+  },
+  {
+    "slug": "sundown-mountain",
+    "trails_total": 21,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "website_url": "https://www.sundownmtn.com",
+    "website_alive": true,
+    "source_url": "https://www.sundownmtn.com/the-mountain/snow-report-trail-map/",
+    "exact_quote": "21 Runs",
+    "notes": "Snow report page confirms 21 runs (input said 21 — note: input had 21 but homepage said \"21 well-groomed trails\"; trail-map page \"21 Runs\"). Trail report table classifies individual runs by green/blue/black but no summary % published."
+  }
+]

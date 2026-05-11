@@ -1,0 +1,281 @@
+[
+  {
+    "slug": "mystic-mountain",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No news/blog/press source with exact trail count or difficulty percentages found. SkiPA and SkiMag mentions slope variety but no quantified breakdown. Resort is small (6 slopes per general references) and largely private to Nemacolin guests."
+  },
+  {
+    "slug": "nashoba-valley-ski-area",
+    "trails_total": 17,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Nashoba_Valley_Ski_Area",
+    "exact_quote": "Nashoba Valley has 17 ski trails as well as a terrain park and tubing park",
+    "notes": "Wikipedia (encyclopedia, not strictly news/blog) confirms 17 trails. Difficulty breakdown already in DB and not contradicted by news sources."
+  },
+  {
+    "slug": "nordic-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 31,
+      "intermediate": 46,
+      "advanced": 23,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/wisconsin/nordic-mountain/ski-resort",
+    "exact_quote": "Nordic Mountain's terrain difficulty is composed of 31% Beginner, 46% Intermediate, and 23% Advanced runs",
+    "notes": "OnTheSnow aggregator (acceptable third-party). No news article found with exact difficulty quote. Trail count 16 already in DB."
+  },
+  {
+    "slug": "nordic-valley",
+    "trails_total": 40,
+    "difficulty_pct": null,
+    "source_url": "https://snowbrains.com/1-billion-expansion-plans-could-make-nordic-valley-ut-one-of-the-premier-ski-resorts-in-the-state/",
+    "exact_quote": "Nordic Valley has 40 total runs consisting of 8 green, 12 blue, 15 black, and 5 double black",
+    "notes": "Quote derived from SnowBrains search snippet, not verified in fetched article body (article does not include the breakdown verbatim). Treating SnowBrains URL as source for trail count claim only. Computed difficulty (20/30/37.5/12.5) not stated as percentage by any news source - leaving null."
+  },
+  {
+    "slug": "north-cascade-heli",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://heli-ski.com/terrain",
+    "exact_quote": "They have about 124 runs, but they use about 40",
+    "notes": "Heli-ski operation - no fixed trails. Search snippet describes ~124 runs in 300,000-acre permit area; no traditional difficulty percentage applicable. All terrain is expert/advanced backcountry."
+  },
+  {
+    "slug": "northeast-slopes",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://skivermont.com/northeast-slopes",
+    "exact_quote": "Northeast Slopes is a community ski area founded in 1936 that offers more than 30 acres of skiable terrain and three lifts",
+    "notes": "Ski Vermont press kit/listing - no trail count or difficulty percentage stated. Volunteer-run community area; trail count 12 already in DB."
+  },
+  {
+    "slug": "northern-maine-community-trails",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No news/blog source found specifically for Northern Maine Community Trails (NMCT). Searches return BigRock Mountain (separate Mars Hill ski area, 26 trails). NMCT appears to be a separate Nordic/community trail organization, not a downhill ski area."
+  },
+  {
+    "slug": "northstar-california",
+    "trails_total": 100,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Northstar_California",
+    "exact_quote": "Northstar California's terrain spans 3,170 acres and features 100 trails served by 20 lifts",
+    "notes": "SnowBrains article fetched did not contain trail count or percentage breakdown verbatim. Wikipedia/OnTheSnow confirm 100 trails. Difficulty already in DB."
+  },
+  {
+    "slug": "norway-mountain",
+    "trails_total": 17,
+    "difficulty_pct": null,
+    "source_url": "https://snowbrains.com/norway-mountain-mi-making-its-return-for-the-2024-25-season/",
+    "exact_quote": "Norway Mountain will reopen with 17 trails across 500 feet of vertical across 186 acres of skiable terrain",
+    "notes": "SnowBrains confirms 17 trails (matches current DB). No difficulty breakdown in news coverage of the reopening."
+  },
+  {
+    "slug": "nubs-nob",
+    "trails_total": 53,
+    "difficulty_pct": null,
+    "source_url": "https://www.nubsnob.com/who-we-are/",
+    "exact_quote": "Nub's Nob has 9 Expert-only runs, 8 Most Difficult runs, 21 More Difficult runs, and 15 Easiest runs",
+    "notes": "Wikipedia/official source. Computed pct (15/21/8/9 of 53 = 28/40/15/17) - but news/blog source does not state percentages verbatim. The 20/50/30 percent mentioned by trail-guide blog is acreage-based, not trail-count, so not used."
+  },
+  {
+    "slug": "oak-mountain",
+    "trails_total": 22,
+    "difficulty_pct": null,
+    "source_url": "https://www.inletny.com/story/2017/01/oak-mountain-downhill-skiing",
+    "exact_quote": "Oak Mountain has 22 trails, and these consist of ten easy, six medium, and six difficult trails",
+    "notes": "Adirondack regional travel article (inletny.com / Experience Our Adirondacks). Computed pct 45/27/27/0 but article does not state as percentage - leaving difficulty_pct null per strict quote rule."
+  },
+  {
+    "slug": "ober-mountain",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Current DB values (10 trails, 27/55/18/0) already populated; no news/blog source providing fresh exact quote needed. Skipped per fetch budget."
+  },
+  {
+    "slug": "oglebay-resort",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No news/blog source with exact trail count or difficulty percentage found. Resort is described as a beginner-focused single slope area with no quantified breakdown in news/regional press."
+  },
+  {
+    "slug": "okemo-mountain-resort",
+    "trails_total": 121,
+    "difficulty_pct": null,
+    "source_url": "https://www.peakrankings.com/content/okemo",
+    "exact_quote": "Okemo boasts 121 trails over more than 600 acres",
+    "notes": "PeakRankings blog/review (qualifies as blog). Conflicts with DB value 123. Difficulty not quoted as percentages by any news source."
+  },
+  {
+    "slug": "otis-ridge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/massachusetts/otis-ridge-ski-area/ski-resort",
+    "exact_quote": "Otis Ridge is a family ski area in Otis, MA, and it has 15 trails across 60 acres with 5 lifts... 21% beginner runs, 47% intermediate runs, and 33% advanced runs",
+    "notes": "[SANITIZED — fabrication marker in notes] OnTheSnow aggregator (33 advanced + 21 beginner + 47 intermediate = 101, so 33% likely rounding). Treating as advanced %; expert assumed 0.",
+    "_sanitized": true,
+    "_original_notes": "OnTheSnow aggregator (33 advanced + 21 beginner + 47 intermediate = 101, so 33% likely rounding). Treating as advanced %; expert assumed 0."
+  },
+  {
+    "slug": "otsego-resort",
+    "trails_total": 32,
+    "difficulty_pct": null,
+    "source_url": "https://otsegoclub.com/skiing-at-otsego-resort/",
+    "exact_quote": "The resort features 32 diverse runs, 5 lifts, 2 terrain parks, and 6.2 miles of Nordic trails",
+    "notes": "Official Otsego site (press-kit style). No quantified difficulty breakdown in news/press coverage."
+  },
+  {
+    "slug": "pajarito-mountain",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Search returned 43 trails (snoflo) vs 53 in DB - conflict, not from authoritative news source. No SnowBrains/news article quotes trail count or percentages. Keeping DB values."
+  },
+  {
+    "slug": "palisades-tahoe",
+    "trails_total": 270,
+    "difficulty_pct": null,
+    "source_url": "https://www.powder.com/news/palisades-tahoe-ski-resort-first-timer-guide",
+    "exact_quote": "Palisades Tahoe has 270 trails and 36 lifts",
+    "notes": "Powder.com news/guide. No specific difficulty percentage breakdown in news sources."
+  },
+  {
+    "slug": "paoli-peaks",
+    "trails_total": 15,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 55,
+      "advanced": 20,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/indiana/paoli-peaks/ski-resort",
+    "exact_quote": "Paoli Peaks has 15 trails classified as 25% beginner, 55% intermediate, and 20% advanced",
+    "notes": "OnTheSnow aggregator. Wikipedia and resort confirm 16-17 lift capacity; 15 trails is current count."
+  },
+  {
+    "slug": "park-city",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 8,
+      "intermediate": 41,
+      "advanced": 28,
+      "expert": 23
+    },
+    "source_url": "https://www.onthesnow.com/utah/park-city-mountain-resort/ski-resort",
+    "exact_quote": "Park City Mountain Resort's trail breakdown includes 8% beginner, 41% intermediate, 28% advanced, and 23% expert runs",
+    "notes": "OnTheSnow aggregator. Trail total varies by source (324 in DB, 349 OnTheSnow); keeping DB number, only updating difficulty."
+  },
+  {
+    "slug": "pats-peak",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://snowbrains.com/pats-peak-nh-report-the-peoples-ski-resort-through-and-through/",
+    "exact_quote": "Beginner: 50%, Intermediate: 21%, Advanced: 12%, Expert: 17%",
+    "notes": "[SANITIZED — fabrication marker in notes] SnowBrains report. DB trail count 28 conflicts with reported 37 - SnowBrains likely more accurate. Difficulty differs slightly from DB (11/18 vs 12/17) - news source authoritative.",
+    "_sanitized": true,
+    "_original_notes": "SnowBrains report. DB trail count 28 conflicts with reported 37 - SnowBrains likely more accurate. Difficulty differs slightly from DB (11/18 vs 12/17) - news source authoritative."
+  },
+  {
+    "slug": "paul-bunyan-hill",
+    "trails_total": 17,
+    "difficulty_pct": null,
+    "source_url": "https://skipaulbunyan.com/",
+    "exact_quote": "Paul Bunyan Ski Hill offers a variety of 17 runs, including five brand new trails for this season",
+    "notes": "Official site (press-kit). DB shows 14, news source indicates 17 (with 5 new). 67% beginner mentioned by Indy Pass but not stated as full breakdown."
+  },
+  {
+    "slug": "pebble-creek",
+    "trails_total": 54,
+    "difficulty_pct": {
+      "beginner": 12,
+      "intermediate": 35,
+      "advanced": 53,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Pebble_Creek,_Idaho",
+    "exact_quote": "Pebble Creek has three chairlifts serving 1,100 acres of skiable terrain, rated at 12% beginner, 35% intermediate, and 53% advanced",
+    "notes": "Wikipedia. SnowBrains article fetched didn't have breakdown verbatim. Differs from DB (51 trails, 20/35/41/4) - news/Wikipedia shows 54 trails and lumps advanced+expert as 53% advanced."
+  },
+  {
+    "slug": "peek-n-peak",
+    "trails_total": 27,
+    "difficulty_pct": null,
+    "source_url": "https://www.peakrankings.com/content/peek-n-peak",
+    "exact_quote": "Peek'n Peak offers 27 lighted, groomed trails... the resort advertises 24% advanced and expert terrain",
+    "notes": "PeakRankings blog. DB shows 26 trails; news source 27. Only partial difficulty data (24% advanced+expert combined)."
+  },
+  {
+    "slug": "perfect-north",
+    "trails_total": 23,
+    "difficulty_pct": null,
+    "source_url": "https://perfectnorth.com/",
+    "exact_quote": "Perfect North Slopes is the premier ski area in the Midwest with 5 chairlifts, 8 carpet lifts, 23 trails, 2 rope tows, 3 terrain parks and 23 tubing lanes",
+    "notes": "Official site press-style. No quantified difficulty breakdown from news/blog. DB difficulty (24/52/19/5) retained."
+  },
+  {
+    "slug": "pico-mountain",
+    "trails_total": 58,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Pico_Mountain",
+    "exact_quote": "The mountain contains 468 acres (189 hectares) of skiable land on 58 trails of varying difficulty",
+    "notes": "Wikipedia. No specific difficulty percentage breakdown in news/blog sources beyond ~50% intermediate qualitative statement."
+  },
+  {
+    "slug": "pine-knob",
+    "trails_total": 17,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/michigan/pine-knob-ski-resort/ski-resort",
+    "exact_quote": "Pine Knob has a total of 17 ski trails, which are serviced by 12 ski lifts",
+    "notes": "OnTheSnow. No quantified difficulty breakdown; '70% rated at or above intermediate' is qualitative summary, not stated breakdown."
+  },
+  {
+    "slug": "pine-mountain",
+    "trails_total": 35,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 35,
+      "advanced": 30,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/michigan/pine-mountain/ski-resort",
+    "exact_quote": "Pine Mountain's terrain is divided into 35% beginner, 35% intermediate, and 30% advanced difficulty",
+    "notes": "OnTheSnow aggregator. Matches DB trail count of 35."
+  },
+  {
+    "slug": "plain-valley-trails",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Cross-country/Nordic ski area, not alpine. Sources describe '25 km of Classic & Skate Skiing Tracks' and 7 km snowshoe, not numbered alpine trails. Not applicable to standard trail/difficulty schema."
+  },
+  {
+    "slug": "plattekill-mountain",
+    "trails_total": 38,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Plattekill_Mountain",
+    "exact_quote": "The mountain offers 38 trails, 1100' vertical and 75% snowmaking",
+    "notes": "Wikipedia confirms 38 trails (DB shows 41 - news source lower). No quantified difficulty breakdown from news/blog. DB difficulty (20/40/20/20) retained."
+  }
+]

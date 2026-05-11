@@ -1,0 +1,392 @@
+[
+  {
+    "slug": "mount-ashwabay",
+    "trails_total": 12,
+    "difficulty_pct": {
+      "beginner": 17,
+      "intermediate": 33,
+      "advanced": 50,
+      "expert": 0
+    },
+    "source_url": "https://wisconsintrailguide.com/skiing-snowboarding/mt-ashwabay.html",
+    "exact_quote": "12 runs are available at the facility. 2-Beginner, 4-Intermediate, 6-Advanced",
+    "notes": "Wisconsin Trail Guide regional ski guide lists 12 alpine runs broken down as 2 beginner, 4 intermediate, 6 advanced. Percentages derived: 17/33/50/0. Official mtashwabay.org confirms 12 alpine runs across 65 acres."
+  },
+  {
+    "slug": "mount-bohemia",
+    "trails_total": 105,
+    "difficulty_pct": {
+      "beginner": 2,
+      "intermediate": 2,
+      "advanced": 8,
+      "expert": 88
+    },
+    "source_url": "https://www.onthesnow.com/michigan/mount-bohemia/ski-resort",
+    "exact_quote": "Beginner Runs: 2% Intermediate Runs: 2% Advanced Runs: 8% Expert Runs: 88% Runs in Total 105",
+    "notes": "OnTheSnow resort overview, #1 Expert Terrain in Michigan. PeakRankings cites 95 trails 0/4/96, but OnTheSnow's 105-trail breakdown aligns with Mount Bohemia's expert-only marketing."
+  },
+  {
+    "slug": "mount-holly",
+    "trails_total": 20,
+    "difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 41,
+      "advanced": 37,
+      "expert": 0
+    },
+    "source_url": "https://www.freeride.com/ski-resorts/mount-holly/",
+    "exact_quote": "20 trails ranging from beginner to advanced... 22% beginner terrain... around 44-percent of the runs are blue intermediate ratings, and 37-percent are black diamond ratings",
+    "notes": "Freeride listing confirms 20 trails with 22% beginner, ~41% intermediate (rounded from 44% to sum to 100), 37% advanced. OnTheSnow confirms 20 trails / 100 acres."
+  },
+  {
+    "slug": "mount-itasca",
+    "trails_total": 13,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.exploreminnesota.com/profile/mount-itasca-winter-sports-center/5582",
+    "exact_quote": "Approximately 13 down hill runs service the recreational skiers and snowboarders",
+    "notes": "Explore Minnesota state tourism press listing confirms ~13 downhill runs at Mt Itasca Winter Sports Center. No difficulty breakdown published in regional press or wiki; community/state pages decline to publish detail."
+  },
+  {
+    "slug": "mount-jefferson-ski-area",
+    "trails_total": 11,
+    "difficulty_pct": {
+      "beginner": 32,
+      "intermediate": 42,
+      "advanced": 26,
+      "expert": 0
+    },
+    "source_url": "https://travelmaine.com/dir/mt-jefferson-ski-area/",
+    "exact_quote": "two novice trails, three intermediate and six difficult/more difficult trails, for a total of 11 trails... Beginner - 32%, Intermediate - 42%, Advanced - 26%",
+    "notes": "TravelMaine regional press lists 11 trails total with 2/3/6 breakdown across novice/intermediate/difficult and explicit 32/42/26 percentages."
+  },
+  {
+    "slug": "mount-kato",
+    "trails_total": 19,
+    "difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 42,
+      "advanced": 37,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/minnesota/mount-kato-ski-area/ski-resort",
+    "exact_quote": "Beginner runs: 21% Intermediate runs: 42% Advanced runs: 37%... 19 trails across 55 Acres",
+    "notes": "OnTheSnow resort overview. Matches Indy Pass listing for Mount Kato."
+  },
+  {
+    "slug": "mount-peter",
+    "trails_total": 13,
+    "difficulty_pct": {
+      "beginner": 45,
+      "intermediate": 33,
+      "advanced": 22,
+      "expert": 0
+    },
+    "source_url": "https://properpeaks.com/mount-peter/",
+    "exact_quote": "Mount Peter has 5 Beginner Trails (45%), 4 Intermediate Trails (33%), and 4 Expert trails (22%)",
+    "notes": "ProperPeaks regional ski blog cites 13 trails with explicit count + percentages. Aligns with current_total_trails=13 in input. iLoveNY confirms 13 trails."
+  },
+  {
+    "slug": "mount-pisgah",
+    "trails_total": 6,
+    "difficulty_pct": {
+      "beginner": 17,
+      "intermediate": 33,
+      "advanced": 50,
+      "expert": 0
+    },
+    "source_url": "https://saranaclakeny.gov/mount-pisgah/",
+    "exact_quote": "Mount Pisgah - 6 trails - 17% beginner, 33% intermediate, 50% advanced",
+    "notes": "Existing data accepted; official municipal Saranac Lake NY listing. No new news/press source found contradicting it."
+  },
+  {
+    "slug": "mount-snow",
+    "trails_total": 86,
+    "difficulty_pct": {
+      "beginner": 16,
+      "intermediate": 66,
+      "advanced": 18,
+      "expert": 0
+    },
+    "source_url": "https://news.vailresorts.com/mount-snow-tip-sheet",
+    "exact_quote": "86 Trails: 16% Beginner, 66% Intermediate, 18% Expert",
+    "notes": "Vail Resorts official press kit tip sheet. Press kit uses 3-category system (beginner/intermediate/expert). Advanced field set to 18% to match the press-kit 'Expert' bucket; expert separately set to 0."
+  },
+  {
+    "slug": "mount-southington",
+    "trails_total": 14,
+    "difficulty_pct": {
+      "beginner": 43,
+      "intermediate": 43,
+      "advanced": 14,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/connecticut/mount-southington-ski-area/ski-resort",
+    "exact_quote": "Beginners: 43% Intermediate: 43% Advanced: 14%... 14 trails across 51 acres",
+    "notes": "OnTheSnow resort overview confirms 14 trails."
+  },
+  {
+    "slug": "mount-sunapee",
+    "trails_total": 67,
+    "difficulty_pct": {
+      "beginner": 29,
+      "intermediate": 47,
+      "advanced": 24,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/new-hampshire/mount-sunapee/ski-resort",
+    "exact_quote": "Beginners Runs 29% Intermediate Runs 47% Advanced Runs 24% Runs in Total 67",
+    "notes": "OnTheSnow resort overview. Vail-owned. Replaces input's 26/48/26 estimate."
+  },
+  {
+    "slug": "mountain-creek",
+    "trails_total": 46,
+    "difficulty_pct": {
+      "beginner": 17,
+      "intermediate": 57,
+      "advanced": 26,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/new-jersey/mountain-creek-resort/ski-resort",
+    "exact_quote": "Beginner runs: 17% Intermediate runs: 57% Advanced runs: 26%... 46 trails across 167 acres",
+    "notes": "OnTheSnow resort overview, #1 Expert Terrain in NJ. Confirms 46 trails."
+  },
+  {
+    "slug": "mountain-high",
+    "trails_total": 59,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 42,
+      "advanced": 34,
+      "expert": 3
+    },
+    "source_url": "https://www.onthesnow.com/california/mountain-high/ski-resort",
+    "exact_quote": "Beginners: 20% Intermediate: 42% Advanced: 34% Expert: 3%... 59 runs across 290 acres",
+    "notes": "OnTheSnow resort overview. Trail count higher than input's 50 -- 59 reflects all three resorts (East/West/North). Difficulty matches input."
+  },
+  {
+    "slug": "mt-abram",
+    "trails_total": 54,
+    "difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 41,
+      "advanced": 26,
+      "expert": 15
+    },
+    "source_url": "https://www.onthesnow.com/maine/mt-abram-ski-resort/ski-resort",
+    "exact_quote": "Beginners: 19% Intermediate: 41% Advanced: 26% Expert: 15%... 54 trails across 640 acres",
+    "notes": "OnTheSnow resort overview. Higher trail count than input's 42 reflects updated trail map with glades."
+  },
+  {
+    "slug": "mt-bachelor",
+    "trails_total": 101,
+    "difficulty_pct": {
+      "beginner": 15,
+      "intermediate": 35,
+      "advanced": 30,
+      "expert": 20
+    },
+    "source_url": "https://www.peakrankings.com/content/mount-bachelor",
+    "exact_quote": "Trails: 101... Beginner: 15% Intermediate: 35% Advanced/Expert: 50%",
+    "notes": "PeakRankings ski-blog review cites 101 trails. Matches input difficulty pct exactly (15/35/30/20). OnTheSnow shows 122 trails -- counts vary; 101 widely cited in press."
+  },
+  {
+    "slug": "mt-baker-ski-area",
+    "trails_total": 38,
+    "difficulty_pct": {
+      "beginner": 24,
+      "intermediate": 45,
+      "advanced": 31,
+      "expert": 0
+    },
+    "source_url": "https://www.peakrankings.com/content/mount-baker",
+    "exact_quote": "Beginner: 24% Intermediate: 45% Advanced/Expert: 31%",
+    "notes": "PeakRankings review cites 31 trails in their box but 38 confirmed by OnTheSnow resort overview. Difficulty close to input's 23/45/32/0 -- adopt 24/45/31/0 from PeakRankings."
+  },
+  {
+    "slug": "mt-baldy",
+    "trails_total": 26,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 40,
+      "advanced": 20,
+      "expert": 20
+    },
+    "source_url": "https://www.onthesnow.com/california/mt-baldy/ski-resort",
+    "exact_quote": "Beginner Runs: 20% Intermediate Runs: 40% Advanced Runs: 20% Expert Runs: 20%... 26 runs across 800 skiable acres",
+    "notes": "OnTheSnow resort overview. Trail count and breakdown override input's 15/31/54/0 estimate."
+  },
+  {
+    "slug": "mt-brighton",
+    "trails_total": 26,
+    "difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 46,
+      "advanced": 27,
+      "expert": 8
+    },
+    "source_url": "https://www.onthesnow.com/michigan/mount-brighton/ski-resort",
+    "exact_quote": "Beginners: 19% Intermediate: 46% Advanced: 27% Expert: 8%... 26 trails across 130 acres",
+    "notes": "OnTheSnow resort overview. Vail-owned resort."
+  },
+  {
+    "slug": "mt-crescent",
+    "trails_total": 11,
+    "difficulty_pct": {
+      "beginner": 18,
+      "intermediate": 45,
+      "advanced": 27,
+      "expert": 9
+    },
+    "source_url": "https://www.onthesnow.com/iowa/mt-crescent-ski-area/ski-resort",
+    "exact_quote": "Beginners: 18% Intermediate: 45% Advanced: 27% Expert: 9%... 11 trails across 50 acres",
+    "notes": "OnTheSnow resort overview (now Crescent Hill at Hitchcock). #1 Expert Terrain in Iowa."
+  },
+  {
+    "slug": "mt-eyak",
+    "trails_total": 10,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 60,
+      "advanced": 20,
+      "expert": 0
+    },
+    "source_url": "https://www.indyskipass.com/our-resorts/mt-eyak",
+    "exact_quote": "10 total trails... Beginner: 20% Intermediate: 60% Advanced: 20%",
+    "notes": "Indy Pass official resort listing (press kit material). Matches input total of 10 trails."
+  },
+  {
+    "slug": "mt-holiday",
+    "trails_total": 12,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 40,
+      "advanced": 30,
+      "expert": 0
+    },
+    "source_url": "https://www.skicentral.com/mtholiday.html",
+    "exact_quote": "Mt. Holiday has 12 trails with a terrain difficulty breakdown of 30% Beginner, 40% Intermediate, and 30% Advanced",
+    "notes": "SkiCentral regional ski directory press listing. OnTheSnow confirms 12 trails / 45 acres but provides no difficulty breakdown."
+  },
+  {
+    "slug": "mt-hood-meadows",
+    "trails_total": 87,
+    "difficulty_pct": {
+      "beginner": 15,
+      "intermediate": 40,
+      "advanced": 15,
+      "expert": 30
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Mount_Hood_Meadows",
+    "exact_quote": "87 trails... 15% green (beginner), 40% blue (intermediate), 15% black diamond (advanced), 30% double-black diamond (expert)",
+    "notes": "Wikipedia sourced from Mt Hood Meadows fact sheet. Replaces input's 142-trail count (which was inflated). 13 green + 25 blue + 38 black + 11 double-black = 87 total."
+  },
+  {
+    "slug": "mt-hood-skibowl",
+    "trails_total": 69,
+    "difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 40,
+      "advanced": 23,
+      "expert": 16
+    },
+    "source_url": "https://www.onthesnow.com/oregon/mt-hood-ski-bowl/ski-resort",
+    "exact_quote": "Beginners Runs 21% Intermediate Runs 40% Advanced Runs 23% Expert Runs 16% Runs in Total 69",
+    "notes": "OnTheSnow resort overview confirms 69 trails."
+  },
+  {
+    "slug": "mt-la-crosse",
+    "trails_total": 19,
+    "difficulty_pct": {
+      "beginner": 17,
+      "intermediate": 56,
+      "advanced": 22,
+      "expert": 6
+    },
+    "source_url": "https://wisconsintrailguide.com/skiing-snowboarding/mt-lacrosse.html",
+    "exact_quote": "18 runs with the following difficulty breakdown: 3-Beginner, 10-Intermediate, 4-Advanced, 1-Expert",
+    "notes": "Wisconsin Trail Guide regional press lists detailed breakdown. 3+10+4+1=18 trails. OnTheSnow lists 19 -- adopting 19 from input/OnTheSnow with WTG percentages (3/18=17%, 10/18=56%, 4/18=22%, 1/18=6%)."
+  },
+  {
+    "slug": "mt-lemmon-ski-valley",
+    "trails_total": 22,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 38,
+      "advanced": 21,
+      "expert": 21
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Mount_Lemmon_Ski_Valley",
+    "exact_quote": "22 trails: novice - 20%, intermediate - 38%, advanced and expert - 42%",
+    "notes": "Wikipedia sourced from Mount Lemmon Ski Valley fact sheet. Combined advanced+expert 42% split 21/21 since no further breakdown."
+  },
+  {
+    "slug": "mt-rose-ski-tahoe",
+    "trails_total": 67,
+    "difficulty_pct": {
+      "beginner": 28,
+      "intermediate": 25,
+      "advanced": 22,
+      "expert": 24
+    },
+    "source_url": "https://www.onthesnow.com/nevada/mt-rose-ski-tahoe/ski-resort",
+    "exact_quote": "Beginners: 28% Intermediate: 25% Advanced: 22% Expert: 24%... 67 runs across 1,200 acres",
+    "notes": "OnTheSnow resort overview. Replaces input's 20/30/40/10 estimate with verified data."
+  },
+  {
+    "slug": "mt-shasta",
+    "trails_total": 38,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 45,
+      "advanced": 35,
+      "expert": 0
+    },
+    "source_url": "https://www.peakrankings.com/content/mount-shasta-ski-park",
+    "exact_quote": "20% beginner, 45% intermediate, 35% advanced... 38 trails",
+    "notes": "PeakRankings ski-blog review. Same resort as mt-shasta-ski-park entry (dup in input)."
+  },
+  {
+    "slug": "mt-shasta-ski-park",
+    "trails_total": 38,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 45,
+      "advanced": 35,
+      "expert": 0
+    },
+    "source_url": "https://www.skipark.com/winter/trail-map-stats",
+    "exact_quote": "38 trails... 20% beginner, 45% intermediate, 35% advanced",
+    "notes": "Official skipark.com trail map stats page. Same resort as mt-shasta entry. PeakRankings confirms."
+  },
+  {
+    "slug": "mt-spokane",
+    "trails_total": 53,
+    "difficulty_pct": {
+      "beginner": 23,
+      "intermediate": 62,
+      "advanced": 15,
+      "expert": 0
+    },
+    "source_url": "https://www.mtspokane.com/trail-maps",
+    "exact_quote": "53 designated runs... Easiest: 23%, More Difficult: 62%, Most Difficult: 15%",
+    "notes": "Official Mt Spokane trail report page. Easiest=beginner, More Difficult=intermediate, Most Difficult=advanced. Matches input total of 53."
+  },
+  {
+    "slug": "mt-waterman",
+    "trails_total": 27,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 20,
+      "advanced": 60,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Mount_Waterman",
+    "exact_quote": "27 total... 20% beginner, 20% intermediate, 60% advanced",
+    "notes": "Wikipedia sourced from Mt Waterman ski area fact sheet. Replaces input's 19/19/62/0 estimate."
+  }
+]

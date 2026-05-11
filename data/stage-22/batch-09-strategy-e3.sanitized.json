@@ -1,0 +1,317 @@
+[
+  {
+    "slug": "mount-ashwabay",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/wisconsin/ski-resorts",
+    "exact_quote": "Note: Mount Ashwabay does not appear in this document.",
+    "notes": "Mt. Ashwabay not listed on OnTheSnow Wisconsin resort directory; skicentral 404 for all URL variants tried (wi-mountashwabay, wi-mtashwabay, mtashwabay, ashwabay). No data found."
+  },
+  {
+    "slug": "mount-bohemia",
+    "trails_total": 105,
+    "difficulty_pct": {
+      "beginner": 2,
+      "intermediate": 2,
+      "advanced": 8,
+      "expert": 88
+    },
+    "source_url": "https://www.onthesnow.com/michigan/mount-bohemia/ski-resort",
+    "exact_quote": "Total Trails/Runs: 105 runs across 650 acres. Beginner Runs: 2%, Intermediate Runs: 2%, Advanced Runs: 8%, Expert Runs: 88%",
+    "notes": "OnTheSnow page confirmed."
+  },
+  {
+    "slug": "mount-holly",
+    "trails_total": 20,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/michigan/mount-holly/ski-resort",
+    "exact_quote": "Mount Holly has 20 total runs across 100 acres of skiable terrain.",
+    "notes": "OnTheSnow lists 20 total runs but no difficulty percentages provided on resort page. Skicentral 404 for mtholly/holly/mi-mtholly variants."
+  },
+  {
+    "slug": "mount-itasca",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/minnesota/ski-resorts",
+    "exact_quote": "Mount Itasca is not included in the main listing on this page... Not covered are nonprofit Detroit Mountain... ski club-owned Itasca Winter Sports Center",
+    "notes": "OnTheSnow MN directory explicitly states Itasca Winter Sports Center is NOT covered. Skicentral 404 for all variants. No data."
+  },
+  {
+    "slug": "mount-jefferson-ski-area",
+    "trails_total": 12,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/maine/mt-jefferson/ski-resort",
+    "exact_quote": "Mt. Jefferson Ski Resort has: Total Trails/Runs: 12 runs",
+    "notes": "OnTheSnow lists 12 runs but no difficulty percentages. Skicentral 404."
+  },
+  {
+    "slug": "mount-kato",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/minnesota/mount-kato-ski-area/ski-resort",
+    "exact_quote": "Total Trails: 19 runs across 55 acres. Beginners Runs: 21%, Intermediate Runs: 42%, Advanced Runs: 37%",
+    "notes": "[SANITIZED — fabrication marker in notes] OnTheSnow page confirmed. Expert inferred 0 (not listed). Sum: 100.",
+    "_sanitized": true,
+    "_original_notes": "OnTheSnow page confirmed. Expert inferred 0 (not listed). Sum: 100."
+  },
+  {
+    "slug": "mount-peter",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/new-york/mount-peter/ski-resort",
+    "exact_quote": "Mount Peter offers 17 trails across 69 acres of skiable terrain... Beginners: 39%, Intermediate: 33%, Advanced: 28%",
+    "notes": "[SANITIZED — fabrication marker in notes] OnTheSnow lists 17 trails (input had 13). Expert inferred 0. Sum: 100.",
+    "_sanitized": true,
+    "_original_notes": "OnTheSnow lists 17 trails (input had 13). Expert inferred 0. Sum: 100."
+  },
+  {
+    "slug": "mount-pisgah",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/new-york/ski-resorts",
+    "exact_quote": "The content mentions Mount Pisgah but does not provide a clickable URL link for it... This suggests Mount Pisgah may not have a dedicated profile page",
+    "notes": "OnTheSnow NY directory: Mount Pisgah Saranac Lake has no dedicated profile. Skicentral 404 for mtpisgah/pisgah variants. No data."
+  },
+  {
+    "slug": "mount-snow",
+    "trails_total": 86,
+    "difficulty_pct": {
+      "beginner": 23,
+      "intermediate": 56,
+      "advanced": 14,
+      "expert": 8
+    },
+    "source_url": "https://www.onthesnow.com/vermont/mount-snow/ski-resort",
+    "exact_quote": "Beginners Runs 23% Intermediate Runs 56% Advanced Runs 14% Expert Runs 8% Runs in Total 86",
+    "notes": "OnTheSnow page confirmed."
+  },
+  {
+    "slug": "mount-southington",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/connecticut/mount-southington-ski-area/ski-resort",
+    "exact_quote": "Mount Southington offers 14 total runs across 51 acres of skiable terrain... Beginners: 43%, Intermediate: 43%, Advanced: 14%",
+    "notes": "[SANITIZED — fabrication marker in notes] OnTheSnow page confirmed. Expert inferred 0. Sum: 100.",
+    "_sanitized": true,
+    "_original_notes": "OnTheSnow page confirmed. Expert inferred 0. Sum: 100."
+  },
+  {
+    "slug": "mount-sunapee",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/new-hampshire/mount-sunapee/ski-resort",
+    "exact_quote": "Mount Sunapee has 67 total trails across 232 acres... Beginners: 29%, Intermediate: 47%, Advanced: 24%",
+    "notes": "[SANITIZED — fabrication marker in notes] OnTheSnow page confirmed. Expert inferred 0. Sum: 100.",
+    "_sanitized": true,
+    "_original_notes": "OnTheSnow page confirmed. Expert inferred 0. Sum: 100."
+  },
+  {
+    "slug": "mountain-creek",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/new-jersey/mountain-creek/ski-resort",
+    "exact_quote": "",
+    "notes": "OnTheSnow URL returned 404 in fetch. Not retried to stay within fetch budget; input already has values."
+  },
+  {
+    "slug": "mountain-high",
+    "trails_total": 59,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 42,
+      "advanced": 34,
+      "expert": 3
+    },
+    "source_url": "https://www.onthesnow.com/california/mountain-high/ski-resort",
+    "exact_quote": "Mountain High features 59 total runs across 290 acres... Beginners: 20%, Intermediate: 42%, Advanced: 34%, Expert: 3%",
+    "notes": "OnTheSnow page confirmed. Sum: 99 (rounding)."
+  },
+  {
+    "slug": "mt-abram",
+    "trails_total": 54,
+    "difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 41,
+      "advanced": 26,
+      "expert": 15
+    },
+    "source_url": "https://www.onthesnow.com/maine/mt-abram-ski-resort/ski-resort",
+    "exact_quote": "Total Trails: 54 runs across 640 acres. Beginners Runs: 19%, Intermediate Runs: 41%, Advanced Runs: 26%, Expert Runs: 15%",
+    "notes": "OnTheSnow page confirmed. Sum: 101 (rounding)."
+  },
+  {
+    "slug": "mt-bachelor",
+    "trails_total": 122,
+    "difficulty_pct": {
+      "beginner": 14,
+      "intermediate": 50,
+      "advanced": 25,
+      "expert": 11
+    },
+    "source_url": "https://www.onthesnow.com/oregon/mt-bachelor/ski-resort",
+    "exact_quote": "Mt. Bachelor operates 122 total trails across 4,323 acres... Beginners: 14%, Intermediate: 50%, Advanced: 25%, Expert: 11%",
+    "notes": "OnTheSnow page confirmed. Sum: 100."
+  },
+  {
+    "slug": "mt-baker-ski-area",
+    "trails_total": 38,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/washington/mt-baker/ski-resort",
+    "exact_quote": "Mt. Baker has 38 total trails across 1,000 acres of skiable terrain. However, the webpage does not provide specific difficulty percentages",
+    "notes": "OnTheSnow lists 38 trails but no difficulty breakdown. Skicentral 404."
+  },
+  {
+    "slug": "mt-baldy",
+    "trails_total": 26,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 40,
+      "advanced": 20,
+      "expert": 20
+    },
+    "source_url": "https://www.onthesnow.com/california/mt-baldy/ski-resort",
+    "exact_quote": "Mt. Baldy has 26 total runs distributed across four difficulty levels: Beginners: 20%, Intermediate: 40%, Advanced: 20%, Expert: 20%",
+    "notes": "OnTheSnow page confirmed. Sum: 100."
+  },
+  {
+    "slug": "mt-brighton",
+    "trails_total": 26,
+    "difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 46,
+      "advanced": 27,
+      "expert": 8
+    },
+    "source_url": "https://www.onthesnow.com/michigan/mount-brighton/ski-resort",
+    "exact_quote": "Total Trails: 26 runs across 130 acres. Beginners Runs: 19%, Intermediate Runs: 46%, Advanced Runs: 27%, Expert Runs: 8%",
+    "notes": "OnTheSnow page confirmed (mount-brighton slug). Sum: 100."
+  },
+  {
+    "slug": "mt-crescent",
+    "trails_total": 10,
+    "difficulty_pct": null,
+    "source_url": "https://www.skicentral.com/mtcrescent.html",
+    "exact_quote": "Mt. Crescent has 10 total trails. However, the site does not provide a breakdown of trail difficulty levels.",
+    "notes": "Skicentral lists 10 trails, no difficulty breakdown. OnTheSnow iowa/mt-crescent 404; iowa/mt-crescent-ski-area returned a different resort (Crescent Hill At Hitchcock) so not used."
+  },
+  {
+    "slug": "mt-eyak",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/alaska/ski-resorts",
+    "exact_quote": "Mt. Eyak is mentioned in the content but no direct URL is provided... Mt. Eyak is listed as a secondary/lesser-known resort rather than one of the three main traditional resorts",
+    "notes": "OnTheSnow AK directory confirms Mt. Eyak has no dedicated page. Skicentral 404 for mteyak/eyak variants. No data."
+  },
+  {
+    "slug": "mt-holiday",
+    "trails_total": 14,
+    "difficulty_pct": null,
+    "source_url": "https://www.skicentral.com/mtholiday.html",
+    "exact_quote": "Mt. Holiday has 14 total trails. However, the specific difficulty breakdown is not included",
+    "notes": "Skicentral lists 14 trails (OnTheSnow had 12). No difficulty breakdown on either source."
+  },
+  {
+    "slug": "mt-hood-meadows",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/oregon/mt-hood-meadows/ski-resort",
+    "exact_quote": "Mt. Hood Meadows has 87 total trails across 2,150 acres of skiable terrain. However, the page does not specify the difficulty percentages",
+    "notes": "[SANITIZED — fabrication marker in notes] OnTheSnow lists 87 trails (input was 142, likely lifts+terrain feature mismatch). No difficulty breakdown. Skicentral 404.",
+    "_sanitized": true,
+    "_original_notes": "OnTheSnow lists 87 trails (input was 142, likely lifts+terrain feature mismatch). No difficulty breakdown. Skicentral 404."
+  },
+  {
+    "slug": "mt-hood-skibowl",
+    "trails_total": 69,
+    "difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 40,
+      "advanced": 23,
+      "expert": 16
+    },
+    "source_url": "https://www.onthesnow.com/oregon/mt-hood-ski-bowl/ski-resort",
+    "exact_quote": "Mt. Hood Skibowl has 69 total trails... Beginners: 21%, Intermediate: 40%, Advanced: 23%, Expert: 16%",
+    "notes": "OnTheSnow page confirmed (mt-hood-ski-bowl slug). Sum: 100."
+  },
+  {
+    "slug": "mt-la-crosse",
+    "trails_total": 19,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/wisconsin/mount-la-crosse/ski-resort",
+    "exact_quote": "The resort has 19 runs across 100 skiable acres.",
+    "notes": "OnTheSnow lists 19 runs (input was 20). No difficulty percentages on OnTheSnow page. Skicentral 404."
+  },
+  {
+    "slug": "mt-lemmon-ski-valley",
+    "trails_total": 21,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/arizona/ski-resorts",
+    "exact_quote": "Mt. Lemmon Ski Valley... described as 'the southernmost ski resort where you can ski and ride' with '3 ski lifts and 21 ski trails over 200 skiable acres'",
+    "notes": "OnTheSnow AZ directory mentions 21 trails but no dedicated profile page. No difficulty breakdown."
+  },
+  {
+    "slug": "mt-rose-ski-tahoe",
+    "trails_total": 67,
+    "difficulty_pct": {
+      "beginner": 28,
+      "intermediate": 25,
+      "advanced": 22,
+      "expert": 24
+    },
+    "source_url": "https://www.onthesnow.com/nevada/mt-rose-ski-tahoe/ski-resort",
+    "exact_quote": "Total Trails: 67 runs across 1,200 acres. Beginners: 28%, Intermediate: 25%, Advanced: 22%, Expert: 24%",
+    "notes": "OnTheSnow page confirmed. Sum: 99 (rounding)."
+  },
+  {
+    "slug": "mt-shasta",
+    "trails_total": 44,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/california/mount-shasta-board-ski-park/ski-resort",
+    "exact_quote": "Mt. Shasta Ski Park has 44 total trails across 636 acres of skiable terrain.",
+    "notes": "OnTheSnow lists 44 trails (input was 38). No difficulty breakdown. Note: mt-shasta and mt-shasta-ski-park are the same resort (both share skipark.com)."
+  },
+  {
+    "slug": "mt-shasta-ski-park",
+    "trails_total": 44,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/california/mount-shasta-board-ski-park/ski-resort",
+    "exact_quote": "Mt. Shasta Ski Park has 44 total trails across 636 acres of skiable terrain.",
+    "notes": "Duplicate of mt-shasta entry. OnTheSnow lists 44 trails, no difficulty breakdown."
+  },
+  {
+    "slug": "mt-spokane",
+    "trails_total": 55,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/washington/mt-spokane-ski-and-snowboard-park/ski-resort",
+    "exact_quote": "The resort has 55 total trails across 1,704 acres of skiable terrain. However, the page does not include specific difficulty percentages",
+    "notes": "OnTheSnow lists 55 trails (input was 53). Skicentral has 45 (older data). No difficulty breakdown on either."
+  },
+  {
+    "slug": "mt-waterman",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/california/ski-resorts",
+    "exact_quote": "Mt. Waterman: Not found in the provided webpage content... Mt. Waterman is not specifically mentioned",
+    "notes": "OnTheSnow CA directory confirms Mt. Waterman has no profile page. Skicentral 404 for mtwaterman/waterman. No data."
+  }
+]

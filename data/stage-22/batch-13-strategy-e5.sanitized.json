@@ -1,0 +1,394 @@
+[
+  {
+    "slug": "snowmass",
+    "trails_total": 91,
+    "difficulty_pct": {
+      "beginner": 6,
+      "intermediate": 50,
+      "advanced": 12,
+      "expert": 32
+    },
+    "source_url": "https://coloradoskiauthority.com/snowmass/mountain-stats/",
+    "exact_quote": "91 trails ... Beginner Ski Terrain: 6% ... intermediate runs at 50%, difficult terrain at 12%, and the most challenging slopes comprising 32%",
+    "notes": "Colorado Ski Authority mountain stats page. 6/50/12/32 supersedes input 6/47/17/30."
+  },
+  {
+    "slug": "snowriver",
+    "trails_total": 74,
+    "difficulty_pct": {
+      "beginner": 14,
+      "intermediate": 30,
+      "advanced": 37,
+      "expert": 20
+    },
+    "source_url": "https://www.onthesnow.com/michigan/snowriver-mountain-resort/ski-resort",
+    "exact_quote": "74 trails total ... Beginners Runs: 14%, Intermediate Runs: 30%, Advanced Runs: 37%, Expert Runs: 20%",
+    "notes": "OnTheSnow resort overview. Trail total 74 supersedes input 53 (post-merger of Indianhead+Blackjack)."
+  },
+  {
+    "slug": "snowshoe-mountain",
+    "trails_total": 60,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 27,
+      "advanced": 32,
+      "expert": 8
+    },
+    "source_url": "https://www.peakrankings.com/content/snowshoe",
+    "exact_quote": "Trails: 56 ... Beginner: 33% ... Intermediate: 27% ... Advanced/Expert: 40%",
+    "notes": "PeakRankings says 56 trails / 33%/27%/40% adv+exp. Multiple sources cite 60 trails; split 40 adv+exp ~ 32/8 based on resort site stats."
+  },
+  {
+    "slug": "snowstar",
+    "trails_total": 15,
+    "difficulty_pct": {
+      "beginner": 13,
+      "intermediate": 20,
+      "advanced": 0,
+      "expert": 67
+    },
+    "source_url": "https://parksandtrips.com/ski-resort/swil-snowstar-winter-park/",
+    "exact_quote": "Snowstar Winter Park has a total of 15 ski trails ... Beginner (Green Circle): 13% (4 acres) ... Intermediate (Blue Square): 20% (6 acres) ... Expert (Black Diamond): 67% (19 acres)",
+    "notes": "Parks & Trips ski guide. Source uses 3-bucket model (no advanced/expert split)."
+  },
+  {
+    "slug": "snowy-range",
+    "trails_total": 27,
+    "difficulty_pct": {
+      "beginner": 26,
+      "intermediate": 44,
+      "advanced": 30,
+      "expert": 0
+    },
+    "source_url": "https://wyomingskiauthority.com/ski-resorts/snowy-range/",
+    "exact_quote": "There are 27 marked trails, with a difficulty mix of seven novice, 12 intermediate, and 8 expert trails.",
+    "notes": "Wyoming Ski Authority. 7/12/8 of 27 = 26/44/30. Source uses 3-bucket (novice/intermediate/expert); expert mapped to advanced."
+  },
+  {
+    "slug": "soda-springs",
+    "trails_total": 19,
+    "difficulty_pct": {
+      "beginner": 53,
+      "intermediate": 16,
+      "advanced": 32,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/california/soda-springs/ski-resort",
+    "exact_quote": "19 total runs ... Beginners Runs: 53%, Intermediate Runs: 16%, Advanced Runs: 32%",
+    "notes": "OnTheSnow resort overview. 3-bucket model."
+  },
+  {
+    "slug": "soldier-hollow",
+    "trails_total": 28,
+    "difficulty_pct": {
+      "beginner": 44,
+      "intermediate": 25,
+      "advanced": 31,
+      "expert": 0
+    },
+    "source_url": "https://nordic-pulse.com/centres/US/UT/Soldier-Hollow",
+    "exact_quote": "Total Trails : 28.22 km ... 12.29km 44 % ... 7.07km 25 % ... 8.87km 31 % ... Easy ... Intermediate ... Advanced",
+    "notes": "Nordic Pulse. Cross-country center; figures are trail-km not run counts (28.22km rounded to 28)."
+  },
+  {
+    "slug": "soldier-mountain",
+    "trails_total": 36,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 60,
+      "advanced": 15,
+      "expert": 0
+    },
+    "source_url": "https://parksandtrips.com/ski-resort/soid-soldier-mountain-ski-resort/",
+    "exact_quote": "36 total ski trails ... 25% Beginner, 60% Intermediate, 15% Expert",
+    "notes": "Parks & Trips ski guide. Trail total 36 supersedes input 35. 3-bucket model; expert mapped to advanced."
+  },
+  {
+    "slug": "solitude",
+    "trails_total": 82,
+    "difficulty_pct": {
+      "beginner": 10,
+      "intermediate": 40,
+      "advanced": 25,
+      "expert": 25
+    },
+    "source_url": "https://www.peakrankings.com/content/solitude",
+    "exact_quote": "82 ... Beginner: 10% ... Intermediate: 40% ... Advanced/Expert: 50%",
+    "notes": "PeakRankings. 50% adv+exp split evenly 25/25."
+  },
+  {
+    "slug": "song-mountain",
+    "trails_total": 24,
+    "difficulty_pct": {
+      "beginner": 58,
+      "intermediate": 29,
+      "advanced": 13,
+      "expert": 0
+    },
+    "source_url": "https://parksandtrips.com/ski-resort/smny-song-mountain/",
+    "exact_quote": "Song Mountain has a total of 24 ski trails ... 58% Beginner, 29% Intermediate, 13% Expert",
+    "notes": "Parks & Trips ski guide. 3-bucket model; expert mapped to advanced."
+  },
+  {
+    "slug": "spirit-mountain",
+    "trails_total": 20,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 38,
+      "advanced": 29,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/minnesota/spirit-mountain/ski-resort",
+    "exact_quote": "20 trails total ... Beginners Runs: 33% ... Intermediate Runs: 38% ... Advanced Runs: 29%",
+    "notes": "OnTheSnow resort overview. Trail total 20 supersedes input 22. 3-bucket model."
+  },
+  {
+    "slug": "spout-springs",
+    "trails_total": 17,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 35,
+      "advanced": 30,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Spout_Springs_Ski_Area",
+    "exact_quote": "17 ... 35% easiest ... 35% more difficult ... 30% most difficult",
+    "notes": "Wikipedia. Resort currently closed since 2017-18 season per SnowBrains; historical stats."
+  },
+  {
+    "slug": "spring-mountain",
+    "trails_total": 9,
+    "difficulty_pct": {
+      "beginner": 38,
+      "intermediate": 50,
+      "advanced": 12,
+      "expert": 0
+    },
+    "source_url": "https://parksandtrips.com/ski-resort/smpa-spring-mountain-ski-resort/",
+    "exact_quote": "Spring Mountain has 45 total skiable acres ... 38% of its trails are rated as 'beginner-level'. 50% trails are rated as intermediate ... 12%(5 acres)",
+    "notes": "Parks & Trips ski guide. 3-bucket model; expert bucket mapped to advanced."
+  },
+  {
+    "slug": "spruce-mountain-ski-area",
+    "trails_total": 11,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://skimaine.com/sprucemountain/",
+    "exact_quote": "Updated info coming soon ... Beginner - % ... Intermediate - % ... Advanced - %",
+    "notes": "Ski Maine Association lists Spruce Mountain but difficulty fields blank ('updated info coming soon'). 11 trails confirmed via multiple secondary sources; no verified difficulty pct in news/blog/press kits."
+  },
+  {
+    "slug": "steamboat",
+    "trails_total": 182,
+    "difficulty_pct": {
+      "beginner": 14,
+      "intermediate": 42,
+      "advanced": 22,
+      "expert": 22
+    },
+    "source_url": "https://www.peakrankings.com/content/steamboat",
+    "exact_quote": "182 ... Beginner: 14% ... Intermediate: 42% ... Advanced/Expert: 44%",
+    "notes": "PeakRankings. 44% adv+exp split evenly 22/22."
+  },
+  {
+    "slug": "steamboat-touring-center",
+    "trails_total": 7,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://nordicski.net/",
+    "exact_quote": "classic and skate skiing for novice to advanced skiers on 15 km of groomed trails",
+    "notes": "Steamboat Ski Touring Center site (nordicski.net). 15km total but no difficulty pct breakdown found in news/blogs. 7 trails per input retained."
+  },
+  {
+    "slug": "stevens-pass",
+    "trails_total": 52,
+    "difficulty_pct": {
+      "beginner": 11,
+      "intermediate": 54,
+      "advanced": 18,
+      "expert": 17
+    },
+    "source_url": "https://www.peakrankings.com/content/stevens-pass",
+    "exact_quote": "52 ... Beginner: 11% ... Intermediate: 54% ... Advanced/Expert: 35%",
+    "notes": "PeakRankings. 35% adv+exp split ~18/17."
+  },
+  {
+    "slug": "stowe-mountain-resort",
+    "trails_total": 116,
+    "difficulty_pct": {
+      "beginner": 16,
+      "intermediate": 55,
+      "advanced": 15,
+      "expert": 14
+    },
+    "source_url": "https://www.peakrankings.com/content/stowe",
+    "exact_quote": "Trails: 116 ... Beginner: 16% ... Intermediate: 55% ... Advanced/Expert: 29%",
+    "notes": "PeakRankings. 29% adv+exp split ~15/14."
+  },
+  {
+    "slug": "stratton-mountain",
+    "trails_total": 99,
+    "difficulty_pct": {
+      "beginner": 40,
+      "intermediate": 35,
+      "advanced": 13,
+      "expert": 12
+    },
+    "source_url": "https://www.peakrankings.com/content/stratton",
+    "exact_quote": "Trails: 99 ... Beginner: 40% ... Intermediate: 35% ... Advanced/Expert: 25%",
+    "notes": "PeakRankings. 25% adv+exp split ~13/12."
+  },
+  {
+    "slug": "sugar-bowl-resort",
+    "trails_total": 103,
+    "difficulty_pct": {
+      "beginner": 17,
+      "intermediate": 45,
+      "advanced": 19,
+      "expert": 19
+    },
+    "source_url": "https://www.peakrankings.com/content/sugar-bowl",
+    "exact_quote": "Trails: 103 ... Beginner: 17% ... Intermediate: 45% ... Advanced/Expert: 38%",
+    "notes": "PeakRankings. Trail count 103 supersedes input 105. 38% adv+exp split ~19/19."
+  },
+  {
+    "slug": "sugar-mountain-resort",
+    "trails_total": 20,
+    "difficulty_pct": {
+      "beginner": 40,
+      "intermediate": 40,
+      "advanced": 10,
+      "expert": 10
+    },
+    "source_url": "https://www.onthesnow.com/north-carolina/sugar-mountain-resort/ski-resort",
+    "exact_quote": "20 trails in total ... Beginners Runs 40% ... Intermediate Runs 40% ... Advanced Runs 10% ... Expert Runs 10%",
+    "notes": "OnTheSnow resort overview. Full 4-bucket breakdown."
+  },
+  {
+    "slug": "sugarbush",
+    "trails_total": 111,
+    "difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 34,
+      "advanced": 24,
+      "expert": 23
+    },
+    "source_url": "https://www.peakrankings.com/content/sugarbush",
+    "exact_quote": "111 ... 19% beginner terrain ... 34% intermediate terrain ... 47% advanced/expert terrain",
+    "notes": "PeakRankings. 47% adv+exp split ~24/23. Supersedes input 22/46/32/0."
+  },
+  {
+    "slug": "sugarloaf",
+    "trails_total": 162,
+    "difficulty_pct": {
+      "beginner": 23,
+      "intermediate": 34,
+      "advanced": 22,
+      "expert": 21
+    },
+    "source_url": "https://www.peakrankings.com/content/sugarloaf",
+    "exact_quote": "Trails: 162 ... Beginner: 23% ... Intermediate: 34% ... Advanced/Expert: 43%",
+    "notes": "PeakRankings. Trail count 162 differs from input 176. 43% adv+exp split ~22/21."
+  },
+  {
+    "slug": "summit-ski-area",
+    "trails_total": 3,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://traveloregon.com/things-to-do/outdoor-recreation/snow-sports/cross-country-skiing-snowshoeing/summit-pass/",
+    "exact_quote": "The ski area has a base elevation of 4,000 feet and a vertical lift of 306 feet, and has three ski trails and one lift.",
+    "notes": "Travel Oregon / multiple Mt Hood sources confirm 3 trails. All beginner terrain per description but no published pct breakdown."
+  },
+  {
+    "slug": "sun-valley",
+    "trails_total": 100,
+    "difficulty_pct": {
+      "beginner": 26,
+      "intermediate": 39,
+      "advanced": 18,
+      "expert": 17
+    },
+    "source_url": "https://www.peakrankings.com/content/sun-valley",
+    "exact_quote": "Trails: 100 ... Beginner: 26% ... Intermediate: 39% ... Advanced/Expert: 35%",
+    "notes": "PeakRankings - Bald Mountain figures. 35% adv+exp split ~18/17. Trail count 100 differs from input 121."
+  },
+  {
+    "slug": "sunburst",
+    "trails_total": 11,
+    "difficulty_pct": {
+      "beginner": 18,
+      "intermediate": 55,
+      "advanced": 18,
+      "expert": 9
+    },
+    "source_url": "https://www.onthesnow.com/wisconsin/sunburst/ski-resort",
+    "exact_quote": "Beginner Runs 18% Intermediate Runs 55% Advanced Runs 18% Expert Runs 9% Runs in Total 11",
+    "notes": "OnTheSnow resort overview. Full 4-bucket breakdown."
+  },
+  {
+    "slug": "sunburst-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/wisconsin/sunburst/ski-resort",
+    "exact_quote": "Beginner Runs 18% Intermediate Runs 55% Advanced Runs 18% Expert Runs 9% Runs in Total 11",
+    "notes": "[SANITIZED — fabrication marker in notes] Same resort as 'sunburst' slug (both link to skisunburst.com); flagged as likely duplicate.",
+    "_sanitized": true,
+    "_original_notes": "Same resort as 'sunburst' slug (both link to skisunburst.com); flagged as likely duplicate."
+  },
+  {
+    "slug": "sundance",
+    "trails_total": 72,
+    "difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 32,
+      "advanced": 24,
+      "expert": 23
+    },
+    "source_url": "https://www.peakrankings.com/content/sundance",
+    "exact_quote": "Trails: 72 ... Beginner: 21% ... Intermediate: 32% ... Advanced/Expert: 47%",
+    "notes": "PeakRankings. 47% adv+exp split ~24/23."
+  },
+  {
+    "slug": "sunday-river",
+    "trails_total": 140,
+    "difficulty_pct": {
+      "beginner": 31,
+      "intermediate": 32,
+      "advanced": 16,
+      "expert": 21
+    },
+    "source_url": "https://www.onthesnow.com/maine/sunday-river/ski-resort",
+    "exact_quote": "140 total runs across 884 Acres ... Beginners Runs: 31% ... Intermediate Runs: 32% ... Advanced Runs: 16% ... Expert Runs: 21%",
+    "notes": "OnTheSnow resort overview. Full 4-bucket breakdown. Trail count 140 supersedes input 139."
+  },
+  {
+    "slug": "sundown-mountain",
+    "trails_total": 21,
+    "difficulty_pct": {
+      "beginner": 40,
+      "intermediate": 40,
+      "advanced": 20,
+      "expert": 0
+    },
+    "source_url": "https://parksandtrips.com/ski-resort/smia-sundown-mountain/",
+    "exact_quote": "Sundown Mountain has a total of 21 ski trails ... 40% of its trails are rated as 'beginner-level'. 40% trails are rated as intermediate ... 20% are expert terrain",
+    "notes": "Parks & Trips ski guide. 3-bucket model; expert mapped to advanced."
+  }
+]

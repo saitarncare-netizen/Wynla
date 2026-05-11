@@ -1,0 +1,392 @@
+[
+  {
+    "slug": "pomerelle",
+    "trails_total": 32,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/idaho/pomerelle-mountain-resort/ski-resort",
+    "exact_quote": "The page states there are \"32\" total runs at the resort.",
+    "notes": "OnTheSnow lists 32 runs; SkiCentral lists 24 trails. Kept 32 per OnTheSnow. Neither source provides difficulty percentage breakdown."
+  },
+  {
+    "slug": "porcupine-mountains",
+    "trails_total": 19,
+    "difficulty_pct": {
+      "beginner": 16,
+      "intermediate": 42,
+      "advanced": 16,
+      "expert": 26
+    },
+    "source_url": "https://www.onthesnow.com/michigan/porkies/ski-resort",
+    "exact_quote": "Total Runs: \"19\" trails in total. Beginners: \"16%\" Intermediate: \"42%\" Advanced: \"16%\" Expert: \"26%\"",
+    "notes": "OnTheSnow slug 'porkies'. SkiCentral lists 42 trails with no breakdown; OnTheSnow 19 used as authoritative explicit-quote source."
+  },
+  {
+    "slug": "powder-mountain",
+    "trails_total": 172,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 40,
+      "advanced": 35,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/utah/powder-mountain/ski-resort",
+    "exact_quote": "The page states there are \"172\" total runs at the resort.",
+    "notes": "OnTheSnow=172, SkiCentral=135. Neither source provides difficulty breakdown; current_difficulty_pct from input retained."
+  },
+  {
+    "slug": "powder-ridge",
+    "trails_total": 13,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/minnesota/powder-ridge-ski-area/ski-resort",
+    "exact_quote": "The page states there are \"13\" total runs at the resort.",
+    "notes": "OnTheSnow=13 (matches input); SkiCentral=15. No difficulty breakdown on either source."
+  },
+  {
+    "slug": "powder-ridge-mountain-park",
+    "trails_total": 20,
+    "difficulty_pct": {
+      "beginner": 45,
+      "intermediate": 40,
+      "advanced": 15,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/connecticut/powder-ridge-park/ski-resort",
+    "exact_quote": "Total Runs: \"20\" trails are available at the resort. Beginner: \"45%\" Intermediate: \"40%\" Advanced: \"15%\"",
+    "notes": "OnTheSnow slug 'powder-ridge-park'. SkiCentral lists 19 trails. Expert=0 since no expert category listed."
+  },
+  {
+    "slug": "powderhorn",
+    "trails_total": 54,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 28,
+      "advanced": 48,
+      "expert": 4
+    },
+    "source_url": "https://www.onthesnow.com/colorado/powderhorn/ski-resort",
+    "exact_quote": "\"54\" runs in total at Powderhorn. Beginners: \"20%\" Intermediate: \"28%\" Advanced: \"48%\" Expert: \"4%\"",
+    "notes": "OnTheSnow=54, SkiCentral=63. OnTheSnow used as it provides full difficulty breakdown with exact quotes."
+  },
+  {
+    "slug": "powderhouse-hill",
+    "trails_total": 3,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skicentral.com/powderhousehill.html",
+    "exact_quote": "The hill has 3 trails and 175-feet of vertical elevation.",
+    "notes": "Not listed on OnTheSnow. SkiCentral provides trail count but no difficulty breakdown."
+  },
+  {
+    "slug": "purgatory",
+    "trails_total": 107,
+    "difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 36,
+      "advanced": 27,
+      "expert": 15
+    },
+    "source_url": "https://www.onthesnow.com/colorado/durango-mountain-resort/ski-resort",
+    "exact_quote": "Beginners Runs 22% Intermediate Runs 36% Advanced Runs 27% Expert Runs 15%; 107 trails",
+    "notes": "OnTheSnow slug 'durango-mountain-resort'. SkiCentral lists 88 trails; OnTheSnow=107 used. Full breakdown with exact percentages."
+  },
+  {
+    "slug": "quarry-road-trails",
+    "trails_total": 22,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not listed on OnTheSnow or SkiCentral. Cross-country trails facility, not downhill ski area. Retained input value of 22."
+  },
+  {
+    "slug": "quechee-club",
+    "trails_total": 13,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skicentral.com/quecheelakes.html",
+    "exact_quote": "Number of Trails: 13",
+    "notes": "Not listed on OnTheSnow. SkiCentral confirms 13 trails, no difficulty breakdown."
+  },
+  {
+    "slug": "ragged-mountain",
+    "trails_total": 57,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 26,
+      "advanced": 37,
+      "expert": 7
+    },
+    "source_url": "https://www.onthesnow.com/new-hampshire/ragged-mountain-resort/ski-resort",
+    "exact_quote": "Beginners Runs 30% Intermediate Runs 26% Advanced Runs 37% Expert Runs 7% Runs in Total 57",
+    "notes": "OnTheSnow slug 'ragged-mountain-resort'. SkiCentral lists 55. OnTheSnow=57 matches input; full breakdown."
+  },
+  {
+    "slug": "rangeley-lakes-trail-center",
+    "trails_total": 35,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skicentral.com/rangeleylakestrailscenter.html",
+    "exact_quote": "Number of Trails is listed as 0",
+    "notes": "Not on OnTheSnow. SkiCentral page exists but lacks data. Cross-country trails facility; retained input value of 35."
+  },
+  {
+    "slug": "red-lodge",
+    "trails_total": 70,
+    "difficulty_pct": {
+      "beginner": 19,
+      "intermediate": 25,
+      "advanced": 36,
+      "expert": 20
+    },
+    "source_url": "https://www.onthesnow.com/montana/red-lodge-mountain/ski-resort",
+    "exact_quote": "Total Trails: 70 runs. Beginners: \"19%\" Intermediate: \"25%\" Advanced: \"36%\" Expert: \"20%\"",
+    "notes": "OnTheSnow=70 matches input. Beginner OnTheSnow=19 vs input=19, Intermediate=25 vs input=26 (minor variance). Updated to OnTheSnow values."
+  },
+  {
+    "slug": "red-river-ski-area",
+    "trails_total": 64,
+    "difficulty_pct": {
+      "beginner": 31,
+      "intermediate": 31,
+      "advanced": 38,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/new-mexico/red-river/ski-resort",
+    "exact_quote": "Total Trails: 64 runs across 285 acres. Beginner: \"31%\" Intermediate: \"31%\" Advanced: \"38%\"",
+    "notes": "OnTheSnow slug 'red-river'. SkiCentral=57. OnTheSnow=64 used; expert=0 (not listed)."
+  },
+  {
+    "slug": "rikert-nordic-center",
+    "trails_total": 35,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Cross-country Nordic facility, not listed on OnTheSnow or SkiCentral. Retained input value of 35."
+  },
+  {
+    "slug": "rikert-outdoor-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Same facility as rikert-nordic-center (duplicate slug). Not listed on OnTheSnow or SkiCentral."
+  },
+  {
+    "slug": "rotarun",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not listed on OnTheSnow or SkiCentral. Small volunteer-run community ski area in Idaho."
+  },
+  {
+    "slug": "roundtop-mountain-resort",
+    "trails_total": 18,
+    "difficulty_pct": {
+      "beginner": 28,
+      "intermediate": 22,
+      "advanced": 39,
+      "expert": 11
+    },
+    "source_url": "https://www.onthesnow.com/pennsylvania/roundtop-mountain-resort/ski-resort",
+    "exact_quote": "\"18\" trails across 103 acres. Beginners: \"28%\" Intermediate: \"22%\" Advanced: \"39%\" Expert: \"11%\"",
+    "notes": "OnTheSnow=18, SkiCentral=22. OnTheSnow used for explicit difficulty breakdown."
+  },
+  {
+    "slug": "royal-mountain",
+    "trails_total": 29,
+    "difficulty_pct": {
+      "beginner": 31,
+      "intermediate": 21,
+      "advanced": 17,
+      "expert": 31
+    },
+    "source_url": "https://www.onthesnow.com/new-york/royal-mountain-ski-area/ski-resort",
+    "exact_quote": "\"29\" trails across 70 acres. Beginner Runs: \"31%\" Intermediate Runs: \"21%\" Advanced Runs: \"17%\" Expert Runs: \"31%\"",
+    "notes": "OnTheSnow slug 'royal-mountain-ski-area'. OnTheSnow=29, SkiCentral=27."
+  },
+  {
+    "slug": "saddleback",
+    "trails_total": 68,
+    "difficulty_pct": {
+      "beginner": 32,
+      "intermediate": 32,
+      "advanced": 25,
+      "expert": 10
+    },
+    "source_url": "https://www.onthesnow.com/maine/saddleback-inc/ski-resort",
+    "exact_quote": "\"68\" runs in total. Beginners: \"32%\" Intermediate: \"32%\" Advanced: \"25%\" Expert: \"10%\"",
+    "notes": "OnTheSnow slug 'saddleback-inc'. OnTheSnow=68 matches input. Minor breakdown variances vs input (32/32/25/10 vs 34/29/26/10)."
+  },
+  {
+    "slug": "sandia-peak",
+    "trails_total": 35,
+    "difficulty_pct": {
+      "beginner": 23,
+      "intermediate": 49,
+      "advanced": 29,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/new-mexico/sandia-peak/ski-resort",
+    "exact_quote": "Beginners Runs 23% Intermediate Runs 49% Advanced Runs 29% Runs in Total 35",
+    "notes": "OnTheSnow=35 trails, full breakdown matches input. Expert not listed (0)."
+  },
+  {
+    "slug": "sapphire-valley-resort",
+    "trails_total": 2,
+    "difficulty_pct": {
+      "beginner": 50,
+      "intermediate": 50,
+      "advanced": 0,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/north-carolina/sapphire-valley/ski-resort",
+    "exact_quote": "Beginners Runs 50% Intermediate Runs 50% Runs in Total 2",
+    "notes": "OnTheSnow=2 runs. SkiCentral confirms two runs (one intermediate, one beginner)."
+  },
+  {
+    "slug": "saskadena-six-area",
+    "trails_total": 28,
+    "difficulty_pct": {
+      "beginner": 18,
+      "intermediate": 50,
+      "advanced": 14,
+      "expert": 18
+    },
+    "source_url": "https://www.onthesnow.com/vermont/suicide-six/ski-resort",
+    "exact_quote": "\"28\" total runs across \"100 ac\" of skiable terrain. Beginners: \"18%\" Intermediate: \"50%\" Advanced: \"14%\" Expert: \"18%\"",
+    "notes": "OnTheSnow slug 'suicide-six' (former name). OnTheSnow=28 matches input. SkiCentral=23."
+  },
+  {
+    "slug": "schuss-shanty-creek",
+    "trails_total": 42,
+    "difficulty_pct": {
+      "beginner": 29,
+      "intermediate": 26,
+      "advanced": 45,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/michigan/shanty-creek/ski-resort",
+    "exact_quote": "42 runs across 80 acres. Beginners: \"29%\" Intermediate: \"26%\" Advanced: \"45%\"",
+    "notes": "OnTheSnow slug 'shanty-creek'. SkiCentral=53. OnTheSnow=42 matches input. Expert not listed (0)."
+  },
+  {
+    "slug": "schweitzer",
+    "trails_total": 92,
+    "difficulty_pct": {
+      "beginner": 10,
+      "intermediate": 40,
+      "advanced": 35,
+      "expert": 15
+    },
+    "source_url": "https://www.onthesnow.com/idaho/schweitzer/ski-resort",
+    "exact_quote": "Beginners Runs 10% Intermediate Runs 40% Advanced Runs 35% Expert Runs 15% Runs in Total 92",
+    "notes": "OnTheSnow=92, full breakdown matches input exactly."
+  },
+  {
+    "slug": "seven-oaks",
+    "trails_total": 11,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 50,
+      "advanced": 0,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/iowa/seven-oaks/ski-resort",
+    "exact_quote": "\"11\" runs across \"35 Acres\". Beginners: \"25%\" Intermediate: \"50%\" Expert: \"-\"",
+    "notes": "OnTheSnow=11 (input=12). Percentages do not sum to 100; only beginner/intermediate listed."
+  },
+  {
+    "slug": "seven-springs",
+    "trails_total": 42,
+    "difficulty_pct": {
+      "beginner": 38,
+      "intermediate": 36,
+      "advanced": 14,
+      "expert": 12
+    },
+    "source_url": "https://www.onthesnow.com/pennsylvania/seven-springs/ski-resort",
+    "exact_quote": "\"42\" trails across 285 acres. Beginners: \"38%\" Intermediate: \"36%\" Advanced: \"14%\" Expert: \"12%\"",
+    "notes": "OnTheSnow=42 trails. SkiCentral=33. Input had beginner=35 vs OnTheSnow 38 (minor); other values match exactly."
+  },
+  {
+    "slug": "shanty-creek",
+    "trails_total": 42,
+    "difficulty_pct": {
+      "beginner": 29,
+      "intermediate": 26,
+      "advanced": 45,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/michigan/shanty-creek/ski-resort",
+    "exact_quote": "42 runs across 80 acres. Beginners: \"29%\" Intermediate: \"26%\" Advanced: \"45%\"",
+    "notes": "Same resort as schuss-shanty-creek (duplicate slug). OnTheSnow=42 matches input."
+  },
+  {
+    "slug": "shawnee-mountain",
+    "trails_total": 23,
+    "difficulty_pct": {
+      "beginner": 43,
+      "intermediate": 30,
+      "advanced": 26,
+      "expert": 0
+    },
+    "source_url": "https://www.onthesnow.com/pennsylvania/shawnee-mountain-ski-area/ski-resort",
+    "exact_quote": "Total Trails: 23 runs. Beginners: \"43%\" Intermediate: \"30%\" Advanced: \"26%\"",
+    "notes": "OnTheSnow slug 'shawnee-mountain-ski-area'. 23 trails matches input. Expert not listed (0)."
+  },
+  {
+    "slug": "shawnee-peak",
+    "trails_total": 43,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/maine/pleasant-mountain/ski-resort",
+    "exact_quote": "The page indicates \"43\" total runs/trails at the resort.",
+    "notes": "Renamed from Shawnee Peak to Pleasant Mountain. OnTheSnow=43, SkiCentral=40 (input=44). No difficulty breakdown on either source."
+  }
+]

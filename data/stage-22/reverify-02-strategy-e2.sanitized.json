@@ -1,0 +1,218 @@
+[
+  {
+    "slug": "loup-loup",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 27,
+      "intermediate": 46,
+      "advanced": 27,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/loup-loup-ski-bowl/",
+    "exact_quote": "Total: 11 km; Easy 3 km (27 %); Intermediate 5 km (46 %); Difficult 3 km (27 %)",
+    "notes": "Found via slug variant 'loup-loup-ski-bowl'. skiresort.info shows km not run counts so trails_total left null. Advanced + Expert combined under 'Difficult'; expert split not provided."
+  },
+  {
+    "slug": "maplelag",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info. Tried slugs: maplelag, maplelag-resort. Both redirected to homepage. Likely a Nordic/XC ski area which skiresort.info doesn't typically cover."
+  },
+  {
+    "slug": "middlebury-snow-bowl",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 33,
+      "intermediate": 27,
+      "advanced": 40,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/middlebury-college-snow-bowl/",
+    "exact_quote": "Total: 15 km; Easy 5 km (33 %); Intermediate 4 km (27 %); Difficult 6 km (40 %)",
+    "notes": "Found via slug variant 'middlebury-college-snow-bowl'. skiresort.info uses km not run counts; trails_total left null. Expert split not separated from Difficult on the page."
+  },
+  {
+    "slug": "minocqua-winter-park",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info. Tried slug: minocqua-winter-park. Redirected to homepage. Nordic/XC only area, generally outside skiresort.info coverage."
+  },
+  {
+    "slug": "mount-itasca",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info. Tried slugs: mount-itasca, mt-itasca. Both redirected to homepage."
+  },
+  {
+    "slug": "mt-holiday",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 45,
+      "advanced": 33,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mt-holiday/",
+    "exact_quote": "Total: 4.5 km; Easy 1 km (22 %); Intermediate 2 km (45 %); Difficult 1.5 km (33 %)",
+    "notes": "Found at primary slug. skiresort.info uses km not run counts; trails_total left null. Expert split not separated."
+  },
+  {
+    "slug": "mt-shasta-ski-park",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 35,
+      "advanced": 43,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/mt-shasta-ski-park/",
+    "exact_quote": "Total: 23 km; Easy 5 km (22 %); Intermediate 8 km (35 %); Difficult 10 km (43 %)",
+    "notes": "Found at primary slug. skiresort.info uses km not run counts; trails_total left null. Expert split not separated."
+  },
+  {
+    "slug": "north-cascade-heli",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info. Tried slug: north-cascade-heli. Redirected to homepage. Heli-ski operations are typically not covered by skiresort.info."
+  },
+  {
+    "slug": "oglebay-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 100,
+      "intermediate": 0,
+      "advanced": 0,
+      "expert": 0
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/oglebay-resort/",
+    "exact_quote": "Easy 0.6 km (100 %); Intermediate 0 km (0 %); Difficult 0 km (0 %); Total 0.6 km",
+    "notes": "Found at primary slug. Beginner-only terrain — page explicitly shows 0 km for Intermediate and Difficult, so expert is also 0. trails_total left null (km-based listing)."
+  },
+  {
+    "slug": "plain-valley-trails",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info. Tried slug: plain-valley-trails. Redirected to homepage. Nordic/XC area."
+  },
+  {
+    "slug": "quarry-road-trails",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info. Tried slug: quarry-road-trails. Redirected to homepage. Nordic/XC area."
+  },
+  {
+    "slug": "rangeley-lakes-trail-center",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info. Tried slug: rangeley-lakes-trail-center. Redirected to homepage. Nordic/XC area."
+  },
+  {
+    "slug": "rikert-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info. Tried slug: rikert-nordic-center. Redirected to homepage. Nordic/XC area."
+  },
+  {
+    "slug": "rikert-outdoor-center",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info. Tried slug: rikert-outdoor-center. Redirected to homepage. Nordic/XC area."
+  },
+  {
+    "slug": "sleepy-hollow",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info. Tried slug: sleepy-hollow-sports-park. Redirected to homepage."
+  },
+  {
+    "slug": "song-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 46,
+      "advanced": 19,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/song-mountain/",
+    "exact_quote": "Total: 13 km; Easy 4.5 km (35 %); Intermediate 6 km (46 %); Difficult 2.5 km (19 %)",
+    "notes": "Found at primary slug. skiresort.info uses km not run counts; trails_total left null. Expert split not separated."
+  },
+  {
+    "slug": "spring-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 47,
+      "intermediate": 29,
+      "advanced": 24,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/spring-mountain/",
+    "exact_quote": "Total: 8.5 km; Easy 4 km (47 %); Intermediate 2.5 km (29 %); Difficult 2 km (24 %)",
+    "notes": "Found at primary slug. skiresort.info uses km not run counts; trails_total left null (the '3' mentioned by parse refers to difficulty levels, not run count). Expert split not separated."
+  },
+  {
+    "slug": "steamboat-touring-center",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info. Tried slug: steamboat-touring-center. Redirected to homepage. Nordic/XC area."
+  },
+  {
+    "slug": "sunburst-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": 17,
+      "intermediate": 50,
+      "advanced": 33,
+      "expert": null
+    },
+    "source_url": "https://www.skiresort.info/ski-resort/sunburst/",
+    "exact_quote": "Total: 3 km; Easy 0.5 km (17 %); Intermediate 1.5 km (50 %); Difficult 1 km (33 %)",
+    "notes": "Found via slug variant 'sunburst' (without '-area'). Also tried 'sunburst-area'. skiresort.info uses km not run counts; trails_total left null. Expert split not separated."
+  },
+  {
+    "slug": "trapp-family-lodge",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info. Tried slugs: trapp-family-lodge, trapp-family-lodge-stowe. Both redirected to homepage. Nordic/XC area."
+  },
+  {
+    "slug": "white-pine-touring-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info. Tried slug: white-pine-touring-nordic-center. Redirected to homepage. Nordic/XC area."
+  },
+  {
+    "slug": "woodstock-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Not found on skiresort.info. Tried slug: woodstock-nordic-center. Redirected to homepage. Nordic/XC area."
+  }
+]

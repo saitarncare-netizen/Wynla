@@ -1,0 +1,282 @@
+[
+  {
+    "slug": "mystic-mountain",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Mystic_Mountain_(Pennsylvania)",
+    "exact_quote": null,
+    "notes": "No Wikipedia article found (404). Tried Mystic_Mountain_(Pennsylvania), Mystic_Mountain_(Nemacolin); Nemacolin Woodlands Resort article does not contain ski trail data."
+  },
+  {
+    "slug": "nashoba-valley-ski-area",
+    "trails_total": 17,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Nashoba_Valley_Ski_Area",
+    "exact_quote": "It has 17 ski trails as well as a terrain park and tubing park.",
+    "notes": "Wikipedia provides 17 trails. No explicit difficulty percentage breakdown; only counts listed (5 advanced, 8 intermediate, 4 beginner) which would imply 24/47/29 — matches input but not stated as percentages on Wikipedia."
+  },
+  {
+    "slug": "nordic-mountain",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Nordic_Mountain",
+    "exact_quote": null,
+    "notes": "No Wikipedia article found (404). Tried Nordic_Mountain and Nordic_Mountain_Ski_Area."
+  },
+  {
+    "slug": "nordic-valley",
+    "trails_total": 40,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 30,
+      "advanced": 50,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Nordic_Valley_Ski_Area",
+    "exact_quote": "40 total [trails] 20% easiest 30% more difficult 50% most difficult",
+    "notes": "Page now titled Wolf Mountain (renamed). Wikipedia infobox lists 40 runs; difficulty uses easiest/more difficult/most difficult labels mapped to beginner/intermediate/advanced+expert."
+  },
+  {
+    "slug": "north-cascade-heli",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/North_Cascade_Heli",
+    "exact_quote": null,
+    "notes": "No Wikipedia article found (404). Heli-ski operation — not a fixed-trail resort."
+  },
+  {
+    "slug": "northeast-slopes",
+    "trails_total": 12,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Northeast_Slopes",
+    "exact_quote": "12",
+    "notes": "Wikipedia infobox lists 12 trails. No difficulty breakdown on page."
+  },
+  {
+    "slug": "northern-maine-community-trails",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Northern_Maine_Community_Trails",
+    "exact_quote": null,
+    "notes": "No Wikipedia article found (404)."
+  },
+  {
+    "slug": "northstar-california",
+    "trails_total": 100,
+    "difficulty_pct": {
+      "beginner": 13,
+      "intermediate": 60,
+      "advanced": 27,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Northstar_California",
+    "exact_quote": "100 total 13% beginner 60% intermediate 27% advanced",
+    "notes": "Wikipedia infobox provides explicit trail count and difficulty percentages. Matches input difficulty exactly."
+  },
+  {
+    "slug": "norway-mountain",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Norway_Mountain",
+    "exact_quote": null,
+    "notes": "No Wikipedia article found (404)."
+  },
+  {
+    "slug": "nubs-nob",
+    "trails_total": 53,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Nub%27s_Nob",
+    "exact_quote": "the area reached its current total of 53 runs",
+    "notes": "Wikipedia confirms 53 runs. No explicit difficulty percentages — only qualitative description."
+  },
+  {
+    "slug": "oak-mountain",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Oak_Mountain_(New_York)",
+    "exact_quote": null,
+    "notes": "No Wikipedia article found (404). Tried Oak_Mountain_(New_York) and Oak_Mountain_Ski_Center."
+  },
+  {
+    "slug": "ober-mountain",
+    "trails_total": 11,
+    "difficulty_pct": {
+      "beginner": 27,
+      "intermediate": 55,
+      "advanced": 18,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Ober_Mountain",
+    "exact_quote": "Ober Mountain features 11 ski trails of varying difficulty from easy (green) to advanced (black diamond). The trail breakdown is as follows: Easy – 3 trails (27%), Intermediate – 6 trails (55%), Advanced – 2 trails (18%)",
+    "notes": "Wikipedia confirms 11 trails (input had 10). Difficulty percentages match input exactly."
+  },
+  {
+    "slug": "oglebay-resort",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Oglebay_Park",
+    "exact_quote": null,
+    "notes": "Oglebay Park Wikipedia article mentions 'a ski slope' but provides no trail count or difficulty breakdown."
+  },
+  {
+    "slug": "okemo-mountain-resort",
+    "trails_total": 123,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Okemo_Mountain_Resort",
+    "exact_quote": "The mountain has a total of 123 trails spread across 667 acres (2.70 km2) skiable terrain.",
+    "notes": "Wikipedia confirms 123 trails. Article states difficulty is 'almost evenly divided between novice, intermediate, and advanced/expert' — no explicit percentages."
+  },
+  {
+    "slug": "otis-ridge",
+    "trails_total": 11,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Otis_Ridge",
+    "exact_quote": "Otis Ridge has a total of 11 trails.",
+    "notes": "Wikipedia confirms 11 trails. No difficulty percentage breakdown provided."
+  },
+  {
+    "slug": "otsego-resort",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Otsego_Resort",
+    "exact_quote": null,
+    "notes": "No Wikipedia article found (404). Tried Otsego_Resort and Otsego_Club."
+  },
+  {
+    "slug": "pajarito-mountain",
+    "trails_total": 44,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 50,
+      "advanced": 30,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Pajarito_Mountain_Ski_Area",
+    "exact_quote": "Trails: 44 total (20% beginner, 50% intermediate, 30% advanced/expert)",
+    "notes": "Wikipedia infobox provides 44 trails (input had 53) and explicit difficulty percentages combining advanced/expert into one 30% bucket."
+  },
+  {
+    "slug": "palisades-tahoe",
+    "trails_total": 177,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Palisades_Tahoe",
+    "exact_quote": "177+",
+    "notes": "Wikipedia infobox shows 177+ trails. No explicit difficulty percentage breakdown."
+  },
+  {
+    "slug": "paoli-peaks",
+    "trails_total": 17,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 55,
+      "advanced": 20,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Paoli_Peaks",
+    "exact_quote": "Paoli Peaks is built on a natural hill at a 900 ft (270 m). elevation with a vertical drop of 300 ft (91 m). Currently, it has 17 runs and many chairlifts and tows.",
+    "notes": "Wikipedia text says 17 runs (infobox says 15). Difficulty 25/55/20 from infobox; alternative breakdown 25/55/10/10 freestyle also mentioned."
+  },
+  {
+    "slug": "park-city",
+    "trails_total": 324,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Park_City_Mountain_Resort",
+    "exact_quote": "324",
+    "notes": "Wikipedia infobox lists 324 trails matching input. Two conflicting difficulty breakdowns on page (7/49/44 infobox vs 15/54/31 statistics section) — too inconsistent to record."
+  },
+  {
+    "slug": "pats-peak",
+    "trails_total": 28,
+    "difficulty_pct": {
+      "beginner": 50,
+      "intermediate": 21,
+      "advanced": 12,
+      "expert": 17
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Pat%27s_Peak",
+    "exact_quote": "The trail network is 50% novice, 21% intermediate, 12% advanced, and 17% expert.",
+    "notes": "Wikipedia confirms 28 trails and provides explicit difficulty percentages (nearly matches input 50/21/11/18)."
+  },
+  {
+    "slug": "paul-bunyan-hill",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Paul_Bunyan_Ski_Hill",
+    "exact_quote": null,
+    "notes": "No Wikipedia article found (404)."
+  },
+  {
+    "slug": "pebble-creek",
+    "trails_total": 54,
+    "difficulty_pct": {
+      "beginner": 12,
+      "intermediate": 35,
+      "advanced": 53,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Pebble_Creek_Ski_Area",
+    "exact_quote": "54 - 12% beginner - 35% intermediate - 53% advanced",
+    "notes": "Wikipedia infobox provides 54 runs (input had 51) and explicit difficulty percentages."
+  },
+  {
+    "slug": "peek-n-peak",
+    "trails_total": 27,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Peek%27n_Peak",
+    "exact_quote": "Peek'n Peak has 27 skiing and snowboarding trails",
+    "notes": "Wikipedia text says 27 trails (infobox 25). No difficulty breakdown on page."
+  },
+  {
+    "slug": "perfect-north",
+    "trails_total": 23,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Perfect_North_Slopes",
+    "exact_quote": "The area has 23 trails, ranging from five beginner level to one expert, and includes three terrain parks.",
+    "notes": "Wikipedia confirms 23 trails. Trail counts by difficulty given (5 beginner, 10 intermediate, 1 adv-int, 4 advanced, 1 expert) but no explicit percentages stated."
+  },
+  {
+    "slug": "pico-mountain",
+    "trails_total": 58,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Pico_Mountain",
+    "exact_quote": "58 trails",
+    "notes": "Wikipedia lists 58 trails. No explicit difficulty percentages provided."
+  },
+  {
+    "slug": "pine-knob",
+    "trails_total": 17,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Pine_Knob",
+    "exact_quote": "It features seventeen trails, twelve lifts and three terrain parks.",
+    "notes": "Wikipedia confirms 17 trails. No explicit difficulty breakdown."
+  },
+  {
+    "slug": "pine-mountain",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Pine_Mountain_Resort",
+    "exact_quote": null,
+    "notes": "No Wikipedia article found (404). Tried Pine_Mountain_Resort and Pine_Mountain_Ski_Resort."
+  },
+  {
+    "slug": "plain-valley-trails",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Plain_Valley_Ski_Trails",
+    "exact_quote": null,
+    "notes": "No Wikipedia article found (404)."
+  },
+  {
+    "slug": "plattekill-mountain",
+    "trails_total": 40,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 40,
+      "advanced": 20,
+      "expert": 20
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Plattekill_Mountain",
+    "exact_quote": "Number of Trails: 40, beginner 20% intermediate 40% advanced 20% expert 20%",
+    "notes": "Wikipedia infobox provides 40 trails (input had 41) and explicit 20/40/20/20 difficulty breakdown matching input."
+  }
+]

@@ -1,0 +1,392 @@
+[
+  {
+    "slug": "aspen-snowmass",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No website_url provided in input; skipped per STRICT official-site rule."
+  },
+  {
+    "slug": "attitash",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Vail Resorts reservations platform returned 'The system cannot process your request' on all fetched pages (home, /the-mountain/mountain-stats, /the-mountain/about-the-mountain/mountain-stats, /the-mountain/about-the-mountain/the-stats.aspx). No explicit numbers available."
+  },
+  {
+    "slug": "badger-mountain-wa",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Fetch of http://www.nwwintersportsman.com/BadgerMt/index2.htm failed with self-signed-certificate error; no explicit numbers obtained."
+  },
+  {
+    "slug": "badger-pass",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "travelyosemite.com/winter/yosemite-ski-snowboard-area/ describes activities but publishes no trail count or difficulty percentages."
+  },
+  {
+    "slug": "bear-basin-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic/cross-country only ('25 kilometers of groomed cross-country ski and skate ski trails'); per rule Nordic -> null."
+  },
+  {
+    "slug": "bear-creek-mountain-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "bcmountainresort.com homepage does not publish trail count or difficulty percentages; no explicit numbers available."
+  },
+  {
+    "slug": "bear-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "bigbearmountainresort.com homepage and /the-mountain, /explore-the-mountain/mountain-info, /snow-summit/the-mountain all 404 or do not surface explicit trail/difficulty numbers for Bear Mountain peak."
+  },
+  {
+    "slug": "bear-paw",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "skibearpaw.com shows 'Launching Soon' placeholder; /about and /trail-map return 404. No explicit numbers."
+  },
+  {
+    "slug": "bear-valley-adventure-company",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic/cross-country only ('XC Ski/Snowshoe Trails'); per rule Nordic -> null."
+  },
+  {
+    "slug": "bear-valley-mountain",
+    "trails_total": 75,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.bearvalley.com",
+    "exact_quote": "75 Trails",
+    "notes": "Homepage explicitly lists '75 Trails' under Mountain Stats. /trail-map links to a PDF for difficulty breakdown; percentages not published as text."
+  },
+  {
+    "slug": "beartooth-basin",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "beartoothbasin.com homepage focuses on season prep; no explicit trail count or difficulty percentages published."
+  },
+  {
+    "slug": "beaver-creek",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Vail Resorts reservations platform returned 'The system cannot process your request' on home page and /the-mountain/mountain-stats variants. No explicit numbers obtained."
+  },
+  {
+    "slug": "beaver-mountain",
+    "trails_total": 48,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 40,
+      "advanced": 25,
+      "expert": 0
+    },
+    "source_url": "https://www.skithebeav.com/mountain/",
+    "exact_quote": "48 runs ... 25% advanced, 40% intermediate 35% beginner",
+    "notes": "Mountain page publishes 48 runs with split 35% beginner / 40% intermediate / 25% advanced. No separate expert tier mentioned -> 0."
+  },
+  {
+    "slug": "beech-mountain-resort",
+    "trails_total": 17,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.beechmountainresort.com/the-mountain/mountain-stats/",
+    "exact_quote": "17 Total trails ... 3 Easiest ... 9 More Difficult ... 4 Most Difficult ... 1 Freestyle Terrain",
+    "notes": "Mountain Stats page lists 17 trails as raw counts (3/9/4/1) but does not publish percentages. Per STRICT rule (no estimation), difficulty_pct left null."
+  },
+  {
+    "slug": "belleayre-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "belleayre.com and /the-mountain/mountain-stats/, /about, /winter/mountain-stats all returned 403 Forbidden; could not read official numbers."
+  },
+  {
+    "slug": "berkshire-east",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "berkshireeast.com homepage and /winter/ do not publish explicit trail count or difficulty percentages as text (trail map linked as image only)."
+  },
+  {
+    "slug": "bethel-village-trails",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic/cross-country only ('cross country skiing, fat tire biking and snowshoeing'); per rule Nordic -> null."
+  },
+  {
+    "slug": "big-bear-ca",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No website_url provided in input; skipped per STRICT official-site rule."
+  },
+  {
+    "slug": "big-bear-pa",
+    "trails_total": 18,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.ski-bigbear.com",
+    "exact_quote": "Ski Big Bear offers 18 trails, 7 lifts including 3 Magic Carpet lifts, and 650' of vertical.",
+    "notes": "Trail total explicit; site states 'Our trails offer something for every ability' but does not publish difficulty percentages."
+  },
+  {
+    "slug": "big-boulder",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "jfbb.com/the-mountain/mountain-stats returned Vail Resorts 'The system cannot process your request' error. No explicit numbers obtained."
+  },
+  {
+    "slug": "big-powderhorn-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "bigpowderhorn.net /the-mountain and /the-mountain/trail-map/ display trail map as image/PDF; By-the-numbers panel renders '0 Trails' placeholder. No explicit text numbers accessible."
+  },
+  {
+    "slug": "big-rock",
+    "trails_total": 25,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.bigrockmaine.com/trails/",
+    "exact_quote": "0 of 25 trails ... Green circles (Beginner): 2 trails ... Blue squares (Intermediate): 16 trails ... Black diamonds (Advanced): 6 trails ... Double black diamonds (Expert): 1 trail",
+    "notes": "Trails page lists 25 total with raw counts (2/16/6/1) but no published percentages; per STRICT rule difficulty_pct left null. Resort closed for 2025-2026 season per site."
+  },
+  {
+    "slug": "big-sky",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "bigskyresort.com home, /about-big-sky/mountain-stats, /the-mountain/mountain-stats, /about-the-mountain/mountain-stats, /the-mountain/mountain-experience, /mountain-stats all returned 404 or no explicit numbers."
+  },
+  {
+    "slug": "big-snow-american-dream",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "bigsnowamericandream.com homepage and /skiing-and-snowboarding, /skiing-snowboarding/ pages either 404 or do not publish trail count or difficulty percentages."
+  },
+  {
+    "slug": "big-squaw-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "skibigsquaw.com 301-redirects to skibigmoose.com; homepage lists named trails but does not publish total count or difficulty percentages."
+  },
+  {
+    "slug": "bittersweet-ski-resort",
+    "trails_total": 20,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skibittersweet.com",
+    "exact_quote": "WITH 350 VERTICAL FEET, 20 RUNS, 6 CHAIR LIFTS, INCLUDING 2 HIGH SPEED LIFTS, 3 WONDER CARPETS, AND 2 ROPE TOWS.",
+    "notes": "Homepage explicitly states 20 runs. No difficulty percentages published."
+  },
+  {
+    "slug": "black-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "blackmt.com (Black Mountain NH) homepage and /trail-map serve trail map as image only; no explicit trail count or difficulty percentages in page text."
+  },
+  {
+    "slug": "black-mountain-nh",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "blackmt.com homepage and /trail-map serve trail map as image only; no explicit trail count or difficulty percentages in page text."
+  },
+  {
+    "slug": "black-mountain-of-maine",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "skiblackmountain.org /the-mountain/ lists '600 acres of boundary to boundary skiing' and individual trail names but does not publish total count or difficulty percentages."
+  },
+  {
+    "slug": "blackjack-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "URL skiblackjack.com resolves to a blackjack card-game site, not the Michigan ski area. Subpaths /the-mountain/, /skiing-and-riding/, /explore-the-mountain/ all 404. No official numbers accessible from this URL."
+  }
+]

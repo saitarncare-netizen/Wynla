@@ -1,0 +1,242 @@
+[
+  {
+    "slug": "camelback-mountain-resort",
+    "trails_total": 35,
+    "difficulty_pct": { "beginner": 39, "intermediate": 26, "advanced": 26, "expert": 9 },
+    "source_url": "https://en.wikipedia.org/wiki/Camelback_Mountain_Resort",
+    "exact_quote": "35 trails 39% Beginner 26% More Difficult 26% Most Difficult 9% Expert",
+    "notes": "Wikipedia infobox. Article also mentions 39 slopes in text; using infobox value of 35."
+  },
+  {
+    "slug": "camp-10-area",
+    "trails_total": 15,
+    "difficulty_pct": { "beginner": 40, "intermediate": 40, "advanced": 20, "expert": 0 },
+    "source_url": "https://www.travelwisconsin.com/downhill-skiing-snowboarding/camp-10-ski-area-204094",
+    "exact_quote": "New double chairlift serves 15 runs - 40% beginner, 40% intermediate and 20% advanced; added lights and snowmaking.",
+    "notes": "TravelWisconsin (state tourism DB)."
+  },
+  {
+    "slug": "campgaw-mountain",
+    "trails_total": 5,
+    "difficulty_pct": { "beginner": 70, "intermediate": 20, "advanced": 10, "expert": 0 },
+    "source_url": "https://parksandtrips.com/ski-resort/cmnj-campgaw-mountain/",
+    "exact_quote": "Beginner: 70% (13 acres) Intermediate: 20% (4 acres) Expert: 10% (2 acres)",
+    "notes": "Parks & Trips. P&T 3-bucket: expert here is mapped to advanced. Wikipedia mentions 12 trails; P&T says 5 — using P&T which provides difficulty pct."
+  },
+  {
+    "slug": "campton-mountain",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No Wikipedia page and not on parksandtrips. Skipped per strict source policy."
+  },
+  {
+    "slug": "canaan-valley-resort",
+    "trails_total": 47,
+    "difficulty_pct": { "beginner": 20, "intermediate": 36, "advanced": 44, "expert": 0 },
+    "source_url": "https://parksandtrips.com/ski-resort/cvwv-canaan-valley/",
+    "exact_quote": "47 ski trails, which are serviced by 4 ski lifts... Beginner: 20%(18 acres) Intermediate: 36%(33 acres) Expert: 44%(40 acres)",
+    "notes": "Parks & Trips. Wikipedia also confirms 47 trails. P&T 3-bucket: expert mapped to advanced."
+  },
+  {
+    "slug": "cannon-mountain",
+    "trails_total": 97,
+    "difficulty_pct": { "beginner": 15, "intermediate": 52, "advanced": 33, "expert": 0 },
+    "source_url": "https://parksandtrips.com/ski-resort/canh-cannon-mountain-ski-resort/",
+    "exact_quote": "97 ski runs... Beginner: 15% (43 acres) Intermediate: 52% (148 acres) Expert: 33% (94 acres)",
+    "notes": "Parks & Trips. Wikipedia lacks specific trail/pct breakdown. Input says 98; P&T says 97. P&T 3-bucket: expert mapped to advanced."
+  },
+  {
+    "slug": "cannonsburg",
+    "trails_total": 19,
+    "difficulty_pct": { "beginner": 20, "intermediate": 25, "advanced": 55, "expert": 0 },
+    "source_url": "https://parksandtrips.com/ski-resort/cami-cannonsburg/",
+    "exact_quote": "19 Total trails... Beginner: 20% Intermediate: 25% Expert: 55%",
+    "notes": "Parks & Trips. P&T 3-bucket: expert mapped to advanced."
+  },
+  {
+    "slug": "cascade-mountain",
+    "trails_total": 48,
+    "difficulty_pct": { "beginner": 37, "intermediate": 40, "advanced": 23, "expert": 0 },
+    "source_url": "https://www.cascademountain.com/faqs/",
+    "exact_quote": "There are 48 trails open to skiing and snowboarding that break down as follows: 37% beginner runs, 40% intermediate runs, and 23% advanced runs.",
+    "notes": "Official Cascade Mountain FAQ page."
+  },
+  {
+    "slug": "cataloochee-ski-area",
+    "trails_total": 18,
+    "difficulty_pct": { "beginner": 44, "intermediate": 39, "advanced": 17, "expert": 0 },
+    "source_url": "https://en.wikipedia.org/wiki/Cataloochee_Ski_Area",
+    "exact_quote": "With eighteen ski slopes and trails, approximately 44% are rated beginner, 39% intermediate, and 17% advanced.",
+    "notes": "Wikipedia. Matches existing input."
+  },
+  {
+    "slug": "catamount-outdoor-family-center",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Cross-country / outdoor nordic center in Williston VT — Wikipedia article does not specify downhill trail counts. Parks & Trips page slug 'cmny-catamount' actually returns Catamount Mountain (Hillsdale NY) data, not the VT center. Skipped to avoid wrong source mapping."
+  },
+  {
+    "slug": "catamount-ski-area",
+    "trails_total": 44,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": "https://en.wikipedia.org/wiki/Catamount_Ski_Area",
+    "exact_quote": "44 trails",
+    "notes": "Wikipedia confirms 44 trails. No explicit pct breakdown on Wikipedia. Note: P&T Catamount Mountain page lists 38 trails with 40/35/25 pct — discrepancy; using Wikipedia trail count. Existing input difficulty (36/38/18/9) retained externally."
+  },
+  {
+    "slug": "chapman-hill",
+    "trails_total": 25,
+    "difficulty_pct": { "beginner": 16, "intermediate": 24, "advanced": 60, "expert": 0 },
+    "source_url": "https://parksandtrips.com/ski-resort/chco-chapman-hill-ski-area/",
+    "exact_quote": "25 ski trails... Beginner: 16% Intermediate: 24% Expert: 60%",
+    "notes": "Parks & Trips. P&T 3-bucket: expert mapped to advanced."
+  },
+  {
+    "slug": "cherry-peak",
+    "trails_total": 29,
+    "difficulty_pct": { "beginner": 30, "intermediate": 45, "advanced": 25, "expert": 0 },
+    "source_url": "https://en.wikipedia.org/wiki/Cherry_Peak_Resort",
+    "exact_quote": "29 runs... 30% easiest, 45% more difficult, 25% most difficult",
+    "notes": "Wikipedia. Input says 38, Wikipedia + P&T both say lower trail counts; using Wikipedia 29."
+  },
+  {
+    "slug": "chestnut-mountain",
+    "trails_total": 19,
+    "difficulty_pct": { "beginner": 30, "intermediate": 40, "advanced": 30, "expert": 0 },
+    "source_url": "https://parksandtrips.com/ski-resort/cmil-chestnut-mountain-resort/",
+    "exact_quote": "19 ski trails... Beginner: 30% Intermediate: 40% Expert: 30%",
+    "notes": "Parks & Trips. Input difficulty (22/61/17/0) differs; using P&T as authoritative regional DB."
+  },
+  {
+    "slug": "china-peak",
+    "trails_total": 52,
+    "difficulty_pct": { "beginner": 11, "intermediate": 28, "advanced": 61, "expert": 0 },
+    "source_url": "https://parksandtrips.com/ski-resort/cpca-china-peak/",
+    "exact_quote": "52 ski trails... Beginner: 11% (154 acres) Intermediate: 28% (392 acres) Expert: 61% (854 acres)",
+    "notes": "Parks & Trips. Wikipedia mentions 45 trails; input says 55. Using P&T which has pct."
+  },
+  {
+    "slug": "christie",
+    "trails_total": 21,
+    "difficulty_pct": { "beginner": 40, "intermediate": 25, "advanced": 35, "expert": 0 },
+    "source_url": "https://parksandtrips.com/ski-resort/chwi-christie-mountain/",
+    "exact_quote": "21 total ski trails... Beginner (Green Circle): 40% Intermediate (Blue Square): 25% Expert (Black Diamond): 35%",
+    "notes": "Parks & Trips. Input said 33 trails; P&T says 21."
+  },
+  {
+    "slug": "christmas-mountain",
+    "trails_total": 10,
+    "difficulty_pct": { "beginner": 40, "intermediate": 40, "advanced": 20, "expert": 0 },
+    "source_url": "https://parksandtrips.com/ski-resort/cmvw-christmas-mountain-village/",
+    "exact_quote": "10 ski trails, which are serviced by 3 ski lifts... Beginner: 40% Intermediate: 40% Expert: 20%",
+    "notes": "Parks & Trips."
+  },
+  {
+    "slug": "cloudmont-ski-resort",
+    "trails_total": 2,
+    "difficulty_pct": { "beginner": 50, "intermediate": 50, "advanced": 0, "expert": 0 },
+    "source_url": "https://parksandtrips.com/ski-resort/cmal-cloudmont-ski-resort/",
+    "exact_quote": "2 runs... Beginner: 50% (5 acres) Intermediate: 50% (5 acres) Expert: 0% (0 acres)",
+    "notes": "Parks & Trips."
+  },
+  {
+    "slug": "cochrans-ski-area",
+    "trails_total": 8,
+    "difficulty_pct": { "beginner": 22, "intermediate": 56, "advanced": 22, "expert": 0 },
+    "source_url": "https://parksandtrips.com/ski-resort/covt-cochran-ski-area/",
+    "exact_quote": "8 ski trails serviced by 5 ski lifts... Beginner: 22% (3 acres) Intermediate: 56% (8 acres) Expert: 22% (3 acres)",
+    "notes": "Parks & Trips. Wikipedia (Skiing Cochrans) also confirms 8 slopes."
+  },
+  {
+    "slug": "cooper-spur-area",
+    "trails_total": 10,
+    "difficulty_pct": { "beginner": 40, "intermediate": 40, "advanced": 20, "expert": 0 },
+    "source_url": "https://parksandtrips.com/ski-resort/csor-cooper-spur-ski-area/",
+    "exact_quote": "10 total ski trails... Beginner: 40% (20 acres) Intermediate: 40% (20 acres) Expert: 20% (10 acres)",
+    "notes": "Parks & Trips. Wikipedia confirms 10 runs (vs input 9)."
+  },
+  {
+    "slug": "copper-mountain",
+    "trails_total": 150,
+    "difficulty_pct": { "beginner": 25, "intermediate": 24, "advanced": 34, "expert": 17 },
+    "source_url": "https://en.wikipedia.org/wiki/Copper_Mountain_(Colorado)",
+    "exact_quote": "150 total (25% beginner, 24% intermediate, 34% advanced, 17% expert)",
+    "notes": "Wikipedia. Full 4-bucket breakdown available."
+  },
+  {
+    "slug": "cottonwood-butte",
+    "trails_total": 7,
+    "difficulty_pct": { "beginner": 28, "intermediate": 29, "advanced": 43, "expert": 0 },
+    "source_url": "https://parksandtrips.com/ski-resort/coco-cottonwood-butte-ski-resort/",
+    "exact_quote": "7 ski trails... Beginner: 28% Intermediate: 29% Expert: 43%",
+    "notes": "Parks & Trips. Wikipedia also confirms 7 trails."
+  },
+  {
+    "slug": "cranor-ski-hill",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Parks & Trips page (crco-cranor-hill-ski-area) lists 0 ski trails / 0% across categories. No usable explicit numbers. Skipped."
+  },
+  {
+    "slug": "crested-butte",
+    "trails_total": 121,
+    "difficulty_pct": { "beginner": 23, "intermediate": 57, "advanced": 20, "expert": 0 },
+    "source_url": "https://en.wikipedia.org/wiki/Crested_Butte_Mountain_Resort",
+    "exact_quote": "121 23% beginner 57% intermediate 20% advanced/expert",
+    "notes": "Wikipedia. Advanced/expert combined in source; placed under advanced (no separate expert%)."
+  },
+  {
+    "slug": "crosscut-sports-center",
+    "trails_total": null,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Cross-country center — no Wikipedia or P&T page. Official site quotes '28 miles (45 km) of cross country and narrow-gauge trails' (distance, not trail count). Skipped — no explicit downhill-style trail count nor difficulty pct."
+  },
+  {
+    "slug": "crotched-mountain",
+    "trails_total": 25,
+    "difficulty_pct": { "beginner": 28, "intermediate": 40, "advanced": 32, "expert": 0 },
+    "source_url": "https://parksandtrips.com/ski-resort/cmnh-crotched-mountain/",
+    "exact_quote": "25 ski trails... 28% of its trails as easy ... 40% Intermediate ... 32% Expert",
+    "notes": "Parks & Trips. Wikipedia also confirms 25 trails."
+  },
+  {
+    "slug": "crystal",
+    "trails_total": 58,
+    "difficulty_pct": { "beginner": 25, "intermediate": 47, "advanced": 28, "expert": 0 },
+    "source_url": "https://www.michiganskiblog.com/crystal-mountain-trail-map/",
+    "exact_quote": "45 downhill runs... Easiest Trails: 25% More Difficult: 47% Most Difficult: 28%",
+    "notes": "MichiganSkiBlog (regional DB). Trail count: Wikipedia says 58 ('The resort has 58 downhill slopes'); pct from MichiganSkiBlog. Same property as crystal-mountain-mi."
+  },
+  {
+    "slug": "crystal-mountain",
+    "trails_total": 85,
+    "difficulty_pct": { "beginner": 11, "intermediate": 54, "advanced": 35, "expert": 0 },
+    "source_url": "https://parksandtrips.com/ski-resort/cmwa-crystal-mountain/",
+    "exact_quote": "85 ski trails, which are serviced by 11 ski lifts... Beginner: 11% Intermediate: 54% Expert: 35%",
+    "notes": "Parks & Trips for Crystal Mountain WA. Wikipedia says 80 (57 designated). Using P&T which gives pct."
+  },
+  {
+    "slug": "crystal-mountain-mi",
+    "trails_total": 58,
+    "difficulty_pct": { "beginner": 25, "intermediate": 47, "advanced": 28, "expert": 0 },
+    "source_url": "https://en.wikipedia.org/wiki/Crystal_Mountain_(Michigan)",
+    "exact_quote": "The resort has 58 downhill slopes, 6 chairlifts and 2 surface lifts, with 27 slopes lighted for night skiing during the peak ski season.",
+    "notes": "Wikipedia confirms 58 trails. Pct from MichiganSkiBlog regional DB (25/47/28); input had 22/47/31/0."
+  },
+  {
+    "slug": "crystal-ridge",
+    "trails_total": 6,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": "https://www.visitbpc.com/Experience/CrystalRidge",
+    "exact_quote": "Crystal Ridge has 6 trails",
+    "notes": "Ballpark Commons / Visit BPC. No explicit pct breakdown anywhere; pct skipped."
+  }
+]

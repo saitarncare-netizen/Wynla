@@ -1,0 +1,162 @@
+[
+  {
+    "slug": "49-degrees-north",
+    "trails_total": 89,
+    "difficulty_pct": { "beginner": 29, "intermediate": 40, "advanced": 31, "expert": null },
+    "source_url": "https://parksandtrips.com/ski-resort/fnwa-49-degrees-north-ski-resort/",
+    "exact_quote": "Trails\n\n89  \n(29% Beginner,  40% Intermediate,  31% Expert)",
+    "notes": "Parks & Trips guide; site uses a 3-bucket scale (Beginner/Intermediate/Expert) so advanced+expert are merged under 'Expert'. PeakRankings cross-check lists Beginner 30 / Intermediate 40 / Advanced+Expert 30 percent."
+  },
+  {
+    "slug": "afton-alps",
+    "trails_total": 48,
+    "difficulty_pct": { "beginner": 30, "intermediate": 49, "advanced": 21, "expert": null },
+    "source_url": "https://parksandtrips.com/ski-resort/aamn-afton-alps-ski-resort/",
+    "exact_quote": "Beginner 30%(75 acres) Intermediate 49%(123 acres) Expert 21%(53 acres)",
+    "notes": "Trail count of 48 from same page. Site uses 3-bucket scale; Expert bucket mapped to 'advanced' (no separate expert tier provided)."
+  },
+  {
+    "slug": "alpine-meadows",
+    "trails_total": 100,
+    "difficulty_pct": { "beginner": 25, "intermediate": 40, "advanced": 35, "expert": null },
+    "source_url": "https://parksandtrips.com/ski-resort/amca-alpine-meadows/",
+    "exact_quote": "100  \n(25% Beginner,  40% Intermediate,  35% Expert)",
+    "notes": "Parks & Trips Palisades Tahoe - Alpine Meadows page; 3-bucket scale, Expert mapped to advanced. PeakRankings cross-check: 103 trails, 2/43/55."
+  },
+  {
+    "slug": "alpine-valley-mi",
+    "trails_total": 25,
+    "difficulty_pct": { "beginner": 39, "intermediate": 26, "advanced": 35, "expert": null },
+    "source_url": "https://parksandtrips.com/ski-resort/avmi-alpine-valley/",
+    "exact_quote": "Alpine Valley has a total of 25 ski trails, which are serviced by 14 ski lifts, gondolas and/or trams. ... Beginner: 39% (46 acres) Intermediate: 26% (31 acres) Expert: 35% (41 acres)",
+    "notes": "Parks & Trips Michigan page; 3-bucket scale, Expert mapped to advanced."
+  },
+  {
+    "slug": "alpine-valley-oh",
+    "trails_total": 11,
+    "difficulty_pct": { "beginner": 33, "intermediate": 34, "advanced": 33, "expert": null },
+    "source_url": "https://parksandtrips.com/ski-resort/avoh-alpine-valley/",
+    "exact_quote": "11 (33% Beginner, 34% Intermediate, 33% Expert)",
+    "notes": "Parks & Trips Ohio page; 3-bucket scale, Expert mapped to advanced."
+  },
+  {
+    "slug": "alpine-valley-wi",
+    "trails_total": 21,
+    "difficulty_pct": { "beginner": 33, "intermediate": 38, "advanced": 29, "expert": null },
+    "source_url": "https://parksandtrips.com/ski-resort/avwi-alpine-valley-resort/",
+    "exact_quote": "Alpine Valley has a total of 21 ski trails, which are serviced by 13 ski lifts, gondolas and/or trams. ... 33% (30 acres) ... 38% (34 acres) ... 29% (26 acres)",
+    "notes": "Parks & Trips Wisconsin page; 3-bucket scale, Expert mapped to advanced."
+  },
+  {
+    "slug": "alta",
+    "trails_total": 119,
+    "difficulty_pct": { "beginner": 15, "intermediate": 30, "advanced": 55, "expert": null },
+    "source_url": "https://parksandtrips.com/ski-resort/alut-alta-ski-area/",
+    "exact_quote": "Trails: 119 (15% Beginner, 30% Intermediate, 55% Expert)",
+    "notes": "Parks & Trips; 3-bucket scale, Expert mapped to advanced. PeakRankings confirms: 119 trails, 15/30/55."
+  },
+  {
+    "slug": "alyeska-resort",
+    "trails_total": 76,
+    "difficulty_pct": { "beginner": 11, "intermediate": 52, "advanced": 37, "expert": null },
+    "source_url": "https://parksandtrips.com/ski-resort/alak-alyeska-ski-resort/",
+    "exact_quote": "Trails\n\n76  \n(11% Beginner,  52% Intermediate,  37% Expert)",
+    "notes": "Parks & Trips; 3-bucket scale, Expert mapped to advanced. PeakRankings confirms 76 trails, 11/52/37."
+  },
+  {
+    "slug": "andes-tower-hills",
+    "trails_total": 16,
+    "difficulty_pct": { "beginner": 35, "intermediate": 35, "advanced": 30, "expert": null },
+    "source_url": "https://parksandtrips.com/ski-resort/atmn-andes-tower-ski-resort/",
+    "exact_quote": "Trails 16 (35% Beginner, 35% Intermediate, 30% Expert)",
+    "notes": "Parks & Trips; 3-bucket scale, Expert mapped to advanced."
+  },
+  {
+    "slug": "angel-fire-resort",
+    "trails_total": 81,
+    "difficulty_pct": { "beginner": 21, "intermediate": 56, "advanced": 23, "expert": null },
+    "source_url": "https://parksandtrips.com/ski-resort/afnm-angel-fire-ski-resort/",
+    "exact_quote": "81  \n(21% Beginner,  56% Intermediate,  23% Expert)",
+    "notes": "Parks & Trips; 3-bucket scale, Expert mapped to advanced."
+  },
+  {
+    "slug": "antelope-butte",
+    "trails_total": 30,
+    "difficulty_pct": { "beginner": 25, "intermediate": 36, "advanced": 39, "expert": null },
+    "source_url": "https://parksandtrips.com/ski-resort/abwy-antelope-butte-mountain/",
+    "exact_quote": "30 (25% Beginner, 36% Intermediate, 39% Expert)",
+    "notes": "Parks & Trips; 3-bucket scale, Expert mapped to advanced."
+  },
+  {
+    "slug": "anthony-lakes",
+    "trails_total": 21,
+    "difficulty_pct": { "beginner": 20, "intermediate": 38, "advanced": 42, "expert": null },
+    "source_url": "https://parksandtrips.com/ski-resort/alor-anthony-lakes/",
+    "exact_quote": "21\n(20% Beginner,  38% Intermediate,  42% Expert)",
+    "notes": "Parks & Trips; 3-bucket scale, Expert mapped to advanced."
+  },
+  {
+    "slug": "appalachian-ski-mountain",
+    "trails_total": 9,
+    "difficulty_pct": { "beginner": 33, "intermediate": 33, "advanced": 34, "expert": null },
+    "source_url": "https://parksandtrips.com/ski-resort/apnc-appalachian/",
+    "exact_quote": "Trails\n\n9  \n(33% Beginner,  33% Intermediate,  34% Expert)",
+    "notes": "Parks & Trips lists 9 trails (resort officially counts 13). 3-bucket scale, Expert mapped to advanced."
+  },
+  {
+    "slug": "apple-mountain",
+    "trails_total": 12,
+    "difficulty_pct": { "beginner": 40, "intermediate": 40, "advanced": 20, "expert": null },
+    "source_url": "https://parksandtrips.com/ski-resort/ammi-apple-mountain/",
+    "exact_quote": "12  \n(40% Beginner,  40% Intermediate,  20% Expert)",
+    "notes": "Parks & Trips; 3-bucket scale, Expert mapped to advanced."
+  },
+  {
+    "slug": "arapahoe-basin",
+    "trails_total": 147,
+    "difficulty_pct": { "beginner": 7, "intermediate": 20, "advanced": 49, "expert": 24 },
+    "source_url": "https://www.peakrankings.com/content/arapahoe-basin",
+    "exact_quote": "Trails: 147 ... Beginner: 7% Intermediate: 20% Advanced/Expert: 73%",
+    "notes": "PeakRankings provides Advanced/Expert combined as 73%; input file already specifies 49/24 split, which matches the 73% combined total."
+  },
+  {
+    "slug": "arctic-valley",
+    "trails_total": 25,
+    "difficulty_pct": { "beginner": 20, "intermediate": 50, "advanced": 30, "expert": null },
+    "source_url": "https://parksandtrips.com/ski-resort/avak-arctic-valley-ski-resort/",
+    "exact_quote": "25  \n(20% Beginner,  50% Intermediate,  30% Expert)",
+    "notes": "Parks & Trips lists 25 trails (input file shows 15). 3-bucket scale, Expert mapped to advanced."
+  },
+  {
+    "slug": "arizona-snowbowl",
+    "trails_total": 55,
+    "difficulty_pct": { "beginner": 22, "intermediate": 43, "advanced": 35, "expert": null },
+    "source_url": "https://parksandtrips.com/ski-resort/asaz-arizona-snowball/",
+    "exact_quote": "Trails\n\n55  \n(22% Beginner,  43% Intermediate,  35% Expert)",
+    "notes": "Parks & Trips lists 55 trails (input file shows 61). 3-bucket scale, Expert mapped to advanced."
+  },
+  {
+    "slug": "ascutney-outdoors",
+    "trails_total": 8,
+    "difficulty_pct": { "beginner": null, "intermediate": null, "advanced": null, "expert": null },
+    "source_url": "https://en.wikipedia.org/wiki/Ascutney_Mountain_Resort",
+    "exact_quote": "in 2019 Ascutney Outdoors installed a 1,800-foot T-bar lift which, as of 2025, served eight maintained ski trails covering 26 acres.",
+    "notes": "Wikipedia is the only source with an explicit current trail-count quote post-2010 resort closure; no published source provides difficulty percentages for the present 8-trail Ascutney Outdoors operation, so difficulty_pct left null per STRICT rule."
+  },
+  {
+    "slug": "aspen-highlands",
+    "trails_total": 117,
+    "difficulty_pct": { "beginner": 29, "intermediate": 18, "advanced": 53, "expert": null },
+    "source_url": "https://parksandtrips.com/ski-resort/ahco-aspen-highlands-ski-resort/",
+    "exact_quote": "Trails\n\n117  \n(29% Beginner,  18% Intermediate,  53% Expert)",
+    "notes": "Parks & Trips; 3-bucket scale, Expert mapped to advanced. PeakRankings cross-check: 118 trails, 0/23/77 Adv+Expert combined. Input file had 0/23/12/65 (advanced+expert = 77)."
+  },
+  {
+    "slug": "aspen-mountain",
+    "trails_total": 107,
+    "difficulty_pct": { "beginner": 0, "intermediate": 48, "advanced": 52, "expert": null },
+    "source_url": "https://parksandtrips.com/ski-resort/amco-aspen-mountain-ski-resort/",
+    "exact_quote": "Trails\n\n107  \n(0% Beginner,  48% Intermediate,  52% Expert)",
+    "notes": "Parks & Trips; 3-bucket scale. PeakRankings cross-check: 76 trails, 0/48/52 Adv+Expert combined. Input file: 0/48/26/26 (advanced+expert = 52)."
+  }
+]

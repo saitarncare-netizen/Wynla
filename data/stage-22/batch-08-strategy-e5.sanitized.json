@@ -1,0 +1,392 @@
+[
+  {
+    "slug": "loon-mountain",
+    "trails_total": 73,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 60,
+      "advanced": 20,
+      "expert": null
+    },
+    "source_url": "https://www.ski.com/ski-resorts/new-hampshire/loon-mountain",
+    "exact_quote": "As of 2022, the location has 73 trails and 13 chairlifts. The resort offers every type of skier their ideal terrain: 20 percent is designated as beginner, 60 percent is intermediate and 20 percent is expert.",
+    "notes": "ski.com resort guide; 3-category breakdown (advanced=expert combined as 20% per source)"
+  },
+  {
+    "slug": "loppet",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No explicit quote found in news/blogs/press kits"
+  },
+  {
+    "slug": "lost-trail",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No explicit quote found in news/blogs/press kits"
+  },
+  {
+    "slug": "lost-valley",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No explicit quote found in news/blogs/press kits"
+  },
+  {
+    "slug": "loup-loup",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No explicit quote found in news/blogs/press kits"
+  },
+  {
+    "slug": "loveland",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No explicit quote in news/blogs/press kits; SnowBrains coverage lacks trail count + difficulty pct"
+  },
+  {
+    "slug": "lutsen-mountains",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No explicit quote in news/blogs/press kits"
+  },
+  {
+    "slug": "lyndon-outing-club",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No explicit quote in news/blogs/press kits"
+  },
+  {
+    "slug": "mad-river-glen",
+    "trails_total": 53,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 35,
+      "advanced": 45,
+      "expert": null
+    },
+    "source_url": "https://snowbrains.com/vermonts-off-the-beaten-path-ski-mountains/",
+    "exact_quote": "53 marked trails (20 percent novice, 35% intermediate, 45% expert)",
+    "notes": "SnowBrains article; 3-category breakdown (advanced+expert combined as 45% per source)"
+  },
+  {
+    "slug": "mad-river-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No explicit quote in news/blogs/press kits"
+  },
+  {
+    "slug": "magic-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "SnowBrains Hometown Shoutout mentioned '26% of this is expert riding' but no full breakdown and trail count was tied to Red Chair-only area; reject"
+  },
+  {
+    "slug": "magic-mountain-id",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "SnowBrains article exists but contains no trail count or difficulty pct"
+  },
+  {
+    "slug": "mammoth-mountain",
+    "trails_total": 173,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://snowbrains.com/hometown-mountain-shoutout-making-memories-at-mammoth-mountain-ca/",
+    "exact_quote": "173 named trails, all ranging in difficulty and landscape",
+    "notes": "SnowBrains Hometown Shoutout; trail count only, no difficulty pct breakdown"
+  },
+  {
+    "slug": "maple-ski-ridge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No explicit quote in news/blogs/press kits"
+  },
+  {
+    "slug": "maplelag",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No explicit quote in news/blogs/press kits"
+  },
+  {
+    "slug": "marquette-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No explicit quote in news/blogs/press kits"
+  },
+  {
+    "slug": "massanutten-resort",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No explicit quote in news/blogs/press kits"
+  },
+  {
+    "slug": "maverick-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No explicit quote in news/blogs/press kits"
+  },
+  {
+    "slug": "mccauley-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No explicit quote in news/blogs/press kits"
+  },
+  {
+    "slug": "mcintyre-ski-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No explicit quote in news/blogs/press kits"
+  },
+  {
+    "slug": "meadowlark",
+    "trails_total": 14,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://snowbrains.com/for-sale-meadowlark-ski-area-wy-aka-little-jackson-hole-looking-for-new-owners/",
+    "exact_quote": "14 trails",
+    "notes": "SnowBrains article; trail count only, no difficulty pct breakdown"
+  },
+  {
+    "slug": "middlebury-snow-bowl",
+    "trails_total": 17,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://snowbrains.com/vermonts-off-the-beaten-path-ski-mountains/",
+    "exact_quote": "Number of Trails: 17",
+    "notes": "SnowBrains article; trail count only, no difficulty pct breakdown"
+  },
+  {
+    "slug": "minocqua-winter-park",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No explicit quote in news/blogs/press kits"
+  },
+  {
+    "slug": "mission-ridge",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "SnowBrains report exists but contains no trail count or difficulty pct"
+  },
+  {
+    "slug": "mohawk-mountain-ski-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No explicit quote in news/blogs/press kits"
+  },
+  {
+    "slug": "monarch-mountain",
+    "trails_total": 66,
+    "difficulty_pct": {
+      "beginner": 23,
+      "intermediate": 26,
+      "advanced": 37,
+      "expert": 12
+    },
+    "source_url": "https://snowbrains.com/monarch-mountain-is-for-soul-skiing/",
+    "exact_quote": "There are a total of 66 trails with a fantastic spread based on skier ability (23% Easy, 26% Intermediate, 37% Difficult, 12% Extreme)",
+    "notes": "SnowBrains article; full 4-category breakdown"
+  },
+  {
+    "slug": "mont-ripley",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No explicit quote in news/blogs/press kits"
+  },
+  {
+    "slug": "montage-mountain",
+    "trails_total": 27,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 45,
+      "advanced": 35,
+      "expert": null
+    },
+    "source_url": "https://snowbrains.com/montage-mountain-pa-report-skiing-the-2nd-steepest-slope-in-the-east/",
+    "exact_quote": "27 Trails ... 20% Beginner Terrain ... 45% Intermediate Terrain ... 35% Advanced Terrain",
+    "notes": "SnowBrains article Quick Facts and History section; 3-category breakdown"
+  },
+  {
+    "slug": "montana-snowbowl",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No explicit quote in news/blogs/press kits"
+  },
+  {
+    "slug": "moose",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "No explicit quote in news/blogs/press kits"
+  }
+]

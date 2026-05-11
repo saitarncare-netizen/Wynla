@@ -1,0 +1,392 @@
+[
+  {
+    "slug": "vail",
+    "trails_total": 195,
+    "difficulty_pct": {
+      "beginner": 18,
+      "intermediate": 29,
+      "advanced": 53,
+      "expert": null
+    },
+    "source_url": "https://www.skicentral.com/vail-trailmap.html",
+    "exact_quote": "195 ... 18% Beginner ... 29% Intermediate ... 53% Advanced",
+    "notes": "skicentral trail map page; OnTheSnow shows 277 trails for current season but skicentral aligns with current_total_trails=195"
+  },
+  {
+    "slug": "victor-constant-ski-area",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "OnTheSnow returned 404; skicentral has no listing for this small military-run hill"
+  },
+  {
+    "slug": "villa-olivia",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/illinois/villa-olivia/skireport",
+    "exact_quote": "offers 180 vertical feet of skiing with one quad lift and a couple of surface tows",
+    "notes": "OnTheSnow only mentions vertical/lifts; no trail count or difficulty breakdown found; skicentral page not found"
+  },
+  {
+    "slug": "wachusett-mountain",
+    "trails_total": 22,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 40,
+      "advanced": 30,
+      "expert": 0
+    },
+    "source_url": "https://www.skicentral.com/wachusettmountain-trailmap.html",
+    "exact_quote": "30% Beginner|40% Intermediate|30% Advanced",
+    "notes": "skicentral lists 22 trails (current_total_trails=27 from earlier scrape); OnTheSnow 404"
+  },
+  {
+    "slug": "warner-canyon",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "OnTheSnow 404; skicentral not listed; small volunteer-run Oregon ski hill"
+  },
+  {
+    "slug": "waterville-valley",
+    "trails_total": 62,
+    "difficulty_pct": {
+      "beginner": 16,
+      "intermediate": 56,
+      "advanced": 23,
+      "expert": 5
+    },
+    "source_url": "https://www.onthesnow.com/new-hampshire/waterville-valley/skireport",
+    "exact_quote": "With 62 trails and 11 lifts—including high-speed sixes and quads—the mountain caters to a wide range of abilities: 16% beginner, 56% intermediate, 23% advanced, and 5% expert.",
+    "notes": "OnTheSnow primary source; full 4-level breakdown"
+  },
+  {
+    "slug": "welch-village",
+    "trails_total": 60,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/minnesota/welch-village/skireport",
+    "exact_quote": "offers a nice variety 60 trails spread out over 140 acres of skiable terrain that cater to all skiing and snowboarding levels, and a quartet of black-diamond, front-face runs that are among the steepest in the region.",
+    "notes": "OnTheSnow gives 60 trails but no difficulty pct; skicentral 404"
+  },
+  {
+    "slug": "west-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/new-york/west-mountain/skireport",
+    "exact_quote": "West Mountain: Closed",
+    "notes": "OnTheSnow page contained no terrain stats; skicentral 404 on multiple URL patterns"
+  },
+  {
+    "slug": "whaleback-mountain",
+    "trails_total": 30,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/new-hampshire/whaleback-mountain/skireport",
+    "exact_quote": "boasts 30 trails spread out over 85 acres of skiable terrain that caters to all ages and ability levels.",
+    "notes": "OnTheSnow gives 30 trails (vs input 31); no pct breakdown; skicentral 404"
+  },
+  {
+    "slug": "white-grass-touring",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "OnTheSnow 404; skicentral 404; Nordic touring center not in mainstream resort directories"
+  },
+  {
+    "slug": "white-pass",
+    "trails_total": 40,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 60,
+      "advanced": 20,
+      "expert": 0
+    },
+    "source_url": "https://www.skicentral.com/whitepass-trailmap.html",
+    "exact_quote": "40 ... 20% Beginner ... 60% Intermediate ... 20% Advanced",
+    "notes": "skicentral primary; OnTheSnow only had generic blurb"
+  },
+  {
+    "slug": "white-pine",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/wyoming/white-pine-ski-area/skireport",
+    "exact_quote": "offers downhill skiing and snowboarding as well as a free Nordic ski terrain park ... Two lifts service groomed downhill runs and the terrain park offers jumps and slides.",
+    "notes": "OnTheSnow has no trail count or pct; skicentral 404"
+  },
+  {
+    "slug": "white-pine-touring-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic center; not covered by OnTheSnow/skicentral alpine directories"
+  },
+  {
+    "slug": "whitecap-mountains",
+    "trails_total": 43,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skicentral.com/whitecapmountains-trailmap.html",
+    "exact_quote": "Number of Trails: 43",
+    "notes": "skicentral lists 43 trails; difficulty pct not present in HTML text (only image-based chart); OnTheSnow 404"
+  },
+  {
+    "slug": "whiteface-mountain",
+    "trails_total": 90,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 42,
+      "advanced": 0,
+      "expert": 38
+    },
+    "source_url": "https://www.skicentral.com/whiteface-trailmap.html",
+    "exact_quote": "20% Beginner|42% Intermediate|0% Advanced|38% Expert",
+    "notes": "skicentral primary; OnTheSnow 404; trail count 90 vs input 94"
+  },
+  {
+    "slug": "whitefish",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/montana/whitefish-mountain-resort/skireport",
+    "exact_quote": "With its many trails and year-round activities, skiers and boarders of all levels will enjoy this scenic resort.",
+    "notes": "OnTheSnow snow report had no terrain stats; skicentral 404 across URL variants"
+  },
+  {
+    "slug": "whitetail-resort",
+    "trails_total": 23,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 45,
+      "advanced": 25,
+      "expert": 0
+    },
+    "source_url": "https://www.skicentral.com/whitetail-trailmap.html",
+    "exact_quote": "23 ... 30% Beginner ... 45% Intermediate ... 25% Advanced",
+    "notes": "skicentral primary; OnTheSnow only mentioned 19 trails with no pct"
+  },
+  {
+    "slug": "wild-mountain",
+    "trails_total": 26,
+    "difficulty_pct": {
+      "beginner": 31,
+      "intermediate": 31,
+      "advanced": 35,
+      "expert": 1
+    },
+    "source_url": "https://www.skicentral.com/wildmountain-trailmap.html",
+    "exact_quote": "Number of Trails: 26 ... Beginner: 31% ... Intermediate: 31% ... Advanced: 35% ... Expert: 1%",
+    "notes": "skicentral primary; OnTheSnow 404"
+  },
+  {
+    "slug": "wildcat-mountain",
+    "trails_total": 49,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 45,
+      "advanced": 0,
+      "expert": 30
+    },
+    "source_url": "https://www.onthesnow.com/new-hampshire/wildcat-mountain/skireport",
+    "exact_quote": "the trails are rated 25% beginner, 45% intermediate, and 30% expert with a vertical drop of 2,112 feet.",
+    "notes": "OnTheSnow primary; source omits advanced category (mapped to 0); expert=30 per quote"
+  },
+  {
+    "slug": "willamette-pass",
+    "trails_total": 29,
+    "difficulty_pct": {
+      "beginner": 21,
+      "intermediate": 45,
+      "advanced": 34,
+      "expert": 0
+    },
+    "source_url": "https://www.skicentral.com/willamettepass-trailmap.html",
+    "exact_quote": "29 ... Beginner: 21% ... Intermediate: 45% ... Advanced: 34%",
+    "notes": "skicentral primary; OnTheSnow only mentioned 8 black diamond runs"
+  },
+  {
+    "slug": "willard-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/new-york/willard-mountain/skireport",
+    "exact_quote": "Willard Mountain: Closed",
+    "notes": "OnTheSnow has only closure notice with no terrain data; skicentral 404 on multiple URL patterns"
+  },
+  {
+    "slug": "wilmot-mountain",
+    "trails_total": 25,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.skicentral.com/wilmotmountain-trailmap.html",
+    "exact_quote": "25",
+    "notes": "skicentral confirms 25 trails (vs OnTheSnow which said 23); no difficulty pct in text; OnTheSnow listed 23 trails without pct"
+  },
+  {
+    "slug": "windham-mountain",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": "https://www.onthesnow.com/new-york/windham-mountain/skireport",
+    "exact_quote": "Windham Mountain: Closed",
+    "notes": "OnTheSnow closed/no data; skicentral 404 across patterns; input already has 54 trails + full pct breakdown from prior source"
+  },
+  {
+    "slug": "winter-park",
+    "trails_total": 171,
+    "difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 20,
+      "advanced": 51,
+      "expert": 6
+    },
+    "source_url": "https://www.onthesnow.com/colorado/winter-park-resort/skireport",
+    "exact_quote": "The mountain features 24 lifts and 171 trails, with terrain breakdowns of 22% beginner, 20% intermediate, 51% advanced, and 6% expert.",
+    "notes": "OnTheSnow primary; full 4-level breakdown matches input trail count"
+  },
+  {
+    "slug": "wintergreen-resort",
+    "trails_total": 25,
+    "difficulty_pct": {
+      "beginner": 23,
+      "intermediate": 35,
+      "advanced": 42,
+      "expert": 0
+    },
+    "source_url": "https://www.skicentral.com/wintergreen-trailmap.html",
+    "exact_quote": "25 ... 23% Beginner ... 35% Intermediate ... 42% Advanced",
+    "notes": "skicentral primary; OnTheSnow had no stats"
+  },
+  {
+    "slug": "winterplace-ski-resort",
+    "trails_total": 27,
+    "difficulty_pct": {
+      "beginner": 41,
+      "intermediate": 44,
+      "advanced": 15,
+      "expert": 0
+    },
+    "source_url": "https://www.skicentral.com/winterplace-trailmap.html",
+    "exact_quote": "27 trails ... 41% Beginner ... 44% Intermediate ... 15% Advanced",
+    "notes": "skicentral primary; OnTheSnow also confirms 27 trails (vs input 28)"
+  },
+  {
+    "slug": "wisp-resort",
+    "trails_total": 32,
+    "difficulty_pct": {
+      "beginner": 41,
+      "intermediate": 28,
+      "advanced": 31,
+      "expert": 0
+    },
+    "source_url": "https://www.skicentral.com/wisp-trailmap.html",
+    "exact_quote": "32 ... 41% Beginner ... 28% Intermediate ... 31% Advanced",
+    "notes": "skicentral primary; OnTheSnow alt URL gives 33 trails with different pct (27/42/30)"
+  },
+  {
+    "slug": "wolf-creek",
+    "trails_total": 77,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 35,
+      "advanced": 25,
+      "expert": 20
+    },
+    "source_url": "https://www.skicentral.com/wolfcreek-trailmap.html",
+    "exact_quote": "77 ... 20% ... 35% ... 25% ... 20%",
+    "notes": "skicentral primary with full 4-level breakdown; OnTheSnow returned wrong resort (Nordic Valley)"
+  },
+  {
+    "slug": "woods-valley",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "OnTheSnow 404; skicentral 404; small upstate NY area not in directories"
+  },
+  {
+    "slug": "woodstock-nordic-center",
+    "trails_total": null,
+    "difficulty_pct": {
+      "beginner": null,
+      "intermediate": null,
+      "advanced": null,
+      "expert": null
+    },
+    "source_url": null,
+    "exact_quote": null,
+    "notes": "Nordic center; not covered by OnTheSnow/skicentral alpine directories"
+  }
+]

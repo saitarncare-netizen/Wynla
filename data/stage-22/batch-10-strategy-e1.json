@@ -1,0 +1,302 @@
+[
+  {
+    "slug": "mystic-mountain",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.nemacolin.com",
+    "website_alive": true,
+    "source_url": "https://www.nemacolin.com",
+    "exact_quote": null,
+    "notes": "Nemacolin homepage does not mention Mystic Mountain trail count or difficulty breakdown; activities/winter/mystic-mountain sub-path returns 404."
+  },
+  {
+    "slug": "nashoba-valley-ski-area",
+    "trails_total": 17,
+    "difficulty_pct": {"beginner": 20, "intermediate": 50, "advanced": 30, "expert": 0},
+    "website_url": "https://skinashoba.com",
+    "website_alive": true,
+    "source_url": "https://skinashoba.com/trail-map/",
+    "exact_quote": "Trails: 17 ... Slope Difficulty: 20% beginner, 50% intermediate, 30% advanced",
+    "notes": "Trail map page lists 17 trails with 20/50/30/0 split; no expert tier reported."
+  },
+  {
+    "slug": "nordic-mountain",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.nordicmountain.com",
+    "website_alive": true,
+    "source_url": "https://www.nordicmountain.com/mountain-info/trail-maps",
+    "exact_quote": null,
+    "notes": "Site shows seasonal landing + trail map PDF; HTML pages do not state trail count or difficulty percentages."
+  },
+  {
+    "slug": "nordic-valley",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.nordicvalley.com",
+    "website_alive": false,
+    "source_url": "https://www.nordicvalley.com",
+    "exact_quote": null,
+    "notes": "Domain returns content for an unrelated Korean sports-streaming site (Spotalk); resort site appears taken over/parked. /the-mountain and /about return 404."
+  },
+  {
+    "slug": "north-cascade-heli",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://heli-ski.com/",
+    "website_alive": true,
+    "source_url": "https://heli-ski.com/",
+    "exact_quote": "300,000 acres of pure backcountry heli-skiing terrain",
+    "notes": "Heli-ski operation, no marked trails or difficulty classification (terrain-based, not trail-based)."
+  },
+  {
+    "slug": "northeast-slopes",
+    "trails_total": 12,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.northeastslopes.org",
+    "website_alive": true,
+    "source_url": "https://www.northeastslopes.org",
+    "exact_quote": "12 trails across 35+ acres",
+    "notes": "Site confirms 12 trails but does not provide difficulty percentage breakdown."
+  },
+  {
+    "slug": "northern-maine-community-trails",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.nmctrails.org/",
+    "website_alive": true,
+    "source_url": "https://www.nmctrails.org/",
+    "exact_quote": "35+ Miles of Trails",
+    "notes": "Site quotes 35+ miles total (multi-activity), not ski trail count or difficulty breakdown."
+  },
+  {
+    "slug": "northstar-california",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.northstarcalifornia.com",
+    "website_alive": false,
+    "source_url": "https://www.northstarcalifornia.com",
+    "exact_quote": null,
+    "notes": "Vail Resorts site returning 'The system cannot process your request' error on homepage and mountain-information sub-path; cannot fetch trail data."
+  },
+  {
+    "slug": "norway-mountain",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.norwaymountain.com",
+    "website_alive": false,
+    "source_url": "https://www.norwaymountain.com",
+    "exact_quote": null,
+    "notes": "Site returning 522 (origin connection timeout) on homepage and /the-mountain and /trail-map/."
+  },
+  {
+    "slug": "nubs-nob",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.nubsnob.com",
+    "website_alive": true,
+    "source_url": "https://www.nubsnob.com/trail-maps/",
+    "exact_quote": null,
+    "notes": "Trail map page shows images only; HTML does not surface trail count or difficulty percentages."
+  },
+  {
+    "slug": "oak-mountain",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.oakmountainski.com",
+    "website_alive": true,
+    "source_url": "https://www.oakmountainski.com/the-mountain/trailmap",
+    "exact_quote": null,
+    "notes": "Trail map page accessible but does not display trail count or difficulty breakdown text."
+  },
+  {
+    "slug": "ober-mountain",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.obermountain.com",
+    "website_alive": true,
+    "source_url": "https://www.obermountain.com",
+    "exact_quote": "Tennessee's only ski area in winter",
+    "notes": "Homepage references skiing but doesn't surface trail count or breakdown; /ski-snowboard and /winter/skiing-snowboarding/ return 404."
+  },
+  {
+    "slug": "oglebay-resort",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://oglebay.com",
+    "website_alive": true,
+    "source_url": "https://oglebay.com",
+    "exact_quote": null,
+    "notes": "Homepage lists Winter Sports as a category but no trail count or difficulty data; /winter-fun/ and /things-to-do/winter-fun/ return 404."
+  },
+  {
+    "slug": "okemo-mountain-resort",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.okemo.com",
+    "website_alive": false,
+    "source_url": "https://www.okemo.com",
+    "exact_quote": null,
+    "notes": "Vail Resorts site returning 'The system cannot process your request' error on homepage and mountain-information sub-path; cannot fetch trail data."
+  },
+  {
+    "slug": "otis-ridge",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://otisridge.com",
+    "website_alive": true,
+    "source_url": "https://otisridge.com/trailmap/",
+    "exact_quote": null,
+    "notes": "Trail map page exists but HTML does not surface trail count or difficulty; data only in downloadable PDF image."
+  },
+  {
+    "slug": "otsego-resort",
+    "trails_total": 34,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.otsegoresort.com",
+    "website_alive": true,
+    "source_url": "https://otsegoclub.com/winter/",
+    "exact_quote": "Our mountain features 34 runs and five chair lifts — including a high-speed quad — with extensive snowmaking and grooming for both alpine and Nordic terrain.",
+    "notes": "Website redirects to otsegoclub.com. 34 runs confirmed; no difficulty percentage breakdown published."
+  },
+  {
+    "slug": "pajarito-mountain",
+    "trails_total": 53,
+    "difficulty_pct": {"beginner": 20, "intermediate": 50, "advanced": 30, "expert": 0},
+    "website_url": "https://www.skipajarito.com",
+    "website_alive": true,
+    "source_url": "https://www.pajarito.ski/mountain-stats/",
+    "exact_quote": "Trails: 53 (20% easy, 50% intermediate, 30% difficult)",
+    "notes": "skipajarito.com redirects to pajarito.ski. Mountain stats page lists 53 trails with 20/50/30 breakdown; no expert tier."
+  },
+  {
+    "slug": "palisades-tahoe",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.palisadestahoe.com",
+    "website_alive": true,
+    "source_url": "https://www.palisadestahoe.com/mountain-information/trail-maps",
+    "exact_quote": null,
+    "notes": "Homepage and trail-maps page mention trail categories but do not surface total trail count or percentage breakdown in HTML."
+  },
+  {
+    "slug": "paoli-peaks",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.paolipeaks.com",
+    "website_alive": false,
+    "source_url": "https://www.paolipeaks.com",
+    "exact_quote": null,
+    "notes": "Vail Resorts site returning 'The system cannot process your request' error on homepage and mountain-information sub-path."
+  },
+  {
+    "slug": "park-city",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.parkcitymountain.com",
+    "website_alive": false,
+    "source_url": "https://www.parkcitymountain.com",
+    "exact_quote": null,
+    "notes": "Vail Resorts site returning 'The system cannot process your request' error on homepage and mountain-information sub-path; cannot fetch trail data."
+  },
+  {
+    "slug": "pats-peak",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.patspeak.com",
+    "website_alive": false,
+    "source_url": "https://www.patspeak.com",
+    "exact_quote": null,
+    "notes": "Site returning 403 Forbidden on homepage and /the-mountain/trail-map sub-path; cannot verify trail data."
+  },
+  {
+    "slug": "paul-bunyan-hill",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://skipaulbunyan.com/",
+    "website_alive": true,
+    "source_url": "https://skipaulbunyan.com/",
+    "exact_quote": "The biggest little hill in the midwest",
+    "notes": "Homepage describes the hill but doesn't state trail count or difficulty breakdown."
+  },
+  {
+    "slug": "pebble-creek",
+    "trails_total": 51,
+    "difficulty_pct": {"beginner": 19, "intermediate": 36, "advanced": 41, "expert": 4},
+    "website_url": "https://www.pebblecreekskiarea.com",
+    "website_alive": true,
+    "source_url": "https://www.pebblecreekskiarea.com/the-mountain/",
+    "exact_quote": "51 Named Runs ... 19% Beginner ... 36% Intermediate ... 41% Advanced ... 4% Expert",
+    "notes": "Mountain page confirms 51 named runs with 19/36/41/4 split."
+  },
+  {
+    "slug": "peek-n-peak",
+    "trails_total": 26,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.pknpk.com",
+    "website_alive": true,
+    "source_url": "https://www.pknpk.com",
+    "exact_quote": "We have 26 trails and slopes of varying difficulty levels.",
+    "notes": "Site confirms 26 trails; no difficulty percentage breakdown surfaced."
+  },
+  {
+    "slug": "perfect-north",
+    "trails_total": 23,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.perfectnorth.com",
+    "website_alive": true,
+    "source_url": "https://www.perfectnorth.com",
+    "exact_quote": "Perfect North Slopes is the premier ski area in the Midwest with 5 chairlifts, 8 carpet lifts, 23 trails, 2 rope tows, 3 terrain parks and 23 tubing lanes.",
+    "notes": "23 trails confirmed; no difficulty percentage breakdown surfaced on official site."
+  },
+  {
+    "slug": "pico-mountain",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.picomountain.com",
+    "website_alive": true,
+    "source_url": "https://www.picomountain.com",
+    "exact_quote": "Closed for the 25/26 season",
+    "notes": "Pico Mountain is closed for 2025/26 season; lifts-trails-report page does not display data."
+  },
+  {
+    "slug": "pine-knob",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.pineknobskiresort.com",
+    "website_alive": true,
+    "source_url": "https://www.pineknobskiresort.com",
+    "exact_quote": null,
+    "notes": "Homepage HTML returns empty content; /trail-map/ and /mountain/trail-map sub-paths do not surface trail count or difficulty."
+  },
+  {
+    "slug": "pine-mountain",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.pinemountainresort.com",
+    "website_alive": true,
+    "source_url": "https://www.pinemountainresort.com/skiing/mountain-info/",
+    "exact_quote": "Enjoy skiing on our classic slopes, with exciting jumps, scenic trails, and convenient lifts to carry you back to the lodge.",
+    "notes": "Mountain info page accessible but does not state trail count or difficulty breakdown in HTML (trail map only available as PDF)."
+  },
+  {
+    "slug": "plain-valley-trails",
+    "trails_total": null,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://www.skiplain.com/",
+    "website_alive": true,
+    "source_url": "https://www.skiplain.com/",
+    "exact_quote": "25 km of groom trails",
+    "notes": "Nordic ski area: 25 km of groomed trails (length, not count); no difficulty percentage breakdown."
+  },
+  {
+    "slug": "plattekill-mountain",
+    "trails_total": 41,
+    "difficulty_pct": {"beginner": null, "intermediate": null, "advanced": null, "expert": null},
+    "website_url": "https://plattekill.com",
+    "website_alive": true,
+    "source_url": "https://plattekill.com",
+    "exact_quote": "Discover BIG MOUNTAIN skiing across 41 exciting trails and 1100′ of vertical, and the best part is you'll enjoy it all in a laid-back family atmosphere.",
+    "notes": "41 trails confirmed; no difficulty percentage breakdown surfaced."
+  }
+]

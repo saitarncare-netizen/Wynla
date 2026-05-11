@@ -1,0 +1,312 @@
+[
+  {
+    "slug": "pomerelle",
+    "trails_total": 31,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Pomerelle",
+    "exact_quote": "Pomerelle has 31 trails and 3 lifts (2 triple chair lifts and a magic carpet).",
+    "notes": "Wikipedia article exists at /wiki/Pomerelle. Trail count 31 per Wikipedia (differs from input value of 32). No difficulty percentages disclosed in Wikipedia infobox."
+  },
+  {
+    "slug": "porcupine-mountains",
+    "trails_total": 20,
+    "difficulty_pct": {
+      "beginner": 27,
+      "intermediate": 46,
+      "advanced": 27,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Porcupine_Mountains_Ski_Area",
+    "exact_quote": "The terrain includes beginner (27%), intermediate (46%), and advanced (27%) trails. The ski hill offers 15 groomed trails and four glade trails.",
+    "notes": "Wikipedia gives 20 trails total. Difficulty pct from secondary source describing the area. No expert category."
+  },
+  {
+    "slug": "powder-mountain",
+    "trails_total": 162,
+    "difficulty_pct": {
+      "beginner": 25,
+      "intermediate": 40,
+      "advanced": 35,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Powder_Mountain",
+    "exact_quote": "162 trails, nine lifts, and two terrain parks ... 25% beginner 40% intermediate 35% advanced",
+    "notes": "Wikipedia. Confirms input pct exactly."
+  },
+  {
+    "slug": "powder-ridge",
+    "trails_total": 15,
+    "difficulty_pct": null,
+    "source_url": "https://www.onthesnow.com/minnesota/powder-ridge-ski-area/ski-resort",
+    "exact_quote": "Powder Ridge has 15 runs with a 290' vertical drop and the longest run is 2,650'.",
+    "notes": "MN Powder Ridge. Input listed 13; updated sources say 15 runs. Beginner-heavy (one source: 45% beginner) but no full 4-tier breakdown available with exact quote."
+  },
+  {
+    "slug": "powder-ridge-mountain-park",
+    "trails_total": 19,
+    "difficulty_pct": {
+      "beginner": 42,
+      "intermediate": 37,
+      "advanced": 21,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Powder_Ridge_Ski_Area",
+    "exact_quote": "Powder Ridge has 19 named trails on 80 acres (32 ha) of skiable terrain... 42% of trails are rated as beginner runs, 37% are intermediate, 21% advanced, and no runs rated as expert.",
+    "notes": "CT Powder Ridge Mountain Park, Wikipedia."
+  },
+  {
+    "slug": "powderhorn",
+    "trails_total": 63,
+    "difficulty_pct": {
+      "beginner": 20,
+      "intermediate": 50,
+      "advanced": 30,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Powderhorn_Resort",
+    "exact_quote": "Powderhorn Mountain Resort has 63 total trails ... 20% beginner, 50% intermediate, 30% advanced/expert",
+    "notes": "Wikipedia /wiki/Powderhorn_Resort. Advanced+expert lumped at 30% per source."
+  },
+  {
+    "slug": "powderhouse-hill",
+    "trails_total": 3,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Powderhouse_Hill_(ski_area)",
+    "exact_quote": "Powderhouse Hill has 3 trails ... 1 lift and 175 vertical feet of family-friendly skiing.",
+    "notes": "Tiny community area in South Berwick, ME. No difficulty breakdown published."
+  },
+  {
+    "slug": "purgatory",
+    "trails_total": 105,
+    "difficulty_pct": {
+      "beginner": 22,
+      "intermediate": 35,
+      "advanced": 43,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Purgatory_Resort",
+    "exact_quote": "Purgatory offers 105 trails, including 5 terrain parks, over 1,500 skiable acres, and 12 lifts ... 22% beginner, 35% intermediate, 43% advanced",
+    "notes": "Wikipedia confirms input pct."
+  },
+  {
+    "slug": "quarry-road-trails",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://quarryroad.org/",
+    "exact_quote": "13.3 km (8.2 miles) of world-class groomed Nordic ski trails, and 8 km (5 mi) of singletrack for snowshoeing, mountain biking, and hiking.",
+    "notes": "Nordic center reports trail length (km) rather than discrete trail count. No alpine difficulty pct applicable."
+  },
+  {
+    "slug": "quechee-club",
+    "trails_total": 13,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Quechee_Ski_Area",
+    "exact_quote": "The mountain has 13 trails and 3 lifts: 1 quadruple chairlift, 1 T-bar and 1 H-tow.",
+    "notes": "Private VT club. Wikipedia article = Quechee_Ski_Area. No difficulty pct in article."
+  },
+  {
+    "slug": "ragged-mountain",
+    "trails_total": 57,
+    "difficulty_pct": {
+      "beginner": 30,
+      "intermediate": 40,
+      "advanced": 30,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Ragged_Mountain_(New_Hampshire)",
+    "exact_quote": "57 trails ... Expert 30%, Intermediate 40%, and Novice 30%.",
+    "notes": "Wikipedia trail count 57; difficulty distribution per secondary source citing the resort."
+  },
+  {
+    "slug": "rangeley-lakes-trail-center",
+    "trails_total": null,
+    "difficulty_pct": null,
+    "source_url": "https://rangeleylakestrailscenter.org/",
+    "exact_quote": "There are 55 km of mapped trails for XC skiing, snowshoeing, hiking, and mountain biking.",
+    "notes": "Nordic center reports kilometers of trail, not discrete count. Input value of 35 trails not verifiable. No alpine difficulty pct applicable."
+  },
+  {
+    "slug": "red-lodge",
+    "trails_total": 65,
+    "difficulty_pct": {
+      "beginner": 17,
+      "intermediate": 45,
+      "advanced": 38,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Red_Lodge_Mountain",
+    "exact_quote": "65 runs ... 17% easiest, 45% more difficult, 38% most difficult",
+    "notes": "Wikipedia. Trail count 65 (input listed 70). Three-tier difficulty only."
+  },
+  {
+    "slug": "red-river-ski-area",
+    "trails_total": 64,
+    "difficulty_pct": {
+      "beginner": 31,
+      "intermediate": 31,
+      "advanced": 38,
+      "expert": 0
+    },
+    "source_url": "https://snowstash.com/usa/new-mexico/red-river",
+    "exact_quote": "Red River Ski Area has 64 trails with a breakdown of 31% beginner, 31% intermediate and 38% advanced runs.",
+    "notes": "Wikipedia /wiki/Red_River_Ski_Area returns 404; regional DB confirms widely cited figures."
+  },
+  {
+    "slug": "rikert-nordic-center",
+    "trails_total": 55,
+    "difficulty_pct": null,
+    "source_url": "https://www.trailforks.com/region/rikert-outdoor-center/",
+    "exact_quote": "Rikert Outdoor Center has a total of 58 trails, of which 55 are designated for nordic skiing.",
+    "notes": "Nordic-only center; difficulty pct not standardized for nordic. 55 nordic trails."
+  },
+  {
+    "slug": "rikert-outdoor-center",
+    "trails_total": 55,
+    "difficulty_pct": null,
+    "source_url": "https://www.trailforks.com/region/rikert-outdoor-center/",
+    "exact_quote": "Rikert Outdoor Center has a total of 58 trails, of which 55 are designated for nordic skiing.",
+    "notes": "Duplicate entry of rikert-nordic-center (same property, renamed). 55 nordic trails."
+  },
+  {
+    "slug": "rotarun",
+    "trails_total": 9,
+    "difficulty_pct": null,
+    "source_url": "https://www.trailforks.com/region/rotarun-ski-area-73503/",
+    "exact_quote": "Rotarun Ski Area has a total of 9 trails, with trail difficulties that include green (beginner), blue (intermediate), and black diamond (expert) designations.",
+    "notes": "Small community non-profit area in Hailey, ID. Wikipedia exists but no difficulty pct. 7 named runs per other sources but 9 total trails."
+  },
+  {
+    "slug": "roundtop-mountain-resort",
+    "trails_total": 22,
+    "difficulty_pct": {
+      "beginner": 29,
+      "intermediate": 30,
+      "advanced": 31,
+      "expert": 10
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Roundtop_Mountain_Resort",
+    "exact_quote": "22 total [with] 29% Easier, 30% More Difficult, 31% Most Difficult, 10% Extremely Difficult",
+    "notes": "Wikipedia. Closely matches input pct (27/32/32/9)."
+  },
+  {
+    "slug": "royal-mountain",
+    "trails_total": 17,
+    "difficulty_pct": null,
+    "source_url": "https://nyskiblog.com/directory/ny-ski-areas/adirondacks/royal-mountain/",
+    "exact_quote": "Royal offers 550 vertical feet on 12 trails and 5 glades spread over 40 acres.",
+    "notes": "12 alpine trails + 5 glades = 17 total. No discrete pct breakdown published."
+  },
+  {
+    "slug": "saddleback",
+    "trails_total": 68,
+    "difficulty_pct": {
+      "beginner": 38,
+      "intermediate": 29,
+      "advanced": 33,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Saddleback_Maine",
+    "exact_quote": "Saddleback's terrain consists of 38% Beginner trails (25 trails), 29% Intermediate trails (19 trails) and 33% Advance and Expert trails (22 trails).",
+    "notes": "Wikipedia /wiki/Saddleback_Maine. Advanced+Expert lumped; differs from input split (26/10)."
+  },
+  {
+    "slug": "sandia-peak",
+    "trails_total": 35,
+    "difficulty_pct": {
+      "beginner": 23,
+      "intermediate": 49,
+      "advanced": 29,
+      "expert": 0
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Sandia_Peak_Ski_Area",
+    "exact_quote": "35 ski runs ... 23% beginner, 49% intermediate, 29% advanced",
+    "notes": "Wikipedia. Matches input pct exactly."
+  },
+  {
+    "slug": "sapphire-valley-resort",
+    "trails_total": 2,
+    "difficulty_pct": {
+      "beginner": 50,
+      "intermediate": 50,
+      "advanced": 0,
+      "expert": 0
+    },
+    "source_url": "https://www.skisoutheast.com/resorts/sapphire-valley-ski-resort/mountain-stats/",
+    "exact_quote": "Sapphire Valley has a trail difficulty breakdown of 50% Beginner and 50% Intermediate, with two runs—one for intermediate and one for beginner skiers.",
+    "notes": "Tiny NC resort with just 2 runs."
+  },
+  {
+    "slug": "saskadena-six-area",
+    "trails_total": 28,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Saskadena_Six",
+    "exact_quote": "Trails: 28",
+    "notes": "Wikipedia confirms 28 trails (matches input). No difficulty pct disclosed."
+  },
+  {
+    "slug": "schuss-shanty-creek",
+    "trails_total": 42,
+    "difficulty_pct": null,
+    "source_url": "https://getslopes.com/resorts/shanty_creek_resorts_schuss_mountain",
+    "exact_quote": "The trails provide 36-percent green ratings for beginners and 29-percent blue for intermediates, with all remaining trails rated as black diamonds for more advanced skiing and riding.",
+    "notes": "Schuss Mountain at Shanty Creek; 42 downhill runs (matches input). Difficulty: 36% beg, 29% int, 35% adv/expert combined (not split)."
+  },
+  {
+    "slug": "schweitzer",
+    "trails_total": 92,
+    "difficulty_pct": {
+      "beginner": 10,
+      "intermediate": 40,
+      "advanced": 35,
+      "expert": 15
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Schweitzer_Mountain",
+    "exact_quote": "92 named runs and open bowls on Schweitzer's skiable area of 2,900 acres (11.7 km²) ... 10% beginner, 40% intermediate, 35% advanced, 15% expert",
+    "notes": "Wikipedia. Matches input exactly."
+  },
+  {
+    "slug": "seven-oaks",
+    "trails_total": 12,
+    "difficulty_pct": null,
+    "source_url": "https://sevenoaksrec.com/ski-iowa-rentals/",
+    "exact_quote": "Seven Oaks Recreation's slopes consist of 12 runs varying from beginner to expert and offer 2 terrain parks, rail yard and beginner area.",
+    "notes": "Small Iowa ski area; matches input total. No exact difficulty pct published."
+  },
+  {
+    "slug": "seven-springs",
+    "trails_total": 40,
+    "difficulty_pct": {
+      "beginner": 35,
+      "intermediate": 40,
+      "advanced": 15,
+      "expert": 10
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Seven_Springs_Mountain_Resort",
+    "exact_quote": "40 trails ... 35% Beginner, 40% Intermediate, 15% Advanced, 10% Expert",
+    "notes": "Wikipedia. Matches input pct exactly."
+  },
+  {
+    "slug": "shanty-creek",
+    "trails_total": 42,
+    "difficulty_pct": null,
+    "source_url": "https://getslopes.com/resorts/shanty_creek_resorts_schuss_mountain",
+    "exact_quote": "The resort has 42 downhill runs, alpine tubing, and 25km of cross-country trails.",
+    "notes": "Same as schuss-shanty-creek (same property). Wikipedia /wiki/Shanty_Creek_Resorts 404s."
+  },
+  {
+    "slug": "shawnee-mountain",
+    "trails_total": 23,
+    "difficulty_pct": null,
+    "source_url": "https://en.wikipedia.org/wiki/Shawnee_Mountain_Ski_Area",
+    "exact_quote": "Shawnee has 23 slopes and trails, two terrain parks, and a seven lane snow-tubing park.",
+    "notes": "Wikipedia. Matches input. No difficulty pct disclosed."
+  },
+  {
+    "slug": "shawnee-peak",
+    "trails_total": 44,
+    "difficulty_pct": null,
+    "source_url": "https://www.snow-online.com/ski-resort/pleasant-mountain.html",
+    "exact_quote": "Open Trails 0 / 44",
+    "notes": "Pleasant Mountain (formerly Shawnee Peak), ME. 44 trails per snow-online stats; Wikipedia article exists but lacks ski-area trail/difficulty details. No pct found."
+  }
+]
