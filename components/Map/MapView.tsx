@@ -171,13 +171,19 @@ export default function MapView({
     // fires earlier and consistently. We also run setup immediately if the
     // style was somehow already loaded by the time this effect mounts.
     const setup = () => {
-      // Empty source — features added in the data effect below
+      // Empty source — features added in the data effect below.
+      // Stage 21.1: aggressive de-clustering. Was clusterMaxZoom 7 /
+      // radius 50 — meant state-level views (zoom 5-6) showed huge
+      // clusters with only counts, hiding which pass each resort
+      // belongs to. Now clusters disappear at zoom 5 so the dense
+      // East-coast resorts spread out into individual pass-colored
+      // pins at any "planning" zoom level.
       map.addSource(SOURCE_ID, {
         type: "geojson",
         data: { type: "FeatureCollection", features: [] },
         cluster: true,
-        clusterMaxZoom: 7,
-        clusterRadius: 50,
+        clusterMaxZoom: 4,
+        clusterRadius: 28,
       });
 
       // Cluster bubbles: light navy with white border, count label on top
