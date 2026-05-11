@@ -315,6 +315,44 @@ export default function MapView({
         },
       });
 
+      // Stage 21.3 — resort name labels. Only renders at zoom 7+ so
+      // the overview view stays as colored pins (uncluttered) and
+      // labels appear once the user zooms to a level where individual
+      // resorts are tap-targetable anyway. Mapbox de-clutters labels
+      // automatically so dense pockets won't all show — the most
+      // prominent (read: featured-tier, then larger circle-radius)
+      // wins. White halo keeps text readable over green/grey terrain.
+      map.addLayer({
+        id: "wynla-pin-labels",
+        type: "symbol",
+        source: SOURCE_ID,
+        filter: ["!", ["has", "point_count"]],
+        minzoom: 7,
+        layout: {
+          "text-field": ["get", "name"],
+          "text-font": ["DIN Pro Medium", "Arial Unicode MS Regular"],
+          "text-size": [
+            "interpolate",
+            ["linear"],
+            ["zoom"],
+            7, 10,
+            10, 12,
+            14, 13,
+          ],
+          "text-offset": [0, 1.2],
+          "text-anchor": "top",
+          "text-allow-overlap": false,
+          "text-optional": true,
+          "text-max-width": 9,
+        },
+        paint: {
+          "text-color": "#1E2952",
+          "text-halo-color": "#FFFFFF",
+          "text-halo-width": 1.8,
+          "text-halo-blur": 0.6,
+        },
+      });
+
       // Cluster click → zoom in
       map.on("click", LAYER_CLUSTERS, (e) => {
         const features = map.queryRenderedFeatures(e.point, { layers: [LAYER_CLUSTERS] });
