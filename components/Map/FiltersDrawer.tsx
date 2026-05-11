@@ -197,7 +197,7 @@ export default function FiltersDrawer({
           </p>
         </header>
 
-        <div className="flex-1 overflow-y-auto px-4 py-3">
+        <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3" style={{ touchAction: "pan-y" }}>
           {/* PASS */}
           <Section title="Pass">
             <div className="grid grid-cols-1 gap-1">

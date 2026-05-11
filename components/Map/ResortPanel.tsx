@@ -221,7 +221,7 @@ export default function ResortPanel({
         </div>
 
         {/* Scrollable body */}
-        <div className="flex-1 overflow-y-auto px-4 py-4">
+        <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-4" style={{ touchAction: "pan-y" }}>
           {/* Pass badges */}
           {resort.passes?.length > 0 && (
             <div className="mb-4 flex flex-wrap gap-1.5">

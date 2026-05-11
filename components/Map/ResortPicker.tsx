@@ -401,7 +401,19 @@ export default function ResortPicker({
         </div>
       </header>
 
-      <ul className="flex-1 overflow-y-auto">
+      <ul
+        // Stage 21.4 — touch-action + overscroll-contain stop scrolls
+        // from chaining to the map behind. Without these, reaching the
+        // top/bottom of the list let the touchmove escape to the map
+        // canvas and pan it instead.
+        className="flex-1 overflow-y-auto overscroll-contain"
+        style={{ touchAction: "pan-y" }}
+        onTouchMove={(e) => {
+          // Belt-and-suspenders: stop the scroll touchmove from
+          // bubbling to Mapbox's document-level listeners.
+          e.stopPropagation();
+        }}
+      >
         {visible.length === 0 && (
           <li className="px-4 py-6 text-center text-xs text-wn-charcoal/55">
             No resorts match your search.
