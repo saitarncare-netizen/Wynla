@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ORIGINS, type Origin } from "@/lib/origins";
+import { type Origin } from "@/lib/origins";
 import { PASS_COLORS, PASS_KEYS, PASS_LABELS } from "@/lib/passColors";
 import { SIZE_TIER_LABELS, type SizeTier } from "@/lib/sizeTier";
 
@@ -10,17 +10,14 @@ type Props = {
   passFilter: string[];
   origin: Origin;
   withinHours: number;
-  days: number;
   sizeFilter: SizeTier | null;
   nightOnly: boolean;
   passCounts: Record<string, number>;
   filteredCount: number;
   totalCount: number;
   onPassChange: (passes: string[]) => void;
-  onFromCity: (code: string) => void;
   onFromGeo: (lat: number, lng: number) => void;
   onWithinChange: (w: string | null) => void;
-  onDaysChange: (d: number) => void;
   onSizeChange: (s: SizeTier | null) => void;
   onNightChange: (v: boolean) => void;
   onClearAll: () => void;
@@ -38,36 +35,19 @@ type Props = {
 
 const DRIVE_TIME_PRESETS = [0, 3, 5, 8, 12];
 
-type TripKind = "anytime" | "day" | "weekend" | "big";
-const TRIP_PRESETS: { kind: TripKind; emoji: string; label: string; defaultDays: number }[] = [
-  { kind: "anytime", emoji: "✶",  label: "Anytime",  defaultDays: 1 },
-  { kind: "day",     emoji: "🚗", label: "Day",      defaultDays: 1 },
-  { kind: "weekend", emoji: "🏕️", label: "Weekend",  defaultDays: 2 },
-  { kind: "big",     emoji: "🎿", label: "Big trip", defaultDays: 5 },
-];
-
-function tripKindFor(days: number): TripKind {
-  if (days >= 4) return "big";
-  if (days >= 2) return "weekend";
-  return "anytime";
-}
-
 export default function FiltersDrawer({
   open,
   passFilter,
   origin,
   withinHours,
-  days,
   sizeFilter,
   nightOnly,
   passCounts,
   filteredCount,
   totalCount,
   onPassChange,
-  onFromCity,
   onFromGeo,
   onWithinChange,
-  onDaysChange,
   onSizeChange,
   onNightChange,
   onClearAll,
@@ -171,7 +151,6 @@ export default function FiltersDrawer({
 
   if (!open) return null;
 
-  const tripKind = tripKindFor(days);
   const isGeo = origin.kind === "geo";
 
   return (
@@ -286,21 +265,6 @@ export default function FiltersDrawer({
             {geoError && (
               <p className="mb-2 text-[11px] leading-tight text-red-700">{geoError}</p>
             )}
-
-            <label className="mb-1 block text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
-              Or pick a city
-            </label>
-            <select
-              value={origin.kind === "city" ? origin.code : ""}
-              onChange={(e) => onFromCity(e.target.value)}
-              className="mb-2 w-full rounded-lg border border-wn-charcoal/20 bg-white px-3 py-2 text-sm font-medium text-wn-charcoal hover:border-wn-charcoal/40 focus:outline-none focus:ring-2 focus:ring-wn-sky"
-              aria-label="From city"
-            >
-              {origin.kind === "geo" && <option value="" disabled>— pick a city —</option>}
-              {ORIGINS.map((o) => (
-                <option key={o.code} value={o.code}>{o.name}</option>
-              ))}
-            </select>
 
             <label className="mb-1 block text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
               Or enter a US ZIP
@@ -447,35 +411,6 @@ export default function FiltersDrawer({
             </button>
           </Section>
 
-          {/* TRIP LENGTH (kept for parity — sets ?days= as the rest of the app expects) */}
-          <Section title="Trip length">
-            <div className="grid grid-cols-4 gap-1">
-              {TRIP_PRESETS.map((preset) => {
-                const active = preset.kind === tripKind;
-                return (
-                  <button
-                    key={preset.kind}
-                    type="button"
-                    onClick={() => onDaysChange(preset.defaultDays)}
-                    aria-pressed={active}
-                    className={`rounded-lg border px-2 py-2 text-xs font-semibold transition ${
-                      active
-                        ? "border-wn-navy bg-wn-navy text-white"
-                        : "border-wn-charcoal/15 bg-white text-wn-charcoal hover:border-wn-charcoal/40"
-                    }`}
-                  >
-                    {preset.emoji && <span className="mr-0.5" aria-hidden="true">{preset.emoji}</span>}
-                    {preset.label}
-                  </button>
-                );
-              })}
-            </div>
-            {days >= 2 && (
-              <p className="mt-1 text-[10px] text-wn-charcoal/55">
-                Currently set to {days} days. Use the trip planner for a multi-stop itinerary.
-              </p>
-            )}
-          </Section>
         </div>
 
         <footer className="flex shrink-0 items-center gap-2 border-t border-wn-charcoal/10 bg-white px-4 py-3">

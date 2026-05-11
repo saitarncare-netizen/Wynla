@@ -342,66 +342,63 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
               Plan smart. Ride better.
             </span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            {/* Stage 21.3 — mobile header buttons are all same-size
+                icon-only square pills. Plan-a-trip is navy (primary
+                action), others are white pills. Desktop keeps text
+                labels (`sm:` reveals them). */}
             {/* Header-level resort search. Click → opens the same
                 ResortPicker the planner uses, but seeded with the
-                origin so results are sorted by drive time. Selecting
-                a resort opens its panel and flies the camera in. */}
+                origin so results are sorted by drive time. */}
             <button
               type="button"
               onClick={() => setSearchOpen(true)}
-              className="inline-flex items-center gap-1.5 rounded-md border border-wn-charcoal/20 bg-white px-3 py-1.5 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95"
-              title="Search for a specific resort"
+              className="inline-flex h-9 items-center justify-center gap-1.5 rounded-md border border-wn-charcoal/20 bg-white px-2.5 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 sm:px-3"
+              title="Search resorts"
               aria-label="Search resorts"
             >
               <span aria-hidden="true">🔍</span>
               <span className="hidden sm:inline">Search</span>
             </button>
-            {/* My trips — quick access to the saved-trips list. /trips
-                redirects to /login when signed out, so we always show
-                the button regardless of auth state. */}
+            {/* My trips */}
             <Link
               href="/trips"
-              className="inline-flex items-center gap-1.5 rounded-md border border-wn-charcoal/20 bg-white px-3 py-1.5 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95"
-              title="View saved trips"
+              className="inline-flex h-9 items-center justify-center gap-1.5 rounded-md border border-wn-charcoal/20 bg-white px-2.5 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 sm:px-3"
+              title="My trips"
               aria-label="My trips"
             >
               <span aria-hidden="true">📋</span>
               <span className="hidden sm:inline">My trips</span>
             </Link>
-            {/* Top-level Plan-a-trip CTA. Replaces the buried "Plan my N-day
-                trip" button that used to live inside the Trip dropdown. */}
+            {/* Plan a trip — primary navy CTA, same height as the
+                others. Icon-only on mobile, "Plan a trip" on desktop. */}
             <button
               type="button"
               onClick={() => updateParam("plan", "1")}
-              className="inline-flex items-center gap-1.5 rounded-md bg-wn-navy px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:bg-wn-navy/90 active:scale-95"
+              className="inline-flex h-9 items-center justify-center gap-1.5 rounded-md bg-wn-navy px-2.5 text-xs font-semibold text-white shadow-sm transition hover:bg-wn-navy/90 active:scale-95 sm:px-3"
               title="Plan a multi-day ski trip"
+              aria-label="Plan a trip"
             >
               <span aria-hidden="true">🗺️</span>
-              <span>Plan a trip</span>
+              <span className="hidden sm:inline">Plan a trip</span>
             </button>
-            {/* Stage 21.2 — mobile-only Filters trigger. Replaces the
-                row of filter pills below the header that ate ~30% of
-                the screen on phones. Desktop keeps the inline FilterBar
-                (more horizontal space, dropdowns work well). */}
+            {/* Mobile-only Filters trigger. */}
             {(() => {
               const activeFilterCount =
                 passFilter.length +
                 (withinHours > 0 ? 1 : 0) +
                 (sizeFilter ? 1 : 0) +
                 (nightOnly ? 1 : 0) +
-                (origin.kind === "geo" ? 1 : 0) +
-                (days >= 2 ? 1 : 0);
+                (origin.kind === "geo" ? 1 : 0);
               return (
                 <button
                   type="button"
                   onClick={() => setFiltersOpen(true)}
-                  className="relative inline-flex items-center gap-1.5 rounded-md border border-wn-charcoal/20 bg-white px-3 py-1.5 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 md:hidden"
-                  title="Open filters"
+                  className="relative inline-flex h-9 items-center justify-center gap-1.5 rounded-md border border-wn-charcoal/20 bg-white px-2.5 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 md:hidden"
+                  title="Filters"
                   aria-label={`Filters${activeFilterCount > 0 ? ` (${activeFilterCount} active)` : ""}`}
                 >
                   <span aria-hidden="true" className="text-base leading-none">☰</span>
-                  <span>Filters</span>
                   {activeFilterCount > 0 && (
                     <span className="inline-flex h-4 min-w-[16px] items-center justify-center rounded-full bg-wn-navy px-1 text-[10px] font-bold text-white">
                       {activeFilterCount}
@@ -537,7 +534,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
           updateParam("pass", passes.length === 0 ? null : passes.join(","))
         }
         onMapPickHandlerChange={handleMapPickHandlerChange}
-        days={Math.max(2, days)}
+        days={Math.max(1, days)}
         isAuthed={isAuthed}
         onClose={() => updateParam("plan", null)}
         onFocusResort={(point) =>
@@ -586,13 +583,14 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
 
       {/* Stage 21.2 — mobile filters drawer. Triggered by the ☰ Filters
           button in the header. All filter controls in one bottom sheet,
-          so the header stays minimal and the map gets the full screen. */}
+          so the header stays minimal and the map gets the full screen.
+          Stage 21.3 — Trip-type / city dropdowns removed (planner owns
+          trip length; ZIP + geo cover origin precisely enough). */}
       <FiltersDrawer
         open={filtersOpen}
         passFilter={passFilter}
         origin={origin}
         withinHours={withinHours}
-        days={days}
         sizeFilter={sizeFilter}
         nightOnly={nightOnly}
         passCounts={passCounts}
@@ -601,10 +599,8 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         onPassChange={(passes) =>
           updateParam("pass", passes.length === 0 ? null : passes.join(","))
         }
-        onFromCity={handleFromCity}
         onFromGeo={handleFromGeo}
         onWithinChange={(w) => updateParam("within", w)}
-        onDaysChange={(d) => updateParam("days", d > 1 ? String(d) : null)}
         onSizeChange={(s) => updateParam("size", s)}
         onNightChange={(v) => updateParam("night", v ? "1" : null)}
         onClearAll={clearAll}
