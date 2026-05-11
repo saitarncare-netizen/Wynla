@@ -9,6 +9,7 @@ import FilterBar from "./FilterBar";
 import ResortPanel from "./ResortPanel";
 import ResortPicker from "./ResortPicker";
 import LocationButton from "./LocationButton";
+import FiltersDrawer from "./FiltersDrawer";
 import TripPlannerPanel from "./TripPlannerPanel";
 import AuthButton from "@/components/auth/AuthButton";
 import Link from "next/link";
@@ -111,6 +112,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   const [tripRoute, setTripRoute] = useState<TripRoutePoint[] | null>(null);
   const [fitTripVersion, setFitTripVersion] = useState(0);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const [lastSeenPlannerOpen, setLastSeenPlannerOpen] = useState(false);
   // Stage 19.5: when the trip planner's picker is active, it
   // registers a handler here. Map pin clicks route through it
@@ -378,6 +380,36 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
               <span aria-hidden="true">🗺️</span>
               <span>Plan a trip</span>
             </button>
+            {/* Stage 21.2 — mobile-only Filters trigger. Replaces the
+                row of filter pills below the header that ate ~30% of
+                the screen on phones. Desktop keeps the inline FilterBar
+                (more horizontal space, dropdowns work well). */}
+            {(() => {
+              const activeFilterCount =
+                passFilter.length +
+                (withinHours > 0 ? 1 : 0) +
+                (sizeFilter ? 1 : 0) +
+                (nightOnly ? 1 : 0) +
+                (origin.kind === "geo" ? 1 : 0) +
+                (days >= 2 ? 1 : 0);
+              return (
+                <button
+                  type="button"
+                  onClick={() => setFiltersOpen(true)}
+                  className="relative inline-flex items-center gap-1.5 rounded-md border border-wn-charcoal/20 bg-white px-3 py-1.5 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 md:hidden"
+                  title="Open filters"
+                  aria-label={`Filters${activeFilterCount > 0 ? ` (${activeFilterCount} active)` : ""}`}
+                >
+                  <span aria-hidden="true" className="text-base leading-none">☰</span>
+                  <span>Filters</span>
+                  {activeFilterCount > 0 && (
+                    <span className="inline-flex h-4 min-w-[16px] items-center justify-center rounded-full bg-wn-navy px-1 text-[10px] font-bold text-white">
+                      {activeFilterCount}
+                    </span>
+                  )}
+                </button>
+              );
+            })()}
             <Link
               href="/pro"
               className="hidden rounded-md border border-wn-gold/60 bg-wn-gold/10 px-2.5 py-1 text-xs font-semibold text-wn-navy transition hover:bg-wn-gold/25 sm:inline-block"
@@ -388,28 +420,32 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
             <AuthButton />
           </div>
         </div>
-        <FilterBar
-          passFilter={passFilter}
-          origin={origin}
-          withinHours={withinHours}
-          days={days}
-          sizeFilter={sizeFilter}
-          nightOnly={nightOnly}
-          passCounts={passCounts}
-          hiddenByNullSize={hiddenByNullSize}
-          filteredCount={filtered.length}
-          totalCount={resorts.length}
-          onPassChange={(passes) =>
-            updateParam("pass", passes.length === 0 ? null : passes.join(","))
-          }
-          onFromCity={handleFromCity}
-          onFromGeo={handleFromGeo}
-          onWithinChange={(w) => updateParam("within", w)}
-          onDaysChange={(d) => updateParam("days", d > 1 ? String(d) : null)}
-          onSizeChange={(s) => updateParam("size", s)}
-          onNightChange={(v) => updateParam("night", v ? "1" : null)}
-          onClearAll={clearAll}
-        />
+        {/* Inline filter pills row — desktop only. Mobile uses the
+            single ☰ Filters button above + FiltersDrawer below. */}
+        <div className="hidden md:block">
+          <FilterBar
+            passFilter={passFilter}
+            origin={origin}
+            withinHours={withinHours}
+            days={days}
+            sizeFilter={sizeFilter}
+            nightOnly={nightOnly}
+            passCounts={passCounts}
+            hiddenByNullSize={hiddenByNullSize}
+            filteredCount={filtered.length}
+            totalCount={resorts.length}
+            onPassChange={(passes) =>
+              updateParam("pass", passes.length === 0 ? null : passes.join(","))
+            }
+            onFromCity={handleFromCity}
+            onFromGeo={handleFromGeo}
+            onWithinChange={(w) => updateParam("within", w)}
+            onDaysChange={(d) => updateParam("days", d > 1 ? String(d) : null)}
+            onSizeChange={(s) => updateParam("size", s)}
+            onNightChange={(v) => updateParam("night", v ? "1" : null)}
+            onClearAll={clearAll}
+          />
+        </div>
       </header>
 
 
@@ -546,6 +582,33 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
       <LocationButton
         isUsingGeo={origin.kind === "geo"}
         onUseMyLocation={handleFromGeo}
+      />
+
+      {/* Stage 21.2 — mobile filters drawer. Triggered by the ☰ Filters
+          button in the header. All filter controls in one bottom sheet,
+          so the header stays minimal and the map gets the full screen. */}
+      <FiltersDrawer
+        open={filtersOpen}
+        passFilter={passFilter}
+        origin={origin}
+        withinHours={withinHours}
+        days={days}
+        sizeFilter={sizeFilter}
+        nightOnly={nightOnly}
+        passCounts={passCounts}
+        filteredCount={filtered.length}
+        totalCount={resorts.length}
+        onPassChange={(passes) =>
+          updateParam("pass", passes.length === 0 ? null : passes.join(","))
+        }
+        onFromCity={handleFromCity}
+        onFromGeo={handleFromGeo}
+        onWithinChange={(w) => updateParam("within", w)}
+        onDaysChange={(d) => updateParam("days", d > 1 ? String(d) : null)}
+        onSizeChange={(s) => updateParam("size", s)}
+        onNightChange={(v) => updateParam("night", v ? "1" : null)}
+        onClearAll={clearAll}
+        onClose={() => setFiltersOpen(false)}
       />
 
       {/* Pass color legend — desktop only. On mobile, the same info
