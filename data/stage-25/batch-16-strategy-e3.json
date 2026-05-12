@@ -1,0 +1,36 @@
+[
+  {
+    "slug": "woodward-park-city",
+    "hero_image_url": null,
+    "source_page_url": "https://www.skiresort.info/ski-resort/woodward-park-city/",
+    "alt_text": "Woodward Park City Utah - freestyle terrain park alpine view",
+    "winter_signals": [
+      "0.5 km of slopes available (0.3 km easy 60%, 0.2 km intermediate 40%)",
+      "1 lift transports guests plus 3 additional terrain-park features",
+      "Elevation range 1,970 - 2,076 m (106 m vertical)",
+      "Season: early December - late April",
+      "Operating hours 10:00 - 20:00 daily"
+    ],
+    "attribution": "skiresort.info",
+    "license": "editorial-fair-use",
+    "confidence": "medium",
+    "notes": "VERIFIED via fetch 2026-05-12. skiresort.info page exists with 5 winter signals (slope km, lift count, elevation, season, hours), but no _processed_ hero image (only logo). OnTheSnow path returned 404. UT freestyle/terrain-park focused resort - this explains the unusual lack of traditional alpine hero. Fetch hero in stage-26 if needed."
+  },
+  {
+    "slug": "yellowstone-club",
+    "hero_image_url": "https://www.skiresort.info/fileadmin/_processed_/3d/d3/35/51/bebbd3df80.jpg",
+    "source_page_url": "https://www.skiresort.info/ski-resort/yellowstone-club/",
+    "alt_text": "Yellowstone Club Montana - private members-only alpine resort view",
+    "winter_signals": [
+      "80 km of slopes plus 20 km of ski routes",
+      "19 total lifts available",
+      "Elevation range 2,182 - 3,005 m (823 m vertical)",
+      "Season: late November - mid April",
+      "Slope breakdown: 30 km easy (37%), 30 km intermediate (37%), 20 km difficult (26%)"
+    ],
+    "attribution": "skiresort.info",
+    "license": "editorial-fair-use",
+    "confidence": "high",
+    "notes": "VERIFIED via fetch 2026-05-12. Hero image confirmed at _processed_ URL on skiresort.info. 5 strong winter signals (slope km, lift count, vertical, season dates, slope breakdown). MT private members-only alpine resort - large 100 km terrain, 19 lifts, full alpine spec. Confidence high."
+  }
+]

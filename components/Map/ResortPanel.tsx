@@ -176,23 +176,34 @@ export default function ResortPanel({
           <div className="h-1 w-10 rounded-full bg-wn-charcoal/25" />
         </div>
 
-        {/* Typographic hero — pass-color gradient + resort name. No image. */}
+        {/* Hero — Stage 25 verified winter ski photo when available;
+            pass-color gradient fallback otherwise. The image is loaded
+            into a background-image style so we keep the gradient under
+            it as both fallback (image fails to load) AND as the dark
+            scrim that keeps the white name readable. */}
         <div
           className="relative shrink-0 overflow-hidden"
           style={{
-            background: `linear-gradient(135deg, ${heroBg} 0%, #1E2952 100%)`,
+            backgroundColor: heroBg,
+            backgroundImage: resort.hero_image_url
+              ? `linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(15,21,48,0.65) 100%), url("${resort.hero_image_url}")`
+              : `linear-gradient(135deg, ${heroBg} 0%, #1E2952 100%)`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
           }}
         >
-          {/* Faint SVG-grain layer adding subtle depth to the flat gradient. */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 opacity-[0.06] mix-blend-overlay"
-            style={{
-              backgroundImage:
-                "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.85'/></svg>\")",
-              backgroundSize: "160px 160px",
-            }}
-          />
+          {/* SVG grain — gradient-only mode keeps it. Image mode skips. */}
+          {!resort.hero_image_url && (
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 opacity-[0.06] mix-blend-overlay"
+              style={{
+                backgroundImage:
+                  "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.85'/></svg>\")",
+                backgroundSize: "160px 160px",
+              }}
+            />
+          )}
           <div className="relative h-32 px-4 pt-4 pb-3 md:h-36">
             {/* Top-right: Favorite + Close */}
             <div className="absolute right-3 top-3 flex items-center gap-2 z-10">
@@ -209,10 +220,10 @@ export default function ResortPanel({
 
             {/* Title block bottom-left */}
             <div className="absolute inset-x-4 bottom-3">
-              <h2 className="text-2xl font-extrabold leading-tight text-white drop-shadow-sm sm:text-3xl">
+              <h2 className="text-2xl font-extrabold leading-tight text-white drop-shadow-md sm:text-3xl">
                 {resort.name}
               </h2>
-              <p className="mt-0.5 text-xs text-white/85">
+              <p className="mt-0.5 text-xs text-white/90 drop-shadow">
                 {resort.state}
                 {resort.region ? " · " + resort.region : ""}
               </p>

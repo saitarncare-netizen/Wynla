@@ -1,0 +1,432 @@
+[
+  {
+    "slug": "aspen-snowmass",
+    "hero_image_url": "https://upload.wikimedia.org/wikipedia/commons/a/a7/Lift_1A_on_Aspen_Mountain.jpg",
+    "source_page_url": "https://commons.wikimedia.org/wiki/File:Lift_1A_on_Aspen_Mountain.jpg",
+    "filename": "Lift_1A_on_Aspen_Mountain.jpg",
+    "alt_text": "Skiers and snowboarders ride up the iconic Lift 1A on Aspen Mountain with downtown Aspen in the background",
+    "winter_signals": [
+      "filename references Lift 1A (chairlift)",
+      "caption mentions skiers and snowboarders",
+      "Jan 2012 capture date (winter)",
+      "categorized as Skiing/Bluebird"
+    ],
+    "attribution": "AspenSkiingCompany",
+    "license": "CC BY-SA 3.0",
+    "confidence": "HIGH",
+    "notes": "Iconic Aspen Mountain lift photo with skiers; primary Wikipedia Aspen/Snowmass article image"
+  },
+  {
+    "slug": "attitash",
+    "hero_image_url": "https://upload.wikimedia.org/wikipedia/commons/6/68/Skiing_at_Attitash.jpg",
+    "source_page_url": "https://commons.wikimedia.org/wiki/File:Skiing_at_Attitash.jpg",
+    "filename": "Skiing_at_Attitash.jpg",
+    "alt_text": "Skiing at Attitash Mountain Resort",
+    "winter_signals": [
+      "filename: 'Skiing at Attitash'",
+      "categorized as Alpine skiing",
+      "categorized as Skiing in the United States",
+      "uploader is Attitash mountain resort"
+    ],
+    "attribution": "Attitashmountain",
+    "license": "CC BY-SA 3.0 / GFDL 1.2+",
+    "confidence": "HIGH",
+    "notes": "Direct skiing scene; preferred over aerial which has no confirmed snow"
+  },
+  {
+    "slug": "badger-mountain-wa",
+    "hero_image_url": null,
+    "source_page_url": "https://en.wikipedia.org/wiki/Badger_Mountain_Ski_Area",
+    "filename": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "LOW",
+    "notes": "No infobox image on Wikipedia; no Commons category; no verified winter ski photo on Wikimedia"
+  },
+  {
+    "slug": "badger-pass",
+    "hero_image_url": "https://upload.wikimedia.org/wikipedia/commons/6/6f/Ski_lodge_Badger.jpg",
+    "source_page_url": "https://commons.wikimedia.org/wiki/File:Ski_lodge_Badger.jpg",
+    "filename": "Ski_lodge_Badger.jpg",
+    "alt_text": "Historic Badger Pass Ski Lodge in winter setting",
+    "winter_signals": [
+      "filename contains 'Ski lodge'",
+      "caption: 'Historic Badger Pass Ski Lodge - January 2010'",
+      "January capture (winter)",
+      "categorized under Badger Pass Ski Area"
+    ],
+    "attribution": "Peterparr",
+    "license": "Public domain",
+    "confidence": "HIGH",
+    "notes": "Primary Wikipedia infobox image; January winter snow"
+  },
+  {
+    "slug": "bear-basin-nordic-center",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "filename": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "LOW",
+    "notes": "No Wikipedia article or Commons category found for Bear Basin Nordic Center (McCall, ID)"
+  },
+  {
+    "slug": "bear-creek-mountain-resort",
+    "hero_image_url": "https://upload.wikimedia.org/wikipedia/commons/f/f9/Bear-creek.JPG",
+    "source_page_url": "https://commons.wikimedia.org/wiki/File:Bear-creek.JPG",
+    "filename": "Bear-creek.JPG",
+    "alt_text": "Ski slopes at Bear Creek Mountain Resort in January 2012",
+    "winter_signals": [
+      "Wikipedia caption: 'Ski slopes at Bear Creek Ski Mountain Resort in January 2012'",
+      "January 2012 capture (winter)",
+      "primary Wikipedia infobox image",
+      "filename references the ski resort"
+    ],
+    "attribution": "Writerchic99",
+    "license": "CC BY-SA 3.0",
+    "confidence": "HIGH",
+    "notes": "January winter date verified; used as the resort's Wikipedia infobox image"
+  },
+  {
+    "slug": "bear-mountain",
+    "hero_image_url": null,
+    "source_page_url": "https://en.wikipedia.org/wiki/Big_Bear_Mountain_Resort",
+    "filename": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "LOW",
+    "notes": "Big Bear Mountain Resort Wikipedia returns 404; no Commons category. Bear Mountain CA has no dedicated Wikipedia article with verified winter hero"
+  },
+  {
+    "slug": "bear-paw",
+    "hero_image_url": null,
+    "source_page_url": "https://en.wikipedia.org/wiki/Bear_Paw_Ski_Bowl",
+    "filename": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "LOW",
+    "notes": "Wikipedia article exists but contains only logo + location maps; Commons search returned no results"
+  },
+  {
+    "slug": "bear-valley-adventure-company",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "filename": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "LOW",
+    "notes": "No Wikipedia article or Commons category found for Bear Valley Adventure Company (Nordic operator)"
+  },
+  {
+    "slug": "bear-valley-mountain",
+    "hero_image_url": "https://upload.wikimedia.org/wikipedia/commons/f/f1/Ebbetts_Pass_Scenic_Byway_-_Powder_Run_at_Bear_Valley_-_NARA_-_7718117.jpg",
+    "source_page_url": "https://commons.wikimedia.org/wiki/File:Ebbetts_Pass_Scenic_Byway_-_Powder_Run_at_Bear_Valley_-_NARA_-_7718117.jpg",
+    "filename": "Ebbetts_Pass_Scenic_Byway_-_Powder_Run_at_Bear_Valley_-_NARA_-_7718117.jpg",
+    "alt_text": "A skier enjoys a powder run at Bear Valley Mountain Resort, California",
+    "winter_signals": [
+      "filename: 'Powder Run at Bear Valley'",
+      "description: 'A skier enjoys a powder run at Bear Valley Mountain Resort'",
+      "depicts active skier in powder snow",
+      "categorized as ski photo"
+    ],
+    "attribution": "U.S. Federal Highway Administration / NARA",
+    "license": "Public domain",
+    "confidence": "HIGH",
+    "notes": "Action ski photo at the actual resort; preferred over overlook image"
+  },
+  {
+    "slug": "beartooth-basin",
+    "hero_image_url": "https://upload.wikimedia.org/wikipedia/commons/a/aa/Beartooth_Basin_Ski_Area_-_June_20_2017.jpg",
+    "source_page_url": "https://commons.wikimedia.org/wiki/File:Beartooth_Basin_Ski_Area_-_June_20_2017.jpg",
+    "filename": "Beartooth_Basin_Ski_Area_-_June_20_2017.jpg",
+    "alt_text": "Beartooth Basin Ski Area at the summit of Beartooth Pass, showing snow-covered slopes during the summer operating season",
+    "winter_signals": [
+      "filename contains 'Ski Area'",
+      "caption identifies it as ski area",
+      "snow-covered slopes (summer ski area uses persistent snowfields)",
+      "primary Wikipedia infobox image"
+    ],
+    "attribution": "US Forest Service",
+    "license": "Public domain",
+    "confidence": "MEDIUM",
+    "notes": "Beartooth Basin operates only summer due to high elevation snowfields; the snow itself qualifies as winter signal but the season is technically summer. Best/only Wikipedia/Commons option"
+  },
+  {
+    "slug": "beaver-creek",
+    "hero_image_url": "https://upload.wikimedia.org/wikipedia/commons/d/d1/Beaver_Creek_%28USA%29_2011.JPG",
+    "source_page_url": "https://commons.wikimedia.org/wiki/File:Beaver_Creek_(USA)_2011.JPG",
+    "filename": "Beaver_Creek_(USA)_2011.JPG",
+    "alt_text": "Birds of Prey World Cup Alpine Ski Course at Beaver Creek Resort, Colorado",
+    "winter_signals": [
+      "description: 'Birds of Prey World Cup Alpine Ski Course'",
+      "captured December 11, 2011 (winter)",
+      "shows ski racing course",
+      "categorized as alpine ski course"
+    ],
+    "attribution": "Davepark",
+    "license": "CC BY-SA 3.0",
+    "confidence": "HIGH",
+    "notes": "December winter alpine ski race course; preferred over generic logo"
+  },
+  {
+    "slug": "beaver-mountain",
+    "hero_image_url": null,
+    "source_page_url": "https://en.wikipedia.org/wiki/Beaver_Mountain",
+    "filename": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "LOW",
+    "notes": "Both available Commons images explicitly labeled 'in Summer' (NARA series). No winter ski photo verified"
+  },
+  {
+    "slug": "beech-mountain-resort",
+    "hero_image_url": null,
+    "source_page_url": "https://en.wikipedia.org/wiki/Beech_Mountain,_North_Carolina",
+    "filename": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "LOW",
+    "notes": "No dedicated Beech Mountain Resort Wikipedia page; only town seal in town article; 'Beech_downhill_02.jpg' is mountain biking (Aug), not skiing"
+  },
+  {
+    "slug": "belleayre-mountain",
+    "hero_image_url": null,
+    "source_page_url": "https://en.wikipedia.org/wiki/Belleayre_Mountain",
+    "filename": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "LOW",
+    "notes": "Wikipedia infobox uses logo only; only Commons match 'Halcott_Mountain_from_Belleayre_ski_slope.jpg' is Sept 2008 (fall, no snow). No verified winter ski hero"
+  },
+  {
+    "slug": "berkshire-east",
+    "hero_image_url": null,
+    "source_page_url": "https://en.wikipedia.org/wiki/Berkshire_East_Ski_Area",
+    "filename": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "LOW",
+    "notes": "Only Commons image is 'September 2022' from Charlemont (no snow, fall foliage). REJECT - fails winter criteria"
+  },
+  {
+    "slug": "bethel-village-trails",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "filename": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "LOW",
+    "notes": "No Wikipedia article or Commons category found for Bethel Village Trails Nordic"
+  },
+  {
+    "slug": "big-bear-ca",
+    "hero_image_url": "https://upload.wikimedia.org/wikipedia/commons/a/a0/Snow_Summit_Ski_Resort.jpg",
+    "source_page_url": "https://commons.wikimedia.org/wiki/File:Snow_Summit_Ski_Resort.jpg",
+    "filename": "Snow_Summit_Ski_Resort.jpg",
+    "alt_text": "Aerial view of Snow Summit Ski Resort, Big Bear, March 2008",
+    "winter_signals": [
+      "filename: 'Snow Summit Ski Resort'",
+      "caption: 'Snow Summit Ski Resort, at Big Bear'",
+      "March 2008 (still ski season)",
+      "primary Wikipedia infobox image for Snow Summit (Big Bear's main resort)"
+    ],
+    "attribution": "Doc Searls",
+    "license": "CC BY-SA 2.0",
+    "confidence": "MEDIUM",
+    "notes": "Big Bear Mountain Resort operates both Snow Summit and Bear Mountain; Snow Summit infobox photo serves as best Wikimedia representation"
+  },
+  {
+    "slug": "big-bear-pa",
+    "hero_image_url": null,
+    "source_page_url": "https://en.wikipedia.org/wiki/Ski_Big_Bear",
+    "filename": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "LOW",
+    "notes": "Wikipedia article has no infobox image; no Commons category found"
+  },
+  {
+    "slug": "big-boulder",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "filename": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "LOW",
+    "notes": "Wikipedia article URL variants return 404; Commons search returned no results"
+  },
+  {
+    "slug": "big-powderhorn-mountain",
+    "hero_image_url": "https://upload.wikimedia.org/wikipedia/commons/f/fa/Big_Powderhorn_Mountain_-_view_from_Dynamite_Trail.jpg",
+    "source_page_url": "https://commons.wikimedia.org/wiki/File:Big_Powderhorn_Mountain_-_view_from_Dynamite_Trail.jpg",
+    "filename": "Big_Powderhorn_Mountain_-_view_from_Dynamite_Trail.jpg",
+    "alt_text": "View from Dynamite Trail at Big Powderhorn Mountain ski resort",
+    "winter_signals": [
+      "filename: 'Big Powderhorn Mountain - view from Dynamite Trail'",
+      "Wikipedia infobox image",
+      "captured February 3, 2009 (winter)",
+      "description: 'Big Powderhorn Mountain ski resort - view from Dynamite Trail'"
+    ],
+    "attribution": "Jhansonxi",
+    "license": "CC BY-SA 3.0",
+    "confidence": "HIGH",
+    "notes": "February winter date; from named ski trail; primary Wikipedia infobox image"
+  },
+  {
+    "slug": "big-rock",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "filename": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "LOW",
+    "notes": "No Wikipedia article found at expected URLs; Commons search returned no Maine ski results"
+  },
+  {
+    "slug": "big-sky",
+    "hero_image_url": "https://upload.wikimedia.org/wikipedia/commons/7/7d/Lone_Peak_seen_from_Big_Sky_Resort%2C_2018.jpg",
+    "source_page_url": "https://commons.wikimedia.org/wiki/File:Lone_Peak_seen_from_Big_Sky_Resort,_2018.jpg",
+    "filename": "Lone_Peak_seen_from_Big_Sky_Resort,_2018.jpg",
+    "alt_text": "Lone Peak seen from Big Sky Resort in January 2018",
+    "winter_signals": [
+      "filename: 'Lone Peak seen from Big Sky Resort'",
+      "description: 'Lone Peak seen from the Big Sky Resort hotels in January of 2018'",
+      "January 2018 capture (winter)",
+      "Big Sky's signature peak"
+    ],
+    "attribution": "Rickmouser45",
+    "license": "CC BY-SA 4.0",
+    "confidence": "HIGH",
+    "notes": "January winter capture of Big Sky's iconic Lone Peak"
+  },
+  {
+    "slug": "big-snow-american-dream",
+    "hero_image_url": "https://upload.wikimedia.org/wikipedia/commons/c/cd/Big_Snow_American_Dream_01.jpg",
+    "source_page_url": "https://commons.wikimedia.org/wiki/File:Big_Snow_American_Dream_01.jpg",
+    "filename": "Big_Snow_American_Dream_01.jpg",
+    "alt_text": "Indoor ski slope at Big Snow American Dream showing the Switchback and Northern Lights trails",
+    "winter_signals": [
+      "filename contains 'Big Snow'",
+      "Wikipedia caption: 'Switchback and Northern Lights trails'",
+      "description: 'Indoor ski slope at Big Snow American Dream'",
+      "depicts snow-covered ski slopes with lift infrastructure"
+    ],
+    "attribution": "Shemtov613",
+    "license": "CC BY-SA 4.0",
+    "confidence": "HIGH",
+    "notes": "Indoor ski facility (year-round snow); primary Wikipedia infobox image"
+  },
+  {
+    "slug": "big-squaw-mountain",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "filename": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "LOW",
+    "notes": "Wikipedia/Commons searches found no verified winter ski photo for Big Moose Mountain (formerly Big Squaw)"
+  },
+  {
+    "slug": "bittersweet-ski-resort",
+    "hero_image_url": "https://upload.wikimedia.org/wikipedia/commons/3/34/Bittersweet_Ski_Resort.jpg",
+    "source_page_url": "https://commons.wikimedia.org/wiki/File:Bittersweet_Ski_Resort.jpg",
+    "filename": "Bittersweet_Ski_Resort.jpg",
+    "alt_text": "Bittersweet Ski Resort in Plainwell, Michigan, January 2021",
+    "winter_signals": [
+      "filename: 'Bittersweet Ski Resort'",
+      "caption identifies resort by name",
+      "captured January 2, 2021 (winter)",
+      "categorized under 'Winter in Michigan' and 'Ski resorts in Michigan'"
+    ],
+    "attribution": "Diego Pierdant",
+    "license": "CC BY-SA 4.0",
+    "confidence": "HIGH",
+    "notes": "January winter capture; explicitly categorized as winter and ski resort"
+  },
+  {
+    "slug": "black-area",
+    "hero_image_url": "https://upload.wikimedia.org/wikipedia/commons/f/fd/Blackmountainnh.jpg",
+    "source_page_url": "https://commons.wikimedia.org/wiki/File:Blackmountainnh.jpg",
+    "filename": "Blackmountainnh.jpg",
+    "alt_text": "Black Mountain Ski Area as seen from South Doublehead Mountain",
+    "winter_signals": [
+      "filename references Black Mountain NH",
+      "description: 'Black Mountain Ski Area as seen from South Doublehead Mountain'",
+      "categorized under ski area",
+      "primary Wikipedia infobox image"
+    ],
+    "attribution": "Jrclark",
+    "license": "CC BY-SA 3.0 / GFDL",
+    "confidence": "MEDIUM",
+    "notes": "April 2008 capture; late-winter/early-spring conditions; only ski signal is the description naming it Ski Area; only confirmed Wikipedia infobox option"
+  },
+  {
+    "slug": "black-mountain-nh",
+    "hero_image_url": "https://upload.wikimedia.org/wikipedia/commons/f/fd/Blackmountainnh.jpg",
+    "source_page_url": "https://commons.wikimedia.org/wiki/File:Blackmountainnh.jpg",
+    "filename": "Blackmountainnh.jpg",
+    "alt_text": "Black Mountain Ski Area as seen from South Doublehead Mountain",
+    "winter_signals": [
+      "filename references Black Mountain NH",
+      "description: 'Black Mountain Ski Area as seen from South Doublehead Mountain'",
+      "categorized under ski area",
+      "primary Wikipedia infobox image"
+    ],
+    "attribution": "Jrclark",
+    "license": "CC BY-SA 3.0 / GFDL",
+    "confidence": "MEDIUM",
+    "notes": "Duplicate of black-area slug (same resort, same website URL). April 2008 capture, only Wikipedia option"
+  },
+  {
+    "slug": "black-mountain-of-maine",
+    "hero_image_url": null,
+    "source_page_url": "https://en.wikipedia.org/wiki/Black_Mountain_of_Maine",
+    "filename": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "LOW",
+    "notes": "Wikipedia infobox uses logo only; Commons search returned no winter ski photo"
+  },
+  {
+    "slug": "blackjack-mountain",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "filename": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "LOW",
+    "notes": "No Wikipedia article found at expected URLs for Blackjack Mountain (Michigan); Commons search returned no results"
+  }
+]

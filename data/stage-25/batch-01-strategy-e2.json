@@ -1,0 +1,300 @@
+[
+  {
+    "slug": "49-degrees-north",
+    "hero_image_url": "https://www.ski49n.com/images/uploads/banners/A55A7615.jpg",
+    "source_page_url": "https://www.ski49n.com",
+    "filename": "A55A7615.jpg",
+    "alt_text": "49 Degrees North homepage banner",
+    "winter_signals": [
+      "Banner image on homepage of a ski-only resort (site is ski49n.com, no summer ops mentioned)",
+      "Homepage nav dominated by ski/snowboard pages (trail-map-stats, ski-snowboard-school, nordic-center, day-tickets)"
+    ],
+    "attribution": "© 49 Degrees North Mountain Resort (homepage banner)",
+    "license": "official-website",
+    "confidence": "MEDIUM",
+    "notes": "Site had no og:image meta tag; using primary homepage banner. Filename is opaque (camera serial) so cannot independently verify it is winter, but the resort is ski-only and the banner role on a ski domain strongly implies winter content."
+  },
+  {
+    "slug": "afton-alps",
+    "hero_image_url": null,
+    "source_page_url": "https://www.aftonalps.com",
+    "filename": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "LOW",
+    "notes": "Site returned a Vail Resorts platform error page ('The system cannot process your request' / vcui.system.down.pic.gif). No og:image, no hero imagery available via this strategy. Retry from alternate source."
+  },
+  {
+    "slug": "alpine-meadows",
+    "hero_image_url": "https://www.palisadestahoe.com/-/media/squaw-alpine/hero-background-images/homepage-hero-background-winter.jpg",
+    "source_page_url": "https://www.palisadestahoe.com",
+    "filename": "homepage-hero-background-winter.jpg",
+    "alt_text": "Palisades Tahoe (Alpine Meadows) winter homepage hero",
+    "winter_signals": [
+      "Filename literally contains 'winter' and 'hero-background'",
+      "Located in /hero-background-images/ path explicitly for homepage hero",
+      "Stored under squaw-alpine media folder (former Squaw / Alpine Meadows brand)"
+    ],
+    "attribution": "© Palisades Tahoe / Alterra Mountain Co. (used as homepage hero)",
+    "license": "official-website",
+    "confidence": "HIGH",
+    "notes": "Strong winter signal — filename is explicitly 'winter'. Note: Alpine Meadows shares the Palisades Tahoe site (merged operation), so this hero represents the combined resort. Acceptable as Alpine Meadows hero since they are now one resort."
+  },
+  {
+    "slug": "alpine-valley-mi",
+    "hero_image_url": "https://skialpinevalley.com/wp-content/uploads/2026/01/First-Tracks-2.png",
+    "source_page_url": "https://www.skialpinevalley.com",
+    "filename": "First-Tracks-2.png",
+    "alt_text": "First Tracks at Alpine Valley MI",
+    "winter_signals": [
+      "Filename 'First-Tracks' is ski-specific terminology (first lift / fresh corduroy run)",
+      "Uploaded January 2026 (mid-ski-season) on a ski-only domain (skialpinevalley.com)",
+      "Site nav is fully winter (snow-report, lift-tickets, terrain-parks, trail-map)"
+    ],
+    "attribution": "© Alpine Valley Ski Area MI (homepage)",
+    "license": "official-website",
+    "confidence": "HIGH",
+    "notes": "No og:image found, but the most prominent ski-specific homepage image is First-Tracks-2.png. Filename + season + ski-only domain all align."
+  },
+  {
+    "slug": "alpine-valley-oh",
+    "hero_image_url": null,
+    "source_page_url": "https://www.alpinevalleyohio.com",
+    "filename": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "LOW",
+    "notes": "Site returned a Vail Resorts platform error page (same vcui.system.down infrastructure as Afton Alps). No og:image, no hero candidates extracted. Retry via alternate source."
+  },
+  {
+    "slug": "alpine-valley-wi",
+    "hero_image_url": null,
+    "source_page_url": "https://www.alpinevalleyresort.com",
+    "filename": null,
+    "alt_text": null,
+    "winter_signals": [
+      "Homepage explicitly currently emphasizes 'GOLF IS OPEN' (summer mode)"
+    ],
+    "attribution": null,
+    "license": null,
+    "confidence": "LOW",
+    "notes": "Only image found on homepage is 'Golf-to-skiing-819x1024.jpg' which depicts the seasonal transition (not pure winter), and no og:image meta tag. The site is currently in summer/golf mode. Reject per criteria (image filename contains 'golf'). Retry on /trail-map or /snow-report in winter season."
+  },
+  {
+    "slug": "alta",
+    "hero_image_url": "https://res.cloudinary.com/altaskiarea/image/upload/f_auto/e_grayscale/e_gradient_fade:35,x_0.4/e_gradient_fade:15,y_0.10/e_gradient_fade:30,y_-0.5,q_60/marquees/Winter-Activities-Hero.jpg",
+    "source_page_url": "https://www.alta.com/winter-activities",
+    "filename": "Winter-Activities-Hero.jpg",
+    "alt_text": "Alta Winter Activities hero marquee",
+    "winter_signals": [
+      "Filename explicitly 'Winter-Activities-Hero.jpg'",
+      "Hosted under /marquees/ path used for hero banners",
+      "Image lives on /winter-activities subpage (winter-specific URL)",
+      "Alta is a ski-only resort (no summer ops)"
+    ],
+    "attribution": "© Alta Ski Area (Winter Activities hero marquee)",
+    "license": "official-website",
+    "confidence": "HIGH",
+    "notes": "Very strong match — filename, page URL, and resort all align with winter ski. Sourced from /winter-activities subpage. Note Cloudinary URL applies a grayscale + gradient filter; if a clean version is needed, strip 'e_grayscale/e_gradient_fade:.../' transform segments to get the original."
+  },
+  {
+    "slug": "alyeska-resort",
+    "hero_image_url": "https://www.alyeskaresort.com/wp-content/uploads/2023/12/RKP_Alyeska_Feb6-744_2019-min-scaled.jpg",
+    "source_page_url": "https://www.alyeskaresort.com/about-the-mountain/",
+    "filename": "RKP_Alyeska_Feb6-744_2019-min-scaled.jpg",
+    "alt_text": "Alyeska Resort mountain photo",
+    "winter_signals": [
+      "Filename contains 'Feb6' (February — peak ski season) and 'Alyeska'",
+      "Image lives on /about-the-mountain/ subpage (winter-ops page)",
+      "Uploaded December 2023 (ski-season upload window)"
+    ],
+    "attribution": "© Alyeska Resort (used on About the Mountain page)",
+    "license": "official-website",
+    "confidence": "HIGH",
+    "notes": "Strong winter signal via Feb date in filename + 'about-the-mountain' page context. Alyeska does have summer aerial tram ops, but this image is sourced specifically from the mountain-info page."
+  },
+  {
+    "slug": "andes-tower-hills",
+    "hero_image_url": null,
+    "source_page_url": "https://www.andestowerhills.com",
+    "filename": null,
+    "alt_text": null,
+    "winter_signals": [
+      "Snowflake icon and snow-making notification appear on homepage"
+    ],
+    "attribution": null,
+    "license": null,
+    "confidence": "LOW",
+    "notes": "Site is a Wix SPA with no extracted og:image and only logo/icon assets exposed (orange snowflake icon, slopes-logo). No real photographic hero candidate. Retry via Wix media gallery or social media."
+  },
+  {
+    "slug": "angel-fire-resort",
+    "hero_image_url": "https://www.angelfireresort.com/wp-content/uploads/2020/02/ScottDWSmith_AngelFire_l8i2482-e1639756886288-750x900.jpg",
+    "source_page_url": "https://www.angelfireresort.com/activities/winter-activities/skiing-and-snowboarding/mountain-stats/",
+    "filename": "ScottDWSmith_AngelFire_l8i2482-e1639756886288-750x900.jpg",
+    "alt_text": "Angel Fire winter skiing hero",
+    "winter_signals": [
+      "Image is the lift-tickets card on the /activities/winter-activities/skiing-and-snowboarding/mountain-stats/ page (deep winter-ops URL)",
+      "Uploaded Feb 2020 (mid-ski-season)",
+      "Photographer credit (ScottDWSmith) is a known winter sports photographer"
+    ],
+    "attribution": "© Scott DW Smith / Angel Fire Resort",
+    "license": "official-website",
+    "confidence": "HIGH",
+    "notes": "Lives deep in the /winter-activities/skiing-and-snowboarding/ hierarchy — strong page-context signal. Angel Fire is a four-season resort so homepage og:image risk is high, but this subpage source avoids that."
+  },
+  {
+    "slug": "antelope-butte",
+    "hero_image_url": "https://images.squarespace-cdn.com/content/v1/5f91dea6536e5854338fe480/6d66a7b1-4cd9-4188-8d8d-589229256892/unnamed-5+%281%29.jpg",
+    "source_page_url": "https://www.skiantelopebutte.com/",
+    "filename": "unnamed-5 (1).jpg",
+    "alt_text": "Antelope Butte homepage hero",
+    "winter_signals": [
+      "Site is on skiantelopebutte.com domain (ski-specific)",
+      "Top-of-homepage hero on a ski-only nonprofit (winter is primary operation)"
+    ],
+    "attribution": "© Antelope Butte Foundation (homepage)",
+    "license": "official-website",
+    "confidence": "MEDIUM",
+    "notes": "Original antelopebutte.org redirects via antelopebuttefoundation.org → skiantelopebutte.com. Squarespace filenames are opaque ('unnamed-5') so no filename verification possible, but the domain name itself is a strong winter/ski signal."
+  },
+  {
+    "slug": "anthony-lakes",
+    "hero_image_url": null,
+    "source_page_url": "https://www.anthonylakes.com",
+    "filename": null,
+    "alt_text": null,
+    "winter_signals": [
+      "Site nav heavily winter-oriented (/winter/maps-stats, /winter/ski-school, /winter/cat-trips)"
+    ],
+    "attribution": null,
+    "license": null,
+    "confidence": "LOW",
+    "notes": "Homepage exposes only a logo PNG (ALMR_Lockup); no photographic hero image accessible via og:image or visible markup. Confidence too low to pick the logo. Retry with /winter/ subpage scrape or social media."
+  },
+  {
+    "slug": "appalachian-ski-mountain",
+    "hero_image_url": "https://appskimtn.com/wp-content/uploads/2020/11/Appalachian-Ski-Mtn-Grooming-1-1024x683.jpg",
+    "source_page_url": "https://www.appskimtn.com",
+    "filename": "Appalachian-Ski-Mtn-Grooming-1-1024x683.jpg",
+    "alt_text": "Appalachian Ski Mtn grooming",
+    "winter_signals": [
+      "Filename contains 'Ski-Mtn' and 'Grooming' (ski-specific term)",
+      "Uploaded November 2020 (pre-ski-season prep)",
+      "Hosted on appskimtn.com (ski-only domain, no summer operations)"
+    ],
+    "attribution": "© Appalachian Ski Mtn.",
+    "license": "official-website",
+    "confidence": "HIGH",
+    "notes": "Strong winter signal — 'Grooming' is a winter-operations term (trail grooming). Alternative homepage candidates also winter-themed (Instruction, Nights). Domain is ski-only so summer risk is zero."
+  },
+  {
+    "slug": "apple-mountain",
+    "hero_image_url": null,
+    "source_page_url": "https://www.applemountain.com",
+    "filename": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "LOW",
+    "notes": "Apple Mountain (MI) homepage currently emphasizes golf, dining, and event venues — no winter/ski imagery or nav links extractable from this view. Site appears to be in off-season mode. Retry in winter season or via /winter, /skiing if those routes exist."
+  },
+  {
+    "slug": "arapahoe-basin",
+    "hero_image_url": "https://www.arapahoebasin.com/uploaded/newsite/tertiarryhero.png",
+    "source_page_url": "https://www.arapahoebasin.com",
+    "filename": "tertiarryhero.png",
+    "alt_text": "Skier in cowboy hat at Arapahoe Basin",
+    "winter_signals": [
+      "Image filename includes 'hero' (designated hero asset role)",
+      "Described as 'skier in cowboy hat' — explicit skiing content",
+      "Hosted on arapahoebasin.com (ski-only domain, peak elevation ski area)"
+    ],
+    "attribution": "© Arapahoe Basin Ski Area (homepage hero)",
+    "license": "official-website",
+    "confidence": "HIGH",
+    "notes": "Filename is 'tertiarryhero.png' (note typo 'tertiarry' in source) — described content is a skier. A-Basin is ski-only and renowned for longest North American ski season."
+  },
+  {
+    "slug": "arctic-valley",
+    "hero_image_url": null,
+    "source_page_url": "https://skiarctic.net",
+    "filename": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "LOW",
+    "notes": "Site returned HTTP 500 error during fetch. Could not retrieve og:image or any hero candidates. Retry later or via alternate source."
+  },
+  {
+    "slug": "arizona-snowbowl",
+    "hero_image_url": "https://www.snowbowl.ski/wp-content/uploads/sites/9/2026/01/DJI_20250215074925_0054_D-scaled.jpg",
+    "source_page_url": "https://www.snowbowl.ski/the-mountain/mountain-information/",
+    "filename": "DJI_20250215074925_0054_D-scaled.jpg",
+    "alt_text": "Aerial view of Snowbowl mountain, covered in snow, sun shining",
+    "winter_signals": [
+      "Filename timestamp '20250215' = Feb 15, 2025 (peak ski-season capture date)",
+      "Image lives on /the-mountain/mountain-information/ subpage (winter-ops URL)",
+      "Source description explicitly mentions 'covered in snow'",
+      "Hosted on snowbowl.ski (.ski TLD, ski-only domain)"
+    ],
+    "attribution": "© Arizona Snowbowl (Mountain Information page)",
+    "license": "official-website",
+    "confidence": "HIGH",
+    "notes": "Excellent match — date-stamped DJI drone capture from mid-Feb, described as snow-covered, sourced from /the-mountain/ subpage. Multiple independent winter signals."
+  },
+  {
+    "slug": "ascutney-outdoors",
+    "hero_image_url": null,
+    "source_page_url": "https://www.ascutneyoutdoors.org/winter/",
+    "filename": null,
+    "alt_text": null,
+    "winter_signals": [
+      "Has dedicated /winter/, /skiing/, /cross-country-skiing/, /backcountry/ subpages"
+    ],
+    "attribution": null,
+    "license": null,
+    "confidence": "LOW",
+    "notes": "Both homepage and /winter/ subpage rely on data:image/svg+xml placeholders (likely lazy-loaded). No og:image and no real photo URLs exposed in initial HTML. Nonprofit / community site. Retry via JS-rendered scrape."
+  },
+  {
+    "slug": "aspen-highlands",
+    "hero_image_url": "https://www.aspensnowmass.com/-/media/aspen-snowmass/images/hero/hero-image/winter/2024-25/activities-hero-2425/2526_winter_activites_hero.jpg",
+    "source_page_url": "https://www.aspensnowmass.com/visit/activities/winter",
+    "filename": "2526_winter_activites_hero.jpg",
+    "alt_text": "Person dragging child on a tube at Snowmass during winter",
+    "winter_signals": [
+      "Filename explicitly contains 'winter' and 'hero' ('2526_winter_activites_hero')",
+      "Path is /winter/2024-25/activities-hero-2425/ (multiple winter URL segments)",
+      "Image lives on /visit/activities/winter subpage",
+      "Description references winter activity (tubing in snow)"
+    ],
+    "attribution": "© Aspen Skiing Co. (Winter Activities hero)",
+    "license": "official-website",
+    "confidence": "HIGH",
+    "notes": "Highest possible signal density — filename, path, and source-page URL all contain 'winter'. Aspen Highlands is one of four mountains under the aspensnowmass.com umbrella; this hero represents the combined winter operation. Stripped query params (?mw=1506&mh=538&hash=...) — original image at the unparameterized URL."
+  },
+  {
+    "slug": "aspen-mountain",
+    "hero_image_url": "https://www.aspensnowmass.com/-/media/aspen-snowmass/images/hero/hero-image/winter/2024-25/activities-hero-2425/2526_winter_activites_hero.jpg",
+    "source_page_url": "https://www.aspensnowmass.com/visit/activities/winter",
+    "filename": "2526_winter_activites_hero.jpg",
+    "alt_text": "Person dragging child on a tube at Snowmass during winter",
+    "winter_signals": [
+      "Filename explicitly contains 'winter' and 'hero' ('2526_winter_activites_hero')",
+      "Path is /winter/2024-25/activities-hero-2425/ (multiple winter URL segments)",
+      "Image lives on /visit/activities/winter subpage",
+      "Description references winter activity (tubing in snow)"
+    ],
+    "attribution": "© Aspen Skiing Co. (Winter Activities hero)",
+    "license": "official-website",
+    "confidence": "HIGH",
+    "notes": "Same source as Aspen Highlands — both mountains share aspensnowmass.com. Image represents the combined winter operation. Consider sourcing a mountain-specific hero from a deeper subpage if per-mountain differentiation is required."
+  }
+]

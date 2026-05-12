@@ -1,0 +1,283 @@
+[
+  {
+    "slug": "49-degrees-north",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "filename": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "LOW",
+    "notes": "No dedicated Wikipedia article for 49 Degrees North Mountain Resort (URL 404). 'Ski_49_Degrees_North' also 404. No Commons category located within budget."
+  },
+  {
+    "slug": "afton-alps",
+    "hero_image_url": "https://upload.wikimedia.org/wikipedia/commons/e/e3/Afton_Alps%2C_January_2014%2C_Sally%27s_Valley.jpg",
+    "source_page_url": "https://commons.wikimedia.org/wiki/File:Afton_Alps,_January_2014,_Sally%27s_Valley.jpg",
+    "filename": "Afton_Alps,_January_2014,_Sally's_Valley.jpg",
+    "alt_text": "View from the top of the Sally's Valley run at Afton Alps in January 2014",
+    "winter_signals": [
+      "filename contains 'January' (winter month)",
+      "caption: 'A run at Afton Alps, 2014' (ski run)",
+      "Wikipedia infobox image of the ski-resort article",
+      "Commons description: 'View from the top of Sally's Valley run'"
+    ],
+    "attribution": "Photo by Collin Knopp-Schwyn (Bobamnertiopsis) / CC BY 4.0",
+    "license": "CC BY 4.0",
+    "confidence": "HIGH",
+    "notes": "Wikipedia infobox image; winter ski run, clearly snowy."
+  },
+  {
+    "slug": "alpine-meadows",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "filename": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "LOW",
+    "notes": "Alpine Meadows Wikipedia article has no infobox image (only text). Commons Category:Alpine_Meadows_Ski_Resort returned 404. Article mentions chairlift images in body but unclear whether they meet winter-signal threshold without further fetches; budget exhausted for this resort."
+  },
+  {
+    "slug": "alpine-valley-mi",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "filename": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "LOW",
+    "notes": "No dedicated Wikipedia article for Alpine Valley Ski Area (Michigan); all 3 URL variants returned 404."
+  },
+  {
+    "slug": "alpine-valley-oh",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "filename": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "LOW",
+    "notes": "No dedicated Wikipedia article for Alpine Valley Ski Area (Ohio); URL variants returned 404."
+  },
+  {
+    "slug": "alpine-valley-wi",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "filename": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "LOW",
+    "notes": "Wikipedia article 'Alpine_Valley_Resort' / 'Alpine_Valley_Resort_(Wisconsin)' exists but has no infobox photo — only location maps."
+  },
+  {
+    "slug": "alta",
+    "hero_image_url": "https://upload.wikimedia.org/wikipedia/commons/5/53/Alta_ski_lessons_-_Feb_21%2C_2011.jpg",
+    "source_page_url": "https://commons.wikimedia.org/wiki/File:Alta_ski_lessons_-_Feb_21,_2011.jpg",
+    "filename": "Alta_ski_lessons_-_Feb_21,_2011.jpg",
+    "alt_text": "Children taking skiing lessons at Alta Ski Area in Utah",
+    "winter_signals": [
+      "filename contains 'ski' and 'Feb' (winter month)",
+      "Commons description: 'Children taking skiing lessons at Alta Ski Area'",
+      "categorized under Alta Ski Area on Commons",
+      "dated Feb 21, 2011 (winter)"
+    ],
+    "attribution": "Photo by Scott Catron / CC BY-SA 2.0",
+    "license": "CC BY-SA 2.0",
+    "confidence": "HIGH",
+    "notes": "Wikipedia infobox image (Alta_Little_Cottonwood_Canyon.JPG) was confirmed summer/no-snow, so substituted with this clear winter ski-lesson image from the same Commons category."
+  },
+  {
+    "slug": "alyeska-resort",
+    "hero_image_url": "https://upload.wikimedia.org/wikipedia/commons/2/25/Finn_ski_in_Alaska.jpg",
+    "source_page_url": "https://commons.wikimedia.org/wiki/File:Finn_ski_in_Alaska.jpg",
+    "filename": "Finn_ski_in_Alaska.jpg",
+    "alt_text": "Skier on snow-covered slope at Alyeska Resort, Alaska, February 2021",
+    "winter_signals": [
+      "filename contains 'ski'",
+      "Commons description: 'Alaska skiing'",
+      "categorized under Alyeska Resort on Commons",
+      "dated February 28, 2021 (winter)"
+    ],
+    "attribution": "Photo by BenLisle888 / CC BY-SA 4.0",
+    "license": "CC BY-SA 4.0",
+    "confidence": "HIGH",
+    "notes": "Wikipedia infobox image (Alyeska_Resort.JPG, June 2008) was confirmed summer/no-snow, so substituted with this winter skiing image from the same Commons category."
+  },
+  {
+    "slug": "andes-tower-hills",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "filename": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "LOW",
+    "notes": "No dedicated Wikipedia article and no Commons category found within fetch budget."
+  },
+  {
+    "slug": "angel-fire-resort",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "filename": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "LOW",
+    "notes": "Angel Fire Resort Wikipedia article has only location maps. Village-of-Angel-Fire article images are summer landscapes. Commons category returned 404. No verified winter ski image within budget."
+  },
+  {
+    "slug": "antelope-butte",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "filename": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "LOW",
+    "notes": "No dedicated Wikipedia article (404). Commons Category:Antelope_Butte_Ski_Area returned 404."
+  },
+  {
+    "slug": "anthony-lakes",
+    "hero_image_url": "https://upload.wikimedia.org/wikipedia/commons/9/98/AnthonyLakes.JPG",
+    "source_page_url": "https://commons.wikimedia.org/wiki/File:AnthonyLakes.JPG",
+    "filename": "AnthonyLakes.JPG",
+    "alt_text": "Anthony Lakes Ski Area in 2008",
+    "winter_signals": [
+      "Wikipedia infobox image of the ski-area article",
+      "caption: 'Anthony Lakes Ski Area in 2008'",
+      "categorized under Anthony Lakes ski resort and Ski resorts in the United States on Commons",
+      "dated February 19, 2008 (winter)"
+    ],
+    "attribution": "Photo by Snowsnapper / Public Domain",
+    "license": "Public Domain",
+    "confidence": "HIGH",
+    "notes": "Wikipedia infobox image; winter scene at the ski area."
+  },
+  {
+    "slug": "appalachian-ski-mountain",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "filename": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "LOW",
+    "notes": "Wikipedia article exists but has only a location map (no infobox photo). Commons category returned 404."
+  },
+  {
+    "slug": "apple-mountain",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "filename": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "LOW",
+    "notes": "No dedicated Wikipedia article for Apple Mountain (MI ski area) — URL returned 404."
+  },
+  {
+    "slug": "arapahoe-basin",
+    "hero_image_url": "https://upload.wikimedia.org/wikipedia/commons/9/91/Eastwall.jpg",
+    "source_page_url": "https://commons.wikimedia.org/wiki/File:Eastwall.jpg",
+    "filename": "Eastwall.jpg",
+    "alt_text": "Arapahoe Basin's East Wall in December 2005, snow-covered terrain",
+    "winter_signals": [
+      "Wikipedia infobox image of the ski-resort article",
+      "caption: 'Arapahoe Basin's East Wall in December 2005' (winter month)",
+      "depicts steep snow-covered ski terrain (East Wall is a known A-Basin run)",
+      "Commons file dated December 15, 2005"
+    ],
+    "attribution": "Photo by Keflavich / Public Domain",
+    "license": "Public Domain",
+    "confidence": "HIGH",
+    "notes": "Wikipedia infobox image; December photo of the named East Wall run — clearly winter conditions."
+  },
+  {
+    "slug": "arctic-valley",
+    "hero_image_url": null,
+    "source_page_url": "https://en.wikipedia.org/wiki/Arctic_Valley",
+    "filename": "Waiting_For_Snow_(64255213).jpeg",
+    "alt_text": "View of the chairlift during the offseason",
+    "winter_signals": [
+      "filename contains 'Snow'",
+      "Wikipedia infobox image of the ski-area article"
+    ],
+    "attribution": null,
+    "license": null,
+    "confidence": "LOW",
+    "notes": "Only available infobox image is explicitly captioned 'View of the chairlift during the offseason' — i.e. no snow. Title 'Waiting For Snow' confirms no snow visible. Per strict criteria (NOT summer), setting url to null. Commons category 404."
+  },
+  {
+    "slug": "arizona-snowbowl",
+    "hero_image_url": "https://upload.wikimedia.org/wikipedia/commons/1/19/AZ_Snowbowl_-_Winter_%285%29_%2821995043136%29.jpg",
+    "source_page_url": "https://commons.wikimedia.org/wiki/File:AZ_Snowbowl_-_Winter_(5)_(21995043136).jpg",
+    "filename": "AZ_Snowbowl_-_Winter_(5)_(21995043136).jpg",
+    "alt_text": "Snow-covered winter terrain at Arizona Snowbowl, December 2013",
+    "winter_signals": [
+      "filename contains 'Snowbowl' and 'Winter'",
+      "Commons description: 'snow-covered terrain at Arizona Snowbowl during winter conditions'",
+      "captured December 7, 2013 (winter)",
+      "categorized under Arizona Snowbowl on Commons"
+    ],
+    "attribution": "Photo by Southwestern Region, USDA Forest Service / CC BY 2.0 (Public Domain as US gov work)",
+    "license": "CC BY 2.0 / Public Domain",
+    "confidence": "HIGH",
+    "notes": "Wikipedia infobox image was a logo, so substituted with this clearly winter Commons image from the same category."
+  },
+  {
+    "slug": "ascutney-outdoors",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "filename": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "LOW",
+    "notes": "No dedicated Wikipedia article. Mount_Ascutney article has summer landscapes only, and an aerial view that does not clearly show winter. Commons Category:Mount_Ascutney has no skiing/winter images."
+  },
+  {
+    "slug": "aspen-highlands",
+    "hero_image_url": "https://upload.wikimedia.org/wikipedia/commons/a/a9/Aspen_Highlands.jpg",
+    "source_page_url": "https://commons.wikimedia.org/wiki/File:Aspen_Highlands.jpg",
+    "filename": "Aspen_Highlands.jpg",
+    "alt_text": "Summit of Aspen Highlands and the backside of the Highland Bowl from Buttermilk Mountain, snow-covered",
+    "winter_signals": [
+      "Wikipedia infobox image of the ski-resort article",
+      "caption mentions 'Summit of Aspen Highlands and Highland Bowl' (ski terrain)",
+      "depicts snow-covered mountain landscape (winter)",
+      "dated December 29, 2005 (winter)"
+    ],
+    "attribution": "Photo by Chassig / CC BY-SA 3.0 (also GFDL)",
+    "license": "CC BY-SA 3.0",
+    "confidence": "HIGH",
+    "notes": "Wikipedia infobox image; snow-covered ski terrain at the Highland Bowl."
+  },
+  {
+    "slug": "aspen-mountain",
+    "hero_image_url": null,
+    "source_page_url": "https://en.wikipedia.org/wiki/Aspen_Mountain_(Colorado)",
+    "filename": "DSCN2976_aspenmountain_e_600.jpg",
+    "alt_text": "Aspen Mountain seen from the northwest showing lower ski runs",
+    "winter_signals": [
+      "Wikipedia infobox image of the ski-mountain article",
+      "caption mentions 'ski runs of the Aspen Mountain ski area'"
+    ],
+    "attribution": null,
+    "license": null,
+    "confidence": "LOW",
+    "notes": "Wikipedia infobox image confirmed via Commons to be from April 27, 2005 (spring) and 'not a winter ski scene'. Per strict criteria (NOT summer/spring), setting url to null. No alternate winter image fetched within budget."
+  }
+]

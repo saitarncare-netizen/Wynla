@@ -195,11 +195,18 @@ export default async function ResortPage({
         }}
       />
 
-      {/* HERO — typographic, no photo. Pass-color gradient + huge name. */}
+      {/* HERO — Stage 25 verified winter ski photo when available;
+          pass-color gradient fallback. Photo is layered with a dark
+          scrim so the giant white name stays readable. */}
       <header
         className="relative w-full overflow-hidden"
         style={{
-          background: `linear-gradient(135deg, ${heroBg} 0%, #1E2952 60%, #0F1530 100%)`,
+          backgroundColor: heroBg,
+          backgroundImage: resort.hero_image_url
+            ? `linear-gradient(180deg, rgba(15,21,48,0.45) 0%, rgba(15,21,48,0.85) 100%), url("${resort.hero_image_url}")`
+            : `linear-gradient(135deg, ${heroBg} 0%, #1E2952 60%, #0F1530 100%)`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
         }}
       >
         {/* Two-stop atmosphere overlay — soft highlight top-left, deeper

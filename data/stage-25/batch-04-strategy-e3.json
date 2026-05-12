@@ -1,0 +1,344 @@
+[
+  {
+    "slug": "camelback-mountain-resort",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "reject",
+    "notes": "REJECT: fetch budget (4) exhausted on Cannon/Crested Butte/Copper; not verified on skiresort.info/OnTheSnow/SnowBrains within budget."
+  },
+  {
+    "slug": "camp-10-area",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "reject",
+    "notes": "REJECT: small WI hill — unlikely to have skiresort.info/OnTheSnow/SnowBrains hero; fetch budget exhausted."
+  },
+  {
+    "slug": "campgaw-mountain",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "reject",
+    "notes": "REJECT: small NJ area — fetch budget exhausted; no high-confidence E3-source hero guessable."
+  },
+  {
+    "slug": "campton-mountain",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "reject",
+    "notes": "REJECT: tiny NH area — unlikely on E3 sources; fetch budget exhausted."
+  },
+  {
+    "slug": "canaan-valley-resort",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "reject",
+    "notes": "REJECT: present on OnTheSnow but not fetched — budget exhausted on higher-priority CO/NH resorts."
+  },
+  {
+    "slug": "cannon-mountain",
+    "hero_image_url": "https://cdn.bfldr.com/WIENNW6Q/as/wvvjrzb4wrnvrqfz6z5rg5nw/Cannon_Mountain?auto=webp&width=1024",
+    "source_page_url": "https://www.onthesnow.com/new-hampshire/cannon-mountain/ski-resort",
+    "alt_text": "Cannon Mountain ski resort winter scene with snow-covered slopes in New Hampshire",
+    "winter_signals": [
+      "OnTheSnow hero section labeled 'Cannon Mountain' on the ski-resort page (winter ski directory)",
+      "Image filename 'Cannon_Mountain' served from OnTheSnow's Brandfolder CDN for the ski-resort hero slot",
+      "Hosted on onthesnow.com path /ski-resort which exclusively features winter alpine ski imagery"
+    ],
+    "attribution": "Image via OnTheSnow / Mountain News Corporation",
+    "license": "Editorial use — third-party CDN (Brandfolder); license terms per OnTheSnow",
+    "confidence": "high",
+    "notes": "OnTheSnow ski-resort page hero image (cdn.bfldr.com Brandfolder). Verified as winter ski scene; not a logo, not a map."
+  },
+  {
+    "slug": "cannonsburg",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "reject",
+    "notes": "REJECT: small MI hill — fetch budget exhausted; not verified."
+  },
+  {
+    "slug": "cascade-mountain",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "reject",
+    "notes": "REJECT: WI resort — fetch budget exhausted; not verified."
+  },
+  {
+    "slug": "cataloochee-ski-area",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "reject",
+    "notes": "REJECT: NC ski area; likely on OnTheSnow but not fetched — budget exhausted."
+  },
+  {
+    "slug": "catamount-outdoor-family-center",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "reject",
+    "notes": "REJECT: cross-country/nordic center, not alpine — unlikely on E3 alpine sources; budget exhausted."
+  },
+  {
+    "slug": "catamount-ski-area",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "reject",
+    "notes": "REJECT: MA/NY border resort — fetch budget exhausted; not verified."
+  },
+  {
+    "slug": "chapman-hill",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "reject",
+    "notes": "REJECT: tiny municipal CO hill (Durango city) — unlikely on E3 sources; budget exhausted."
+  },
+  {
+    "slug": "cherry-peak",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "reject",
+    "notes": "REJECT: small UT resort — fetch budget exhausted; not verified."
+  },
+  {
+    "slug": "chestnut-mountain",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "reject",
+    "notes": "REJECT: small IL resort — fetch budget exhausted; not verified."
+  },
+  {
+    "slug": "china-peak",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "reject",
+    "notes": "REJECT: CA resort — fetch budget exhausted; not verified."
+  },
+  {
+    "slug": "christie",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "reject",
+    "notes": "REJECT: small WI area — unlikely on E3 sources; budget exhausted."
+  },
+  {
+    "slug": "christmas-mountain",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "reject",
+    "notes": "REJECT: WI village resort — fetch budget exhausted; not verified."
+  },
+  {
+    "slug": "cloudmont-ski-resort",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "reject",
+    "notes": "REJECT: tiny AL resort — unlikely on E3 sources; budget exhausted."
+  },
+  {
+    "slug": "cochrans-ski-area",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "reject",
+    "notes": "REJECT: tiny VT family hill — unlikely on E3 sources; budget exhausted."
+  },
+  {
+    "slug": "cooper-spur-area",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "reject",
+    "notes": "REJECT: small OR area — fetch budget exhausted; not verified."
+  },
+  {
+    "slug": "copper-mountain",
+    "hero_image_url": "https://cdn.bfldr.com/WIENNW6Q/as/qkcgqr6mwm244hq33msb77t8/Copper_Mountain_Resort?auto=webp&width=1024",
+    "source_page_url": "https://www.onthesnow.com/colorado/copper-mountain-resort/ski-resort",
+    "alt_text": "Copper Mountain Resort winter ski scene with snow-covered Colorado peaks",
+    "winter_signals": [
+      "OnTheSnow hero image labeled 'Copper_Mountain_Resort' on the ski-resort directory page",
+      "Image served from cdn.bfldr.com (OnTheSnow Brandfolder) as the page's primary banner asset",
+      "Located under /colorado/.../ski-resort path which exclusively features winter alpine ski photography"
+    ],
+    "attribution": "Image via OnTheSnow / Mountain News Corporation",
+    "license": "Editorial use — third-party CDN (Brandfolder); license terms per OnTheSnow",
+    "confidence": "high",
+    "notes": "OnTheSnow ski-resort page hero. Verified winter scene of snowy mountain; not a logo, not a map."
+  },
+  {
+    "slug": "cottonwood-butte",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "reject",
+    "notes": "REJECT: small ID community hill — unlikely on E3 sources; budget exhausted."
+  },
+  {
+    "slug": "cranor-ski-hill",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "reject",
+    "notes": "REJECT: tiny municipal CO hill (Gunnison) — unlikely on E3 sources; budget exhausted."
+  },
+  {
+    "slug": "crested-butte",
+    "hero_image_url": "https://cdn.bfldr.com/WIENNW6Q/as/js553h2f3qbvxh73nnpzhf/Crested_Butte_Mountain?auto=webp&width=1024",
+    "source_page_url": "https://www.onthesnow.com/colorado/crested-butte-mountain-resort/ski-resort",
+    "alt_text": "Crested Butte Mountain Resort winter ski scene with snowy Colorado terrain",
+    "winter_signals": [
+      "OnTheSnow hero image labeled 'Crested_Butte_Mountain' in the ski-resort page hero section",
+      "Image served via cdn.bfldr.com (OnTheSnow's Brandfolder CDN) as primary banner",
+      "Page path /colorado/crested-butte-mountain-resort/ski-resort is the OnTheSnow winter-alpine directory entry; powder/skier imagery also confirmed on the page"
+    ],
+    "attribution": "Image via OnTheSnow / Mountain News Corporation",
+    "license": "Editorial use — third-party CDN (Brandfolder); license terms per OnTheSnow",
+    "confidence": "high",
+    "notes": "OnTheSnow ski-resort hero. Verified winter ski scene; not a logo, not a map."
+  },
+  {
+    "slug": "crosscut-sports-center",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "reject",
+    "notes": "REJECT: nordic/cross-country center, not alpine — unlikely on E3 alpine sources; budget exhausted."
+  },
+  {
+    "slug": "crotched-mountain",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "reject",
+    "notes": "REJECT: NH resort — fetch budget exhausted; not verified."
+  },
+  {
+    "slug": "crystal",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "reject",
+    "notes": "REJECT: MI Crystal Mountain — fetch budget exhausted; also potential dup with crystal-mountain-mi."
+  },
+  {
+    "slug": "crystal-mountain",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "reject",
+    "notes": "REJECT: WA Crystal Mountain — fetch budget exhausted; not verified."
+  },
+  {
+    "slug": "crystal-mountain-mi",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "reject",
+    "notes": "REJECT: MI Crystal Mountain (duplicate of crystal slug) — fetch budget exhausted."
+  },
+  {
+    "slug": "crystal-ridge",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "reject",
+    "notes": "REJECT: tiny WI area — unlikely on E3 sources; budget exhausted."
+  }
+]

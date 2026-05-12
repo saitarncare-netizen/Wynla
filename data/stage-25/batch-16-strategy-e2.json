@@ -1,0 +1,32 @@
+[
+  {
+    "slug": "woodward-park-city",
+    "hero_image_url": null,
+    "source_page_url": "https://www.woodwardparkcity.com/",
+    "filename": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "rejected",
+    "notes": "REJECTED: Dedicated winter subpages (/winter, /snow, /mountain/winter-activities) returned 404. Homepage hero images are summer-themed (Camp_FAQs_Hero_Skate.jpg, MTB_HOME_HERO-opt.jpg, Woodward_Mountain_Kids_MTB_Slider2-opt.jpg). Only winter signals were navigation labels (WINTER CAMPS, SKI & RIDE LIFT TICKETS, Snow weather widget) — not tied to a winter body image. Homepage banner says 'Stay Tuned - Check back soon for opening day updates!' indicating off-season state. Cannot satisfy ≥2 winter signals on a non-winter hero. Fetch budget exhausted (3/3)."
+  },
+  {
+    "slug": "yellowstone-club",
+    "hero_image_url": "https://yellowstoneclub.com/wp-content/uploads/2015/11/Snowsports-Update.jpg",
+    "source_page_url": "https://www.yellowstoneclub.com/ski",
+    "filename": "Snowsports-Update.jpg",
+    "alt_text": "Yellowstone Club ski terrain — 2,700 skiable acres with 300 inches of annual snowfall",
+    "winter_signals": [
+      "page title/section: 'Ski' / Snowsports",
+      "2,700 skiable acres and 2,700 vertical feet",
+      "300 inches of snowfall each year",
+      "100+ runs including expert chutes, trees, and gullies",
+      "references to avalanche forecasts and skier duties"
+    ],
+    "attribution": "Yellowstone Club",
+    "license": "All rights reserved — resort website asset; fair-use thumbnail for resort listing",
+    "confidence": "medium",
+    "notes": "Hero candidate selected from body content on /ski subpage. WebFetch surfaced 'Snowsports-Update.jpg' as the primary snowsports content image (no top-banner <img> tag was rendered — likely a CSS background hero). Winter signals strongly present on the page (≥5). Filename and surrounding copy explicitly snowsports/ski. Confidence medium because hero-vs-content distinction couldn't be visually verified within 3-fetch budget."
+  }
+]

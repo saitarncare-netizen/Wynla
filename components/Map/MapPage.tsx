@@ -57,6 +57,9 @@ export type Resort = {
   season_open_text: string | null;
   season_close_text: string | null;
   snowmaking_pct: number | null;
+  hero_image_url: string | null;
+  hero_image_alt: string | null;
+  hero_image_attribution: string | null;
   has_tubing: boolean | null;
   has_lessons: boolean | null;
   has_rentals: boolean | null;

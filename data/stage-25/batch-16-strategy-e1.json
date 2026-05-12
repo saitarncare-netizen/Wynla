@@ -1,0 +1,26 @@
+[
+  {
+    "slug": "woodward-park-city",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "filename": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "LOW",
+    "notes": "No dedicated Wikipedia article for Woodward Park City (en.wikipedia.org/wiki/Woodward_Park_City returns 404). Only briefly mentioned within the Park City, Utah article as an action-sports training center; no infobox image in source. Rejected per Stage 25 strict (Wikipedia infobox -> Commons required)."
+  },
+  {
+    "slug": "yellowstone-club",
+    "hero_image_url": null,
+    "source_page_url": "https://en.wikipedia.org/wiki/Yellowstone_Club",
+    "filename": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "LOW",
+    "notes": "Wikipedia article exists with strong winter signals (300 inches/yr snowfall, Pioneer Ridge double-black runs, high-speed chairlifts, 2200 ski acres, tie-in to Big Sky lift system, 'Private Powder' tagline, cross-country skiing, ice skating) but the article contains NO infobox and NO File:/Image: references at all (verified via parse API images=[] and raw wikitext scan). Rejected per Stage 25 strict (no infobox image to extract)."
+  }
+]

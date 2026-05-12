@@ -1,0 +1,222 @@
+[
+  {
+    "slug": "49-degrees-north",
+    "hero_image_url": "https://cdn.bfldr.com/WIENNW6Q/as/4r3p7h7srnh8sfjhtbbbncq/49_Degrees_North_NSX_Edited_Hero?auto=webp&width=1024",
+    "source_page_url": "https://www.onthesnow.com/washington/49-degrees-north/skireport",
+    "alt_text": "49 Degrees North NSX Edited Hero",
+    "winter_signals": ["OnTheSnow Resort Overview hero image", "OnTheSnow is exclusively a ski/winter sports site", "filename contains 'Hero' tag for resort listing"],
+    "attribution": "OnTheSnow (cdn.bfldr.com / Brandfolder CDN)",
+    "license": "third-party (publicly displayed on OnTheSnow snow report page)",
+    "confidence": "HIGH",
+    "notes": "OnTheSnow uses consistent Brandfolder CDN pattern for resort hero images; site context is exclusively winter ski."
+  },
+  {
+    "slug": "afton-alps",
+    "hero_image_url": "https://cdn.bfldr.com/WIENNW6Q/as/99x37mg74x2gb4n3xv3rwwsp/Afton_Alps?auto=webp&width=1024",
+    "source_page_url": "https://www.onthesnow.com/minnesota/afton-alps/skireport",
+    "alt_text": "Afton Alps",
+    "winter_signals": ["OnTheSnow Resort Overview hero image", "OnTheSnow is exclusively a ski/winter sports site"],
+    "attribution": "OnTheSnow (cdn.bfldr.com / Brandfolder CDN)",
+    "license": "third-party (publicly displayed on OnTheSnow snow report page)",
+    "confidence": "HIGH",
+    "notes": "OnTheSnow ski report hero. Resort is Vail-owned ski area along St Croix River Valley."
+  },
+  {
+    "slug": "alpine-meadows",
+    "hero_image_url": "https://cdn.bfldr.com/WIENNW6Q/as/ng7npv854whswnqw6985bs2f/Palisades_Tahoe_Hero_2025?auto=webp&width=1024",
+    "source_page_url": "https://www.onthesnow.com/california/palisades-tahoe/skireport",
+    "alt_text": "Palisades Tahoe Hero 2025",
+    "winter_signals": ["OnTheSnow Resort Overview hero image", "OnTheSnow is exclusively a ski/winter sports site", "filename contains 'Hero_2025' tag"],
+    "attribution": "OnTheSnow (cdn.bfldr.com / Brandfolder CDN)",
+    "license": "third-party (publicly displayed on OnTheSnow snow report page)",
+    "confidence": "HIGH",
+    "notes": "Alpine Meadows is now part of Palisades Tahoe; using parent resort hero image from OnTheSnow."
+  },
+  {
+    "slug": "alpine-valley-mi",
+    "hero_image_url": "https://cdn.bfldr.com/WIENNW6Q/as/9rsn8spmvggh85ntkkrhjmp/Alpine_Valley_Ski_Area?auto=webp&width=1024",
+    "source_page_url": "https://www.onthesnow.com/michigan/alpine-valley-ski-area/skireport",
+    "alt_text": "Alpine Valley Ski Area",
+    "winter_signals": ["OnTheSnow Resort Overview hero image", "OnTheSnow is exclusively a ski/winter sports site", "described as largest ski area in southern Michigan"],
+    "attribution": "OnTheSnow (cdn.bfldr.com / Brandfolder CDN)",
+    "license": "third-party (publicly displayed on OnTheSnow snow report page)",
+    "confidence": "HIGH",
+    "notes": "OnTheSnow ski report hero for the Michigan Alpine Valley."
+  },
+  {
+    "slug": "alpine-valley-oh",
+    "hero_image_url": "https://cdn.bfldr.com/WIENNW6Q/as/qqm4bzxc85s5f7w9tv27nc25/Alpine_Valley?auto=webp&width=1024",
+    "source_page_url": "https://www.onthesnow.com/ohio/alpine-valley/skireport",
+    "alt_text": "Alpine Valley",
+    "winter_signals": ["OnTheSnow Resort Overview hero image", "OnTheSnow is exclusively a ski/winter sports site", "OnTheSnow text confirms 'fantastic winter escape for skiers and snowboarders'"],
+    "attribution": "OnTheSnow (cdn.bfldr.com / Brandfolder CDN)",
+    "license": "third-party (publicly displayed on OnTheSnow snow report page)",
+    "confidence": "HIGH",
+    "notes": "Ohio Alpine Valley in Chesterland; OnTheSnow Resort Overview hero."
+  },
+  {
+    "slug": "alpine-valley-wi",
+    "hero_image_url": "https://cdn.bfldr.com/WIENNW6Q/as/c5gqxjrgcjfhk7tjfxkw73gs/Alpine_Valley_Resort?auto=webp&width=1024",
+    "source_page_url": "https://www.onthesnow.com/wisconsin/alpine-valley-resort/skireport",
+    "alt_text": "Alpine Valley Resort",
+    "winter_signals": ["OnTheSnow Resort Overview hero image", "OnTheSnow is exclusively a ski/winter sports site"],
+    "attribution": "OnTheSnow (cdn.bfldr.com / Brandfolder CDN)",
+    "license": "third-party (publicly displayed on OnTheSnow snow report page)",
+    "confidence": "HIGH",
+    "notes": "Wisconsin Alpine Valley Resort; OnTheSnow Resort Overview hero."
+  },
+  {
+    "slug": "alta",
+    "hero_image_url": "https://cdn.bfldr.com/WIENNW6Q/as/bjmk7p777vgrksg9f277qmx/Alta_Ski_Area?auto=webp&width=1024",
+    "source_page_url": "https://www.onthesnow.com/utah/alta-ski-area/skireport",
+    "alt_text": "Alta Ski Area",
+    "winter_signals": ["OnTheSnow Resort Overview hero image", "OnTheSnow is exclusively a ski/winter sports site", "Alta is ski-only resort (no summer ops)"],
+    "attribution": "OnTheSnow (cdn.bfldr.com / Brandfolder CDN)",
+    "license": "third-party (publicly displayed on OnTheSnow snow report page)",
+    "confidence": "HIGH",
+    "notes": "Alta is a winter-only legendary powder ski area in Little Cottonwood Canyon."
+  },
+  {
+    "slug": "alyeska-resort",
+    "hero_image_url": "https://cdn.bfldr.com/WIENNW6Q/as/tmx5bc4vrkmtrwpcj3rh3bn/Alyeska_Resort?auto=webp&width=1024",
+    "source_page_url": "https://www.onthesnow.com/alaska/alyeska-resort/skireport",
+    "alt_text": "Alyeska Resort",
+    "winter_signals": ["OnTheSnow Resort Overview hero image", "OnTheSnow is exclusively a ski/winter sports site", "Alaska's largest ski resort"],
+    "attribution": "OnTheSnow (cdn.bfldr.com / Brandfolder CDN)",
+    "license": "third-party (publicly displayed on OnTheSnow snow report page)",
+    "confidence": "HIGH",
+    "notes": "Alyeska is Alaska's premier ski resort; OnTheSnow Resort Overview hero."
+  },
+  {
+    "slug": "andes-tower-hills",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "LOW",
+    "notes": "OnTheSnow returned 404 for andes-tower-hills slug. skiresort.info page only has logo (no hero). SnowBrains articles exist but use base64 placeholders for images, no extractable direct URL within 4-fetch budget."
+  },
+  {
+    "slug": "angel-fire-resort",
+    "hero_image_url": "https://cdn.bfldr.com/WIENNW6Q/as/xk8wp5hnnjjxrjfq8h58gc/Angel_Fire_Resort?auto=webp&width=1024",
+    "source_page_url": "https://www.onthesnow.com/new-mexico/angel-fire-resort/skireport",
+    "alt_text": "Angel Fire Resort",
+    "winter_signals": ["OnTheSnow Resort Overview hero image", "OnTheSnow is exclusively a ski/winter sports site", "Located in Sangre de Cristo Mountains"],
+    "attribution": "OnTheSnow (cdn.bfldr.com / Brandfolder CDN)",
+    "license": "third-party (publicly displayed on OnTheSnow snow report page)",
+    "confidence": "HIGH",
+    "notes": "Angel Fire is northern New Mexico ski resort; OnTheSnow Resort Overview hero."
+  },
+  {
+    "slug": "antelope-butte",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "LOW",
+    "notes": "OnTheSnow returned 404 for antelope-butte slug. skiresort.info has only logo (no hero photo). SnowBrains feature article exists with caption 'Catching some airtime at Antelope Butte' but images are base64 lazy-loaded placeholders, no direct URL extractable."
+  },
+  {
+    "slug": "anthony-lakes",
+    "hero_image_url": "https://cdn.bfldr.com/WIENNW6Q/as/k4jw85ntggcnccq3xq86nxs4/Anthony_Lakes_Mountain_Resort?auto=webp&width=1024",
+    "source_page_url": "https://www.onthesnow.com/oregon/anthony-lakes-mountain-resort/skireport",
+    "alt_text": "Anthony Lakes Mountain Resort",
+    "winter_signals": ["OnTheSnow Resort Overview hero image", "OnTheSnow is exclusively a ski/winter sports site", "Eastern Oregon mountain resort"],
+    "attribution": "OnTheSnow (cdn.bfldr.com / Brandfolder CDN)",
+    "license": "third-party (publicly displayed on OnTheSnow snow report page)",
+    "confidence": "HIGH",
+    "notes": "Anthony Lakes is Eastern Oregon ski resort; OnTheSnow Resort Overview hero."
+  },
+  {
+    "slug": "appalachian-ski-mountain",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "LOW",
+    "notes": "OnTheSnow returned 404 for appalachian-ski-mountain. skiresort.info only has logo. No dedicated SnowBrains feature article found in search."
+  },
+  {
+    "slug": "apple-mountain",
+    "hero_image_url": "https://cdn.bfldr.com/WIENNW6Q/as/6hk6ptbj5vcm3g94v6wk2rf/Apple_Mountain?auto=webp&width=1024",
+    "source_page_url": "https://www.onthesnow.com/michigan/apple-mountain/skireport",
+    "alt_text": "Apple Mountain",
+    "winter_signals": ["OnTheSnow Resort Overview hero image", "OnTheSnow is exclusively a ski/winter sports site"],
+    "attribution": "OnTheSnow (cdn.bfldr.com / Brandfolder CDN)",
+    "license": "third-party (publicly displayed on OnTheSnow snow report page)",
+    "confidence": "MEDIUM",
+    "notes": "Note: Apple Mountain listed as 'Permanently Closed' per OnTheSnow. Hero image still on file as historical listing."
+  },
+  {
+    "slug": "arapahoe-basin",
+    "hero_image_url": "https://cdn.bfldr.com/WIENNW6Q/as/96srvk9p5qfzg3877fnqnnc/Arapahoe_Basin_Ski_Area?auto=webp&width=1024",
+    "source_page_url": "https://www.onthesnow.com/colorado/arapahoe-basin-ski-area/skireport",
+    "alt_text": "Arapahoe Basin Ski Area",
+    "winter_signals": ["OnTheSnow Resort Overview hero image", "OnTheSnow is exclusively a ski/winter sports site", "Loveland Pass / high alpine Colorado ski area"],
+    "attribution": "OnTheSnow (cdn.bfldr.com / Brandfolder CDN)",
+    "license": "third-party (publicly displayed on OnTheSnow snow report page)",
+    "confidence": "HIGH",
+    "notes": "A-Basin is a Colorado high-alpine ski area with one of the longest seasons in North America."
+  },
+  {
+    "slug": "arctic-valley",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "LOW",
+    "notes": "OnTheSnow returned 404 for arctic-valley-ski-area. skiresort.info shows only logo. SnowBrains has a dedicated feature article (arctic-valley-ski-area-ak-serving-the-community-1-powder-day-at-a-time) with alt 'arctic valley ski area snowboard' and caption confirming winter scene, but actual image URL is lazy-loaded base64 placeholder and og:image meta not exposed in body fetch."
+  },
+  {
+    "slug": "arizona-snowbowl",
+    "hero_image_url": "https://cdn.bfldr.com/WIENNW6Q/as/v3s4vchv83wnfjw2rnkf4v/Arizona_Snowbowl?auto=webp&width=1024",
+    "source_page_url": "https://www.onthesnow.com/arizona/arizona-snowbowl/skireport",
+    "alt_text": "Arizona Snowbowl",
+    "winter_signals": ["OnTheSnow Resort Overview hero image", "OnTheSnow is exclusively a ski/winter sports site"],
+    "attribution": "OnTheSnow (cdn.bfldr.com / Brandfolder CDN)",
+    "license": "third-party (publicly displayed on OnTheSnow snow report page)",
+    "confidence": "HIGH",
+    "notes": "Arizona Snowbowl on San Francisco Peaks near Flagstaff; OnTheSnow Resort Overview hero."
+  },
+  {
+    "slug": "ascutney-outdoors",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "LOW",
+    "notes": "OnTheSnow returned 404. Ascutney is a small community/nonprofit Vermont area that's not on OnTheSnow's hero CDN. No skiresort.info hero or SnowBrains feature found within fetch budget."
+  },
+  {
+    "slug": "aspen-highlands",
+    "hero_image_url": "https://www.skiresort.info/fileadmin/_processed_/1c/c5/56/65/b14bcd985d.jpg",
+    "source_page_url": "https://www.skiresort.info/ski-resort/aspen-highlands/",
+    "alt_text": "Descent T-Lazy-7-Catwalk",
+    "winter_signals": ["skiresort.info hero image", "skiresort.info is exclusively a winter ski directory", "alt text refers to a downhill ski run ('Descent T-Lazy-7-Catwalk')"],
+    "attribution": "skiresort.info",
+    "license": "third-party (publicly displayed on skiresort.info)",
+    "confidence": "HIGH",
+    "notes": "OnTheSnow has no separate aspen-highlands page (rolled into aspen-snowmass parent). Sourced from skiresort.info Aspen Highlands resort gallery."
+  },
+  {
+    "slug": "aspen-mountain",
+    "hero_image_url": "https://www.skiresort.info/fileadmin/_processed_/1e/e9/95/51/b128702913.jpg",
+    "source_page_url": "https://www.skiresort.info/ski-resort/aspen-mountain/",
+    "alt_text": "Aspen Mountain",
+    "winter_signals": ["skiresort.info hero image", "skiresort.info is exclusively a winter ski directory", "first image in Aspen Mountain photo gallery"],
+    "attribution": "skiresort.info",
+    "license": "third-party (publicly displayed on skiresort.info)",
+    "confidence": "HIGH",
+    "notes": "OnTheSnow has no aspen-mountain-ajax page (rolled into aspen-snowmass parent). Sourced from skiresort.info Aspen Mountain photo gallery first image."
+  }
+]

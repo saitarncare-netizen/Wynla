@@ -1,0 +1,351 @@
+[
+  {
+    "slug": "granby-ranch",
+    "hero_image_url": null,
+    "source_page_url": "https://www.skiresort.info/ski-resort/granby-ranch/",
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "none",
+    "notes": "Not fetched within ≤4 fetch budget; reserved budget for higher-priority larger resorts. No verified hero secured."
+  },
+  {
+    "slug": "grand-targhee",
+    "hero_image_url": "https://www.skiresort.info/fileadmin/_processed_/72/24/4d/d5/e443158074.jpg",
+    "source_page_url": "https://www.skiresort.info/ski-resort/grand-targhee/",
+    "alt_text": "Ski resort Grand Targhee",
+    "winter_signals": [
+      "alt text contains 'Ski resort'",
+      "page states '57 km of slopes available'",
+      "page states '6 lifts transport the guests'",
+      "page states 'skiers and snowboarders enjoy ... great slopes'",
+      "page states 'known for its impressive snowfall ... attracts freeriders'"
+    ],
+    "attribution": "skiresort.info",
+    "license": "skiresort.info editorial — fair use thumbnail; verify licensing before production publication",
+    "confidence": "high",
+    "notes": "skiresort.info /fileadmin/_processed_/ path is the standard hero thumbnail (not logo subdirectory). ≥2 winter signals satisfied via alt text + slopes/lifts/snowfall copy."
+  },
+  {
+    "slug": "granite-gorge",
+    "hero_image_url": null,
+    "source_page_url": "https://www.skiresort.info/ski-resorts/united-states/state/new-hampshire/",
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "none",
+    "notes": "Small NH area; not fetched within ≤4 budget. Prior Stage 22 work showed no OnTheSnow page (404). No hero verified."
+  },
+  {
+    "slug": "granite-peak",
+    "hero_image_url": null,
+    "source_page_url": "https://www.skiresort.info/ski-resort/granite-peak/",
+    "alt_text": null,
+    "winter_signals": [
+      "page states '20 km of slopes available'",
+      "page states '7 lifts transport the guests'",
+      "page states 'Skiing and snowboarding offerings ... intermediate and advanced runs'"
+    ],
+    "attribution": null,
+    "license": null,
+    "confidence": "none",
+    "notes": "REJECT: only image found on skiresort.info page was the logo (/logo/granite_ski_peak_logo.png path). Per instructions, logos must be rejected. No hero candidate available."
+  },
+  {
+    "slug": "great-bear",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "none",
+    "notes": "Small SD area; no skiresort.info / OnTheSnow / SnowBrains page known. Likely duplicate of great-bear-valley per Stage 22 notes."
+  },
+  {
+    "slug": "great-bear-valley",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "none",
+    "notes": "Same operator as great-bear (greatbearpark.com). No skiresort.info / OnTheSnow individual page known per Stage 22."
+  },
+  {
+    "slug": "great-divide",
+    "hero_image_url": null,
+    "source_page_url": "https://www.skiresort.info/ski-resort/great-divide/",
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "none",
+    "notes": "Not fetched within ≤4 fetch budget. No hero verified."
+  },
+  {
+    "slug": "great-glen-trails-outdoor-center",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "none",
+    "notes": "Cross-country / nordic center; not on skiresort.info (alpine focus). Stage 22 confirmed no OnTheSnow / skicentral page."
+  },
+  {
+    "slug": "greek-peak",
+    "hero_image_url": null,
+    "source_page_url": "https://www.skiresort.info/ski-resort/greek-peak/",
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "none",
+    "notes": "Not fetched within ≤4 fetch budget. No hero verified."
+  },
+  {
+    "slug": "gunstock-mountain-resort",
+    "hero_image_url": null,
+    "source_page_url": "https://www.skiresort.info/ski-resort/gunstock/",
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "none",
+    "notes": "Not fetched within ≤4 fetch budget. No hero verified."
+  },
+  {
+    "slug": "hatley-pointe",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "none",
+    "notes": "Formerly Wolf Ridge; skiresort.info may not have a current page under hatley-pointe slug. Not fetched within budget."
+  },
+  {
+    "slug": "haymaker-nordic-center",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "none",
+    "notes": "Cross-country / nordic center; not on skiresort.info / OnTheSnow (alpine focus)."
+  },
+  {
+    "slug": "heavenly-mountain-resort",
+    "hero_image_url": "https://www.skiresort.info/fileadmin/_processed_/72/2a/a0/02/4ecc13b9fc.jpg",
+    "source_page_url": "https://www.skiresort.info/ski-resort/heavenly/",
+    "alt_text": "View of Lake Tahoe",
+    "winter_signals": [
+      "page states '94 km of slopes'",
+      "page states '27 lifts'",
+      "page states 'skiing and snowboarding'",
+      "page identifies the area as a ski resort at southern Lake Tahoe / Carson Range"
+    ],
+    "attribution": "skiresort.info",
+    "license": "skiresort.info editorial — fair use thumbnail; verify licensing before production publication",
+    "confidence": "high",
+    "notes": "skiresort.info /fileadmin/_processed_/ hero thumbnail. Alt text 'View of Lake Tahoe' does not itself name 'ski', but page context provides ≥2 strong winter signals (slopes count + lifts count + skiing/snowboarding mention)."
+  },
+  {
+    "slug": "hermon-mountain",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "none",
+    "notes": "Small ME area (a.k.a. New Hermon Mountain). Not fetched within budget."
+  },
+  {
+    "slug": "hesperus-ski-area",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "none",
+    "notes": "Closed for 2025/26 season per Stage 22 notes. OnTheSnow returned 404. Not fetched within budget."
+  },
+  {
+    "slug": "hidden-valley",
+    "hero_image_url": null,
+    "source_page_url": "https://www.skiresort.info/ski-resort/hidden-valley/",
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "none",
+    "notes": "Hidden Valley PA. Not fetched within budget."
+  },
+  {
+    "slug": "hidden-valley-mo",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "none",
+    "notes": "Hidden Valley MO. Not fetched within budget."
+  },
+  {
+    "slug": "high-point-xc-center",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "none",
+    "notes": "Cross-country center; not on skiresort.info / OnTheSnow (alpine focus)."
+  },
+  {
+    "slug": "highlands",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "none",
+    "notes": "The Highlands at Harbor Springs MI (formerly Boyne Highlands). Not fetched within budget."
+  },
+  {
+    "slug": "hilltop-ski-area",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "none",
+    "notes": "Small AK area. Not fetched within budget."
+  },
+  {
+    "slug": "hoedown-hill",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "none",
+    "notes": "New resort (opened 2023). Likely no skiresort.info / OnTheSnow page per Stage 22 notes."
+  },
+  {
+    "slug": "hogadon",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "none",
+    "notes": "Small WY area (Hogadon Basin). Not fetched within budget."
+  },
+  {
+    "slug": "holiday-mountain",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "none",
+    "notes": "Small NY area. Not fetched within budget."
+  },
+  {
+    "slug": "holiday-valley",
+    "hero_image_url": null,
+    "source_page_url": "https://www.skiresort.info/ski-resort/holiday-valley/",
+    "alt_text": null,
+    "winter_signals": [
+      "page states '48 km of slopes available'",
+      "page states '13 lifts transport the guests'",
+      "page states 'Night skiing'"
+    ],
+    "attribution": null,
+    "license": null,
+    "confidence": "none",
+    "notes": "REJECT: only top image found on skiresort.info appeared to be the resort logo (.png header image). Per instructions, logos must be rejected. No hero candidate confirmed."
+  },
+  {
+    "slug": "holimont",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "none",
+    "notes": "NY private club. Not fetched within budget."
+  },
+  {
+    "slug": "homestake-lodge",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "none",
+    "notes": "Cross-country / nordic lodge (35km groomed). Not on skiresort.info / OnTheSnow (alpine focus)."
+  },
+  {
+    "slug": "homestead-resort",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "none",
+    "notes": "The Homestead MI. Not fetched within budget."
+  },
+  {
+    "slug": "homewood-mountain-resort",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "none",
+    "notes": "CA Lake Tahoe resort. Not fetched within budget. Note: resort closed indefinitely after 2023-24 season."
+  },
+  {
+    "slug": "hoodoo",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "none",
+    "notes": "OR ski area. Not fetched within budget."
+  },
+  {
+    "slug": "howelsen-hill",
+    "hero_image_url": null,
+    "source_page_url": null,
+    "alt_text": null,
+    "winter_signals": [],
+    "attribution": null,
+    "license": null,
+    "confidence": "none",
+    "notes": "Small CO area in Steamboat Springs. Not fetched within budget."
+  }
+]
