@@ -7,12 +7,10 @@ import {
   passLabel,
   primaryPass,
 } from "@/lib/passColors";
-import { ORIGINS, formatDriveTime } from "@/lib/origins";
 import {
   weatherGovUrl,
   windyUrl,
   googleMapsUrl,
-  bookingComUrl,
 } from "@/lib/externalLinks";
 import { getDifficultyMix } from "@/lib/difficulty";
 import FavoriteToggle from "@/components/auth/FavoriteToggle";
@@ -64,15 +62,39 @@ type Resort = {
   hero_image_source: string | null;
   hero_image_alt: string | null;
   last_verified_at: string | null;
+  // Stage 23 columns — preferred over the legacy elevation_base /
+  // typical_season_* fields above when both exist.
+  high_speed_lifts: number | null;
+  base_elevation_ft: number | null;
+  summit_elevation_ft: number | null;
+  annual_snowfall_in: number | null;
+  season_open_text: string | null;
+  season_close_text: string | null;
+  snowmaking_pct: number | null;
+  has_tubing: boolean | null;
+  has_lessons: boolean | null;
+  has_rentals: boolean | null;
+  has_lodging_on_mountain: boolean | null;
+  has_xc_skiing: boolean | null;
+  has_backcountry_access: boolean | null;
+  webcam_url: string | null;
+  closest_airport_iata: string | null;
+  closest_airport_distance_mi: number | null;
 };
 
-type DriveTime = {
-  origin_name: string;
-  duration_seconds: number;
-  distance_meters: number | null;
+type WeatherSnapshot = {
+  resort_id: number;
+  temp_high_f: number | null;
+  temp_low_f: number | null;
+  conditions_short: string | null;
+  snow_24h_in: number | string | null;
+  snow_48h_in: number | string | null;
+  wind_mph_avg: number | null;
+  wind_dir_short: string | null;
+  fetched_at: string | null;
 };
 
-async function getData(slug: string): Promise<{ resort: Resort; driveTimes: DriveTime[] } | null> {
+async function getData(slug: string): Promise<{ resort: Resort; weather: WeatherSnapshot | null } | null> {
   const { data: resort, error } = await supabase
     .from("resorts")
     .select("*")
@@ -80,11 +102,14 @@ async function getData(slug: string): Promise<{ resort: Resort; driveTimes: Driv
     .eq("active", true)
     .maybeSingle();
   if (error || !resort) return null;
-  const { data: dt } = await supabase
-    .from("drive_time_cache")
-    .select("origin_name, duration_seconds, distance_meters")
-    .eq("resort_id", resort.id);
-  return { resort: resort as Resort, driveTimes: (dt as DriveTime[]) ?? [] };
+  const { data: wx } = await supabase
+    .from("weather_cache")
+    .select(
+      "resort_id, temp_high_f, temp_low_f, conditions_short, snow_24h_in, snow_48h_in, wind_mph_avg, wind_dir_short, fetched_at",
+    )
+    .eq("resort_id", resort.id)
+    .maybeSingle();
+  return { resort: resort as Resort, weather: (wx as WeatherSnapshot) ?? null };
 }
 
 export async function generateMetadata({
@@ -123,7 +148,7 @@ export default async function ResortPage({
   const { slug } = await params;
   const data = await getData(slug);
   if (!data) notFound();
-  const { resort, driveTimes } = data;
+  const { resort, weather } = data;
 
   const lng = Number(resort.longitude);
   const lat = Number(resort.latitude);
@@ -137,7 +162,9 @@ export default async function ResortPage({
     resort.total_trails != null ||
     resort.total_lifts != null ||
     resort.total_acres != null ||
+    resort.summit_elevation_ft != null ||
     resort.elevation_summit != null ||
+    resort.annual_snowfall_in != null ||
     resort.longest_run_miles != null;
 
   return (
@@ -240,93 +267,61 @@ export default async function ResortPage({
         {/* QUICK STATS — show whenever any stats exist (QuickStats returns null otherwise) */}
         <QuickStats resort={resort} />
 
-        {/* WEATHER — combined external links. Wynla is a planner, not a
-            conditions app: we link to specialized sources rather than maintain
-            mediocre inline data. */}
-        <Section
-          title="Weather"
-          subtitle="Live conditions from trusted external sources:"
-        >
-          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-            <ActionLink
-              href={weatherGovUrl(lat, lng)}
-              label="🌡️ Weather.gov"
-              sub="Official US 7-day forecast"
-              external
-            />
-            <ActionLink
-              href={windyUrl(lat, lng)}
-              label="🌬️ Windy.com"
-              sub="Animated wind layer"
-              external
-            />
-          </div>
+        {/* WEATHER — in-app card driven by weather_cache, with the
+            external links surfaced as small follow-ons. */}
+        <Section title="Today's weather">
+          <FullWeatherCard weather={weather} lat={lat} lng={lng} />
         </Section>
 
-        {/* BEST TIME TO VISIT — typical-season month strip */}
-        {resort.typical_season_start && resort.typical_season_end && (
-          <Section
-            title="Best time to visit"
-            subtitle="Typical season — verify on resort site for current conditions"
-          >
-            <BestTimeStrip
-              start={resort.typical_season_start}
-              end={resort.typical_season_end}
-            />
-          </Section>
-        )}
+        {/* AMENITIES — Stage 23 booleans + legacy night/halfpipe/glades. */}
+        <FullAmenities resort={resort} />
 
-        {/* DRIVE TIMES — only if cached */}
-        {driveTimes.length > 0 && (
-          <Section title="Drive time" subtitle="From major Northeast cities">
-            <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-              {ORIGINS.map((o) => {
-                const dt = driveTimes.find((d) => d.origin_name === o.name);
-                return (
-                  <div
-                    key={o.code}
-                    className="rounded-lg border border-wn-charcoal/10 bg-white px-3 py-2.5"
-                  >
-                    <div className="text-[11px] font-semibold uppercase tracking-wide text-wn-charcoal/50">
-                      from {o.short}
-                    </div>
-                    <div className="mt-0.5 text-base font-semibold text-wn-navy">
-                      {dt ? formatDriveTime(dt.duration_seconds) : "—"}
-                    </div>
-                    {dt?.distance_meters && (
-                      <div className="text-[11px] text-wn-charcoal/60">
-                        {Math.round(dt.distance_meters / 1609.34)} mi
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
+        {/* CLOSEST AIRPORT — Stage 23. */}
+        {resort.closest_airport_iata && (
+          <Section title="Closest airport">
+            <div className="rounded-lg border border-wn-charcoal/10 bg-white px-4 py-3">
+              <div className="flex items-baseline gap-3">
+                <span className="text-2xl font-extrabold tracking-tight text-wn-navy">
+                  ✈️ {resort.closest_airport_iata}
+                </span>
+                {resort.closest_airport_distance_mi != null && (
+                  <span className="text-sm text-wn-charcoal/65">
+                    {resort.closest_airport_distance_mi} mi away
+                  </span>
+                )}
+              </div>
             </div>
           </Section>
         )}
 
-        {/* QUICK ACTIONS */}
+        {/* QUICK ACTIONS — Google Maps + Trail map + Webcam. Resort
+            website + ticket-booking links dropped Stage 21.5 since many
+            were broken or stale. Find-lodging dropped too — it can be
+            added back later if user feedback wants it. */}
         <Section title="Visit & book">
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-            {resort.website_url && (
-              <ActionLink href={resort.website_url} label="Resort website" sub="Live trail status, hours, news" external />
-            )}
             <ActionLink
               href={googleMapsUrl(resort.name, resort.state)}
               label="Open in Google Maps"
               sub="Navigation, photos, reviews"
               external
             />
-            {resort.ticket_booking_url && (
-              <ActionLink href={resort.ticket_booking_url} label="Lift tickets" sub="Buy on the resort site" external />
-            )}
             {resort.trail_map_url && (
-              <ActionLink href={resort.trail_map_url} label="Trail map" sub="Official PDF" external />
+              <ActionLink href={resort.trail_map_url} label="Trail map" sub="Lifts, runs, terrain" external />
+            )}
+            {resort.webcam_url && (
+              <ActionLink href={resort.webcam_url} label="Live webcam" sub="Current conditions" external />
             )}
             <ActionLink
-              href={bookingComUrl(resort.name)}
-              label="Find lodging"
-              sub="Hotels nearby (Booking.com)"
+              href={weatherGovUrl(lat, lng)}
+              label="🌡️ Weather.gov"
+              sub="Official 7-day forecast"
+              external
+            />
+            <ActionLink
+              href={windyUrl(lat, lng)}
+              label="🌬️ Windy.com"
+              sub="Animated wind layer"
               external
             />
           </div>
@@ -445,9 +440,26 @@ function QuickStats({ resort }: { resort: Resort }) {
   const stats: Array<{ label: string; value: string }> = [];
   if (resort.vertical_drop) stats.push({ label: "Vertical drop", value: `${resort.vertical_drop.toLocaleString()} ft` });
   if (resort.total_trails) stats.push({ label: "Trails", value: String(resort.total_trails) });
-  if (resort.total_lifts) stats.push({ label: "Lifts", value: String(resort.total_lifts) });
+  if (resort.total_lifts) {
+    const hs = resort.high_speed_lifts;
+    stats.push({
+      label: "Lifts",
+      value: hs != null && hs > 0 ? `${resort.total_lifts} (${hs} HS)` : String(resort.total_lifts),
+    });
+  }
   if (resort.total_acres) stats.push({ label: "Skiable acres", value: resort.total_acres.toLocaleString() });
-  if (resort.elevation_summit) stats.push({ label: "Summit elevation", value: `${resort.elevation_summit.toLocaleString()} ft` });
+  const baseEl = resort.base_elevation_ft ?? resort.elevation_base;
+  const summitEl = resort.summit_elevation_ft ?? resort.elevation_summit;
+  if (baseEl != null) stats.push({ label: "Base elevation", value: `${baseEl.toLocaleString()} ft` });
+  if (summitEl != null) stats.push({ label: "Summit elevation", value: `${summitEl.toLocaleString()} ft` });
+  if (resort.annual_snowfall_in != null) stats.push({ label: "Annual snowfall", value: `${resort.annual_snowfall_in}" / yr` });
+  if (resort.snowmaking_pct != null) stats.push({ label: "Snowmaking", value: `${resort.snowmaking_pct}%` });
+  if (resort.season_open_text || resort.season_close_text) {
+    stats.push({
+      label: "Season",
+      value: `${resort.season_open_text ?? "—"} → ${resort.season_close_text ?? "—"}`,
+    });
+  }
   if (resort.longest_run_miles) stats.push({ label: "Longest run", value: `${resort.longest_run_miles} mi` });
 
   const mix = getDifficultyMix(resort);
@@ -565,6 +577,126 @@ function DataRow({ label, value }: { label: string; value: string }) {
       </div>
       <div className="text-sm text-wn-charcoal">{value}</div>
     </div>
+  );
+}
+
+// In-page weather card — same data model as the homepage ResortPanel.
+// Falls back to "no data yet" state when weather_cache hasn't refreshed.
+function FullWeatherCard({
+  weather,
+  lat,
+  lng,
+}: {
+  weather: WeatherSnapshot | null;
+  lat: number;
+  lng: number;
+}) {
+  const conditionEmoji = (cond: string | null): string => {
+    if (!cond) return "🌤️";
+    const c = cond.toLowerCase();
+    if (c.includes("snow")) return "🌨️";
+    if (c.includes("rain") || c.includes("shower")) return "🌧️";
+    if (c.includes("thunder")) return "⛈️";
+    if (c.includes("cloud")) return "☁️";
+    if (c.includes("clear") || c.includes("sun")) return "☀️";
+    if (c.includes("fog") || c.includes("mist")) return "🌫️";
+    return "🌤️";
+  };
+  if (!weather || (weather.temp_high_f == null && weather.conditions_short == null)) {
+    return (
+      <div className="rounded-lg border border-dashed border-wn-charcoal/15 bg-white p-4 text-sm text-wn-charcoal/65">
+        Live weather hasn&apos;t synced for this resort yet. Use the links below
+        for current conditions.
+      </div>
+    );
+  }
+  const snow24 = weather.snow_24h_in != null ? Number(weather.snow_24h_in) : null;
+  const snow48 = weather.snow_48h_in != null ? Number(weather.snow_48h_in) : null;
+  return (
+    <div className="rounded-lg border border-wn-charcoal/10 bg-white p-4">
+      <div className="flex items-baseline justify-between gap-3">
+        <div className="flex items-baseline gap-2">
+          <span className="text-3xl" aria-hidden="true">
+            {conditionEmoji(weather.conditions_short)}
+          </span>
+          <div>
+            <div className="text-2xl font-extrabold tracking-tight text-wn-navy">
+              {weather.temp_high_f != null ? `${weather.temp_high_f}°F` : "—"}
+              {weather.temp_low_f != null && (
+                <span className="ml-2 text-base font-semibold text-wn-charcoal/60">
+                  / {weather.temp_low_f}°F
+                </span>
+              )}
+            </div>
+            <div className="text-xs text-wn-charcoal/65">
+              {weather.conditions_short ?? "—"}
+            </div>
+          </div>
+        </div>
+        {(snow24 != null && snow24 > 0) || (snow48 != null && snow48 > 0) ? (
+          <div className="rounded-md bg-wn-sky/15 px-3 py-1.5 text-right">
+            <div className="text-[10px] font-semibold uppercase tracking-wide text-wn-navy/70">
+              Snow
+            </div>
+            <div className="text-sm font-bold text-wn-navy">
+              {snow24 != null && snow24 > 0 && <>{snow24}&quot; (24h) </>}
+              {snow48 != null && snow48 > 0 && <>· {snow48}&quot; (48h)</>}
+            </div>
+          </div>
+        ) : null}
+      </div>
+      {(weather.wind_mph_avg != null || weather.wind_dir_short) && (
+        <p className="mt-2 text-xs text-wn-charcoal/65">
+          🌬️ Wind {weather.wind_mph_avg != null ? `${weather.wind_mph_avg} mph` : ""}
+          {weather.wind_dir_short ? ` ${weather.wind_dir_short}` : ""}
+        </p>
+      )}
+      {weather.fetched_at && (
+        <p className="mt-1 text-[10px] text-wn-charcoal/45">
+          Synced{" "}
+          {new Date(weather.fetched_at).toLocaleString(undefined, {
+            weekday: "short",
+            hour: "numeric",
+            minute: "2-digit",
+          })}
+        </p>
+      )}
+      {/* Hint that we have lat/lng if user wants external sources */}
+      <p className="mt-2 text-[10px] text-wn-charcoal/40">
+        {lat.toFixed(3)}, {lng.toFixed(3)}
+      </p>
+    </div>
+  );
+}
+
+function FullAmenities({ resort }: { resort: Resort }) {
+  const items: Array<{ key: string; label: string; emoji: string; on: boolean }> = [
+    { key: "tubing", label: "Tubing", emoji: "🛷", on: resort.has_tubing === true },
+    { key: "lessons", label: "Ski school", emoji: "🎓", on: resort.has_lessons === true },
+    { key: "rentals", label: "Rentals", emoji: "🎿", on: resort.has_rentals === true },
+    { key: "lodging", label: "On-mountain lodging", emoji: "🏨", on: resort.has_lodging_on_mountain === true },
+    { key: "xc", label: "XC skiing", emoji: "⛷️", on: resort.has_xc_skiing === true },
+    { key: "backcountry", label: "Backcountry access", emoji: "🏔️", on: resort.has_backcountry_access === true },
+    { key: "night", label: "Night skiing", emoji: "🌙", on: resort.has_night_skiing === true },
+    { key: "glades", label: "Glades", emoji: "🌲", on: resort.has_glades === true },
+    { key: "halfpipe", label: "Halfpipe", emoji: "🛹", on: resort.has_halfpipe === true },
+  ];
+  const active = items.filter((i) => i.on);
+  if (active.length === 0) return null;
+  return (
+    <Section title="Amenities">
+      <div className="flex flex-wrap gap-1.5">
+        {active.map((i) => (
+          <span
+            key={i.key}
+            className="inline-flex items-center gap-1.5 rounded-full border border-wn-charcoal/15 bg-white px-3 py-1.5 text-sm font-semibold text-wn-charcoal"
+          >
+            <span aria-hidden="true">{i.emoji}</span>
+            <span>{i.label}</span>
+          </span>
+        ))}
+      </div>
+    </Section>
   );
 }
 

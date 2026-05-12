@@ -48,6 +48,25 @@ export type Resort = {
   trails_expert: number | null;
   has_terrain_park: boolean | null;
   terrain_park_count: number | null;
+  // Stage 23 — lifts/elevation/snow/amenities/airport/URLs
+  total_lifts: number | null;
+  high_speed_lifts: number | null;
+  base_elevation_ft: number | null;
+  summit_elevation_ft: number | null;
+  annual_snowfall_in: number | null;
+  season_open_text: string | null;
+  season_close_text: string | null;
+  snowmaking_pct: number | null;
+  has_tubing: boolean | null;
+  has_lessons: boolean | null;
+  has_rentals: boolean | null;
+  has_lodging_on_mountain: boolean | null;
+  has_xc_skiing: boolean | null;
+  has_backcountry_access: boolean | null;
+  trail_map_url: string | null;
+  webcam_url: string | null;
+  closest_airport_iata: string | null;
+  closest_airport_distance_mi: number | null;
 };
 
 export type DriveTime = {

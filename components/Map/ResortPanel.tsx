@@ -263,34 +263,72 @@ export default function ResortPanel({
             </div>
           )}
 
-          <MountainStats resort={resort} />
-
-          {/* Weather — in-app card built from weather_cache (refreshed
-              daily by the cron). Falls back to a "no data yet" state
-              with the original Weather.gov / Windy links until the
-              first refresh lands. */}
+          {/* Weather first — biggest snow-trip decider. */}
           <Section title="Today's weather">
             <WeatherCard weather={weather} lat={lat} lng={lng} />
           </Section>
 
-          {/* Visit & book — Google Maps + resort website */}
+          {/* Mountain stats — now includes lifts + elevation + snowfall
+              + snowmaking + season (Stage 23). */}
+          <MountainStats resort={resort} />
+
+          {/* Amenities badges — Stage 23 booleans rendered as chips when set. */}
+          <AmenityBadges resort={resort} />
+
+          {/* Closest airport — Stage 23. */}
+          {resort.closest_airport_iata && (
+            <Section title="Closest airport">
+              <div className="rounded-lg border border-wn-charcoal/10 bg-wn-offwhite px-3 py-2.5">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-lg font-bold text-wn-navy">
+                    ✈️ {resort.closest_airport_iata}
+                  </span>
+                  {resort.closest_airport_distance_mi != null && (
+                    <span className="text-xs text-wn-charcoal/60">
+                      {resort.closest_airport_distance_mi} mi away
+                    </span>
+                  )}
+                </div>
+              </div>
+            </Section>
+          )}
+
+          {/* Live trail map + webcam links. Stage 23 + Stage 21.5
+              (we dropped the resort-website link — many were broken
+              and the AI-scrape pulled what we actually need into the
+              card directly). */}
+          {(resort.trail_map_url || resort.webcam_url) && (
+            <Section title="Mountain links">
+              <div className="grid grid-cols-1 gap-1.5">
+                {resort.trail_map_url && (
+                  <PanelLink
+                    href={resort.trail_map_url}
+                    emoji="🗺️"
+                    label="Trail map"
+                    sub="Lifts, runs, terrain"
+                  />
+                )}
+                {resort.webcam_url && (
+                  <PanelLink
+                    href={resort.webcam_url}
+                    emoji="📷"
+                    label="Live webcam"
+                    sub="Current conditions"
+                  />
+                )}
+              </div>
+            </Section>
+          )}
+
+          {/* Visit & book — Google Maps only. Resort-website link
+              removed (Stage 21.5) since many were broken. */}
           <Section title="Visit & book">
-            <div className="grid grid-cols-1 gap-1.5">
-              <PanelLink
-                href={googleMapsUrl(resort.name, resort.state)}
-                emoji="📍"
-                label="Open in Google Maps"
-                sub="Photos, reviews, navigation"
-              />
-              {resort.website_url && (
-                <PanelLink
-                  href={resort.website_url}
-                  emoji="🌐"
-                  label="Resort website"
-                  sub="Live trail status"
-                />
-              )}
-            </div>
+            <PanelLink
+              href={googleMapsUrl(resort.name, resort.state)}
+              emoji="📍"
+              label="Open in Google Maps"
+              sub="Photos, reviews, navigation"
+            />
           </Section>
         </div>
 
@@ -320,77 +358,185 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   );
 }
 
-// Unified Mountain stats — Vert / Trails / Acres up top, the
-// difficulty-mix percentage bar below, and a terrain-park badge at
-// the bottom when the resort has one. Stage 18 swapped the prior
-// 5-column count grid for a stacked % bar; counts are inherently
-// fuzzy (try counting trails on a piste map and you'll see) and
-// percentages are what resorts publish in their own marketing.
+// Unified Mountain stats — top row of headline numbers (vert, trails,
+// acres, lifts), elevation range card, snowfall / snowmaking card,
+// season card, difficulty mix bar, terrain-park badge. Stage 23 added
+// the lifts/elevation/snowfall/snowmaking/season fields.
 function MountainStats({ resort }: { resort: Resort }) {
   const mix = getDifficultyMix(resort);
   const hasPark = resort.has_terrain_park === true;
   const parkCount = resort.terrain_park_count;
   const showPark = hasPark || parkCount != null;
 
+  const liftsLabel =
+    resort.total_lifts != null
+      ? resort.high_speed_lifts != null && resort.high_speed_lifts > 0
+        ? `${resort.total_lifts} (${resort.high_speed_lifts} HS)`
+        : String(resort.total_lifts)
+      : "—";
+
   return (
-    <div className="mb-4 rounded-lg border border-wn-charcoal/10 bg-white p-3">
-      <h3 className="mb-2 text-[11px] font-bold uppercase tracking-wide text-wn-charcoal/55">
-        Mountain stats
-      </h3>
-      <div className="grid grid-cols-3 gap-2">
-        <Stat
-          label="Vert"
-          value={
-            resort.vertical_drop != null
-              ? `${resort.vertical_drop.toLocaleString()} ft`
-              : "—"
-          }
-          muted={resort.vertical_drop == null}
-        />
-        <Stat
-          label="Trails"
-          value={resort.total_trails != null ? String(resort.total_trails) : "—"}
-          muted={resort.total_trails == null}
-        />
-        <Stat
-          label="Acres"
-          value={
-            resort.total_acres != null ? resort.total_acres.toLocaleString() : "—"
-          }
-          muted={resort.total_acres == null}
-        />
-      </div>
-
-      {mix ? (
-        <div className="mt-3 border-t border-wn-charcoal/10 pt-2.5">
-          <div className="mb-1.5 text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/50">
-            Difficulty mix
-          </div>
-          <DifficultyBar mix={mix} size="compact" showSourceHint />
-        </div>
-      ) : (
-        <p className="mt-2.5 border-t border-wn-charcoal/10 pt-2 text-[10px] italic text-wn-charcoal/50">
-          Difficulty mix not yet verified.
-        </p>
-      )}
-
-      {showPark && (
-        <div className="mt-2.5 flex items-center gap-2 border-t border-wn-charcoal/10 pt-2">
-          <span
-            className="block h-2.5 w-5 rounded-full bg-orange-500"
-            aria-hidden="true"
+    <Section title="Mountain stats">
+      <div className="rounded-lg border border-wn-charcoal/10 bg-white p-3">
+        {/* Headline grid — 4 numeric stats. Lifts is new (Stage 23). */}
+        <div className="grid grid-cols-4 gap-2">
+          <Stat
+            label="Vert"
+            value={
+              resort.vertical_drop != null
+                ? `${resort.vertical_drop.toLocaleString()}'`
+                : "—"
+            }
+            muted={resort.vertical_drop == null}
           />
-          <span className="text-[11px] font-semibold text-wn-charcoal">
-            Terrain park
-            {parkCount != null && parkCount > 0 && (
-              <span className="ml-1 font-normal text-wn-charcoal/60">
-                · {parkCount}
-              </span>
-            )}
-          </span>
+          <Stat
+            label="Trails"
+            value={resort.total_trails != null ? String(resort.total_trails) : "—"}
+            muted={resort.total_trails == null}
+          />
+          <Stat
+            label="Acres"
+            value={
+              resort.total_acres != null ? resort.total_acres.toLocaleString() : "—"
+            }
+            muted={resort.total_acres == null}
+          />
+          <Stat
+            label="Lifts"
+            value={liftsLabel}
+            muted={resort.total_lifts == null}
+          />
         </div>
-      )}
-    </div>
+
+        {/* Elevation range — Stage 23. */}
+        {(resort.base_elevation_ft != null || resort.summit_elevation_ft != null) && (
+          <div className="mt-3 border-t border-wn-charcoal/10 pt-2.5">
+            <div className="mb-1 text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/50">
+              Elevation
+            </div>
+            <div className="flex items-baseline justify-between gap-3 text-[13px]">
+              <span className="font-semibold text-wn-charcoal">
+                Base{" "}
+                <span className="font-bold text-wn-navy">
+                  {resort.base_elevation_ft != null
+                    ? `${resort.base_elevation_ft.toLocaleString()}'`
+                    : "—"}
+                </span>
+              </span>
+              <span aria-hidden="true" className="text-wn-charcoal/40">→</span>
+              <span className="font-semibold text-wn-charcoal">
+                Summit{" "}
+                <span className="font-bold text-wn-navy">
+                  {resort.summit_elevation_ft != null
+                    ? `${resort.summit_elevation_ft.toLocaleString()}'`
+                    : "—"}
+                </span>
+              </span>
+            </div>
+          </div>
+        )}
+
+        {/* Snowfall + snowmaking. Stage 23. */}
+        {(resort.annual_snowfall_in != null || resort.snowmaking_pct != null) && (
+          <div className="mt-3 border-t border-wn-charcoal/10 pt-2.5">
+            <div className="mb-1 text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/50">
+              Snow
+            </div>
+            <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 text-[13px]">
+              {resort.annual_snowfall_in != null && (
+                <span className="font-semibold text-wn-charcoal">
+                  ❄️ {resort.annual_snowfall_in}&quot;/yr avg
+                </span>
+              )}
+              {resort.snowmaking_pct != null && (
+                <span className="font-semibold text-wn-charcoal">
+                  🔫 {resort.snowmaking_pct}% snowmaking
+                </span>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Season — Stage 23. */}
+        {(resort.season_open_text || resort.season_close_text) && (
+          <div className="mt-3 border-t border-wn-charcoal/10 pt-2.5">
+            <div className="mb-1 text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/50">
+              Season
+            </div>
+            <p className="text-[13px] font-semibold text-wn-charcoal">
+              {resort.season_open_text ?? "—"}
+              <span className="px-1.5 text-wn-charcoal/40">→</span>
+              {resort.season_close_text ?? "—"}
+            </p>
+          </div>
+        )}
+
+        {/* Difficulty mix bar (Stage 18+). */}
+        {mix ? (
+          <div className="mt-3 border-t border-wn-charcoal/10 pt-2.5">
+            <div className="mb-1.5 text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/50">
+              Difficulty mix
+            </div>
+            <DifficultyBar mix={mix} size="compact" showSourceHint />
+          </div>
+        ) : (
+          <p className="mt-2.5 border-t border-wn-charcoal/10 pt-2 text-[10px] italic text-wn-charcoal/50">
+            Difficulty mix not yet verified.
+          </p>
+        )}
+
+        {showPark && (
+          <div className="mt-2.5 flex items-center gap-2 border-t border-wn-charcoal/10 pt-2">
+            <span
+              className="block h-2.5 w-5 rounded-full bg-orange-500"
+              aria-hidden="true"
+            />
+            <span className="text-[11px] font-semibold text-wn-charcoal">
+              Terrain park
+              {parkCount != null && parkCount > 0 && (
+                <span className="ml-1 font-normal text-wn-charcoal/60">
+                  · {parkCount}
+                </span>
+              )}
+            </span>
+          </div>
+        )}
+      </div>
+    </Section>
+  );
+}
+
+// Amenity badges — small chip row showing which on-mountain conveniences
+// are confirmed available. Only renders true booleans (skipping null
+// "unknown" and false). If nothing is true, the section is hidden so
+// the panel stays tight.
+function AmenityBadges({ resort }: { resort: Resort }) {
+  const items: Array<{ key: string; label: string; emoji: string; on: boolean }> = [
+    { key: "tubing", label: "Tubing", emoji: "🛷", on: resort.has_tubing === true },
+    { key: "lessons", label: "Ski school", emoji: "🎓", on: resort.has_lessons === true },
+    { key: "rentals", label: "Rentals", emoji: "🎿", on: resort.has_rentals === true },
+    { key: "lodging", label: "On-mtn lodging", emoji: "🏨", on: resort.has_lodging_on_mountain === true },
+    { key: "xc", label: "XC skiing", emoji: "⛷️", on: resort.has_xc_skiing === true },
+    { key: "backcountry", label: "Backcountry", emoji: "🏔️", on: resort.has_backcountry_access === true },
+    { key: "night", label: "Night skiing", emoji: "🌙", on: resort.has_night_skiing === true },
+  ];
+  const active = items.filter((i) => i.on);
+  if (active.length === 0) return null;
+
+  return (
+    <Section title="Amenities">
+      <div className="flex flex-wrap gap-1.5">
+        {active.map((i) => (
+          <span
+            key={i.key}
+            className="inline-flex items-center gap-1 rounded-full border border-wn-charcoal/15 bg-white px-2.5 py-1 text-[11px] font-semibold text-wn-charcoal"
+          >
+            <span aria-hidden="true">{i.emoji}</span>
+            <span>{i.label}</span>
+          </span>
+        ))}
+      </div>
+    </Section>
   );
 }
 

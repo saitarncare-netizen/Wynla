@@ -327,7 +327,7 @@ export default function MapView({
         type: "symbol",
         source: SOURCE_ID,
         filter: ["!", ["has", "point_count"]],
-        minzoom: 7,
+        minzoom: 5,
         layout: {
           "text-field": ["get", "name"],
           "text-font": ["DIN Pro Medium", "Arial Unicode MS Regular"],
