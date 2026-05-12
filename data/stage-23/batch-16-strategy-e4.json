@@ -1,0 +1,42 @@
+[
+  {
+    "slug": "woodward-park-city",
+    "name": "Woodward Park City",
+    "lifts_total": null,
+    "lifts_breakdown": null,
+    "base_elevation_ft": null,
+    "summit_elevation_ft": null,
+    "vertical_drop_ft": null,
+    "annual_snowfall_in": null,
+    "season_start": null,
+    "season_end": null,
+    "trails_total": null,
+    "skiable_acres": null,
+    "amenities": [],
+    "primary_source_url": "https://www.onthesnow.com/utah/ski-resorts",
+    "secondary_source_url": null,
+    "exact_quote": "Woodward Park City is also located here for indoor sports.",
+    "confidence": "none",
+    "notes": "OnTheSnow has NO dedicated resort page for Woodward Park City. /utah/woodward-park-city/ski-resort and /skireport return 404. The Utah resorts index page mentions it only in the FAQ as an 'indoor training center' but provides no URL or stats. No data extractable from OnTheSnow."
+  },
+  {
+    "slug": "yellowstone-club",
+    "name": "Yellowstone Club",
+    "lifts_total": null,
+    "lifts_breakdown": null,
+    "base_elevation_ft": null,
+    "summit_elevation_ft": null,
+    "vertical_drop_ft": null,
+    "annual_snowfall_in": null,
+    "season_start": null,
+    "season_end": null,
+    "trails_total": null,
+    "skiable_acres": null,
+    "amenities": [],
+    "primary_source_url": "https://www.onthesnow.com/montana/ski-resorts",
+    "secondary_source_url": null,
+    "exact_quote": "Many celebrities choose high-end private ski clubs near Yellowstone and Big Sky. Specifically, they can afford to choose the exclusive 15,200-acre Yellowstone Club.",
+    "confidence": "none",
+    "notes": "OnTheSnow has NO dedicated resort page for Yellowstone Club (private members-only club). /montana/yellowstone-club/ski-resort returns 404. The Montana resorts index page mentions it only in the FAQ as a private 15,200-acre club but provides no URL or operational stats. No data extractable from OnTheSnow."
+  }
+]
