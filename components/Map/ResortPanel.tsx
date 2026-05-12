@@ -6,11 +6,8 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { passColor, passLabel, primaryPass } from "@/lib/passColors";
 import { formatDriveTime, type Origin } from "@/lib/origins";
-import { weatherGovUrl, windyUrl, googleMapsUrl, lodgingSearchUrl, airbnbSearchUrl } from "@/lib/externalLinks";
 import { fetchMatrixDriveTime, type MatrixResult } from "@/lib/mapboxMatrix";
-import { getDifficultyMix } from "@/lib/difficulty";
 import FavoriteToggle from "@/components/auth/FavoriteToggle";
-import DifficultyBar from "./DifficultyBar";
 import type { Resort, DriveTime, WeatherSnapshot } from "./MapPage";
 
 type Props = {
@@ -223,11 +220,13 @@ export default function ResortPanel({
           </div>
         </div>
 
-        {/* Scrollable body */}
-        <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-4" style={{ touchAction: "pan-y" }}>
-          {/* Pass badges */}
+        {/* Compact body — 3-stat preview only. The full panel
+            (weather, mountain stats, amenities, airport, ticket,
+            lodging) lives at /resort/[slug] now. */}
+        <div className="flex-1 overflow-hidden px-4 py-3" style={{ touchAction: "manipulation" }}>
+          {/* Pass badges row */}
           {resort.passes?.length > 0 && (
-            <div className="mb-4 flex flex-wrap gap-1.5">
+            <div className="mb-3 flex flex-wrap gap-1.5">
               {resort.passes.map((p) => (
                 <span
                   key={p}
@@ -240,187 +239,39 @@ export default function ResortPanel({
             </div>
           )}
 
-          {/* Drive time card. For geo origins we show "≈ 4h 20m" until the
-              Mapbox Matrix call resolves, then swap in the exact value. */}
-          {driveText && (
-            <div className="mb-4 rounded-lg border border-wn-charcoal/10 bg-wn-offwhite px-3 py-2.5">
-              <div className="text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
-                Drive from {originShort}
-              </div>
-              <div className="mt-0.5 flex items-baseline gap-2">
-                <span className="text-lg font-bold text-wn-navy">
-                  🚗 {isEstimate ? "≈ " : ""}
-                  {driveText}
-                </span>
-                {distanceMiles && (
-                  <span className="text-xs text-wn-charcoal/60">
-                    {distanceMiles} mi
-                  </span>
-                )}
-              </div>
-              {isEstimate && (
-                <div className="mt-1 text-[10px] text-wn-charcoal/45">
-                  Estimate based on straight-line distance.
-                </div>
-              )}
+          {/* 3-stat compact card: weather / drive / trails */}
+          <div className="grid grid-cols-3 gap-2 rounded-lg border border-wn-charcoal/10 bg-white p-3">
+            <CompactStat
+              emoji={weatherEmoji(weather?.conditions_short)}
+              label={weather?.conditions_short ?? "Weather"}
+              value={
+                weather?.temp_high_f != null
+                  ? `${weather.temp_high_f}°F`
+                  : "—"
+              }
+            />
+            <CompactStat
+              emoji="🚗"
+              label={`from ${originShort}`}
+              value={driveText ? `${isEstimate ? "≈ " : ""}${driveText}` : "—"}
+            />
+            <CompactStat
+              emoji="⛷️"
+              label="Trails"
+              value={
+                resort.total_trails != null ? String(resort.total_trails) : "—"
+              }
+            />
+          </div>
+
+          {/* Snow report mini-banner if data exists — small chip so users
+              know fresh-snow numbers without scrolling. */}
+          {(resort.snow_new_24h_in != null && resort.snow_new_24h_in > 0) && (
+            <div className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-wn-sky/15 px-2.5 py-1 text-[11px] font-semibold text-wn-navy">
+              <span aria-hidden="true">❄️</span>
+              <span>{resort.snow_new_24h_in}&quot; new in last 24h</span>
             </div>
           )}
-
-          {/* Today's snow conditions — Stage 26. Only renders when the
-              daily cron has populated at least one snow field. */}
-          {(resort.snow_base_depth_in != null ||
-            resort.snow_new_24h_in != null ||
-            resort.trails_open_today != null ||
-            resort.lifts_open_today != null) && (
-            <Section title="Today's snow report">
-              <div className="rounded-lg border border-wn-charcoal/10 bg-white p-3">
-                <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-                  {resort.snow_base_depth_in != null && (
-                    <SnowStat label="Base" value={`${resort.snow_base_depth_in}"`} />
-                  )}
-                  {resort.snow_new_24h_in != null && (
-                    <SnowStat label="New (24h)" value={`${resort.snow_new_24h_in}"`} />
-                  )}
-                  {resort.trails_open_today != null && resort.total_trails != null && (
-                    <SnowStat
-                      label="Trails open"
-                      value={`${resort.trails_open_today}/${resort.total_trails}`}
-                    />
-                  )}
-                  {resort.lifts_open_today != null && resort.total_lifts != null && (
-                    <SnowStat
-                      label="Lifts open"
-                      value={`${resort.lifts_open_today}/${resort.total_lifts}`}
-                    />
-                  )}
-                </div>
-                {resort.snow_report_updated_at && (
-                  <p className="mt-2 text-[10px] text-wn-charcoal/45">
-                    Synced{" "}
-                    {new Date(resort.snow_report_updated_at).toLocaleString(undefined, {
-                      weekday: "short",
-                      hour: "numeric",
-                      minute: "2-digit",
-                    })}
-                  </p>
-                )}
-              </div>
-            </Section>
-          )}
-
-          {/* Weather — runner-up biggest snow-trip decider. */}
-          <Section title="Today's weather">
-            <WeatherCard weather={weather} lat={lat} lng={lng} />
-          </Section>
-
-          {/* Mountain stats — now includes lifts + elevation + snowfall
-              + snowmaking + season (Stage 23). */}
-          <MountainStats resort={resort} />
-
-          {/* Amenities badges — Stage 23 booleans rendered as chips when set. */}
-          <AmenityBadges resort={resort} />
-
-          {/* Closest airport — Stage 23. */}
-          {resort.closest_airport_iata && (
-            <Section title="Closest airport">
-              <div className="rounded-lg border border-wn-charcoal/10 bg-wn-offwhite px-3 py-2.5">
-                <div className="flex items-baseline gap-2">
-                  <span className="text-lg font-bold text-wn-navy">
-                    ✈️ {resort.closest_airport_iata}
-                  </span>
-                  {resort.closest_airport_distance_mi != null && (
-                    <span className="text-xs text-wn-charcoal/60">
-                      {resort.closest_airport_distance_mi} mi away
-                    </span>
-                  )}
-                </div>
-              </div>
-            </Section>
-          )}
-
-          {/* Lift ticket pricing — Stage 27. Only renders when cron has
-              populated either price OR booking URL. */}
-          {(resort.ticket_price_adult_min != null || resort.ticket_booking_url) && (
-            <Section title="Lift ticket">
-              <div className="rounded-lg border border-wn-charcoal/10 bg-white p-3">
-                {resort.ticket_price_adult_min != null && (
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-xl font-extrabold tracking-tight text-wn-navy">
-                      ${resort.ticket_price_adult_min}
-                      {resort.ticket_price_adult_max != null &&
-                        resort.ticket_price_adult_max > resort.ticket_price_adult_min && (
-                          <span className="text-base font-semibold text-wn-charcoal/65">
-                            {" "}- ${resort.ticket_price_adult_max}
-                          </span>
-                        )}
-                    </span>
-                    <span className="text-xs text-wn-charcoal/60">adult day pass</span>
-                  </div>
-                )}
-                {resort.ticket_booking_url && (
-                  <a
-                    href={resort.ticket_booking_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-2 inline-flex w-full items-center justify-center rounded-md bg-wn-navy px-3 py-2 text-xs font-semibold text-white transition hover:bg-wn-navy/90"
-                  >
-                    Buy ticket on resort site →
-                  </a>
-                )}
-              </div>
-            </Section>
-          )}
-
-          {/* Live trail map + webcam links. Stage 23 + Stage 21.5
-              (we dropped the resort-website link — many were broken
-              and the AI-scrape pulled what we actually need into the
-              card directly). */}
-          {(resort.trail_map_url || resort.webcam_url) && (
-            <Section title="Mountain links">
-              <div className="grid grid-cols-1 gap-1.5">
-                {resort.trail_map_url && (
-                  <PanelLink
-                    href={resort.trail_map_url}
-                    emoji="🗺️"
-                    label="Trail map"
-                    sub="Lifts, runs, terrain"
-                  />
-                )}
-                {resort.webcam_url && (
-                  <PanelLink
-                    href={resort.webcam_url}
-                    emoji="📷"
-                    label="Live webcam"
-                    sub="Current conditions"
-                  />
-                )}
-              </div>
-            </Section>
-          )}
-
-          {/* Visit & book — Google Maps + Stage 30 lodging links. */}
-          <Section title="Visit & book">
-            <div className="grid grid-cols-1 gap-1.5">
-              <PanelLink
-                href={googleMapsUrl(resort.name, resort.state)}
-                emoji="📍"
-                label="Open in Google Maps"
-                sub="Photos, reviews, navigation"
-              />
-              <PanelLink
-                href={lodgingSearchUrl(resort.name, resort.state)}
-                emoji="🏨"
-                label="Find lodging"
-                sub="Booking.com search nearby"
-              />
-              <PanelLink
-                href={airbnbSearchUrl(resort.name, resort.state)}
-                emoji="🏡"
-                label="Airbnb nearby"
-                sub="Homes + cabins"
-              />
-            </div>
-          </Section>
         </div>
 
         {/* Sticky footer CTA */}
@@ -437,460 +288,37 @@ export default function ResortPanel({
     </>
   );
 }
-
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <section className="mb-4 last:mb-0">
-      <h3 className="mb-1.5 text-[11px] font-bold uppercase tracking-wide text-wn-charcoal/55">
-        {title}
-      </h3>
-      {children}
-    </section>
-  );
-}
-
-// Unified Mountain stats — top row of headline numbers (vert, trails,
-// acres, lifts), elevation range card, snowfall / snowmaking card,
-// season card, difficulty mix bar, terrain-park badge. Stage 23 added
-// the lifts/elevation/snowfall/snowmaking/season fields.
-function MountainStats({ resort }: { resort: Resort }) {
-  const mix = getDifficultyMix(resort);
-  const hasPark = resort.has_terrain_park === true;
-  const parkCount = resort.terrain_park_count;
-  const showPark = hasPark || parkCount != null;
-
-  const liftsLabel =
-    resort.total_lifts != null
-      ? resort.high_speed_lifts != null && resort.high_speed_lifts > 0
-        ? `${resort.total_lifts} (${resort.high_speed_lifts} HS)`
-        : String(resort.total_lifts)
-      : "—";
-
-  return (
-    <Section title="Mountain stats">
-      <div className="rounded-lg border border-wn-charcoal/10 bg-white p-3">
-        {/* Headline grid — 4 numeric stats. Lifts is new (Stage 23). */}
-        <div className="grid grid-cols-4 gap-2">
-          <Stat
-            label="Vert"
-            value={
-              resort.vertical_drop != null
-                ? `${resort.vertical_drop.toLocaleString()}'`
-                : "—"
-            }
-            muted={resort.vertical_drop == null}
-          />
-          <Stat
-            label="Trails"
-            value={resort.total_trails != null ? String(resort.total_trails) : "—"}
-            muted={resort.total_trails == null}
-          />
-          <Stat
-            label="Acres"
-            value={
-              resort.total_acres != null ? resort.total_acres.toLocaleString() : "—"
-            }
-            muted={resort.total_acres == null}
-          />
-          <Stat
-            label="Lifts"
-            value={liftsLabel}
-            muted={resort.total_lifts == null}
-          />
-        </div>
-
-        {/* Elevation range — Stage 23. */}
-        {(resort.base_elevation_ft != null || resort.summit_elevation_ft != null) && (
-          <div className="mt-3 border-t border-wn-charcoal/10 pt-2.5">
-            <div className="mb-1 text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/50">
-              Elevation
-            </div>
-            <div className="flex items-baseline justify-between gap-3 text-[13px]">
-              <span className="font-semibold text-wn-charcoal">
-                Base{" "}
-                <span className="font-bold text-wn-navy">
-                  {resort.base_elevation_ft != null
-                    ? `${resort.base_elevation_ft.toLocaleString()}'`
-                    : "—"}
-                </span>
-              </span>
-              <span aria-hidden="true" className="text-wn-charcoal/40">→</span>
-              <span className="font-semibold text-wn-charcoal">
-                Summit{" "}
-                <span className="font-bold text-wn-navy">
-                  {resort.summit_elevation_ft != null
-                    ? `${resort.summit_elevation_ft.toLocaleString()}'`
-                    : "—"}
-                </span>
-              </span>
-            </div>
-          </div>
-        )}
-
-        {/* Snowfall + snowmaking. Stage 23. */}
-        {(resort.annual_snowfall_in != null || resort.snowmaking_pct != null) && (
-          <div className="mt-3 border-t border-wn-charcoal/10 pt-2.5">
-            <div className="mb-1 text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/50">
-              Snow
-            </div>
-            <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 text-[13px]">
-              {resort.annual_snowfall_in != null && (
-                <span className="font-semibold text-wn-charcoal">
-                  ❄️ {resort.annual_snowfall_in}&quot;/yr avg
-                </span>
-              )}
-              {resort.snowmaking_pct != null && (
-                <span className="font-semibold text-wn-charcoal">
-                  🔫 {resort.snowmaking_pct}% snowmaking
-                </span>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* Season — Stage 23. */}
-        {(resort.season_open_text || resort.season_close_text) && (
-          <div className="mt-3 border-t border-wn-charcoal/10 pt-2.5">
-            <div className="mb-1 text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/50">
-              Season
-            </div>
-            <p className="text-[13px] font-semibold text-wn-charcoal">
-              {resort.season_open_text ?? "—"}
-              <span className="px-1.5 text-wn-charcoal/40">→</span>
-              {resort.season_close_text ?? "—"}
-            </p>
-          </div>
-        )}
-
-        {/* Difficulty mix bar (Stage 18+). */}
-        {mix ? (
-          <div className="mt-3 border-t border-wn-charcoal/10 pt-2.5">
-            <div className="mb-1.5 text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/50">
-              Difficulty mix
-            </div>
-            <DifficultyBar mix={mix} size="compact" showSourceHint />
-          </div>
-        ) : (
-          <p className="mt-2.5 border-t border-wn-charcoal/10 pt-2 text-[10px] italic text-wn-charcoal/50">
-            Difficulty mix not yet verified.
-          </p>
-        )}
-
-        {showPark && (
-          <div className="mt-2.5 flex items-center gap-2 border-t border-wn-charcoal/10 pt-2">
-            <span
-              className="block h-2.5 w-5 rounded-full bg-orange-500"
-              aria-hidden="true"
-            />
-            <span className="text-[11px] font-semibold text-wn-charcoal">
-              Terrain park
-              {parkCount != null && parkCount > 0 && (
-                <span className="ml-1 font-normal text-wn-charcoal/60">
-                  · {parkCount}
-                </span>
-              )}
-            </span>
-          </div>
-        )}
-      </div>
-    </Section>
-  );
-}
-
-// Amenity badges — small chip row showing which on-mountain conveniences
-// are confirmed available. Only renders true booleans (skipping null
-// "unknown" and false). If nothing is true, the section is hidden so
-// the panel stays tight.
-function AmenityBadges({ resort }: { resort: Resort }) {
-  const items: Array<{ key: string; label: string; emoji: string; on: boolean }> = [
-    { key: "tubing", label: "Tubing", emoji: "🛷", on: resort.has_tubing === true },
-    { key: "lessons", label: "Ski school", emoji: "🎓", on: resort.has_lessons === true },
-    { key: "rentals", label: "Rentals", emoji: "🎿", on: resort.has_rentals === true },
-    { key: "lodging", label: "On-mtn lodging", emoji: "🏨", on: resort.has_lodging_on_mountain === true },
-    { key: "xc", label: "XC skiing", emoji: "⛷️", on: resort.has_xc_skiing === true },
-    { key: "backcountry", label: "Backcountry", emoji: "🏔️", on: resort.has_backcountry_access === true },
-    { key: "night", label: "Night skiing", emoji: "🌙", on: resort.has_night_skiing === true },
-  ];
-  const active = items.filter((i) => i.on);
-  if (active.length === 0) return null;
-
-  return (
-    <Section title="Amenities">
-      <div className="flex flex-wrap gap-1.5">
-        {active.map((i) => (
-          <span
-            key={i.key}
-            className="inline-flex items-center gap-1 rounded-full border border-wn-charcoal/15 bg-white px-2.5 py-1 text-[11px] font-semibold text-wn-charcoal"
-          >
-            <span aria-hidden="true">{i.emoji}</span>
-            <span>{i.label}</span>
-          </span>
-        ))}
-      </div>
-    </Section>
-  );
-}
-
-function SnowStat({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-md border border-wn-charcoal/10 bg-wn-offwhite px-2 py-1.5 text-center">
-      <div className="text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
-        {label}
-      </div>
-      <div className="mt-0.5 text-base font-extrabold tracking-tight text-wn-navy">
-        {value}
-      </div>
-    </div>
-  );
-}
-
-function Stat({
-  label,
-  value,
-  muted,
-  hint,
-}: {
-  label: string;
-  value: string;
-  muted?: boolean;
-  hint?: string;
-}) {
-  return (
-    <div className="rounded-lg border border-wn-charcoal/10 bg-wn-offwhite/60 px-2.5 py-2 text-center">
-      <div className="text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/50">
-        {label}
-      </div>
-      <div
-        className={`mt-0.5 text-sm font-bold ${muted ? "text-wn-charcoal/30" : "text-wn-navy"}`}
-      >
-        {value}
-      </div>
-      {hint && (
-        <div className="text-[9px] italic text-wn-charcoal/45">{hint}</div>
-      )}
-    </div>
-  );
-}
-
-// In-app weather card. Renders a hero strip (high/low + conditions),
-// a snow chip when there's measurable precipitation, and a wind block.
-// Falls back to two link rows (Weather.gov + Windy) when the cache row
-// hasn't been populated yet — first refresh lands once Vercel Cron runs.
-function WeatherCard({
-  weather,
-  lat,
-  lng,
-}: {
-  weather: WeatherSnapshot | null;
-  lat: number;
-  lng: number;
-}) {
-  // Show absolute fetch date (no relative "X hours ago") — Date.now()
-  // during render trips the React purity lint, and the relative form
-  // doesn't add much value once we already have an exact timestamp.
-  const fetchedLabel = weather?.fetched_at
-    ? new Date(weather.fetched_at).toLocaleString(undefined, {
-        weekday: "short",
-        hour: "numeric",
-        minute: "2-digit",
-      })
-    : null;
-
-  const conditionEmoji = (cond: string | null): string => {
-    if (!cond) return "🌤️";
-    const c = cond.toLowerCase();
-    if (c.includes("snow")) return "🌨️";
-    if (c.includes("rain") || c.includes("shower")) return "🌧️";
-    if (c.includes("thunder")) return "⛈️";
-    if (c.includes("cloud")) return "☁️";
-    if (c.includes("clear") || c.includes("sun")) return "☀️";
-    if (c.includes("fog") || c.includes("mist")) return "🌫️";
-    return "🌤️";
-  };
-
-  if (!weather || (weather.temp_high_f == null && weather.temp_low_f == null)) {
-    // No cache row yet — show the two external-link rows as a safe fallback.
-    return (
-      <div className="rounded-lg border border-wn-charcoal/10 bg-white">
-        <a
-          href={weatherGovUrl(lat, lng)}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group flex items-center gap-2.5 px-3 py-2.5 transition hover:bg-wn-offwhite"
-        >
-          <span aria-hidden="true" className="text-base">🌡️</span>
-          <div className="min-w-0 flex-1">
-            <div className="text-sm font-semibold text-wn-navy">Weather.gov</div>
-            <div className="text-[11px] text-wn-charcoal/55">In-app forecast loads once today&apos;s refresh runs</div>
-          </div>
-          <span className="text-wn-navy/40 transition group-hover:translate-x-0.5 group-hover:text-wn-navy">↗</span>
-        </a>
-        <div className="border-t border-wn-charcoal/10" />
-        <a
-          href={windyUrl(lat, lng)}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group flex items-center gap-2.5 px-3 py-2.5 transition hover:bg-wn-offwhite"
-        >
-          <span aria-hidden="true" className="text-base">🌬️</span>
-          <div className="min-w-0 flex-1">
-            <div className="text-sm font-semibold text-wn-navy">Windy.com</div>
-            <div className="text-[11px] text-wn-charcoal/55">Animated wind layer</div>
-          </div>
-          <span className="text-wn-navy/40 transition group-hover:translate-x-0.5 group-hover:text-wn-navy">↗</span>
-        </a>
-      </div>
-    );
-  }
-
-  const snow24 = Number(weather.snow_24h_in ?? 0);
-  const snow48 = Number(weather.snow_48h_in ?? 0);
-  return (
-    <div className="overflow-hidden rounded-lg border border-wn-charcoal/10 bg-white">
-      {/* Hero — temps + conditions */}
-      <div className="flex items-center gap-3 bg-gradient-to-br from-sky-50 to-white px-3 py-3">
-        <div className="text-3xl leading-none" aria-hidden="true">
-          {conditionEmoji(weather.conditions_short)}
-        </div>
-        <div className="min-w-0 flex-1">
-          <div className="flex items-baseline gap-1">
-            {weather.temp_high_f != null && (
-              <span className="text-xl font-extrabold text-wn-navy">
-                {Math.round(weather.temp_high_f)}°
-              </span>
-            )}
-            {weather.temp_low_f != null && weather.temp_high_f != null && (
-              <span className="text-sm text-wn-charcoal/55">
-                / {Math.round(weather.temp_low_f)}°
-              </span>
-            )}
-            <span className="ml-0.5 text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/50">
-              F
-            </span>
-          </div>
-          {weather.conditions_short && (
-            <div className="truncate text-xs font-medium text-wn-charcoal">
-              {weather.conditions_short}
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Snow + wind grid */}
-      <div className="grid grid-cols-2 divide-x divide-wn-charcoal/10 border-t border-wn-charcoal/10">
-        <div className="px-3 py-2.5">
-          <div className="flex items-baseline gap-1.5">
-            <span aria-hidden="true">🌨️</span>
-            <span className="text-base font-bold text-wn-navy">
-              {snow24 > 0 ? `${snow24.toFixed(snow24 < 1 ? 1 : 0)}"` : "—"}
-            </span>
-          </div>
-          <div className="text-[10px] uppercase tracking-wide text-wn-charcoal/55">
-            snow / 24h
-          </div>
-          {snow48 > 0 && snow48 !== snow24 && (
-            <div className="mt-0.5 text-[10px] text-wn-charcoal/55">
-              {snow48.toFixed(snow48 < 1 ? 1 : 0)}&quot; / 48h
-            </div>
-          )}
-        </div>
-        <div className="px-3 py-2.5">
-          <div className="flex items-baseline gap-1.5">
-            <span aria-hidden="true">🌬️</span>
-            <span className="text-base font-bold text-wn-navy">
-              {weather.wind_mph_avg != null ? `${weather.wind_mph_avg}` : "—"}
-            </span>
-            <span className="text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
-              mph
-            </span>
-            {weather.wind_dir_short && (
-              <span className="text-[10px] text-wn-charcoal/55">
-                · {weather.wind_dir_short}
-              </span>
-            )}
-          </div>
-          <div className="text-[10px] uppercase tracking-wide text-wn-charcoal/55">
-            wind
-          </div>
-        </div>
-      </div>
-
-      {/* 7-day forecast strip — scrollable on overflow. Skips today
-          since it's already the hero above. */}
-      {weather.forecast_json && weather.forecast_json.length > 1 && (
-        <div className="border-t border-wn-charcoal/10 bg-white px-3 py-2.5">
-          <div className="mb-1.5 text-[10px] font-semibold uppercase tracking-[0.15em] text-wn-charcoal/55">
-            Next 6 days
-          </div>
-          <div className="-mx-1 flex gap-1 overflow-x-auto px-1 pb-1">
-            {weather.forecast_json.slice(1, 7).map((d) => (
-              <div
-                key={d.date}
-                className="flex w-16 shrink-0 flex-col items-center rounded-md border border-wn-charcoal/10 bg-wn-offwhite px-1.5 py-1.5 text-center"
-                title={d.conditions_short ?? undefined}
-              >
-                <div className="text-[10px] font-bold uppercase tracking-wide text-wn-charcoal/65">
-                  {d.weekday}
-                </div>
-                <div className="my-0.5 text-base leading-none" aria-hidden="true">
-                  {conditionEmoji(d.conditions_short)}
-                </div>
-                <div className="text-[11px] font-bold text-wn-navy leading-tight">
-                  {d.temp_high_f != null ? `${Math.round(d.temp_high_f)}°` : "—"}
-                </div>
-                {d.temp_low_f != null && (
-                  <div className="text-[9px] text-wn-charcoal/55 leading-tight">
-                    {Math.round(d.temp_low_f)}°
-                  </div>
-                )}
-                {d.snow_in != null && d.snow_in > 0 && (
-                  <div className="mt-0.5 text-[9px] font-semibold text-sky-700">
-                    🌨️{Number(d.snow_in).toFixed(d.snow_in < 1 ? 1 : 0)}&quot;
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {fetchedLabel && (
-        <div className="border-t border-wn-charcoal/10 bg-wn-offwhite px-3 py-1.5 text-[10px] text-wn-charcoal/55">
-          Updated {fetchedLabel} · weather.gov + Open-Meteo
-        </div>
-      )}
-    </div>
-  );
-}
-
-function PanelLink({
-  href,
+function CompactStat({
   emoji,
   label,
-  sub,
+  value,
 }: {
-  href: string;
   emoji: string;
   label: string;
-  sub?: string;
+  value: string;
 }) {
   return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="group flex items-center gap-2.5 rounded-lg border border-wn-charcoal/10 bg-white px-3 py-2 transition hover:border-wn-navy hover:shadow-sm"
-    >
-      <span aria-hidden="true" className="text-base">{emoji}</span>
-      <div className="min-w-0 flex-1">
-        <div className="truncate text-sm font-semibold text-wn-navy">{label}</div>
-        {sub && (
-          <div className="truncate text-[11px] text-wn-charcoal/60">{sub}</div>
-        )}
+    <div className="text-center">
+      <div className="text-2xl leading-none" aria-hidden="true">{emoji}</div>
+      <div className="mt-1 text-base font-extrabold tracking-tight text-wn-navy">
+        {value}
       </div>
-      <span className="text-wn-navy/40 transition group-hover:translate-x-0.5 group-hover:text-wn-navy">
-        ↗
-      </span>
-    </a>
+      <div className="text-[10px] font-medium uppercase tracking-wide text-wn-charcoal/55 truncate">
+        {label}
+      </div>
+    </div>
   );
 }
+
+function weatherEmoji(cond: string | null | undefined): string {
+  if (!cond) return "🌤️";
+  const c = cond.toLowerCase();
+  if (c.includes("snow")) return "🌨️";
+  if (c.includes("rain") || c.includes("shower")) return "🌧️";
+  if (c.includes("thunder")) return "⛈️";
+  if (c.includes("cloud")) return "☁️";
+  if (c.includes("clear") || c.includes("sun")) return "☀️";
+  if (c.includes("fog") || c.includes("mist")) return "🌫️";
+  return "🌤️";
+}
+

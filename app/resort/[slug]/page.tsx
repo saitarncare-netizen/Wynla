@@ -86,6 +86,18 @@ type Resort = {
   closest_airport_distance_mi: number | null;
 };
 
+type ForecastDay = {
+  date: string;
+  weekday: string;
+  temp_high_f: number | null;
+  temp_low_f: number | null;
+  conditions_short: string | null;
+  snow_in: number | null;
+  precip_chance: number | null;
+  wind_short: string | null;
+  wind_dir_short: string | null;
+};
+
 type WeatherSnapshot = {
   resort_id: number;
   temp_high_f: number | null;
@@ -96,6 +108,7 @@ type WeatherSnapshot = {
   wind_mph_avg: number | null;
   wind_dir_short: string | null;
   fetched_at: string | null;
+  forecast_json: ForecastDay[] | null;
 };
 
 async function getData(slug: string): Promise<{ resort: Resort; weather: WeatherSnapshot | null } | null> {
@@ -109,7 +122,7 @@ async function getData(slug: string): Promise<{ resort: Resort; weather: Weather
   const { data: wx } = await supabase
     .from("weather_cache")
     .select(
-      "resort_id, temp_high_f, temp_low_f, conditions_short, snow_24h_in, snow_48h_in, wind_mph_avg, wind_dir_short, fetched_at",
+      "resort_id, temp_high_f, temp_low_f, conditions_short, snow_24h_in, snow_48h_in, wind_mph_avg, wind_dir_short, fetched_at, forecast_json",
     )
     .eq("resort_id", resort.id)
     .maybeSingle();
@@ -279,6 +292,14 @@ export default async function ResortPage({
         <Section title="Today's weather">
           <FullWeatherCard weather={weather} lat={lat} lng={lng} />
         </Section>
+
+        {/* 7-DAY FORECAST — pulled from weather_cache.forecast_json on
+            the same daily cron that powers Today's weather. */}
+        {weather?.forecast_json && weather.forecast_json.length > 0 && (
+          <Section title="7-day forecast">
+            <SevenDayForecast days={weather.forecast_json.slice(0, 7)} />
+          </Section>
+        )}
 
         {/* AMENITIES — Stage 23 booleans + legacy night/halfpipe/glades. */}
         <FullAmenities resort={resort} />
@@ -690,6 +711,63 @@ function FullWeatherCard({
       <p className="mt-2 text-[10px] text-wn-charcoal/40">
         {lat.toFixed(3)}, {lng.toFixed(3)}
       </p>
+    </div>
+  );
+}
+
+// 7-day forecast strip — one card per day with weekday, conditions
+// emoji, high/low, snow inches when any, and precipitation chance.
+function SevenDayForecast({ days }: { days: ForecastDay[] }) {
+  const emoji = (cond: string | null): string => {
+    if (!cond) return "🌤️";
+    const c = cond.toLowerCase();
+    if (c.includes("snow")) return "🌨️";
+    if (c.includes("rain") || c.includes("shower")) return "🌧️";
+    if (c.includes("thunder")) return "⛈️";
+    if (c.includes("cloud")) return "☁️";
+    if (c.includes("clear") || c.includes("sun")) return "☀️";
+    if (c.includes("fog") || c.includes("mist")) return "🌫️";
+    return "🌤️";
+  };
+  return (
+    <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-7">
+      {days.map((d, i) => (
+        <div
+          key={`${d.date}-${i}`}
+          className="rounded-lg border border-wn-charcoal/10 bg-white p-3 text-center"
+        >
+          <div className="text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
+            {d.weekday || new Date(d.date).toLocaleDateString(undefined, { weekday: "short" })}
+          </div>
+          <div className="my-1 text-2xl" aria-hidden="true">
+            {emoji(d.conditions_short)}
+          </div>
+          <div className="text-sm font-bold text-wn-navy">
+            {d.temp_high_f != null ? `${d.temp_high_f}°` : "—"}
+            {d.temp_low_f != null && (
+              <span className="ml-1 text-xs font-medium text-wn-charcoal/55">
+                / {d.temp_low_f}°
+              </span>
+            )}
+          </div>
+          {d.snow_in != null && d.snow_in > 0 && (
+            <div className="mt-1 inline-block rounded bg-wn-sky/15 px-1.5 py-0.5 text-[10px] font-bold text-wn-navy">
+              ❄️ {d.snow_in}&quot;
+            </div>
+          )}
+          {d.precip_chance != null && d.precip_chance > 30 && d.snow_in == null && (
+            <div className="mt-1 text-[10px] text-wn-charcoal/55">
+              {d.precip_chance}% precip
+            </div>
+          )}
+          {d.wind_short && (
+            <div className="mt-1 text-[10px] text-wn-charcoal/45">
+              🌬️ {d.wind_short}
+              {d.wind_dir_short ? ` ${d.wind_dir_short}` : ""}
+            </div>
+          )}
+        </div>
+      ))}
     </div>
   );
 }
