@@ -10,6 +10,7 @@ import { haversineMeters, estimateDriveSeconds } from "@/lib/distance";
 import { formatDriveTime } from "@/lib/origins";
 import TripActions from "./TripActions";
 import TripNameEditor from "./TripNameEditor";
+import TripShareButton from "./TripShareButton";
 
 export const dynamic = "force-dynamic";
 
@@ -218,12 +219,15 @@ export default async function TripPage({
         />
 
         <div className="relative z-10 mx-auto max-w-3xl px-4 py-6 sm:px-6 sm:py-8">
-          <Link
-            href="/trips"
-            className="mb-4 inline-flex items-center gap-1 rounded-md bg-white/95 px-2.5 py-1 text-xs font-semibold text-wn-navy shadow-sm backdrop-blur-sm transition hover:bg-white"
-          >
-            ← All trips
-          </Link>
+          <div className="mb-4 flex items-start justify-between gap-2">
+            <Link
+              href="/trips"
+              className="inline-flex items-center gap-1 rounded-md bg-white/95 px-2.5 py-1 text-xs font-semibold text-wn-navy shadow-sm backdrop-blur-sm transition hover:bg-white"
+            >
+              ← All trips
+            </Link>
+            <TripShareButton tripId={String(trip.id)} />
+          </div>
 
           <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/70">
             🛣️ {expandedSlugs.length} day{expandedSlugs.length === 1 ? "" : "s"}

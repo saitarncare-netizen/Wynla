@@ -60,6 +60,21 @@ export type Resort = {
   hero_image_url: string | null;
   hero_image_alt: string | null;
   hero_image_attribution: string | null;
+  // Stage 26 — live snow + open conditions (cron-refreshed)
+  snow_base_depth_in: number | null;
+  snow_new_24h_in: number | null;
+  snow_new_48h_in: number | null;
+  snow_new_7d_in: number | null;
+  trails_open_today: number | null;
+  lifts_open_today: number | null;
+  snow_report_status: string | null;
+  snow_report_updated_at: string | null;
+  // Stage 27 — lift ticket pricing
+  ticket_price_adult_min: number | null;
+  ticket_price_adult_max: number | null;
+  ticket_price_currency: string | null;
+  ticket_booking_url: string | null;
+  ticket_price_updated_at: string | null;
   has_tubing: boolean | null;
   has_lessons: boolean | null;
   has_rentals: boolean | null;

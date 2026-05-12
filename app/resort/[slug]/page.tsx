@@ -11,10 +11,14 @@ import {
   weatherGovUrl,
   windyUrl,
   googleMapsUrl,
+  lodgingSearchUrl,
+  airbnbSearchUrl,
 } from "@/lib/externalLinks";
 import { getDifficultyMix } from "@/lib/difficulty";
 import FavoriteToggle from "@/components/auth/FavoriteToggle";
 import DifficultyBar from "@/components/Map/DifficultyBar";
+import ResortReviews from "@/components/Map/ResortReviews";
+import SnowAlertButton from "@/components/SnowAlertButton";
 
 export const dynamic = "force-dynamic";
 
@@ -195,18 +199,14 @@ export default async function ResortPage({
         }}
       />
 
-      {/* HERO — Stage 25 verified winter ski photo when available;
-          pass-color gradient fallback. Photo is layered with a dark
-          scrim so the giant white name stays readable. */}
+      {/* HERO — gradient only. Stage 25 hero photo data stays in DB
+          (hero_image_url) but UI keeps the uniform gradient until
+          coverage > 70%. Re-enable in Stage 25.2 once raw-HTML scraper
+          fills the gaps. */}
       <header
         className="relative w-full overflow-hidden"
         style={{
-          backgroundColor: heroBg,
-          backgroundImage: resort.hero_image_url
-            ? `linear-gradient(180deg, rgba(15,21,48,0.45) 0%, rgba(15,21,48,0.85) 100%), url("${resort.hero_image_url}")`
-            : `linear-gradient(135deg, ${heroBg} 0%, #1E2952 60%, #0F1530 100%)`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
+          background: `linear-gradient(135deg, ${heroBg} 0%, #1E2952 60%, #0F1530 100%)`,
         }}
       >
         {/* Two-stop atmosphere overlay — soft highlight top-left, deeper
@@ -331,6 +331,18 @@ export default async function ResortPage({
               sub="Animated wind layer"
               external
             />
+            <ActionLink
+              href={lodgingSearchUrl(resort.name, resort.state)}
+              label="🏨 Find lodging"
+              sub="Booking.com nearby"
+              external
+            />
+            <ActionLink
+              href={airbnbSearchUrl(resort.name, resort.state)}
+              label="🏡 Airbnb nearby"
+              sub="Homes + cabins"
+              external
+            />
           </div>
         </Section>
 
@@ -367,6 +379,12 @@ export default async function ResortPage({
             )}
           </div>
         </Section>
+
+        {/* Snow alerts — Stage 29. Push notifications for new-snow events. */}
+        <SnowAlertButton resortId={resort.id} resortName={resort.name} />
+
+        {/* Reviews — Stage 28. RLS-driven, signed-out users see-only. */}
+        <ResortReviews resortId={resort.id} />
 
         {/* Listed footer — shown only when no stats are available */}
         {!hasAnyStats && (

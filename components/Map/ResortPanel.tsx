@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { passColor, passLabel, primaryPass } from "@/lib/passColors";
 import { formatDriveTime, type Origin } from "@/lib/origins";
-import { weatherGovUrl, windyUrl, googleMapsUrl } from "@/lib/externalLinks";
+import { weatherGovUrl, windyUrl, googleMapsUrl, lodgingSearchUrl, airbnbSearchUrl } from "@/lib/externalLinks";
 import { fetchMatrixDriveTime, type MatrixResult } from "@/lib/mapboxMatrix";
 import { getDifficultyMix } from "@/lib/difficulty";
 import FavoriteToggle from "@/components/auth/FavoriteToggle";
@@ -176,34 +176,26 @@ export default function ResortPanel({
           <div className="h-1 w-10 rounded-full bg-wn-charcoal/25" />
         </div>
 
-        {/* Hero — Stage 25 verified winter ski photo when available;
-            pass-color gradient fallback otherwise. The image is loaded
-            into a background-image style so we keep the gradient under
-            it as both fallback (image fails to load) AND as the dark
-            scrim that keeps the white name readable. */}
+        {/* Hero — gradient only for now. Stage 25 collected verified
+            winter photo URLs but coverage was 23%, so the inconsistent
+            "some have photos, some don't" UX was worse than uniform
+            gradient. Data stays in DB (hero_image_url column) for a
+            future re-enable when coverage > 70%. */}
         <div
           className="relative shrink-0 overflow-hidden"
           style={{
-            backgroundColor: heroBg,
-            backgroundImage: resort.hero_image_url
-              ? `linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(15,21,48,0.65) 100%), url("${resort.hero_image_url}")`
-              : `linear-gradient(135deg, ${heroBg} 0%, #1E2952 100%)`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
+            background: `linear-gradient(135deg, ${heroBg} 0%, #1E2952 100%)`,
           }}
         >
-          {/* SVG grain — gradient-only mode keeps it. Image mode skips. */}
-          {!resort.hero_image_url && (
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-0 opacity-[0.06] mix-blend-overlay"
-              style={{
-                backgroundImage:
-                  "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.85'/></svg>\")",
-                backgroundSize: "160px 160px",
-              }}
-            />
-          )}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 opacity-[0.06] mix-blend-overlay"
+            style={{
+              backgroundImage:
+                "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.85'/></svg>\")",
+              backgroundSize: "160px 160px",
+            }}
+          />
           <div className="relative h-32 px-4 pt-4 pb-3 md:h-36">
             {/* Top-right: Favorite + Close */}
             <div className="absolute right-3 top-3 flex items-center gap-2 z-10">
@@ -274,7 +266,49 @@ export default function ResortPanel({
             </div>
           )}
 
-          {/* Weather first — biggest snow-trip decider. */}
+          {/* Today's snow conditions — Stage 26. Only renders when the
+              daily cron has populated at least one snow field. */}
+          {(resort.snow_base_depth_in != null ||
+            resort.snow_new_24h_in != null ||
+            resort.trails_open_today != null ||
+            resort.lifts_open_today != null) && (
+            <Section title="Today's snow report">
+              <div className="rounded-lg border border-wn-charcoal/10 bg-white p-3">
+                <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                  {resort.snow_base_depth_in != null && (
+                    <SnowStat label="Base" value={`${resort.snow_base_depth_in}"`} />
+                  )}
+                  {resort.snow_new_24h_in != null && (
+                    <SnowStat label="New (24h)" value={`${resort.snow_new_24h_in}"`} />
+                  )}
+                  {resort.trails_open_today != null && resort.total_trails != null && (
+                    <SnowStat
+                      label="Trails open"
+                      value={`${resort.trails_open_today}/${resort.total_trails}`}
+                    />
+                  )}
+                  {resort.lifts_open_today != null && resort.total_lifts != null && (
+                    <SnowStat
+                      label="Lifts open"
+                      value={`${resort.lifts_open_today}/${resort.total_lifts}`}
+                    />
+                  )}
+                </div>
+                {resort.snow_report_updated_at && (
+                  <p className="mt-2 text-[10px] text-wn-charcoal/45">
+                    Synced{" "}
+                    {new Date(resort.snow_report_updated_at).toLocaleString(undefined, {
+                      weekday: "short",
+                      hour: "numeric",
+                      minute: "2-digit",
+                    })}
+                  </p>
+                )}
+              </div>
+            </Section>
+          )}
+
+          {/* Weather — runner-up biggest snow-trip decider. */}
           <Section title="Today's weather">
             <WeatherCard weather={weather} lat={lat} lng={lng} />
           </Section>
@@ -300,6 +334,39 @@ export default function ResortPanel({
                     </span>
                   )}
                 </div>
+              </div>
+            </Section>
+          )}
+
+          {/* Lift ticket pricing — Stage 27. Only renders when cron has
+              populated either price OR booking URL. */}
+          {(resort.ticket_price_adult_min != null || resort.ticket_booking_url) && (
+            <Section title="Lift ticket">
+              <div className="rounded-lg border border-wn-charcoal/10 bg-white p-3">
+                {resort.ticket_price_adult_min != null && (
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-xl font-extrabold tracking-tight text-wn-navy">
+                      ${resort.ticket_price_adult_min}
+                      {resort.ticket_price_adult_max != null &&
+                        resort.ticket_price_adult_max > resort.ticket_price_adult_min && (
+                          <span className="text-base font-semibold text-wn-charcoal/65">
+                            {" "}- ${resort.ticket_price_adult_max}
+                          </span>
+                        )}
+                    </span>
+                    <span className="text-xs text-wn-charcoal/60">adult day pass</span>
+                  </div>
+                )}
+                {resort.ticket_booking_url && (
+                  <a
+                    href={resort.ticket_booking_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-2 inline-flex w-full items-center justify-center rounded-md bg-wn-navy px-3 py-2 text-xs font-semibold text-white transition hover:bg-wn-navy/90"
+                  >
+                    Buy ticket on resort site →
+                  </a>
+                )}
               </div>
             </Section>
           )}
@@ -331,15 +398,28 @@ export default function ResortPanel({
             </Section>
           )}
 
-          {/* Visit & book — Google Maps only. Resort-website link
-              removed (Stage 21.5) since many were broken. */}
+          {/* Visit & book — Google Maps + Stage 30 lodging links. */}
           <Section title="Visit & book">
-            <PanelLink
-              href={googleMapsUrl(resort.name, resort.state)}
-              emoji="📍"
-              label="Open in Google Maps"
-              sub="Photos, reviews, navigation"
-            />
+            <div className="grid grid-cols-1 gap-1.5">
+              <PanelLink
+                href={googleMapsUrl(resort.name, resort.state)}
+                emoji="📍"
+                label="Open in Google Maps"
+                sub="Photos, reviews, navigation"
+              />
+              <PanelLink
+                href={lodgingSearchUrl(resort.name, resort.state)}
+                emoji="🏨"
+                label="Find lodging"
+                sub="Booking.com search nearby"
+              />
+              <PanelLink
+                href={airbnbSearchUrl(resort.name, resort.state)}
+                emoji="🏡"
+                label="Airbnb nearby"
+                sub="Homes + cabins"
+              />
+            </div>
           </Section>
         </div>
 
@@ -548,6 +628,19 @@ function AmenityBadges({ resort }: { resort: Resort }) {
         ))}
       </div>
     </Section>
+  );
+}
+
+function SnowStat({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-md border border-wn-charcoal/10 bg-wn-offwhite px-2 py-1.5 text-center">
+      <div className="text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
+        {label}
+      </div>
+      <div className="mt-0.5 text-base font-extrabold tracking-tight text-wn-navy">
+        {value}
+      </div>
+    </div>
   );
 }
 
