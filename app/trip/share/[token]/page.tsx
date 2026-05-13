@@ -48,7 +48,7 @@ async function getData(token: string) {
     .update({ view_count: ((share as { view_count: number }).view_count ?? 0) + 1 })
     .eq("share_token", token);
 
-  const tripId = (share as { trip_id: number }).trip_id;
+  const tripId = (share as { trip_id: string }).trip_id;
   const { data: trip } = await supabase
     .from("trips")
     .select(

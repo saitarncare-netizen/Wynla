@@ -38,9 +38,10 @@ CREATE POLICY "reviews_delete_own" ON resort_reviews FOR DELETE
 
 -- Trip shares: trip owner generates a public-read token. Anyone with
 -- the token can view the trip read-only via /trip/share/[token].
+-- trip_id is UUID because the trips table uses UUID primary keys.
 CREATE TABLE IF NOT EXISTS trip_shares (
   id BIGSERIAL PRIMARY KEY,
-  trip_id BIGINT NOT NULL REFERENCES trips(id) ON DELETE CASCADE,
+  trip_id UUID NOT NULL REFERENCES trips(id) ON DELETE CASCADE,
   share_token TEXT NOT NULL UNIQUE,
   created_by UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
