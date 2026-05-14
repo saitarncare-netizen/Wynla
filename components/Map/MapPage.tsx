@@ -10,6 +10,7 @@ import ResortPanel from "./ResortPanel";
 import ResortPicker from "./ResortPicker";
 import LocationButton from "./LocationButton";
 import FiltersDrawer from "./FiltersDrawer";
+import MobileQuickFilters from "./MobileQuickFilters";
 import TripPlannerPanel from "./TripPlannerPanel";
 import AuthButton from "@/components/auth/AuthButton";
 import CompareFloatingButton from "@/components/CompareFloatingButton";
@@ -575,6 +576,16 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
             <AuthButton />
           </div>
         </div>
+        {/* Mobile-only quick pass-filter chips. Doubles as the pass
+            legend (chip color = pin color) which used to be desktop-only
+            in the bottom-right legend card. Hidden on md+. */}
+        <MobileQuickFilters
+          passFilter={passFilter}
+          passCounts={passCounts}
+          onPassChange={(passes) =>
+            updateParam("pass", passes.length === 0 ? null : passes.join(","))
+          }
+        />
         {/* Off-season banner — visible May 1 – Oct 31, dismissable. The
             component self-gates on date + localStorage, so unconditionally
             mounting it here is safe (renders null when not applicable). */}
