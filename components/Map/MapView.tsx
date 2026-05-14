@@ -315,41 +315,55 @@ export default function MapView({
         },
       });
 
-      // Stage 21.3 — resort name labels. Only renders at zoom 7+ so
-      // the overview view stays as colored pins (uncluttered) and
-      // labels appear once the user zooms to a level where individual
-      // resorts are tap-targetable anyway. Mapbox de-clutters labels
-      // automatically so dense pockets won't all show — the most
-      // prominent (read: featured-tier, then larger circle-radius)
-      // wins. White halo keeps text readable over green/grey terrain.
+      // Stage 31 — labels appear earlier (zoom 4.5+) and are bolder so
+      // resort names are readable at "scan the state" zoom, not only at
+      // "zoom into one valley" zoom. Symbol-sort-key prioritizes
+      // featured tier + larger resorts when de-cluttering crowds them
+      // (Mapbox shows the highest-priority symbol per overlap group),
+      // so in dense pockets like the Wasatch the big names win.
+      // text-padding 1 (vs default 2) packs labels tighter — more fit
+      // before culling. Wider halo + bolder font keep them legible
+      // against green forest tiles.
       map.addLayer({
         id: "wynla-pin-labels",
         type: "symbol",
         source: SOURCE_ID,
         filter: ["!", ["has", "point_count"]],
-        minzoom: 5,
+        minzoom: 4.5,
         layout: {
           "text-field": ["get", "name"],
-          "text-font": ["DIN Pro Medium", "Arial Unicode MS Regular"],
+          "text-font": ["DIN Pro Bold", "Arial Unicode MS Bold"],
           "text-size": [
             "interpolate",
             ["linear"],
             ["zoom"],
-            7, 10,
-            10, 12,
-            14, 13,
+            4.5, 11,
+            6, 12,
+            8, 13,
+            10, 14,
+            14, 15,
           ],
-          "text-offset": [0, 1.2],
+          "text-offset": [0, 1.3],
           "text-anchor": "top",
           "text-allow-overlap": false,
           "text-optional": true,
           "text-max-width": 9,
+          "text-padding": 1,
+          // Lower sort-key wins in Mapbox symbol placement. Featured
+          // resorts (-1000) sort before listed (0); within each tier
+          // bigger circles (higher `radius`) outrank smaller ones via
+          // the `-radius` term.
+          "symbol-sort-key": [
+            "+",
+            ["case", ["==", ["get", "tier"], "featured"], -1000, 0],
+            ["-", 0, ["get", "radius"]],
+          ],
         },
         paint: {
-          "text-color": "#1E2952",
+          "text-color": "#0F1530",
           "text-halo-color": "#FFFFFF",
-          "text-halo-width": 1.8,
-          "text-halo-blur": 0.6,
+          "text-halo-width": 2.2,
+          "text-halo-blur": 0.4,
         },
       });
 

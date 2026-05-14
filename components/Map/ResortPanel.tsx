@@ -239,7 +239,11 @@ export default function ResortPanel({
             </div>
           )}
 
-          {/* 3-stat compact card: weather / drive / trails */}
+          {/* 3-stat compact card: weather / drive / [smart slot 3].
+              Slot 3 is context-aware — see pickSlot3() below. Priority:
+              fresh snow > % open > vertical drop > trail count. The
+              point is to surface the single most decision-relevant
+              number at a glance, not a fixed "size" stat. */}
           <div className="grid grid-cols-3 gap-2 rounded-lg border border-wn-charcoal/10 bg-white p-3">
             <CompactStat
               emoji={weatherEmoji(weather?.conditions_short)}
@@ -255,23 +259,17 @@ export default function ResortPanel({
               label={`from ${originShort}`}
               value={driveText ? `${isEstimate ? "≈ " : ""}${driveText}` : "—"}
             />
-            <CompactStat
-              emoji="⛷️"
-              label="Trails"
-              value={
-                resort.total_trails != null ? String(resort.total_trails) : "—"
-              }
-            />
+            {(() => {
+              const slot3 = pickSlot3(resort);
+              return (
+                <CompactStat
+                  emoji={slot3.emoji}
+                  label={slot3.label}
+                  value={slot3.value}
+                />
+              );
+            })()}
           </div>
-
-          {/* Snow report mini-banner if data exists — small chip so users
-              know fresh-snow numbers without scrolling. */}
-          {(resort.snow_new_24h_in != null && resort.snow_new_24h_in > 0) && (
-            <div className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-wn-sky/15 px-2.5 py-1 text-[11px] font-semibold text-wn-navy">
-              <span aria-hidden="true">❄️</span>
-              <span>{resort.snow_new_24h_in}&quot; new in last 24h</span>
-            </div>
-          )}
         </div>
 
         {/* Sticky footer CTA */}
@@ -308,6 +306,61 @@ function CompactStat({
       </div>
     </div>
   );
+}
+
+// Smart slot 3 — picks the single most decision-relevant stat to
+// show in the compact preview card. Order of preference:
+//   1. ❄️ Fresh snow in last 24h (only when > 0) — emotional + actionable
+//   2. 🟢 % terrain open today — actionable, "is it worth the drive?"
+//   3. ⛰ Vertical drop — universal size signal that doesn't go stale
+//   4. ⛷️ Trail count — fallback when nothing better is known
+//
+// Slots 1 & 2 light up only when the Stage 26 snow-report cron has
+// populated the relevant columns. Until that cron runs (deferred to
+// fall 2026), most resorts will fall through to slot 3 (vertical
+// drop) which is the meaningful "size" hint we have for almost every
+// resort in the catalog.
+function pickSlot3(resort: {
+  snow_new_24h_in: number | null;
+  trails_open_today: number | null;
+  total_trails: number | null;
+  snow_report_status: string | null;
+  vertical_drop: number | null;
+}): { emoji: string; label: string; value: string } {
+  if (resort.snow_new_24h_in != null && resort.snow_new_24h_in > 0) {
+    return {
+      emoji: "❄️",
+      label: "new (24h)",
+      value: `${resort.snow_new_24h_in}"`,
+    };
+  }
+  if (
+    resort.snow_report_status === "open" &&
+    resort.trails_open_today != null &&
+    resort.total_trails != null &&
+    resort.total_trails > 0
+  ) {
+    const pct = Math.round(
+      (resort.trails_open_today / resort.total_trails) * 100,
+    );
+    return {
+      emoji: "🟢",
+      label: "open today",
+      value: `${pct}%`,
+    };
+  }
+  if (resort.vertical_drop != null) {
+    return {
+      emoji: "⛰",
+      label: "vertical",
+      value: `${resort.vertical_drop.toLocaleString()} ft`,
+    };
+  }
+  return {
+    emoji: "⛷️",
+    label: "trails",
+    value: resort.total_trails != null ? String(resort.total_trails) : "—",
+  };
 }
 
 function weatherEmoji(cond: string | null | undefined): string {

@@ -293,11 +293,21 @@ export default async function ResortPage({
           <FullWeatherCard weather={weather} lat={lat} lng={lng} />
         </Section>
 
-        {/* 7-DAY FORECAST — pulled from weather_cache.forecast_json on
-            the same daily cron that powers Today's weather. */}
+        {/* 10-DAY FORECAST — pulled from weather_cache.forecast_json on
+            the same daily cron that powers Today's weather. NWS gives
+            ~7 reliable days, Open-Meteo fills 8-10. Horizontal-scroll
+            strip so the user sees a few days at once and swipes for
+            the rest — feels more natural on phones than a stacked grid. */}
         {weather?.forecast_json && weather.forecast_json.length > 0 && (
-          <Section title="7-day forecast">
-            <SevenDayForecast days={weather.forecast_json.slice(0, 7)} />
+          <Section
+            title={`${Math.min(weather.forecast_json.length, 10)}-day forecast`}
+            subtitle={
+              weather.forecast_json.length >= 8
+                ? "Swipe sideways to see the full window. Days 8–10 are trend-only."
+                : "Swipe sideways to see the full window."
+            }
+          >
+            <TenDayForecast days={weather.forecast_json.slice(0, 10)} />
           </Section>
         )}
 
@@ -715,9 +725,18 @@ function FullWeatherCard({
   );
 }
 
-// 7-day forecast strip — one card per day with weekday, conditions
-// emoji, high/low, snow inches when any, and precipitation chance.
-function SevenDayForecast({ days }: { days: ForecastDay[] }) {
+// 10-day forecast strip — horizontal scroll carousel. One card per
+// day; cards are a fixed width so 3-4 fit on mobile and 6-7 on
+// desktop, and the user swipes/scrolls sideways to see the rest.
+// snap-x mandatory so each swipe lands cleanly on a day boundary
+// instead of stopping mid-card. The right-edge fade is a soft hint
+// that more days are off-screen; pair with the section subtitle copy
+// "swipe sideways" so the affordance is also told in words.
+//
+// Days 8-10 visually de-emphasize (slightly muted background) because
+// Open-Meteo's accuracy past day 7 is noticeably looser than NWS days
+// 1-7. We label them with "trend" rather than promising a number.
+function TenDayForecast({ days }: { days: ForecastDay[] }) {
   const emoji = (cond: string | null): string => {
     if (!cond) return "🌤️";
     const c = cond.toLowerCase();
@@ -730,44 +749,86 @@ function SevenDayForecast({ days }: { days: ForecastDay[] }) {
     return "🌤️";
   };
   return (
-    <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-7">
-      {days.map((d, i) => (
-        <div
-          key={`${d.date}-${i}`}
-          className="rounded-lg border border-wn-charcoal/10 bg-white p-3 text-center"
-        >
-          <div className="text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
-            {d.weekday || new Date(d.date).toLocaleDateString(undefined, { weekday: "short" })}
-          </div>
-          <div className="my-1 text-2xl" aria-hidden="true">
-            {emoji(d.conditions_short)}
-          </div>
-          <div className="text-sm font-bold text-wn-navy">
-            {d.temp_high_f != null ? `${d.temp_high_f}°` : "—"}
-            {d.temp_low_f != null && (
-              <span className="ml-1 text-xs font-medium text-wn-charcoal/55">
-                / {d.temp_low_f}°
-              </span>
-            )}
-          </div>
-          {d.snow_in != null && d.snow_in > 0 && (
-            <div className="mt-1 inline-block rounded bg-wn-sky/15 px-1.5 py-0.5 text-[10px] font-bold text-wn-navy">
-              ❄️ {d.snow_in}&quot;
+    <div className="relative">
+      <div
+        className="-mx-4 flex snap-x snap-mandatory gap-2 overflow-x-auto overflow-y-hidden px-4 pb-2 [scrollbar-width:thin] sm:mx-0 sm:px-0"
+        style={{
+          // Phones: horizontal scroll only, never pan the page vertically
+          // when swiping the strip. Stays smooth on iOS Safari.
+          touchAction: "pan-x",
+          WebkitOverflowScrolling: "touch",
+        }}
+        aria-label="10-day forecast (scrollable)"
+        role="region"
+      >
+        {days.map((d, i) => {
+          const isTrend = i >= 7; // days 8-10 — Open-Meteo trend, not NWS
+          return (
+            <div
+              key={`${d.date}-${i}`}
+              className={[
+                "snap-start shrink-0 rounded-lg border p-3 text-center",
+                isTrend
+                  ? "w-[88px] border-dashed border-wn-charcoal/15 bg-wn-charcoal/[0.025]"
+                  : "w-[88px] border-wn-charcoal/10 bg-white",
+              ].join(" ")}
+            >
+              <div className="text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
+                {d.weekday ||
+                  new Date(d.date).toLocaleDateString(undefined, {
+                    weekday: "short",
+                  })}
+              </div>
+              <div className="text-[9px] text-wn-charcoal/40">
+                {new Date(d.date + "T12:00:00").toLocaleDateString(undefined, {
+                  month: "short",
+                  day: "numeric",
+                })}
+              </div>
+              <div className="my-1 text-2xl" aria-hidden="true">
+                {emoji(d.conditions_short)}
+              </div>
+              <div className="text-sm font-bold text-wn-navy">
+                {d.temp_high_f != null ? `${d.temp_high_f}°` : "—"}
+                {d.temp_low_f != null && (
+                  <span className="ml-1 text-xs font-medium text-wn-charcoal/55">
+                    / {d.temp_low_f}°
+                  </span>
+                )}
+              </div>
+              {d.snow_in != null && d.snow_in > 0 && (
+                <div className="mt-1 inline-block rounded bg-wn-sky/15 px-1.5 py-0.5 text-[10px] font-bold text-wn-navy">
+                  ❄️ {d.snow_in}&quot;
+                </div>
+              )}
+              {d.precip_chance != null &&
+                d.precip_chance > 30 &&
+                (d.snow_in == null || d.snow_in === 0) && (
+                  <div className="mt-1 text-[10px] text-wn-charcoal/55">
+                    {d.precip_chance}% precip
+                  </div>
+                )}
+              {d.wind_short && (
+                <div className="mt-1 text-[10px] text-wn-charcoal/45">
+                  🌬️ {d.wind_short}
+                  {d.wind_dir_short ? ` ${d.wind_dir_short}` : ""}
+                </div>
+              )}
+              {isTrend && (
+                <div className="mt-1 text-[9px] font-medium uppercase tracking-wide text-wn-charcoal/40">
+                  trend
+                </div>
+              )}
             </div>
-          )}
-          {d.precip_chance != null && d.precip_chance > 30 && d.snow_in == null && (
-            <div className="mt-1 text-[10px] text-wn-charcoal/55">
-              {d.precip_chance}% precip
-            </div>
-          )}
-          {d.wind_short && (
-            <div className="mt-1 text-[10px] text-wn-charcoal/45">
-              🌬️ {d.wind_short}
-              {d.wind_dir_short ? ` ${d.wind_dir_short}` : ""}
-            </div>
-          )}
-        </div>
-      ))}
+          );
+        })}
+      </div>
+      {/* Soft right-edge fade — visual hint that the strip scrolls. Hidden
+          on desktop where the full set usually fits without scrolling. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-y-0 right-0 hidden w-8 bg-gradient-to-l from-wn-offwhite to-transparent sm:hidden"
+      />
     </div>
   );
 }

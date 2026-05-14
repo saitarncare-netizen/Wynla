@@ -152,6 +152,16 @@ type OpenMeteo = {
     wind_direction_10m?: number;
     wind_gusts_10m?: number;
   };
+  daily?: {
+    time?: string[];
+    temperature_2m_max?: (number | null)[];
+    temperature_2m_min?: (number | null)[];
+    weathercode?: (number | null)[];
+    snowfall_sum?: (number | null)[];
+    precipitation_probability_max?: (number | null)[];
+    wind_speed_10m_max?: (number | null)[];
+    wind_direction_10m_dominant?: (number | null)[];
+  };
 };
 function parseMeteo(j: OpenMeteo) {
   const cur = j?.current;
@@ -165,6 +175,63 @@ function parseMeteo(j: OpenMeteo) {
   };
 }
 
+// WMO weather codes → short human label. Maps Open-Meteo's `weathercode`
+// numeric output into the same short-text shape NWS returns, so the
+// forecast_json rows stay uniform across the day-1-7 (NWS) and day-8-10
+// (Open-Meteo) halves of the strip.
+function wmoToShort(code: number | null | undefined): string | null {
+  if (code == null) return null;
+  if (code === 0) return "Clear";
+  if (code === 1) return "Mostly clear";
+  if (code === 2) return "Partly cloudy";
+  if (code === 3) return "Overcast";
+  if (code === 45 || code === 48) return "Foggy";
+  if (code >= 51 && code <= 57) return "Drizzle";
+  if (code >= 61 && code <= 67) return "Rain";
+  if (code >= 71 && code <= 77) return "Snow";
+  if (code >= 80 && code <= 82) return "Rain showers";
+  if (code === 85 || code === 86) return "Snow showers";
+  if (code >= 95 && code <= 99) return "Thunderstorm";
+  return null;
+}
+
+// Convert Open-Meteo daily output to our forecast_json shape — same
+// keys as parseNws's forecastDays so the frontend doesn't know or care
+// where each day's data came from.
+function meteoToForecastDays(j: OpenMeteo) {
+  const d = j?.daily;
+  if (!d?.time) return [];
+  return d.time.map((date, i) => {
+    const dirDeg = d.wind_direction_10m_dominant?.[i] ?? null;
+    return {
+      date,
+      weekday: new Date(date + "T12:00:00").toLocaleDateString("en-US", { weekday: "short" }),
+      temp_high_f: d.temperature_2m_max?.[i] != null ? Math.round(d.temperature_2m_max[i]!) : null,
+      temp_low_f: d.temperature_2m_min?.[i] != null ? Math.round(d.temperature_2m_min[i]!) : null,
+      conditions_short: wmoToShort(d.weathercode?.[i]),
+      snow_in: d.snowfall_sum?.[i] != null ? Math.round(d.snowfall_sum[i]! * 10) / 10 : 0,
+      precip_chance: d.precipitation_probability_max?.[i] ?? null,
+      wind_short: d.wind_speed_10m_max?.[i] != null ? `${Math.round(d.wind_speed_10m_max[i]!)} mph` : null,
+      wind_dir_short: compass(dirDeg != null ? Math.round(dirDeg) : null),
+    };
+  });
+}
+
+// Merge NWS days 1-7 with Open-Meteo days 8-10. Prefer NWS where both
+// have data for the same date (NWS is more accurate for the US window
+// it covers). Tail-fill from Open-Meteo for dates NWS doesn't reach.
+function mergeForecasts(
+  nws: ReturnType<typeof parseNws>,
+  meteoDays: ReturnType<typeof meteoToForecastDays>,
+): ReturnType<typeof parseNws> {
+  if (!nws) return nws;
+  if (!meteoDays.length) return nws;
+  const seen = new Set(nws.forecast_json.map((d) => d.date));
+  const tail = meteoDays.filter((d) => !seen.has(d.date));
+  const combined = [...nws.forecast_json, ...tail].slice(0, 10);
+  return { ...nws, forecast_json: combined };
+}
+
 async function refreshOne(resort: Resort, cached: CacheRow | undefined) {
   const lat = Number(resort.latitude);
   const lng = Number(resort.longitude);
@@ -173,17 +240,26 @@ async function refreshOne(resort: Resort, cached: CacheRow | undefined) {
   }
   try {
     const grid = await getGridpoint(lat, lng, cached);
+    // Single combined Open-Meteo call: `current` for wind + `daily` for
+    // the 10-day forecast. NWS still drives days 1-7 (US-tuned); Open-
+    // Meteo's daily array is only used to tail-fill days 8-10 where NWS
+    // simply doesn't reach.
+    const meteoUrl =
+      `https://api.open-meteo.com/v1/forecast?latitude=${lat.toFixed(4)}&longitude=${lng.toFixed(4)}` +
+      `&current=wind_speed_10m,wind_direction_10m,wind_gusts_10m` +
+      `&daily=temperature_2m_max,temperature_2m_min,weathercode,snowfall_sum,precipitation_probability_max,wind_speed_10m_max,wind_direction_10m_dominant` +
+      `&temperature_unit=fahrenheit&precipitation_unit=inch&wind_speed_unit=mph&timezone=auto&forecast_days=10`;
     const [nws, meteo] = await Promise.all([
       fetchJson<NwsForecast>(
         `https://api.weather.gov/gridpoints/${grid.office}/${grid.x},${grid.y}/forecast`,
         { headers: NWS_HEADERS },
       ).catch((e) => ({ error: String(e) }) as { error: string }),
-      fetchJson<OpenMeteo>(
-        `https://api.open-meteo.com/v1/forecast?latitude=${lat.toFixed(4)}&longitude=${lng.toFixed(4)}&current=wind_speed_10m,wind_direction_10m,wind_gusts_10m&wind_speed_unit=mph&timezone=auto`,
-      ).catch((e) => ({ error: String(e) }) as { error: string }),
+      fetchJson<OpenMeteo>(meteoUrl).catch((e) => ({ error: String(e) }) as { error: string }),
     ]);
     const nwsParsed = "error" in nws ? null : parseNws(nws);
     const meteoParsed = "error" in meteo ? {} : parseMeteo(meteo);
+    const meteoDays = "error" in meteo ? [] : meteoToForecastDays(meteo);
+    const merged = nwsParsed ? mergeForecasts(nwsParsed, meteoDays) : null;
     const errs = [
       "error" in nws ? `nws:${nws.error.slice(0, 80)}` : null,
       "error" in meteo ? `meteo:${meteo.error.slice(0, 80)}` : null,
@@ -193,11 +269,11 @@ async function refreshOne(resort: Resort, cached: CacheRow | undefined) {
       nws_grid_office: grid.office,
       nws_grid_x: grid.x,
       nws_grid_y: grid.y,
-      ...(nwsParsed ?? {}),
+      ...(merged ?? {}),
       ...meteoParsed,
       forecast_for_date: new Date().toISOString().slice(0, 10),
       fetched_at: new Date().toISOString(),
-      fetch_source: nwsParsed ? "nws+meteo" : "partial",
+      fetch_source: nwsParsed && meteoDays.length ? "nws+meteo10d" : nwsParsed ? "nws-only" : "partial",
       fetch_error: errs || null,
     };
   } catch (e) {

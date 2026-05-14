@@ -103,8 +103,58 @@ async function getNwsForecast(grid) {
 }
 
 async function getOpenMeteoWind(lat, lng) {
-  const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat.toFixed(4)}&longitude=${lng.toFixed(4)}&current=wind_speed_10m,wind_direction_10m,wind_gusts_10m&wind_speed_unit=mph&timezone=auto`;
+  // Combined call: `current` for wind + `daily` for the 10-day forecast
+  // (used to tail-fill NWS days 8-10). Same shape as the prod cron route.
+  const url =
+    `https://api.open-meteo.com/v1/forecast?latitude=${lat.toFixed(4)}&longitude=${lng.toFixed(4)}` +
+    `&current=wind_speed_10m,wind_direction_10m,wind_gusts_10m` +
+    `&daily=temperature_2m_max,temperature_2m_min,weathercode,snowfall_sum,precipitation_probability_max,wind_speed_10m_max,wind_direction_10m_dominant` +
+    `&temperature_unit=fahrenheit&precipitation_unit=inch&wind_speed_unit=mph&timezone=auto&forecast_days=10`;
   return fetchJson(url);
+}
+
+function wmoToShort(code) {
+  if (code == null) return null;
+  if (code === 0) return "Clear";
+  if (code === 1) return "Mostly clear";
+  if (code === 2) return "Partly cloudy";
+  if (code === 3) return "Overcast";
+  if (code === 45 || code === 48) return "Foggy";
+  if (code >= 51 && code <= 57) return "Drizzle";
+  if (code >= 61 && code <= 67) return "Rain";
+  if (code >= 71 && code <= 77) return "Snow";
+  if (code >= 80 && code <= 82) return "Rain showers";
+  if (code === 85 || code === 86) return "Snow showers";
+  if (code >= 95 && code <= 99) return "Thunderstorm";
+  return null;
+}
+
+function meteoToForecastDays(j) {
+  const d = j?.daily;
+  if (!d?.time) return [];
+  return d.time.map((date, i) => {
+    const dirDeg = d.wind_direction_10m_dominant?.[i] ?? null;
+    return {
+      date,
+      weekday: new Date(date + "T12:00:00").toLocaleDateString("en-US", { weekday: "short" }),
+      temp_high_f: d.temperature_2m_max?.[i] != null ? Math.round(d.temperature_2m_max[i]) : null,
+      temp_low_f: d.temperature_2m_min?.[i] != null ? Math.round(d.temperature_2m_min[i]) : null,
+      conditions_short: wmoToShort(d.weathercode?.[i]),
+      snow_in: d.snowfall_sum?.[i] != null ? Math.round(d.snowfall_sum[i] * 10) / 10 : 0,
+      precip_chance: d.precipitation_probability_max?.[i] ?? null,
+      wind_short: d.wind_speed_10m_max?.[i] != null ? `${Math.round(d.wind_speed_10m_max[i])} mph` : null,
+      wind_dir_short: compass(dirDeg != null ? Math.round(dirDeg) : null),
+    };
+  });
+}
+
+function mergeForecasts(nws, meteoDays) {
+  if (!nws) return nws;
+  if (!meteoDays.length) return nws;
+  const seen = new Set(nws.forecast_json.map((d) => d.date));
+  const tail = meteoDays.filter((d) => !seen.has(d.date));
+  const combined = [...nws.forecast_json, ...tail].slice(0, 10);
+  return { ...nws, forecast_json: combined };
 }
 
 // Parse the NWS /forecast response into our cache row fields.
@@ -208,6 +258,8 @@ async function refreshOne(resort, cached) {
     ]);
     const nwsParsed = nws.error ? null : parseNwsForecast(nws);
     const meteoParsed = meteo.error ? {} : parseOpenMeteo(meteo);
+    const meteoDays = meteo.error ? [] : meteoToForecastDays(meteo);
+    const merged = nwsParsed ? mergeForecasts(nwsParsed, meteoDays) : null;
     const partialErrors = [
       nws.error ? `nws:${nws.error.slice(0, 80)}` : null,
       meteo.error ? `meteo:${meteo.error.slice(0, 80)}` : null,
@@ -219,11 +271,11 @@ async function refreshOne(resort, cached) {
       nws_grid_office: grid.office,
       nws_grid_x: grid.x,
       nws_grid_y: grid.y,
-      ...(nwsParsed ?? {}),
+      ...(merged ?? {}),
       ...meteoParsed,
       forecast_for_date: new Date().toISOString().slice(0, 10),
       fetched_at: new Date().toISOString(),
-      fetch_source: nwsParsed && meteoParsed.wind_mph_avg != null ? "nws+meteo" : "partial",
+      fetch_source: nwsParsed && meteoDays.length ? "nws+meteo10d" : nwsParsed ? "nws-only" : "partial",
       fetch_error: partialErrors || null,
     };
   } catch (e) {
