@@ -16,9 +16,15 @@ import {
 } from "@/lib/externalLinks";
 import { getDifficultyMix } from "@/lib/difficulty";
 import FavoriteToggle from "@/components/auth/FavoriteToggle";
+import CompareToggle from "@/components/CompareToggle";
+import RecordRecentVisit from "@/components/RecordRecentVisit";
 import DifficultyBar from "@/components/Map/DifficultyBar";
 import ResortReviews from "@/components/Map/ResortReviews";
 import SnowAlertButton from "@/components/SnowAlertButton";
+import SeasonCountdown from "@/components/SeasonCountdown";
+import { parseSeasonDates } from "@/lib/seasonDates";
+import SimilarResorts from "@/components/SimilarResorts";
+import type { SimilarityResort } from "@/lib/similarity";
 
 export const dynamic = "force-dynamic";
 
@@ -111,14 +117,34 @@ type WeatherSnapshot = {
   forecast_json: ForecastDay[] | null;
 };
 
-async function getData(slug: string): Promise<{ resort: Resort; weather: WeatherSnapshot | null } | null> {
-  const { data: resort, error } = await supabase
-    .from("resorts")
-    .select("*")
-    .eq("slug", slug)
-    .eq("active", true)
-    .maybeSingle();
-  if (error || !resort) return null;
+async function getData(
+  slug: string,
+): Promise<{
+  resort: Resort;
+  weather: WeatherSnapshot | null;
+  pool: SimilarityResort[];
+} | null> {
+  // Fetch resort, weather, and the active-resort pool in parallel.
+  // The pool select is trimmed to just the columns similarity.ts needs
+  // (no images/links/booleans) so we don't pay for transferring 50+
+  // columns × ~450 rows on a page that only reads ~10 of them.
+  const [resortRes, poolRes] = await Promise.all([
+    supabase
+      .from("resorts")
+      .select("*")
+      .eq("slug", slug)
+      .eq("active", true)
+      .maybeSingle(),
+    supabase
+      .from("resorts")
+      .select(
+        "id, slug, name, state, region, passes, vertical_drop, total_trails, difficulty_pct_beginner, difficulty_pct_intermediate, difficulty_pct_advanced, difficulty_pct_expert, trails_beginner, trails_intermediate, trails_advanced, trails_expert",
+      )
+      .eq("active", true),
+  ]);
+  if (resortRes.error || !resortRes.data) return null;
+  const resort = resortRes.data as Resort;
+
   const { data: wx } = await supabase
     .from("weather_cache")
     .select(
@@ -126,7 +152,11 @@ async function getData(slug: string): Promise<{ resort: Resort; weather: Weather
     )
     .eq("resort_id", resort.id)
     .maybeSingle();
-  return { resort: resort as Resort, weather: (wx as WeatherSnapshot) ?? null };
+  return {
+    resort,
+    weather: (wx as WeatherSnapshot) ?? null,
+    pool: (poolRes.data ?? []) as SimilarityResort[],
+  };
 }
 
 export async function generateMetadata({
@@ -165,7 +195,7 @@ export default async function ResortPage({
   const { slug } = await params;
   const data = await getData(slug);
   if (!data) notFound();
-  const { resort, weather } = data;
+  const { resort, weather, pool } = data;
 
   const lng = Number(resort.longitude);
   const lat = Number(resort.latitude);
@@ -186,6 +216,16 @@ export default async function ResortPage({
 
   return (
     <main className="min-h-dvh bg-wn-offwhite">
+      {/* Client-only effect that records this resort in the localStorage
+          "recently viewed" list so the homepage strip can show it next time. */}
+      <RecordRecentVisit
+        id={resort.id}
+        slug={resort.slug}
+        name={resort.name}
+        primary_pass={primary}
+        lat={lat}
+        lng={lng}
+      />
       {/* JSON-LD for SEO */}
       <script
         type="application/ld+json"
@@ -243,7 +283,7 @@ export default async function ResortPage({
           }}
         />
 
-        {/* Top bar — back link + favorite */}
+        {/* Top bar — back link + compare + favorite */}
         <div className="relative z-10 mx-auto flex max-w-5xl items-center justify-between px-4 py-4 sm:px-6">
           <Link
             href="/"
@@ -251,7 +291,10 @@ export default async function ResortPage({
           >
             ← Map
           </Link>
-          <FavoriteToggle resortId={resort.id} size="lg" />
+          <div className="flex items-center gap-2">
+            <CompareToggle resortId={resort.id} size="lg" />
+            <FavoriteToggle resortId={resort.id} size="lg" />
+          </div>
         </div>
 
         {/* Hero content */}
@@ -264,6 +307,21 @@ export default async function ResortPage({
           <h1 className="text-4xl font-extrabold leading-[0.95] tracking-tight text-white sm:text-7xl md:text-[7.5rem] md:tracking-[-0.025em]">
             {resort.name}
           </h1>
+          {/* Season countdown — sits just under the hero title for
+              high visibility. Hidden when both season fields can't be
+              parsed (status === "unknown"). */}
+          {(() => {
+            const seasonInfo = parseSeasonDates(
+              resort.season_open_text,
+              resort.season_close_text,
+            );
+            if (seasonInfo.status === "unknown") return null;
+            return (
+              <div className="mt-4">
+                <SeasonCountdown info={seasonInfo} variant="hero" />
+              </div>
+            );
+          })()}
           <p className="mt-3 text-base text-white/85 sm:text-lg">
             {resort.state}
             {resort.region ? " · " + resort.region : ""}
@@ -428,6 +486,14 @@ export default async function ResortPage({
             </p>
           </div>
         )}
+
+        {/* Mountains like this one — pure server-side recommender,
+            computed from the active-resort pool fetched alongside the
+            primary resort row above. */}
+        <SimilarResorts
+          currentResort={resort as unknown as SimilarityResort}
+          allResorts={pool}
+        />
 
         {/* Trust footer */}
         <footer className="mt-8 rounded-lg border border-wn-charcoal/10 bg-white/70 p-4 text-xs text-wn-charcoal/60">

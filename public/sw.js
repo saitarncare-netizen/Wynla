@@ -20,19 +20,30 @@ self.addEventListener("activate", (event) => {
 
 // Push payloads we send from /api/cron/check-snow-alerts look like:
 //   { title: "8\" of fresh snow at Vail!", body: "...", url: "/resort/vail" }
+//
+// The Stage-32 implementation of lib/webPush.ts sends NO payload body
+// (encryption is TODO), so most pushes currently arrive with event.data === null.
+// In that case we fall back to a generic "fresh snow at a resort you're
+// watching" notification so the user still hears about it.
+// TODO: when lib/webPush.ts gains aes128gcm payload encryption, the data-less
+// branch below can be deleted (or kept as a defensive fallback).
 self.addEventListener("push", (event) => {
-  let payload = {};
-  try {
-    payload = event.data ? event.data.json() : {};
-  } catch (e) {
-    payload = { title: "Wynla", body: event.data ? event.data.text() : "" };
+  let payload = null;
+  if (event.data) {
+    try {
+      payload = event.data.json();
+    } catch (e) {
+      payload = { title: "Wynla", body: event.data.text() };
+    }
   }
-  const title = payload.title || "Wynla snow alert";
+  const title = (payload && payload.title) || "Wynla";
+  const body = (payload && payload.body) ||
+    "Fresh snow at a resort you're watching — open Wynla to see.";
   const options = {
-    body: payload.body || "",
+    body,
     icon: "/icon.svg",
     badge: "/icon.svg",
-    data: { url: payload.url || "/" },
+    data: { url: (payload && payload.url) || "/" },
   };
   event.waitUntil(self.registration.showNotification(title, options));
 });

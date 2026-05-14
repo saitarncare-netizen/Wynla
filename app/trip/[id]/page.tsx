@@ -11,6 +11,7 @@ import { formatDriveTime } from "@/lib/origins";
 import TripActions from "./TripActions";
 import TripNameEditor from "./TripNameEditor";
 import TripShareButton from "./TripShareButton";
+import TripCalendarExport from "@/components/TripCalendarExport";
 
 export const dynamic = "force-dynamic";
 
@@ -226,7 +227,30 @@ export default async function TripPage({
             >
               ← All trips
             </Link>
-            <TripShareButton tripId={String(trip.id)} />
+            <div className="flex items-start gap-2">
+              <TripCalendarExport
+                tripName={trip.name ?? fallbackName}
+                originLabel={trip.origin_label ?? "Home"}
+                // No explicit trip start date in the schema yet —
+                // anchor day 1 to today so the calendar export is at
+                // least useful for active / upcoming trips. Users can
+                // shift dates in their own calendar once imported.
+                startDateIso={
+                  trip.started_at ?? new Date().toISOString()
+                }
+                days={expandedSlugs.map((slug, i) => {
+                  const r = bySlug.get(slug);
+                  return {
+                    day: i + 1,
+                    resortName: r?.name ?? slug,
+                    resortState: r?.state ?? "",
+                    lat: r ? Number(r.latitude) : null,
+                    lng: r ? Number(r.longitude) : null,
+                  };
+                })}
+              />
+              <TripShareButton tripId={String(trip.id)} />
+            </div>
           </div>
 
           <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/70">

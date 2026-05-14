@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { type Origin } from "@/lib/origins";
 import { PASS_COLORS, PASS_KEYS, PASS_LABELS } from "@/lib/passColors";
 import { SIZE_TIER_LABELS, type SizeTier } from "@/lib/sizeTier";
@@ -12,6 +13,7 @@ type Props = {
   withinHours: number;
   sizeFilter: SizeTier | null;
   nightOnly: boolean;
+  airportFilter: string | null;
   passCounts: Record<string, number>;
   filteredCount: number;
   totalCount: number;
@@ -20,9 +22,31 @@ type Props = {
   onWithinChange: (w: string | null) => void;
   onSizeChange: (s: SizeTier | null) => void;
   onNightChange: (v: boolean) => void;
+  onAirportChange: (iata: string | null) => void;
   onClearAll: () => void;
   onClose: () => void;
 };
+
+// Stage 8 — most-relevant US ski-trip airports. Chips render as a
+// horizontal-scroll row to keep the drawer compact. IATA codes match
+// resort.closest_airport_iata values stored on each resort.
+export const AIRPORT_OPTIONS: Array<{ iata: string; label: string }> = [
+  { iata: "DEN", label: "Denver" },
+  { iata: "SLC", label: "Salt Lake City" },
+  { iata: "RNO", label: "Reno" },
+  { iata: "BTV", label: "Burlington VT" },
+  { iata: "MHT", label: "Manchester NH" },
+  { iata: "BOS", label: "Boston" },
+  { iata: "JFK", label: "NYC (JFK)" },
+  { iata: "LGA", label: "NYC (LGA)" },
+  { iata: "PHL", label: "Philly" },
+  { iata: "ALB", label: "Albany" },
+  { iata: "MSP", label: "Minneapolis" },
+  { iata: "GEG", label: "Spokane" },
+  { iata: "SEA", label: "Seattle" },
+  { iata: "MSO", label: "Missoula" },
+  { iata: "JAC", label: "Jackson Hole" },
+];
 
 // Stage 21.2 — single drawer that replaces the row of FilterBar pills
 // on mobile. All filter controls live inside a bottom sheet that the
@@ -42,6 +66,7 @@ export default function FiltersDrawer({
   withinHours,
   sizeFilter,
   nightOnly,
+  airportFilter,
   passCounts,
   filteredCount,
   totalCount,
@@ -50,6 +75,7 @@ export default function FiltersDrawer({
   onWithinChange,
   onSizeChange,
   onNightChange,
+  onAirportChange,
   onClearAll,
   onClose,
 }: Props) {
@@ -409,6 +435,101 @@ export default function FiltersDrawer({
               <span aria-hidden="true">🌙</span>
               <span>Show only night-skiing resorts</span>
             </button>
+          </Section>
+
+          {/* AIRPORT — Stage 8. Filters resorts where
+              closest_airport_iata matches AND distance ≤ 120 mi (shuttle
+              range). Horizontal-scroll chip row to keep the drawer
+              compact while exposing all 15 top US ski airports. */}
+          <Section title="Closest airport">
+            <div
+              className="-mx-1 flex gap-1.5 overflow-x-auto px-1 pb-1"
+              style={{ touchAction: "pan-x", WebkitOverflowScrolling: "touch" }}
+            >
+              <button
+                type="button"
+                onClick={() => onAirportChange(null)}
+                aria-pressed={airportFilter === null}
+                className={`shrink-0 rounded-lg border px-3 py-1.5 text-xs font-semibold transition ${
+                  airportFilter === null
+                    ? "border-wn-navy bg-wn-navy text-white"
+                    : "border-wn-charcoal/15 bg-white text-wn-charcoal hover:border-wn-charcoal/40"
+                }`}
+              >
+                Any
+              </button>
+              {AIRPORT_OPTIONS.map((a) => {
+                const active = airportFilter === a.iata;
+                return (
+                  <button
+                    key={a.iata}
+                    type="button"
+                    onClick={() =>
+                      onAirportChange(active ? null : a.iata)
+                    }
+                    aria-pressed={active}
+                    className={`shrink-0 rounded-lg border px-3 py-1.5 text-xs font-semibold transition ${
+                      active
+                        ? "border-wn-navy bg-wn-navy text-white"
+                        : "border-wn-charcoal/15 bg-white text-wn-charcoal hover:border-wn-charcoal/40"
+                    }`}
+                  >
+                    <span className="font-mono">{a.iata}</span>
+                    <span className="ml-1 font-normal opacity-80">
+                      {a.label}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </Section>
+
+          {/* Mobile-only entry point for Deals + Stage 8 Guides + Lists.
+              Desktop surfaces these in the header; on mobile the header
+              is too tight so we surface them here in the FiltersDrawer
+              footer area instead. */}
+          <Section title="More">
+            <div className="grid grid-cols-1 gap-1.5">
+              <Link
+                href="/deals"
+                onClick={onClose}
+                className="flex items-center justify-between rounded-lg border border-wn-charcoal/15 bg-white px-3 py-2.5 text-sm font-semibold text-wn-navy transition hover:border-wn-navy"
+              >
+                <span className="flex items-center gap-2">
+                  <span aria-hidden="true">🎟️</span>
+                  <span>Pass deals</span>
+                </span>
+                <span aria-hidden="true" className="text-wn-charcoal/40">
+                  →
+                </span>
+              </Link>
+              <Link
+                href="/guides"
+                onClick={onClose}
+                className="flex items-center justify-between rounded-lg border border-wn-charcoal/15 bg-white px-3 py-2.5 text-sm font-semibold text-wn-navy transition hover:border-wn-navy"
+              >
+                <span className="flex items-center gap-2">
+                  <span aria-hidden="true">📖</span>
+                  <span>Guides</span>
+                </span>
+                <span aria-hidden="true" className="text-wn-charcoal/40">
+                  →
+                </span>
+              </Link>
+              <Link
+                href="/lists"
+                onClick={onClose}
+                className="flex items-center justify-between rounded-lg border border-wn-charcoal/15 bg-white px-3 py-2.5 text-sm font-semibold text-wn-navy transition hover:border-wn-navy"
+              >
+                <span className="flex items-center gap-2">
+                  <span aria-hidden="true">⭐</span>
+                  <span>Curated lists</span>
+                </span>
+                <span aria-hidden="true" className="text-wn-charcoal/40">
+                  →
+                </span>
+              </Link>
+            </div>
           </Section>
 
         </div>

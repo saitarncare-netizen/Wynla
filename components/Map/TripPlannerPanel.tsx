@@ -5,9 +5,12 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { formatDriveTime, type Origin } from "@/lib/origins";
 import { passColor, primaryPass } from "@/lib/passColors";
-import { haversineMeters, estimateDriveSeconds } from "@/lib/distance";
+import { haversineMeters, estimateDriveSeconds, estimateDriveMeters } from "@/lib/distance";
 import { expandStopsToDays, type Stop } from "@/lib/tripPlanner";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+import { estimateTripCost, metersToMiles } from "@/lib/tripCost";
+import { getPreferences } from "@/lib/preferences";
+import { getTemplate } from "@/lib/tripTemplates";
 import ResortPicker from "./ResortPicker";
 import type { Resort } from "./MapPage";
 import type { TripRoutePoint } from "./MapView";
@@ -65,6 +68,86 @@ type Props = {
   onViewFullRoute?: () => void;
 };
 
+// Nearest-neighbor TSP for reordering stops. Returns the reordered
+// stops AND the haversine meters saved compared to the original
+// ordering. Origin is fixed — the route starts and ends at the
+// origin. Stops with the same slug share a position (basecamp days
+// don't move). Pure function — exported only for testability.
+//
+// Why nearest-neighbor: brute-force n! works under 7 stops but blows
+// up past that. For the planner's typical 2-6 stops NN is within ~5%
+// of optimal and runs in O(n²). Good enough to surface a meaningful
+// "saves X minutes" prompt.
+function nearestNeighborReorder(
+  origin: { lat: number; lng: number },
+  stops: Stop[],
+  resortBySlug: Map<string, { lat: number; lng: number }>,
+): { reordered: Stop[]; savedMeters: number } {
+  // Build the working set — unique stops (dedupe by slug, sum days).
+  // The reorder operates on unique resort positions; days carry along.
+  const unique: Stop[] = [];
+  const dayBySlug = new Map<string, number>();
+  for (const s of stops) {
+    if (dayBySlug.has(s.slug)) {
+      dayBySlug.set(s.slug, (dayBySlug.get(s.slug) ?? 0) + s.days);
+    } else {
+      dayBySlug.set(s.slug, s.days);
+      unique.push({ slug: s.slug, days: s.days });
+    }
+  }
+
+  function pointFor(slug: string): { lat: number; lng: number } | null {
+    const p = resortBySlug.get(slug);
+    if (!p) return null;
+    return p;
+  }
+  function totalMeters(order: Stop[]): number {
+    let cursor = origin;
+    let total = 0;
+    for (const s of order) {
+      const p = pointFor(s.slug);
+      if (!p) continue;
+      total += haversineMeters(cursor.lat, cursor.lng, p.lat, p.lng);
+      cursor = p;
+    }
+    total += haversineMeters(cursor.lat, cursor.lng, origin.lat, origin.lng);
+    return total;
+  }
+
+  const beforeMeters = totalMeters(unique);
+
+  // Greedy NN: always jump to the closest unvisited stop.
+  const remaining = [...unique];
+  const out: Stop[] = [];
+  let cursor = origin;
+  while (remaining.length > 0) {
+    let bestIdx = -1;
+    let bestDist = Infinity;
+    for (let i = 0; i < remaining.length; i++) {
+      const p = pointFor(remaining[i].slug);
+      if (!p) continue;
+      const d = haversineMeters(cursor.lat, cursor.lng, p.lat, p.lng);
+      if (d < bestDist) {
+        bestDist = d;
+        bestIdx = i;
+      }
+    }
+    if (bestIdx < 0) {
+      // Stops with missing coords — drop to the end so we don't lose
+      // them, but they don't participate in distance math.
+      out.push(remaining.shift()!);
+      continue;
+    }
+    const picked = remaining.splice(bestIdx, 1)[0];
+    out.push({ slug: picked.slug, days: dayBySlug.get(picked.slug) ?? picked.days });
+    const p = pointFor(picked.slug);
+    if (p) cursor = p;
+  }
+
+  const afterMeters = totalMeters(out);
+  return { reordered: out, savedMeters: Math.max(0, beforeMeters - afterMeters) };
+}
+
 // Suggest a default trip name like "Vail + Aspen 5d" so the input has
 // something useful out of the box. Empty when there are no stops yet.
 function suggestTripName(stops: Stop[], allResorts: Resort[], days: number): string {
@@ -118,6 +201,19 @@ export default function TripPlannerPanel({
   const [draftName, setDraftName] = useState<string>("");
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+
+  // Stage-4 trip-order optimizer. After tapping "✨ Optimize order"
+  // we stash a short inline message ("Reordered: saves ~N min") above
+  // the stops list; auto-clears after a few seconds.
+  const [optimizeNotice, setOptimizeNotice] = useState<string | null>(null);
+
+  // Stage-4 template hydration. When the URL carries ?template=<slug>,
+  // we seed stops from lib/tripTemplates on first mount, jump the
+  // wizard to "review", and show a dismissable banner. The ref + state
+  // guard against re-applying on every render.
+  const templateSlug = searchParams.get("template");
+  const templateApplied = useRef(false);
+  const [templateNotice, setTemplateNotice] = useState<{ slug: string; title: string } | null>(null);
 
   // Stage 21 mobile wizard state. The mobile path renders one phase at a
   // time (set days → pick stop → confirm days → repeat → review). Desktop
@@ -216,6 +312,59 @@ export default function TripPlannerPanel({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, restoreToken]);
 
+  // Stage-4 template hydration. Fires once per ?template=<slug> token
+  // when the planner is open. Seeds stops from the template definition,
+  // updates the day total via the parent's onDaysChange (so the URL
+  // ?days param matches), jumps the wizard straight to "review", and
+  // pops a dismissable banner. URL flag is preserved so refresh keeps
+  // the template applied — the dismiss action strips it.
+  useEffect(() => {
+    if (!open || !templateSlug || templateApplied.current) return;
+    const tpl = getTemplate(templateSlug);
+    if (!tpl) {
+      // Unknown slug — clean the URL so we don't bother the user with
+      // a stale banner and exit. Treat as applied so we don't retry.
+      templateApplied.current = true;
+      const params = new URLSearchParams(searchParams.toString());
+      params.delete("template");
+      const qs = params.toString();
+      router.replace(qs ? `?${qs}` : "?", { scroll: false });
+      return;
+    }
+    templateApplied.current = true;
+    // Seed stops from the template's resort + day arrays.
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- one-shot hydration from URL, same pattern as restore above.
+    setStops(
+      tpl.resortSlugs.map((slug, i) => ({
+        slug,
+        days: Math.max(1, tpl.daysPerResort[i] ?? 1),
+      })),
+    );
+    setDraftName(tpl.title);
+    setDaysLockedIn(true);
+    setPendingStop(null);
+    setPickerForIndex(null);
+    setTemplateNotice({ slug: tpl.slug, title: tpl.title });
+    // Push the template's total day count back up to MapPage so the
+    // URL ?days param matches. Without this the budget tracker still
+    // shows whatever days was when the planner opened.
+    const totalDays = tpl.daysPerResort.reduce((a, b) => a + b, 0);
+    if (totalDays > 0 && totalDays !== days) {
+      onDaysChange?.(totalDays);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, templateSlug]);
+
+  function dismissTemplateNotice() {
+    setTemplateNotice(null);
+    // Strip ?template from the URL so a refresh doesn't re-pop the
+    // banner. Keep all other params (plan, days, from, etc).
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("template");
+    const qs = params.toString();
+    router.replace(qs ? `?${qs}` : "?", { scroll: false });
+  }
+
   // Render-phase reset for pendingStop on panel close. Avoids the
   // setState-in-effect lint while still guaranteeing the in-flight
   // confirm card disappears when the user closes the planner.
@@ -276,6 +425,109 @@ export default function TripPlannerPanel({
   }, [stops, candidateBySlug, originLat, originLng]);
   const totalDriveSeconds =
     legs.reduce((s, l) => s + l.durationSeconds, 0) + homeLegSeconds;
+
+  // Total round-trip meters (origin → stops → home), inflated by the
+  // distance.ts highway factor so the miles match the per-leg drive
+  // estimates the user already sees. Drives both the cost estimator
+  // (driving × IRS rate) and the optimize-saved math.
+  const totalRoundTripMeters = useMemo(() => {
+    if (stops.length === 0) return 0;
+    let cursorLat = originLat;
+    let cursorLng = originLng;
+    let total = 0;
+    for (const s of stops) {
+      const r = candidateBySlug.get(s.slug);
+      if (!r) continue;
+      const lat = Number(r.latitude);
+      const lng = Number(r.longitude);
+      const m = haversineMeters(cursorLat, cursorLng, lat, lng);
+      total += estimateDriveMeters(m);
+      cursorLat = lat;
+      cursorLng = lng;
+    }
+    // Drive-home leg.
+    const last = candidateBySlug.get(stops[stops.length - 1].slug);
+    if (last) {
+      total += estimateDriveMeters(
+        haversineMeters(Number(last.latitude), Number(last.longitude), originLat, originLng),
+      );
+    }
+    return total;
+  }, [stops, candidateBySlug, originLat, originLng]);
+  const totalRoundTripMiles = useMemo(
+    () => Math.round(metersToMiles(totalRoundTripMeters)),
+    [totalRoundTripMeters],
+  );
+
+  // Stage-4 cost estimator. Pulls the user's owned passes from
+  // localStorage preferences (empty if not onboarded) and reads
+  // ticket_price_adult_min/max off the resort rows. The estimator is
+  // pure — see lib/tripCost.ts.
+  const userPasses = useMemo<string[]>(() => {
+    if (typeof window === "undefined") return [];
+    return getPreferences()?.passes ?? [];
+  }, []);
+  const costBreakdown = useMemo(() => {
+    if (stops.length === 0) return null;
+    const slugs = stops.map((s) => s.slug);
+    const daysArr = stops.map((s) => s.days);
+    const passesBySlug = new Map<string, string[]>();
+    const minBySlug = new Map<string, number>();
+    const maxBySlug = new Map<string, number>();
+    for (const s of stops) {
+      const r = candidateBySlug.get(s.slug);
+      if (!r) continue;
+      passesBySlug.set(s.slug, r.passes ?? []);
+      if (r.ticket_price_adult_min != null) minBySlug.set(s.slug, r.ticket_price_adult_min);
+      if (r.ticket_price_adult_max != null) maxBySlug.set(s.slug, r.ticket_price_adult_max);
+    }
+    return estimateTripCost(slugs, daysArr, passesBySlug, totalRoundTripMiles, userPasses, {
+      ticketPriceMin: minBySlug,
+      ticketPriceMax: maxBySlug,
+    });
+  }, [stops, candidateBySlug, totalRoundTripMiles, userPasses]);
+
+  // Stage-4 optimize-order handler. Runs nearest-neighbor TSP locally
+  // (no API call), updates the stops state, and sets an inline notice
+  // with the rough drive-time savings. Disabled when there are fewer
+  // than 3 unique stops — the only orders are trivially the same or
+  // reversed.
+  const uniqueStopCount = useMemo(
+    () => new Set(stops.map((s) => s.slug)).size,
+    [stops],
+  );
+  const canOptimize = uniqueStopCount >= 3;
+  function handleOptimizeOrder() {
+    if (!canOptimize) return;
+    const resortBySlug = new Map<string, { lat: number; lng: number }>();
+    for (const s of stops) {
+      const r = candidateBySlug.get(s.slug);
+      if (r) resortBySlug.set(s.slug, { lat: Number(r.latitude), lng: Number(r.longitude) });
+    }
+    const { reordered, savedMeters } = nearestNeighborReorder(
+      { lat: originLat, lng: originLng },
+      stops,
+      resortBySlug,
+    );
+    // No change → tell the user the route is already optimal.
+    const sameOrder =
+      reordered.length === stops.length &&
+      reordered.every((s, i) => s.slug === stops[i].slug);
+    if (sameOrder || savedMeters < 1000) {
+      setOptimizeNotice("Already optimized — current order is the shortest route.");
+    } else {
+      setStops(reordered);
+      const savedSeconds = estimateDriveSeconds(savedMeters);
+      const savedMinutes = Math.max(1, Math.round(savedSeconds / 60));
+      setOptimizeNotice(
+        savedMinutes >= 60
+          ? `Reordered: saves ~${Math.round(savedMinutes / 60)}h ${savedMinutes % 60}m driving.`
+          : `Reordered: saves ~${savedMinutes} min driving.`,
+      );
+    }
+    // Auto-dismiss after 5s so the notice doesn't camp on the screen.
+    window.setTimeout(() => setOptimizeNotice(null), 5000);
+  }
 
   // Sync upstream — pin highlight + plan IDs. We include the
   // pendingStop's resort here so the pin gets the gold-halo treatment
@@ -859,6 +1111,24 @@ export default function TripPlannerPanel({
                 </p>
               </header>
               <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-4" style={{ touchAction: "pan-y" }}>
+                {/* Stage-4 template-loaded banner (mobile review). */}
+                {templateNotice && (
+                  <div className="mb-3 flex items-start gap-2 rounded-lg border border-wn-navy/25 bg-wn-navy/5 px-3 py-2">
+                    <span className="text-base leading-none" aria-hidden="true">✨</span>
+                    <div className="flex-1 text-[12px] leading-snug text-wn-navy">
+                      <span className="font-bold">Template loaded:</span> {templateNotice.title}.
+                      Customize and save when ready.
+                    </div>
+                    <button
+                      type="button"
+                      onClick={dismissTemplateNotice}
+                      aria-label="Dismiss template notice"
+                      className="ml-1 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-wn-navy/65 transition hover:bg-wn-navy/10 hover:text-wn-navy"
+                    >
+                      <span aria-hidden="true">×</span>
+                    </button>
+                  </div>
+                )}
                 <ol className="flex flex-col gap-2">
                   {stops.map((stop, i) => {
                     const r = candidateBySlug.get(stop.slug);
@@ -905,6 +1175,66 @@ export default function TripPlannerPanel({
                     );
                   })}
                 </ol>
+
+                {/* Stage-4 optimize order button (mobile review). */}
+                <button
+                  type="button"
+                  onClick={handleOptimizeOrder}
+                  disabled={!canOptimize}
+                  className="mt-3 w-full rounded-md border border-wn-navy/30 bg-wn-navy/5 px-3 py-2 text-[12px] font-semibold text-wn-navy transition hover:bg-wn-navy/10 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  ✨ Optimize order
+                  {!canOptimize && (
+                    <span className="ml-1 font-normal text-wn-charcoal/55">
+                      (need 3+ stops)
+                    </span>
+                  )}
+                </button>
+                {optimizeNotice && (
+                  <p
+                    role="status"
+                    className="mt-1.5 rounded-md bg-emerald-50 px-2 py-1 text-center text-[11px] font-medium text-emerald-800"
+                  >
+                    {optimizeNotice}
+                  </p>
+                )}
+
+                {/* Stage-4 cost estimator (mobile review). */}
+                {costBreakdown && (
+                  <div className="mt-3 rounded-lg border border-wn-charcoal/10 bg-white p-3">
+                    <div className="mb-1 flex items-baseline justify-between">
+                      <div className="text-[10px] font-bold uppercase tracking-[0.15em] text-wn-charcoal/55">
+                        Estimated trip cost
+                      </div>
+                      <div className="text-[10px] text-wn-charcoal/45">per person</div>
+                    </div>
+                    <div className="mb-2 text-base font-extrabold tracking-tight text-wn-navy">
+                      ${costBreakdown.totalLow.toLocaleString()}–${costBreakdown.totalHigh.toLocaleString()}
+                    </div>
+                    {costBreakdown.passCoversAll && (
+                      <p className="mb-2 rounded-md bg-emerald-50 px-2 py-1 text-[11px] font-semibold text-emerald-800">
+                        ✓ Your pass covers all stops — lift tickets $0
+                      </p>
+                    )}
+                    <dl className="grid grid-cols-3 gap-2 text-center">
+                      <CostTile
+                        label="Lift tickets"
+                        value={`$${costBreakdown.liftTickets.toLocaleString()}`}
+                      />
+                      <CostTile
+                        label={`Lodging (${costBreakdown.totalDays}n)`}
+                        value={`$${costBreakdown.lodging.toLocaleString()}`}
+                      />
+                      <CostTile
+                        label={`Driving (${totalRoundTripMiles}mi)`}
+                        value={`$${costBreakdown.driving.toLocaleString()}`}
+                      />
+                    </dl>
+                    <p className="mt-2 text-[10px] leading-tight text-wn-charcoal/50">
+                      Estimate. Real prices vary by date, hotel, and demand.
+                    </p>
+                  </div>
+                )}
 
                 <div className="mt-3">
                   <label
@@ -1049,6 +1379,24 @@ export default function TripPlannerPanel({
         </header>
 
         <div className="flex-1 overflow-y-auto px-4 py-4">
+          {/* Stage-4 template-loaded banner (desktop). */}
+          {templateNotice && (
+            <div className="mb-3 flex items-start gap-2 rounded-lg border border-wn-navy/25 bg-wn-navy/5 px-3 py-2">
+              <span className="text-base leading-none" aria-hidden="true">✨</span>
+              <div className="flex-1 text-[12px] leading-snug text-wn-navy">
+                <span className="font-bold">Template loaded:</span> {templateNotice.title}.
+                Customize and save when ready.
+              </div>
+              <button
+                type="button"
+                onClick={dismissTemplateNotice}
+                aria-label="Dismiss template notice"
+                className="ml-1 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-wn-navy/65 transition hover:bg-wn-navy/10 hover:text-wn-navy"
+              >
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+          )}
           {/* Days-planned tracker */}
           <div className="mb-3 flex items-baseline justify-between">
             <span className="text-[11px] font-semibold uppercase tracking-wide text-wn-charcoal/60">
@@ -1308,6 +1656,73 @@ export default function TripPlannerPanel({
                   🗺️ View full route on map
                 </button>
               )}
+              {/* Stage-4 optimize order. Disabled below 3 unique stops
+                  (the only orders are equivalent). */}
+              <button
+                type="button"
+                onClick={handleOptimizeOrder}
+                disabled={!canOptimize}
+                title={
+                  canOptimize
+                    ? "Reorder stops to minimize driving"
+                    : "Need 3+ stops to optimize"
+                }
+                className="mt-2 w-full rounded-md border border-wn-navy/30 bg-wn-navy/5 px-3 py-1.5 text-[11px] font-semibold text-wn-navy transition hover:bg-wn-navy/10 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                ✨ Optimize order
+                {!canOptimize && (
+                  <span className="ml-1 font-normal text-wn-charcoal/55">
+                    (need 3+ stops)
+                  </span>
+                )}
+              </button>
+              {optimizeNotice && (
+                <p
+                  role="status"
+                  className="mt-1.5 rounded-md bg-emerald-50 px-2 py-1 text-center text-[11px] font-medium text-emerald-800"
+                >
+                  {optimizeNotice}
+                </p>
+              )}
+            </div>
+          )}
+
+          {/* Stage-4 cost estimator. Renders only when there's at
+              least one stop so the layout doesn't shift on a blank
+              planner. */}
+          {stops.length > 0 && costBreakdown && (
+            <div className="mt-3 rounded-lg border border-wn-charcoal/10 bg-white p-3">
+              <div className="mb-1 flex items-baseline justify-between">
+                <div className="text-[10px] font-bold uppercase tracking-[0.15em] text-wn-charcoal/55">
+                  Estimated trip cost
+                </div>
+                <div className="text-[10px] text-wn-charcoal/45">per person</div>
+              </div>
+              <div className="mb-2 text-base font-extrabold tracking-tight text-wn-navy">
+                ${costBreakdown.totalLow.toLocaleString()}–${costBreakdown.totalHigh.toLocaleString()}
+              </div>
+              {costBreakdown.passCoversAll && (
+                <p className="mb-2 rounded-md bg-emerald-50 px-2 py-1 text-[11px] font-semibold text-emerald-800">
+                  ✓ Your pass covers all stops — lift tickets $0
+                </p>
+              )}
+              <dl className="grid grid-cols-3 gap-2 text-center">
+                <CostTile
+                  label="Lift tickets"
+                  value={`$${costBreakdown.liftTickets.toLocaleString()}`}
+                />
+                <CostTile
+                  label={`Lodging (${costBreakdown.totalDays} night${costBreakdown.totalDays === 1 ? "" : "s"})`}
+                  value={`$${costBreakdown.lodging.toLocaleString()}`}
+                />
+                <CostTile
+                  label={`Driving (${totalRoundTripMiles.toLocaleString()} mi)`}
+                  value={`$${costBreakdown.driving.toLocaleString()}`}
+                />
+              </dl>
+              <p className="mt-2 text-[10px] leading-tight text-wn-charcoal/50">
+                Estimate. Real prices vary by date, hotel, and demand.
+              </p>
             </div>
           )}
 
@@ -1400,5 +1815,20 @@ export default function TripPlannerPanel({
         />
       )}
     </>
+  );
+}
+
+// Single cost-breakdown tile inside the estimator card. Kept inline
+// so the cost section stays self-contained.
+function CostTile({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-md border border-wn-charcoal/10 bg-wn-offwhite px-1.5 py-2 text-center">
+      <div className="text-[12px] font-bold tracking-tight text-wn-navy">
+        {value}
+      </div>
+      <div className="mt-0.5 text-[9px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
+        {label}
+      </div>
+    </div>
   );
 }

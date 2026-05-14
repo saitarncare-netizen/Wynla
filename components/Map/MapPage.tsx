@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState, useEffect } from "react";
+import { useMemo, useRef, useState, useEffect, useSyncExternalStore } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import MapView, { type TripRoutePoint } from "./MapView";
 import AlaskaInset from "./AlaskaInset";
@@ -12,6 +12,14 @@ import LocationButton from "./LocationButton";
 import FiltersDrawer from "./FiltersDrawer";
 import TripPlannerPanel from "./TripPlannerPanel";
 import AuthButton from "@/components/auth/AuthButton";
+import CompareFloatingButton from "@/components/CompareFloatingButton";
+import RecentlyViewedStrip, {
+  OPEN_RESORT_EVENT,
+  type OpenResortDetail,
+} from "@/components/RecentlyViewedStrip";
+import OnboardingCard from "@/components/OnboardingCard";
+import OffSeasonBanner from "@/components/OffSeasonBanner";
+import { isOnboarded } from "@/lib/preferences";
 import Link from "next/link";
 import { resolveOrigin } from "@/lib/origins";
 import { haversineMeters, estimateDriveSeconds, estimateDriveMeters } from "@/lib/distance";
@@ -134,6 +142,21 @@ function isSizeTier(v: string | null): v is SizeTier {
   return v === "small" || v === "medium" || v === "large";
 }
 
+// useSyncExternalStore plumbing for the onboarded flag. We don't have
+// real cross-tab sync needs here, so subscribe is a no-op; the snapshot
+// is just localStorage's truth. getServerSnapshot returns null to keep
+// SSR markup neutral — the client recomputes once mounted and either
+// renders the wizard or doesn't, without a hydration warning.
+function onboardedSubscribe(_cb: () => void): () => void {
+  return () => {};
+}
+function onboardedGetSnapshot(): boolean | null {
+  return isOnboarded();
+}
+function onboardedGetServerSnapshot(): boolean | null {
+  return null;
+}
+
 export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Props) {
   const weatherByResort = useMemo(
     () => new Map(weather.map((w) => [w.resort_id, w])),
@@ -150,6 +173,21 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   const [searchOpen, setSearchOpen] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [lastSeenPlannerOpen, setLastSeenPlannerOpen] = useState(false);
+  // Onboarding wizard — null on first render (SSR + pre-mount) so the
+  // server-rendered HTML matches the client's first paint and we avoid
+  // a hydration mismatch. useSyncExternalStore reads the onboarded flag
+  // from localStorage on every commit, but its getServerSnapshot returns
+  // null so SSR sees the un-onboarded baseline without diverging from
+  // the first client paint. (Direct setState inside useEffect would trip
+  // React 19's react-hooks/set-state-in-effect rule.)
+  const onboardedClient = useSyncExternalStore(
+    onboardedSubscribe,
+    onboardedGetSnapshot,
+    onboardedGetServerSnapshot,
+  );
+  const [onboardingDismissed, setOnboardingDismissed] = useState(false);
+  const showOnboarding: boolean | null =
+    onboardedClient === null ? null : !onboardedClient && !onboardingDismissed;
   // Stage 19.5: when the trip planner's picker is active, it
   // registers a handler here. Map pin clicks route through it
   // (treating the click as "pick this resort for the current stop")
@@ -186,6 +224,15 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   const days = Math.min(30, Math.max(1, Number(searchParams.get("days")) || 1));
   const plannerOpen = searchParams.get("plan") === "1";
   const nightOnly = searchParams.get("night") === "1";
+  // Stage 8 — airport filter. URL form: ?airport=DEN. Empty / missing
+  // = no airport filter. Matched against resort.closest_airport_iata
+  // with a 120-mile shuttle-range distance cap; resorts with NULL
+  // airport data are excluded when this filter is active.
+  const airportParam = searchParams.get("airport");
+  const airportFilter: string | null = airportParam
+    ? airportParam.toUpperCase()
+    : null;
+  const AIRPORT_MAX_DISTANCE_MI = 120;
 
   // Defensive: when the planner closes, clear any trip overlays so a
   // user who saved + deleted a trip never sees lingering "in_trip"
@@ -236,6 +283,21 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
     return map;
   }, [driveTimes, origin, resorts]);
 
+  // Stage 8 — airport-match predicate. Reused across pipelines.
+  const matchesAirport = (r: Resort): boolean => {
+    if (!airportFilter) return true;
+    if (r.closest_airport_iata !== airportFilter) return false;
+    // Distance cap — keep the result set to realistic shuttle range so
+    // a user filtering by DEN doesn't see a resort 280 mi away.
+    if (
+      r.closest_airport_distance_mi != null &&
+      r.closest_airport_distance_mi > AIRPORT_MAX_DISTANCE_MI
+    ) {
+      return false;
+    }
+    return true;
+  };
+
   // Resorts that pass every filter EXCEPT size — used to compute the
   // "X with unknown size hidden" caption when the size chip is active.
   const filteredIgnoringSize = useMemo(() => {
@@ -250,9 +312,13 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         const dt = driveTimeByResort.get(r.id)?.get(origin.name);
         if (!dt || dt.duration_seconds > withinHours * 3600) return false;
       }
+      if (!matchesAirport(r)) return false;
       return true;
     });
-  }, [resorts, featuredOnly, passFilter, nightOnly, withinHours, origin, driveTimeByResort]);
+    // matchesAirport closes over airportFilter; depending on
+    // airportFilter is enough for memoization correctness.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [resorts, featuredOnly, passFilter, nightOnly, withinHours, origin, driveTimeByResort, airportFilter]);
 
   const filtered = useMemo(() => {
     return filteredIgnoringSize.filter((r) => matchesSizeFilter(r.vertical_drop, sizeFilter));
@@ -273,9 +339,11 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         if (!dt || dt.duration_seconds > withinHours * 3600) return false;
       }
       if (!matchesSizeFilter(r.vertical_drop, sizeFilter)) return false;
+      if (!matchesAirport(r)) return false;
       return true;
     });
-  }, [resorts, featuredOnly, nightOnly, withinHours, origin, driveTimeByResort, sizeFilter]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [resorts, featuredOnly, nightOnly, withinHours, origin, driveTimeByResort, sizeFilter, airportFilter]);
 
   // Count of resorts hidden specifically because they have NULL vertical_drop
   // and a size filter is active. 0 when no filter active or no NULL hits.
@@ -359,6 +427,26 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
     return () => window.removeEventListener("keydown", onKey);
   }, [selectedId]);
 
+  // Recently-viewed strip dispatches OPEN_RESORT_EVENT when the user
+  // taps a chip. Catch it here and re-use the existing selectedId +
+  // cameraTarget machinery to fly to the pin and open the panel —
+  // same UX path as picking from the header search.
+  useEffect(() => {
+    function onOpenResort(e: Event) {
+      const ce = e as CustomEvent<OpenResortDetail>;
+      const detail = ce.detail;
+      if (!detail || typeof detail.id !== "number") return;
+      setSelectedId(detail.id);
+      setCameraTarget({
+        lat: detail.lat,
+        lng: detail.lng,
+        token: `recent-${Date.now()}`,
+      });
+    }
+    window.addEventListener(OPEN_RESORT_EVENT, onOpenResort);
+    return () => window.removeEventListener(OPEN_RESORT_EVENT, onOpenResort);
+  }, []);
+
   return (
     <div className="relative h-dvh w-full overflow-hidden">
       <header
@@ -424,6 +512,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
                 (withinHours > 0 ? 1 : 0) +
                 (sizeFilter ? 1 : 0) +
                 (nightOnly ? 1 : 0) +
+                (airportFilter ? 1 : 0) +
                 (origin.kind === "geo" ? 1 : 0);
               return (
                 <button
@@ -442,6 +531,40 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
                 </button>
               );
             })()}
+            {/* Deals — desktop only. Sits between My trips and Pro so
+                users can pop over to the season-pass tracker while
+                browsing the map. Mobile placement lives in the
+                FiltersDrawer footer to keep the header minimal. */}
+            <Link
+              href="/deals"
+              className="hidden h-9 items-center justify-center gap-1.5 rounded-md border border-wn-charcoal/20 bg-white px-3 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 sm:inline-flex"
+              title="Season pass deals"
+              aria-label="Pass deals"
+            >
+              <span aria-hidden="true">🎟️</span>
+              <span>Deals</span>
+            </Link>
+            {/* Stage 8 — Guides + Lists SEO surfaces. Desktop-only nav
+                entries; mobile users reach them via the FiltersDrawer
+                footer "More" section. */}
+            <Link
+              href="/guides"
+              className="hidden h-9 items-center justify-center gap-1.5 rounded-md border border-wn-charcoal/20 bg-white px-3 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 lg:inline-flex"
+              title="Editorial guides"
+              aria-label="Guides"
+            >
+              <span aria-hidden="true">📖</span>
+              <span>Guides</span>
+            </Link>
+            <Link
+              href="/lists"
+              className="hidden h-9 items-center justify-center gap-1.5 rounded-md border border-wn-charcoal/20 bg-white px-3 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 lg:inline-flex"
+              title="Curated lists"
+              aria-label="Curated lists"
+            >
+              <span aria-hidden="true">⭐</span>
+              <span>Lists</span>
+            </Link>
             <Link
               href="/pro"
               className="hidden rounded-md border border-wn-gold/60 bg-wn-gold/10 px-2.5 py-1 text-xs font-semibold text-wn-navy transition hover:bg-wn-gold/25 sm:inline-block"
@@ -452,6 +575,10 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
             <AuthButton />
           </div>
         </div>
+        {/* Off-season banner — visible May 1 – Oct 31, dismissable. The
+            component self-gates on date + localStorage, so unconditionally
+            mounting it here is safe (renders null when not applicable). */}
+        <OffSeasonBanner />
         {/* Inline filter pills row — desktop only. Mobile uses the
             single ☰ Filters button above + FiltersDrawer below. */}
         <div className="hidden md:block">
@@ -616,6 +743,17 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         onUseMyLocation={handleFromGeo}
       />
 
+      {/* Recently-viewed strip — pulls from localStorage; renders only
+          when the user has at least one entry. Chip clicks dispatch
+          OPEN_RESORT_EVENT which our useEffect below catches to drive
+          the camera + open the side panel. */}
+      <RecentlyViewedStrip />
+
+      {/* Compare CTA — fixed pill bottom-center (mobile) / bottom-left
+          (desktop). Renders only when the localStorage list has ≥2.
+          Routes to /compare?ids=… */}
+      <CompareFloatingButton />
+
       {/* Stage 21.2 — mobile filters drawer. Triggered by the ☰ Filters
           button in the header. All filter controls in one bottom sheet,
           so the header stays minimal and the map gets the full screen.
@@ -628,6 +766,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         withinHours={withinHours}
         sizeFilter={sizeFilter}
         nightOnly={nightOnly}
+        airportFilter={airportFilter}
         passCounts={passCounts}
         filteredCount={filtered.length}
         totalCount={resorts.length}
@@ -638,9 +777,14 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         onWithinChange={(w) => updateParam("within", w)}
         onSizeChange={(s) => updateParam("size", s)}
         onNightChange={(v) => updateParam("night", v ? "1" : null)}
+        onAirportChange={(iata) => updateParam("airport", iata)}
         onClearAll={clearAll}
         onClose={() => setFiltersOpen(false)}
       />
+
+      {showOnboarding === true && (
+        <OnboardingCard onFinished={() => setOnboardingDismissed(true)} />
+      )}
 
       {/* Pass color legend — desktop only. On mobile, the same info
           is already conveyed by the active-filter chips and the pin

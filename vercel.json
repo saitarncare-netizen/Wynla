@@ -1,8 +1,7 @@
 {
   "crons": [
-    {
-      "path": "/api/cron/refresh-weather",
-      "schedule": "0 12 * * *"
-    }
+    { "path": "/api/cron/refresh-weather", "schedule": "0 12 * * *" },
+    { "path": "/api/cron/daily-digest", "schedule": "0 13 * * *" },
+    { "path": "/api/cron/check-snow-alerts", "schedule": "30 12 * * *" }
   ]
 }

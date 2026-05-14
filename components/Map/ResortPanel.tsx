@@ -7,7 +7,11 @@ import Link from "next/link";
 import { passColor, passLabel, primaryPass } from "@/lib/passColors";
 import { formatDriveTime, type Origin } from "@/lib/origins";
 import { fetchMatrixDriveTime, type MatrixResult } from "@/lib/mapboxMatrix";
+import { parseSeasonDates } from "@/lib/seasonDates";
 import FavoriteToggle from "@/components/auth/FavoriteToggle";
+import CompareToggle from "@/components/CompareToggle";
+import SeasonCountdown from "@/components/SeasonCountdown";
+import { addRecent } from "@/lib/recentlyViewed";
 import type { Resort, DriveTime, WeatherSnapshot } from "./MapPage";
 
 type Props = {
@@ -59,6 +63,22 @@ export default function ResortPanel({
       });
     return () => ctrl.abort();
   }, [matrixKey, lat, lng, origin]);
+
+  // Record this resort in the localStorage "recently viewed" list so
+  // the homepage strip can show it next time. We push the minimum
+  // projection needed to render the chip + drive the camera flyTo
+  // (id, slug, name, primary pass for the color dot, lat/lng).
+  useEffect(() => {
+    if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
+    addRecent({
+      id: resort.id,
+      slug: resort.slug,
+      name: resort.name,
+      primary_pass: primary,
+      lat,
+      lng,
+    });
+  }, [resort.id, resort.slug, resort.name, primary, lat, lng]);
 
   // Pick the best drive-time data we have for display.
   const isEstimate = matrixResult ? false : driveTime?.is_estimate ?? false;
@@ -194,8 +214,9 @@ export default function ResortPanel({
             }}
           />
           <div className="relative h-32 px-4 pt-4 pb-3 md:h-36">
-            {/* Top-right: Favorite + Close */}
+            {/* Top-right: Compare + Favorite + Close */}
             <div className="absolute right-3 top-3 flex items-center gap-2 z-10">
+              <CompareToggle resortId={resort.id} />
               <FavoriteToggle resortId={resort.id} />
               <button
                 type="button"
@@ -238,6 +259,22 @@ export default function ResortPanel({
               ))}
             </div>
           )}
+
+          {/* Season-status badge — small countdown sitting just above
+              the 3-stat grid. Hidden when both season fields are
+              unparseable (status "unknown") to keep the preview tight. */}
+          {(() => {
+            const seasonInfo = parseSeasonDates(
+              resort.season_open_text,
+              resort.season_close_text,
+            );
+            if (seasonInfo.status === "unknown") return null;
+            return (
+              <div className="mb-3">
+                <SeasonCountdown info={seasonInfo} variant="badge" />
+              </div>
+            );
+          })()}
 
           {/* 3-stat compact card: weather / drive / [smart slot 3].
               Slot 3 is context-aware — see pickSlot3() below. Priority:
