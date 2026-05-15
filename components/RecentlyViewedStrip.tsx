@@ -61,10 +61,19 @@ export default function RecentlyViewedStrip() {
     );
   }
 
+  // Stage 33 — stop touch bubbling on the strip itself so horizontal
+  // swipes scroll the chips, not the map underneath.
+  const stopTouchBubble = (e: React.TouchEvent) => e.stopPropagation();
+
   return (
     <>
       {/* Mobile — inline block in normal flow, sits below off-season banner */}
-      <div className="md:hidden px-3 pb-2 sm:px-6">
+      <div
+        className="md:hidden px-3 pb-2 sm:px-6"
+        onTouchStart={stopTouchBubble}
+        onTouchMove={stopTouchBubble}
+        onTouchEnd={stopTouchBubble}
+      >
         <Strip list={list} onChipClick={onChipClick} />
       </div>
       {/* Desktop — fixed pill floating above the bottom-right pass legend */}

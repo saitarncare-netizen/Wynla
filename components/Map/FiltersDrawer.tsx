@@ -17,6 +17,13 @@ type Props = {
   passCounts: Record<string, number>;
   filteredCount: number;
   totalCount: number;
+  // Stage 22 — fresh-snow conditions filter, mirrors MobileQuickFilters.
+  // Optional during the wire-up window: MapPage will pass them once the
+  // freshSnow URL param + filter logic is plumbed through there. Until
+  // then the Conditions chip stays disabled (count=0, off).
+  freshSnowOnly?: boolean;
+  freshSnowCount?: number;
+  onFreshSnowChange?: (v: boolean) => void;
   onPassChange: (passes: string[]) => void;
   onFromGeo: (lat: number, lng: number) => void;
   onWithinChange: (w: string | null) => void;
@@ -54,6 +61,11 @@ export const AIRPORT_OPTIONS: Array<{ iata: string; label: string }> = [
 // apply live (URL updates on every toggle) so the map narrows behind
 // the drawer; user taps Done / × / backdrop to close.
 //
+// Stage 22 — redesigned to group filters into clearly-labeled sections
+// with horizontal dividers so the long-scroll feels structured. Each
+// section maps to a desktop FilterBar pill cluster: Pass, Conditions,
+// Origin, Drive time, Resort size, Airport, More.
+//
 // Desktop still uses FilterBar inline — its pills work fine with the
 // extra horizontal space and the dropdown menus.
 
@@ -70,6 +82,9 @@ export default function FiltersDrawer({
   passCounts,
   filteredCount,
   totalCount,
+  freshSnowOnly = false,
+  freshSnowCount = 0,
+  onFreshSnowChange,
   onPassChange,
   onFromGeo,
   onWithinChange,
@@ -179,6 +194,10 @@ export default function FiltersDrawer({
 
   const isGeo = origin.kind === "geo";
 
+  // Stage 22 — stop touch events from bubbling to Mapbox underneath.
+  // User-reported bug: swiping inside the drawer panned the map.
+  const stopTouchBubble = (e: React.TouchEvent) => e.stopPropagation();
+
   return (
     <>
       {/* Backdrop — tap to close. Faint so map behind stays readable. */}
@@ -192,6 +211,9 @@ export default function FiltersDrawer({
       <aside
         role="dialog"
         aria-label="Filters"
+        onTouchStart={stopTouchBubble}
+        onTouchMove={stopTouchBubble}
+        onTouchEnd={stopTouchBubble}
         className={[
           "fixed z-[60] flex flex-col overflow-hidden bg-white shadow-2xl",
           // Mobile: bottom sheet at 85vh
@@ -223,8 +245,8 @@ export default function FiltersDrawer({
           </p>
         </header>
 
-        <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3" style={{ touchAction: "pan-y" }}>
-          {/* PASS */}
+        <div className="flex-1 overflow-y-auto overscroll-contain px-4" style={{ touchAction: "pan-y" }}>
+          {/* 1. PASS */}
           <Section title="Pass">
             <div className="grid grid-cols-1 gap-1">
               {PASS_KEYS.map((key) => {
@@ -272,13 +294,59 @@ export default function FiltersDrawer({
             </div>
           </Section>
 
-          {/* FROM */}
-          <Section title="From">
+          {/* 2. CONDITIONS — fresh snow + night skiing as inline toggle pills */}
+          <Section title="Conditions">
+            <div className="grid grid-cols-2 gap-1.5">
+              <button
+                type="button"
+                onClick={() => onFreshSnowChange?.(!freshSnowOnly)}
+                aria-pressed={freshSnowOnly}
+                disabled={!onFreshSnowChange || freshSnowCount === 0}
+                className={[
+                  "flex items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-semibold transition disabled:cursor-not-allowed disabled:opacity-50",
+                  freshSnowOnly
+                    ? "border-wn-sky bg-wn-sky/10 text-wn-navy"
+                    : "border-wn-charcoal/15 bg-white text-wn-charcoal hover:border-wn-charcoal/40",
+                ].join(" ")}
+              >
+                <span aria-hidden="true">❄️</span>
+                <span>Fresh snow</span>
+                {freshSnowCount > 0 && (
+                  <span
+                    className={`ml-0.5 rounded-full px-1.5 py-0.5 text-[10px] font-bold ${
+                      freshSnowOnly
+                        ? "bg-wn-navy text-white"
+                        : "bg-wn-charcoal/10 text-wn-charcoal/70"
+                    }`}
+                  >
+                    {freshSnowCount}
+                  </span>
+                )}
+              </button>
+              <button
+                type="button"
+                onClick={() => onNightChange(!nightOnly)}
+                aria-pressed={nightOnly}
+                className={[
+                  "flex items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-semibold transition",
+                  nightOnly
+                    ? "border-wn-navy bg-wn-navy text-white"
+                    : "border-wn-charcoal/15 bg-white text-wn-charcoal hover:border-wn-charcoal/40",
+                ].join(" ")}
+              >
+                <span aria-hidden="true">🌙</span>
+                <span>Night skiing</span>
+              </button>
+            </div>
+          </Section>
+
+          {/* 3. ORIGIN — geolocation + ZIP lookup */}
+          <Section title="Origin">
             <button
               type="button"
               onClick={handleUseHere}
               disabled={requestingGeo}
-              className={`mb-2 flex w-full items-center gap-2 rounded-lg border px-3 py-2 text-sm font-semibold transition disabled:opacity-60 ${
+              className={`mb-2 flex w-full items-center gap-2 rounded-lg border px-3 py-2.5 text-sm font-semibold transition disabled:opacity-60 ${
                 isGeo
                   ? "border-wn-navy bg-wn-navy text-white"
                   : "border-wn-charcoal/15 bg-white text-wn-charcoal hover:border-wn-charcoal/40"
@@ -326,7 +394,7 @@ export default function FiltersDrawer({
             )}
           </Section>
 
-          {/* DRIVE TIME */}
+          {/* 4. DRIVE TIME (DAY 1) */}
           <Section title="Drive time (day 1)">
             <div className="grid grid-cols-5 gap-1">
               {DRIVE_TIME_PRESETS.map((h) => {
@@ -381,8 +449,8 @@ export default function FiltersDrawer({
             </div>
           </Section>
 
-          {/* SIZE */}
-          <Section title="Size">
+          {/* 5. RESORT SIZE */}
+          <Section title="Resort size">
             <div className="grid grid-cols-4 gap-1">
               {([null, "small", "medium", "large"] as const).map((tier) => {
                 const active = sizeFilter === tier;
@@ -406,42 +474,11 @@ export default function FiltersDrawer({
             </div>
           </Section>
 
-          {/* NIGHT SKIING */}
-          <Section title="Night skiing">
-            <button
-              type="button"
-              onClick={() => onNightChange(!nightOnly)}
-              aria-pressed={nightOnly}
-              className={`flex w-full items-center gap-2 rounded-lg border px-3 py-2 text-sm font-semibold transition ${
-                nightOnly
-                  ? "border-wn-navy bg-wn-navy text-white"
-                  : "border-wn-charcoal/15 bg-white text-wn-charcoal hover:border-wn-charcoal/40"
-              }`}
-            >
-              <span
-                className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-sm border ${
-                  nightOnly
-                    ? "border-white bg-white text-wn-navy"
-                    : "border-wn-charcoal/30 bg-white"
-                }`}
-                aria-hidden="true"
-              >
-                {nightOnly && (
-                  <svg viewBox="0 0 12 12" className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth="2.5">
-                    <path d="M2 6.5L5 9.5L10 3" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                )}
-              </span>
-              <span aria-hidden="true">🌙</span>
-              <span>Show only night-skiing resorts</span>
-            </button>
-          </Section>
-
-          {/* AIRPORT — Stage 8. Filters resorts where
+          {/* 6. AIRPORT — Stage 8. Filters resorts where
               closest_airport_iata matches AND distance ≤ 120 mi (shuttle
               range). Horizontal-scroll chip row to keep the drawer
               compact while exposing all 15 top US ski airports. */}
-          <Section title="Closest airport">
+          <Section title="Airport">
             <div
               className="-mx-1 flex gap-1.5 overflow-x-auto px-1 pb-1"
               style={{ touchAction: "pan-x", WebkitOverflowScrolling: "touch" }}
@@ -484,32 +521,19 @@ export default function FiltersDrawer({
             </div>
           </Section>
 
-          {/* Mobile-only entry point for Deals + Stage 8 Guides + Lists.
+          {/* 7. MORE — Mobile-only entry point for Guides, Lists, Deals.
               Desktop surfaces these in the header; on mobile the header
               is too tight so we surface them here in the FiltersDrawer
               footer area instead. */}
-          <Section title="More">
+          <Section title="More" last>
             <div className="grid grid-cols-1 gap-1.5">
-              <Link
-                href="/deals"
-                onClick={onClose}
-                className="flex items-center justify-between rounded-lg border border-wn-charcoal/15 bg-white px-3 py-2.5 text-sm font-semibold text-wn-navy transition hover:border-wn-navy"
-              >
-                <span className="flex items-center gap-2">
-                  <span aria-hidden="true">🎟️</span>
-                  <span>Pass deals</span>
-                </span>
-                <span aria-hidden="true" className="text-wn-charcoal/40">
-                  →
-                </span>
-              </Link>
               <Link
                 href="/guides"
                 onClick={onClose}
                 className="flex items-center justify-between rounded-lg border border-wn-charcoal/15 bg-white px-3 py-2.5 text-sm font-semibold text-wn-navy transition hover:border-wn-navy"
               >
                 <span className="flex items-center gap-2">
-                  <span aria-hidden="true">📖</span>
+                  <span aria-hidden="true">📚</span>
                   <span>Guides</span>
                 </span>
                 <span aria-hidden="true" className="text-wn-charcoal/40">
@@ -529,9 +553,21 @@ export default function FiltersDrawer({
                   →
                 </span>
               </Link>
+              <Link
+                href="/deals"
+                onClick={onClose}
+                className="flex items-center justify-between rounded-lg border border-wn-charcoal/15 bg-white px-3 py-2.5 text-sm font-semibold text-wn-navy transition hover:border-wn-navy"
+              >
+                <span className="flex items-center gap-2">
+                  <span aria-hidden="true">🎟</span>
+                  <span>Pass deals</span>
+                </span>
+                <span aria-hidden="true" className="text-wn-charcoal/40">
+                  →
+                </span>
+              </Link>
             </div>
           </Section>
-
         </div>
 
         <footer className="flex shrink-0 items-center gap-2 border-t border-wn-charcoal/10 bg-white px-4 py-3">
@@ -559,10 +595,28 @@ export default function FiltersDrawer({
   );
 }
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+// Stage 22 — section wrapper. Each section gets a clear uppercase
+// heading and a top divider (except the very first one), so the
+// drawer reads as discrete groups instead of one long scroll. `last`
+// trims the trailing padding so the sticky footer sits flush.
+function Section({
+  title,
+  children,
+  last = false,
+}: {
+  title: string;
+  children: React.ReactNode;
+  last?: boolean;
+}) {
   return (
-    <section className="mb-4 last:mb-0">
-      <h3 className="mb-1.5 text-[10px] font-bold uppercase tracking-[0.15em] text-wn-charcoal/55">
+    <section
+      className={[
+        "py-4",
+        last ? "" : "border-b border-wn-charcoal/10",
+        "first:pt-3",
+      ].join(" ")}
+    >
+      <h3 className="mb-2 text-[11px] font-bold uppercase tracking-[0.15em] text-wn-charcoal/55">
         {title}
       </h3>
       {children}

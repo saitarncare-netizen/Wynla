@@ -146,12 +146,11 @@ export default function MapView({
     const map = new mapboxgl.Map({
       container: mapContainer.current,
       style: "mapbox://styles/mapbox/light-v11",
-      // Mapbox 3.x default projection: "globe" at low zoom, transitions
-      // to mercator (flat) as you zoom in past ~5. User feedback was
-      // that the globe-at-low-zoom view looked nicer; the previous
-      // forced "mercator" was a workaround for an old circle-layer
-      // clipping issue that's no longer reproducing.
-      projection: "globe",
+      // Stage 33 — back to flat mercator. Users zooming out (especially
+      // after closing search) were seeing the globe view and reading it
+      // as a visual bug ("the map turned into a circle"). Flat is the
+      // expected look for a US-only trip-planning map.
+      projection: "mercator",
       center: [-95, 40],
       zoom: 3.6,
       // 22 px halo around clicks/taps → effective 44×44 px touch target,

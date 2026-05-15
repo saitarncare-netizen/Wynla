@@ -1010,6 +1010,11 @@ function TenDayForecast({ days }: { days: ForecastDay[] }) {
 }
 
 function FullAmenities({ resort }: { resort: Resort }) {
+  // Stage 33 — night skiing / glades / halfpipe removed from this list
+  // because they already render as feature chips inside QuickStats
+  // (the "Mountain stats" block above). The Amenities section now
+  // covers ONLY things QuickStats doesn't surface, so a resort never
+  // shows the same icon twice on the same page.
   const items: Array<{ key: string; label: string; emoji: string; on: boolean }> = [
     { key: "tubing", label: "Tubing", emoji: "🛷", on: resort.has_tubing === true },
     { key: "lessons", label: "Ski school", emoji: "🎓", on: resort.has_lessons === true },
@@ -1017,9 +1022,6 @@ function FullAmenities({ resort }: { resort: Resort }) {
     { key: "lodging", label: "On-mountain lodging", emoji: "🏨", on: resort.has_lodging_on_mountain === true },
     { key: "xc", label: "XC skiing", emoji: "⛷️", on: resort.has_xc_skiing === true },
     { key: "backcountry", label: "Backcountry access", emoji: "🏔️", on: resort.has_backcountry_access === true },
-    { key: "night", label: "Night skiing", emoji: "🌙", on: resort.has_night_skiing === true },
-    { key: "glades", label: "Glades", emoji: "🌲", on: resort.has_glades === true },
-    { key: "halfpipe", label: "Halfpipe", emoji: "🛹", on: resort.has_halfpipe === true },
   ];
   const active = items.filter((i) => i.on);
   if (active.length === 0) return null;

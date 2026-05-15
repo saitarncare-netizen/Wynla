@@ -36,12 +36,20 @@ export default function MobileQuickFilters({
     onPassChange(Array.from(cur));
   }
 
+  // Stage 33 — touch events stopped at the container so taps + horizontal
+  // swipes inside the chip strip don't bubble down to Mapbox and pan the
+  // map. Users reported the map "scrolling under them" when they tapped
+  // on Ikon / Fresh snow / etc.
+  const stopTouchBubble = (e: React.TouchEvent) => e.stopPropagation();
   return (
     <div
       className="md:hidden -mx-3 px-3 pb-1 pt-2 overflow-x-auto"
       style={{ touchAction: "pan-x", WebkitOverflowScrolling: "touch" }}
       aria-label="Quick pass filters"
       role="region"
+      onTouchStart={stopTouchBubble}
+      onTouchMove={stopTouchBubble}
+      onTouchEnd={stopTouchBubble}
     >
       <div className="flex items-center gap-1.5">
         {(passFilter.length > 0 || freshSnowOnly) && (

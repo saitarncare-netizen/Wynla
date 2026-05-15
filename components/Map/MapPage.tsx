@@ -174,15 +174,30 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   const [searchOpen, setSearchOpenRaw] = useState(false);
   const [filtersOpen, setFiltersOpenRaw] = useState(false);
   const [lastSeenPlannerOpen, setLastSeenPlannerOpen] = useState(false);
-  // Stage 33 — search + filter sheets are mutually exclusive on mobile.
-  // Opening one closes the other so they never stack visually.
+  // Stage 33 — Search / Filter / ResortPanel are mutually exclusive on
+  // mobile. Opening any one of them closes the other two so they
+  // never stack visually. selectedId drives the ResortPanel; setting
+  // it to null hides the panel.
   function setSearchOpen(v: boolean) {
     setSearchOpenRaw(v);
-    if (v) setFiltersOpenRaw(false);
+    if (v) {
+      setFiltersOpenRaw(false);
+      setSelectedId(null);
+    }
   }
   function setFiltersOpen(v: boolean) {
     setFiltersOpenRaw(v);
-    if (v) setSearchOpenRaw(false);
+    if (v) {
+      setSearchOpenRaw(false);
+      setSelectedId(null);
+    }
+  }
+  function openResort(id: number | null) {
+    setSelectedId(id);
+    if (id != null) {
+      setSearchOpenRaw(false);
+      setFiltersOpenRaw(false);
+    }
   }
   // Onboarding wizard — null on first render (SSR + pre-mount) so the
   // server-rendered HTML matches the client's first paint and we avoid
@@ -458,7 +473,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
       const ce = e as CustomEvent<OpenResortDetail>;
       const detail = ce.detail;
       if (!detail || typeof detail.id !== "number") return;
-      setSelectedId(detail.id);
+      openResort(detail.id);
       setCameraTarget({
         lat: detail.lat,
         lng: detail.lng,
@@ -672,7 +687,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
             if (r) pickHandler(r.slug);
             return;
           }
-          setSelectedId(id);
+          openResort(id);
         }}
         tripRoute={tripRoute ?? undefined}
         cameraTarget={cameraTarget}
@@ -769,7 +784,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         onSelect={(slug) => {
           const r = resorts.find((c) => c.slug === slug);
           if (r) {
-            setSelectedId(r.id);
+            openResort(r.id);
             setCameraTarget({
               lat: Number(r.latitude),
               lng: Number(r.longitude),
@@ -811,6 +826,10 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         passCounts={passCounts}
         filteredCount={filtered.length}
         totalCount={resorts.length}
+        freshSnowOnly={freshSnowOnly}
+        freshSnowCount={resorts.filter(
+          (r) => r.snow_new_24h_in != null && r.snow_new_24h_in > 0,
+        ).length}
         onPassChange={(passes) =>
           updateParam("pass", passes.length === 0 ? null : passes.join(","))
         }
@@ -819,6 +838,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         onSizeChange={(s) => updateParam("size", s)}
         onNightChange={(v) => updateParam("night", v ? "1" : null)}
         onAirportChange={(iata) => updateParam("airport", iata)}
+        onFreshSnowChange={(v) => updateParam("freshsnow", v ? "1" : null)}
         onClearAll={clearAll}
         onClose={() => setFiltersOpen(false)}
       />

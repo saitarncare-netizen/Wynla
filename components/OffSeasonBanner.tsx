@@ -69,8 +69,16 @@ export default function OffSeasonBanner() {
     setSessionDismissed(true);
   }
 
+  // Stage 33 — stop touch propagation so taps on the banner / dismiss
+  // button don't bubble to Mapbox's pan handler underneath.
+  const stopTouchBubble = (e: React.TouchEvent) => e.stopPropagation();
   return (
-    <div className="flex justify-center px-3 pb-2 pt-1 sm:px-6">
+    <div
+      className="flex justify-center px-3 pb-2 pt-1 sm:px-6"
+      onTouchStart={stopTouchBubble}
+      onTouchMove={stopTouchBubble}
+      onTouchEnd={stopTouchBubble}
+    >
       <div className="inline-flex max-w-full items-center gap-2 rounded-full bg-wn-navy/95 px-3 py-1.5 text-[11px] font-medium text-white shadow-sm backdrop-blur-sm sm:text-xs">
         <span aria-hidden="true">❄️</span>
         <span className="truncate">

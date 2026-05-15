@@ -155,6 +155,13 @@ export default function ResortPanel({
 
   const sheetHeight = isMobile ? (dragHeight ?? snapToPx(snap)) : undefined;
 
+  // Stage 33 — stop any touch event inside the panel from bubbling to
+  // Mapbox. Without this, touching the body of the panel (3-stat card,
+  // pass badges, sticky CTA) panned the map underneath. The drag-handle
+  // has its OWN touch handlers (above) for snap resizing — those run
+  // first and don't call stopPropagation, so they keep working.
+  const stopTouchBubble = (e: React.TouchEvent) => e.stopPropagation();
+
   return (
     <>
       {/* No mobile scrim — Stage 21. Map stays fully pannable behind
@@ -164,6 +171,9 @@ export default function ResortPanel({
       <aside
         role="complementary"
         aria-label={`${resort.name} details`}
+        onTouchStart={stopTouchBubble}
+        onTouchMove={stopTouchBubble}
+        onTouchEnd={stopTouchBubble}
         className={[
           "fixed z-40 flex flex-col bg-white shadow-2xl",
           // mobile bottom sheet — slides up from bottom on open
