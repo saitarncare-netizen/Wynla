@@ -51,6 +51,14 @@ type Props = {
   // Google-Maps-style "you are here" blue dot. Rendered when the user
   // grants browser geolocation. Null = no dot.
   userLocation?: { lat: number; lng: number } | null;
+  // Stage 33 — when true, disable map drag / zoom gestures entirely.
+  // Used by MapPage to freeze the map while a full-bleed overlay
+  // (search picker / filter drawer) is open. Without this, touches
+  // on the overlay leak through to Mapbox's gesture recognizers no
+  // matter how aggressively we stopPropagation in React, because
+  // Mapbox attaches some listeners at window/document level. Killing
+  // the gesture handler at the SOURCE is the only fully reliable fix.
+  interactionDisabled?: boolean;
 };
 
 const SOURCE_ID = "wynla-resorts";
@@ -106,6 +114,7 @@ export default function MapView({
   previewLeg,
   fitTripVersion,
   userLocation,
+  interactionDisabled = false,
 }: Props) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
@@ -837,6 +846,34 @@ export default function MapView({
       }
     };
   }, [userLocation, mapReady]);
+
+  // Stage 33 — freeze all Mapbox interaction handlers when the parent
+  // signals a full-bleed overlay is open (search picker / filter
+  // drawer). Disables drag pan, scroll/pinch zoom, double-tap zoom,
+  // box zoom, keyboard. Re-enabled when interactionDisabled goes false.
+  // This is the source-level fix for the long-running "map pans when
+  // I scroll the drawer" bug — works no matter where Mapbox attaches
+  // its listeners because we kill the handlers themselves, not the
+  // event propagation.
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !mapReady) return;
+    if (interactionDisabled) {
+      map.dragPan.disable();
+      map.scrollZoom.disable();
+      map.touchZoomRotate.disable();
+      map.doubleClickZoom.disable();
+      map.boxZoom.disable();
+      map.keyboard.disable();
+    } else {
+      map.dragPan.enable();
+      map.scrollZoom.enable();
+      map.touchZoomRotate.enable();
+      map.doubleClickZoom.enable();
+      map.boxZoom.enable();
+      map.keyboard.enable();
+    }
+  }, [interactionDisabled, mapReady]);
 
   return (
     <>

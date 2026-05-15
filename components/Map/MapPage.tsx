@@ -673,6 +673,13 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         originName={origin.name}
         driveTimeByResort={driveTimeByResort}
         selectedId={selectedId}
+        // Stage 33 — freeze map interaction whenever a full-bleed
+        // overlay is on screen. Without this, vertical scrolls inside
+        // the filter drawer / search picker leak through to Mapbox's
+        // pan handler. ResortPanel + Planner stay interactive because
+        // they're partial-height bottom sheets where users still want
+        // to see and pan the map behind.
+        interactionDisabled={searchOpen || filtersOpen}
         userLocation={
           origin.kind === "geo" ? { lat: origin.lat, lng: origin.lon } : null
         }
