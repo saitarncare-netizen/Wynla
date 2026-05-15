@@ -817,22 +817,17 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
           trip length; ZIP + geo cover origin precisely enough). */}
       <FiltersDrawer
         open={filtersOpen}
-        passFilter={passFilter}
         origin={origin}
         withinHours={withinHours}
         sizeFilter={sizeFilter}
         nightOnly={nightOnly}
         airportFilter={airportFilter}
-        passCounts={passCounts}
         filteredCount={filtered.length}
         totalCount={resorts.length}
         freshSnowOnly={freshSnowOnly}
         freshSnowCount={resorts.filter(
           (r) => r.snow_new_24h_in != null && r.snow_new_24h_in > 0,
         ).length}
-        onPassChange={(passes) =>
-          updateParam("pass", passes.length === 0 ? null : passes.join(","))
-        }
         onFromGeo={handleFromGeo}
         onWithinChange={(w) => updateParam("within", w)}
         onSizeChange={(s) => updateParam("size", s)}

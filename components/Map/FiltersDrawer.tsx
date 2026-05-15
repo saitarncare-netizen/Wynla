@@ -3,28 +3,23 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { type Origin } from "@/lib/origins";
-import { PASS_COLORS, PASS_KEYS, PASS_LABELS } from "@/lib/passColors";
+// PASS_COLORS / PASS_KEYS / PASS_LABELS dropped along with the Pass
+// section. Pass selection now lives only in the map-header chip strip.
 import { SIZE_TIER_LABELS, type SizeTier } from "@/lib/sizeTier";
 
 type Props = {
   open: boolean;
-  passFilter: string[];
   origin: Origin;
   withinHours: number;
   sizeFilter: SizeTier | null;
   nightOnly: boolean;
   airportFilter: string | null;
-  passCounts: Record<string, number>;
   filteredCount: number;
   totalCount: number;
-  // Stage 22 — fresh-snow conditions filter, mirrors MobileQuickFilters.
-  // Optional during the wire-up window: MapPage will pass them once the
-  // freshSnow URL param + filter logic is plumbed through there. Until
-  // then the Conditions chip stays disabled (count=0, off).
-  freshSnowOnly?: boolean;
-  freshSnowCount?: number;
-  onFreshSnowChange?: (v: boolean) => void;
-  onPassChange: (passes: string[]) => void;
+  // Stage 33 — fresh-snow conditions filter, mirrors MobileQuickFilters.
+  freshSnowOnly: boolean;
+  freshSnowCount: number;
+  onFreshSnowChange: (v: boolean) => void;
   onFromGeo: (lat: number, lng: number) => void;
   onWithinChange: (w: string | null) => void;
   onSizeChange: (s: SizeTier | null) => void;
@@ -73,19 +68,16 @@ const DRIVE_TIME_PRESETS = [0, 3, 5, 8, 12];
 
 export default function FiltersDrawer({
   open,
-  passFilter,
   origin,
   withinHours,
   sizeFilter,
   nightOnly,
   airportFilter,
-  passCounts,
   filteredCount,
   totalCount,
-  freshSnowOnly = false,
-  freshSnowCount = 0,
+  freshSnowOnly,
+  freshSnowCount,
   onFreshSnowChange,
-  onPassChange,
   onFromGeo,
   onWithinChange,
   onSizeChange,
@@ -114,13 +106,6 @@ export default function FiltersDrawer({
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose]);
-
-  function togglePass(key: string) {
-    const next = passFilter.includes(key)
-      ? passFilter.filter((p) => p !== key)
-      : [...passFilter, key];
-    onPassChange(next);
-  }
 
   function handleUseHere() {
     if (typeof navigator === "undefined" || !navigator.geolocation) {
@@ -196,7 +181,16 @@ export default function FiltersDrawer({
 
   // Stage 22 — stop touch events from bubbling to Mapbox underneath.
   // User-reported bug: swiping inside the drawer panned the map.
-  const stopTouchBubble = (e: React.TouchEvent) => e.stopPropagation();
+  // Stage 33 — stop touch propagation at BOTH React + native DOM
+  // layers. Mapbox attaches its drag/pan listener at window/document
+  // level, so React.stopPropagation alone is not enough — we have to
+  // call nativeEvent.stopImmediatePropagation to keep Mapbox from
+  // hijacking vertical drawer scrolls. Reusable pattern for any UI
+  // floating over the map.
+  const stopTouchBubble = (e: React.TouchEvent) => {
+    e.stopPropagation();
+    e.nativeEvent.stopImmediatePropagation();
+  };
 
   return (
     <>
@@ -245,65 +239,20 @@ export default function FiltersDrawer({
           </p>
         </header>
 
-        <div className="flex-1 overflow-y-auto overscroll-contain px-4" style={{ touchAction: "pan-y" }}>
-          {/* 1. PASS */}
-          <Section
-            title="Pass"
-            summary={
-              passFilter.length === 0
-                ? "Any pass"
-                : passFilter
-                    .map((p) => PASS_LABELS[p as keyof typeof PASS_LABELS] ?? p)
-                    .join(" · ")
-            }
-          >
-            <div className="grid grid-cols-1 gap-1">
-              {PASS_KEYS.map((key) => {
-                const isActive = passFilter.includes(key);
-                const count = passCounts[key] ?? 0;
-                return (
-                  <button
-                    key={key}
-                    type="button"
-                    onClick={() => togglePass(key)}
-                    aria-pressed={isActive}
-                    className={[
-                      "flex items-center gap-2.5 rounded-lg border px-3 py-2 text-left text-sm transition",
-                      isActive
-                        ? "border-wn-navy bg-wn-navy/5"
-                        : "border-wn-charcoal/15 bg-white hover:border-wn-charcoal/30",
-                    ].join(" ")}
-                  >
-                    <span
-                      className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-sm border ${
-                        isActive
-                          ? "border-wn-navy bg-wn-navy text-white"
-                          : "border-wn-charcoal/30 bg-white"
-                      }`}
-                      aria-hidden="true"
-                    >
-                      {isActive && (
-                        <svg viewBox="0 0 12 12" className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth="2.5">
-                          <path d="M2 6.5L5 9.5L10 3" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                      )}
-                    </span>
-                    <span
-                      className="h-2.5 w-2.5 shrink-0 rounded-full"
-                      style={{ backgroundColor: PASS_COLORS[key] }}
-                      aria-hidden="true"
-                    />
-                    <span className="flex-1 font-semibold text-wn-charcoal">
-                      {PASS_LABELS[key]}
-                    </span>
-                    <span className="text-xs text-wn-charcoal/55">{count}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </Section>
+        <div
+          className="flex-1 overflow-y-auto overscroll-contain px-4"
+          style={{ touchAction: "pan-y" }}
+          onTouchStart={stopTouchBubble}
+          onTouchMove={stopTouchBubble}
+          onTouchEnd={stopTouchBubble}
+        >
+          {/* Stage 33 — PASS section dropped from the drawer. The pass
+              chips on the map header already provide 1-tap pass toggle
+              + colored-dot legend, so duplicating them here was just
+              clutter. Drawer keeps the rarer filters (conditions,
+              origin, drive time, size, airport) + content links. */}
 
-          {/* 2. CONDITIONS — fresh snow + night skiing as inline toggle pills */}
+          {/* CONDITIONS — fresh snow + night skiing as inline toggle pills */}
           <Section
             title="Conditions"
             summary={
