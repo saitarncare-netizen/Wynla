@@ -435,7 +435,14 @@ export default async function ResortPage({
           </div>
         </Section>
 
-        {/* ABOUT — always show; inner rows gracefully omit when fields are null */}
+        {/* ABOUT — Stage 33: hide entirely if there's nothing useful
+            to show (after we dropped the noisy "Night skiing: No" row,
+            About often collapsed to just an address row). */}
+        {(resort.address ||
+          resort.weekday_hours ||
+          resort.weekend_hours ||
+          resort.typical_season_start ||
+          resort.typical_season_end) && (
         <Section title="About">
           <div className="grid grid-cols-1 gap-x-8 gap-y-3 rounded-lg border border-wn-charcoal/10 bg-white p-4 text-sm sm:grid-cols-2">
             {resort.address && (
@@ -460,14 +467,13 @@ export default async function ResortPage({
                 value={`${resort.typical_season_start ?? "—"} to ${resort.typical_season_end ?? "—"}`}
               />
             )}
-            {resort.has_night_skiing != null && (
-              <DataRow
-                label="Night skiing"
-                value={resort.has_night_skiing ? "Yes" : "No"}
-              />
-            )}
+            {/* Stage 33 — night skiing row removed from About; it's
+                already surfaced as a 🌙 feature chip in QuickStats /
+                Amenities + as a filter chip on the homepage. Showing
+                "No" was just noise. */}
           </div>
         </Section>
+        )}
 
         {/* Snow alerts — Stage 29. Push notifications for new-snow events. */}
         <SnowAlertButton resortId={resort.id} resortName={resort.name} />
@@ -935,18 +941,21 @@ function TenDayForecast({ days }: { days: ForecastDay[] }) {
               key={`${d.date}-${i}`}
               className={[
                 "snap-start shrink-0 rounded-lg border p-3 text-center",
+                // Stage 33 — trend cards: keep a dashed border to flag
+                // them as less-trusted, but drop the muted background.
+                // The faded-text variant was unreadable on mobile.
                 isTrend
-                  ? "w-[88px] border-dashed border-wn-charcoal/15 bg-wn-charcoal/[0.025]"
+                  ? "w-[88px] border-dashed border-wn-charcoal/30 bg-white"
                   : "w-[88px] border-wn-charcoal/10 bg-white",
               ].join(" ")}
             >
-              <div className="text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
+              <div className="text-[10px] font-bold uppercase tracking-wide text-wn-navy">
                 {d.weekday ||
                   new Date(d.date).toLocaleDateString(undefined, {
                     weekday: "short",
                   })}
               </div>
-              <div className="text-[9px] text-wn-charcoal/40">
+              <div className="text-[9px] font-medium text-wn-charcoal/60">
                 {new Date(d.date + "T12:00:00").toLocaleDateString(undefined, {
                   month: "short",
                   day: "numeric",
@@ -958,7 +967,7 @@ function TenDayForecast({ days }: { days: ForecastDay[] }) {
               <div className="text-sm font-bold text-wn-navy">
                 {d.temp_high_f != null ? `${d.temp_high_f}°` : "—"}
                 {d.temp_low_f != null && (
-                  <span className="ml-1 text-xs font-medium text-wn-charcoal/55">
+                  <span className="ml-1 text-xs font-semibold text-wn-charcoal/70">
                     / {d.temp_low_f}°
                   </span>
                 )}
@@ -971,18 +980,18 @@ function TenDayForecast({ days }: { days: ForecastDay[] }) {
               {d.precip_chance != null &&
                 d.precip_chance > 30 &&
                 (d.snow_in == null || d.snow_in === 0) && (
-                  <div className="mt-1 text-[10px] text-wn-charcoal/55">
+                  <div className="mt-1 text-[10px] font-semibold text-wn-charcoal/70">
                     {d.precip_chance}% precip
                   </div>
                 )}
               {d.wind_short && (
-                <div className="mt-1 text-[10px] text-wn-charcoal/45">
-                  🌬️ {d.wind_short}
+                <div className="mt-1 text-[10px] font-medium text-wn-charcoal/65">
+                  💨 {d.wind_short}
                   {d.wind_dir_short ? ` ${d.wind_dir_short}` : ""}
                 </div>
               )}
               {isTrend && (
-                <div className="mt-1 text-[9px] font-medium uppercase tracking-wide text-wn-charcoal/40">
+                <div className="mt-1 text-[9px] font-bold uppercase tracking-wide text-wn-charcoal/55">
                   trend
                 </div>
               )}

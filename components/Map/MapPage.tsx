@@ -171,9 +171,19 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   const [tripResortIds, setTripResortIds] = useState<number[]>([]);
   const [tripRoute, setTripRoute] = useState<TripRoutePoint[] | null>(null);
   const [fitTripVersion, setFitTripVersion] = useState(0);
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [searchOpen, setSearchOpenRaw] = useState(false);
+  const [filtersOpen, setFiltersOpenRaw] = useState(false);
   const [lastSeenPlannerOpen, setLastSeenPlannerOpen] = useState(false);
+  // Stage 33 — search + filter sheets are mutually exclusive on mobile.
+  // Opening one closes the other so they never stack visually.
+  function setSearchOpen(v: boolean) {
+    setSearchOpenRaw(v);
+    if (v) setFiltersOpenRaw(false);
+  }
+  function setFiltersOpen(v: boolean) {
+    setFiltersOpenRaw(v);
+    if (v) setSearchOpenRaw(false);
+  }
   // Onboarding wizard — null on first render (SSR + pre-mount) so the
   // server-rendered HTML matches the client's first paint and we avoid
   // a hydration mismatch. useSyncExternalStore reads the onboarded flag
@@ -225,6 +235,11 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   const days = Math.min(30, Math.max(1, Number(searchParams.get("days")) || 1));
   const plannerOpen = searchParams.get("plan") === "1";
   const nightOnly = searchParams.get("night") === "1";
+  // Stage 33 — fresh-snow filter. URL `?freshsnow=1` narrows to
+  // resorts where the Stage 26 snow cron populated snow_new_24h_in > 0
+  // (e.g. powder-day chasers). Off-season this filter will surface
+  // only the rare late-season snow events (Mt. Hood, etc).
+  const freshSnowOnly = searchParams.get("freshsnow") === "1";
   // Stage 8 — airport filter. URL form: ?airport=DEN. Empty / missing
   // = no airport filter. Matched against resort.closest_airport_iata
   // with a 120-mile shuttle-range distance cap; resorts with NULL
@@ -309,6 +324,9 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         if (!userPasses.some((p) => passFilter.includes(p))) return false;
       }
       if (nightOnly && !r.has_night_skiing) return false;
+      if (freshSnowOnly && !(r.snow_new_24h_in != null && r.snow_new_24h_in > 0)) {
+        return false;
+      }
       if (withinHours > 0) {
         const dt = driveTimeByResort.get(r.id)?.get(origin.name);
         if (!dt || dt.duration_seconds > withinHours * 3600) return false;
@@ -319,7 +337,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
     // matchesAirport closes over airportFilter; depending on
     // airportFilter is enough for memoization correctness.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [resorts, featuredOnly, passFilter, nightOnly, withinHours, origin, driveTimeByResort, airportFilter]);
+  }, [resorts, featuredOnly, passFilter, nightOnly, freshSnowOnly, withinHours, origin, driveTimeByResort, airportFilter]);
 
   const filtered = useMemo(() => {
     return filteredIgnoringSize.filter((r) => matchesSizeFilter(r.vertical_drop, sizeFilter));
@@ -335,6 +353,9 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
     return resorts.filter((r) => {
       if (featuredOnly && r.tier !== "featured") return false;
       if (nightOnly && !r.has_night_skiing) return false;
+      if (freshSnowOnly && !(r.snow_new_24h_in != null && r.snow_new_24h_in > 0)) {
+        return false;
+      }
       if (withinHours > 0) {
         const dt = driveTimeByResort.get(r.id)?.get(origin.name);
         if (!dt || dt.duration_seconds > withinHours * 3600) return false;
@@ -344,7 +365,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
       return true;
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [resorts, featuredOnly, nightOnly, withinHours, origin, driveTimeByResort, sizeFilter, airportFilter]);
+  }, [resorts, featuredOnly, nightOnly, freshSnowOnly, withinHours, origin, driveTimeByResort, sizeFilter, airportFilter]);
 
   // Count of resorts hidden specifically because they have NULL vertical_drop
   // and a size filter is active. 0 when no filter active or no NULL hits.
@@ -582,9 +603,14 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         <MobileQuickFilters
           passFilter={passFilter}
           passCounts={passCounts}
+          freshSnowOnly={freshSnowOnly}
+          freshSnowCount={resorts.filter(
+            (r) => r.snow_new_24h_in != null && r.snow_new_24h_in > 0,
+          ).length}
           onPassChange={(passes) =>
             updateParam("pass", passes.length === 0 ? null : passes.join(","))
           }
+          onFreshSnowChange={(v) => updateParam("freshsnow", v ? "1" : null)}
         />
         {/* Stage 33 — both the off-season banner and the recently-viewed
             chips hide when the user is actively searching or planning

@@ -200,14 +200,25 @@ export default function ResortPicker({
   }, [enriched]);
 
   const visible = useMemo(() => {
-    const q = query.trim().toLowerCase();
+    // Stage 33 — typo-tolerant search.
+    // Strip non-alphanumerics from BOTH sides so "Blue wood" matches
+    // "Bluewood", "park-city" matches "Park City", and apostrophes /
+    // ampersands don't fail the match. Then split into tokens and
+    // require ALL tokens to be substring-present (any order).
+    const normalize = (s: string) =>
+      s.toLowerCase().replace(/[^a-z0-9]+/g, "");
+    const tokens = query
+      .trim()
+      .toLowerCase()
+      .split(/\s+/)
+      .map((t) => normalize(t))
+      .filter((t) => t.length > 0);
     let list = enriched;
-    if (q) {
-      list = list.filter(
-        (r) =>
-          r.name.toLowerCase().includes(q) ||
-          r.state.toLowerCase().includes(q),
-      );
+    if (tokens.length > 0) {
+      list = list.filter((r) => {
+        const haystack = normalize(r.name + " " + r.state);
+        return tokens.every((t) => haystack.includes(t));
+      });
     }
     if (activePasses.length > 0) {
       const filterSet = new Set(activePasses);
@@ -217,10 +228,6 @@ export default function ResortPicker({
       if (sortBy === "name") return a.name.localeCompare(b.name);
       return a.driveSeconds - b.driveSeconds;
     });
-    // No cap — show every match so the count label is honest. The list
-    // is plain DOM rows under an overflow-y-auto container, so browser
-    // virtualization handles the ~450 max comfortably (one repaint on
-    // open, then scroll-only).
     return list;
   }, [enriched, query, sortBy, activePasses]);
 

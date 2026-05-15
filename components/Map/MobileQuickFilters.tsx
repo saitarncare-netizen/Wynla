@@ -15,13 +15,19 @@ import { PASS_COLORS, PASS_KEYS, PASS_LABELS, type Pass } from "@/lib/passColors
 type Props = {
   passFilter: string[];
   passCounts: Record<string, number>;
+  freshSnowOnly: boolean;
+  freshSnowCount: number;
   onPassChange: (passes: string[]) => void;
+  onFreshSnowChange: (v: boolean) => void;
 };
 
 export default function MobileQuickFilters({
   passFilter,
   passCounts,
+  freshSnowOnly,
+  freshSnowCount,
   onPassChange,
+  onFreshSnowChange,
 }: Props) {
   function toggle(p: Pass) {
     const cur = new Set(passFilter);
@@ -38,15 +44,41 @@ export default function MobileQuickFilters({
       role="region"
     >
       <div className="flex items-center gap-1.5">
-        {passFilter.length > 0 && (
+        {(passFilter.length > 0 || freshSnowOnly) && (
           <button
             type="button"
-            onClick={() => onPassChange([])}
+            onClick={() => {
+              onPassChange([]);
+              onFreshSnowChange(false);
+            }}
             className="inline-flex shrink-0 items-center gap-1 rounded-full border border-wn-charcoal/15 bg-white/95 px-2.5 py-1 text-[11px] font-semibold text-wn-charcoal/75 shadow-sm backdrop-blur-sm active:scale-95"
-            aria-label="Clear pass filter"
+            aria-label="Clear filters"
           >
             <span aria-hidden="true">✕</span>
             <span>Clear</span>
+          </button>
+        )}
+        {/* Stage 33 — Fresh snow chip. Sits before pass chips because
+            it's the most actionable filter when there IS fresh snow.
+            Shows the count of resorts with snow_new_24h_in > 0. */}
+        {freshSnowCount > 0 && (
+          <button
+            type="button"
+            onClick={() => onFreshSnowChange(!freshSnowOnly)}
+            className={[
+              "inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold shadow-sm backdrop-blur-sm transition active:scale-95",
+              freshSnowOnly
+                ? "border-2 border-wn-sky bg-wn-sky/10 text-wn-navy"
+                : "border border-wn-sky/40 bg-white/95 text-wn-navy",
+            ].join(" ")}
+            aria-pressed={freshSnowOnly}
+            aria-label={`Toggle fresh snow filter (${freshSnowCount} resorts with snow)`}
+          >
+            <span aria-hidden="true">❄️</span>
+            <span>Fresh snow</span>
+            <span className="text-[10px] font-normal text-wn-charcoal/55">
+              {freshSnowCount}
+            </span>
           </button>
         )}
         {PASS_KEYS.map((p) => {

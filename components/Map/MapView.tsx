@@ -784,13 +784,13 @@ export default function MapView({
       const isDesktop = window.matchMedia("(min-width: 768px)").matches;
       map.flyTo({
         center: [cameraTarget.lng, cameraTarget.lat],
-        // zoom 9 — close enough to see the picked resort + road
-        // network, but far enough that previously-picked resorts and
-        // the trip line stay in the same viewport (so the user can
-        // see "is the route going east → west or backtracking?"). The
-        // earlier zoom 11 zoomed in too tight and made the trip
-        // overview legs disappear off-screen.
-        zoom: 9,
+        // Stage 33 — dropped from zoom 9 → 7. After we removed the
+        // explicit +/- zoom controls (Stage 33 earlier), users had no
+        // visible way to zoom out of the deep auto-zoom; "screen
+        // freezes at this scale" reports came in. Zoom 7 keeps the
+        // regional context (neighboring resorts visible) so pinch-out
+        // is rarely needed.
+        zoom: 7,
         padding: isDesktop
           ? { right: 440, top: 0, bottom: 0, left: 0 }
           : { bottom: 360, top: 0, left: 0, right: 0 },
