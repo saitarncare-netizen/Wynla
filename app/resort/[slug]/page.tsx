@@ -8,8 +8,6 @@ import {
   primaryPass,
 } from "@/lib/passColors";
 import {
-  weatherGovUrl,
-  windyUrl,
   googleMapsUrl,
   lodgingSearchUrl,
   airbnbSearchUrl,
@@ -423,18 +421,10 @@ export default async function ResortPage({
             {resort.webcam_url && (
               <ActionLink href={resort.webcam_url} label="Live webcam" sub="Current conditions" external />
             )}
-            <ActionLink
-              href={weatherGovUrl(lat, lng)}
-              label="🌡️ Weather.gov"
-              sub="Official 7-day forecast"
-              external
-            />
-            <ActionLink
-              href={windyUrl(lat, lng)}
-              label="🌬️ Windy.com"
-              sub="Animated wind layer"
-              external
-            />
+            {/* Weather.gov + Windy.com links removed Stage 33 — Wynla
+                now ships its own 10-day forecast + live snow report
+                above this section, so the external links were
+                redundant and pushed users off the site. */}
             <ActionLink
               href={lodgingSearchUrl(resort.name, resort.state)}
               label="🏨 Find lodging"

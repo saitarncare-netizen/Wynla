@@ -59,7 +59,10 @@ const MIN_PX = 120;
 
 function snapToPx(s: Snap, vh: number) {
   if (s === "collapsed") return COLLAPSED_PX;
-  if (s === "half") return Math.round(vh * 0.5);
+  // Stage 33 — half dropped from 50% → 42% so the map stays the dominant
+  // visual on open. Slimmer header (no subtitle line, count merged into
+  // title row) keeps ~4-5 list rows visible in the new 42% height.
+  if (s === "half") return Math.round(vh * 0.42);
   return Math.round(vh * 0.85);
 }
 
@@ -174,6 +177,10 @@ export default function ResortPicker({
           passes: r.passes ?? [],
           driveSeconds: estimateDriveSeconds(meters),
           alreadyInTrip: pickedSet.has(r.slug),
+          // Stage 33 — surface live snow data on the row so the user
+          // can spot powder destinations without opening each resort.
+          snowNew24h: r.snow_new_24h_in,
+          snowReportStatus: r.snow_report_status,
         };
       });
   }, [allResorts, fromPoint, alreadyPicked]);
@@ -298,9 +305,17 @@ export default function ResortPicker({
         <div className="h-1 w-10 rounded-full bg-wn-charcoal/25" />
       </div>
 
-      <header className="shrink-0 border-b border-wn-charcoal/10 px-3 pb-3 pt-2 md:pt-3">
+      <header className="shrink-0 border-b border-wn-charcoal/10 px-3 pb-2 pt-1.5 md:pt-3">
+        {/* Stage 33 — header slimmed: title + count + close all on one
+            row (subtitle "From X · sorted by drive time" dropped — the
+            same info now lives next to the sort toggles below). */}
         <div className="flex items-baseline justify-between gap-2">
-          <h3 className="text-sm font-bold text-wn-navy">{title}</h3>
+          <div className="flex items-baseline gap-2 truncate">
+            <h3 className="truncate text-sm font-bold text-wn-navy">{title}</h3>
+            <span className="shrink-0 text-[10px] font-medium text-wn-charcoal/50">
+              {visible.length} of {enriched.length}
+            </span>
+          </div>
           <button
             type="button"
             onClick={onClose}
@@ -310,22 +325,16 @@ export default function ResortPicker({
             ×
           </button>
         </div>
-        <p className="mt-0.5 text-[11px] text-wn-charcoal/55">
-          From {fromPoint.label} · sorted by drive time
-        </p>
         <input
           ref={inputRef}
           type="search"
-          placeholder="Search resorts… (e.g. loveland, MT, jackson)"
+          placeholder="Search resorts…"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => {
-            // If the user taps the search input on mobile while the sheet
-            // is collapsed, expand to half so the iOS keyboard doesn't
-            // immediately cover the chip row + sort buttons.
             if (isMobile && snap === "collapsed") setSnap("half");
           }}
-          className="mt-2 w-full rounded-md border border-wn-charcoal/20 bg-white px-3 py-2 text-sm font-medium text-wn-charcoal placeholder:text-wn-charcoal/40 focus:border-wn-navy focus:outline-none focus:ring-2 focus:ring-wn-navy/20"
+          className="mt-1.5 w-full rounded-md border border-wn-charcoal/20 bg-white px-2.5 py-1.5 text-sm font-medium text-wn-charcoal placeholder:text-wn-charcoal/40 focus:border-wn-navy focus:outline-none focus:ring-2 focus:ring-wn-navy/20"
         />
         {/* Pass-filter chip row. Multi-pass owners frequently want
             "Ikon + Epic" — clicking a chip toggles inclusion (OR
@@ -372,7 +381,7 @@ export default function ResortPicker({
           )}
         </div>
 
-        <div className="mt-2 flex gap-1 text-[10px]">
+        <div className="mt-1.5 flex items-center gap-1 text-[10px]">
           <button
             type="button"
             onClick={() => setSortBy("distance")}
@@ -395,8 +404,8 @@ export default function ResortPicker({
           >
             A–Z
           </button>
-          <span className="ml-auto text-wn-charcoal/45">
-            {visible.length} resort{visible.length === 1 ? "" : "s"}
+          <span className="ml-auto truncate text-wn-charcoal/45">
+            from {fromPoint.label}
           </span>
         </div>
       </header>
@@ -453,6 +462,28 @@ export default function ResortPicker({
                       </span>
                     )}
                   </div>
+                  {/* Stage 33 — live snow indicator. Shows ❄️ amount when
+                      a resort has fresh snow > 0; otherwise a small open
+                      🟢 / off-season 🌸 / closed 🔴 dot when status is
+                      set. Resorts with no scrape data render nothing. */}
+                  {(r.snowNew24h != null && r.snowNew24h > 0) ||
+                  r.snowReportStatus ? (
+                    <div className="mt-0.5 flex items-center gap-1.5 text-[10px] text-wn-charcoal/65">
+                      {r.snowNew24h != null && r.snowNew24h > 0 ? (
+                        <span className="font-semibold text-wn-sky">
+                          ❄️ {r.snowNew24h}&quot; new
+                        </span>
+                      ) : r.snowReportStatus === "open" ? (
+                        <span className="text-emerald-700">🟢 Open today</span>
+                      ) : r.snowReportStatus === "closed" ? (
+                        <span className="text-red-700">🔴 Closed</span>
+                      ) : r.snowReportStatus === "limited" ? (
+                        <span className="text-amber-700">🟡 Limited</span>
+                      ) : r.snowReportStatus === "off-season" ? (
+                        <span className="text-wn-charcoal/50">🌸 Off-season</span>
+                      ) : null}
+                    </div>
+                  ) : null}
                 </div>
                 <span className="shrink-0 rounded bg-wn-offwhite px-2 py-0.5 text-[11px] font-semibold text-wn-navy">
                   ≈ {formatDriveTime(r.driveSeconds)}

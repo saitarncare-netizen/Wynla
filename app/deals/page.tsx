@@ -31,6 +31,9 @@ type PassDeal = {
   tiers: PassTier[];
   url: string;
   lastVerified: string;
+  /** Set when the pass is sold out for the upcoming season. Renders a
+      SOLD OUT badge in place of the price + disables the buy CTA. */
+  soldOut?: { reason: string; waitlistUrl?: string };
 };
 
 // Plausible 2026-27 pricing based on 2025-26 trends + standard ~5% YoY
@@ -72,6 +75,10 @@ const PASS_DEALS: PassDeal[] = [
     ],
     url: "https://www.indyskipass.com/",
     lastVerified: "2026-05-14",
+    soldOut: {
+      reason: "2026-27 allocation has sold out. Join the waitlist for 2027-28 release.",
+      waitlistUrl: "https://www.indyskipass.com/",
+    },
   },
   {
     pass: "mountain_collective",
@@ -192,6 +199,7 @@ export default function DealsPage() {
 function PassCard({ deal }: { deal: PassDeal }) {
   const accent = passColor(deal.pass);
   const headlineTier = deal.tiers[0];
+  const isSoldOut = deal.soldOut != null;
 
   return (
     <article className="overflow-hidden rounded-xl border border-wn-charcoal/10 bg-white shadow-sm transition hover:shadow-md">
@@ -203,56 +211,89 @@ function PassCard({ deal }: { deal: PassDeal }) {
           <h3 className="text-lg font-extrabold tracking-tight text-wn-navy sm:text-xl">
             {deal.label}
           </h3>
-          <span
-            className="inline-block rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white"
-            style={{
-              backgroundColor: accent,
-              color: deal.pass === "ikon" ? "#1E2952" : "#FFFFFF",
-            }}
-          >
-            {passLabel(deal.pass)}
-          </span>
+          {isSoldOut ? (
+            <span className="inline-block rounded-md bg-red-600 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white">
+              Sold out
+            </span>
+          ) : (
+            <span
+              className="inline-block rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white"
+              style={{
+                backgroundColor: accent,
+                color: deal.pass === "ikon" ? "#1E2952" : "#FFFFFF",
+              }}
+            >
+              {passLabel(deal.pass)}
+            </span>
+          )}
         </div>
         <p className="mt-1 text-xs text-wn-charcoal/65 sm:text-sm">
           {deal.tagline}
         </p>
 
-        {/* Headline price */}
-        <div className="mt-4 flex items-baseline gap-2">
-          <span className="text-3xl font-extrabold tracking-tight text-wn-navy">
-            {formatPrice(headlineTier.price, headlineTier.currency)}
-          </span>
-          <span className="text-xs text-wn-charcoal/60">
-            · {headlineTier.name}
-          </span>
-        </div>
-        <p className="mt-0.5 text-[11px] font-semibold uppercase tracking-wider text-wn-charcoal/55">
-          Price ends {formatPriceEnd(headlineTier.priceEnds)}
-        </p>
-
-        {/* Other tiers */}
-        <ul className="mt-4 space-y-1.5 text-sm">
-          {deal.tiers.slice(1).map((tier) => (
-            <li
-              key={tier.name}
-              className="flex items-baseline justify-between gap-3 border-t border-wn-charcoal/5 pt-1.5"
-            >
-              <span className="text-wn-charcoal/80">{tier.name}</span>
-              <span className="font-semibold text-wn-navy">
-                {formatPrice(tier.price, tier.currency)}
+        {isSoldOut ? (
+          <>
+            <div className="mt-4 rounded-lg border border-red-200 bg-red-50 px-3 py-2.5">
+              <p className="text-sm font-semibold text-red-900">
+                🚫 {deal.soldOut?.reason}
+              </p>
+            </div>
+            <p className="mt-3 text-[11px] text-wn-charcoal/55">
+              Originally priced from {formatPrice(headlineTier.price, headlineTier.currency)} ({headlineTier.name}).
+              Demand outpaced allocation — Indy Pass historically sells out
+              in spring once year-over-year passholder count hits the cap.
+            </p>
+            {deal.soldOut?.waitlistUrl && (
+              <a
+                href={deal.soldOut.waitlistUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 inline-flex w-full items-center justify-center gap-1.5 rounded-lg border border-wn-charcoal/20 bg-white px-4 py-2.5 text-sm font-semibold text-wn-charcoal/85 transition hover:border-wn-navy hover:text-wn-navy"
+              >
+                Join 2027-28 waitlist <span aria-hidden="true">→</span>
+              </a>
+            )}
+          </>
+        ) : (
+          <>
+            {/* Headline price */}
+            <div className="mt-4 flex items-baseline gap-2">
+              <span className="text-3xl font-extrabold tracking-tight text-wn-navy">
+                {formatPrice(headlineTier.price, headlineTier.currency)}
               </span>
-            </li>
-          ))}
-        </ul>
+              <span className="text-xs text-wn-charcoal/60">
+                · {headlineTier.name}
+              </span>
+            </div>
+            <p className="mt-0.5 text-[11px] font-semibold uppercase tracking-wider text-wn-charcoal/55">
+              Price ends {formatPriceEnd(headlineTier.priceEnds)}
+            </p>
 
-        <a
-          href={deal.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-5 inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-wn-navy px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-wn-navy/90"
-        >
-          Get this pass <span aria-hidden="true">→</span>
-        </a>
+            {/* Other tiers */}
+            <ul className="mt-4 space-y-1.5 text-sm">
+              {deal.tiers.slice(1).map((tier) => (
+                <li
+                  key={tier.name}
+                  className="flex items-baseline justify-between gap-3 border-t border-wn-charcoal/5 pt-1.5"
+                >
+                  <span className="text-wn-charcoal/80">{tier.name}</span>
+                  <span className="font-semibold text-wn-navy">
+                    {formatPrice(tier.price, tier.currency)}
+                  </span>
+                </li>
+              ))}
+            </ul>
+
+            <a
+              href={deal.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-5 inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-wn-navy px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-wn-navy/90"
+            >
+              Get this pass <span aria-hidden="true">→</span>
+            </a>
+          </>
+        )}
 
         <p className="mt-3 text-[10px] text-wn-charcoal/45">
           Last verified {formatPriceEnd(deal.lastVerified)}
