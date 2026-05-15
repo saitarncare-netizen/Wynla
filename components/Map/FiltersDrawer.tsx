@@ -194,12 +194,14 @@ export default function FiltersDrawer({
 
   return (
     <>
-      {/* Backdrop — tap to close. Faint so map behind stays readable. */}
+      {/* Backdrop — desktop only. Mobile drawer is full-screen so the
+          backdrop would be hidden behind it anyway. Tap to close on
+          desktop where the modal is centered + smaller. */}
       <button
         type="button"
         aria-label="Close filters"
         onClick={onClose}
-        className="fixed inset-0 z-[55] cursor-default bg-wn-charcoal/35 backdrop-blur-[1px]"
+        className="fixed inset-0 z-[55] hidden cursor-default bg-wn-charcoal/35 backdrop-blur-[1px] md:block"
       />
 
       <aside
@@ -210,11 +212,15 @@ export default function FiltersDrawer({
         onTouchEnd={stopTouchBubble}
         className={[
           "fixed z-[60] flex flex-col overflow-hidden bg-white shadow-2xl",
-          // Mobile: bottom sheet at 85vh
-          "inset-x-0 bottom-0 max-h-[85vh] rounded-t-2xl",
-          "animate-[slideUp_220ms_cubic-bezier(0.16,1,0.3,1)]",
-          // Desktop: centered modal at fixed width
-          "md:inset-auto md:left-1/2 md:top-12 md:bottom-12 md:max-h-none md:w-[440px] md:-translate-x-1/2 md:rounded-2xl",
+          // Stage 33 — full-screen on mobile (not a bottom sheet). The
+          // bottom-sheet pattern left the top ~15-30% of the viewport
+          // showing the dimmed map, and users kept perceiving touches
+          // in that strip as "map is panning". Going full-screen
+          // removes the map from the viewport entirely so the
+          // perception bug can't happen.
+          "inset-0 animate-[slideUp_220ms_cubic-bezier(0.16,1,0.3,1)]",
+          // Desktop: centered modal at fixed width (unchanged).
+          "md:inset-auto md:left-1/2 md:top-12 md:bottom-12 md:w-[440px] md:-translate-x-1/2 md:rounded-2xl",
         ].join(" ")}
       >
         {/* Drag handle (mobile only — visual cue, taps go to backdrop) */}
