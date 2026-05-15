@@ -910,7 +910,20 @@ export default function MapView({
           100% { transform: scale(2.4); opacity: 0; }
         }
       `}</style>
-      <div ref={mapContainer} className="h-full w-full" />
+      {/* Stage 33 — pointer-events:none when interaction is disabled.
+          Nuclear belt-and-suspenders alongside the Mapbox handler disable
+          above: kills every touch/click/wheel at the DOM level so no
+          event ever reaches Mapbox's listeners. Pin clicks etc are
+          unaffected when interactionDisabled=false (the default). */}
+      <div
+        ref={mapContainer}
+        className="h-full w-full"
+        style={
+          interactionDisabled
+            ? { pointerEvents: "none", touchAction: "none" }
+            : undefined
+        }
+      />
     </>
   );
 }
