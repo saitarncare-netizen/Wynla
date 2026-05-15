@@ -101,6 +101,11 @@ export default function ResortPicker({
 }: Props) {
   const [query, setQuery] = useState("");
   const [sortBy, setSortBy] = useState<"distance" | "name">("distance");
+  // Stage 33 — local fresh-snow toggle. Doesn't write to URL since the
+  // picker is a transient view; users can flip it on inside the search
+  // sheet to surface powder candidates without changing the map filter
+  // behind. Resets to false every time the picker opens.
+  const [freshSnowFilter, setFreshSnowFilter] = useState(false);
   // Track the most recent `open` value we've seen so we can clear the
   // query whenever the picker opens. React's recommended way to derive
   // state from a prop change without a setState-in-effect cascade.
@@ -123,6 +128,7 @@ export default function ResortPicker({
       setQuery("");
       setSnap("half");
       setDragHeight(null);
+      setFreshSnowFilter(false);
     }
   }
 
@@ -224,12 +230,17 @@ export default function ResortPicker({
       const filterSet = new Set(activePasses);
       list = list.filter((r) => r.passes.some((p) => filterSet.has(p)));
     }
+    if (freshSnowFilter) {
+      list = list.filter(
+        (r) => r.snowNew24h != null && r.snowNew24h > 0,
+      );
+    }
     list = [...list].sort((a, b) => {
       if (sortBy === "name") return a.name.localeCompare(b.name);
       return a.driveSeconds - b.driveSeconds;
     });
     return list;
-  }, [enriched, query, sortBy, activePasses]);
+  }, [enriched, query, sortBy, activePasses, freshSnowFilter]);
 
   function togglePassChip(key: string) {
     const next = activePasses.includes(key)
@@ -237,6 +248,17 @@ export default function ResortPicker({
       : [...activePasses, key];
     onPassFilterChange?.(next);
   }
+
+  // Stage 33 — count of resorts (within the current pool, before any
+  // pass / fresh-snow filter is applied) that have fresh snow. Powers
+  // the chip's badge ("Fresh snow · 2") so users know if it's worth
+  // toggling.
+  const freshSnowCount = useMemo(
+    () =>
+      enriched.filter((r) => r.snowNew24h != null && r.snowNew24h > 0)
+        .length,
+    [enriched],
+  );
 
   function handleRowClick(slug: string) {
     onSelect(slug);
@@ -343,12 +365,31 @@ export default function ResortPicker({
           }}
           className="mt-1.5 w-full rounded-md border border-wn-charcoal/20 bg-white px-2.5 py-1.5 text-sm font-medium text-wn-charcoal placeholder:text-wn-charcoal/40 focus:border-wn-navy focus:outline-none focus:ring-2 focus:ring-wn-navy/20"
         />
-        {/* Pass-filter chip row. Multi-pass owners frequently want
-            "Ikon + Epic" — clicking a chip toggles inclusion (OR
-            semantics). Only chips with at least one matching resort
-            in the current list are shown so we don't render dead
-            chips for passes nobody in the picker has. */}
+        {/* Pass-filter chip row + Stage 33 fresh-snow chip. Multi-pass
+            owners frequently want "Ikon + Epic" — clicking a chip
+            toggles inclusion (OR semantics). Only chips with at least
+            one matching resort in the current list are shown so we
+            don't render dead chips for passes nobody in the picker
+            has. The Fresh snow chip leads the row because it's the
+            most actionable filter when powder is falling. */}
         <div className="mt-2 flex flex-wrap items-center gap-1.5">
+          {freshSnowCount > 0 && (
+            <button
+              type="button"
+              onClick={() => setFreshSnowFilter((v) => !v)}
+              className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold transition ${
+                freshSnowFilter
+                  ? "border-wn-sky bg-wn-sky/10 text-wn-navy"
+                  : "border-wn-sky/40 bg-white text-wn-navy hover:border-wn-sky"
+              }`}
+              aria-pressed={freshSnowFilter}
+              title={`Fresh snow (${freshSnowCount})`}
+            >
+              <span aria-hidden="true">❄️</span>
+              <span>Fresh snow</span>
+              <span className="text-wn-charcoal/55">{freshSnowCount}</span>
+            </button>
+          )}
           {PASS_KEYS.filter((k) => (passCounts[k] ?? 0) > 0).map((k) => {
             const isActive = activePasses.includes(k);
             const count = passCounts[k] ?? 0;
