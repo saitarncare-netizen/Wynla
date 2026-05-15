@@ -164,7 +164,10 @@ export default function MapView({
     map.touchZoomRotate.disableRotation();
 
     mapRef.current = map;
-    map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), "top-right");
+    // Stage 33 — dropped mapbox NavigationControl (+/- zoom buttons).
+    // On mobile they clashed with the floating header pills + the
+    // recently-viewed strip; users zoom via pinch-gesture anyway.
+    // Re-add per-viewport if we ever want explicit zoom UI back.
 
     // Setup runs once the basemap style is ready. In Mapbox 3.x the "load"
     // event can be unreliable under React strict-mode double-mount; "style.load"

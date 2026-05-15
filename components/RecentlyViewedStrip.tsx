@@ -21,9 +21,16 @@ export type OpenResortDetail = {
 };
 
 // Horizontal-scroll strip of the user's last 8 viewed resorts. Hidden
-// until there's at least one entry — empty state would be visual
-// noise on a fresh visit. Placement is delegated to the parent (the
-// component fixed-positions itself relative to the viewport).
+// until there's at least one entry — empty state would be visual noise
+// on a fresh visit.
+//
+// Renders TWO simultaneous variants gated by Tailwind breakpoints:
+//   * Mobile (< md): inline block — parent mounts it in normal flow
+//     so it stacks cleanly with the brand row / quick-filter chips /
+//     off-season banner without absolute-position overlap.
+//   * Desktop (md+): fixed floating pill bottom-right, above the pass
+//     legend. Mobile fragment is hidden via `md:hidden` so they never
+//     show at the same time.
 export default function RecentlyViewedStrip() {
   const [list, setList] = useState<RecentResort[]>([]);
 
@@ -49,29 +56,25 @@ export default function RecentlyViewedStrip() {
       lat: r.lat,
       lng: r.lng,
     };
-    window.dispatchEvent(new CustomEvent<OpenResortDetail>(OPEN_RESORT_EVENT, { detail }));
+    window.dispatchEvent(
+      new CustomEvent<OpenResortDetail>(OPEN_RESORT_EVENT, { detail }),
+    );
   }
 
   return (
-    <div
-      className="pointer-events-none absolute inset-x-0 z-10 px-3 sm:px-6"
-      // Position: mobile sits under the header pill row (~64px down);
-      // desktop floats just above the pass legend (bottom-right).
-      style={{
-        top: "calc(env(safe-area-inset-top, 0px) + 64px)",
-      }}
-    >
-      <div className="md:hidden">
+    <>
+      {/* Mobile — inline block in normal flow, sits below off-season banner */}
+      <div className="md:hidden px-3 pb-2 sm:px-6">
         <Strip list={list} onChipClick={onChipClick} />
       </div>
-      {/* Desktop: absolute-position above the pass legend at bottom-right */}
+      {/* Desktop — fixed pill floating above the bottom-right pass legend */}
       <div
         className="pointer-events-none fixed bottom-20 right-6 z-10 hidden md:block"
         style={{ maxWidth: "calc(100vw - 3rem)" }}
       >
         <Strip list={list} onChipClick={onChipClick} compact />
       </div>
-    </div>
+    </>
   );
 }
 
@@ -86,7 +89,7 @@ function Strip({
 }) {
   return (
     <div
-      className="pointer-events-auto rounded-full border border-wn-charcoal/10 bg-white/95 px-2 py-1.5 shadow-md backdrop-blur-sm"
+      className="pointer-events-auto rounded-full border border-wn-charcoal/10 bg-white/95 px-2 py-1 shadow-sm backdrop-blur-sm"
       role="region"
       aria-label="Recently viewed resorts"
     >
@@ -99,10 +102,10 @@ function Strip({
         }}
       >
         <span
-          className="shrink-0 px-1 text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55"
+          className="shrink-0 px-1 text-[9px] font-bold uppercase tracking-wider text-wn-charcoal/45"
           aria-hidden="true"
         >
-          Recent
+          🕐
         </span>
         {list.map((r) => (
           <button
@@ -110,15 +113,15 @@ function Strip({
             type="button"
             onClick={() => onChipClick(r)}
             className={[
-              "inline-flex shrink-0 items-center gap-1.5 rounded-full border border-wn-charcoal/15 bg-white px-2.5 font-medium text-wn-charcoal transition hover:border-wn-navy hover:text-wn-navy active:scale-95",
-              compact ? "h-7 text-[11px]" : "h-7 text-[11px]",
+              "inline-flex shrink-0 items-center gap-1.5 rounded-full border border-wn-charcoal/15 bg-white px-2 font-medium text-wn-charcoal transition hover:border-wn-navy hover:text-wn-navy active:scale-95",
+              compact ? "h-6 text-[10px]" : "h-6 text-[10px]",
             ].join(" ")}
             title={r.name}
             aria-label={`Open ${r.name}`}
           >
             <span
               aria-hidden="true"
-              className="block h-2 w-2 rounded-full"
+              className="block h-1.5 w-1.5 rounded-full"
               style={{ backgroundColor: passColor(r.primary_pass) }}
             />
             <span className="max-w-[7rem] truncate">{truncate(r.name, 14)}</span>

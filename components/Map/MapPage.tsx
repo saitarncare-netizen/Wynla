@@ -590,6 +590,11 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
             component self-gates on date + localStorage, so unconditionally
             mounting it here is safe (renders null when not applicable). */}
         <OffSeasonBanner />
+        {/* Recently-viewed chips — sits inline below banner on mobile so
+            the strip flows with the rest of the header pills instead of
+            absolute-overlapping them. Desktop variant inside the component
+            renders as a floating fixed pill bottom-right. */}
+        <RecentlyViewedStrip />
         {/* Inline filter pills row — desktop only. Mobile uses the
             single ☰ Filters button above + FiltersDrawer below. */}
         <div className="hidden md:block">
@@ -754,15 +759,11 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         onUseMyLocation={handleFromGeo}
       />
 
-      {/* Recently-viewed strip — pulls from localStorage; renders only
-          when the user has at least one entry. Chip clicks dispatch
-          OPEN_RESORT_EVENT which our useEffect below catches to drive
-          the camera + open the side panel. */}
-      <RecentlyViewedStrip />
-
       {/* Compare CTA — fixed pill bottom-center (mobile) / bottom-left
           (desktop). Renders only when the localStorage list has ≥2.
-          Routes to /compare?ids=… */}
+          Routes to /compare?ids=… (RecentlyViewedStrip moved into the
+          header above so it stacks inline on mobile instead of
+          absolute-overlapping the off-season banner / quick filters.) */}
       <CompareFloatingButton />
 
       {/* Stage 21.2 — mobile filters drawer. Triggered by the ☰ Filters
