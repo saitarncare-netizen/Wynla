@@ -352,16 +352,11 @@ export default async function ResortPage({
         {/* QUICK STATS — show whenever any stats exist (QuickStats returns null otherwise) */}
         <QuickStats resort={resort} />
 
-        {/* TODAY'S SNOW REPORT — Stage 26 columns populated by the
-            /api/cron/refresh-snow-conditions daily cron. Hidden when
-            no live snow fields are set so brand-new / unscraped
-            resorts don't show an empty card. */}
-        <SnowReportCard resort={resort} />
-
-        {/* WEATHER — in-app card driven by weather_cache, with the
-            external links surfaced as small follow-ons. */}
+        {/* TODAY'S WEATHER — Stage 33 merge: snow + status from the
+            Stage 26 columns are now inline in the 3-icon weather row
+            instead of a separate "Today's snow report" section. */}
         <Section title="Today's weather">
-          <FullWeatherCard weather={weather} lat={lat} lng={lng} />
+          <FullWeatherCard resort={resort} weather={weather} lat={lat} lng={lng} />
         </Section>
 
         {/* 10-DAY FORECAST — pulled from weather_cache.forecast_json on
@@ -707,192 +702,23 @@ function DataRow({ label, value }: { label: string; value: string }) {
   );
 }
 
-// In-page weather card — same data model as the homepage ResortPanel.
-// Falls back to "no data yet" state when weather_cache hasn't refreshed.
-// Today's snow report — surfaces the Stage 26 live columns populated
-// by /api/cron/refresh-snow-conditions (OnTheSnow scrape with
-// Open-Meteo fallback). Returns null when EVERY field is null so we
-// don't show an empty card on freshly-added resorts that haven't been
-// scraped yet, or on resorts where OnTheSnow URL discovery failed and
-// the Open-Meteo fallback returned no useful snow data.
-function SnowReportCard({ resort }: { resort: Resort }) {
-  const status = resort.snow_report_status;
-  const newSnow24 = resort.snow_new_24h_in;
-  const newSnow48 = resort.snow_new_48h_in;
-  const newSnow7d = resort.snow_new_7d_in;
-  const base = resort.snow_base_depth_in;
-  const trailsOpen = resort.trails_open_today;
-  const totalTrails = resort.total_trails;
-  const liftsOpen = resort.lifts_open_today;
-  const totalLifts = resort.total_lifts;
-
-  const hasAnyData =
-    status != null ||
-    newSnow24 != null ||
-    newSnow48 != null ||
-    newSnow7d != null ||
-    base != null ||
-    trailsOpen != null ||
-    liftsOpen != null;
-  if (!hasAnyData) return null;
-
-  // Map status to a colored badge. "unknown" = Open-Meteo fallback only
-  // (we can't infer open/closed reliably without an OnTheSnow page).
-  const statusMeta: Record<string, { label: string; bg: string; fg: string }> = {
-    open: { label: "🟢 Open today", bg: "bg-emerald-100", fg: "text-emerald-900" },
-    closed: { label: "🔴 Closed", bg: "bg-red-100", fg: "text-red-900" },
-    limited: { label: "🟡 Limited operations", bg: "bg-amber-100", fg: "text-amber-900" },
-    "off-season": { label: "🌸 Off-season", bg: "bg-wn-charcoal/10", fg: "text-wn-charcoal/70" },
-    unknown: { label: "Status unverified", bg: "bg-wn-charcoal/5", fg: "text-wn-charcoal/55" },
-  };
-  const sm = status ? statusMeta[status] : null;
-
-  const pctTrails =
-    trailsOpen != null && totalTrails != null && totalTrails > 0
-      ? Math.round((trailsOpen / totalTrails) * 100)
-      : null;
-  const pctLifts =
-    liftsOpen != null && totalLifts != null && totalLifts > 0
-      ? Math.round((liftsOpen / totalLifts) * 100)
-      : null;
-
-  return (
-    <Section title="Today's snow report">
-      <div className="rounded-lg border border-wn-charcoal/10 bg-white p-4">
-        {sm && (
-          <div className="mb-3 flex items-center justify-between gap-3">
-            <span
-              className={`inline-block rounded-full px-3 py-1 text-xs font-semibold ${sm.bg} ${sm.fg}`}
-            >
-              {sm.label}
-            </span>
-            {resort.snow_report_updated_at && (
-              <span className="text-[10px] text-wn-charcoal/45">
-                Updated{" "}
-                {new Date(resort.snow_report_updated_at).toLocaleString(undefined, {
-                  weekday: "short",
-                  hour: "numeric",
-                  minute: "2-digit",
-                })}
-              </span>
-            )}
-          </div>
-        )}
-
-        {/* Snow depth + new snow grid */}
-        {(base != null || newSnow24 != null || newSnow48 != null || newSnow7d != null) && (
-          <div className="mb-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
-            {base != null && <SnowStat label="Base depth" value={`${base}"`} />}
-            {newSnow24 != null && (
-              <SnowStat
-                label="New (24h)"
-                value={`${newSnow24}"`}
-                accent={newSnow24 > 0}
-              />
-            )}
-            {newSnow48 != null && <SnowStat label="New (48h)" value={`${newSnow48}"`} />}
-            {newSnow7d != null && <SnowStat label="New (7d)" value={`${newSnow7d}"`} />}
-          </div>
-        )}
-
-        {/* Trails / lifts open rows */}
-        {(trailsOpen != null || liftsOpen != null) && (
-          <div className="space-y-2">
-            {trailsOpen != null && totalTrails != null && (
-              <OpenBar
-                label="Trails open"
-                open={trailsOpen}
-                total={totalTrails}
-                pct={pctTrails}
-              />
-            )}
-            {liftsOpen != null && totalLifts != null && (
-              <OpenBar
-                label="Lifts open"
-                open={liftsOpen}
-                total={totalLifts}
-                pct={pctLifts}
-              />
-            )}
-          </div>
-        )}
-
-        {/* Source attribution — keeps the user honest about where the
-            numbers came from. Unknown status means Open-Meteo only. */}
-        <p className="mt-3 text-[10px] text-wn-charcoal/45">
-          {status === "unknown"
-            ? "Snowfall estimated from weather data. Conditions not directly verified."
-            : "Source: OnTheSnow. Resort-reported numbers; treat with normal skepticism."}
-        </p>
-      </div>
-    </Section>
-  );
-}
-
-function SnowStat({
-  label,
-  value,
-  accent = false,
-}: {
-  label: string;
-  value: string;
-  accent?: boolean;
-}) {
-  return (
-    <div className="rounded-md border border-wn-charcoal/10 bg-wn-offwhite/40 px-3 py-2">
-      <div className="text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/50">
-        {label}
-      </div>
-      <div
-        className={`mt-0.5 text-base font-extrabold tracking-tight ${
-          accent ? "text-wn-sky" : "text-wn-navy"
-        }`}
-      >
-        {accent && <span aria-hidden="true">❄️ </span>}
-        {value}
-      </div>
-    </div>
-  );
-}
-
-function OpenBar({
-  label,
-  open,
-  total,
-  pct,
-}: {
-  label: string;
-  open: number;
-  total: number;
-  pct: number | null;
-}) {
-  const widthPct = pct != null ? Math.max(0, Math.min(100, pct)) : 0;
-  return (
-    <div>
-      <div className="mb-1 flex items-baseline justify-between text-xs">
-        <span className="font-semibold text-wn-charcoal/70">{label}</span>
-        <span className="font-bold text-wn-navy">
-          {open} / {total}
-          {pct != null && (
-            <span className="ml-1 font-normal text-wn-charcoal/55">({pct}%)</span>
-          )}
-        </span>
-      </div>
-      <div className="h-1.5 w-full overflow-hidden rounded-full bg-wn-charcoal/10">
-        <div
-          className="h-full rounded-full bg-wn-navy transition-all"
-          style={{ width: `${widthPct}%` }}
-        />
-      </div>
-    </div>
-  );
-}
-
+// Stage 33 — Compact "Today's weather" card that folds the old
+// SnowReportCard data inline. Layout:
+//
+//   [optional status line: 🟢 Open · 79/175 trails ...]
+//   [ 🌨️ 43°/36°F     |    💨 5 mph S    |    ❄️ 2"      ]
+//   [ Light snow      |    Wind          |    24h new    ]
+//
+// Each column hides if its data is missing. Saves ~250px vertical
+// vs the previous separate-section design while keeping all the
+// decision-driving info: status, temp, wind, snow.
 function FullWeatherCard({
+  resort,
   weather,
   lat,
   lng,
 }: {
+  resort: Resort;
   weather: WeatherSnapshot | null;
   lat: number;
   lng: number;
@@ -908,72 +734,163 @@ function FullWeatherCard({
     if (c.includes("fog") || c.includes("mist")) return "🌫️";
     return "🌤️";
   };
+
   if (!weather || (weather.temp_high_f == null && weather.conditions_short == null)) {
     return (
       <div className="rounded-lg border border-dashed border-wn-charcoal/15 bg-white p-4 text-sm text-wn-charcoal/65">
-        Live weather hasn&apos;t synced for this resort yet. Use the links below
-        for current conditions.
+        Live weather hasn&apos;t synced for this resort yet.
       </div>
     );
   }
-  const snow24 = weather.snow_24h_in != null ? Number(weather.snow_24h_in) : null;
-  const snow48 = weather.snow_48h_in != null ? Number(weather.snow_48h_in) : null;
+
+  // Combine new-snow from weather_cache (live NWS-derived) and the
+  // Stage 26 cron column. Prefer the cron column when set since it
+  // pulls from OnTheSnow's resort-reported numbers; fall back to NWS.
+  const snowNew24 =
+    resort.snow_new_24h_in ?? (weather.snow_24h_in != null ? Number(weather.snow_24h_in) : null);
+  const base = resort.snow_base_depth_in;
+
+  // Status line — open/closed/limited/off-season, with trails+lifts
+  // open ratios inline when applicable. Hide for "unknown" (Open-Meteo
+  // fallback couldn't infer status reliably).
+  const status = resort.snow_report_status;
+  const trailsOpen = resort.trails_open_today;
+  const totalTrails = resort.total_trails;
+  const liftsOpen = resort.lifts_open_today;
+  const totalLifts = resort.total_lifts;
+  const statusMeta: Record<
+    string,
+    { emoji: string; label: string; color: string }
+  > = {
+    open: { emoji: "🟢", label: "Open today", color: "text-emerald-800" },
+    closed: { emoji: "🔴", label: "Closed", color: "text-red-800" },
+    limited: { emoji: "🟡", label: "Limited operations", color: "text-amber-800" },
+    "off-season": { emoji: "🌸", label: "Off-season", color: "text-wn-charcoal/65" },
+  };
+  const sm = status ? statusMeta[status] : null;
+  const trailsStr =
+    trailsOpen != null && totalTrails != null && totalTrails > 0
+      ? `${trailsOpen}/${totalTrails} trails`
+      : null;
+  const liftsStr =
+    liftsOpen != null && totalLifts != null && totalLifts > 0
+      ? `${liftsOpen}/${totalLifts} lifts`
+      : null;
+
   return (
     <div className="rounded-lg border border-wn-charcoal/10 bg-white p-4">
-      <div className="flex items-baseline justify-between gap-3">
-        <div className="flex items-baseline gap-2">
-          <span className="text-3xl" aria-hidden="true">
-            {conditionEmoji(weather.conditions_short)}
-          </span>
-          <div>
-            <div className="text-2xl font-extrabold tracking-tight text-wn-navy">
-              {weather.temp_high_f != null ? `${weather.temp_high_f}°F` : "—"}
-              {weather.temp_low_f != null && (
-                <span className="ml-2 text-base font-semibold text-wn-charcoal/60">
-                  / {weather.temp_low_f}°F
-                </span>
-              )}
-            </div>
-            <div className="text-xs text-wn-charcoal/65">
-              {weather.conditions_short ?? "—"}
-            </div>
-          </div>
+      {sm && (
+        <div className={`mb-3 text-xs font-semibold ${sm.color}`}>
+          <span aria-hidden="true">{sm.emoji}</span> {sm.label}
+          {(trailsStr || liftsStr) && status === "open" && (
+            <span className="ml-1 font-normal text-wn-charcoal/60">
+              · {[trailsStr, liftsStr].filter(Boolean).join(" · ")}
+            </span>
+          )}
         </div>
-        {(snow24 != null && snow24 > 0) || (snow48 != null && snow48 > 0) ? (
-          <div className="rounded-md bg-wn-sky/15 px-3 py-1.5 text-right">
-            <div className="text-[10px] font-semibold uppercase tracking-wide text-wn-navy/70">
-              Snow
-            </div>
-            <div className="text-sm font-bold text-wn-navy">
-              {snow24 != null && snow24 > 0 && <>{snow24}&quot; (24h) </>}
-              {snow48 != null && snow48 > 0 && <>· {snow48}&quot; (48h)</>}
-            </div>
-          </div>
-        ) : null}
-      </div>
-      {(weather.wind_mph_avg != null || weather.wind_dir_short) && (
-        <p className="mt-2 text-xs text-wn-charcoal/65">
-          🌬️ Wind {weather.wind_mph_avg != null ? `${weather.wind_mph_avg} mph` : ""}
-          {weather.wind_dir_short ? ` ${weather.wind_dir_short}` : ""}
-        </p>
       )}
+
+      <div className="grid grid-cols-3 gap-2 text-center sm:gap-4">
+        {/* Weather column */}
+        <WeatherStat
+          icon={conditionEmoji(weather.conditions_short)}
+          value={
+            weather.temp_high_f != null
+              ? `${weather.temp_high_f}°${
+                  weather.temp_low_f != null ? `/${weather.temp_low_f}°F` : "F"
+                }`
+              : "—"
+          }
+          label={weather.conditions_short ?? "Weather"}
+        />
+        {/* Wind column */}
+        <WeatherStat
+          icon="💨"
+          value={
+            weather.wind_mph_avg != null
+              ? `${weather.wind_mph_avg} mph${weather.wind_dir_short ? " " + weather.wind_dir_short : ""}`
+              : "—"
+          }
+          label="Wind"
+          divider
+        />
+        {/* Snow column */}
+        <WeatherStat
+          icon="❄️"
+          value={snowNew24 != null ? `${snowNew24}"` : "—"}
+          label={
+            base != null ? `${base}" base` : "24h new"
+          }
+          accent={snowNew24 != null && snowNew24 > 0}
+        />
+      </div>
+
       {weather.fetched_at && (
-        <p className="mt-1 text-[10px] text-wn-charcoal/45">
+        <p className="mt-3 text-[10px] text-wn-charcoal/45">
           Synced{" "}
           {new Date(weather.fetched_at).toLocaleString(undefined, {
             weekday: "short",
             hour: "numeric",
             minute: "2-digit",
           })}
+          {resort.snow_report_updated_at && status && status !== "unknown" && (
+            <>
+              {" · Snow report "}
+              {new Date(resort.snow_report_updated_at).toLocaleString(
+                undefined,
+                { weekday: "short", hour: "numeric", minute: "2-digit" },
+              )}
+            </>
+          )}
         </p>
       )}
-      {/* Hint that we have lat/lng if user wants external sources */}
-      <p className="mt-2 text-[10px] text-wn-charcoal/40">
+      {/* Tiny coord footer kept for users who want to plug into external
+          tools. Not a link — just a hint that lat/lng is known. */}
+      <p className="mt-1 text-[10px] text-wn-charcoal/40">
         {lat.toFixed(3)}, {lng.toFixed(3)}
       </p>
     </div>
   );
 }
+
+function WeatherStat({
+  icon,
+  value,
+  label,
+  accent = false,
+  divider = false,
+}: {
+  icon: string;
+  value: string;
+  label: string;
+  accent?: boolean;
+  divider?: boolean;
+}) {
+  return (
+    <div
+      className={
+        divider
+          ? "border-l border-r border-wn-charcoal/10 px-1 sm:px-3"
+          : "px-1 sm:px-3"
+      }
+    >
+      <div className="text-3xl leading-none sm:text-4xl" aria-hidden="true">
+        {icon}
+      </div>
+      <div
+        className={`mt-1.5 text-base font-extrabold tracking-tight sm:text-lg ${
+          accent ? "text-wn-sky" : "text-wn-navy"
+        }`}
+      >
+        {value}
+      </div>
+      <div className="mt-0.5 text-[10px] uppercase tracking-wide text-wn-charcoal/55 truncate">
+        {label}
+      </div>
+    </div>
+  );
+}
+
 
 // 10-day forecast strip — horizontal scroll carousel. One card per
 // day; cards are a fixed width so 3-4 fit on mobile and 6-7 on

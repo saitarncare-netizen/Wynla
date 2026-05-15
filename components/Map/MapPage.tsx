@@ -586,15 +586,18 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
             updateParam("pass", passes.length === 0 ? null : passes.join(","))
           }
         />
-        {/* Off-season banner — visible May 1 – Oct 31, dismissable. The
-            component self-gates on date + localStorage, so unconditionally
-            mounting it here is safe (renders null when not applicable). */}
-        <OffSeasonBanner />
-        {/* Recently-viewed chips — sits inline below banner on mobile so
-            the strip flows with the rest of the header pills instead of
-            absolute-overlapping them. Desktop variant inside the component
-            renders as a floating fixed pill bottom-right. */}
-        <RecentlyViewedStrip />
+        {/* Stage 33 — both the off-season banner and the recently-viewed
+            chips hide when the user is actively searching or planning
+            (searchOpen / plannerOpen). They're "ambient" UI for the
+            idle-map state; while the user is focused on picking a
+            resort or building a trip those rows just push the map down
+            and add noise. Show them again the moment those flows close. */}
+        {!searchOpen && !plannerOpen && (
+          <>
+            <OffSeasonBanner />
+            <RecentlyViewedStrip />
+          </>
+        )}
         {/* Inline filter pills row — desktop only. Mobile uses the
             single ☰ Filters button above + FiltersDrawer below. */}
         <div className="hidden md:block">
