@@ -327,6 +327,19 @@ export default function MapView({
       // text-padding 1 (vs default 2) packs labels tighter — more fit
       // before culling. Wider halo + bolder font keep them legible
       // against green forest tiles.
+      // Stage 33 — smarter label placement to fix dense-pocket overlap
+      // (Wasatch, NH, VT). Three changes vs the previous static-anchor
+      // setup:
+      //
+      //   1. `text-variable-anchor` lets Mapbox try top → bottom → left
+      //      → right → top-left → top-right → bottom-left → bottom-right
+      //      per label, so two pins 200 m apart can end up with one
+      //      label above + one below instead of both stacking below.
+      //   2. `text-radial-offset` is the variable-anchor cousin of
+      //      `text-offset` — it works with all 8 anchor candidates.
+      //   3. Slightly smaller text + wider padding gives the collision
+      //      detector more breathing room so more labels survive
+      //      de-clutter culling.
       map.addLayer({
         id: "wynla-pin-labels",
         type: "symbol",
@@ -340,18 +353,28 @@ export default function MapView({
             "interpolate",
             ["linear"],
             ["zoom"],
-            4.5, 11,
-            6, 12,
-            8, 13,
-            10, 14,
-            14, 15,
+            4.5, 10,
+            6, 11,
+            8, 12,
+            10, 13,
+            14, 14,
           ],
-          "text-offset": [0, 1.3],
-          "text-anchor": "top",
+          "text-variable-anchor": [
+            "top",
+            "bottom",
+            "left",
+            "right",
+            "top-left",
+            "top-right",
+            "bottom-left",
+            "bottom-right",
+          ],
+          "text-radial-offset": 1.1,
+          "text-justify": "auto",
           "text-allow-overlap": false,
           "text-optional": true,
-          "text-max-width": 9,
-          "text-padding": 1,
+          "text-max-width": 8,
+          "text-padding": 3,
           // Lower sort-key wins in Mapbox symbol placement. Featured
           // resorts (-1000) sort before listed (0); within each tier
           // bigger circles (higher `radius`) outrank smaller ones via
@@ -365,7 +388,7 @@ export default function MapView({
         paint: {
           "text-color": "#0F1530",
           "text-halo-color": "#FFFFFF",
-          "text-halo-width": 2.2,
+          "text-halo-width": 1.8,
           "text-halo-blur": 0.4,
         },
       });
