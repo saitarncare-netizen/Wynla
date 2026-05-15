@@ -31,12 +31,27 @@ export type ResortDifficultyInput = {
 
 export function getDifficultyMix(r: ResortDifficultyInput): DifficultyMix | null {
   // Prefer explicit percentages — the canonical source post-Stage 18.
-  const hasAnyPct =
-    r.difficulty_pct_beginner != null ||
-    r.difficulty_pct_intermediate != null ||
-    r.difficulty_pct_advanced != null ||
-    r.difficulty_pct_expert != null;
-  if (hasAnyPct) {
+  const pctValues = [
+    r.difficulty_pct_beginner,
+    r.difficulty_pct_intermediate,
+    r.difficulty_pct_advanced,
+    r.difficulty_pct_expert,
+  ];
+  const setCount = pctValues.filter((v) => v != null).length;
+  const pctSum = pctValues.reduce<number>((acc, v) => acc + (v ?? 0), 0);
+
+  // Stage 33 — fabrication guard. The old `normalize()` blindly absorbed
+  // the missing percentage into the largest bucket, which meant a single
+  // value (e.g. Hurricane Ridge with advanced=33 and the other three
+  // NULL) rendered as "100% Advanced" — wildly wrong. New rule: trust
+  // the row only when:
+  //   * at least 2 of the 4 buckets have a real value, AND
+  //   * the raw sum is at least 70 (missing-bucket = implicit 0 is fine,
+  //     but a sum of 33 means the row is genuinely incomplete).
+  // Returns null in either failure case so the UI hides the bar and
+  // shows "Difficulty mix not yet verified" instead of fabricating.
+  if (setCount > 0) {
+    if (setCount < 2 || pctSum < 70) return null;
     return normalize({
       beginner: r.difficulty_pct_beginner ?? 0,
       intermediate: r.difficulty_pct_intermediate ?? 0,
