@@ -61,9 +61,13 @@ export default function RecentlyViewedStrip() {
     );
   }
 
-  // Stage 33 — stop touch bubbling on the strip itself so horizontal
-  // swipes scroll the chips, not the map underneath.
-  const stopTouchBubble = (e: React.TouchEvent) => e.stopPropagation();
+  // Stage 33 — stop touch propagation at both React + DOM layers.
+  // Mapbox listens at window level so React's stopPropagation alone
+  // doesn't prevent its drag handler from firing.
+  const stopTouchBubble = (e: React.TouchEvent) => {
+    e.stopPropagation();
+    e.nativeEvent.stopImmediatePropagation();
+  };
 
   return (
     <>

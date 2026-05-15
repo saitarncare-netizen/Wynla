@@ -36,11 +36,15 @@ export default function MobileQuickFilters({
     onPassChange(Array.from(cur));
   }
 
-  // Stage 33 — touch events stopped at the container so taps + horizontal
-  // swipes inside the chip strip don't bubble down to Mapbox and pan the
-  // map. Users reported the map "scrolling under them" when they tapped
-  // on Ikon / Fresh snow / etc.
-  const stopTouchBubble = (e: React.TouchEvent) => e.stopPropagation();
+  // Stage 33 — touch events stopped at both React + DOM levels. React's
+  // stopPropagation alone wasn't enough because Mapbox attaches its
+  // drag listeners at window/document level; only stopImmediatePropagation
+  // on the native event prevents Mapbox from interpreting our chip
+  // taps as a map pan-start gesture.
+  const stopTouchBubble = (e: React.TouchEvent) => {
+    e.stopPropagation();
+    e.nativeEvent.stopImmediatePropagation();
+  };
   return (
     <div
       className="md:hidden -mx-3 px-3 pb-1 pt-2 overflow-x-auto"

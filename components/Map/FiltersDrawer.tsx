@@ -247,7 +247,16 @@ export default function FiltersDrawer({
 
         <div className="flex-1 overflow-y-auto overscroll-contain px-4" style={{ touchAction: "pan-y" }}>
           {/* 1. PASS */}
-          <Section title="Pass">
+          <Section
+            title="Pass"
+            summary={
+              passFilter.length === 0
+                ? "Any pass"
+                : passFilter
+                    .map((p) => PASS_LABELS[p as keyof typeof PASS_LABELS] ?? p)
+                    .join(" · ")
+            }
+          >
             <div className="grid grid-cols-1 gap-1">
               {PASS_KEYS.map((key) => {
                 const isActive = passFilter.includes(key);
@@ -295,7 +304,17 @@ export default function FiltersDrawer({
           </Section>
 
           {/* 2. CONDITIONS — fresh snow + night skiing as inline toggle pills */}
-          <Section title="Conditions">
+          <Section
+            title="Conditions"
+            summary={
+              [
+                freshSnowOnly ? "❄️ Fresh snow" : null,
+                nightOnly ? "🌙 Night skiing" : null,
+              ]
+                .filter(Boolean)
+                .join(" · ") || "Any conditions"
+            }
+          >
             <div className="grid grid-cols-2 gap-1.5">
               <button
                 type="button"
@@ -341,7 +360,12 @@ export default function FiltersDrawer({
           </Section>
 
           {/* 3. ORIGIN — geolocation + ZIP lookup */}
-          <Section title="Origin">
+          <Section
+            title="Origin"
+            summary={
+              origin.kind === "geo" ? "📍 Your location" : origin.short
+            }
+          >
             <button
               type="button"
               onClick={handleUseHere}
@@ -395,7 +419,10 @@ export default function FiltersDrawer({
           </Section>
 
           {/* 4. DRIVE TIME (DAY 1) */}
-          <Section title="Drive time (day 1)">
+          <Section
+            title="Drive time (day 1)"
+            summary={withinHours > 0 ? `≤ ${withinHours}h` : "Any"}
+          >
             <div className="grid grid-cols-5 gap-1">
               {DRIVE_TIME_PRESETS.map((h) => {
                 const isAny = h === 0;
@@ -450,7 +477,10 @@ export default function FiltersDrawer({
           </Section>
 
           {/* 5. RESORT SIZE */}
-          <Section title="Resort size">
+          <Section
+            title="Resort size"
+            summary={sizeFilter ? SIZE_TIER_LABELS[sizeFilter] : "Any size"}
+          >
             <div className="grid grid-cols-4 gap-1">
               {([null, "small", "medium", "large"] as const).map((tier) => {
                 const active = sizeFilter === tier;
@@ -478,7 +508,15 @@ export default function FiltersDrawer({
               closest_airport_iata matches AND distance ≤ 120 mi (shuttle
               range). Horizontal-scroll chip row to keep the drawer
               compact while exposing all 15 top US ski airports. */}
-          <Section title="Airport">
+          <Section
+            title="Airport"
+            summary={
+              airportFilter
+                ? AIRPORT_OPTIONS.find((a) => a.iata === airportFilter)?.label ??
+                  airportFilter
+                : "Any airport"
+            }
+          >
             <div
               className="-mx-1 flex gap-1.5 overflow-x-auto px-1 pb-1"
               style={{ touchAction: "pan-x", WebkitOverflowScrolling: "touch" }}
@@ -597,29 +635,56 @@ export default function FiltersDrawer({
 
 // Stage 22 — section wrapper. Each section gets a clear uppercase
 // heading and a top divider (except the very first one), so the
-// drawer reads as discrete groups instead of one long scroll. `last`
-// trims the trailing padding so the sticky footer sits flush.
+// Stage 33 — accordion behavior. Every section is collapsed by default;
+// the user taps the title row to expand. `summary` renders inline next
+// to the chevron when collapsed so active filters are still visible.
+// Multiple sections can be open at once.
 function Section({
   title,
   children,
+  summary,
+  defaultOpen = false,
   last = false,
 }: {
   title: string;
   children: React.ReactNode;
+  summary?: string | null;
+  defaultOpen?: boolean;
   last?: boolean;
 }) {
+  const [isOpen, setIsOpen] = useState(defaultOpen);
   return (
     <section
       className={[
-        "py-4",
         last ? "" : "border-b border-wn-charcoal/10",
-        "first:pt-3",
       ].join(" ")}
     >
-      <h3 className="mb-2 text-[11px] font-bold uppercase tracking-[0.15em] text-wn-charcoal/55">
-        {title}
-      </h3>
-      {children}
+      <button
+        type="button"
+        onClick={() => setIsOpen((v) => !v)}
+        className="flex w-full items-center justify-between gap-3 py-3 text-left transition active:bg-wn-charcoal/5"
+        aria-expanded={isOpen}
+      >
+        <div className="min-w-0 flex-1">
+          <h3 className="text-[11px] font-bold uppercase tracking-[0.15em] text-wn-charcoal/55">
+            {title}
+          </h3>
+          {summary && !isOpen && (
+            <p className="mt-0.5 truncate text-xs font-semibold text-wn-navy">
+              {summary}
+            </p>
+          )}
+        </div>
+        <span
+          aria-hidden="true"
+          className={`shrink-0 text-sm text-wn-charcoal/45 transition-transform duration-200 ${
+            isOpen ? "rotate-180" : ""
+          }`}
+        >
+          ▾
+        </span>
+      </button>
+      {isOpen && <div className="pb-4">{children}</div>}
     </section>
   );
 }

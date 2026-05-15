@@ -597,11 +597,14 @@ function QuickStats({ resort }: { resort: Resort }) {
   if (stats.length === 0 && !mix && !hasPark) return null;
 
   // Features chip row. Terrain park lives in its own pill below the
-  // difficulty bar so we don't duplicate it here.
-  const features: string[] = [];
-  if (resort.has_halfpipe) features.push("Halfpipe");
-  if (resort.has_glades) features.push("Glades");
-  if (resort.has_night_skiing) features.push("Night skiing");
+  // difficulty bar so we don't duplicate it here. Stage 33 — each
+  // feature ships its own emoji so the chip carries meaning at a
+  // glance (Night skiing especially — the moon icon reads as "open
+  // at night" much faster than a ✓ does).
+  const features: Array<{ label: string; emoji: string }> = [];
+  if (resort.has_halfpipe) features.push({ label: "Halfpipe", emoji: "🛹" });
+  if (resort.has_glades) features.push({ label: "Glades", emoji: "🌲" });
+  if (resort.has_night_skiing) features.push({ label: "Night skiing", emoji: "🌙" });
 
   return (
     <Section title="Mountain stats">
@@ -657,10 +660,11 @@ function QuickStats({ resort }: { resort: Resort }) {
         <div className="mt-3 flex flex-wrap gap-1.5 text-xs">
           {features.map((f) => (
             <span
-              key={f}
-              className="rounded-full border border-wn-charcoal/15 bg-white px-2.5 py-1 font-medium text-wn-charcoal"
+              key={f.label}
+              className="inline-flex items-center gap-1.5 rounded-full border border-wn-charcoal/15 bg-white px-2.5 py-1 font-semibold text-wn-charcoal"
             >
-              ✓ {f}
+              <span aria-hidden="true">{f.emoji}</span>
+              <span>{f.label}</span>
             </span>
           ))}
         </div>
@@ -764,14 +768,17 @@ function FullWeatherCard({
   const totalTrails = resort.total_trails;
   const liftsOpen = resort.lifts_open_today;
   const totalLifts = resort.total_lifts;
+  // Status labels — written so a casual visitor reads them without a
+  // glossary. "Closed" alone (the raw OnTheSnow term) confused testers
+  // who thought it meant "closed today" rather than "winter ended".
   const statusMeta: Record<
     string,
     { emoji: string; label: string; color: string }
   > = {
     open: { emoji: "🟢", label: "Open today", color: "text-emerald-800" },
-    closed: { emoji: "🔴", label: "Closed", color: "text-red-800" },
+    closed: { emoji: "🔴", label: "Closed for the season", color: "text-red-800" },
     limited: { emoji: "🟡", label: "Limited operations", color: "text-amber-800" },
-    "off-season": { emoji: "🌸", label: "Off-season", color: "text-wn-charcoal/65" },
+    "off-season": { emoji: "🌸", label: "Off-season — opens in Nov", color: "text-wn-charcoal/65" },
   };
   const sm = status ? statusMeta[status] : null;
   const trailsStr =

@@ -155,12 +155,15 @@ export default function ResortPanel({
 
   const sheetHeight = isMobile ? (dragHeight ?? snapToPx(snap)) : undefined;
 
-  // Stage 33 — stop any touch event inside the panel from bubbling to
-  // Mapbox. Without this, touching the body of the panel (3-stat card,
-  // pass badges, sticky CTA) panned the map underneath. The drag-handle
-  // has its OWN touch handlers (above) for snap resizing — those run
-  // first and don't call stopPropagation, so they keep working.
-  const stopTouchBubble = (e: React.TouchEvent) => e.stopPropagation();
+  // Stage 33 — stop touch propagation at both React + DOM layers.
+  // Mapbox attaches its drag/pan listener at window/document level, so
+  // React.stopPropagation alone wasn't enough; stopImmediatePropagation
+  // on the native event keeps the panel's body from triggering a map
+  // pan when the user scrolls the 3-stat card or taps the CTA.
+  const stopTouchBubble = (e: React.TouchEvent) => {
+    e.stopPropagation();
+    e.nativeEvent.stopImmediatePropagation();
+  };
 
   return (
     <>
