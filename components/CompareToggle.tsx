@@ -8,6 +8,9 @@ import {
   getCompareIds,
   removeFromCompare,
 } from "@/lib/compareList";
+import { useProStatus } from "@/lib/proClient";
+import { FREE_LIMITS } from "@/lib/tierLimits";
+import UpsellModal from "@/components/UpsellModal";
 
 type Props = {
   resortId: number;
@@ -25,6 +28,8 @@ export default function CompareToggle({ resortId, size = "sm" }: Props) {
   // mount, which avoids a hydration mismatch warning.
   const [inList, setInList] = useState(false);
   const [count, setCount] = useState(0);
+  const [showUpsell, setShowUpsell] = useState(false);
+  const { isPro, isLoading: proLoading } = useProStatus();
 
   useEffect(() => {
     function sync() {
@@ -42,17 +47,27 @@ export default function CompareToggle({ resortId, size = "sm" }: Props) {
     };
   }, [resortId]);
 
-  // Disable the "add" path when the list is full and this resort isn't
-  // already on it — prevents a silent no-op (the helper caps at 4).
-  const disabled = !inList && count >= COMPARE_MAX;
+  // Hard ceiling (Pro): COMPARE_MAX. Soft ceiling (Free): FREE_LIMITS.compare.
+  // The hard cap disables; the soft cap routes to the upsell modal instead.
+  const hardFull = !inList && count >= COMPARE_MAX;
+  const softFull = !isPro && !inList && count >= FREE_LIMITS.compare;
+  const disabled = hardFull;
 
   function toggle() {
     if (inList) {
       removeFromCompare(resortId);
-    } else {
-      if (disabled) return;
-      addToCompare(resortId);
+      return;
     }
+    if (hardFull) return;
+    // Hold the add until Pro status loads so a Pro user clicking right
+    // after mount doesn't see an upsell. proClient.ts resolves in one
+    // network roundtrip and caches module-level, so this is brief.
+    if (proLoading) return;
+    if (softFull) {
+      setShowUpsell(true);
+      return;
+    }
+    addToCompare(resortId);
   }
 
   const dim =
@@ -68,26 +83,34 @@ export default function CompareToggle({ resortId, size = "sm" }: Props) {
       : "Add to compare";
 
   return (
-    <button
-      type="button"
-      onClick={toggle}
-      disabled={disabled}
-      aria-pressed={inList}
-      aria-label={title}
-      title={title}
-      className={[
-        "inline-flex items-center justify-center gap-1 rounded-full font-semibold shadow-md backdrop-blur-sm transition active:scale-95",
-        dim,
-        inList
-          ? "bg-wn-navy text-white hover:bg-wn-navy/90"
-          : "bg-white/95 text-wn-charcoal hover:text-wn-navy",
-        disabled ? "cursor-not-allowed opacity-60" : "",
-      ].join(" ")}
-    >
-      <span aria-hidden="true" className="text-sm leading-none">
-        {inList ? "✓" : "+"}
-      </span>
-      <span>{label}</span>
-    </button>
+    <>
+      <button
+        type="button"
+        onClick={toggle}
+        disabled={disabled}
+        aria-pressed={inList}
+        aria-label={title}
+        title={title}
+        className={[
+          "inline-flex items-center justify-center gap-1 rounded-full font-semibold shadow-md backdrop-blur-sm transition active:scale-95",
+          dim,
+          inList
+            ? "bg-wn-navy text-white hover:bg-wn-navy/90"
+            : "bg-white/95 text-wn-charcoal hover:text-wn-navy",
+          disabled ? "cursor-not-allowed opacity-60" : "",
+        ].join(" ")}
+      >
+        <span aria-hidden="true" className="text-sm leading-none">
+          {inList ? "✓" : "+"}
+        </span>
+        <span>{label}</span>
+      </button>
+      <UpsellModal
+        open={showUpsell}
+        onClose={() => setShowUpsell(false)}
+        gate="compare"
+        detail={`You're comparing ${count} resorts on the free tier. Pro lets you compare up to ${COMPARE_MAX} side-by-side.`}
+      />
+    </>
   );
 }

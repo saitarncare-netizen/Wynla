@@ -8,7 +8,10 @@
 // hydration when the first effect runs.
 
 const KEY = "wynla_compare_v1";
-export const COMPARE_MAX = 4;
+// Pro tier ceiling; free users hit a soft cap from FREE_LIMITS.compare
+// (lib/tierLimits.ts) and see UpsellModal before reaching this hard one.
+// Anything above 5 makes the /compare page UX-hostile regardless of tier.
+export const COMPARE_MAX = 5;
 
 /** Custom event name dispatched whenever the list mutates. Components
  *  in different parts of the tree listen for this to stay in sync
