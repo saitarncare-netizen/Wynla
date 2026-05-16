@@ -54,6 +54,13 @@ type Props = {
   /** Live hover preview — fires when the user mouseenters a row so the
       map can draw an ephemeral leg from fromPoint to that resort. */
   onHover?: (slug: string | null) => void;
+  /** Stage 33 — when set, a "🎛️ Filters" button appears in the
+   *  picker header. Tapping it should open the full filter drawer
+   *  STACKED on top of the picker (the picker stays open underneath).
+   *  Used by the header-search flow so users don't have to close
+   *  search → set filters → re-open search just to filter by size /
+   *  night / drive time. */
+  onOpenFilters?: () => void;
 };
 
 type Snap = "collapsed" | "half" | "full";
@@ -106,6 +113,7 @@ export default function ResortPicker({
   onSelect,
   onClose,
   onHover,
+  onOpenFilters,
 }: Props) {
   const [query, setQuery] = useState("");
   const [sortBy, setSortBy] = useState<"distance" | "name">("distance");
@@ -364,21 +372,38 @@ export default function ResortPicker({
         {/* Stage 33 — header slimmed: title + count + close all on one
             row (subtitle "From X · sorted by drive time" dropped — the
             same info now lives next to the sort toggles below). */}
-        <div className="flex items-baseline justify-between gap-2">
+        <div className="flex items-center justify-between gap-2">
           <div className="flex items-baseline gap-2 truncate">
             <h3 className="truncate text-sm font-bold text-wn-navy">{title}</h3>
             <span className="shrink-0 text-[10px] font-medium text-wn-charcoal/50">
               {visible.length} of {enriched.length}
             </span>
           </div>
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close"
-            className="text-lg leading-none text-wn-charcoal/55 hover:text-wn-navy"
-          >
-            ×
-          </button>
+          <div className="flex shrink-0 items-center gap-1">
+            {/* Stage 33 — open the full filter drawer on top of the
+                picker, so users can refine by Size / Night / Drive
+                without leaving search. Only renders when the caller
+                provides the handler. */}
+            {onOpenFilters && (
+              <button
+                type="button"
+                onClick={onOpenFilters}
+                aria-label="Open filters"
+                className="inline-flex h-7 items-center gap-1 rounded-md border border-wn-charcoal/15 bg-white px-2 text-[11px] font-semibold text-wn-charcoal/75 hover:border-wn-navy hover:text-wn-navy"
+              >
+                <span aria-hidden="true">🎛️</span>
+                <span>Filters</span>
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Close"
+              className="inline-flex h-7 w-7 items-center justify-center rounded-md text-lg leading-none text-wn-charcoal/55 hover:text-wn-navy"
+            >
+              ×
+            </button>
+          </div>
         </div>
         <input
           ref={inputRef}

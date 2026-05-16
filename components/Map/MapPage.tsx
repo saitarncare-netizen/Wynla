@@ -795,6 +795,11 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         // Map isn't relevant while typing a name; full-screen avoids
         // the "map peeks through but is frozen" UX bug.
         fullScreen
+        // Stage 33 — let users open the filter drawer ON TOP of the
+        // search picker without closing search. Bypasses the
+        // mutually-exclusive `setFiltersOpen` wrapper that kills
+        // search; we want both open with filter stacked above.
+        onOpenFilters={() => setFiltersOpenRaw(true)}
         fromPoint={{ lat: origin.lat, lng: origin.lon, label: origin.kind === "geo" ? "your location" : origin.name }}
         allResorts={filtered}
         alreadyPicked={[]}

@@ -202,7 +202,7 @@ export default function FiltersDrawer({
         type="button"
         aria-label="Close filters"
         onClick={onClose}
-        className="fixed inset-0 z-[55] hidden cursor-default bg-wn-charcoal/35 backdrop-blur-[1px] md:block"
+        className="fixed inset-0 z-[65] hidden cursor-default bg-wn-charcoal/35 backdrop-blur-[1px] md:block"
       />
 
       <aside
@@ -212,7 +212,10 @@ export default function FiltersDrawer({
         onTouchMove={stopTouchBubble}
         onTouchEnd={stopTouchBubble}
         className={[
-          "fixed z-[60] flex flex-col overflow-hidden bg-white shadow-2xl",
+          // Stage 33 — z-[70] (was 60) so the drawer stacks ON TOP of
+          // the search picker (z-[61]) when opened from inside search.
+          // Users can refine by size/night/drive without leaving search.
+          "fixed z-[70] flex flex-col overflow-hidden bg-white shadow-2xl",
           // Stage 33 — full-screen on mobile (not a bottom sheet). The
           // bottom-sheet pattern left the top ~15-30% of the viewport
           // showing the dimmed map, and users kept perceiving touches
