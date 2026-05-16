@@ -19,7 +19,9 @@ import {
   US_STATES,
 } from "@/lib/usStates";
 
-export const dynamic = "force-dynamic";
+// ISR — state pages list resorts in a single state and rarely change.
+// Hourly revalidate is plenty.
+export const revalidate = 3600;
 
 type Resort = {
   id: number;

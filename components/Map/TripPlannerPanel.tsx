@@ -11,6 +11,9 @@ import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { estimateTripCost, metersToMiles } from "@/lib/tripCost";
 import { getPreferences } from "@/lib/preferences";
 import { getTemplate } from "@/lib/tripTemplates";
+import { useProStatus } from "@/lib/proClient";
+import { FREE_LIMITS } from "@/lib/tierLimits";
+import UpsellModal from "@/components/UpsellModal";
 import ResortPicker from "./ResortPicker";
 import type { Resort } from "./MapPage";
 import type { TripRoutePoint } from "./MapView";
@@ -206,6 +209,11 @@ export default function TripPlannerPanel({
   const [draftName, setDraftName] = useState<string>("");
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+  // Pro gate for trip save (free users get 2 saved trips). Modal opens
+  // when a free user hits the cap on save attempt; status loads in
+  // background via useProStatus().
+  const [showTripUpsell, setShowTripUpsell] = useState(false);
+  const { isPro, isLoading: proLoading } = useProStatus();
 
   // Stage-4 trip-order optimizer. After tapping "✨ Optimize order"
   // we stash a short inline message ("Reordered: saves ~N min") above
@@ -797,6 +805,13 @@ export default function TripPlannerPanel({
 
   async function saveTrip() {
     if (stops.length === 0) return;
+    // Hold the save until Pro status resolves — otherwise a Pro user
+    // saving their 3rd+ trip in the first ~200ms after mount would be
+    // mis-gated as free. proClient.ts resolves quickly on warm cache.
+    if (proLoading) {
+      setSaveError("Loading account status… try again in a moment.");
+      return;
+    }
     setSaving(true);
     setSaveError(null);
     const { data: userRes } = await supabase.auth.getUser();
@@ -833,6 +848,32 @@ export default function TripPlannerPanel({
       const returnTo = `${window.location.pathname}?${returnParams.toString()}`;
       router.push(`/login?next=${encodeURIComponent(returnTo)}`);
       return;
+    }
+    // Pro gate: free users get FREE_LIMITS.savedTrips saved trips. Count
+    // existing trips before the insert; if the user is over the cap, show
+    // the upsell instead of writing the row.
+    //
+    // Fail-closed: if the count query errors (network blip, RLS hiccup,
+    // anything), we treat it as "at cap" and route to the upsell rather
+    // than letting the insert through. A free user racing two saves in
+    // two tabs is still a hole — that needs a Postgres trigger to fully
+    // close, tracked in lib/tierLimits.ts comment.
+    if (!isPro) {
+      const { count: tripCountRaw, error: countErr } = await supabase
+        .from("trips")
+        .select("id", { count: "exact", head: true })
+        .eq("user_id", userRes.user.id);
+      if (countErr) {
+        setSaving(false);
+        setShowTripUpsell(true);
+        return;
+      }
+      const tripCount = tripCountRaw ?? 0;
+      if (tripCount >= FREE_LIMITS.savedTrips) {
+        setSaving(false);
+        setShowTripUpsell(true);
+        return;
+      }
     }
     const finalName =
       draftName.trim() || suggestTripName(stops, allResorts, daysPlanned);
@@ -1826,6 +1867,12 @@ export default function TripPlannerPanel({
           }}
         />
       )}
+      <UpsellModal
+        open={showTripUpsell}
+        onClose={() => setShowTripUpsell(false)}
+        gate="savedTrips"
+        detail={`You've already saved ${FREE_LIMITS.savedTrips} trips on the free tier. Pro lets you save unlimited trips, export to PDF + calendar, and access trip templates.`}
+      />
     </>
   );
 }

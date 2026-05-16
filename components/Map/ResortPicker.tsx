@@ -306,6 +306,7 @@ export default function ResortPicker({
   return (
     <div
       role="dialog"
+      aria-modal="true"
       aria-label={title}
       className={[
         "fixed z-[61] flex flex-col overflow-hidden bg-white shadow-2xl",

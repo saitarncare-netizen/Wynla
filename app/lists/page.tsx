@@ -6,7 +6,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { LISTS } from "@/lib/lists";
 
-export const dynamic = "force-dynamic";
+// ISR — list directory rarely changes, hourly is plenty.
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Curated Ski Resort Lists",

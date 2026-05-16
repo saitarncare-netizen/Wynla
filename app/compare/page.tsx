@@ -1,4 +1,5 @@
-// /compare — server-rendered side-by-side comparison of up to 4 resorts.
+// /compare — server-rendered side-by-side comparison of up to
+// COMPARE_MAX resorts (Stage 34: 5; Pro tier ceiling).
 //
 // Driven by the `?ids=12,55,99` query string (populated by the floating
 // "Compare X" button on the homepage). The compare list lives in
@@ -14,6 +15,7 @@ import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { passColor, passLabel, primaryPass } from "@/lib/passColors";
 import { getDifficultyMix, type DifficultyMix } from "@/lib/difficulty";
+import { COMPARE_MAX } from "@/lib/compareList";
 
 export const dynamic = "force-dynamic";
 
@@ -67,15 +69,16 @@ function parseIds(raw: string | string[] | undefined): number[] {
     const n = Number(part.trim());
     if (Number.isFinite(n) && Number.isInteger(n) && n > 0) out.push(n);
   }
-  // Dedup and cap at 4 — mirrors compareList.COMPARE_MAX so an attacker
-  // can't blow up the query by pasting 500 ids.
+  // Dedup and cap at COMPARE_MAX — single source of truth lives in
+  // lib/compareList.ts; importing keeps server + client in sync so a
+  // bump there can't leave this server route capping at the old value.
   const seen = new Set<number>();
   const deduped: number[] = [];
   for (const n of out) {
     if (seen.has(n)) continue;
     seen.add(n);
     deduped.push(n);
-    if (deduped.length >= 4) break;
+    if (deduped.length >= COMPARE_MAX) break;
   }
   return deduped;
 }

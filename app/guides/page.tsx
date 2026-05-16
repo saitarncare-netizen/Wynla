@@ -6,7 +6,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { GUIDES } from "@/lib/guides";
 
-export const dynamic = "force-dynamic";
+// ISR — guides are editorial content, rarely changes.
+export const revalidate = 86400; // 24h
 
 export const metadata: Metadata = {
   title: "Wynla Guides",

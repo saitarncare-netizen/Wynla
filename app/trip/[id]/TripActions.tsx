@@ -8,6 +8,7 @@
 import { useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+import ConfirmButton from "@/components/ConfirmButton";
 
 type Props = {
   tripId: string;
@@ -95,7 +96,8 @@ export default function TripActions({
   }
 
   async function deleteTrip() {
-    if (!window.confirm("Delete this trip? This can't be undone.")) return;
+    // No window.confirm — blocked in Capacitor WebView. ConfirmButton
+    // wraps this with a two-tap UX so the safety check is in the UI layer.
     setBusy("delete");
     setError(null);
     const { error } = await supabase.from("trips").delete().eq("id", tripId);
@@ -159,14 +161,15 @@ export default function TripActions({
                 Restart trip
               </button>
             )}
-            <button
-              type="button"
-              onClick={deleteTrip}
-              disabled={busy != null}
+            <ConfirmButton
+              onConfirm={deleteTrip}
+              busy={busy != null}
+              busyLabel={busy === "delete" ? "Deleting…" : "…"}
+              label="Delete"
+              confirmLabel="Tap again to confirm"
               className="ml-auto rounded-lg border border-wn-charcoal/20 bg-white px-4 py-2 text-sm font-semibold text-wn-charcoal transition hover:border-red-400 hover:text-red-700 disabled:opacity-60"
-            >
-              Delete
-            </button>
+              armedClassName="ml-auto rounded-lg border border-red-400 bg-red-50 px-4 py-2 text-sm font-semibold text-red-700"
+            />
           </div>
         </>
       )}
@@ -185,14 +188,15 @@ export default function TripActions({
             >
               {busy === "restart" ? "Resetting…" : "Run it again"}
             </button>
-            <button
-              type="button"
-              onClick={deleteTrip}
-              disabled={busy != null}
+            <ConfirmButton
+              onConfirm={deleteTrip}
+              busy={busy != null}
+              busyLabel={busy === "delete" ? "Deleting…" : "…"}
+              label="Delete"
+              confirmLabel="Tap again to confirm"
               className="rounded-lg border border-wn-charcoal/20 bg-white px-4 py-2 text-sm font-semibold text-wn-charcoal transition hover:border-red-400 hover:text-red-700 disabled:opacity-60"
-            >
-              Delete
-            </button>
+              armedClassName="rounded-lg border border-red-400 bg-red-50 px-4 py-2 text-sm font-semibold text-red-700"
+            />
           </div>
         </>
       )}

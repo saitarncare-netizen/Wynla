@@ -8,6 +8,9 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+import { useProStatus } from "@/lib/proClient";
+import { FREE_LIMITS } from "@/lib/tierLimits";
+import UpsellModal from "@/components/UpsellModal";
 
 type Props = {
   resortId: number;
@@ -38,6 +41,9 @@ export default function SnowAlertButton({ resortId, resortName }: Props) {
   const [busy, setBusy] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [activeAlertCount, setActiveAlertCount] = useState<number | null>(null);
+  const [showUpsell, setShowUpsell] = useState(false);
+  const { isPro, isLoading: proLoading } = useProStatus();
 
   useEffect(() => {
     const compute = () => {
@@ -54,16 +60,26 @@ export default function SnowAlertButton({ resortId, resortName }: Props) {
       const { data: u } = await supabase.auth.getUser();
       setUserId(u.user?.id ?? null);
       if (u.user) {
-        const { data: a } = await supabase
-          .from("snow_alerts")
-          .select("threshold_in, enabled")
-          .eq("user_id", u.user.id)
-          .eq("resort_id", resortId)
-          .maybeSingle();
+        // Existing per-resort alert state + count of active alerts across
+        // all resorts (Pro gate: free user can have 1 active alert total).
+        const [{ data: a }, countRes] = await Promise.all([
+          supabase
+            .from("snow_alerts")
+            .select("threshold_in, enabled")
+            .eq("user_id", u.user.id)
+            .eq("resort_id", resortId)
+            .maybeSingle(),
+          supabase
+            .from("snow_alerts")
+            .select("resort_id", { count: "exact", head: true })
+            .eq("user_id", u.user.id)
+            .eq("enabled", true),
+        ]);
         if (a) {
           setEnabled((a as { enabled: boolean }).enabled);
           setThreshold((a as { threshold_in: number }).threshold_in);
         }
+        setActiveAlertCount(countRes.count ?? 0);
       }
     })();
   }, [supabase, resortId]);
@@ -79,6 +95,26 @@ export default function SnowAlertButton({ resortId, resortName }: Props) {
     }
     if (!VAPID_PUBLIC_KEY) {
       setError("Push setup incomplete (no VAPID key). Tell the admin.");
+      return;
+    }
+    // Wait for Pro status + alert count to load before gating; otherwise
+    // a tap in the first ~200ms could misfire (Pro user sees upsell, or
+    // a free-user-at-cap silently slips past). Surface a soft error so
+    // the user knows to try again rather than the click vanishing.
+    if (!enabled && (proLoading || activeAlertCount === null)) {
+      setError("Loading account status… try again in a moment.");
+      return;
+    }
+    // Pro gate: free users get 1 active snow alert total. If they already
+    // have one elsewhere AND this resort isn't the one already enabled,
+    // route them to the upsell instead of silently failing.
+    if (
+      !isPro &&
+      !enabled &&
+      activeAlertCount !== null &&
+      activeAlertCount >= FREE_LIMITS.snowAlerts
+    ) {
+      setShowUpsell(true);
       return;
     }
     setBusy(true);
@@ -125,6 +161,7 @@ export default function SnowAlertButton({ resortId, resortName }: Props) {
       );
       if (alertErr) throw new Error(alertErr.message);
       setEnabled(true);
+      setActiveAlertCount((c) => (c == null ? c : c + 1));
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e));
     } finally {
@@ -141,8 +178,12 @@ export default function SnowAlertButton({ resortId, resortName }: Props) {
       .update({ enabled: false })
       .eq("user_id", userId)
       .eq("resort_id", resortId);
-    if (updErr) setError(updErr.message);
-    else setEnabled(false);
+    if (updErr) {
+      setError(updErr.message);
+    } else {
+      setEnabled(false);
+      setActiveAlertCount((c) => (c == null ? c : Math.max(0, c - 1)));
+    }
     setBusy(false);
   }
 
@@ -201,6 +242,12 @@ export default function SnowAlertButton({ resortId, resortName }: Props) {
       {!userId && (
         <p className="mt-1 text-[10px] text-wn-charcoal/55">Sign in to enable.</p>
       )}
+      <UpsellModal
+        open={showUpsell}
+        onClose={() => setShowUpsell(false)}
+        gate="snowAlerts"
+        detail={`Free tier alerts on 1 resort at a time. You already have an active alert elsewhere — upgrade to Pro for alerts on every favorite with custom thresholds per resort.`}
+      />
     </div>
   );
 }

@@ -20,10 +20,27 @@
   --font-mono: var(--font-geist-mono);
 }
 
+html, body {
+  /* Stop iOS Safari rubber-band from revealing white behind the map shell.
+     Drawers / sheets manage their own overscroll. */
+  overscroll-behavior: none;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+/* iOS Safari auto-zooms when an input's font-size is < 16px on focus.
+   Force 16px on phones so taps never trigger viewport zoom. Desktop is
+   unaffected. */
+@media (max-width: 767px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
 }
 
 /* ResortPanel entrance animations.
@@ -38,5 +55,9 @@ body {
   to   { transform: translateX(0); }
 }
 @media (prefers-reduced-motion: reduce) {
-  [class*="animate-["] { animation: none !important; }
+  [class*="animate-["],
+  *[style*="transition"] {
+    animation: none !important;
+    transition: none !important;
+  }
 }
