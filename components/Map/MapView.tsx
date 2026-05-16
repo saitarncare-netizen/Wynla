@@ -152,6 +152,39 @@ export default function MapView({
     }
     mapboxgl.accessToken = token;
 
+    // Stage 33 — restore the saved camera (center + zoom) from
+    // sessionStorage so back-navigating from /resort/[slug] lands the
+    // user where they were on the map, not at the default US-wide
+    // view. Session-scoped so closing the tab clears it. Saved on
+    // every map moveend below.
+    const SAVED_VIEW_KEY = "wynla_map_view_v1";
+    let initialCenter: [number, number] = [-95, 40];
+    let initialZoom = 3.6;
+    try {
+      if (typeof window !== "undefined") {
+        const raw = window.sessionStorage.getItem(SAVED_VIEW_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw) as {
+            center?: [number, number];
+            zoom?: number;
+          };
+          if (
+            Array.isArray(parsed.center) &&
+            parsed.center.length === 2 &&
+            Number.isFinite(parsed.center[0]) &&
+            Number.isFinite(parsed.center[1]) &&
+            typeof parsed.zoom === "number" &&
+            Number.isFinite(parsed.zoom)
+          ) {
+            initialCenter = parsed.center;
+            initialZoom = parsed.zoom;
+          }
+        }
+      }
+    } catch {
+      // Malformed JSON / sessionStorage disabled — fall through to defaults.
+    }
+
     const map = new mapboxgl.Map({
       container: mapContainer.current,
       style: "mapbox://styles/mapbox/light-v11",
@@ -160,8 +193,8 @@ export default function MapView({
       // as a visual bug ("the map turned into a circle"). Flat is the
       // expected look for a US-only trip-planning map.
       projection: "mercator",
-      center: [-95, 40],
-      zoom: 3.6,
+      center: initialCenter,
+      zoom: initialZoom,
       // 22 px halo around clicks/taps → effective 44×44 px touch target,
       // even when the visible circle is only 12 px (small size tier).
       clickTolerance: 22,
@@ -170,6 +203,21 @@ export default function MapView({
       dragRotate: false,
     });
     map.touchZoomRotate.disableRotation();
+
+    // Persist camera on every moveend so we can restore on next mount.
+    map.on("moveend", () => {
+      try {
+        if (typeof window === "undefined") return;
+        const c = map.getCenter();
+        const z = map.getZoom();
+        window.sessionStorage.setItem(
+          SAVED_VIEW_KEY,
+          JSON.stringify({ center: [c.lng, c.lat], zoom: z }),
+        );
+      } catch {
+        // Storage quota / disabled — best-effort.
+      }
+    });
 
     mapRef.current = map;
     // Stage 33 — dropped mapbox NavigationControl (+/- zoom buttons).
