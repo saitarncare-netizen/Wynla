@@ -11,6 +11,7 @@
 // Hidden on desktop because the FilterBar already serves both roles.
 
 import { PASS_COLORS, PASS_KEYS, PASS_LABELS, type Pass } from "@/lib/passColors";
+import { isGlobalOffSeasonNow } from "@/lib/seasonDates";
 
 type Props = {
   passFilter: string[];
@@ -70,10 +71,12 @@ export default function MobileQuickFilters({
             <span>Clear</span>
           </button>
         )}
-        {/* Stage 33 — Fresh snow chip. Sits before pass chips because
-            it's the most actionable filter when there IS fresh snow.
-            Shows the count of resorts with snow_new_24h_in > 0. */}
-        {freshSnowCount > 0 && (
+        {/* Stage 33 — Fresh snow chip. Hidden during May-Oct off-season
+            because any fresh snow is on resorts that aren't actually
+            operating (Mt Hood, etc) — surfacing it as a filter just
+            lured users into closed-resort dead-ends. Re-appears in
+            winter. */}
+        {freshSnowCount > 0 && !isGlobalOffSeasonNow() && (
           <button
             type="button"
             onClick={() => onFreshSnowChange(!freshSnowOnly)}

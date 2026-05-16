@@ -6,6 +6,7 @@ import { type Origin } from "@/lib/origins";
 // PASS_COLORS / PASS_KEYS / PASS_LABELS dropped along with the Pass
 // section. Pass selection now lives only in the map-header chip strip.
 import { SIZE_TIER_LABELS, type SizeTier } from "@/lib/sizeTier";
+import { isGlobalOffSeasonNow } from "@/lib/seasonDates";
 
 type Props = {
   open: boolean;
@@ -271,32 +272,38 @@ export default function FiltersDrawer({
             }
           >
             <div className="grid grid-cols-2 gap-1.5">
-              <button
-                type="button"
-                onClick={() => onFreshSnowChange?.(!freshSnowOnly)}
-                aria-pressed={freshSnowOnly}
-                disabled={!onFreshSnowChange || freshSnowCount === 0}
-                className={[
-                  "flex items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-semibold transition disabled:cursor-not-allowed disabled:opacity-50",
-                  freshSnowOnly
-                    ? "border-wn-sky bg-wn-sky/10 text-wn-navy"
-                    : "border-wn-charcoal/15 bg-white text-wn-charcoal hover:border-wn-charcoal/40",
-                ].join(" ")}
-              >
-                <span aria-hidden="true">❄️</span>
-                <span>Fresh snow</span>
-                {freshSnowCount > 0 && (
-                  <span
-                    className={`ml-0.5 rounded-full px-1.5 py-0.5 text-[10px] font-bold ${
-                      freshSnowOnly
-                        ? "bg-wn-navy text-white"
-                        : "bg-wn-charcoal/10 text-wn-charcoal/70"
-                    }`}
-                  >
-                    {freshSnowCount}
-                  </span>
-                )}
-              </button>
+              {/* Stage 33 — fresh-snow chip hidden during May-Oct
+                  off-season window; resorts with fresh snow are all
+                  closed/off-season anyway so the filter just dead-ends
+                  users. Show during real ski season. */}
+              {!isGlobalOffSeasonNow() && (
+                <button
+                  type="button"
+                  onClick={() => onFreshSnowChange?.(!freshSnowOnly)}
+                  aria-pressed={freshSnowOnly}
+                  disabled={!onFreshSnowChange || freshSnowCount === 0}
+                  className={[
+                    "flex items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-semibold transition disabled:cursor-not-allowed disabled:opacity-50",
+                    freshSnowOnly
+                      ? "border-wn-sky bg-wn-sky/10 text-wn-navy"
+                      : "border-wn-charcoal/15 bg-white text-wn-charcoal hover:border-wn-charcoal/40",
+                  ].join(" ")}
+                >
+                  <span aria-hidden="true">❄️</span>
+                  <span>Fresh snow</span>
+                  {freshSnowCount > 0 && (
+                    <span
+                      className={`ml-0.5 rounded-full px-1.5 py-0.5 text-[10px] font-bold ${
+                        freshSnowOnly
+                          ? "bg-wn-navy text-white"
+                          : "bg-wn-charcoal/10 text-wn-charcoal/70"
+                      }`}
+                    >
+                      {freshSnowCount}
+                    </span>
+                  )}
+                </button>
+              )}
               <button
                 type="button"
                 onClick={() => onNightChange(!nightOnly)}

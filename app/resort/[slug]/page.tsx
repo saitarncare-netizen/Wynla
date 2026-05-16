@@ -20,7 +20,7 @@ import DifficultyBar from "@/components/Map/DifficultyBar";
 import ResortReviews from "@/components/Map/ResortReviews";
 import SnowAlertButton from "@/components/SnowAlertButton";
 import SeasonCountdown from "@/components/SeasonCountdown";
-import { parseSeasonDates } from "@/lib/seasonDates";
+import { parseSeasonDates, isGlobalOffSeasonNow } from "@/lib/seasonDates";
 import SimilarResorts from "@/components/SimilarResorts";
 import type { SimilarityResort } from "@/lib/similarity";
 
@@ -763,14 +763,19 @@ function FullWeatherCard({
   // Status line — open/closed/limited/off-season, with trails+lifts
   // open ratios inline when applicable. Hide for "unknown" (Open-Meteo
   // fallback couldn't infer status reliably).
-  const status = resort.snow_report_status;
+  let status = resort.snow_report_status;
+  // Stage 33 — unify "closed" + "off-season" + "unknown" during the
+  // global May-Oct window. The OnTheSnow scraper marks some resorts
+  // (Timberline Lodge etc) as "closed" with stale spring data while
+  // others fall through to "off-season". Both mean the same thing to
+  // a user in May; show one consistent label instead of two.
+  if (isGlobalOffSeasonNow() && status && status !== "open" && status !== "limited") {
+    status = "off-season";
+  }
   const trailsOpen = resort.trails_open_today;
   const totalTrails = resort.total_trails;
   const liftsOpen = resort.lifts_open_today;
   const totalLifts = resort.total_lifts;
-  // Status labels — written so a casual visitor reads them without a
-  // glossary. "Closed" alone (the raw OnTheSnow term) confused testers
-  // who thought it meant "closed today" rather than "winter ended".
   const statusMeta: Record<
     string,
     { emoji: string; label: string; color: string }

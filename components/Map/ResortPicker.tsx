@@ -13,6 +13,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { haversineMeters, estimateDriveSeconds } from "@/lib/distance";
 import { formatDriveTime } from "@/lib/origins";
 import { PASS_COLORS, PASS_KEYS, PASS_LABELS } from "@/lib/passColors";
+import { isGlobalOffSeasonNow } from "@/lib/seasonDates";
 import type { Resort } from "./MapPage";
 
 type Props = {
@@ -373,7 +374,11 @@ export default function ResortPicker({
             has. The Fresh snow chip leads the row because it's the
             most actionable filter when powder is falling. */}
         <div className="mt-2 flex flex-wrap items-center gap-1.5">
-          {freshSnowCount > 0 && (
+          {/* Stage 33 — fresh-snow chip suppressed during off-season
+              even when scraper data exists; in May the only resorts
+              with fresh snow are spring-skiing/closed places that
+              would dead-end a user. Returns in winter. */}
+          {freshSnowCount > 0 && !isGlobalOffSeasonNow() && (
             <button
               type="button"
               onClick={() => setFreshSnowFilter((v) => !v)}

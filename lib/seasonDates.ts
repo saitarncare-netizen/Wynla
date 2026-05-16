@@ -18,6 +18,19 @@
 
 export type SeasonStatus = "in-season" | "off-season" | "unknown";
 
+/**
+ * Global "is this currently off-season for most US resorts?" helper.
+ * May 1 (month 4) through Oct 31 (month 9). Used to gate UI that's
+ * pointless during summer (powder-day filter chips, etc) and to unify
+ * the "closed" vs "off-season" status copy on resort pages — during
+ * this window we want one consistent message regardless of what the
+ * OnTheSnow scraper literally reports.
+ */
+export function isGlobalOffSeasonNow(now: Date = new Date()): boolean {
+  const m = now.getMonth();
+  return m >= 4 && m <= 9;
+}
+
 export type SeasonInfo = {
   status: SeasonStatus;
   /** Days until the NEXT opening date. null when in-season or unknown. */
