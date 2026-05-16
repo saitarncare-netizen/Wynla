@@ -20,7 +20,7 @@ import RecentlyViewedStrip, {
 } from "@/components/RecentlyViewedStrip";
 import OnboardingCard from "@/components/OnboardingCard";
 import OffSeasonBanner from "@/components/OffSeasonBanner";
-import { isOnboarded } from "@/lib/preferences";
+import { isOnboarded, getPreferences, matchesSkill } from "@/lib/preferences";
 import Link from "next/link";
 import { resolveOrigin } from "@/lib/origins";
 import { haversineMeters, estimateDriveSeconds, estimateDriveMeters } from "@/lib/distance";
@@ -255,6 +255,16 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   // (e.g. powder-day chasers). Off-season this filter will surface
   // only the rare late-season snow events (Mt. Hood, etc).
   const freshSnowOnly = searchParams.get("freshsnow") === "1";
+  // Stage 33 — "For you" filter, reads the saved skillLevel from
+  // onboarding preferences and narrows the map to resorts that match.
+  // URL `?foryou=1`. Hidden when user has no preferences or picked
+  // "any" skill — nothing to match against.
+  const forYouOnly = searchParams.get("foryou") === "1";
+  const userSkillLevel = useSyncExternalStore(
+    onboardedSubscribe,
+    () => getPreferences()?.skillLevel ?? "any",
+    () => "any" as const,
+  );
   // Stage 8 — airport filter. URL form: ?airport=DEN. Empty / missing
   // = no airport filter. Matched against resort.closest_airport_iata
   // with a 120-mile shuttle-range distance cap; resorts with NULL
@@ -342,6 +352,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
       if (freshSnowOnly && !(r.snow_new_24h_in != null && r.snow_new_24h_in > 0)) {
         return false;
       }
+      if (forYouOnly && !matchesSkill(r, userSkillLevel)) return false;
       if (withinHours > 0) {
         const dt = driveTimeByResort.get(r.id)?.get(origin.name);
         if (!dt || dt.duration_seconds > withinHours * 3600) return false;
@@ -352,7 +363,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
     // matchesAirport closes over airportFilter; depending on
     // airportFilter is enough for memoization correctness.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [resorts, featuredOnly, passFilter, nightOnly, freshSnowOnly, withinHours, origin, driveTimeByResort, airportFilter]);
+  }, [resorts, featuredOnly, passFilter, nightOnly, freshSnowOnly, forYouOnly, userSkillLevel, withinHours, origin, driveTimeByResort, airportFilter]);
 
   const filtered = useMemo(() => {
     return filteredIgnoringSize.filter((r) => matchesSizeFilter(r.vertical_drop, sizeFilter));
@@ -622,10 +633,13 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
           freshSnowCount={resorts.filter(
             (r) => r.snow_new_24h_in != null && r.snow_new_24h_in > 0,
           ).length}
+          forYouOnly={forYouOnly}
+          userSkillLevel={userSkillLevel}
           onPassChange={(passes) =>
             updateParam("pass", passes.length === 0 ? null : passes.join(","))
           }
           onFreshSnowChange={(v) => updateParam("freshsnow", v ? "1" : null)}
+          onForYouChange={(v) => updateParam("foryou", v ? "1" : null)}
         />
         {/* Stage 33 — both the off-season banner and the recently-viewed
             chips hide when the user is actively searching or planning

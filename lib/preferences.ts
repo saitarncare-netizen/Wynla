@@ -84,3 +84,54 @@ export function setOnboarded(): void {
     // ignore
   }
 }
+
+/** Reset onboarding so the wizard re-appears on next visit. Useful if
+ *  the user wants to update their skill level / passes / origin. Also
+ *  clears the stored preferences so MapPage doesn't filter against
+ *  stale answers. */
+export function clearOnboarding(): void {
+  if (!isBrowser()) return;
+  try {
+    window.localStorage.removeItem(ONBOARDED_KEY);
+    window.localStorage.removeItem(PREFS_KEY);
+  } catch {
+    // ignore
+  }
+}
+
+/**
+ * Stage 33 — true when this resort's difficulty mix matches the user's
+ * stated skill level. Used by the "🎯 For you" filter chip + as the
+ * basis for the "Matches you" badge on resort cards.
+ *
+ *   beginner    → resort needs >=30% beginner terrain
+ *   intermediate → >=35% intermediate
+ *   advanced    → >=25% advanced or >=10% expert-only
+ *   any         → match everything
+ *
+ * Resorts with no difficulty data scrape are INCLUDED (we don't punish
+ * unknown — the user can decide). This keeps the filter from hiding
+ * the 68 resorts where the partial-data sanity check has nulled the
+ * percentages.
+ */
+export function matchesSkill(
+  difficulty: {
+    difficulty_pct_beginner: number | null;
+    difficulty_pct_intermediate: number | null;
+    difficulty_pct_advanced: number | null;
+    difficulty_pct_expert: number | null;
+  },
+  skill: SkillLevel,
+): boolean {
+  if (skill === "any") return true;
+  const beg = difficulty.difficulty_pct_beginner;
+  const intm = difficulty.difficulty_pct_intermediate;
+  const adv = difficulty.difficulty_pct_advanced;
+  const exp = difficulty.difficulty_pct_expert;
+  // No data → include rather than exclude.
+  if (beg == null && intm == null && adv == null && exp == null) return true;
+  if (skill === "beginner") return (beg ?? 0) >= 30;
+  if (skill === "intermediate") return (intm ?? 0) >= 35;
+  if (skill === "advanced") return (adv ?? 0) >= 25 || (exp ?? 0) >= 10;
+  return true;
+}

@@ -12,14 +12,18 @@
 
 import { PASS_COLORS, PASS_KEYS, PASS_LABELS, type Pass } from "@/lib/passColors";
 import { isGlobalOffSeasonNow } from "@/lib/seasonDates";
+import type { SkillLevel } from "@/lib/preferences";
 
 type Props = {
   passFilter: string[];
   passCounts: Record<string, number>;
   freshSnowOnly: boolean;
   freshSnowCount: number;
+  forYouOnly: boolean;
+  userSkillLevel: SkillLevel;
   onPassChange: (passes: string[]) => void;
   onFreshSnowChange: (v: boolean) => void;
+  onForYouChange: (v: boolean) => void;
 };
 
 export default function MobileQuickFilters({
@@ -27,8 +31,11 @@ export default function MobileQuickFilters({
   passCounts,
   freshSnowOnly,
   freshSnowCount,
+  forYouOnly,
+  userSkillLevel,
   onPassChange,
   onFreshSnowChange,
+  onForYouChange,
 }: Props) {
   function toggle(p: Pass) {
     const cur = new Set(passFilter);
@@ -57,18 +64,47 @@ export default function MobileQuickFilters({
       onTouchEnd={stopTouchBubble}
     >
       <div className="flex items-center gap-1.5">
-        {(passFilter.length > 0 || freshSnowOnly) && (
+        {(passFilter.length > 0 || freshSnowOnly || forYouOnly) && (
           <button
             type="button"
             onClick={() => {
               onPassChange([]);
               onFreshSnowChange(false);
+              onForYouChange(false);
             }}
             className="inline-flex shrink-0 items-center gap-1 rounded-full border border-wn-charcoal/15 bg-white/95 px-2.5 py-1 text-[11px] font-semibold text-wn-charcoal/75 shadow-sm backdrop-blur-sm active:scale-95"
             aria-label="Clear filters"
           >
             <span aria-hidden="true">✕</span>
             <span>Clear</span>
+          </button>
+        )}
+        {/* Stage 33 — "For you" chip. Surfaces only when the user has
+            actually completed onboarding with a non-"any" skill level
+            (otherwise there's nothing to match against). Filters the
+            map to resorts whose difficulty mix suits the picked level. */}
+        {userSkillLevel !== "any" && (
+          <button
+            type="button"
+            onClick={() => onForYouChange(!forYouOnly)}
+            className={[
+              "inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold shadow-sm backdrop-blur-sm transition active:scale-95",
+              forYouOnly
+                ? "border-2 border-wn-gold bg-wn-gold/10 text-wn-navy"
+                : "border border-wn-gold/40 bg-white/95 text-wn-navy",
+            ].join(" ")}
+            aria-pressed={forYouOnly}
+            aria-label={`Show only resorts matching your skill level: ${userSkillLevel}`}
+          >
+            <span aria-hidden="true">🎯</span>
+            <span>
+              For{" "}
+              {userSkillLevel === "beginner"
+                ? "beginners"
+                : userSkillLevel === "intermediate"
+                  ? "intermediates"
+                  : "advanced"}
+            </span>
           </button>
         )}
         {/* Stage 33 — Fresh snow chip. Hidden during May-Oct off-season
