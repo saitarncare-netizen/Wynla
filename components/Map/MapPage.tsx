@@ -9,7 +9,7 @@ import FilterBar from "./FilterBar";
 import ResortPanel from "./ResortPanel";
 import ResortPicker from "./ResortPicker";
 import LocationButton from "./LocationButton";
-import FiltersDrawer from "./FiltersDrawer";
+import FiltersDrawer, { AIRPORT_OPTIONS } from "./FiltersDrawer";
 import MobileQuickFilters from "./MobileQuickFilters";
 import TripPlannerPanel from "./TripPlannerPanel";
 import AuthButton from "@/components/auth/AuthButton";
@@ -849,7 +849,6 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
           trip length; ZIP + geo cover origin precisely enough). */}
       <FiltersDrawer
         open={filtersOpen}
-        origin={origin}
         withinHours={withinHours}
         sizeFilter={sizeFilter}
         nightOnly={nightOnly}
@@ -860,11 +859,26 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         freshSnowCount={resorts.filter(
           (r) => r.snow_new_24h_in != null && r.snow_new_24h_in > 0,
         ).length}
-        onFromGeo={handleFromGeo}
         onWithinChange={(w) => updateParam("within", w)}
         onSizeChange={(s) => updateParam("size", s)}
         onNightChange={(v) => updateParam("night", v ? "1" : null)}
-        onAirportChange={(iata) => updateParam("airport", iata)}
+        onAirportChange={(iata) => {
+          updateParam("airport", iata);
+          // Stage 33 — fly the map camera to the picked airport so
+          // the user immediately sees its surrounding resorts. Skips
+          // when iata is null (filter cleared) — leave the map where
+          // it was.
+          if (iata) {
+            const a = AIRPORT_OPTIONS.find((opt) => opt.iata === iata);
+            if (a) {
+              setCameraTarget({
+                lat: a.lat,
+                lng: a.lng,
+                token: `airport-${a.iata}-${Date.now()}`,
+              });
+            }
+          }
+        }}
         onFreshSnowChange={(v) => updateParam("freshsnow", v ? "1" : null)}
         onClearAll={clearAll}
         onClose={() => setFiltersOpen(false)}

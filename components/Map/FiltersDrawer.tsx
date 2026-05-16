@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { type Origin } from "@/lib/origins";
+// Origin import dropped Stage 33 along with the Origin section.
 // PASS_COLORS / PASS_KEYS / PASS_LABELS dropped along with the Pass
 // section. Pass selection now lives only in the map-header chip strip.
 import { SIZE_TIER_LABELS, type SizeTier } from "@/lib/sizeTier";
@@ -10,7 +10,6 @@ import { isGlobalOffSeasonNow } from "@/lib/seasonDates";
 
 type Props = {
   open: boolean;
-  origin: Origin;
   withinHours: number;
   sizeFilter: SizeTier | null;
   nightOnly: boolean;
@@ -21,7 +20,6 @@ type Props = {
   freshSnowOnly: boolean;
   freshSnowCount: number;
   onFreshSnowChange: (v: boolean) => void;
-  onFromGeo: (lat: number, lng: number) => void;
   onWithinChange: (w: string | null) => void;
   onSizeChange: (s: SizeTier | null) => void;
   onNightChange: (v: boolean) => void;
@@ -30,25 +28,30 @@ type Props = {
   onClose: () => void;
 };
 
-// Stage 8 — most-relevant US ski-trip airports. Chips render as a
-// horizontal-scroll row to keep the drawer compact. IATA codes match
-// resort.closest_airport_iata values stored on each resort.
-export const AIRPORT_OPTIONS: Array<{ iata: string; label: string }> = [
-  { iata: "DEN", label: "Denver" },
-  { iata: "SLC", label: "Salt Lake City" },
-  { iata: "RNO", label: "Reno" },
-  { iata: "BTV", label: "Burlington VT" },
-  { iata: "MHT", label: "Manchester NH" },
-  { iata: "BOS", label: "Boston" },
-  { iata: "JFK", label: "NYC (JFK)" },
-  { iata: "LGA", label: "NYC (LGA)" },
-  { iata: "PHL", label: "Philly" },
-  { iata: "ALB", label: "Albany" },
-  { iata: "MSP", label: "Minneapolis" },
-  { iata: "GEG", label: "Spokane" },
-  { iata: "SEA", label: "Seattle" },
-  { iata: "MSO", label: "Missoula" },
-  { iata: "JAC", label: "Jackson Hole" },
+// Stage 8 — most-relevant US ski-trip airports. IATA codes match
+// resort.closest_airport_iata values stored on each resort. Stage 33
+// added lat/lng so MapPage can fly the camera to the picked airport.
+export const AIRPORT_OPTIONS: Array<{
+  iata: string;
+  label: string;
+  lat: number;
+  lng: number;
+}> = [
+  { iata: "DEN", label: "Denver", lat: 39.8617, lng: -104.6731 },
+  { iata: "SLC", label: "Salt Lake City", lat: 40.7884, lng: -111.9778 },
+  { iata: "RNO", label: "Reno", lat: 39.4991, lng: -119.7681 },
+  { iata: "BTV", label: "Burlington VT", lat: 44.4717, lng: -73.1533 },
+  { iata: "MHT", label: "Manchester NH", lat: 42.9326, lng: -71.4357 },
+  { iata: "BOS", label: "Boston", lat: 42.3656, lng: -71.0096 },
+  { iata: "JFK", label: "NYC (JFK)", lat: 40.6413, lng: -73.7781 },
+  { iata: "LGA", label: "NYC (LGA)", lat: 40.7769, lng: -73.874 },
+  { iata: "PHL", label: "Philly", lat: 39.8744, lng: -75.2424 },
+  { iata: "ALB", label: "Albany", lat: 42.7483, lng: -73.8017 },
+  { iata: "MSP", label: "Minneapolis", lat: 44.8848, lng: -93.2223 },
+  { iata: "GEG", label: "Spokane", lat: 47.6199, lng: -117.5339 },
+  { iata: "SEA", label: "Seattle", lat: 47.4502, lng: -122.3088 },
+  { iata: "MSO", label: "Missoula", lat: 46.9163, lng: -114.0908 },
+  { iata: "JAC", label: "Jackson Hole", lat: 43.6073, lng: -110.7377 },
 ];
 
 // Stage 21.2 — single drawer that replaces the row of FilterBar pills
@@ -69,7 +72,6 @@ const DRIVE_TIME_PRESETS = [0, 3, 5, 8, 12];
 
 export default function FiltersDrawer({
   open,
-  origin,
   withinHours,
   sizeFilter,
   nightOnly,
@@ -79,7 +81,6 @@ export default function FiltersDrawer({
   freshSnowOnly,
   freshSnowCount,
   onFreshSnowChange,
-  onFromGeo,
   onWithinChange,
   onSizeChange,
   onNightChange,
@@ -87,16 +88,15 @@ export default function FiltersDrawer({
   onClearAll,
   onClose,
 }: Props) {
-  const [requestingGeo, setRequestingGeo] = useState(false);
-  const [geoError, setGeoError] = useState<string | null>(null);
-  const [zipInput, setZipInput] = useState("");
-  const [resolvingZip, setResolvingZip] = useState(false);
-  const [zipError, setZipError] = useState<string | null>(null);
   const [customHours, setCustomHours] = useState<string>(
     withinHours > 0 && !DRIVE_TIME_PRESETS.includes(withinHours)
       ? String(withinHours)
       : "",
   );
+  // Stage 33 — airport search box. Filters the AIRPORT_OPTIONS list as
+  // the user types so the section is browsable for non-USA travellers
+  // who don't know the IATA codes off-hand.
+  const [airportQuery, setAirportQuery] = useState("");
 
   // ESC to close.
   useEffect(() => {
@@ -108,65 +108,6 @@ export default function FiltersDrawer({
     return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose]);
 
-  function handleUseHere() {
-    if (typeof navigator === "undefined" || !navigator.geolocation) {
-      setGeoError("Browser doesn't support location.");
-      return;
-    }
-    setRequestingGeo(true);
-    setGeoError(null);
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        onFromGeo(pos.coords.latitude, pos.coords.longitude);
-        setRequestingGeo(false);
-      },
-      (err) => {
-        setRequestingGeo(false);
-        setGeoError(
-          err.code === err.PERMISSION_DENIED
-            ? "Permission denied — open iOS Settings → Safari → Location."
-            : "Couldn't get your location.",
-        );
-      },
-      { enableHighAccuracy: false, timeout: 8000, maximumAge: 60_000 },
-    );
-  }
-
-  async function handleZipSubmit() {
-    const clean = zipInput.trim();
-    if (!/^\d{5}$/.test(clean)) {
-      setZipError("Enter a 5-digit US ZIP code.");
-      return;
-    }
-    setResolvingZip(true);
-    setZipError(null);
-    try {
-      const res = await fetch(`https://api.zippopotam.us/us/${clean}`);
-      if (!res.ok) {
-        setZipError(res.status === 404 ? "ZIP not found." : "Lookup failed.");
-        setResolvingZip(false);
-        return;
-      }
-      const data = (await res.json()) as {
-        places?: { latitude?: string; longitude?: string }[];
-      };
-      const place = data.places?.[0];
-      const lat = place ? Number(place.latitude) : NaN;
-      const lng = place ? Number(place.longitude) : NaN;
-      if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
-        setZipError("ZIP returned no coordinates.");
-        setResolvingZip(false);
-        return;
-      }
-      onFromGeo(lat, lng);
-      setResolvingZip(false);
-      setZipInput("");
-    } catch {
-      setResolvingZip(false);
-      setZipError("Network error — try again.");
-    }
-  }
-
   function commitCustomDrive() {
     const n = Number(customHours);
     if (Number.isFinite(n) && n > 0 && n <= 24) {
@@ -177,8 +118,6 @@ export default function FiltersDrawer({
   }
 
   if (!open) return null;
-
-  const isGeo = origin.kind === "geo";
 
   // Stage 22 — stop touch events from bubbling to Mapbox underneath.
   // User-reported bug: swiping inside the drawer panned the map.
@@ -324,66 +263,17 @@ export default function FiltersDrawer({
             </div>
           </Section>
 
-          {/* 3. ORIGIN — geolocation + ZIP lookup */}
-          <Section
-            title="Origin"
-            summary={
-              origin.kind === "geo" ? "📍 Your location" : origin.short
-            }
-          >
-            <button
-              type="button"
-              onClick={handleUseHere}
-              disabled={requestingGeo}
-              className={`mb-2 flex w-full items-center gap-2 rounded-lg border px-3 py-2.5 text-sm font-semibold transition disabled:opacity-60 ${
-                isGeo
-                  ? "border-wn-navy bg-wn-navy text-white"
-                  : "border-wn-charcoal/15 bg-white text-wn-charcoal hover:border-wn-charcoal/40"
-              }`}
-            >
-              <span aria-hidden="true">📍</span>
-              <span>{requestingGeo ? "Locating…" : isGeo ? "Using your location" : "Use my location"}</span>
-              {isGeo && <span className="ml-auto text-[10px] text-white/80">live</span>}
-            </button>
-            {geoError && (
-              <p className="mb-2 text-[11px] leading-tight text-red-700">{geoError}</p>
-            )}
+          {/* Stage 33 — ORIGIN section removed from drawer. The
+              onboarding wizard already collects origin once (Use my
+              location OR a city), and the floating LocationButton at
+              the bottom-right of the map lets users opt into geo at
+              any time. Surfacing the picker again here was redundant
+              and added clutter. ZIP-code entry is dropped along with
+              it; if users need to change origin they can either tap
+              the floating geo button or clear browser data to
+              re-onboard. */}
 
-            <label className="mb-1 block text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
-              Or enter a US ZIP
-            </label>
-            <div className="flex gap-1.5">
-              <input
-                type="text"
-                inputMode="numeric"
-                pattern="\d{5}"
-                maxLength={5}
-                placeholder="e.g. 80424"
-                value={zipInput}
-                onChange={(e) => {
-                  setZipInput(e.target.value.replace(/\D/g, "").slice(0, 5));
-                  if (zipError) setZipError(null);
-                }}
-                onKeyDown={(e) => { if (e.key === "Enter") handleZipSubmit(); }}
-                disabled={resolvingZip}
-                className="min-w-0 flex-1 rounded-lg border border-wn-charcoal/20 bg-white px-3 py-2 text-sm font-medium text-wn-charcoal placeholder:text-wn-charcoal/35 focus:outline-none focus:ring-2 focus:ring-wn-sky disabled:opacity-60"
-                aria-label="ZIP code"
-              />
-              <button
-                type="button"
-                onClick={handleZipSubmit}
-                disabled={resolvingZip || zipInput.length !== 5}
-                className="rounded-lg bg-wn-navy px-3 py-2 text-sm font-semibold text-white transition hover:bg-wn-navy/90 disabled:opacity-50"
-              >
-                {resolvingZip ? "…" : "Use"}
-              </button>
-            </div>
-            {zipError && (
-              <p className="mt-1 text-[11px] leading-tight text-red-700">{zipError}</p>
-            )}
-          </Section>
-
-          {/* 4. DRIVE TIME (DAY 1) */}
+          {/* DRIVE TIME (DAY 1) */}
           <Section
             title="Drive time (day 1)"
             summary={withinHours > 0 ? `≤ ${withinHours}h` : "Any"}
@@ -482,23 +372,45 @@ export default function FiltersDrawer({
                 : "Any airport"
             }
           >
-            <div
-              className="-mx-1 flex gap-1.5 overflow-x-auto px-1 pb-1"
-              style={{ touchAction: "pan-x", WebkitOverflowScrolling: "touch" }}
-            >
+            {/* Stage 33 — airport picker rebuilt as a searchable
+                vertical list. Horizontal chips required the user to
+                already know the IATA; the list makes scanning easier
+                and the search box covers travellers who type the
+                city name. Selecting an airport ALSO flies the map
+                camera to it (handled in MapPage via the airport URL
+                param). */}
+            <input
+              type="search"
+              placeholder="Search airports… (Denver, DEN, etc.)"
+              value={airportQuery}
+              onChange={(e) => setAirportQuery(e.target.value)}
+              className="mb-2 w-full rounded-lg border border-wn-charcoal/20 bg-white px-3 py-2 text-sm font-medium text-wn-charcoal placeholder:text-wn-charcoal/40 focus:border-wn-navy focus:outline-none focus:ring-2 focus:ring-wn-navy/20"
+            />
+            <div className="max-h-[280px] overflow-y-auto rounded-lg border border-wn-charcoal/10 bg-white">
               <button
                 type="button"
                 onClick={() => onAirportChange(null)}
                 aria-pressed={airportFilter === null}
-                className={`shrink-0 rounded-lg border px-3 py-1.5 text-xs font-semibold transition ${
+                className={`flex w-full items-center gap-2 border-b border-wn-charcoal/10 px-3 py-2 text-left text-sm font-semibold transition ${
                   airportFilter === null
-                    ? "border-wn-navy bg-wn-navy text-white"
-                    : "border-wn-charcoal/15 bg-white text-wn-charcoal hover:border-wn-charcoal/40"
+                    ? "bg-wn-navy/5 text-wn-navy"
+                    : "text-wn-charcoal hover:bg-wn-charcoal/5"
                 }`}
               >
-                Any
+                <span aria-hidden="true" className="text-base">✈️</span>
+                <span className="flex-1">Any airport</span>
+                {airportFilter === null && (
+                  <span aria-hidden="true" className="text-wn-navy">✓</span>
+                )}
               </button>
-              {AIRPORT_OPTIONS.map((a) => {
+              {AIRPORT_OPTIONS.filter((a) => {
+                const q = airportQuery.trim().toLowerCase();
+                if (!q) return true;
+                return (
+                  a.iata.toLowerCase().includes(q) ||
+                  a.label.toLowerCase().includes(q)
+                );
+              }).map((a) => {
                 const active = airportFilter === a.iata;
                 return (
                   <button
@@ -508,16 +420,17 @@ export default function FiltersDrawer({
                       onAirportChange(active ? null : a.iata)
                     }
                     aria-pressed={active}
-                    className={`shrink-0 rounded-lg border px-3 py-1.5 text-xs font-semibold transition ${
+                    className={`flex w-full items-center gap-2 border-b border-wn-charcoal/10 px-3 py-2 text-left text-sm font-semibold transition last:border-b-0 ${
                       active
-                        ? "border-wn-navy bg-wn-navy text-white"
-                        : "border-wn-charcoal/15 bg-white text-wn-charcoal hover:border-wn-charcoal/40"
+                        ? "bg-wn-navy/5 text-wn-navy"
+                        : "text-wn-charcoal hover:bg-wn-charcoal/5"
                     }`}
                   >
-                    <span className="font-mono">{a.iata}</span>
-                    <span className="ml-1 font-normal opacity-80">
-                      {a.label}
-                    </span>
+                    <span className="font-mono text-xs font-bold text-wn-charcoal/60">{a.iata}</span>
+                    <span className="flex-1 truncate">{a.label}</span>
+                    {active && (
+                      <span aria-hidden="true" className="text-wn-navy">✓</span>
+                    )}
                   </button>
                 );
               })}
@@ -578,8 +491,8 @@ export default function FiltersDrawer({
             type="button"
             onClick={() => {
               onClearAll();
-              setZipInput("");
               setCustomHours("");
+              setAirportQuery("");
             }}
             className="rounded-lg border border-wn-charcoal/20 bg-white px-3 py-2 text-sm font-semibold text-wn-charcoal transition hover:border-wn-charcoal/40"
           >

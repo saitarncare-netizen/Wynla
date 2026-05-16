@@ -479,9 +479,24 @@ export default function ResortPicker({
               type="button"
               onClick={onOpenFilters}
               aria-label="Open more filters"
-              className="inline-flex items-center gap-1 rounded-full border-2 border-wn-navy bg-wn-navy/5 px-2.5 py-0.5 text-[11px] font-bold text-wn-navy transition hover:bg-wn-navy/10"
+              className="inline-flex items-center gap-1.5 rounded-full border-2 border-wn-navy bg-wn-navy/5 px-2.5 py-0.5 text-[11px] font-bold text-wn-navy transition hover:bg-wn-navy/10"
             >
-              <span aria-hidden="true">🎛️</span>
+              {/* Stage 33 — replaced 🎛️ emoji with a clean inline funnel
+                  icon. Reads more universally as "filter" and matches
+                  the brand's flat / typographic visual style. */}
+              <svg
+                aria-hidden="true"
+                width="11"
+                height="11"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M3 5h18l-7 9v6l-4-2v-4z" />
+              </svg>
               <span>More filters</span>
               {activeFilterCount > 0 && (
                 <span className="ml-0.5 inline-flex h-4 min-w-[16px] items-center justify-center rounded-full bg-wn-navy px-1 text-[10px] font-bold text-white">
