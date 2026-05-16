@@ -80,11 +80,55 @@ const LAYER_CLUSTERS = "wynla-clusters";
 const LAYER_CLUSTER_COUNT = "wynla-cluster-count";
 const LAYER_LISTED = "wynla-listed-pins";
 const LAYER_FEATURED = "wynla-featured-pins";
+const LAYER_LABELS_HIGH = "wynla-pin-labels-high";
+const LAYER_LABELS_MID = "wynla-pin-labels-mid";
+const LAYER_LABELS_LOW = "wynla-pin-labels-low";
+
+// Stage 33 — composite "importance" score for each resort. Drives BOTH
+// pin radius AND which zoom level the label appears at, so the map
+// reads as a hierarchy at-a-glance: name-brand resorts (Vail / Alta /
+// Killington) dominate at low zoom, smaller resorts surface only as
+// the user zooms into their region.
+//
+// Inputs are proxies for "how many skiers care about this resort":
+//   - vertical_drop  (mountain physical scale)
+//   - total_trails   (terrain breadth)
+//   - total_acres    (skiable area)
+//   - tier=featured  (hand-curated must-have)
+//   - pass coverage  (Ikon/Epic = popular, Indy = mid)
+//
+// Score range roughly 0-200 (Vail/Killington ≈ 150-170, mid resort
+// ≈ 60-80, tiny local hill ≈ 4-10). Numbers chosen so each input
+// contributes meaningfully without one drowning others.
+//
+// Future: replace pass-affiliation proxy with real popularity once
+// review-count + trip-share-count + view-count data accumulates.
+function computeImportance(r: Resort): number {
+  let score = 0;
+  if (r.vertical_drop) score += r.vertical_drop / 100;
+  if (r.total_trails) score += r.total_trails / 5;
+  if (r.total_acres) score += r.total_acres / 100;
+  if (r.tier === "featured") score += 30;
+  const passes = new Set(r.passes ?? []);
+  if (passes.has("ikon") || passes.has("epic")) score += 15;
+  else if (passes.has("indy")) score += 8;
+  return score;
+}
+
+// Stage 33 — smooth radius derived from importance instead of the
+// old 3-tier step function. Range: 9px (tiny local) → 22px (Vail).
+// Keeps everything visible (clickable target stays ≥ 9px) but lets
+// big-brand resorts dominate the visual.
+function importanceToRadius(importance: number): number {
+  const clamped = Math.max(0, Math.min(200, importance));
+  return 9 + (clamped / 200) * 13;
+}
 
 // Map a resort to its pin properties for the GeoJSON feature.
 function resortToProperties(resort: Resort, dt: DriveTime | undefined) {
   const primary: Pass = primaryPass(resort.passes);
   const tier = sizeTier(resort.vertical_drop);
+  const importance = computeImportance(resort);
   return {
     id: resort.id,
     slug: resort.slug,
@@ -96,7 +140,13 @@ function resortToProperties(resort: Resort, dt: DriveTime | undefined) {
     primary_pass: primary,
     color: passColor(primary),
     size_tier: tier ?? "unknown",
-    radius: sizeTierRadius(tier),
+    // Radius now interpolates on importance (smoother + brand-aware).
+    // Old sizeTierRadius preserved here as a fallback for resorts
+    // with absolutely no data; importanceToRadius defaults to 9px in
+    // that case which still hits the 44×44 touch target with the
+    // existing clickTolerance: 22 from map init.
+    radius: importance > 0 ? importanceToRadius(importance) : sizeTierRadius(tier),
+    importance,
     vertical_drop: resort.vertical_drop ?? -1,
     drive_seconds: dt?.duration_seconds ?? -1,
   };
@@ -374,86 +424,124 @@ export default function MapView({
         },
       });
 
-      // Stage 31 — labels appear earlier (zoom 4.5+) and are bolder so
-      // resort names are readable at "scan the state" zoom, not only at
-      // "zoom into one valley" zoom. Symbol-sort-key prioritizes
-      // featured tier + larger resorts when de-cluttering crowds them
-      // (Mapbox shows the highest-priority symbol per overlap group),
-      // so in dense pockets like the Wasatch the big names win.
-      // text-padding 1 (vs default 2) packs labels tighter — more fit
-      // before culling. Wider halo + bolder font keep them legible
-      // against green forest tiles.
-      // Stage 33 — smarter label placement to fix dense-pocket overlap
-      // (Wasatch, NH, VT). Three changes vs the previous static-anchor
-      // setup:
+      // Stage 33 — labels split into THREE layers by importance so the
+      // map reads as a brand hierarchy. Each tier has its own minzoom:
       //
-      //   1. `text-variable-anchor` lets Mapbox try top → bottom → left
-      //      → right → top-left → top-right → bottom-left → bottom-right
-      //      per label, so two pins 200 m apart can end up with one
-      //      label above + one below instead of both stacking below.
-      //   2. `text-radial-offset` is the variable-anchor cousin of
-      //      `text-offset` — it works with all 8 anchor candidates.
-      //   3. Slightly smaller text + wider padding gives the collision
-      //      detector more breathing room so more labels survive
-      //      de-clutter culling.
+      //   high  (importance ≥ 50)  → visible from zoom 4.5+ (US-wide view)
+      //   mid   (importance 20-50) → visible from zoom 6+   (region view)
+      //   low   (importance < 20)  → visible from zoom 8+   (state/close)
+      //
+      // At any zoom, symbol-sort-key on `importance` ensures the most
+      // popular surviving resort wins collision (Mapbox lower sort-key
+      // = higher priority, so we negate). Net result: scan the US
+      // and only see Vail/Killington/Alta etc; zoom in and smaller
+      // local hills surface in their region.
+      const sharedLabelLayout = {
+        "text-field": ["get", "name"] as unknown as mapboxgl.ExpressionSpecification,
+        "text-font": ["DIN Pro Bold", "Arial Unicode MS Bold"],
+        "text-variable-anchor": [
+          "top",
+          "bottom",
+          "left",
+          "right",
+          "top-left",
+          "top-right",
+          "bottom-left",
+          "bottom-right",
+        ],
+        "text-radial-offset": 1.1,
+        "text-justify": "auto" as const,
+        "text-allow-overlap": false,
+        "text-optional": true,
+        "text-max-width": 8,
+        "text-padding": 3,
+        "symbol-sort-key": ["-", 0, ["get", "importance"]] as unknown as mapboxgl.ExpressionSpecification,
+      } satisfies Partial<mapboxgl.SymbolLayerSpecification["layout"]>;
+
+      const sharedLabelPaint = {
+        "text-color": "#0F1530",
+        "text-halo-color": "#FFFFFF",
+        "text-halo-width": 1.8,
+        "text-halo-blur": 0.4,
+      } satisfies mapboxgl.SymbolLayerSpecification["paint"];
+
+      // HIGH tier — name-brand resorts visible at every zoom
       map.addLayer({
-        id: "wynla-pin-labels",
+        id: LAYER_LABELS_HIGH,
         type: "symbol",
         source: SOURCE_ID,
-        filter: ["!", ["has", "point_count"]],
+        filter: [
+          "all",
+          ["!", ["has", "point_count"]],
+          [">=", ["get", "importance"], 50],
+        ],
         minzoom: 4.5,
         layout: {
-          "text-field": ["get", "name"],
-          "text-font": ["DIN Pro Bold", "Arial Unicode MS Bold"],
-          // Stage 33 — text size scales MORE aggressively with zoom so
-          // dense pockets read clean at low zoom (small labels won't
-          // fight each other) and detail view at high zoom feels
-          // legible at arm's length on a phone. Smaller floor: 9px
-          // (was 10) still readable when squinting at the US-wide
-          // overview, but cuts visual clutter ~10%.
+          ...sharedLabelLayout,
           "text-size": [
             "interpolate",
             ["linear"],
             ["zoom"],
-            4.5, 9,
-            6, 10,
-            8, 11,
+            4.5, 10,
+            6, 11,
+            8, 12,
             10, 13,
-            12, 14,
             14, 15,
           ],
-          "text-variable-anchor": [
-            "top",
-            "bottom",
-            "left",
-            "right",
-            "top-left",
-            "top-right",
-            "bottom-left",
-            "bottom-right",
-          ],
-          "text-radial-offset": 1.1,
-          "text-justify": "auto",
-          "text-allow-overlap": false,
-          "text-optional": true,
-          "text-max-width": 8,
-          "text-padding": 3,
-          // Lower sort-key wins in Mapbox symbol placement. Featured
-          // resorts (-1000) sort before listed (0); within each tier
-          // bigger circles (higher `radius`) outrank smaller ones via
-          // the `-radius` term.
-          "symbol-sort-key": [
-            "+",
-            ["case", ["==", ["get", "tier"], "featured"], -1000, 0],
-            ["-", 0, ["get", "radius"]],
+        },
+        paint: sharedLabelPaint,
+      });
+
+      // MID tier — mid-size regional resorts, surface at state-zoom
+      map.addLayer({
+        id: LAYER_LABELS_MID,
+        type: "symbol",
+        source: SOURCE_ID,
+        filter: [
+          "all",
+          ["!", ["has", "point_count"]],
+          [">=", ["get", "importance"], 20],
+          ["<", ["get", "importance"], 50],
+        ],
+        minzoom: 6,
+        layout: {
+          ...sharedLabelLayout,
+          "text-size": [
+            "interpolate",
+            ["linear"],
+            ["zoom"],
+            6, 9,
+            8, 11,
+            10, 12,
+            14, 14,
           ],
         },
-        paint: {
-          "text-color": "#0F1530",
-          "text-halo-color": "#FFFFFF",
-          "text-halo-width": 1.8,
-          "text-halo-blur": 0.4,
+        paint: sharedLabelPaint,
+      });
+
+      // LOW tier — small local hills, only when zoomed in close
+      map.addLayer({
+        id: LAYER_LABELS_LOW,
+        type: "symbol",
+        source: SOURCE_ID,
+        filter: [
+          "all",
+          ["!", ["has", "point_count"]],
+          ["<", ["get", "importance"], 20],
+        ],
+        minzoom: 8,
+        layout: {
+          ...sharedLabelLayout,
+          "text-size": [
+            "interpolate",
+            ["linear"],
+            ["zoom"],
+            8, 9,
+            10, 11,
+            14, 13,
+          ],
         },
+        paint: sharedLabelPaint,
       });
 
       // Cluster click → zoom in
