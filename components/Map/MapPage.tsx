@@ -519,7 +519,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
             <button
               type="button"
               onClick={() => setSearchOpen(true)}
-              className="inline-flex h-9 items-center justify-center gap-1.5 rounded-md border border-wn-charcoal/20 bg-white px-2.5 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 sm:px-3"
+              className="inline-flex h-11 items-center justify-center gap-1.5 rounded-md border border-wn-charcoal/20 bg-white px-2.5 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 sm:px-3"
               title="Search resorts"
               aria-label="Search resorts"
             >
@@ -529,7 +529,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
             {/* My trips */}
             <Link
               href="/trips"
-              className="inline-flex h-9 items-center justify-center gap-1.5 rounded-md border border-wn-charcoal/20 bg-white px-2.5 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 sm:px-3"
+              className="inline-flex h-11 items-center justify-center gap-1.5 rounded-md border border-wn-charcoal/20 bg-white px-2.5 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 sm:px-3"
               title="My trips"
               aria-label="My trips"
             >
@@ -541,7 +541,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
             <button
               type="button"
               onClick={() => updateParam("plan", "1")}
-              className="inline-flex h-9 items-center justify-center gap-1.5 rounded-md bg-wn-navy px-2.5 text-xs font-semibold text-white shadow-sm transition hover:bg-wn-navy/90 active:scale-95 sm:px-3"
+              className="inline-flex h-11 items-center justify-center gap-1.5 rounded-md bg-wn-navy px-2.5 text-xs font-semibold text-white shadow-sm transition hover:bg-wn-navy/90 active:scale-95 sm:px-3"
               title="Plan a multi-day ski trip"
               aria-label="Plan a trip"
             >
@@ -561,7 +561,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
                 <button
                   type="button"
                   onClick={() => setFiltersOpen(true)}
-                  className="relative inline-flex h-9 items-center justify-center gap-1.5 rounded-md border border-wn-charcoal/20 bg-white px-2.5 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 md:hidden"
+                  className="relative inline-flex h-11 items-center justify-center gap-1.5 rounded-md border border-wn-charcoal/20 bg-white px-2.5 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 md:hidden"
                   title="Filters"
                   aria-label={`Filters${activeFilterCount > 0 ? ` (${activeFilterCount} active)` : ""}`}
                 >
@@ -580,7 +580,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
                 FiltersDrawer footer to keep the header minimal. */}
             <Link
               href="/deals"
-              className="hidden h-9 items-center justify-center gap-1.5 rounded-md border border-wn-charcoal/20 bg-white px-3 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 sm:inline-flex"
+              className="hidden h-11 items-center justify-center gap-1.5 rounded-md border border-wn-charcoal/20 bg-white px-3 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 sm:inline-flex"
               title="Season pass deals"
               aria-label="Pass deals"
             >
@@ -592,7 +592,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
                 footer "More" section. */}
             <Link
               href="/guides"
-              className="hidden h-9 items-center justify-center gap-1.5 rounded-md border border-wn-charcoal/20 bg-white px-3 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 lg:inline-flex"
+              className="hidden h-11 items-center justify-center gap-1.5 rounded-md border border-wn-charcoal/20 bg-white px-3 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 lg:inline-flex"
               title="Editorial guides"
               aria-label="Guides"
             >
@@ -601,7 +601,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
             </Link>
             <Link
               href="/lists"
-              className="hidden h-9 items-center justify-center gap-1.5 rounded-md border border-wn-charcoal/20 bg-white px-3 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 lg:inline-flex"
+              className="hidden h-11 items-center justify-center gap-1.5 rounded-md border border-wn-charcoal/20 bg-white px-3 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 lg:inline-flex"
               title="Curated lists"
               aria-label="Curated lists"
             >

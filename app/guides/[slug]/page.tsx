@@ -9,7 +9,8 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getGuide, GUIDES } from "@/lib/guides";
 
-export const dynamic = "force-dynamic";
+// ISR — guide bodies live in lib/guides.tsx, refreshed on deploy.
+export const revalidate = 86400; // 24h
 
 export async function generateMetadata({
   params,

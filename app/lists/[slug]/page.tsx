@@ -10,7 +10,8 @@ import { supabase } from "@/lib/supabase";
 import { getList, LISTS } from "@/lib/lists";
 import { passColor, primaryPass, passLabel } from "@/lib/passColors";
 
-export const dynamic = "force-dynamic";
+// ISR — single list pages, hourly revalidate.
+export const revalidate = 3600;
 
 type Resort = {
   id: number;

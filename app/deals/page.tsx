@@ -12,9 +12,12 @@ import type { Metadata } from "next";
 import { passColor, passLabel, type Pass } from "@/lib/passColors";
 
 export const metadata: Metadata = {
-  title: "Pass Deals — 2026-27 Season | Wynla",
+  // Title template in app/layout.tsx already appends " · Wynla". Don't
+  // duplicate it here.
+  title: "Pass Deals — 2026-27 Season",
   description:
     "Locked-in early prices for Ikon, Epic, Indy, and Mountain Collective passes. We track price changes weekly so you don't have to.",
+  alternates: { canonical: "/deals" },
 };
 
 type PassTier = {
@@ -112,6 +115,14 @@ function formatPriceEnd(iso: string): string {
   });
 }
 
+/** Has this early-bird tier already expired? Used to swap the "Price ends"
+ *  microcopy for a neutral "Pricing has since stepped up" so we never show
+ *  a stale countdown. */
+function isPriceEnded(iso: string): boolean {
+  const d = new Date(iso + "T00:00:00Z").getTime();
+  return Number.isFinite(d) && d < Date.now();
+}
+
 export default function DealsPage() {
   return (
     <main className="min-h-dvh bg-wn-offwhite px-4 py-10 sm:px-6 sm:py-16">
@@ -124,8 +135,10 @@ export default function DealsPage() {
         </Link>
 
         <header className="mt-6 mb-10">
-          <span className="inline-flex items-center rounded bg-wn-sky/95 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-white">
-            Locked-in pricing
+          {/* Contrast fix: bg-wn-sky/95 + white = 2.41:1 (WCAG fail).
+              Navy + white = 14:1. */}
+          <span className="inline-flex items-center rounded bg-wn-navy px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-white">
+            2026-27 Pricing
           </span>
           <h1 className="mt-3 text-3xl font-extrabold text-wn-navy sm:text-5xl">
             Pass Deals — 2026-27 Season

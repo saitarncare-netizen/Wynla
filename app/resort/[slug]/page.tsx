@@ -24,7 +24,11 @@ import { parseSeasonDates, isGlobalOffSeasonNow } from "@/lib/seasonDates";
 import SimilarResorts from "@/components/SimilarResorts";
 import type { SimilarityResort } from "@/lib/similarity";
 
-export const dynamic = "force-dynamic";
+// ISR — resort detail data (lifts/trails/passes/coords) changes rarely.
+// Snow conditions are stamped on the row by the cron; ISR every 10 min
+// keeps the page fresh enough while letting Vercel cache the rendered
+// HTML for every visitor. Capacitor wrap needs static-friendly pages too.
+export const revalidate = 600;
 
 type Resort = {
   id: number;
@@ -862,11 +866,6 @@ function FullWeatherCard({
           )}
         </p>
       )}
-      {/* Tiny coord footer kept for users who want to plug into external
-          tools. Not a link — just a hint that lat/lng is known. */}
-      <p className="mt-1 text-[10px] text-wn-charcoal/40">
-        {lat.toFixed(3)}, {lng.toFixed(3)}
-      </p>
     </div>
   );
 }

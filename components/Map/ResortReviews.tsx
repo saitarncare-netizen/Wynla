@@ -9,6 +9,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import Link from "next/link";
+import ConfirmButton from "@/components/ConfirmButton";
 
 type Review = {
   id: number;
@@ -104,7 +105,8 @@ export default function ResortReviews({ resortId }: Props) {
 
   async function deleteMyReview() {
     if (!userId) return;
-    if (!window.confirm("Delete your review?")) return;
+    // No window.confirm — blocked in Capacitor WebView. Two-tap UX via
+    // ConfirmButton below provides the same safety net.
     setSaving(true);
     const { error: delErr } = await supabase
       .from("resort_reviews")
@@ -173,14 +175,14 @@ export default function ResortReviews({ resortId }: Props) {
               {saving ? "Saving…" : myReview ? "Update" : "Post"}
             </button>
             {myReview && (
-              <button
-                type="button"
-                onClick={deleteMyReview}
-                disabled={saving}
+              <ConfirmButton
+                onConfirm={deleteMyReview}
+                busy={saving}
+                label="Delete"
+                confirmLabel="Tap to confirm"
                 className="text-xs font-semibold text-wn-charcoal/60 underline-offset-2 hover:text-red-700 hover:underline"
-              >
-                Delete
-              </button>
+                armedClassName="text-xs font-semibold text-red-700 underline"
+              />
             )}
           </div>
         </div>

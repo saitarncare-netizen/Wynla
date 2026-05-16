@@ -162,6 +162,7 @@ export default function FiltersDrawer({
 
       <aside
         role="dialog"
+        aria-modal="true"
         aria-label="Filters"
         onTouchStart={stopTouchBubble}
         onTouchMove={stopTouchBubble}
@@ -217,8 +218,12 @@ export default function FiltersDrawer({
               same. Pass section sits at the very top because it's
               the most-used filter and matches the top-of-list mental
               model from desktop FilterBar. */}
+          {/* Pass section is the single most-used filter — open by
+              default so users see chips immediately on drawer open
+              instead of a wall of collapsed headers. */}
           <Section
             title="Pass"
+            defaultOpen
             summary={
               passFilter.length === 0
                 ? "Any pass"
@@ -573,7 +578,14 @@ export default function FiltersDrawer({
           </Section>
         </div>
 
-        <footer className="flex shrink-0 items-center gap-2 border-t border-wn-charcoal/10 bg-white px-4 py-3">
+        <footer
+          className="flex shrink-0 items-center gap-2 border-t border-wn-charcoal/10 bg-white px-4 py-3"
+          style={{
+            // Clear iPhone home indicator so the navy "Done" button isn't
+            // clipped by the gesture area.
+            paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 0.75rem)",
+          }}
+        >
           <button
             type="button"
             onClick={() => {
