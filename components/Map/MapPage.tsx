@@ -21,6 +21,7 @@ import RecentlyViewedStrip, {
 } from "@/components/RecentlyViewedStrip";
 import OnboardingCard from "@/components/OnboardingCard";
 import OffSeasonBanner from "@/components/OffSeasonBanner";
+import ProBenefitsCard from "@/components/ProBenefitsCard";
 import { isOnboarded } from "@/lib/preferences";
 // Stage 33 — matchesSkill / getPreferences are still exported for
 // future use (badges, sort order, curated lists), but the map-level
@@ -639,6 +640,12 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
             <RecentlyViewedStrip />
           </>
         )}
+        {/* Stage 35 — Pro benefits / status card. Free users see a
+            "Try Pro · 7 days free" pitch with 3 bullet benefits; Pro
+            users see a "You're a Pro" confirmation with their unlocked
+            features. Dismissable (free: re-appears in 14d; Pro: stays
+            dismissed). Hidden while a flow is active. */}
+        <ProBenefitsCard hidden={searchOpen || plannerOpen} />
         {/* Inline filter pills row — desktop only. Mobile uses the
             single ☰ Filters button above + FiltersDrawer below. */}
         <div className="hidden md:block">

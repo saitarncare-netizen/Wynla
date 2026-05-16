@@ -1,19 +1,22 @@
 "use client";
 
-// Stage 35 — Pro indicator in the global header. Two visual states:
+// Stage 35 — Pro indicator in the global header. Designed to be
+// obvious + benefit-led, not a hidden tiny pill. Three visual states:
 //
-//   • Pro user      → "💎 Pro" — solid wn-gold pill, links to /account/pro
-//                     so they can manage the subscription. Communicates
-//                     "you got something for your $59" — closes the
-//                     feedback loop on the upgrade.
-//   • Free / anon   → "✨ Pro · Free trial" — outlined wn-gold pill,
-//                     links to /pro. Hints there's a trial without
-//                     being pushy. Skipped during the loading window so
-//                     anon users don't see "Free trial" briefly flicker
-//                     to "💎 Pro" if they actually are subscribed.
+//   • Pro user      → "💎 You're a Pro" — solid wn-gold pill, links to
+//                     /account/pro so they can manage the subscription.
+//                     Closes the feedback loop ("I paid; the app says
+//                     thanks").
+//   • Free / anon   → "✨ Try Pro · 7 days free" — outlined wn-gold pill
+//                     with subtle pulse on hover. Routes to /pro with
+//                     the badge as the upsell source.
+//   • Loading       → renders the free-tier shell so anon users never
+//                     see "💎 Pro" flicker on first paint. Pro users
+//                     get a brief "Try Pro" flash that flips to "💎
+//                     Pro" once /api/me/pro-status resolves.
 //
-// Replaces the previous static `<Link href="/pro">✨ Pro</Link>` in
-// MapPage's header.
+// Visible on mobile (`inline-flex` without `sm:` gate) so subscribers
+// see the badge they paid for everywhere, not just desktop.
 
 import Link from "next/link";
 import { useProStatus } from "@/lib/proClient";
@@ -23,45 +26,40 @@ export default function ProBadge({
 }: {
   className?: string;
 }) {
-  const { isPro, isLoading } = useProStatus();
+  const { isPro } = useProStatus();
 
-  // Render the free-tier pill during the loading window. Pro users see
-  // a brief "Try Pro" flash that flips to "💎 Pro" once status confirms;
-  // worse case is a benign visual blink. Anon users never get teased
-  // with the wrong state.
   if (!isPro) {
     return (
       <Link
-        href="/pro"
+        href="/pro?from=header"
         title="Try Wynla Pro free for 7 days"
-        aria-label="Wynla Pro — free trial"
+        aria-label="Try Wynla Pro free for 7 days"
         className={[
-          "hidden h-11 items-center justify-center gap-1.5 rounded-md border border-wn-gold/60 bg-wn-gold/10 px-2.5 text-xs font-semibold text-wn-navy transition hover:bg-wn-gold/25 active:scale-95 sm:inline-flex",
-          isLoading ? "opacity-80" : "",
+          "inline-flex h-11 items-center justify-center gap-1.5 rounded-md border border-wn-gold bg-gradient-to-br from-wn-gold/20 to-wn-gold/10 px-3 text-xs font-bold text-wn-navy shadow-sm transition hover:from-wn-gold/30 hover:to-wn-gold/20 active:scale-95",
           className,
         ].join(" ")}
       >
-        <span aria-hidden="true">✨</span>
-        <span>Pro</span>
-        <span className="hidden text-wn-charcoal/60 lg:inline">· Free trial</span>
+        <span aria-hidden="true" className="text-sm">✨</span>
+        <span className="whitespace-nowrap">Try Pro</span>
+        <span className="hidden whitespace-nowrap text-[10px] font-semibold text-wn-charcoal/70 sm:inline">
+          · 7 days free
+        </span>
       </Link>
     );
   }
 
-  // Pro user — solid gold pill, routes to /account/pro for subscription
-  // management.
   return (
     <Link
       href="/account/pro"
-      title="Manage your Wynla Pro subscription"
+      title="You're a Pro — manage subscription"
       aria-label="You're a Pro — manage subscription"
       className={[
-        "inline-flex h-11 items-center justify-center gap-1.5 rounded-md bg-wn-gold px-2.5 text-xs font-extrabold text-wn-navy shadow-sm transition hover:bg-wn-gold/90 active:scale-95",
+        "inline-flex h-11 items-center justify-center gap-1.5 rounded-md bg-wn-gold px-3 text-xs font-extrabold text-wn-navy shadow-sm transition hover:bg-wn-gold/90 active:scale-95",
         className,
       ].join(" ")}
     >
-      <span aria-hidden="true">💎</span>
-      <span>Pro</span>
+      <span aria-hidden="true" className="text-sm">💎</span>
+      <span className="whitespace-nowrap">You&apos;re a Pro</span>
     </Link>
   );
 }
