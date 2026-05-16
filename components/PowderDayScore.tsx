@@ -77,8 +77,17 @@ export default function PowderDayScore({ score, resortName }: Props) {
           {score.score}
         </div>
         <div className="flex-1">
-          <div className="text-[10px] font-bold uppercase tracking-wider text-wn-charcoal/55">
-            Powder Day Score
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="text-[10px] font-bold uppercase tracking-wider text-wn-charcoal/55">
+              Powder Day Score
+            </div>
+            {/* Stage 35 — small "Pro" tag reminds the subscriber that
+                this number is part of what they're paying for. Without
+                it the feature can feel like generic UI and the upgrade
+                loses its perceived value. */}
+            <span className="inline-flex items-center rounded bg-wn-gold/95 px-1.5 py-0.5 text-[9px] font-extrabold uppercase tracking-wider text-wn-navy">
+              💎 Pro
+            </span>
           </div>
           <div className={`text-xl font-extrabold ${tone.headline}`}>
             {score.label}

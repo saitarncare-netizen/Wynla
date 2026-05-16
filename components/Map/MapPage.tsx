@@ -13,6 +13,7 @@ import FiltersDrawer, { AIRPORT_OPTIONS } from "./FiltersDrawer";
 import MobileQuickFilters from "./MobileQuickFilters";
 import TripPlannerPanel from "./TripPlannerPanel";
 import AuthButton from "@/components/auth/AuthButton";
+import ProBadge from "@/components/ProBadge";
 import CompareFloatingButton from "@/components/CompareFloatingButton";
 import RecentlyViewedStrip, {
   OPEN_RESORT_EVENT,
@@ -608,13 +609,11 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
               <span aria-hidden="true">⭐</span>
               <span>Lists</span>
             </Link>
-            <Link
-              href="/pro"
-              className="hidden rounded-md border border-wn-gold/60 bg-wn-gold/10 px-2.5 py-1 text-xs font-semibold text-wn-navy transition hover:bg-wn-gold/25 sm:inline-block"
-              title="Wynla Pro — coming soon"
-            >
-              ✨ Pro
-            </Link>
+            {/* Stage 35 — Pro badge. ProBadge client island swaps between
+                "✨ Pro · Free trial" (free / anon) and "💎 Pro" (subscribed)
+                so paying users see the badge they paid for and free users
+                see the trial nudge. */}
+            <ProBadge />
             <AuthButton />
           </div>
         </div>
