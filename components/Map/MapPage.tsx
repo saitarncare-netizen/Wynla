@@ -800,6 +800,16 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         // mutually-exclusive `setFiltersOpen` wrapper that kills
         // search; we want both open with filter stacked above.
         onOpenFilters={() => setFiltersOpenRaw(true)}
+        // Stage 33 — count of "other" filters set (size, night,
+        // drive, airport). Pass chips + fresh snow live inline in
+        // the picker so they're not counted; this badge represents
+        // only the filters that require opening the drawer to see.
+        activeFilterCount={
+          (sizeFilter ? 1 : 0) +
+          (nightOnly ? 1 : 0) +
+          (withinHours > 0 ? 1 : 0) +
+          (airportFilter ? 1 : 0)
+        }
         fromPoint={{ lat: origin.lat, lng: origin.lon, label: origin.kind === "geo" ? "your location" : origin.name }}
         allResorts={filtered}
         alreadyPicked={[]}

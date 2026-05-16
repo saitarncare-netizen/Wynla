@@ -54,13 +54,15 @@ type Props = {
   /** Live hover preview — fires when the user mouseenters a row so the
       map can draw an ephemeral leg from fromPoint to that resort. */
   onHover?: (slug: string | null) => void;
-  /** Stage 33 — when set, a "🎛️ Filters" button appears in the
-   *  picker header. Tapping it should open the full filter drawer
-   *  STACKED on top of the picker (the picker stays open underneath).
-   *  Used by the header-search flow so users don't have to close
-   *  search → set filters → re-open search just to filter by size /
-   *  night / drive time. */
+  /** Stage 33 — when set, a "🎛️ More filters" pill appears at the
+   *  end of the chip row (next to pass chips). Tapping it opens the
+   *  full filter drawer STACKED on top of the picker so users can
+   *  refine size / night / drive without leaving search. */
   onOpenFilters?: () => void;
+  /** Count of currently-active "other" filters (size, night, drive,
+   *  airport). Rendered as a badge on the More filters pill so the
+   *  user can see at a glance what's set without opening the drawer. */
+  activeFilterCount?: number;
 };
 
 type Snap = "collapsed" | "half" | "full";
@@ -114,6 +116,7 @@ export default function ResortPicker({
   onClose,
   onHover,
   onOpenFilters,
+  activeFilterCount = 0,
 }: Props) {
   const [query, setQuery] = useState("");
   const [sortBy, setSortBy] = useState<"distance" | "name">("distance");
@@ -372,38 +375,21 @@ export default function ResortPicker({
         {/* Stage 33 — header slimmed: title + count + close all on one
             row (subtitle "From X · sorted by drive time" dropped — the
             same info now lives next to the sort toggles below). */}
-        <div className="flex items-center justify-between gap-2">
+        <div className="flex items-baseline justify-between gap-2">
           <div className="flex items-baseline gap-2 truncate">
             <h3 className="truncate text-sm font-bold text-wn-navy">{title}</h3>
             <span className="shrink-0 text-[10px] font-medium text-wn-charcoal/50">
               {visible.length} of {enriched.length}
             </span>
           </div>
-          <div className="flex shrink-0 items-center gap-1">
-            {/* Stage 33 — open the full filter drawer on top of the
-                picker, so users can refine by Size / Night / Drive
-                without leaving search. Only renders when the caller
-                provides the handler. */}
-            {onOpenFilters && (
-              <button
-                type="button"
-                onClick={onOpenFilters}
-                aria-label="Open filters"
-                className="inline-flex h-7 items-center gap-1 rounded-md border border-wn-charcoal/15 bg-white px-2 text-[11px] font-semibold text-wn-charcoal/75 hover:border-wn-navy hover:text-wn-navy"
-              >
-                <span aria-hidden="true">🎛️</span>
-                <span>Filters</span>
-              </button>
-            )}
-            <button
-              type="button"
-              onClick={onClose}
-              aria-label="Close"
-              className="inline-flex h-7 w-7 items-center justify-center rounded-md text-lg leading-none text-wn-charcoal/55 hover:text-wn-navy"
-            >
-              ×
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close"
+            className="text-lg leading-none text-wn-charcoal/55 hover:text-wn-navy"
+          >
+            ×
+          </button>
         </div>
         <input
           ref={inputRef}
@@ -480,6 +466,28 @@ export default function ResortPicker({
               className="text-[10px] font-semibold text-wn-charcoal/55 underline-offset-2 hover:text-wn-navy hover:underline"
             >
               Clear
+            </button>
+          )}
+          {/* Stage 33 — "More filters" pill placed at end of the chip
+              row (next to pass chips) for stronger discovery than the
+              old top-right header button. Navy outline + bg sets it
+              apart from pass chips; badge surfaces the active count
+              of size/night/drive/airport filters so users know what's
+              set without opening the drawer. */}
+          {onOpenFilters && (
+            <button
+              type="button"
+              onClick={onOpenFilters}
+              aria-label="Open more filters"
+              className="inline-flex items-center gap-1 rounded-full border-2 border-wn-navy bg-wn-navy/5 px-2.5 py-0.5 text-[11px] font-bold text-wn-navy transition hover:bg-wn-navy/10"
+            >
+              <span aria-hidden="true">🎛️</span>
+              <span>More filters</span>
+              {activeFilterCount > 0 && (
+                <span className="ml-0.5 inline-flex h-4 min-w-[16px] items-center justify-center rounded-full bg-wn-navy px-1 text-[10px] font-bold text-white">
+                  {activeFilterCount}
+                </span>
+              )}
             </button>
           )}
         </div>
