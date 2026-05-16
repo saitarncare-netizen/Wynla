@@ -791,6 +791,10 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
       <ResortPicker
         open={searchOpen}
         title="Find a resort"
+        // Stage 33 — header search uses full-screen picker (mobile).
+        // Map isn't relevant while typing a name; full-screen avoids
+        // the "map peeks through but is frozen" UX bug.
+        fullScreen
         fromPoint={{ lat: origin.lat, lng: origin.lon, label: origin.kind === "geo" ? "your location" : origin.name }}
         allResorts={filtered}
         alreadyPicked={[]}

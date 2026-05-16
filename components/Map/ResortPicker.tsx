@@ -19,6 +19,12 @@ import type { Resort } from "./MapPage";
 type Props = {
   open: boolean;
   title: string;
+  /** Stage 33 — when true, mobile renders as a full-screen sheet
+   *  (inset-0) with no map peeking through. Header-search uses this
+   *  because users don't need the map while searching by name; trip
+   *  planner keeps the bottom-sheet snap behavior so users can see
+   *  candidates on the map while picking. */
+  fullScreen?: boolean;
   fromPoint: { lat: number; lng: number; label: string };
   allResorts: Resort[];
   /** Slugs already in the trip — shown as "in trip" tags but still clickable. */
@@ -88,6 +94,7 @@ function nearestSnap(px: number, vh: number): Snap {
 export default function ResortPicker({
   open,
   title,
+  fullScreen = false,
   fromPoint,
   allResorts,
   alreadyPicked,
@@ -297,7 +304,11 @@ export default function ResortPicker({
 
   if (!open) return null;
 
-  const sheetHeight = isMobile ? (dragHeight ?? snapToPx(snap, vh)) : undefined;
+  // Bottom-sheet height applies only in snap mode (trip planner). In
+  // full-screen mode (header search) the sheet covers the entire
+  // viewport so there's no map peeking through to compete for touch.
+  const sheetHeight =
+    fullScreen ? undefined : isMobile ? (dragHeight ?? snapToPx(snap, vh)) : undefined;
 
   return (
     <div
@@ -305,13 +316,16 @@ export default function ResortPicker({
       aria-label={title}
       className={[
         "fixed z-[61] flex flex-col overflow-hidden bg-white shadow-2xl",
-        // Mobile: bottom sheet — full width, top corners rounded, sits
-        // on the bottom edge with no left/right gap so it doesn't look
-        // like a floating card.
-        "inset-x-0 bottom-0 rounded-t-2xl border-t border-wn-charcoal/15",
-        // Desktop (md+): left-docked sidebar. Cancel mobile bottom-sheet
-        // styling and switch to a fixed left rail.
-        "md:inset-x-auto md:bottom-4 md:left-4 md:top-28 md:w-[360px] md:rounded-xl md:border md:border-wn-charcoal/15",
+        fullScreen
+          ? // Stage 33 — full-screen mode (header search). No map
+            // visible behind = no touch-leak bugs + cleaner search UX.
+            "inset-0 md:inset-x-auto md:bottom-4 md:left-4 md:top-28 md:w-[360px] md:rounded-xl md:border md:border-wn-charcoal/15"
+          : // Snap-sheet mode (trip planner). User keeps the map
+            // visible while picking so they see where candidates are.
+            [
+              "inset-x-0 bottom-0 rounded-t-2xl border-t border-wn-charcoal/15",
+              "md:inset-x-auto md:bottom-4 md:left-4 md:top-28 md:w-[360px] md:rounded-xl md:border md:border-wn-charcoal/15",
+            ].join(" "),
       ].join(" ")}
       style={{
         // Mobile only — desktop height is driven by md:top-28 / md:bottom-4.
@@ -319,9 +333,18 @@ export default function ResortPicker({
         // No transition while actively dragging — the user expects the
         // sheet to track their finger 1:1, then animate to the snap
         // when they release.
-        transition: dragHeight !== null ? "none" : "height 220ms cubic-bezier(0.16,1,0.3,1)",
+        transition:
+          fullScreen
+            ? undefined
+            : dragHeight !== null
+              ? "none"
+              : "height 220ms cubic-bezier(0.16,1,0.3,1)",
       }}
     >
+      {/* Drag handle — mobile only AND only when in snap-sheet mode.
+          Full-screen picker has no need to resize. */}
+      {!fullScreen && (
+      <>
       {/* Drag handle — mobile only. Touch handlers attach here so the
           user can grab anywhere on the handle area to resize the sheet
           without accidentally triggering search input or list scroll. */}
@@ -334,6 +357,8 @@ export default function ResortPicker({
       >
         <div className="h-1 w-10 rounded-full bg-wn-charcoal/25" />
       </div>
+      </>
+      )}
 
       <header className="shrink-0 border-b border-wn-charcoal/10 px-3 pb-2 pt-1.5 md:pt-3">
         {/* Stage 33 — header slimmed: title + count + close all on one
