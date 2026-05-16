@@ -382,7 +382,12 @@ export default function ResortPicker({
           onFocus={() => {
             if (isMobile && snap === "collapsed") setSnap("half");
           }}
-          className="mt-1.5 w-full rounded-md border border-wn-charcoal/20 bg-white px-2.5 py-1.5 text-sm font-medium text-wn-charcoal placeholder:text-wn-charcoal/40 focus:border-wn-navy focus:outline-none focus:ring-2 focus:ring-wn-navy/20"
+          // Stage 33 — explicit 16px font-size so iOS Safari doesn't
+          // auto-zoom the viewport when the field is focused. Anything
+          // < 16px triggers the zoom-in; visual look stays the same
+          // (we drop a half-step of letter-spacing instead).
+          style={{ fontSize: "16px" }}
+          className="mt-1.5 w-full rounded-md border border-wn-charcoal/20 bg-white px-2.5 py-1.5 font-medium text-wn-charcoal placeholder:text-wn-charcoal/40 focus:border-wn-navy focus:outline-none focus:ring-2 focus:ring-wn-navy/20"
         />
         {/* Stage 33 final — Search picker (header) shows ONLY the
             search input + sort row + Filters pill. No inline chips.

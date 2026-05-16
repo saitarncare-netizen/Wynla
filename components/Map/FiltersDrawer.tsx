@@ -469,7 +469,9 @@ export default function FiltersDrawer({
               placeholder="Search airports… (Denver, DEN, etc.)"
               value={airportQuery}
               onChange={(e) => setAirportQuery(e.target.value)}
-              className="mb-2 w-full rounded-lg border border-wn-charcoal/20 bg-white px-3 py-2 text-sm font-medium text-wn-charcoal placeholder:text-wn-charcoal/40 focus:border-wn-navy focus:outline-none focus:ring-2 focus:ring-wn-navy/20"
+              // 16px so iOS doesn't auto-zoom on focus.
+              style={{ fontSize: "16px" }}
+              className="mb-2 w-full rounded-lg border border-wn-charcoal/20 bg-white px-3 py-2 font-medium text-wn-charcoal placeholder:text-wn-charcoal/40 focus:border-wn-navy focus:outline-none focus:ring-2 focus:ring-wn-navy/20"
             />
             <div className="max-h-[280px] overflow-y-auto rounded-lg border border-wn-charcoal/10 bg-white">
               <button

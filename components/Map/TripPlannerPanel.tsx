@@ -37,15 +37,10 @@ type Props = {
       allResorts when omitted (e.g. tests). */
   candidates?: Resort[];
   allResorts: Resort[];
-  /** Global pass filter — passed through to the picker so its chip
-      row is the SAME source of truth as the URL/map filter. Toggling
-      a chip inside the picker calls onPassChange below, which flips
-      the URL, which feeds back here, which re-renders the chips AND
-      narrows the map behind. */
-  passFilter?: string[];
-  /** Setter for the global pass filter. Wired directly to MapPage's
-      URL update; without it the picker chips don't change anything. */
-  onPassChange?: (passes: string[]) => void;
+  // Stage 33 final — passFilter / onPassChange dropped from
+  // TripPlannerPanel props. Pass filtering happens via the
+  // FiltersDrawer (opened from the picker's Filters pill); the
+  // global URL state is consumed via `candidates` already.
   /** Lets MapPage hand off resort-pin clicks to the panel while the
       picker is open. Panel registers a (slug) => void handler when
       pickerForIndex is set, and clears it on close. MapPage routes
@@ -65,6 +60,16 @@ type Props = {
       and null when the panel is empty so the line/markers clear. */
   onTripRoute?: (points: TripRoutePoint[] | null) => void;
   onDaysChange?: (d: number) => void;
+  /** Stage 33 final — same "stack drawer on top of picker" pattern as
+   *  the header search. Letting the user open the FiltersDrawer from
+   *  inside the trip-planner picker so they can refine candidates by
+   *  pass / conditions / size / drive / airport without closing the
+   *  picker and losing their place. */
+  onOpenFilters?: () => void;
+  /** Number of "other" filters currently set (size / night / drive /
+   *  airport / fresh-snow). Renders as a badge on the Filters pill in
+   *  the picker. */
+  activeFilterCount?: number;
   onViewFullRoute?: () => void;
 };
 
@@ -168,8 +173,6 @@ export default function TripPlannerPanel({
   origin,
   candidates,
   allResorts,
-  passFilter,
-  onPassChange,
   onMapPickHandlerChange,
   days,
   initialOrderedSlugs,
@@ -181,6 +184,8 @@ export default function TripPlannerPanel({
   onTripRoute,
   onDaysChange,
   onViewFullRoute,
+  onOpenFilters,
+  activeFilterCount = 0,
 }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -1774,6 +1779,15 @@ export default function TripPlannerPanel({
         <ResortPicker
           open
           title={pickerForIndex === "new" ? "Pick a resort to add" : `Swap stop ${(pickerForIndex as number) + 1}`}
+          // Stage 33 final — trip-planner picker now uses the same
+          // simplified "search by name + open drawer for filters"
+          // pattern as the header search. No inline pass chips, no
+          // fresh-snow chip. The drawer (opened via onOpenFilters)
+          // is the single filter surface; the picker is just for
+          // browsing candidates by name + drive time.
+          fullScreen
+          onOpenFilters={onOpenFilters}
+          activeFilterCount={activeFilterCount}
           fromPoint={pickerFromPoint}
           allResorts={pickerResorts}
           alreadyPicked={pickedSlugs}
@@ -1783,8 +1797,6 @@ export default function TripPlannerPanel({
               ? candidateBySlug.get(pendingStop.slug)?.name ?? pendingStop.slug
               : null
           }
-          passFilter={passFilter}
-          onPassFilterChange={onPassChange}
           onSelect={handlePicked}
           onConfirmPending={confirmPreviewPick}
           onClose={() => {

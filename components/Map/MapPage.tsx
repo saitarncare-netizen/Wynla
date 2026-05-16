@@ -759,10 +759,6 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         origin={origin}
         candidates={filteredForPicker}
         allResorts={resorts}
-        passFilter={passFilter}
-        onPassChange={(passes) =>
-          updateParam("pass", passes.length === 0 ? null : passes.join(","))
-        }
         onMapPickHandlerChange={handleMapPickHandlerChange}
         days={Math.max(1, days)}
         isAuthed={isAuthed}
@@ -777,6 +773,19 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         onTripRoute={setTripRoute}
         onDaysChange={(d) => updateParam("days", d > 1 ? String(d) : null)}
         onViewFullRoute={() => setFitTripVersion((v) => v + 1)}
+        // Stage 33 final — let the trip-planner picker open the
+        // FiltersDrawer stacked on top (bypassing mutex). Same UX as
+        // header search: refine candidates by pass/conditions/etc
+        // without leaving the planner.
+        onOpenFilters={() => setFiltersOpenRaw(true)}
+        activeFilterCount={
+          passFilter.length +
+          (sizeFilter ? 1 : 0) +
+          (nightOnly ? 1 : 0) +
+          (withinHours > 0 ? 1 : 0) +
+          (airportFilter ? 1 : 0) +
+          (freshSnowOnly ? 1 : 0)
+        }
       />
 
       {/* Header search modal — re-uses the planner's ResortPicker.
