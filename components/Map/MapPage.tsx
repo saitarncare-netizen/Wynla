@@ -624,14 +624,9 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         <MobileQuickFilters
           passFilter={passFilter}
           passCounts={passCounts}
-          freshSnowOnly={freshSnowOnly}
-          freshSnowCount={resorts.filter(
-            (r) => r.snow_new_24h_in != null && r.snow_new_24h_in > 0,
-          ).length}
           onPassChange={(passes) =>
             updateParam("pass", passes.length === 0 ? null : passes.join(","))
           }
-          onFreshSnowChange={(v) => updateParam("freshsnow", v ? "1" : null)}
         />
         {/* Stage 33 — both the off-season banner and the recently-viewed
             chips hide when the user is actively searching or planning
@@ -849,6 +844,11 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
           trip length; ZIP + geo cover origin precisely enough). */}
       <FiltersDrawer
         open={filtersOpen}
+        passFilter={passFilter}
+        passCounts={passCounts}
+        onPassChange={(passes) =>
+          updateParam("pass", passes.length === 0 ? null : passes.join(","))
+        }
         withinHours={withinHours}
         sizeFilter={sizeFilter}
         nightOnly={nightOnly}

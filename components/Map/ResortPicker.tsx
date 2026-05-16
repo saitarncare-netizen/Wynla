@@ -13,7 +13,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { haversineMeters, estimateDriveSeconds } from "@/lib/distance";
 import { formatDriveTime } from "@/lib/origins";
 import { PASS_COLORS, PASS_KEYS, PASS_LABELS } from "@/lib/passColors";
-import { isGlobalOffSeasonNow } from "@/lib/seasonDates";
+// isGlobalOffSeasonNow no longer needed — fresh-snow chip removed
+// from picker in Stage 33 final cleanup.
 import type { Resort } from "./MapPage";
 
 type Props = {
@@ -120,11 +121,9 @@ export default function ResortPicker({
 }: Props) {
   const [query, setQuery] = useState("");
   const [sortBy, setSortBy] = useState<"distance" | "name">("distance");
-  // Stage 33 — local fresh-snow toggle. Doesn't write to URL since the
-  // picker is a transient view; users can flip it on inside the search
-  // sheet to surface powder candidates without changing the map filter
-  // behind. Resets to false every time the picker opens.
-  const [freshSnowFilter, setFreshSnowFilter] = useState(false);
+  // Stage 33 final — fresh-snow toggle removed from the picker. Lives
+  // exclusively in the FiltersDrawer now (Conditions section). The
+  // picker is a single-purpose "search by name" surface.
   // Track the most recent `open` value we've seen so we can clear the
   // query whenever the picker opens. React's recommended way to derive
   // state from a prop change without a setState-in-effect cascade.
@@ -147,7 +146,6 @@ export default function ResortPicker({
       setQuery("");
       setSnap("half");
       setDragHeight(null);
-      setFreshSnowFilter(false);
     }
   }
 
@@ -249,17 +247,12 @@ export default function ResortPicker({
       const filterSet = new Set(activePasses);
       list = list.filter((r) => r.passes.some((p) => filterSet.has(p)));
     }
-    if (freshSnowFilter) {
-      list = list.filter(
-        (r) => r.snowNew24h != null && r.snowNew24h > 0,
-      );
-    }
     list = [...list].sort((a, b) => {
       if (sortBy === "name") return a.name.localeCompare(b.name);
       return a.driveSeconds - b.driveSeconds;
     });
     return list;
-  }, [enriched, query, sortBy, activePasses, freshSnowFilter]);
+  }, [enriched, query, sortBy, activePasses]);
 
   function togglePassChip(key: string) {
     const next = activePasses.includes(key)
@@ -267,17 +260,6 @@ export default function ResortPicker({
       : [...activePasses, key];
     onPassFilterChange?.(next);
   }
-
-  // Stage 33 — count of resorts (within the current pool, before any
-  // pass / fresh-snow filter is applied) that have fresh snow. Powers
-  // the chip's badge ("Fresh snow · 2") so users know if it's worth
-  // toggling.
-  const freshSnowCount = useMemo(
-    () =>
-      enriched.filter((r) => r.snowNew24h != null && r.snowNew24h > 0)
-        .length,
-    [enriched],
-  );
 
   function handleRowClick(slug: string) {
     onSelect(slug);
@@ -402,110 +384,54 @@ export default function ResortPicker({
           }}
           className="mt-1.5 w-full rounded-md border border-wn-charcoal/20 bg-white px-2.5 py-1.5 text-sm font-medium text-wn-charcoal placeholder:text-wn-charcoal/40 focus:border-wn-navy focus:outline-none focus:ring-2 focus:ring-wn-navy/20"
         />
-        {/* Pass-filter chip row + Stage 33 fresh-snow chip. Multi-pass
-            owners frequently want "Ikon + Epic" — clicking a chip
-            toggles inclusion (OR semantics). Only chips with at least
-            one matching resort in the current list are shown so we
-            don't render dead chips for passes nobody in the picker
-            has. The Fresh snow chip leads the row because it's the
-            most actionable filter when powder is falling. */}
-        <div className="mt-2 flex flex-wrap items-center gap-1.5">
-          {/* Stage 33 — fresh-snow chip suppressed during off-season
-              even when scraper data exists; in May the only resorts
-              with fresh snow are spring-skiing/closed places that
-              would dead-end a user. Returns in winter. */}
-          {freshSnowCount > 0 && !isGlobalOffSeasonNow() && (
-            <button
-              type="button"
-              onClick={() => setFreshSnowFilter((v) => !v)}
-              className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold transition ${
-                freshSnowFilter
-                  ? "border-wn-sky bg-wn-sky/10 text-wn-navy"
-                  : "border-wn-sky/40 bg-white text-wn-navy hover:border-wn-sky"
-              }`}
-              aria-pressed={freshSnowFilter}
-              title={`Fresh snow (${freshSnowCount})`}
-            >
-              <span aria-hidden="true">❄️</span>
-              <span>Fresh snow</span>
-              <span className="text-wn-charcoal/55">{freshSnowCount}</span>
-            </button>
-          )}
-          {PASS_KEYS.filter((k) => (passCounts[k] ?? 0) > 0).map((k) => {
-            const isActive = activePasses.includes(k);
-            const count = passCounts[k] ?? 0;
-            return (
+        {/* Stage 33 final — Search picker (header) shows ONLY the
+            search input + sort row + Filters pill. No inline chips.
+            The trip-planner picker is the lone exception: it passes
+            `onPassFilterChange` so users can scope candidates to
+            specific passes while building a trip, which makes sense
+            in that context. The conditional below preserves chips
+            only for that flow. */}
+        {onPassFilterChange && (
+          <div className="mt-2 flex flex-wrap items-center gap-1.5">
+            {PASS_KEYS.filter((k) => (passCounts[k] ?? 0) > 0).map((k) => {
+              const isActive = activePasses.includes(k);
+              const count = passCounts[k] ?? 0;
+              return (
+                <button
+                  key={k}
+                  type="button"
+                  onClick={() => togglePassChip(k)}
+                  className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold transition ${
+                    isActive
+                      ? "border-wn-navy bg-wn-navy text-white"
+                      : "border-wn-charcoal/20 bg-white text-wn-charcoal hover:border-wn-charcoal/40"
+                  }`}
+                  aria-pressed={isActive}
+                  title={`${PASS_LABELS[k]} (${count})`}
+                >
+                  <span
+                    className="block h-1.5 w-1.5 rounded-full"
+                    style={{ backgroundColor: PASS_COLORS[k] }}
+                    aria-hidden="true"
+                  />
+                  <span>{PASS_LABELS[k]}</span>
+                  <span className={isActive ? "text-white/70" : "text-wn-charcoal/55"}>
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
+            {activePasses.length > 0 && (
               <button
-                key={k}
                 type="button"
-                onClick={() => togglePassChip(k)}
-                className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold transition ${
-                  isActive
-                    ? "border-wn-navy bg-wn-navy text-white"
-                    : "border-wn-charcoal/20 bg-white text-wn-charcoal hover:border-wn-charcoal/40"
-                }`}
-                aria-pressed={isActive}
-                title={`${PASS_LABELS[k]} (${count})`}
+                onClick={() => onPassFilterChange?.([])}
+                className="text-[10px] font-semibold text-wn-charcoal/55 underline-offset-2 hover:text-wn-navy hover:underline"
               >
-                <span
-                  className="block h-1.5 w-1.5 rounded-full"
-                  style={{ backgroundColor: PASS_COLORS[k] }}
-                  aria-hidden="true"
-                />
-                <span>{PASS_LABELS[k]}</span>
-                <span className={isActive ? "text-white/70" : "text-wn-charcoal/55"}>
-                  {count}
-                </span>
+                Clear
               </button>
-            );
-          })}
-          {activePasses.length > 0 && (
-            <button
-              type="button"
-              onClick={() => onPassFilterChange?.([])}
-              className="text-[10px] font-semibold text-wn-charcoal/55 underline-offset-2 hover:text-wn-navy hover:underline"
-            >
-              Clear
-            </button>
-          )}
-          {/* Stage 33 — "More filters" pill placed at end of the chip
-              row (next to pass chips) for stronger discovery than the
-              old top-right header button. Navy outline + bg sets it
-              apart from pass chips; badge surfaces the active count
-              of size/night/drive/airport filters so users know what's
-              set without opening the drawer. */}
-          {onOpenFilters && (
-            <button
-              type="button"
-              onClick={onOpenFilters}
-              aria-label="Open more filters"
-              className="inline-flex items-center gap-1.5 rounded-full border-2 border-wn-navy bg-wn-navy/5 px-2.5 py-0.5 text-[11px] font-bold text-wn-navy transition hover:bg-wn-navy/10"
-            >
-              {/* Stage 33 — replaced 🎛️ emoji with a clean inline funnel
-                  icon. Reads more universally as "filter" and matches
-                  the brand's flat / typographic visual style. */}
-              <svg
-                aria-hidden="true"
-                width="11"
-                height="11"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M3 5h18l-7 9v6l-4-2v-4z" />
-              </svg>
-              <span>More filters</span>
-              {activeFilterCount > 0 && (
-                <span className="ml-0.5 inline-flex h-4 min-w-[16px] items-center justify-center rounded-full bg-wn-navy px-1 text-[10px] font-bold text-white">
-                  {activeFilterCount}
-                </span>
-              )}
-            </button>
-          )}
-        </div>
+            )}
+          </div>
+        )}
 
         <div className="mt-1.5 flex items-center gap-1 text-[10px]">
           <button
@@ -533,6 +459,34 @@ export default function ResortPicker({
           <span className="ml-auto truncate text-wn-charcoal/45">
             from {fromPoint.label}
           </span>
+          {onOpenFilters && (
+            <button
+              type="button"
+              onClick={onOpenFilters}
+              aria-label="Open more filters"
+              className="inline-flex items-center gap-1.5 rounded-full border-2 border-wn-navy bg-wn-navy/5 px-2.5 py-0.5 text-[11px] font-bold text-wn-navy transition hover:bg-wn-navy/10"
+            >
+              <svg
+                aria-hidden="true"
+                width="11"
+                height="11"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M3 5h18l-7 9v6l-4-2v-4z" />
+              </svg>
+              <span>Filters</span>
+              {activeFilterCount > 0 && (
+                <span className="ml-0.5 inline-flex h-4 min-w-[16px] items-center justify-center rounded-full bg-wn-navy px-1 text-[10px] font-bold text-white">
+                  {activeFilterCount}
+                </span>
+              )}
+            </button>
+          )}
         </div>
       </header>
 

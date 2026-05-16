@@ -3,20 +3,26 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 // Origin import dropped Stage 33 along with the Origin section.
-// PASS_COLORS / PASS_KEYS / PASS_LABELS dropped along with the Pass
-// section. Pass selection now lives only in the map-header chip strip.
+import { PASS_COLORS, PASS_KEYS, PASS_LABELS } from "@/lib/passColors";
 import { SIZE_TIER_LABELS, type SizeTier } from "@/lib/sizeTier";
 import { isGlobalOffSeasonNow } from "@/lib/seasonDates";
 
 type Props = {
   open: boolean;
+  // Stage 33 final — Pass filter back in the drawer. The drawer is now
+  // the single source of truth for every filter (Pass · Conditions ·
+  // Drive · Size · Airport). Map chip strip still exists as a 1-tap
+  // shortcut for Pass + as the pin color legend, but those chips and
+  // these checkboxes share the same URL state.
+  passFilter: string[];
+  passCounts: Record<string, number>;
+  onPassChange: (passes: string[]) => void;
   withinHours: number;
   sizeFilter: SizeTier | null;
   nightOnly: boolean;
   airportFilter: string | null;
   filteredCount: number;
   totalCount: number;
-  // Stage 33 — fresh-snow conditions filter, mirrors MobileQuickFilters.
   freshSnowOnly: boolean;
   freshSnowCount: number;
   onFreshSnowChange: (v: boolean) => void;
@@ -72,6 +78,9 @@ const DRIVE_TIME_PRESETS = [0, 3, 5, 8, 12];
 
 export default function FiltersDrawer({
   open,
+  passFilter,
+  passCounts,
+  onPassChange,
   withinHours,
   sizeFilter,
   nightOnly,
@@ -88,6 +97,13 @@ export default function FiltersDrawer({
   onClearAll,
   onClose,
 }: Props) {
+  function togglePass(key: string) {
+    if (passFilter.includes(key)) {
+      onPassChange(passFilter.filter((p) => p !== key));
+    } else {
+      onPassChange([...passFilter, key]);
+    }
+  }
   const [customHours, setCustomHours] = useState<string>(
     withinHours > 0 && !DRIVE_TIME_PRESETS.includes(withinHours)
       ? String(withinHours)
@@ -195,11 +211,80 @@ export default function FiltersDrawer({
           onTouchMove={stopTouchBubble}
           onTouchEnd={stopTouchBubble}
         >
-          {/* Stage 33 — PASS section dropped from the drawer. The pass
-              chips on the map header already provide 1-tap pass toggle
-              + colored-dot legend, so duplicating them here was just
-              clutter. Drawer keeps the rarer filters (conditions,
-              origin, drive time, size, airport) + content links. */}
+          {/* PASS — Stage 33 final. Drawer is now the single source of
+              truth for every filter; map chip strip remains as a
+              1-tap shortcut + color legend but state-wise they're the
+              same. Pass section sits at the very top because it's
+              the most-used filter and matches the top-of-list mental
+              model from desktop FilterBar. */}
+          <Section
+            title="Pass"
+            summary={
+              passFilter.length === 0
+                ? "Any pass"
+                : passFilter
+                    .map(
+                      (p) =>
+                        PASS_LABELS[p as keyof typeof PASS_LABELS] ?? p,
+                    )
+                    .join(" · ")
+            }
+          >
+            <div className="grid grid-cols-1 gap-1">
+              {PASS_KEYS.map((key) => {
+                const isActive = passFilter.includes(key);
+                const count = passCounts[key] ?? 0;
+                return (
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={() => togglePass(key)}
+                    aria-pressed={isActive}
+                    className={[
+                      "flex items-center gap-2.5 rounded-lg border px-3 py-2 text-left text-sm transition",
+                      isActive
+                        ? "border-wn-navy bg-wn-navy/5"
+                        : "border-wn-charcoal/15 bg-white hover:border-wn-charcoal/30",
+                    ].join(" ")}
+                  >
+                    <span
+                      className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-sm border ${
+                        isActive
+                          ? "border-wn-navy bg-wn-navy text-white"
+                          : "border-wn-charcoal/30 bg-white"
+                      }`}
+                      aria-hidden="true"
+                    >
+                      {isActive && (
+                        <svg
+                          viewBox="0 0 12 12"
+                          className="h-3 w-3"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2.5"
+                        >
+                          <path
+                            d="M2 6.5L5 9.5L10 3"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      )}
+                    </span>
+                    <span
+                      className="h-2.5 w-2.5 shrink-0 rounded-full"
+                      style={{ backgroundColor: PASS_COLORS[key] }}
+                      aria-hidden="true"
+                    />
+                    <span className="flex-1 font-semibold text-wn-charcoal">
+                      {PASS_LABELS[key]}
+                    </span>
+                    <span className="text-xs text-wn-charcoal/55">{count}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </Section>
 
           {/* CONDITIONS — fresh snow + night skiing as inline toggle pills */}
           <Section
