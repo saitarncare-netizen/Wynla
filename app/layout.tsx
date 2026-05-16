@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -105,6 +106,26 @@ export default function RootLayout({
           Skip to main content
         </a>
         {children}
+        {/* Global legal footer. `mt-auto` plus the body's flex column keeps
+            it at the very bottom without pushing the map page (the map
+            fills the viewport; the footer sits below the fold for that
+            route). Kept tiny so it never competes with primary UI. */}
+        <footer className="mt-auto flex flex-wrap items-center justify-center gap-x-3 gap-y-1 px-4 py-3 text-[11px] text-wn-charcoal/55">
+          <Link href="/privacy" className="hover:text-wn-navy">
+            Privacy
+          </Link>
+          <span aria-hidden="true">·</span>
+          <Link href="/terms" className="hover:text-wn-navy">
+            Terms
+          </Link>
+          <span aria-hidden="true">·</span>
+          <a
+            href="mailto:saitarncare@gmail.com"
+            className="hover:text-wn-navy"
+          >
+            Contact: saitarncare@gmail.com
+          </a>
+        </footer>
         <PwaRegistrar />
         <Analytics />
         <SpeedInsights />
