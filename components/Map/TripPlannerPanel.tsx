@@ -1779,13 +1779,13 @@ export default function TripPlannerPanel({
         <ResortPicker
           open
           title={pickerForIndex === "new" ? "Pick a resort to add" : `Swap stop ${(pickerForIndex as number) + 1}`}
-          // Stage 33 final — trip-planner picker now uses the same
-          // simplified "search by name + open drawer for filters"
-          // pattern as the header search. No inline pass chips, no
-          // fresh-snow chip. The drawer (opened via onOpenFilters)
-          // is the single filter surface; the picker is just for
-          // browsing candidates by name + drive time.
-          fullScreen
+          // Stage 33 amend — trip-planner picker stays as a SNAP sheet
+          // (collapsed / half / full) instead of full-screen. The
+          // user needs to see the map BEHIND the picker while planning
+          // so they can read the dashed preview leg + understand
+          // route direction. The "Filters" pill still opens the
+          // drawer stacked on top — same one-source-of-truth pattern
+          // as header search, just without hiding the map.
           onOpenFilters={onOpenFilters}
           activeFilterCount={activeFilterCount}
           fromPoint={pickerFromPoint}

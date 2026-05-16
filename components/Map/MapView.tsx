@@ -405,15 +405,22 @@ export default function MapView({
         layout: {
           "text-field": ["get", "name"],
           "text-font": ["DIN Pro Bold", "Arial Unicode MS Bold"],
+          // Stage 33 — text size scales MORE aggressively with zoom so
+          // dense pockets read clean at low zoom (small labels won't
+          // fight each other) and detail view at high zoom feels
+          // legible at arm's length on a phone. Smaller floor: 9px
+          // (was 10) still readable when squinting at the US-wide
+          // overview, but cuts visual clutter ~10%.
           "text-size": [
             "interpolate",
             ["linear"],
             ["zoom"],
-            4.5, 10,
-            6, 11,
-            8, 12,
+            4.5, 9,
+            6, 10,
+            8, 11,
             10, 13,
-            14, 14,
+            12, 14,
+            14, 15,
           ],
           "text-variable-anchor": [
             "top",
