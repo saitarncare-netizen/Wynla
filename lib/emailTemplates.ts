@@ -17,7 +17,7 @@ const OFFWHITE = "#FAF7F2";
 const SKY = "#87CEEB";
 const GOLD = "#D4A84B";
 
-const SITE_BASE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://wynla.com";
+const SITE_BASE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://wynla.app";
 
 export type FavoriteResortSnapshot = {
   name: string;
