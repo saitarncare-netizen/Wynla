@@ -1,5 +1,37 @@
+<!-- Wynla logo — Smart Decision Fan (E-2, 5-branch variant)
+     Origin dot (bottom) → stem up → decision marker (gold ring) →
+     4 faded alternative paths fan UPWARD + 1 chosen GOLD path
+     straight up to a peak triangle (the destination).
+     All motion is forward (no crossings). Says: "we considered options,
+     this is the right one." -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <rect width="512" height="512" rx="96" fill="#1E2952"/>
-  <path d="M256 128 L376 376 L296 376 L256 296 L216 376 L136 376 Z" fill="#F5C443"/>
-  <circle cx="256" cy="180" r="32" fill="#FAFAF7"/>
+
+  <!-- Origin dot — "you are here" -->
+  <circle cx="256" cy="442" r="14" fill="#FAFAF7"/>
+
+  <!-- Origin stem — neutral white -->
+  <line x1="256" y1="428" x2="256" y2="338"
+        stroke="#FAFAF7" stroke-width="22" stroke-linecap="round"/>
+
+  <!-- 4 faded "alternatives considered" — fan upward, no crossings -->
+  <line x1="256" y1="320" x2="95"  y2="195"
+        stroke="#FAFAF7" stroke-width="16" stroke-linecap="round" opacity="0.35"/>
+  <line x1="256" y1="320" x2="170" y2="115"
+        stroke="#FAFAF7" stroke-width="16" stroke-linecap="round" opacity="0.45"/>
+  <line x1="256" y1="320" x2="342" y2="115"
+        stroke="#FAFAF7" stroke-width="16" stroke-linecap="round" opacity="0.45"/>
+  <line x1="256" y1="320" x2="417" y2="195"
+        stroke="#FAFAF7" stroke-width="16" stroke-linecap="round" opacity="0.35"/>
+
+  <!-- The chosen path: bold gold, straight up to destination -->
+  <line x1="256" y1="320" x2="256" y2="108"
+        stroke="#F5C443" stroke-width="30" stroke-linecap="round"/>
+
+  <!-- Destination peak — gold filled triangle at top of chosen path -->
+  <polygon points="256,58 296,122 216,122" fill="#F5C443"/>
+
+  <!-- Decision marker at the junction — gold ring with navy core -->
+  <circle cx="256" cy="320" r="24" fill="#F5C443"/>
+  <circle cx="256" cy="320" r="11" fill="#1E2952"/>
 </svg>

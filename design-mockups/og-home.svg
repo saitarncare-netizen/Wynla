@@ -1,0 +1,60 @@
+<!-- Wynla OG share image — 1200×630 (Facebook / Twitter / iMessage preview).
+     Left: brand mark + tagline. Right: subtle decoration. Navy background.
+     Designed for legibility when shrunk to ~600×315 in Twitter feed. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <!-- Navy background -->
+  <rect width="1200" height="630" fill="#1E2952"/>
+
+  <!-- Subtle gold gradient hint on the right side -->
+  <defs>
+    <radialGradient id="bgGlow" cx="85%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#F5C443" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#F5C443" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bgGlow)"/>
+
+  <!-- Logo mark (Smart Decision Fan E-2) — scaled and positioned left -->
+  <g transform="translate(80, 145) scale(0.65)">
+    <rect width="512" height="512" rx="96" fill="#FAFAF7" opacity="0.08"/>
+    <circle cx="256" cy="442" r="14" fill="#FAFAF7"/>
+    <line x1="256" y1="428" x2="256" y2="338"
+          stroke="#FAFAF7" stroke-width="22" stroke-linecap="round"/>
+    <line x1="256" y1="320" x2="95"  y2="195"
+          stroke="#FAFAF7" stroke-width="16" stroke-linecap="round" opacity="0.35"/>
+    <line x1="256" y1="320" x2="170" y2="115"
+          stroke="#FAFAF7" stroke-width="16" stroke-linecap="round" opacity="0.45"/>
+    <line x1="256" y1="320" x2="342" y2="115"
+          stroke="#FAFAF7" stroke-width="16" stroke-linecap="round" opacity="0.45"/>
+    <line x1="256" y1="320" x2="417" y2="195"
+          stroke="#FAFAF7" stroke-width="16" stroke-linecap="round" opacity="0.35"/>
+    <line x1="256" y1="320" x2="256" y2="108"
+          stroke="#F5C443" stroke-width="30" stroke-linecap="round"/>
+    <polygon points="256,58 296,122 216,122" fill="#F5C443"/>
+    <circle cx="256" cy="320" r="24" fill="#F5C443"/>
+    <circle cx="256" cy="320" r="11" fill="#1E2952"/>
+  </g>
+
+  <!-- Wordmark + tagline -->
+  <text x="490" y="280"
+        font-family="Geist, Inter, system-ui, sans-serif"
+        font-weight="800" font-size="132"
+        fill="#FAFAF7" letter-spacing="-5">wynla<tspan fill="#F5C443">.</tspan></text>
+  <text x="490" y="345"
+        font-family="Geist, Inter, system-ui, sans-serif"
+        font-weight="600" font-size="36"
+        fill="#FAFAF7" opacity="0.85" letter-spacing="-0.5">Plan smart. Ride better.</text>
+  <text x="490" y="395"
+        font-family="Geist, Inter, system-ui, sans-serif"
+        font-weight="400" font-size="24"
+        fill="#FAFAF7" opacity="0.6">451 US ski resorts · pass info · drive time · snow forecast</text>
+
+  <!-- Bottom corner accent — small "Pro" chip echo -->
+  <g transform="translate(490, 470)">
+    <rect width="120" height="36" rx="6" fill="#F5C443"/>
+    <text x="60" y="24"
+          font-family="Geist, Inter, system-ui, sans-serif"
+          font-weight="700" font-size="14"
+          fill="#1E2952" text-anchor="middle" letter-spacing="0.5">✨ TRY PRO FREE</text>
+  </g>
+</svg>
