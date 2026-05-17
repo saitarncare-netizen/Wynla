@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wynla — Logo v3: Smart Decision Fan</title>
+<style>
+  :root { --navy:#1E2952; --gold:#F5C443; --offwhite:#FAFAF7; --charcoal:#2A2A2A; }
+  body { margin:0; font-family: 'Geist', 'Inter', system-ui, sans-serif; background: var(--offwhite); color: var(--charcoal); padding: 32px; }
+  .wrap { max-width: 1200px; margin: 0 auto; }
+  h1 { color: var(--navy); font-size: 28px; margin: 0 0 8px; }
+  h2 { color: var(--navy); margin: 48px 0 8px; font-size: 22px; border-bottom: 2px solid var(--gold); padding-bottom: 8px; display: inline-block; }
+  h3 { color: var(--navy); margin: 24px 0 12px; font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em; }
+  p { line-height: 1.6; max-width: 720px; }
+  .intro { color: rgba(42,42,42,0.7); margin-bottom: 24px; }
+  .rationale { background: white; padding: 16px 20px; border-radius: 12px; border-left: 4px solid var(--gold); margin-bottom: 24px; font-size: 14px; line-height: 1.7; }
+  .rationale strong { color: var(--navy); }
+  .sizes-row { display: flex; gap: 24px; align-items: flex-end; flex-wrap: wrap; padding: 24px; background: white; border-radius: 12px; border: 1px solid rgba(42,42,42,0.08); }
+  .size-block { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .size-block span { font-size: 10px; color: rgba(42,42,42,0.5); }
+  .app-icon { display: block; border-radius: 22%; }
+  .app-icon-180 { width: 180px; height: 180px; }
+  .app-icon-128 { width: 128px; height: 128px; }
+  .app-icon-64 { width: 64px; height: 64px; }
+  .app-icon-32 { width: 32px; height: 32px; }
+  .lockup { display: flex; align-items: center; gap: 18px; padding: 18px 22px; border-radius: 12px; margin-top: 12px; background: var(--offwhite); }
+  .lockup-dark { background: var(--navy); color: white; }
+  .lockup .mark { width: 72px; height: 72px; flex-shrink: 0; border-radius: 14%; }
+  .lockup .name { font-size: 42px; font-weight: 800; letter-spacing: -1.4px; color: var(--navy); }
+  .lockup-dark .name { color: white; }
+  .lockup .dot { color: var(--gold); }
+  .direction { margin-bottom: 64px; padding-top: 16px; }
+  .verdict { display: inline-block; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; background: var(--gold); color: var(--navy); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Wynla — Logo v3: Smart Decision Fan</h1>
+<p class="intro"><strong>Feedback from v2:</strong> Crossroads (D-2) มี X-pattern → ดูเหมือนเดินถอยหลังได้ ไม่ใช่ "forward planning"
+<br><br>
+<strong>เป้า v3:</strong> จุดเริ่มเดียว (origin ล่าง) → forward fan ขึ้น (ไม่มี crossing) → 1 เส้น GOLD = the smart pick + decision marker</p>
+
+<!-- =================== E-1 =================== -->
+<div class="direction">
+  <h2>E-1 — Decision Fan (3 branches) <span class="verdict">⭐ recommended</span></h2>
+  <div class="rationale">
+    <strong>Reads as:</strong> You start at the bottom dot. Travel up to the decision moment (gold ring). From there, 3 options fan UPWARD only (no backward, no crossing). The middle one in BOLD GOLD with a peak triangle = "the chosen path with destination". The other 2 stay visible but faded = "alternatives we considered".
+    <br><br>
+    <strong>Why it works for the feedback:</strong> All motion is forward (up). Gold thickness + brightness + peak = clearly "this is the right one". The gold ring at the fork marks the decision moment explicitly.
+  </div>
+  <div class="sizes-row">
+    <div class="size-block">
+      <svg class="app-icon app-icon-180" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+        <rect width="512" height="512" rx="96" fill="#1E2952"/>
+        <circle cx="256" cy="442" r="14" fill="#FAFAF7"/>
+        <line x1="256" y1="428" x2="256" y2="338" stroke="#FAFAF7" stroke-width="22" stroke-linecap="round"/>
+        <line x1="256" y1="320" x2="115" y2="150" stroke="#FAFAF7" stroke-width="18" stroke-linecap="round" opacity="0.4"/>
+        <line x1="256" y1="320" x2="397" y2="150" stroke="#FAFAF7" stroke-width="18" stroke-linecap="round" opacity="0.4"/>
+        <line x1="256" y1="320" x2="256" y2="108" stroke="#F5C443" stroke-width="30" stroke-linecap="round"/>
+        <polygon points="256,58 296,122 216,122" fill="#F5C443"/>
+        <circle cx="256" cy="320" r="24" fill="#F5C443"/>
+        <circle cx="256" cy="320" r="11" fill="#1E2952"/>
+      </svg>
+      <span>180 px</span>
+    </div>
+    <div class="size-block">
+      <svg class="app-icon app-icon-128" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+        <rect width="512" height="512" rx="96" fill="#1E2952"/>
+        <circle cx="256" cy="442" r="14" fill="#FAFAF7"/>
+        <line x1="256" y1="428" x2="256" y2="338" stroke="#FAFAF7" stroke-width="22" stroke-linecap="round"/>
+        <line x1="256" y1="320" x2="115" y2="150" stroke="#FAFAF7" stroke-width="18" stroke-linecap="round" opacity="0.4"/>
+        <line x1="256" y1="320" x2="397" y2="150" stroke="#FAFAF7" stroke-width="18" stroke-linecap="round" opacity="0.4"/>
+        <line x1="256" y1="320" x2="256" y2="108" stroke="#F5C443" stroke-width="30" stroke-linecap="round"/>
+        <polygon points="256,58 296,122 216,122" fill="#F5C443"/>
+        <circle cx="256" cy="320" r="24" fill="#F5C443"/>
+        <circle cx="256" cy="320" r="11" fill="#1E2952"/>
+      </svg>
+      <span>128 px</span>
+    </div>
+    <div class="size-block">
+      <svg class="app-icon app-icon-64" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+        <rect width="512" height="512" rx="96" fill="#1E2952"/>
+        <circle cx="256" cy="442" r="14" fill="#FAFAF7"/>
+        <line x1="256" y1="428" x2="256" y2="338" stroke="#FAFAF7" stroke-width="22" stroke-linecap="round"/>
+        <line x1="256" y1="320" x2="115" y2="150" stroke="#FAFAF7" stroke-width="18" stroke-linecap="round" opacity="0.4"/>
+        <line x1="256" y1="320" x2="397" y2="150" stroke="#FAFAF7" stroke-width="18" stroke-linecap="round" opacity="0.4"/>
+        <line x1="256" y1="320" x2="256" y2="108" stroke="#F5C443" stroke-width="30" stroke-linecap="round"/>
+        <polygon points="256,58 296,122 216,122" fill="#F5C443"/>
+        <circle cx="256" cy="320" r="24" fill="#F5C443"/>
+        <circle cx="256" cy="320" r="11" fill="#1E2952"/>
+      </svg>
+      <span>64 px</span>
+    </div>
+    <div class="size-block">
+      <svg class="app-icon app-icon-32" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+        <rect width="512" height="512" rx="96" fill="#1E2952"/>
+        <circle cx="256" cy="442" r="14" fill="#FAFAF7"/>
+        <line x1="256" y1="428" x2="256" y2="338" stroke="#FAFAF7" stroke-width="22" stroke-linecap="round"/>
+        <line x1="256" y1="320" x2="115" y2="150" stroke="#FAFAF7" stroke-width="18" stroke-linecap="round" opacity="0.4"/>
+        <line x1="256" y1="320" x2="397" y2="150" stroke="#FAFAF7" stroke-width="18" stroke-linecap="round" opacity="0.4"/>
+        <line x1="256" y1="320" x2="256" y2="108" stroke="#F5C443" stroke-width="30" stroke-linecap="round"/>
+        <polygon points="256,58 296,122 216,122" fill="#F5C443"/>
+        <circle cx="256" cy="320" r="24" fill="#F5C443"/>
+        <circle cx="256" cy="320" r="11" fill="#1E2952"/>
+      </svg>
+      <span>32 px favicon</span>
+    </div>
+  </div>
+  <div class="lockup">
+    <svg class="mark" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+      <rect width="512" height="512" rx="96" fill="#1E2952"/>
+      <circle cx="256" cy="442" r="14" fill="#FAFAF7"/>
+      <line x1="256" y1="428" x2="256" y2="338" stroke="#FAFAF7" stroke-width="22" stroke-linecap="round"/>
+      <line x1="256" y1="320" x2="115" y2="150" stroke="#FAFAF7" stroke-width="18" stroke-linecap="round" opacity="0.4"/>
+      <line x1="256" y1="320" x2="397" y2="150" stroke="#FAFAF7" stroke-width="18" stroke-linecap="round" opacity="0.4"/>
+      <line x1="256" y1="320" x2="256" y2="108" stroke="#F5C443" stroke-width="30" stroke-linecap="round"/>
+      <polygon points="256,58 296,122 216,122" fill="#F5C443"/>
+      <circle cx="256" cy="320" r="24" fill="#F5C443"/>
+      <circle cx="256" cy="320" r="11" fill="#1E2952"/>
+    </svg>
+    <span class="name">wynla<span class="dot">.</span></span>
+  </div>
+</div>
+
+<!-- =================== E-2 =================== -->
+<div class="direction">
+  <h2>E-2 — Decision Fan (5 branches, wider)</h2>
+  <div class="rationale">
+    <strong>Variant:</strong> Same idea as E-1 but with 4 alternative branches (not 2) + the chosen gold one = 5 total options. "More choices considered" visual narrative. Thinner strokes to keep it readable.
+    <br><br>
+    <strong>Trade-off:</strong> More visually rich but harder to read at 32px favicon size.
+  </div>
+  <div class="sizes-row">
+    <div class="size-block">
+      <svg class="app-icon app-icon-180" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+        <rect width="512" height="512" rx="96" fill="#1E2952"/>
+        <circle cx="256" cy="442" r="14" fill="#FAFAF7"/>
+        <line x1="256" y1="428" x2="256" y2="338" stroke="#FAFAF7" stroke-width="22" stroke-linecap="round"/>
+        <line x1="256" y1="320" x2="95" y2="195" stroke="#FAFAF7" stroke-width="16" stroke-linecap="round" opacity="0.35"/>
+        <line x1="256" y1="320" x2="170" y2="115" stroke="#FAFAF7" stroke-width="16" stroke-linecap="round" opacity="0.45"/>
+        <line x1="256" y1="320" x2="342" y2="115" stroke="#FAFAF7" stroke-width="16" stroke-linecap="round" opacity="0.45"/>
+        <line x1="256" y1="320" x2="417" y2="195" stroke="#FAFAF7" stroke-width="16" stroke-linecap="round" opacity="0.35"/>
+        <line x1="256" y1="320" x2="256" y2="108" stroke="#F5C443" stroke-width="30" stroke-linecap="round"/>
+        <polygon points="256,58 296,122 216,122" fill="#F5C443"/>
+        <circle cx="256" cy="320" r="24" fill="#F5C443"/>
+        <circle cx="256" cy="320" r="11" fill="#1E2952"/>
+      </svg>
+      <span>180 px</span>
+    </div>
+    <div class="size-block">
+      <svg class="app-icon app-icon-128" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+        <rect width="512" height="512" rx="96" fill="#1E2952"/>
+        <circle cx="256" cy="442" r="14" fill="#FAFAF7"/>
+        <line x1="256" y1="428" x2="256" y2="338" stroke="#FAFAF7" stroke-width="22" stroke-linecap="round"/>
+        <line x1="256" y1="320" x2="95" y2="195" stroke="#FAFAF7" stroke-width="16" stroke-linecap="round" opacity="0.35"/>
+        <line x1="256" y1="320" x2="170" y2="115" stroke="#FAFAF7" stroke-width="16" stroke-linecap="round" opacity="0.45"/>
+        <line x1="256" y1="320" x2="342" y2="115" stroke="#FAFAF7" stroke-width="16" stroke-linecap="round" opacity="0.45"/>
+        <line x1="256" y1="320" x2="417" y2="195" stroke="#FAFAF7" stroke-width="16" stroke-linecap="round" opacity="0.35"/>
+        <line x1="256" y1="320" x2="256" y2="108" stroke="#F5C443" stroke-width="30" stroke-linecap="round"/>
+        <polygon points="256,58 296,122 216,122" fill="#F5C443"/>
+        <circle cx="256" cy="320" r="24" fill="#F5C443"/>
+        <circle cx="256" cy="320" r="11" fill="#1E2952"/>
+      </svg>
+      <span>128 px</span>
+    </div>
+    <div class="size-block">
+      <svg class="app-icon app-icon-64" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+        <rect width="512" height="512" rx="96" fill="#1E2952"/>
+        <circle cx="256" cy="442" r="14" fill="#FAFAF7"/>
+        <line x1="256" y1="428" x2="256" y2="338" stroke="#FAFAF7" stroke-width="22" stroke-linecap="round"/>
+        <line x1="256" y1="320" x2="95" y2="195" stroke="#FAFAF7" stroke-width="16" stroke-linecap="round" opacity="0.35"/>
+        <line x1="256" y1="320" x2="170" y2="115" stroke="#FAFAF7" stroke-width="16" stroke-linecap="round" opacity="0.45"/>
+        <line x1="256" y1="320" x2="342" y2="115" stroke="#FAFAF7" stroke-width="16" stroke-linecap="round" opacity="0.45"/>
+        <line x1="256" y1="320" x2="417" y2="195" stroke="#FAFAF7" stroke-width="16" stroke-linecap="round" opacity="0.35"/>
+        <line x1="256" y1="320" x2="256" y2="108" stroke="#F5C443" stroke-width="30" stroke-linecap="round"/>
+        <polygon points="256,58 296,122 216,122" fill="#F5C443"/>
+        <circle cx="256" cy="320" r="24" fill="#F5C443"/>
+        <circle cx="256" cy="320" r="11" fill="#1E2952"/>
+      </svg>
+      <span>64 px</span>
+    </div>
+    <div class="size-block">
+      <svg class="app-icon app-icon-32" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+        <rect width="512" height="512" rx="96" fill="#1E2952"/>
+        <circle cx="256" cy="442" r="14" fill="#FAFAF7"/>
+        <line x1="256" y1="428" x2="256" y2="338" stroke="#FAFAF7" stroke-width="22" stroke-linecap="round"/>
+        <line x1="256" y1="320" x2="95" y2="195" stroke="#FAFAF7" stroke-width="16" stroke-linecap="round" opacity="0.35"/>
+        <line x1="256" y1="320" x2="170" y2="115" stroke="#FAFAF7" stroke-width="16" stroke-linecap="round" opacity="0.45"/>
+        <line x1="256" y1="320" x2="342" y2="115" stroke="#FAFAF7" stroke-width="16" stroke-linecap="round" opacity="0.45"/>
+        <line x1="256" y1="320" x2="417" y2="195" stroke="#FAFAF7" stroke-width="16" stroke-linecap="round" opacity="0.35"/>
+        <line x1="256" y1="320" x2="256" y2="108" stroke="#F5C443" stroke-width="30" stroke-linecap="round"/>
+        <polygon points="256,58 296,122 216,122" fill="#F5C443"/>
+        <circle cx="256" cy="320" r="24" fill="#F5C443"/>
+        <circle cx="256" cy="320" r="11" fill="#1E2952"/>
+      </svg>
+      <span>32 px favicon</span>
+    </div>
+  </div>
+  <div class="lockup">
+    <svg class="mark" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+      <rect width="512" height="512" rx="96" fill="#1E2952"/>
+      <circle cx="256" cy="442" r="14" fill="#FAFAF7"/>
+      <line x1="256" y1="428" x2="256" y2="338" stroke="#FAFAF7" stroke-width="22" stroke-linecap="round"/>
+      <line x1="256" y1="320" x2="95" y2="195" stroke="#FAFAF7" stroke-width="16" stroke-linecap="round" opacity="0.35"/>
+      <line x1="256" y1="320" x2="170" y2="115" stroke="#FAFAF7" stroke-width="16" stroke-linecap="round" opacity="0.45"/>
+      <line x1="256" y1="320" x2="342" y2="115" stroke="#FAFAF7" stroke-width="16" stroke-linecap="round" opacity="0.45"/>
+      <line x1="256" y1="320" x2="417" y2="195" stroke="#FAFAF7" stroke-width="16" stroke-linecap="round" opacity="0.35"/>
+      <line x1="256" y1="320" x2="256" y2="108" stroke="#F5C443" stroke-width="30" stroke-linecap="round"/>
+      <polygon points="256,58 296,122 216,122" fill="#F5C443"/>
+      <circle cx="256" cy="320" r="24" fill="#F5C443"/>
+      <circle cx="256" cy="320" r="11" fill="#1E2952"/>
+    </svg>
+    <span class="name">wynla<span class="dot">.</span></span>
+  </div>
+</div>
+
+<!-- =================== E-3 =================== -->
+<div class="direction">
+  <h2>E-3 — Decision Fan + Checkmark</h2>
+  <div class="rationale">
+    <strong>Variant:</strong> Same as E-1 but instead of a peak triangle at the top of the chosen path, there's an explicit CHECKMARK ✓ in gold. Says "this is the RIGHT decision" with maximum clarity. Trade-off: more "approval / verification" feel, less "outdoor / destination" feel.
+  </div>
+  <div class="sizes-row">
+    <div class="size-block">
+      <svg class="app-icon app-icon-180" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+        <rect width="512" height="512" rx="96" fill="#1E2952"/>
+        <circle cx="256" cy="442" r="14" fill="#FAFAF7"/>
+        <line x1="256" y1="428" x2="256" y2="338" stroke="#FAFAF7" stroke-width="22" stroke-linecap="round"/>
+        <line x1="256" y1="320" x2="115" y2="150" stroke="#FAFAF7" stroke-width="18" stroke-linecap="round" opacity="0.4"/>
+        <line x1="256" y1="320" x2="397" y2="150" stroke="#FAFAF7" stroke-width="18" stroke-linecap="round" opacity="0.4"/>
+        <line x1="256" y1="320" x2="256" y2="130" stroke="#F5C443" stroke-width="30" stroke-linecap="round"/>
+        <polyline points="200,115 244,80 320,40" stroke="#F5C443" stroke-width="32" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <circle cx="256" cy="320" r="24" fill="#F5C443"/>
+        <circle cx="256" cy="320" r="11" fill="#1E2952"/>
+      </svg>
+      <span>180 px</span>
+    </div>
+    <div class="size-block">
+      <svg class="app-icon app-icon-128" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+        <rect width="512" height="512" rx="96" fill="#1E2952"/>
+        <circle cx="256" cy="442" r="14" fill="#FAFAF7"/>
+        <line x1="256" y1="428" x2="256" y2="338" stroke="#FAFAF7" stroke-width="22" stroke-linecap="round"/>
+        <line x1="256" y1="320" x2="115" y2="150" stroke="#FAFAF7" stroke-width="18" stroke-linecap="round" opacity="0.4"/>
+        <line x1="256" y1="320" x2="397" y2="150" stroke="#FAFAF7" stroke-width="18" stroke-linecap="round" opacity="0.4"/>
+        <line x1="256" y1="320" x2="256" y2="130" stroke="#F5C443" stroke-width="30" stroke-linecap="round"/>
+        <polyline points="200,115 244,80 320,40" stroke="#F5C443" stroke-width="32" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <circle cx="256" cy="320" r="24" fill="#F5C443"/>
+        <circle cx="256" cy="320" r="11" fill="#1E2952"/>
+      </svg>
+      <span>128 px</span>
+    </div>
+    <div class="size-block">
+      <svg class="app-icon app-icon-64" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+        <rect width="512" height="512" rx="96" fill="#1E2952"/>
+        <circle cx="256" cy="442" r="14" fill="#FAFAF7"/>
+        <line x1="256" y1="428" x2="256" y2="338" stroke="#FAFAF7" stroke-width="22" stroke-linecap="round"/>
+        <line x1="256" y1="320" x2="115" y2="150" stroke="#FAFAF7" stroke-width="18" stroke-linecap="round" opacity="0.4"/>
+        <line x1="256" y1="320" x2="397" y2="150" stroke="#FAFAF7" stroke-width="18" stroke-linecap="round" opacity="0.4"/>
+        <line x1="256" y1="320" x2="256" y2="130" stroke="#F5C443" stroke-width="30" stroke-linecap="round"/>
+        <polyline points="200,115 244,80 320,40" stroke="#F5C443" stroke-width="32" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <circle cx="256" cy="320" r="24" fill="#F5C443"/>
+        <circle cx="256" cy="320" r="11" fill="#1E2952"/>
+      </svg>
+      <span>64 px</span>
+    </div>
+  </div>
+  <div class="lockup">
+    <svg class="mark" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+      <rect width="512" height="512" rx="96" fill="#1E2952"/>
+      <circle cx="256" cy="442" r="14" fill="#FAFAF7"/>
+      <line x1="256" y1="428" x2="256" y2="338" stroke="#FAFAF7" stroke-width="22" stroke-linecap="round"/>
+      <line x1="256" y1="320" x2="115" y2="150" stroke="#FAFAF7" stroke-width="18" stroke-linecap="round" opacity="0.4"/>
+      <line x1="256" y1="320" x2="397" y2="150" stroke="#FAFAF7" stroke-width="18" stroke-linecap="round" opacity="0.4"/>
+      <line x1="256" y1="320" x2="256" y2="130" stroke="#F5C443" stroke-width="30" stroke-linecap="round"/>
+      <polyline points="200,115 244,80 320,40" stroke="#F5C443" stroke-width="32" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <circle cx="256" cy="320" r="24" fill="#F5C443"/>
+      <circle cx="256" cy="320" r="11" fill="#1E2952"/>
+    </svg>
+    <span class="name">wynla<span class="dot">.</span></span>
+  </div>
+</div>
+
+</div>
+</body>
+</html>
