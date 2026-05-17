@@ -1,0 +1,28 @@
+<!-- Direction D-1 — Branching Arrow / Wayfinder mark
+     Concept: A single origin (short stem) splitting into TWO upward
+     arrows (the destinations you weigh). A gold diamond at the
+     junction marks the smart decision point.
+     Reads as a route-planning diagram, not a letter Y. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" rx="96" fill="#1E2952"/>
+
+  <!-- Short origin stem (deliberately shorter than branches so it
+       doesn't read as a Y) -->
+  <line x1="256" y1="430" x2="256" y2="330"
+        stroke="#FAFAF7" stroke-width="32" stroke-linecap="round"/>
+
+  <!-- Left destination branch — wide angle, with explicit arrowhead -->
+  <line x1="256" y1="330" x2="135" y2="175"
+        stroke="#FAFAF7" stroke-width="32" stroke-linecap="round"/>
+  <!-- Left arrowhead (triangle pointing up-left, aligned with branch direction) -->
+  <polygon points="135,175 173,180 157,215" fill="#FAFAF7"/>
+
+  <!-- Right destination branch -->
+  <line x1="256" y1="330" x2="377" y2="175"
+        stroke="#FAFAF7" stroke-width="32" stroke-linecap="round"/>
+  <polygon points="377,175 339,180 355,215" fill="#FAFAF7"/>
+
+  <!-- Gold decision diamond at the junction (instead of plain dot —
+       diamond reads "decision marker" more than dot) -->
+  <polygon points="256,302 282,330 256,358 230,330" fill="#F5C443"/>
+</svg>

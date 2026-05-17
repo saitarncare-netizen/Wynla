@@ -1,0 +1,24 @@
+<!-- Direction D-2 — Crossroads mark
+     Concept: An X-shape representing the moment two trails meet.
+     One arm is highlighted in gold = "the chosen path". The other in
+     white/navy = the alternatives. Read as a trail map intersection.
+     More abstract than D-1 but unmistakably about "choosing between routes". -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" rx="96" fill="#1E2952"/>
+
+  <!-- The 3 "considered" routes — all in white, equal weight -->
+  <line x1="120" y1="120" x2="392" y2="392"
+        stroke="#FAFAF7" stroke-width="32" stroke-linecap="round" opacity="0.6"/>
+  <line x1="392" y1="120" x2="120" y2="392"
+        stroke="#FAFAF7" stroke-width="32" stroke-linecap="round" opacity="0.6"/>
+
+  <!-- The "chosen route" — gold, extends BEYOND the others to feel like
+       "this one wins" -->
+  <line x1="256" y1="90" x2="256" y2="422"
+        stroke="#F5C443" stroke-width="36" stroke-linecap="round"/>
+
+  <!-- Decision marker at the intersection (small navy disk inside a
+       white ring = "the spot where you picked") -->
+  <circle cx="256" cy="256" r="34" fill="#FAFAF7"/>
+  <circle cx="256" cy="256" r="20" fill="#1E2952"/>
+</svg>

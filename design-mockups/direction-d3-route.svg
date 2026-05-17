@@ -1,0 +1,22 @@
+<!-- Direction D-3 — Route line with key turn
+     Concept: An abstracted hiking/driving route. Two segments with
+     a bend at the middle. A gold dot at the bend = the planning
+     decision (where the route makes its smart turn). Origin dot at
+     start, peak triangle at end (destination).
+     Most narrative of the 3 — tells a tiny story in one glance. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" rx="96" fill="#1E2952"/>
+
+  <!-- The route — 2 line segments with a 90-ish degree bend -->
+  <path d="M 130 380 L 256 256 L 382 132"
+        stroke="#FAFAF7" stroke-width="34" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+
+  <!-- Origin dot (you / starting point) at bottom-left -->
+  <circle cx="130" cy="380" r="26" fill="#FAFAF7"/>
+
+  <!-- Destination — small upward peak/arrowhead at top-right -->
+  <polygon points="382,90 415,150 349,150" fill="#FAFAF7"/>
+
+  <!-- Decision marker — gold diamond at the bend (the smart turn) -->
+  <polygon points="256,232 282,256 256,280 230,256" fill="#F5C443"/>
+</svg>
