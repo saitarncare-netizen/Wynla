@@ -1,0 +1,16 @@
+<!-- Direction B — Single mountain peak with snow cap
+     Concept: One clean geometric peak. Not 3-mountain Patagonia.
+     Snow cap line gives "ski" association without being a snowflake. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Rounded square background, brand navy -->
+  <rect width="512" height="512" rx="96" fill="#1E2952"/>
+
+  <!-- Background "shadow peak" for depth (slightly off-axis, lighter) -->
+  <polygon points="180,400 320,160 460,400" fill="#5BAFE6" opacity="0.35"/>
+
+  <!-- Foreground main peak in gold -->
+  <polygon points="80,400 230,140 380,400" fill="#F5C443"/>
+
+  <!-- Snow cap on the main peak: a small jagged triangle near the summit -->
+  <polygon points="186,210 230,140 274,210 254,200 230,210 206,200" fill="#FAFAF7"/>
+</svg>

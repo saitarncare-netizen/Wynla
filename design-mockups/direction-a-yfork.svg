@@ -1,0 +1,22 @@
+<!-- Direction A — Y-fork trail signpost
+     Concept: The Y in "Wynla" naturally forms a fork shape.
+     Fork = where trails branch = the act of planning a trip.
+     Geometric, modern, ownable. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Rounded square background, brand navy -->
+  <rect width="512" height="512" rx="96" fill="#1E2952"/>
+
+  <!-- Y mark: 2 angled branches up + center stem down.
+       Stroke-based for crispness at any size. -->
+  <g stroke="#FAFAF7" stroke-width="48" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <!-- Left branch -->
+    <line x1="120" y1="120" x2="256" y2="280"/>
+    <!-- Right branch -->
+    <line x1="392" y1="120" x2="256" y2="280"/>
+    <!-- Center stem -->
+    <line x1="256" y1="280" x2="256" y2="400"/>
+  </g>
+
+  <!-- Gold "trail marker" dot at the fork point (signposts the decision) -->
+  <circle cx="256" cy="280" r="22" fill="#F5C443"/>
+</svg>

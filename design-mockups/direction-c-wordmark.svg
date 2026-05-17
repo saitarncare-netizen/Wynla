@@ -1,0 +1,25 @@
+<!-- Direction C — Pure wordmark (Stripe / Linear style)
+     Concept: "wynla." in clean geometric lowercase. The y has a slightly
+     extended descender (subtle "trail extending down" cue). Gold period
+     for accent — implies "planned. done."
+     For app-icon contexts where the wordmark is too wide, the "w" or
+     "wy" letterforms are used standalone (see variants below). -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 200" width="600" height="200">
+  <!-- Transparent BG by default; works on both light and dark surfaces. -->
+
+  <!-- Main wordmark: navy "wynla" + gold period dot -->
+  <text x="40" y="135"
+        font-family="Geist, 'Inter', system-ui, sans-serif"
+        font-weight="800"
+        font-size="120"
+        fill="#1E2952"
+        letter-spacing="-6">wynla</text>
+
+  <!-- Gold period — drawn as a circle so it pops larger than a text period -->
+  <circle cx="478" cy="125" r="14" fill="#F5C443"/>
+
+  <!-- Extended descender on the 'y' — subtle "trail going down" detail.
+       Drawn as a thin line continuing below the y's natural descender. -->
+  <line x1="180" y1="155" x2="180" y2="178"
+        stroke="#1E2952" stroke-width="14" stroke-linecap="round"/>
+</svg>
