@@ -32,6 +32,13 @@ import PowderDayScore from "@/components/PowderDayScore";
 // HTML for every visitor. Capacitor wrap needs static-friendly pages too.
 export const revalidate = 600;
 
+// Explicit column list — replaces a select("*") that pulled ~70+ columns
+// per row, several of them large text fields (descriptions, attribution
+// blobs). Keeping this in sync with the local Resort type is enforced by
+// TS at the cast site. ~3-5KB per detail page hit saved.
+const RESORT_DETAIL_COLS =
+  "id, slug, name, state, region, city, address, latitude, longitude, passes, tier, operating_status, vertical_drop, total_trails, total_lifts, total_acres, difficulty_pct_beginner, difficulty_pct_intermediate, difficulty_pct_advanced, difficulty_pct_expert, trails_beginner, trails_intermediate, trails_advanced, trails_expert, has_terrain_park, terrain_park_count, has_glades, has_halfpipe, has_night_skiing, longest_run_miles, elevation_base, elevation_summit, typical_season_start, typical_season_end, weekday_hours, weekend_hours, website_url, trail_map_url, ticket_booking_url, hero_image_url, hero_image_source, hero_image_alt, last_verified_at, high_speed_lifts, base_elevation_ft, summit_elevation_ft, annual_snowfall_in, season_open_text, season_close_text, snowmaking_pct, has_tubing, has_lessons, has_rentals, has_lodging_on_mountain, has_xc_skiing, has_backcountry_access, webcam_url, closest_airport_iata, closest_airport_distance_mi, snow_base_depth_in, snow_new_24h_in, snow_new_48h_in, snow_new_7d_in, trails_open_today, lifts_open_today, snow_report_status, snow_report_updated_at";
+
 type Resort = {
   id: number;
   slug: string;
@@ -144,7 +151,7 @@ async function getData(
   const [resortRes, poolRes] = await Promise.all([
     supabase
       .from("resorts")
-      .select("*")
+      .select(RESORT_DETAIL_COLS)
       .eq("slug", slug)
       .eq("active", true)
       .maybeSingle(),

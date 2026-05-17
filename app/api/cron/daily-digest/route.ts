@@ -30,8 +30,8 @@ import { buildDigestEmail, type FavoriteResortSnapshot } from "@/lib/emailTempla
 export const runtime = "nodejs";
 export const maxDuration = 300;
 
-const RESEND_FROM = process.env.RESEND_FROM_EMAIL ?? "Wynla <digest@wynla.com>";
-const SITE_BASE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://wynla.com";
+const RESEND_FROM = process.env.RESEND_FROM_EMAIL ?? "Wynla <digest@wynla.app>";
+const SITE_BASE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://wynla.app";
 
 type DigestSub = {
   id: number;

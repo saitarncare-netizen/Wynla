@@ -43,7 +43,7 @@ export default function ResortReviews({ resortId }: Props) {
       const [{ data: rs }, { data: u }] = await Promise.all([
         supabase
           .from("resort_reviews")
-          .select("*")
+          .select("id, resort_id, user_id, rating, body, created_at, updated_at")
           .eq("resort_id", resortId)
           .order("created_at", { ascending: false }),
         supabase.auth.getUser(),

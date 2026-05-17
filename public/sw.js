@@ -39,10 +39,13 @@ self.addEventListener("push", (event) => {
   const title = (payload && payload.title) || "Wynla";
   const body = (payload && payload.body) ||
     "Fresh snow at a resort you're watching — open Wynla to see.";
+  // Use PNG icons for the notification — Android Chrome doesn't render SVG
+  // badges reliably (silently falls back to a generic bell). icon-192 is the
+  // hero glyph, icon-192 also serves as the small tray badge.
   const options = {
     body,
-    icon: "/icon.svg",
-    badge: "/icon.svg",
+    icon: "/icon-192.png",
+    badge: "/icon-192.png",
     data: { url: (payload && payload.url) || "/" },
   };
   event.waitUntil(self.registration.showNotification(title, options));
