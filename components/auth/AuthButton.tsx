@@ -33,16 +33,26 @@ export default function AuthButton() {
   if (user === undefined) {
     // Avoid layout shift: reserve roughly the same width as the signed-out
     // state while we resolve the session.
-    return <div className="h-7 w-20 animate-pulse rounded-md bg-wn-charcoal/10" aria-hidden="true" />;
+    // Reserve the same footprint as the resolved Sign-in pill so we
+    // don't get a layout shift when the auth state lands.
+    return <div className="h-11 w-11 animate-pulse rounded-md bg-wn-charcoal/10 sm:w-24" aria-hidden="true" />;
   }
 
   if (!user) {
+    // Mobile: icon-only square pill matching the other header buttons
+    // (search/trips/plan/filters → all h-11 px-2.5 with icon-only on
+    // small viewports). Desktop reveals the "Sign in" label.
+    // whitespace-nowrap so the label never wraps to two lines when the
+    // header gets cramped on edge-case widths (iPhone SE / split view).
     return (
       <Link
         href="/login"
-        className="rounded-md border border-wn-charcoal/20 bg-white px-2.5 py-1 text-xs font-semibold text-wn-charcoal/80 transition hover:border-wn-charcoal/40 hover:text-wn-navy"
+        className="inline-flex h-11 items-center justify-center gap-1.5 whitespace-nowrap rounded-md border border-wn-charcoal/20 bg-white px-2.5 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 sm:px-3"
+        title="Sign in"
+        aria-label="Sign in"
       >
-        Sign in
+        <span aria-hidden="true">👤</span>
+        <span className="hidden sm:inline">Sign in</span>
       </Link>
     );
   }
@@ -55,7 +65,7 @@ export default function AuthButton() {
         type="button"
         onClick={() => setMenuOpen((v) => !v)}
         aria-label="Account menu"
-        className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-wn-navy text-xs font-bold text-white transition hover:bg-wn-navy/90"
+        className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-wn-navy text-sm font-bold text-white shadow-sm transition hover:bg-wn-navy/90 active:scale-95"
       >
         {initial}
       </button>
