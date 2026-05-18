@@ -7,11 +7,8 @@ import {
   passLabel,
   primaryPass,
 } from "@/lib/passColors";
-import {
-  googleMapsUrl,
-  lodgingSearchUrl,
-  airbnbSearchUrl,
-} from "@/lib/externalLinks";
+import { googleMapsUrl } from "@/lib/externalLinks";
+import PlanYourTrip from "@/components/PlanYourTrip";
 import { getDifficultyMix } from "@/lib/difficulty";
 import FavoriteToggle from "@/components/auth/FavoriteToggle";
 import CompareToggle from "@/components/CompareToggle";
@@ -394,6 +391,28 @@ export default async function ResortPage({
           <FullWeatherCard resort={resort} weather={weather} lat={lat} lng={lng} />
         </Section>
 
+        {/* Stage 37 — single affiliate revenue surface for the resort
+            page. Four cards (Tickets / Stay / Gear / Travel) each open
+            a modal of 2–3 partner options. Lives high in the page so
+            high-intent visitors see it without scrolling past every
+            stat block, but BELOW Today's weather so the user has the
+            "yes I want to ski this" context first. The old inline
+            "Find lodging / Airbnb nearby" rows in the Visit & book
+            section are retired by this — booking now lives here.
+            Discovery surfaces (map, search, planner header) stay
+            ad-free per the Komoot/AllTrails playbook. */}
+        <PlanYourTrip
+          resort={{
+            name: resort.name,
+            state: resort.state,
+            latitude: lat,
+            longitude: lng,
+            closest_airport_iata: resort.closest_airport_iata,
+            ticket_booking_url: resort.ticket_booking_url,
+            website_url: resort.website_url,
+          }}
+        />
+
         {/* 10-DAY FORECAST — pulled from weather_cache.forecast_json on
             the same daily cron that powers Today's weather. NWS gives
             ~7 reliable days, Open-Meteo fills 8-10. Horizontal-scroll
@@ -433,11 +452,12 @@ export default async function ResortPage({
           </Section>
         )}
 
-        {/* QUICK ACTIONS — Google Maps + Trail map + Webcam. Resort
-            website + ticket-booking links dropped Stage 21.5 since many
-            were broken or stale. Find-lodging dropped too — it can be
-            added back later if user feedback wants it. */}
-        <Section title="Visit & book">
+        {/* QUICK ACTIONS — utility-only after Stage 37.
+            Booking (lodging / lift tickets / gear / flights / insurance)
+            moved into the dedicated PlanYourTrip section higher in the
+            page; this row is now just navigation + trail map + webcam,
+            which are the no-revenue informational links. */}
+        <Section title="Maps & cameras">
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
             <ActionLink
               href={googleMapsUrl(resort.name, resort.state)}
@@ -451,22 +471,6 @@ export default async function ResortPage({
             {resort.webcam_url && (
               <ActionLink href={resort.webcam_url} label="Live webcam" sub="Current conditions" external />
             )}
-            {/* Weather.gov + Windy.com links removed Stage 33 — Wynla
-                now ships its own 10-day forecast + live snow report
-                above this section, so the external links were
-                redundant and pushed users off the site. */}
-            <ActionLink
-              href={lodgingSearchUrl(resort.name, resort.state)}
-              label="🏨 Find lodging"
-              sub="Booking.com nearby"
-              external
-            />
-            <ActionLink
-              href={airbnbSearchUrl(resort.name, resort.state)}
-              label="🏡 Airbnb nearby"
-              sub="Homes + cabins"
-              external
-            />
           </div>
         </Section>
 

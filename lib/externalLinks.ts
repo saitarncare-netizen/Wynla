@@ -18,27 +18,8 @@ export function googleMapsUrl(name: string, state: string | null | undefined): s
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
 }
 
-export function bookingComUrl(name: string): string {
-  return `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(name)}`;
-}
-
-// Stage 30 — Booking.com search URL biased toward "near this resort"
-// with sane defaults. If/when we get an actual affiliate AID we just
-// add `&aid={id}` here and revenue flows. Until then it's still
-// useful as a "find a hotel nearby" handoff.
-export function lodgingSearchUrl(name: string, state: string | null | undefined): string {
-  const query = state ? `${name} ${state}` : `${name}`;
-  const params = new URLSearchParams({
-    ss: query,
-    dest_type: "landmark",
-    // Default 1 adult, no children, 2-night stay starting in 30 days —
-    // Booking.com falls back to a sane default if dates are missing.
-  });
-  return `https://www.booking.com/searchresults.html?${params.toString()}`;
-}
-
-// Airbnb fallback for users who prefer it over Booking.com.
-export function airbnbSearchUrl(name: string, state: string | null | undefined): string {
-  const query = state ? `${name} ${state}` : name;
-  return `https://www.airbnb.com/s/${encodeURIComponent(query)}/homes`;
-}
+// Stage 37 — the previous Booking.com / Airbnb / generic lodging URL
+// builders moved out of this file into `lib/affiliateLinks.ts`, where
+// they pick up affiliate IDs from NEXT_PUBLIC_AFFILIATE_* env vars.
+// This file is back to its original "non-revenue informational links"
+// scope: weather, wind, and a Google Maps handoff.
