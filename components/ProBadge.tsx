@@ -35,12 +35,19 @@ export default function ProBadge({
         title="Try Wynla Pro free for 7 days"
         aria-label="Try Wynla Pro free for 7 days"
         className={[
-          "inline-flex h-11 items-center justify-center gap-1.5 rounded-md border border-wn-gold bg-gradient-to-br from-wn-gold/20 to-wn-gold/10 px-3 text-xs font-bold text-wn-navy shadow-sm transition hover:from-wn-gold/30 hover:to-wn-gold/20 active:scale-95",
+          "inline-flex h-11 items-center justify-center gap-1 rounded-md border border-wn-gold bg-gradient-to-br from-wn-gold/20 to-wn-gold/10 px-2 text-xs font-bold text-wn-navy shadow-sm transition hover:from-wn-gold/30 hover:to-wn-gold/20 active:scale-95 sm:gap-1.5 sm:px-3",
           className,
         ].join(" ")}
       >
         <span aria-hidden="true" className="text-sm">✨</span>
-        <span className="whitespace-nowrap">Try Pro</span>
+        {/* On the tightest mobile widths the full "Try Pro · 7 days free"
+            pill is one of the biggest reasons the header wraps. Mobile
+            now shows just "Pro" next to the sparkle; sm+ regains the
+            full call-to-action. */}
+        <span className="whitespace-nowrap">
+          <span className="sm:hidden">Pro</span>
+          <span className="hidden sm:inline">Try Pro</span>
+        </span>
         <span className="hidden whitespace-nowrap text-[10px] font-semibold text-wn-charcoal/70 sm:inline">
           · 7 days free
         </span>
@@ -54,12 +61,17 @@ export default function ProBadge({
       title="You're a Pro — manage subscription"
       aria-label="You're a Pro — manage subscription"
       className={[
-        "inline-flex h-11 items-center justify-center gap-1.5 rounded-md bg-wn-gold px-3 text-xs font-extrabold text-wn-navy shadow-sm transition hover:bg-wn-gold/90 active:scale-95",
+        "inline-flex h-11 items-center justify-center gap-1 rounded-md bg-wn-gold px-2 text-xs font-extrabold text-wn-navy shadow-sm transition hover:bg-wn-gold/90 active:scale-95 sm:gap-1.5 sm:px-3",
         className,
       ].join(" ")}
     >
       <span aria-hidden="true" className="text-sm">💎</span>
-      <span className="whitespace-nowrap">You&apos;re a Pro</span>
+      {/* "Pro" alone on mobile, "You're a Pro" on sm+ — same compaction
+          rule as the free-tier badge above. */}
+      <span className="whitespace-nowrap">
+        <span className="sm:hidden">Pro</span>
+        <span className="hidden sm:inline">You&apos;re a Pro</span>
+      </span>
     </Link>
   );
 }
