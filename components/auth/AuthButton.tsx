@@ -47,7 +47,7 @@ export default function AuthButton() {
     return (
       <Link
         href="/login"
-        className="inline-flex h-11 items-center justify-center gap-1.5 whitespace-nowrap rounded-md border border-wn-charcoal/20 bg-white px-2.5 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 sm:px-3"
+        className="inline-flex h-11 items-center justify-center gap-1.5 whitespace-nowrap rounded-md border border-wn-charcoal/20 bg-white px-2 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 sm:px-3"
         title="Sign in"
         aria-label="Sign in"
       >

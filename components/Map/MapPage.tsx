@@ -498,19 +498,21 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         className="absolute inset-x-0 top-0 z-10 md:border-b md:border-wn-charcoal/10 md:bg-white/95 md:backdrop-blur-sm"
         style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}
       >
-        <div className="flex items-center justify-between gap-2 px-3 pt-3 sm:px-6">
+        <div className="flex items-center justify-between gap-1.5 px-2 pt-3 sm:gap-2 sm:px-6">
           <div className="flex items-baseline gap-3">
             {/* Brand pill — gets its own bg on mobile (header is transparent
                 there for a Google-Maps-style float), inherits the solid
-                header bg on desktop. */}
-            <span className="rounded-md bg-white/90 px-2 py-0.5 text-xl font-extrabold tracking-tight text-wn-navy shadow-sm backdrop-blur-sm md:bg-transparent md:px-0 md:py-0 md:shadow-none md:backdrop-blur-none">
+                header bg on desktop. Slightly smaller on mobile so the
+                button row to its right has more breathing room — 6 pills
+                + logo otherwise wrap into a second line on iPhone widths. */}
+            <span className="rounded-md bg-white/90 px-1.5 py-0.5 text-lg font-extrabold tracking-tight text-wn-navy shadow-sm backdrop-blur-sm sm:px-2 sm:text-xl md:bg-transparent md:px-0 md:py-0 md:shadow-none md:backdrop-blur-none">
               Wynla
             </span>
             <span className="hidden text-xs text-wn-charcoal/50 sm:inline">
               Plan smart. Ride better.
             </span>
           </div>
-          <div className="flex items-center gap-1.5 sm:gap-2">
+          <div className="flex items-center gap-1 sm:gap-2">
             {/* Stage 21.3 — mobile header buttons are all same-size
                 icon-only square pills. Plan-a-trip is navy (primary
                 action), others are white pills. Desktop keeps text
@@ -521,7 +523,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
             <button
               type="button"
               onClick={() => setSearchOpen(true)}
-              className="inline-flex h-11 items-center justify-center gap-1.5 rounded-md border border-wn-charcoal/20 bg-white px-2.5 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 sm:px-3"
+              className="inline-flex h-11 items-center justify-center gap-1.5 rounded-md border border-wn-charcoal/20 bg-white px-2 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 sm:px-3"
               title="Search resorts"
               aria-label="Search resorts"
             >
@@ -531,7 +533,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
             {/* My trips */}
             <Link
               href="/trips"
-              className="inline-flex h-11 items-center justify-center gap-1.5 rounded-md border border-wn-charcoal/20 bg-white px-2.5 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 sm:px-3"
+              className="inline-flex h-11 items-center justify-center gap-1.5 rounded-md border border-wn-charcoal/20 bg-white px-2 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 sm:px-3"
               title="My trips"
               aria-label="My trips"
             >
@@ -543,7 +545,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
             <button
               type="button"
               onClick={() => updateParam("plan", "1")}
-              className="inline-flex h-11 items-center justify-center gap-1.5 rounded-md bg-wn-navy px-2.5 text-xs font-semibold text-white shadow-sm transition hover:bg-wn-navy/90 active:scale-95 sm:px-3"
+              className="inline-flex h-11 items-center justify-center gap-1.5 rounded-md bg-wn-navy px-2 text-xs font-semibold text-white shadow-sm transition hover:bg-wn-navy/90 active:scale-95 sm:px-3"
               title="Plan a multi-day ski trip"
               aria-label="Plan a trip"
             >
@@ -563,7 +565,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
                 <button
                   type="button"
                   onClick={() => setFiltersOpen(true)}
-                  className="relative inline-flex h-11 items-center justify-center gap-1.5 rounded-md border border-wn-charcoal/20 bg-white px-2.5 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 md:hidden"
+                  className="relative inline-flex h-11 items-center justify-center gap-1.5 rounded-md border border-wn-charcoal/20 bg-white px-2 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 md:hidden"
                   title="Filters"
                   aria-label={`Filters${activeFilterCount > 0 ? ` (${activeFilterCount} active)` : ""}`}
                 >
