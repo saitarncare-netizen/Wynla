@@ -110,21 +110,32 @@ export default function RootLayout({
             it at the very bottom without pushing the map page (the map
             fills the viewport; the footer sits below the fold for that
             route). Kept tiny so it never competes with primary UI. */}
-        <footer className="mt-auto flex flex-wrap items-center justify-center gap-x-3 gap-y-1 px-4 py-3 text-[11px] text-wn-charcoal/55">
-          <Link href="/privacy" className="hover:text-wn-navy">
-            Privacy
-          </Link>
-          <span aria-hidden="true">·</span>
-          <Link href="/terms" className="hover:text-wn-navy">
-            Terms
-          </Link>
-          <span aria-hidden="true">·</span>
-          <a
-            href="mailto:saitarncare@gmail.com"
-            className="hover:text-wn-navy"
-          >
-            Contact: saitarncare@gmail.com
-          </a>
+        <footer className="mt-auto flex flex-col items-center gap-1 px-4 py-3 text-[11px] text-wn-charcoal/55">
+          <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
+            <Link href="/privacy" className="hover:text-wn-navy">
+              Privacy
+            </Link>
+            <span aria-hidden="true">·</span>
+            <Link href="/terms" className="hover:text-wn-navy">
+              Terms
+            </Link>
+            <span aria-hidden="true">·</span>
+            <a
+              href="mailto:saitarncare@gmail.com"
+              className="hover:text-wn-navy"
+            >
+              Contact: saitarncare@gmail.com
+            </a>
+          </div>
+          {/* Stage 37 — FTC affiliate disclosure. Required wherever
+              Wynla deep-links to a partner that pays commission
+              (Booking, Vrbo, Liftopia, evo, Skyscanner, World Nomads).
+              Sits in the global footer so every page that surfaces an
+              affiliate link is covered, not just resort detail. */}
+          <p className="max-w-md text-center text-[10px] text-wn-charcoal/45">
+            Wynla may earn a commission from purchases made through partner
+            links, at no extra cost to you.
+          </p>
         </footer>
         <PwaRegistrar />
         <Analytics />
