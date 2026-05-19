@@ -20,6 +20,7 @@ import { parseSeasonDates, isGlobalOffSeasonNow } from "@/lib/seasonDates";
 import SimilarResorts from "@/components/SimilarResorts";
 import type { SimilarityResort } from "@/lib/similarity";
 import SnowSurfaceForecast from "@/components/SnowSurfaceForecast";
+import WhereToStay from "@/components/WhereToStay";
 import {
   buildSurfaceReport,
   type DailyWeather,
@@ -464,37 +465,16 @@ export default async function ResortPage({
             3-day outlook. lib/powderScore.ts + components/PowderDayScore.tsx
             stay in tree as dead code in case we want to revive it. */}
 
-        {/* TODAY'S WEATHER — Stage 33 merge: snow + status from the
-            Stage 26 columns are now inline in the 3-icon weather row
-            instead of a separate "Today's snow report" section. */}
+        {/* CONDITIONS BLOCK — Today's weather, 10-day forecast, and the
+            Snow Surface interpretation read in a single uninterrupted
+            flow: current conditions → planning window → "what it'll
+            feel like" summary. Earlier we had Today's weather + Snow
+            Surface + 10-day forecast, which read as weather → surface →
+            back to weather and made the page feel like it backtracked. */}
         <Section title="Today's weather">
           <FullWeatherCard resort={resort} weather={weather} lat={lat} lng={lng} />
         </Section>
 
-        {/* Inaugural Season 2026 — Snow Surface Forecast. Predicts
-            today's SANY surface code from 7 days of weather_history;
-            renders the prominent "Today's surface" card + 3-day
-            outlook + tap-to-learn glossary modal. Hidden when we
-            can't build a report (e.g. weather_cache + history both
-            empty for this resort). */}
-        {surfaceReport && (
-          <SnowSurfaceForecast
-            report={surfaceReport}
-            forecastDates={forecastDateLabels}
-          />
-        )}
-
-        {/* Inaugural Season 2026 pivot — affiliate "Plan your trip"
-            surface removed from UI. Subscription is the long-term
-            revenue path; affiliate clutter doesn't fit the premium
-            positioning. PlanYourTrip component + lib/affiliateLinks.ts
-            kept as dead code in case we want to restore later. */}
-
-        {/* 10-DAY FORECAST — pulled from weather_cache.forecast_json on
-            the same daily cron that powers Today's weather. NWS gives
-            ~7 reliable days, Open-Meteo fills 8-10. Horizontal-scroll
-            strip so the user sees a few days at once and swipes for
-            the rest — feels more natural on phones than a stacked grid. */}
         {weather?.forecast_json && weather.forecast_json.length > 0 && (
           <Section
             title={`${Math.min(weather.forecast_json.length, 10)}-day forecast`}
@@ -507,6 +487,35 @@ export default async function ResortPage({
             <TenDayForecast days={weather.forecast_json.slice(0, 10)} />
           </Section>
         )}
+
+        {/* Snow Surface Forecast — predicts today's SANY surface code
+            from 7 days of weather_history + a 3-day outlook + tap-to-
+            learn glossary modal. Sits at the end of the weather block
+            as the interpretation layer (the "what does this weather
+            actually mean for your edges" payoff). */}
+        {surfaceReport && (
+          <SnowSurfaceForecast
+            report={surfaceReport}
+            forecastDates={forecastDateLabels}
+          />
+        )}
+
+        {/* WHERE TO STAY — three lodging partners (Booking, Vrbo,
+            Airbnb). Sits right after the conditions block so a user
+            who's just decided "yes the snow looks worth it" can act
+            on lodging without scrolling past five more stat sections.
+            Booking + Vrbo earn Wynla a commission; Airbnb is a
+            no-affiliate UX courtesy. FTC disclosure lives in the
+            global footer. */}
+        <WhereToStay
+          resort={{
+            name: resort.name,
+            state: resort.state,
+            latitude: lat,
+            longitude: lng,
+            closest_airport_iata: resort.closest_airport_iata,
+          }}
+        />
 
         {/* AMENITIES — Stage 23 booleans + legacy night/halfpipe/glades. */}
         <FullAmenities resort={resort} />
