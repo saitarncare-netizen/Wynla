@@ -107,29 +107,30 @@ async function sendFounderWelcomeEmail(toEmail: string): Promise<void> {
   const key = process.env.RESEND_API_KEY;
   if (!key) return;
 
-  const subject = "You're on the Wynla Founder list ⛷️";
+  const subject = "Welcome to the Wynla Founder list";
   const html = `<!doctype html>
-<html><body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height:1.5; color:#2A2A2A; max-width:560px; margin:0 auto; padding:24px;">
-  <h1 style="color:#1E2952; font-size:22px; margin:0 0 16px 0;">You're in. Welcome to the Founder list.</h1>
-  <p style="margin:0 0 14px 0;">Wynla is the ski + snowboard trip planner I'm building for the 2026–27 season. It's a single, beautiful map of every US resort, with weather, drive time, and our first-of-its-kind <strong>snow surface forecast</strong> that tells you what the snow will actually feel like under your edges.</p>
-  <p style="margin:0 0 14px 0;"><strong>The inaugural season (Nov 2026 – Apr 2027) is free for everyone</strong> — no card, no trial countdown. I want feedback more than revenue right now.</p>
-  <p style="margin:0 0 14px 0;">As a Founder member you're in a smaller group: when Wynla goes paid for Season 2, you'll keep a <strong>special founder rate, locked forever</strong>. Details in the welcome email when we open in November.</p>
-  <p style="margin:0 0 14px 0;">Thanks for being early. Reply to this email any time if there's a feature you want to see, or a resort that needs better data.</p>
-  <p style="margin:24px 0 0 0;">— Saitarn<br/><span style="color:#888;">Founder, Wynla</span></p>
+<html><body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height:1.6; color:#2A2A2A; max-width:560px; margin:0 auto; padding:24px;">
+  <h1 style="color:#1E2952; font-size:22px; margin:0 0 16px 0;">Welcome to the Wynla Founder list.</h1>
+  <p style="margin:0 0 14px 0;">Wynla is the ski and snowboard trip planner built for the 2026&ndash;27 season &mdash; one beautiful map of every US resort, with weather, drive time, and a first-of-its-kind <strong>snow surface forecast</strong> that tells you what the snow will actually feel like under your edges.</p>
+  <p style="margin:0 0 14px 0;"><strong>The inaugural season (November 2026 &ndash; April 2027) is free for everyone</strong> &mdash; no credit card, no trial countdown. The Founder Season is about putting the product into the hands of real riders and listening hard before we move to paid plans for Season 2.</p>
+  <p style="margin:0 0 14px 0;">As a Founder Member, you keep a <strong>special founder rate, locked forever</strong> when Wynla moves to paid plans. That rate is disclosed only to Founder Members and stays out of public view.</p>
+  <p style="margin:0 0 14px 0;">Thank you for backing Wynla early. If a feature would make your season better, or a resort on the map needs better data, just reply to this message &mdash; the team reads every note.</p>
+  <p style="margin:24px 0 0 0;">&mdash; The Wynla team</p>
   <hr style="border:none; border-top:1px solid #eee; margin:32px 0 16px 0;"/>
-  <p style="font-size:11px; color:#888; margin:0;">You're receiving this because you signed up at wynla.app/early. We'll only email you when Wynla opens for the season — no other spam.</p>
+  <p style="font-size:11px; color:#888; margin:0;">You&rsquo;re receiving this because you signed up at wynla.app/early. We&rsquo;ll only email you when Wynla opens for the season &mdash; nothing else.</p>
 </body></html>`;
   const text = [
-    "You're in. Welcome to the Founder list.",
+    "Welcome to the Wynla Founder list.",
     "",
-    "Wynla is the ski + snowboard trip planner I'm building for the 2026-27 season. It's a single, beautiful map of every US resort, with weather, drive time, and our first-of-its-kind snow surface forecast.",
+    "Wynla is the ski and snowboard trip planner built for the 2026-27 season - one beautiful map of every US resort, with weather, drive time, and a first-of-its-kind snow surface forecast that tells you what the snow will actually feel like under your edges.",
     "",
-    "The inaugural season (Nov 2026 - Apr 2027) is FREE for everyone - no card, no trial countdown.",
+    "The inaugural season (November 2026 - April 2027) is free for everyone. No credit card, no trial countdown.",
     "",
-    "As a Founder member you keep a special founder rate locked forever when Wynla goes paid for Season 2. Details in the welcome email when we open in November.",
+    "As a Founder Member, you keep a special founder rate, locked forever when Wynla moves to paid plans for Season 2. That rate is disclosed only to Founder Members.",
     "",
-    "Thanks for being early.",
-    "- Saitarn, Founder, Wynla",
+    "Thank you for backing Wynla early. If a feature would make your season better, just reply to this message - the team reads every note.",
+    "",
+    "- The Wynla team",
   ].join("\n");
 
   const res = await fetch("https://api.resend.com/emails", {

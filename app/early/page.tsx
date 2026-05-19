@@ -74,9 +74,9 @@ export default async function EarlyPage() {
             Free for the whole inaugural season.
           </h1>
           <p className="mt-3 text-base text-wn-charcoal/75 sm:text-lg">
-            Wynla is the ski + snowboard trip planner I&apos;m building
-            for the 2026–27 season. One beautiful map of every US
-            resort, with weather, drive time, and a first-of-its-kind
+            Wynla is the ski and snowboard trip planner built for the
+            2026–27 season — one beautiful map of every US resort, with
+            weather, drive time, and a first-of-its-kind
             <strong> snow surface forecast</strong> that tells you what
             the snow will actually feel like under your edges.
           </p>
@@ -87,24 +87,25 @@ export default async function EarlyPage() {
           <div className="space-y-3 text-sm text-wn-charcoal/85 sm:text-base">
             <p>
               <strong className="text-wn-navy">
-                Season 1 (Nov 2026 – Apr 2027) is free for everyone.
+                The inaugural season (Nov 2026 – Apr 2027) is free for everyone.
               </strong>{" "}
-              No card, no trial countdown. I want feedback more than
-              revenue right now.
+              No credit card, no trial countdown. Wynla&apos;s Founder
+              Season is about putting the product in the hands of real
+              skiers and snowboarders, and listening hard.
             </p>
             <p>
               <strong className="text-wn-navy">Founder Members</strong>{" "}
-              — anyone on this list before launch — get something the
-              public never will: a{" "}
-              <em>special founder rate, locked forever</em>, the moment
-              Wynla goes paid for Season 2. We&apos;ll share the
-              number in your welcome email so it stays between us.
+              — anyone on this list before launch — receive something
+              the public never will: a{" "}
+              <em>special founder rate, locked forever</em>, when Wynla
+              moves to paid plans for Season 2. The exact rate is
+              disclosed in your welcome email and stays out of public
+              view.
             </p>
             <p>
-              No catch, no commitment. Skip the season if it&apos;s
-              not for you. We just want to build the resort planner
-              I&apos;ve always wanted to use, and Founder Members get
-              the first look + the lowest price ever.
+              No commitment. Skip the season if it&apos;s not for you.
+              Founder Members get the first look at every new feature
+              and the lowest price Wynla will ever offer.
             </p>
           </div>
         </section>
@@ -129,9 +130,9 @@ export default async function EarlyPage() {
           </h2>
           <ul className="mt-3 space-y-2 text-sm text-wn-charcoal/80">
             <Bullet>
-              <strong>Free, full access</strong> to all 451 US resorts
-              for the inaugural season — favorites, alerts, trip
-              planner, every filter.
+              <strong>Free, full access</strong> to every US ski resort
+              on the map for the inaugural season — favorites, alerts,
+              trip planner, every filter.
             </Bullet>
             <Bullet>
               <strong>Snow Surface Forecast</strong> for every resort
@@ -156,8 +157,9 @@ export default async function EarlyPage() {
         {/* TRUST FOOTER */}
         <footer className="mt-12 text-xs text-wn-charcoal/55">
           <p>
-            Wynla is built by Saitarn — a solo snowboarder/founder. No
-            ads, no data sales. Just a tool I wanted to exist.
+            Wynla is built by skiers and snowboarders, for skiers and
+            snowboarders. No ads. No data sales. A planning tool
+            we&apos;d use ourselves — and now you can too.
           </p>
         </footer>
       </div>

@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Page not found",
-  description: "We couldn't find that page on Wynla. Try the map or browse all 451 US ski resorts.",
+  description: "We couldn't find that page on Wynla. Try the map or browse every US ski resort.",
 };
 
 /**

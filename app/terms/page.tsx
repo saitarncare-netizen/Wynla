@@ -49,14 +49,14 @@ export default function TermsPage() {
             Last updated: {LAST_UPDATED}
           </p>
           <p className="mt-4 text-sm text-wn-charcoal/75 sm:text-base">
-            Wynla is a US ski-trip planning service operated by a solo
-            founder. These terms keep things sane for both of us. If
-            anything is unclear, email{" "}
+            Wynla is a US ski and snowboard trip planning service. These
+            terms keep things clear for everyone using the product. If
+            anything is unclear, reach the team at{" "}
             <a
-              href="mailto:saitarncare@gmail.com"
+              href="mailto:hello@wynla.app"
               className="font-semibold text-wn-navy underline hover:no-underline"
             >
-              saitarncare@gmail.com
+              hello@wynla.app
             </a>
             .
           </p>
@@ -66,17 +66,16 @@ export default function TermsPage() {
           <p>
             By signing in, creating a trip, posting a review, or
             subscribing to Pro, you agree to these terms. If you
-            don&apos;t agree, don&apos;t use Wynla. We may update these
-            terms over time (see &quot;Changes&quot; below).
+            don&apos;t agree, please do not use Wynla. These terms may
+            be updated over time (see &quot;Changes&quot; below).
           </p>
         </Section>
 
         <Section title="Who runs this">
           <p>
-            Wynla (operated by Saitarn Care) is an early-stage product
-            built and maintained by a single founder. There&apos;s no
-            help desk and no on-call support team — replies to your
-            emails are personal and usually arrive within a few days.
+            Wynla is an early-stage product operated by an independent
+            founding team. We respond to support requests personally and
+            aim to reply within two business days.
           </p>
         </Section>
 
@@ -320,12 +319,12 @@ export default function TermsPage() {
           <p>
             Questions, disputes, refund requests, or feedback? Email{" "}
             <a
-              href="mailto:saitarncare@gmail.com"
+              href="mailto:hello@wynla.app"
               className="font-semibold text-wn-navy underline hover:no-underline"
             >
-              saitarncare@gmail.com
+              hello@wynla.app
             </a>
-            . One person reads that inbox.
+            . We respond personally to every message.
           </p>
         </Section>
 
