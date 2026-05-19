@@ -23,11 +23,11 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://wynla.app";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Wynla — Plan smart. Ride better.",
+    default: "Wynla — Free for the inaugural ski season.",
     template: "%s · Wynla",
   },
   description:
-    "Plan your ski or snowboard trip with confidence — 451 US resorts on a single map, with pass info, drive time, and curated weather sources.",
+    "451 US ski resorts on one map, with pass info, drive time, weather, and the snow surface forecast. Free for the inaugural 2026-27 season — founder pricing locked forever for early members.",
   applicationName: "Wynla",
   manifest: "/manifest.json",
   alternates: { canonical: "/" },
@@ -39,16 +39,16 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: "Wynla",
-    title: "Wynla — Plan smart. Ride better.",
+    title: "Wynla — Free for the inaugural ski season.",
     description:
-      "Map of 451 US ski resorts with pass colors, drive time, and curated weather sources. Built for skiers and snowboarders.",
+      "451 US ski resorts on one map. Snow surface forecast, drive time, pass info. Free for the inaugural 2026-27 season.",
     url: SITE_URL,
     images: [{ url: "/og-home.png", width: 1200, height: 630, alt: "Wynla — US ski resort map" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Wynla — Plan smart. Ride better.",
-    description: "Plan your ski trip with one map.",
+    title: "Wynla — Free for the inaugural ski season.",
+    description: "Plan your 2026-27 ski trip with one map. Free inaugural season.",
     images: ["/og-home.png"],
   },
   icons: {
@@ -74,7 +74,7 @@ const ORG_JSONLD = {
   url: SITE_URL,
   logo: `${SITE_URL}/icon.svg`,
   description:
-    "Wynla is a US ski resort discovery and multi-stop trip planner — 451 resorts on one map with pass info, drive time, and weather.",
+    "Wynla is a US ski resort discovery + multi-stop trip planner with a first-of-its-kind snow surface forecast. Free for the inaugural 2026-27 season; founder pricing locked forever for early members.",
 };
 
 export default function RootLayout({
@@ -112,6 +112,10 @@ export default function RootLayout({
             route). Kept tiny so it never competes with primary UI. */}
         <footer className="mt-auto flex flex-col items-center gap-1 px-4 py-3 text-[11px] text-wn-charcoal/55">
           <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
+            <Link href="/early" className="font-semibold text-wn-navy hover:text-wn-navy/80">
+              Founder list
+            </Link>
+            <span aria-hidden="true">·</span>
             <Link href="/privacy" className="hover:text-wn-navy">
               Privacy
             </Link>
@@ -127,15 +131,6 @@ export default function RootLayout({
               Contact: saitarncare@gmail.com
             </a>
           </div>
-          {/* Stage 37 — FTC affiliate disclosure. Required wherever
-              Wynla deep-links to a partner that pays commission
-              (Booking, Vrbo, Liftopia, evo, Skyscanner, World Nomads).
-              Sits in the global footer so every page that surfaces an
-              affiliate link is covered, not just resort detail. */}
-          <p className="max-w-md text-center text-[10px] text-wn-charcoal/45">
-            Wynla may earn a commission from purchases made through partner
-            links, at no extra cost to you.
-          </p>
         </footer>
         <PwaRegistrar />
         <Analytics />

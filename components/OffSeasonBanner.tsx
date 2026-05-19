@@ -5,14 +5,17 @@ import { useState, useSyncExternalStore } from "react";
 
 // Off-season banner — a small, dismissable pill that appears under the
 // brand row on the homepage between May 1 and Oct 31 (when most US
-// resorts are closed). Drives users to the /deals page so the off-season
-// visit still returns value.
+// resorts are closed).
 //
-// Dismissal is persisted in localStorage. We bump the version suffix
-// (`_v1`) when the messaging changes so old dismissals don't suppress
-// new copy.
+// Inaugural Season 2026: messaging now points at the founder waitlist
+// (/early) instead of the old /deals page. Wynla opens Nov 2026 — the
+// off-season window is exactly when we want to be collecting Founder
+// emails. Storage key bumped to _v2 so anyone who dismissed the old
+// "see pass deals" banner sees this fresh pitch.
+//
+// Dismissal is persisted in localStorage.
 
-const STORAGE_KEY = "wynla_offseason_banner_dismissed_v1";
+const STORAGE_KEY = "wynla_offseason_banner_dismissed_v2";
 
 /** May 1 (month 4) through Oct 31 (month 9) inclusive. */
 function isOffSeasonNow(now: Date = new Date()): boolean {
@@ -84,14 +87,14 @@ export default function OffSeasonBanner() {
       onTouchEnd={stopTouchBubble}
     >
       <div className="inline-flex max-w-full items-center gap-2 rounded-full bg-wn-navy/95 px-3 py-1.5 text-[11px] font-medium text-white shadow-sm backdrop-blur-sm sm:text-xs">
-        <span aria-hidden="true">❄️</span>
+        <span aria-hidden="true">⛷️</span>
         <span className="truncate">
-          Off-season — most US resorts open in Nov.{" "}
+          Wynla opens Nov 2026 — free for the inaugural season.{" "}
           <Link
-            href="/deals"
-            className="underline decoration-white/40 underline-offset-2 hover:decoration-white"
+            href="/early"
+            className="font-semibold underline decoration-wn-gold/70 underline-offset-2 hover:decoration-wn-gold"
           >
-            See pass deals →
+            Lock founder pricing →
           </Link>
         </span>
         <button

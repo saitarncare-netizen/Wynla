@@ -1,16 +1,15 @@
 "use client";
 
-// Stage 34 — Powder Day Score display block. Renders a big circular
-// 0-100 number + label + 1-2 reasons. Server passes the computed score;
-// this client island only handles the Pro gate (free users see a teaser
-// + upsell instead of the number).
+// Stage 34 / Inaugural Season 2026 — Powder Day Score display block.
+// Renders a big circular 0-100 number + label + 1-2 reasons.
 //
-// Why a client component? We need useProStatus() to decide between
-// number-visible vs locked-state. Score itself is computed server-side.
+// **Pro gate removed for Inaugural Season.** Everyone sees the full
+// score during Nov 2026 – Apr 2027. Re-gate for Season 2 by uncommenting
+// the useProStatus / locked-state block in git history.
+//
+// Server passes the computed score; this client island just renders.
 
-import Link from "next/link";
 import type { PowderScore } from "@/lib/powderScore";
-import { useProStatus } from "@/lib/proClient";
 
 type Props = {
   score: PowderScore;
@@ -18,53 +17,9 @@ type Props = {
 };
 
 export default function PowderDayScore({ score, resortName }: Props) {
-  const { isPro, isLoading } = useProStatus();
-
+  void resortName;
   const tone = toneStyles(score.tone);
 
-  // Default-locked: show the teaser until /pro-status confirms Pro=true.
-  // Showing the unlocked score during the loading window would leak the
-  // gated value to free/anon users for ~100-300ms — small but it
-  // undermines the upsell. Pro users see the teaser briefly then the
-  // score; that's the right trade.
-  if (!isPro) {
-    return (
-      <section
-        aria-busy={isLoading || undefined}
-        className="rounded-xl border border-wn-gold/40 bg-gradient-to-br from-wn-gold/10 via-white to-white p-4 sm:p-5"
-      >
-        <div className="flex items-start gap-4">
-          <div
-            aria-hidden="true"
-            className="relative flex h-16 w-16 shrink-0 items-center justify-center rounded-full border-2 border-dashed border-wn-charcoal/30 bg-white text-2xl"
-          >
-            🔒
-          </div>
-          <div className="flex-1">
-            <div className="text-[10px] font-bold uppercase tracking-wider text-wn-gold">
-              Wynla Pro
-            </div>
-            <div className="text-lg font-extrabold text-wn-navy sm:text-xl">
-              Powder Day Score
-            </div>
-            <p className="mt-1 text-xs text-wn-charcoal/70 sm:text-sm">
-              See {resortName}&apos;s 0-100 score combining 24h snow, the
-              next-3-day forecast, base depth, and wind into one number
-              you can trust.
-            </p>
-            <Link
-              href="/pro?from=powderScore"
-              className="mt-3 inline-flex h-10 items-center justify-center rounded-md bg-wn-navy px-4 text-xs font-semibold text-white transition hover:bg-wn-navy/90"
-            >
-              Unlock with Pro →
-            </Link>
-          </div>
-        </div>
-      </section>
-    );
-  }
-
-  // Pro confirmed → reveal the score.
   return (
     <section
       className={`rounded-xl border p-4 shadow-sm sm:p-5 ${tone.container}`}
@@ -77,17 +32,8 @@ export default function PowderDayScore({ score, resortName }: Props) {
           {score.score}
         </div>
         <div className="flex-1">
-          <div className="flex flex-wrap items-center gap-2">
-            <div className="text-[10px] font-bold uppercase tracking-wider text-wn-charcoal/55">
-              Powder Day Score
-            </div>
-            {/* Stage 35 — small "Pro" tag reminds the subscriber that
-                this number is part of what they're paying for. Without
-                it the feature can feel like generic UI and the upgrade
-                loses its perceived value. */}
-            <span className="inline-flex items-center rounded bg-wn-gold/95 px-1.5 py-0.5 text-[9px] font-extrabold uppercase tracking-wider text-wn-navy">
-              💎 Pro
-            </span>
+          <div className="text-[10px] font-bold uppercase tracking-wider text-wn-charcoal/55">
+            Powder Day Score
           </div>
           <div className={`text-xl font-extrabold ${tone.headline}`}>
             {score.label}

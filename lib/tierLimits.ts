@@ -18,15 +18,24 @@ export type TierLimitKey =
 
 export type TierLimits = Record<TierLimitKey, number>;
 
-/** Free tier ceilings. Generous enough that casual users (the ones who
- *  drive affiliate revenue) never feel walled, but tight enough that a
- *  "trip planner power user" hits friction by their 3rd trip. */
+/** Free tier ceilings.
+ *
+ *  Inaugural Season 2026 (Nov 2026 – Apr 2027): everyone gets everything.
+ *  No Pro tier UI visible, no upsell modals, no caps. The original limits
+ *  are preserved in the comments below so they're trivial to restore for
+ *  Season 2 (Nov 2027+) when paid tiers come back online.
+ *
+ *  Season 1 free-tier intended caps (commented for restoration):
+ *    compare: 2, favorites: 5, snowAlerts: 1, savedTrips: 2, origins: 1
+ *
+ *  Hard cap on `compare` stays at 5 — comparing more than 5 resorts
+ *  side-by-side becomes UX-hostile regardless of payment status. */
 export const FREE_LIMITS: TierLimits = {
-  compare: 2,
-  favorites: 5,
-  snowAlerts: 1,
-  savedTrips: 2,
-  origins: 1,
+  compare: 5,
+  favorites: Number.POSITIVE_INFINITY,
+  snowAlerts: Number.POSITIVE_INFINITY,
+  savedTrips: Number.POSITIVE_INFINITY,
+  origins: Number.POSITIVE_INFINITY,
 };
 
 /** Pro tier ceilings. Number.POSITIVE_INFINITY = "unlimited"; we still
