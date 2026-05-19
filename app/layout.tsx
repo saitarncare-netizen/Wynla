@@ -131,6 +131,15 @@ export default function RootLayout({
               Contact
             </a>
           </div>
+          {/* FTC affiliate disclosure — required wherever Wynla
+              deep-links to a partner that pays commission. Currently
+              that's Booking.com + Vrbo on the resort detail page; if
+              the affiliate surface ever expands, the disclosure stays
+              valid because it covers "partner links" generically. */}
+          <p className="max-w-md text-center text-[10px] text-wn-charcoal/45">
+            Wynla may earn a commission from purchases made through
+            partner links, at no extra cost to you.
+          </p>
           <p className="mt-1 text-[10px] text-wn-charcoal/40">
             &copy; {new Date().getFullYear()} Wynla. All rights reserved.
           </p>
