@@ -8,7 +8,6 @@ import {
   primaryPass,
 } from "@/lib/passColors";
 import { googleMapsUrl } from "@/lib/externalLinks";
-import PlanYourTrip from "@/components/PlanYourTrip";
 import { getDifficultyMix } from "@/lib/difficulty";
 import FavoriteToggle from "@/components/auth/FavoriteToggle";
 import CompareToggle from "@/components/CompareToggle";
@@ -391,27 +390,11 @@ export default async function ResortPage({
           <FullWeatherCard resort={resort} weather={weather} lat={lat} lng={lng} />
         </Section>
 
-        {/* Stage 37 — single affiliate revenue surface for the resort
-            page. Four cards (Tickets / Stay / Gear / Travel) each open
-            a modal of 2–3 partner options. Lives high in the page so
-            high-intent visitors see it without scrolling past every
-            stat block, but BELOW Today's weather so the user has the
-            "yes I want to ski this" context first. The old inline
-            "Find lodging / Airbnb nearby" rows in the Visit & book
-            section are retired by this — booking now lives here.
-            Discovery surfaces (map, search, planner header) stay
-            ad-free per the Komoot/AllTrails playbook. */}
-        <PlanYourTrip
-          resort={{
-            name: resort.name,
-            state: resort.state,
-            latitude: lat,
-            longitude: lng,
-            closest_airport_iata: resort.closest_airport_iata,
-            ticket_booking_url: resort.ticket_booking_url,
-            website_url: resort.website_url,
-          }}
-        />
+        {/* Inaugural Season 2026 pivot — affiliate "Plan your trip"
+            surface removed from UI. Subscription is the long-term
+            revenue path; affiliate clutter doesn't fit the premium
+            positioning. PlanYourTrip component + lib/affiliateLinks.ts
+            kept as dead code in case we want to restore later. */}
 
         {/* 10-DAY FORECAST — pulled from weather_cache.forecast_json on
             the same daily cron that powers Today's weather. NWS gives

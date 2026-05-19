@@ -127,15 +127,10 @@ export default function RootLayout({
               Contact: saitarncare@gmail.com
             </a>
           </div>
-          {/* Stage 37 — FTC affiliate disclosure. Required wherever
-              Wynla deep-links to a partner that pays commission
-              (Booking, Vrbo, Liftopia, evo, Skyscanner, World Nomads).
-              Sits in the global footer so every page that surfaces an
-              affiliate link is covered, not just resort detail. */}
-          <p className="max-w-md text-center text-[10px] text-wn-charcoal/45">
-            Wynla may earn a commission from purchases made through partner
-            links, at no extra cost to you.
-          </p>
+          {/* Inaugural Season 2026 — FTC affiliate disclosure removed
+              along with the PlanYourTrip surface. Subscription model
+              replaces affiliate; if affiliate ever returns this
+              disclosure must come back too. */}
         </footer>
         <PwaRegistrar />
         <Analytics />
