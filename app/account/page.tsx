@@ -102,15 +102,11 @@ export default async function AccountPage() {
                 <span className="text-wn-charcoal/50">→</span>
               </Link>
             </li>
-            <li>
-              <Link
-                href="/account/pro"
-                className="flex items-center justify-between py-3 text-sm text-wn-charcoal transition hover:text-wn-navy"
-              >
-                <span className="font-medium">⭐ Wynla Pro</span>
-                <span className="text-wn-charcoal/50">→</span>
-              </Link>
-            </li>
+            {/* Inaugural Season 2026 — "Wynla Pro" account section is
+                hidden during the Founder Season. /account/pro route
+                still exists for the few users who had pre-launch Pro
+                subs (test mode) but doesn't get a discoverable link
+                from /account. Re-surface for Season 2. */}
           </ul>
         </section>
 

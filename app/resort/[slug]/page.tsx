@@ -19,8 +19,6 @@ import SeasonCountdown from "@/components/SeasonCountdown";
 import { parseSeasonDates, isGlobalOffSeasonNow } from "@/lib/seasonDates";
 import SimilarResorts from "@/components/SimilarResorts";
 import type { SimilarityResort } from "@/lib/similarity";
-import { computePowderScore, forecastNext3Snow } from "@/lib/powderScore";
-import PowderDayScore from "@/components/PowderDayScore";
 import SnowSurfaceForecast from "@/components/SnowSurfaceForecast";
 import {
   buildSurfaceReport,
@@ -459,27 +457,12 @@ export default async function ResortPage({
         {/* QUICK STATS — show whenever any stats exist (QuickStats returns null otherwise) */}
         <QuickStats resort={resort} />
 
-        {/* Stage 34 — Powder Day Score. Server computes from existing
-            snow + weather columns; PowderDayScore client island gates
-            display behind Pro status. Render only when we have any
-            usable snow input. */}
-        {(() => {
-          const wind =
-            typeof weather?.wind_mph_avg === "number"
-              ? weather.wind_mph_avg
-              : null;
-          const score = computePowderScore({
-            snow_new_24h_in: resort.snow_new_24h_in,
-            snow_new_48h_in: resort.snow_new_48h_in,
-            snow_new_7d_in: resort.snow_new_7d_in,
-            snow_base_depth_in: resort.snow_base_depth_in,
-            forecast_next3_in: forecastNext3Snow(weather?.forecast_json ?? null),
-            wind_mph_avg: wind,
-            snow_report_status: resort.snow_report_status,
-          });
-          if (!score) return null;
-          return <PowderDayScore score={score} resortName={resort.name} />;
-        })()}
+        {/* Inaugural Season 2026 — Powder Day Score retired from the
+            UI. The new Snow Surface Forecast (below) covers the same
+            "what will today feel like?" question with more nuance —
+            powder, packed powder, frozen granular, icy, etc. — and a
+            3-day outlook. lib/powderScore.ts + components/PowderDayScore.tsx
+            stay in tree as dead code in case we want to revive it. */}
 
         {/* TODAY'S WEATHER — Stage 33 merge: snow + status from the
             Stage 26 columns are now inline in the 3-icon weather row
