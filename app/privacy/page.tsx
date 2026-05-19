@@ -49,28 +49,28 @@ export default function PrivacyPage() {
             Last updated: {LAST_UPDATED}
           </p>
           <p className="mt-4 text-sm text-wn-charcoal/75 sm:text-base">
-            Wynla is a US ski-trip planning app run by one person. This page
+            Wynla is a US ski and snowboard trip planning service. This page
             explains what we collect, why, and what your choices are. If
-            anything is unclear, email{" "}
+            anything is unclear, reach the team at{" "}
             <a
-              href="mailto:saitarncare@gmail.com"
+              href="mailto:hello@wynla.app"
               className="font-semibold text-wn-navy underline hover:no-underline"
             >
-              saitarncare@gmail.com
+              hello@wynla.app
             </a>{" "}
-            and we&apos;ll answer in plain English.
+            — we&apos;ll answer in plain English.
           </p>
         </header>
 
         <Section title="Who we are">
           <p>
-            Wynla (operated by Saitarn Care) is an early-stage product built
-            by a solo founder. The service runs at{" "}
-            <span className="font-semibold text-wn-navy">wynla.app</span> and
-            helps US skiers and snowboarders discover resorts and plan
-            multi-stop trips. There&apos;s no marketing department or data
-            broker behind it — just one person, this site, and the third
-            parties listed below.
+            Wynla is an early-stage product helping US skiers and
+            snowboarders discover resorts and plan multi-stop trips. The
+            service runs at{" "}
+            <span className="font-semibold text-wn-navy">wynla.app</span>.
+            There is no advertising and no data brokerage involved — only
+            the third-party services listed below, each of which is named
+            and explained.
           </p>
         </Section>
 
@@ -234,10 +234,10 @@ export default function PrivacyPage() {
               <span className="font-semibold text-wn-navy">Access</span> —
               email{" "}
               <a
-                href="mailto:saitarncare@gmail.com"
+                href="mailto:hello@wynla.app"
                 className="font-semibold text-wn-navy underline hover:no-underline"
               >
-                saitarncare@gmail.com
+                hello@wynla.app
               </a>{" "}
               and we&apos;ll send you a copy of what we have on file.
             </li>
@@ -325,14 +325,14 @@ export default function PrivacyPage() {
 
         <Section title="Contact">
           <p>
-            Questions, requests, complaints, or just curious? Email{" "}
+            Questions, requests, or concerns? Email{" "}
             <a
-              href="mailto:saitarncare@gmail.com"
+              href="mailto:hello@wynla.app"
               className="font-semibold text-wn-navy underline hover:no-underline"
             >
-              saitarncare@gmail.com
+              hello@wynla.app
             </a>
-            . One person reads that inbox and replies personally.
+            . We respond personally and aim to reply within two business days.
           </p>
         </Section>
 

@@ -83,8 +83,8 @@ export default function EarlySignupForm({
         </div>
         <p className="mt-1 text-sm">
           {status.alreadyOnList
-            ? "We have your email on the Founder list. Watch your inbox for the welcome the morning Wynla opens for the inaugural season (November 2026)."
-            : "Check your inbox for a welcome from Saitarn. You're now a Founder Member — your founder rate is locked forever when Wynla goes paid for Season 2."}
+            ? "Your email is already on the Founder list. We'll send your welcome the morning Wynla opens for the inaugural season (November 2026)."
+            : "Check your inbox for the welcome message. You're now a Founder Member — your founder rate is locked forever when Wynla moves to paid plans for Season 2."}
         </p>
         {count != null && (
           <p className="mt-3 text-xs text-emerald-900/70">

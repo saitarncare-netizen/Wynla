@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     template: "%s · Wynla",
   },
   description:
-    "451 US ski resorts on one map, with pass info, drive time, weather, and the snow surface forecast. Free for the inaugural 2026-27 season — founder pricing locked forever for early members.",
+    "Every US ski resort on one map, with pass info, drive time, weather, and the snow surface forecast. Free for the inaugural 2026-27 season — founder pricing locked forever for early members.",
   applicationName: "Wynla",
   manifest: "/manifest.json",
   alternates: { canonical: "/" },
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     siteName: "Wynla",
     title: "Wynla — Free for the inaugural ski season.",
     description:
-      "451 US ski resorts on one map. Snow surface forecast, drive time, pass info. Free for the inaugural 2026-27 season.",
+      "Every US ski resort on one map. Snow surface forecast, drive time, pass info. Free for the inaugural 2026-27 season.",
     url: SITE_URL,
     images: [{ url: "/og-home.png", width: 1200, height: 630, alt: "Wynla — US ski resort map" }],
   },
@@ -125,12 +125,15 @@ export default function RootLayout({
             </Link>
             <span aria-hidden="true">·</span>
             <a
-              href="mailto:saitarncare@gmail.com"
+              href="mailto:hello@wynla.app"
               className="hover:text-wn-navy"
             >
-              Contact: saitarncare@gmail.com
+              Contact
             </a>
           </div>
+          <p className="mt-1 text-[10px] text-wn-charcoal/40">
+            &copy; {new Date().getFullYear()} Wynla. All rights reserved.
+          </p>
         </footer>
         <PwaRegistrar />
         <Analytics />
