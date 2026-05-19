@@ -158,6 +158,8 @@ type OpenMeteo = {
     temperature_2m_min?: (number | null)[];
     weathercode?: (number | null)[];
     snowfall_sum?: (number | null)[];
+    rain_sum?: (number | null)[];
+    precipitation_sum?: (number | null)[];
     precipitation_probability_max?: (number | null)[];
     wind_speed_10m_max?: (number | null)[];
     wind_direction_10m_dominant?: (number | null)[];
@@ -172,6 +174,25 @@ function parseMeteo(j: OpenMeteo) {
     wind_mph_gust: typeof cur.wind_gusts_10m === "number" ? Math.round(cur.wind_gusts_10m) : null,
     wind_dir_deg: dir,
     wind_dir_short: compass(dir),
+  };
+}
+
+// Inaugural Season 2026 — Snow Surface Forecast support.
+// Extract today's rain + total precip from Open-Meteo's daily array
+// (NWS narrative doesn't expose these as clean numbers). Returns null
+// when the daily payload is missing or today isn't represented.
+function todaysPrecipFromMeteo(
+  j: OpenMeteo,
+): { rain_24h_in: number | null; precip_24h_in: number | null } {
+  const d = j?.daily;
+  if (!d?.time?.length) return { rain_24h_in: null, precip_24h_in: null };
+  // Day index 0 in Open-Meteo's daily window is "today" (timezone=auto
+  // is set in the request URL, so this is local-resort today, not UTC).
+  const rain = d.rain_sum?.[0];
+  const precip = d.precipitation_sum?.[0];
+  return {
+    rain_24h_in: typeof rain === "number" ? Math.round(rain * 100) / 100 : null,
+    precip_24h_in: typeof precip === "number" ? Math.round(precip * 100) / 100 : null,
   };
 }
 
@@ -247,7 +268,7 @@ async function refreshOne(resort: Resort, cached: CacheRow | undefined) {
     const meteoUrl =
       `https://api.open-meteo.com/v1/forecast?latitude=${lat.toFixed(4)}&longitude=${lng.toFixed(4)}` +
       `&current=wind_speed_10m,wind_direction_10m,wind_gusts_10m` +
-      `&daily=temperature_2m_max,temperature_2m_min,weathercode,snowfall_sum,precipitation_probability_max,wind_speed_10m_max,wind_direction_10m_dominant` +
+      `&daily=temperature_2m_max,temperature_2m_min,weathercode,snowfall_sum,rain_sum,precipitation_sum,precipitation_probability_max,wind_speed_10m_max,wind_direction_10m_dominant` +
       `&temperature_unit=fahrenheit&precipitation_unit=inch&wind_speed_unit=mph&timezone=auto&forecast_days=10`;
     const [nws, meteo] = await Promise.all([
       fetchJson<NwsForecast>(
@@ -260,6 +281,13 @@ async function refreshOne(resort: Resort, cached: CacheRow | undefined) {
     const meteoParsed = "error" in meteo ? {} : parseMeteo(meteo);
     const meteoDays = "error" in meteo ? [] : meteoToForecastDays(meteo);
     const merged = nwsParsed ? mergeForecasts(nwsParsed, meteoDays) : null;
+    // Inaugural Season — today's rain + total precip for the
+    // weather_history daily snapshot. Pulled from Open-Meteo only;
+    // NWS narrative doesn't expose these as clean numbers.
+    const todaysPrecip =
+      "error" in meteo
+        ? { rain_24h_in: null, precip_24h_in: null }
+        : todaysPrecipFromMeteo(meteo);
     const errs = [
       "error" in nws ? `nws:${nws.error.slice(0, 80)}` : null,
       "error" in meteo ? `meteo:${meteo.error.slice(0, 80)}` : null,
@@ -271,6 +299,10 @@ async function refreshOne(resort: Resort, cached: CacheRow | undefined) {
       nws_grid_y: grid.y,
       ...(merged ?? {}),
       ...meteoParsed,
+      // Side-channel fields for weather_history. Picked off in the
+      // GET handler below and stripped before the weather_cache upsert.
+      __rain_24h_in: todaysPrecip.rain_24h_in,
+      __precip_24h_in: todaysPrecip.precip_24h_in,
       forecast_for_date: new Date().toISOString().slice(0, 10),
       fetched_at: new Date().toISOString(),
       fetch_source: nwsParsed && meteoDays.length ? "nws+meteo10d" : nwsParsed ? "nws-only" : "partial",
@@ -279,6 +311,8 @@ async function refreshOne(resort: Resort, cached: CacheRow | undefined) {
   } catch (e) {
     return {
       resort_id: resort.id,
+      __rain_24h_in: null,
+      __precip_24h_in: null,
       fetched_at: new Date().toISOString(),
       fetch_source: "failed",
       fetch_error: String((e as Error)?.message ?? e).slice(0, 240),
@@ -324,20 +358,78 @@ export async function GET(request: Request) {
   }
   await Promise.all(Array.from({ length: CONCURRENCY }, () => worker()));
 
-  // Upsert in chunks
+  // Build the parallel weather_history snapshot rows BEFORE we strip
+  // the __side-channel fields from the weather_cache payload. One row
+  // per resort per UTC calendar day.
+  const today = new Date().toISOString().slice(0, 10);
+  type HistoryRow = {
+    resort_id: number;
+    observed_date: string;
+    temp_high_f: number | null;
+    temp_low_f: number | null;
+    snow_24h_in: number | null;
+    rain_24h_in: number | null;
+    precip_24h_in: number | null;
+    wind_mph_avg: number | null;
+    wind_dir_short: string | null;
+    conditions_short: string | null;
+  };
+  const historyRows: HistoryRow[] = rows
+    .filter((r) => r.fetch_source !== "failed" && typeof r.resort_id === "number")
+    .map((r) => ({
+      resort_id: r.resort_id as number,
+      observed_date: today,
+      temp_high_f: (r.temp_high_f as number | null) ?? null,
+      temp_low_f: (r.temp_low_f as number | null) ?? null,
+      snow_24h_in: (r.snow_24h_in as number | null) ?? null,
+      rain_24h_in: (r.__rain_24h_in as number | null) ?? null,
+      precip_24h_in: (r.__precip_24h_in as number | null) ?? null,
+      wind_mph_avg: (r.wind_mph_avg as number | null) ?? null,
+      wind_dir_short: (r.wind_dir_short as string | null) ?? null,
+      conditions_short: (r.conditions_short as string | null) ?? null,
+    }));
+
+  // Strip the side-channel fields before weather_cache upsert — the
+  // table doesn't have these columns and Supabase will reject the row.
+  const cacheRows = rows.map((r) => {
+    const { __rain_24h_in: _rain, __precip_24h_in: _precip, ...rest } = r;
+    void _rain;
+    void _precip;
+    return rest;
+  });
+
+  // Upsert weather_cache in chunks (existing behaviour).
   const CHUNK = 100;
   let upsertErrors = 0;
-  for (let off = 0; off < rows.length; off += CHUNK) {
+  for (let off = 0; off < cacheRows.length; off += CHUNK) {
     const { error: upErr } = await supabase
       .from("weather_cache")
-      .upsert(rows.slice(off, off + CHUNK), { onConflict: "resort_id" });
+      .upsert(cacheRows.slice(off, off + CHUNK), { onConflict: "resort_id" });
     if (upErr) upsertErrors++;
   }
+
+  // Upsert weather_history in chunks. Append-only conceptually;
+  // UNIQUE (resort_id, observed_date) lets cron retries be idempotent.
+  // Failure here is logged but doesn't fail the request — the surface
+  // forecast quietly degrades to lower confidence rather than blocking
+  // the daily weather refresh.
+  let historyErrors = 0;
+  for (let off = 0; off < historyRows.length; off += CHUNK) {
+    const { error: histErr } = await supabase
+      .from("weather_history")
+      .upsert(historyRows.slice(off, off + CHUNK), {
+        onConflict: "resort_id,observed_date",
+      });
+    if (histErr) historyErrors++;
+  }
+
   const ok = rows.filter((r) => r.fetch_source !== "failed").length;
   return NextResponse.json({
     ok: true,
     refreshed: ok,
     total: rows.length,
     upsertErrors,
+    historyInserted: historyRows.length,
+    historyErrors,
   });
 }

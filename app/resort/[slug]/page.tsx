@@ -21,6 +21,12 @@ import SimilarResorts from "@/components/SimilarResorts";
 import type { SimilarityResort } from "@/lib/similarity";
 import { computePowderScore, forecastNext3Snow } from "@/lib/powderScore";
 import PowderDayScore from "@/components/PowderDayScore";
+import SnowSurfaceForecast from "@/components/SnowSurfaceForecast";
+import {
+  buildSurfaceReport,
+  type DailyWeather,
+  type ForecastDay as SurfaceForecastDay,
+} from "@/lib/snowSurface";
 
 // ISR — resort detail data (lifts/trails/passes/coords) changes rarely.
 // Snow conditions are stamped on the row by the cron; ISR every 10 min
@@ -133,12 +139,23 @@ type WeatherSnapshot = {
   forecast_json: ForecastDay[] | null;
 };
 
+type HistoryRow = {
+  observed_date: string;
+  temp_high_f: number | null;
+  temp_low_f: number | null;
+  snow_24h_in: number | string | null;
+  rain_24h_in: number | string | null;
+  precip_24h_in: number | string | null;
+  wind_mph_avg: number | null;
+};
+
 async function getData(
   slug: string,
 ): Promise<{
   resort: Resort;
   weather: WeatherSnapshot | null;
   pool: SimilarityResort[];
+  history: HistoryRow[];
 } | null> {
   // Fetch resort, weather, and the active-resort pool in parallel.
   // The pool select is trimmed to just the columns similarity.ts needs
@@ -161,17 +178,32 @@ async function getData(
   if (resortRes.error || !resortRes.data) return null;
   const resort = resortRes.data as Resort;
 
-  const { data: wx } = await supabase
-    .from("weather_cache")
-    .select(
-      "resort_id, temp_high_f, temp_low_f, conditions_short, snow_24h_in, snow_48h_in, wind_mph_avg, wind_dir_short, fetched_at, forecast_json",
-    )
-    .eq("resort_id", resort.id)
-    .maybeSingle();
+  // Weather snapshot + last-7-days history. Both keyed by resort_id; the
+  // history is sorted ascending so the most recent row sits at the end
+  // (lib/snowSurface.deriveFeatures contract).
+  const [wxRes, historyRes] = await Promise.all([
+    supabase
+      .from("weather_cache")
+      .select(
+        "resort_id, temp_high_f, temp_low_f, conditions_short, snow_24h_in, snow_48h_in, wind_mph_avg, wind_dir_short, fetched_at, forecast_json",
+      )
+      .eq("resort_id", resort.id)
+      .maybeSingle(),
+    supabase
+      .from("weather_history")
+      .select(
+        "observed_date, temp_high_f, temp_low_f, snow_24h_in, rain_24h_in, precip_24h_in, wind_mph_avg",
+      )
+      .eq("resort_id", resort.id)
+      .order("observed_date", { ascending: true })
+      .limit(7),
+  ]);
+
   return {
     resort,
-    weather: (wx as WeatherSnapshot) ?? null,
+    weather: (wxRes.data as WeatherSnapshot) ?? null,
     pool: (poolRes.data ?? []) as SimilarityResort[],
+    history: (historyRes.data as HistoryRow[] | null) ?? [],
   };
 }
 
@@ -211,7 +243,72 @@ export default async function ResortPage({
   const { slug } = await params;
   const data = await getData(slug);
   if (!data) notFound();
-  const { resort, weather, pool } = data;
+  const { resort, weather, pool, history } = data;
+
+  // Snow Surface Forecast — build the report on the server so the
+  // client island stays small. We synthesize a "today" row from
+  // weather_cache when weather_history hasn't caught up yet (which
+  // will be the case for the first ~7 days post-deploy). The classifier
+  // gracefully returns lower confidence rather than failing when the
+  // window is short.
+  const surfaceHistory: DailyWeather[] = (() => {
+    const fromHistory: DailyWeather[] = history.map((h) => ({
+      observed_date: h.observed_date,
+      temp_high_f: h.temp_high_f,
+      temp_low_f: h.temp_low_f,
+      snow_24h_in:
+        h.snow_24h_in == null ? null : Number(h.snow_24h_in),
+      rain_24h_in:
+        h.rain_24h_in == null ? null : Number(h.rain_24h_in),
+      precip_24h_in:
+        h.precip_24h_in == null ? null : Number(h.precip_24h_in),
+      wind_mph_avg: h.wind_mph_avg,
+    }));
+    const todayDate = new Date().toISOString().slice(0, 10);
+    const lastDate = fromHistory.at(-1)?.observed_date;
+    if (lastDate !== todayDate && weather) {
+      fromHistory.push({
+        observed_date: todayDate,
+        temp_high_f: weather.temp_high_f,
+        temp_low_f: weather.temp_low_f,
+        snow_24h_in:
+          weather.snow_24h_in == null ? null : Number(weather.snow_24h_in),
+        // rain + precip aren't on weather_cache; rough fallback uses 0
+        // so today's row exists at all. Once a few days of history
+        // accumulate this synthesis tapers out naturally.
+        rain_24h_in: 0,
+        precip_24h_in:
+          weather.snow_24h_in != null ? Number(weather.snow_24h_in) * 0.1 : 0,
+        wind_mph_avg: weather.wind_mph_avg,
+      });
+    }
+    return fromHistory;
+  })();
+
+  const surfaceForecastDays: SurfaceForecastDay[] = (
+    weather?.forecast_json ?? []
+  )
+    .slice(1, 4)
+    .map((d) => ({
+      date: d.date,
+      temp_high_f: d.temp_high_f,
+      temp_low_f: d.temp_low_f,
+      snow_in: d.snow_in,
+      precip_chance: d.precip_chance,
+      conditions_short: d.conditions_short,
+      wind_short: d.wind_short,
+    }));
+
+  const surfaceReport = buildSurfaceReport(surfaceHistory, surfaceForecastDays);
+  const forecastDateLabels: Array<string | null> = surfaceForecastDays.map(
+    (d) =>
+      new Date(d.date + "T12:00:00").toLocaleDateString(undefined, {
+        weekday: "short",
+        month: "short",
+        day: "numeric",
+      }),
+  );
+  while (forecastDateLabels.length < 3) forecastDateLabels.push(null);
 
   const lng = Number(resort.longitude);
   const lat = Number(resort.latitude);
@@ -389,6 +486,19 @@ export default async function ResortPage({
         <Section title="Today's weather">
           <FullWeatherCard resort={resort} weather={weather} lat={lat} lng={lng} />
         </Section>
+
+        {/* Inaugural Season 2026 — Snow Surface Forecast. Predicts
+            today's SANY surface code from 7 days of weather_history;
+            renders the prominent "Today's surface" card + 3-day
+            outlook + tap-to-learn glossary modal. Hidden when we
+            can't build a report (e.g. weather_cache + history both
+            empty for this resort). */}
+        {surfaceReport && (
+          <SnowSurfaceForecast
+            report={surfaceReport}
+            forecastDates={forecastDateLabels}
+          />
+        )}
 
         {/* Inaugural Season 2026 pivot — affiliate "Plan your trip"
             surface removed from UI. Subscription is the long-term
