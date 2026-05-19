@@ -146,8 +146,8 @@ export default async function EarlyPage() {
               email, never on the public site.
             </Bullet>
             <Bullet>
-              <strong>First-look access</strong> to new features as we
-              ship them. You&apos;ll see the snow forecast,
+              <strong>First-look access</strong>{" "}to new features as
+              we ship them. You&apos;ll see the snow forecast,
               multi-pass optimizer, and trip exports before anyone
               else.
             </Bullet>

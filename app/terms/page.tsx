@@ -126,50 +126,54 @@ export default function TermsPage() {
           </p>
         </Section>
 
-        <Section title="Pro subscription">
-          <ul className="ml-5 list-disc space-y-2">
+        <Section title="Paid subscriptions (future seasons)">
+          <p>
+            Wynla&apos;s inaugural season is free for everyone — no
+            payment is required during the 2026&ndash;27 season. Paid
+            subscription terms apply only once paid plans launch for
+            Season 2 and later, and we&apos;ll publish the specific
+            pricing and trial details on the Wynla product pages before
+            charging begins. The points below describe how billing
+            will work when it does:
+          </p>
+          <ul className="ml-5 mt-3 list-disc space-y-2">
             <li>
               <span className="font-semibold text-wn-navy">
-                Free 7-day trial
+                Trial period
               </span>{" "}
-              — a payment method is required at signup, but you&apos;re
-              not charged until day 8. Cancel before then and you pay $0.
+              — a free trial may be offered at signup. A payment method
+              is required to start the trial, but you are not charged
+              until the trial ends. Cancel before then and you pay $0.
             </li>
             <li>
               <span className="font-semibold text-wn-navy">
                 Auto-renewal
               </span>{" "}
-              — after the trial, your subscription renews automatically
-              at the price displayed on the Pro page ($7/month or
-              $59/year as of the date above). We may change pricing for
-              new signups; existing subscribers get notice before any
+              — after the trial, subscriptions renew automatically at
+              the price displayed on the Wynla pricing page at the
+              time you signed up. We may change pricing for new
+              signups; existing subscribers receive notice before any
               renewal at a higher rate.
             </li>
             <li>
               <span className="font-semibold text-wn-navy">
                 Cancellation
               </span>{" "}
-              — cancel anytime from{" "}
-              <Link
-                href="/account/pro"
-                className="font-semibold text-wn-navy underline hover:no-underline"
-              >
-                /account/pro
-              </Link>{" "}
-              (opens the Stripe customer portal). Pro features stay
-              active until the end of the period you&apos;ve already
+              — cancel anytime from your account settings (opens the
+              Stripe customer portal). Subscription features stay
+              active until the end of the period you have already
               paid for.
             </li>
             <li>
               <span className="font-semibold text-wn-navy">Refunds</span>{" "}
-              — we generally don&apos;t pro-rate partial periods. If
-              something obviously went wrong (charged twice, broken
-              feature you paid for), email us and we&apos;ll make it
-              right.
+              — we generally do not pro-rate partial periods. If
+              something obviously went wrong (a duplicate charge, a
+              broken feature you paid for), contact us and we will
+              make it right.
             </li>
             <li>
-              Payment is processed by Stripe, who handles your card
-              data. We don&apos;t see or store card numbers.
+              Payment is processed by Stripe, which handles your card
+              data. Wynla does not see or store card numbers.
             </li>
           </ul>
         </Section>

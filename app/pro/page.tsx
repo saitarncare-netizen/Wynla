@@ -64,8 +64,8 @@ export default function ProPage() {
           </Link>
 
           <p className="mt-4 text-[11px] text-wn-charcoal/55">
-            Already on the waitlist? You&apos;re in. We&apos;ll email
-            you the morning Wynla opens for Season 1.
+            Already on the waitlist? You&apos;re in. We&apos;ll send
+            your welcome the morning the inaugural season opens.
           </p>
         </div>
       </div>
