@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import type { User } from "@supabase/supabase-js";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+import Icon from "@/components/icons/Icon";
 
 // Header sign-in / user-menu button. Renders nothing until we know the auth
 // state, then either a "Sign in" link or a small avatar dropdown. The button
@@ -51,7 +52,7 @@ export default function AuthButton() {
         title="Sign in"
         aria-label="Sign in"
       >
-        <span aria-hidden="true">👤</span>
+        <Icon name="user" className="h-4 w-4" />
         <span className="hidden sm:inline">Sign in</span>
       </Link>
     );
@@ -83,23 +84,26 @@ export default function AuthButton() {
             <Link
               href="/favorites"
               onClick={() => setMenuOpen(false)}
-              className="block border-t border-wn-charcoal/10 px-3 py-2 text-sm font-medium text-wn-charcoal transition hover:bg-wn-offwhite hover:text-wn-navy"
+              className="flex items-center gap-2 border-t border-wn-charcoal/10 px-3 py-2 text-sm font-medium text-wn-charcoal transition hover:bg-wn-offwhite hover:text-wn-navy"
             >
-              ❤️ Favorites
+              <Icon name="heart" className="h-4 w-4 text-wn-navy/70" />
+              Favorites
             </Link>
             <Link
               href="/trips"
               onClick={() => setMenuOpen(false)}
-              className="block border-t border-wn-charcoal/10 px-3 py-2 text-sm font-medium text-wn-charcoal transition hover:bg-wn-offwhite hover:text-wn-navy"
+              className="flex items-center gap-2 border-t border-wn-charcoal/10 px-3 py-2 text-sm font-medium text-wn-charcoal transition hover:bg-wn-offwhite hover:text-wn-navy"
             >
-              🗺️ My trips
+              <Icon name="trips" className="h-4 w-4 text-wn-navy/70" />
+              My trips
             </Link>
             <Link
               href="/account"
               onClick={() => setMenuOpen(false)}
-              className="block border-t border-wn-charcoal/10 px-3 py-2 text-sm font-medium text-wn-charcoal transition hover:bg-wn-offwhite hover:text-wn-navy"
+              className="flex items-center gap-2 border-t border-wn-charcoal/10 px-3 py-2 text-sm font-medium text-wn-charcoal transition hover:bg-wn-offwhite hover:text-wn-navy"
             >
-              ⚙️ Account
+              <Icon name="settings" className="h-4 w-4 text-wn-navy/70" />
+              Account
             </Link>
             <button
               type="button"

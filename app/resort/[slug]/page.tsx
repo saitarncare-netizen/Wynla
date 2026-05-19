@@ -27,6 +27,7 @@ import {
   type DailyWeather,
   type ForecastDay as SurfaceForecastDay,
 } from "@/lib/snowSurface";
+import Icon, { type IconName } from "@/components/icons/Icon";
 
 // ISR — resort detail data (lifts/trails/passes/coords) changes rarely.
 // Snow conditions are stamped on the row by the cron; ISR every 10 min
@@ -454,7 +455,7 @@ export default async function ResortPage({
       </header>
 
       {/* Body */}
-      <div className="mx-auto max-w-5xl space-y-10 px-4 py-8 sm:px-6 sm:py-12">
+      <div className="mx-auto max-w-5xl space-y-8 px-4 py-8 sm:px-6 sm:py-12">
         {/* QUICK STATS — show whenever any stats exist (QuickStats returns null otherwise) */}
         <QuickStats resort={resort} />
 
@@ -531,13 +532,16 @@ export default async function ResortPage({
         {resort.closest_airport_iata && (
           <Section title="Closest airport">
             <div className="rounded-lg border border-wn-charcoal/10 bg-white px-4 py-3">
-              <div className="flex items-baseline gap-3">
+              <div className="flex items-center gap-3">
+                <span className="inline-flex h-10 w-10 items-center justify-center rounded-md bg-wn-navy/5 text-wn-navy">
+                  <Icon name="plane" className="h-5 w-5" />
+                </span>
                 <span className="text-2xl font-extrabold tracking-tight text-wn-navy">
-                  ✈️ {resort.closest_airport_iata}
+                  {resort.closest_airport_iata}
                 </span>
                 {resort.closest_airport_distance_mi != null && (
                   <span className="text-sm text-wn-charcoal/65">
-                    {resort.closest_airport_distance_mi} mi away
+                    · {resort.closest_airport_distance_mi} mi away
                   </span>
                 )}
               </div>
@@ -556,13 +560,35 @@ export default async function ResortPage({
               href={googleMapsUrl(resort.name, resort.state)}
               label="Open in Google Maps"
               sub="Navigation, photos, reviews"
+              icon="pin"
               external
             />
             {resort.trail_map_url && (
-              <ActionLink href={resort.trail_map_url} label="Trail map" sub="Lifts, runs, terrain" external />
+              <ActionLink
+                href={resort.trail_map_url}
+                label="Trail map"
+                sub="Lifts, runs, terrain"
+                icon="map"
+                external
+              />
             )}
             {resort.webcam_url && (
-              <ActionLink href={resort.webcam_url} label="Live webcam" sub="Current conditions" external />
+              <ActionLink
+                href={resort.webcam_url}
+                label="Live webcam"
+                sub="Current conditions"
+                icon="camera"
+                external
+              />
+            )}
+            {resort.website_url && (
+              <ActionLink
+                href={resort.website_url}
+                label="Resort website"
+                sub="Hours, tickets, news"
+                icon="globe"
+                external
+              />
             )}
           </div>
         </Section>
@@ -810,21 +836,30 @@ function ActionLink({
   label,
   sub,
   external,
+  icon,
 }: {
   href: string;
   label: string;
   sub?: string;
   external?: boolean;
+  icon?: IconName;
 }) {
   return (
     <a
       href={href}
       {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-      className="group flex items-center justify-between rounded-lg border border-wn-charcoal/10 bg-white px-4 py-3 transition hover:border-wn-navy hover:shadow-sm"
+      className="group flex items-center justify-between gap-3 rounded-lg border border-wn-charcoal/10 bg-white px-4 py-3 transition hover:border-wn-navy hover:shadow-sm"
     >
-      <div>
-        <div className="text-sm font-semibold text-wn-navy">{label}</div>
-        {sub && <div className="text-xs text-wn-charcoal/60">{sub}</div>}
+      <div className="flex items-center gap-3 min-w-0">
+        {icon && (
+          <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-wn-navy/5 text-wn-navy">
+            <Icon name={icon} className="h-4 w-4" />
+          </span>
+        )}
+        <div className="min-w-0">
+          <div className="text-sm font-semibold text-wn-navy">{label}</div>
+          {sub && <div className="text-xs text-wn-charcoal/60">{sub}</div>}
+        </div>
       </div>
       <span className="text-wn-navy/40 transition group-hover:translate-x-0.5 group-hover:text-wn-navy">
         →
