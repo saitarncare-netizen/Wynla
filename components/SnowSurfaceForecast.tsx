@@ -24,7 +24,14 @@ import {
   type SurfaceReport,
   type SurfaceResult,
 } from "@/lib/snowSurface";
-import SurfaceIcon from "@/components/icons/SurfaceIcon";
+
+// Inaugural Season 2026 (v2 — icons retired). The 8 SANY codes are
+// rendered as bold typography chips inside the tone bubble instead of
+// custom-drawn SVG icons. At 16-28px viewport the type-only chip is
+// dramatically more legible and matches the industry convention used
+// by OnTheSnow / SkiReport / Snocountry. components/icons/SurfaceIcon.tsx
+// stays in tree as dead code in case we want to revive a pictogram
+// version with a real designer.
 
 type Props = {
   report: SurfaceReport;
@@ -69,12 +76,14 @@ export default function SnowSurfaceForecast({ report, forecastDates }: Props) {
             aria-hidden="true"
             className={`relative flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ${tone.bubble} sm:h-16 sm:w-16`}
           >
-            <SurfaceIcon code={today.code} className="h-7 w-7 sm:h-8 sm:w-8" />
+            <span className="text-lg font-extrabold tracking-tight sm:text-xl">
+              {today.short}
+            </span>
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex flex-wrap items-center gap-2">
               <span className={`text-[11px] font-bold uppercase tracking-wider ${tone.code}`}>
-                {today.short} · {today.label}
+                {today.label}
               </span>
               <ConfidenceChip confidence={today.confidence} />
             </div>
@@ -180,14 +189,13 @@ function ForecastSlot({
         {headerLabel}
       </div>
       <div
-        className={`my-1.5 inline-flex h-8 w-8 items-center justify-center rounded-lg ${tone.bubble}`}
+        className={`my-1.5 inline-flex h-9 w-9 items-center justify-center rounded-lg ${tone.bubble}`}
       >
-        <SurfaceIcon code={result.code} className="h-5 w-5" />
+        <span className="text-xs font-extrabold tracking-tight">
+          {result.short}
+        </span>
       </div>
-      <div className={`text-xs font-extrabold ${tone.headline}`}>
-        {result.short}
-      </div>
-      <div className="mt-0.5 text-[10px] font-medium text-wn-charcoal/65 truncate">
+      <div className="mt-0.5 text-[10px] font-medium text-wn-charcoal/70 truncate">
         {result.label}
       </div>
     </div>
@@ -242,9 +250,11 @@ function SurfaceEducationModal({ onClose }: { onClose: () => void }) {
                 >
                   <div
                     aria-hidden="true"
-                    className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${tone.bubble}`}
+                    className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${tone.bubble}`}
                   >
-                    <SurfaceIcon code={c} className="h-5 w-5" />
+                    <span className="text-xs font-extrabold tracking-tight">
+                      {c}
+                    </span>
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex flex-wrap items-baseline gap-2">
