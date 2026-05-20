@@ -475,25 +475,36 @@ export default async function ResortPage({
           <FullWeatherCard resort={resort} weather={weather} lat={lat} lng={lng} />
         </Section>
 
-        {weather?.forecast_json && weather.forecast_json.length > 0 && (
-          <Section
-            title={`${Math.min(weather.forecast_json.length, 10)}-day forecast`}
-            subtitle={
-              weather.forecast_json.length >= 8
-                ? "Swipe sideways to see the full window. Days 8–10 are trend-only."
-                : "Swipe sideways to see the full window."
-            }
-          >
-            <TenDayForecast days={weather.forecast_json.slice(0, 10)} />
-          </Section>
-        )}
+        {/* 10-day forecast is hidden globally during May-Oct: when the
+            resort is closed for the season nobody is planning around a
+            spring forecast for it, and the bulky cards crowd the page
+            without serving real intent. Returns in November along with
+            the Snow Surface block. */}
+        {weather?.forecast_json &&
+          weather.forecast_json.length > 0 &&
+          !isGlobalOffSeasonNow() && (
+            <Section
+              title={`${Math.min(weather.forecast_json.length, 10)}-day forecast`}
+              subtitle={
+                weather.forecast_json.length >= 8
+                  ? "Swipe sideways to see the full window. Days 8–10 are trend-only."
+                  : "Swipe sideways to see the full window."
+              }
+            >
+              <TenDayForecast days={weather.forecast_json.slice(0, 10)} />
+            </Section>
+          )}
 
         {/* Snow Surface Forecast — predicts today's SANY surface code
             from 7 days of weather_history + a 3-day outlook + tap-to-
             learn glossary modal. Sits at the end of the weather block
-            as the interpretation layer (the "what does this weather
-            actually mean for your edges" payoff). */}
-        {surfaceReport && (
+            as the interpretation layer.
+            Hidden globally during May-Oct: with US resorts closed there
+            is no surface to predict, and rendering a "VC · Variable ·
+            Low confidence · Mixed signals" card every page adds noise
+            without information. We pop back in November when resorts
+            open and the cron has real recent-weather data. */}
+        {surfaceReport && !isGlobalOffSeasonNow() && (
           <SnowSurfaceForecast
             report={surfaceReport}
             forecastDates={forecastDateLabels}

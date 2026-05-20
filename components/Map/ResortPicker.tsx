@@ -13,6 +13,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { haversineMeters, estimateDriveSeconds } from "@/lib/distance";
 import { formatDriveTime } from "@/lib/origins";
 import { PASS_COLORS, PASS_KEYS, PASS_LABELS } from "@/lib/passColors";
+import { isGlobalOffSeasonNow } from "@/lib/seasonDates";
 // isGlobalOffSeasonNow no longer needed — fresh-snow chip removed
 // from picker in Stage 33 final cleanup.
 import type { Resort } from "./MapPage";
@@ -548,12 +549,19 @@ export default function ResortPicker({
                       </span>
                     )}
                   </div>
-                  {/* Stage 33 — live snow indicator. Shows ❄️ amount when
-                      a resort has fresh snow > 0; otherwise a small open
-                      🟢 / off-season 🌸 / closed 🔴 dot when status is
-                      set. Resorts with no scrape data render nothing. */}
-                  {(r.snowNew24h != null && r.snowNew24h > 0) ||
-                  r.snowReportStatus ? (
+                  {/* Live snow indicator. Shows ❄️ amount when a resort
+                      has fresh snow > 0; otherwise a small open / limited
+                      dot when the scrape returned a meaningful status.
+                      During the global off-season (May-Oct) every US
+                      resort is closed; rendering 🌸/🔴 on each row turned
+                      the search picker into noise, so the indicator is
+                      suppressed entirely in that window. Re-appears in
+                      November. */}
+                  {!isGlobalOffSeasonNow() &&
+                  ((r.snowNew24h != null && r.snowNew24h > 0) ||
+                    r.snowReportStatus === "open" ||
+                    r.snowReportStatus === "limited" ||
+                    r.snowReportStatus === "closed") ? (
                     <div className="mt-0.5 flex items-center gap-1.5 text-[10px] text-wn-charcoal/65">
                       {r.snowNew24h != null && r.snowNew24h > 0 ? (
                         <span className="font-semibold text-wn-sky">
@@ -565,8 +573,6 @@ export default function ResortPicker({
                         <span className="text-red-700">🔴 Closed</span>
                       ) : r.snowReportStatus === "limited" ? (
                         <span className="text-amber-700">🟡 Limited</span>
-                      ) : r.snowReportStatus === "off-season" ? (
-                        <span className="text-wn-charcoal/50">🌸 Off-season</span>
                       ) : null}
                     </div>
                   ) : null}
