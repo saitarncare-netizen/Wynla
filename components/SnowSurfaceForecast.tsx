@@ -24,6 +24,7 @@ import {
   type SurfaceReport,
   type SurfaceResult,
 } from "@/lib/snowSurface";
+import SurfaceIcon from "@/components/icons/SurfaceIcon";
 
 type Props = {
   report: SurfaceReport;
@@ -66,9 +67,9 @@ export default function SnowSurfaceForecast({ report, forecastDates }: Props) {
         <div className="flex items-start gap-4">
           <div
             aria-hidden="true"
-            className={`relative flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl text-2xl ${tone.bubble} sm:h-16 sm:w-16 sm:text-3xl`}
+            className={`relative flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ${tone.bubble} sm:h-16 sm:w-16`}
           >
-            {today.emoji}
+            <SurfaceIcon code={today.code} className="h-7 w-7 sm:h-8 sm:w-8" />
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex flex-wrap items-center gap-2">
@@ -178,8 +179,10 @@ function ForecastSlot({
       <div className="text-[10px] font-bold uppercase tracking-wider text-wn-navy">
         {headerLabel}
       </div>
-      <div className="my-1.5 text-2xl" aria-hidden="true">
-        {result.emoji}
+      <div
+        className={`my-1.5 inline-flex h-8 w-8 items-center justify-center rounded-lg ${tone.bubble}`}
+      >
+        <SurfaceIcon code={result.code} className="h-5 w-5" />
       </div>
       <div className={`text-xs font-extrabold ${tone.headline}`}>
         {result.short}
@@ -239,9 +242,9 @@ function SurfaceEducationModal({ onClose }: { onClose: () => void }) {
                 >
                   <div
                     aria-hidden="true"
-                    className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-xl ${tone.bubble}`}
+                    className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${tone.bubble}`}
                   >
-                    {g.emoji}
+                    <SurfaceIcon code={c} className="h-5 w-5" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex flex-wrap items-baseline gap-2">
