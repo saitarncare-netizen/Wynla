@@ -478,6 +478,14 @@ export default async function ResortPage({
               🎿 Skis only
             </p>
           )}
+          {resort.currently_open === true && (
+            <p className="ml-2 mt-3 inline-block rounded bg-emerald-600/95 px-2 py-0.5 text-xs font-semibold text-white">
+              🟢 Open today
+              {resort.season_end_date
+                ? ` · until ${new Date(resort.season_end_date + "T12:00:00").toLocaleDateString(undefined, { month: "short", day: "numeric" })}`
+                : ""}
+            </p>
+          )}
         </div>
       </header>
 
@@ -776,11 +784,23 @@ function QuickStats({ resort }: { resort: Resort }) {
   if (resort.vertical_drop) stats.push({ label: "Vertical drop", value: `${resort.vertical_drop.toLocaleString()} ft` });
   if (resort.total_trails) stats.push({ label: "Trails", value: String(resort.total_trails) });
   if (resort.total_lifts) {
-    const hs = resort.high_speed_lifts;
-    stats.push({
-      label: "Lifts",
-      value: hs != null && hs > 0 ? `${resort.total_lifts} (${hs} HS)` : String(resort.total_lifts),
-    });
+    // Phase 3 one-app: when Tier 1 lift_types is available, derive a
+    // richer label e.g. "21 (6 high-speed + 2 gondola)". Falls back to
+    // the legacy high_speed_lifts label when only that field is set.
+    const t = resort.lift_types;
+    let value = String(resort.total_lifts);
+    if (t) {
+      const parts: string[] = [];
+      if ((t.chair_detach ?? 0) > 0) parts.push(`${t.chair_detach} HS chair`);
+      if ((t.gondola ?? 0) > 0) parts.push(`${t.gondola} gondola`);
+      if ((t.tram ?? 0) > 0) parts.push(`${t.tram} tram`);
+      if (parts.length > 0) {
+        value = `${resort.total_lifts} (${parts.join(" + ")})`;
+      }
+    } else if (resort.high_speed_lifts != null && resort.high_speed_lifts > 0) {
+      value = `${resort.total_lifts} (${resort.high_speed_lifts} HS)`;
+    }
+    stats.push({ label: "Lifts", value });
   }
   if (resort.total_acres) stats.push({ label: "Skiable acres", value: resort.total_acres.toLocaleString() });
   const baseEl = resort.base_elevation_ft ?? resort.elevation_base;

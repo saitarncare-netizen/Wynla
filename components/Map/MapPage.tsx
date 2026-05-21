@@ -102,6 +102,21 @@ export type Resort = {
   webcam_url: string | null;
   closest_airport_iata: string | null;
   closest_airport_distance_mi: number | null;
+  // Phase 0 (one-app build, 2026-05-21) — Tier 1 verified data.
+  allows_snowboards: boolean | null;
+  lift_types: {
+    chair_fixed?: number;
+    chair_detach?: number;
+    gondola?: number;
+    tram?: number;
+    tbar?: number;
+    poma?: number;
+    rope?: number;
+    carpet?: number;
+  } | null;
+  currently_open: boolean | null;
+  season_end_date: string | null;
+  terrain_park_features: number | null;
 };
 
 export type DriveTime = {
@@ -263,6 +278,15 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   // (e.g. powder-day chasers). Off-season this filter will surface
   // only the rare late-season snow events (Mt. Hood, etc).
   const freshSnowOnly = searchParams.get("freshsnow") === "1";
+  // Phase 3 (one-app build) — Open Now filter. ?open=1 narrows to resorts
+  // with currently_open=true (Tier 1 verified data). Most useful during
+  // late-spring (May-Jul) when only a handful of resorts are still
+  // operating. Hidden from chip strip when zero resorts qualify.
+  const openNowOnly = searchParams.get("open") === "1";
+  // Phase 3 — lift-type requirement. ?lift=gondola|tram|highspeed|nosurface
+  // filters by minimum lift inventory. Useful for "I want gondola access"
+  // (visual partners, beginners, comfort) or "no T-bars/poma" (snowboarder).
+  const liftReq = searchParams.get("lift");
   // Stage 8 — airport filter. URL form: ?airport=DEN. Empty / missing
   // = no airport filter. Matched against resort.closest_airport_iata
   // with a 120-mile shuttle-range distance cap; resorts with NULL
@@ -350,6 +374,23 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
       if (freshSnowOnly && !(r.snow_new_24h_in != null && r.snow_new_24h_in > 0)) {
         return false;
       }
+      if (openNowOnly && r.currently_open !== true) return false;
+      if (liftReq) {
+        const t = r.lift_types;
+        if (!t) return false;
+        if (liftReq === "gondola" && (t.gondola ?? 0) < 1) return false;
+        if (liftReq === "tram" && (t.tram ?? 0) < 1) return false;
+        if (liftReq === "highspeed" && (t.chair_detach ?? 0) < 1) return false;
+        if (liftReq === "nosurface") {
+          // exclude resorts where surface lifts are the ONLY uphill option
+          const aerial =
+            (t.chair_fixed ?? 0) +
+            (t.chair_detach ?? 0) +
+            (t.gondola ?? 0) +
+            (t.tram ?? 0);
+          if (aerial < 1) return false;
+        }
+      }
       if (withinHours > 0) {
         const dt = driveTimeByResort.get(r.id)?.get(origin.name);
         if (!dt || dt.duration_seconds > withinHours * 3600) return false;
@@ -360,7 +401,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
     // matchesAirport closes over airportFilter; depending on
     // airportFilter is enough for memoization correctness.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [resorts, featuredOnly, passFilter, nightOnly, freshSnowOnly, withinHours, origin, driveTimeByResort, airportFilter]);
+  }, [resorts, featuredOnly, passFilter, nightOnly, freshSnowOnly, openNowOnly, liftReq, withinHours, origin, driveTimeByResort, airportFilter]);
 
   const filtered = useMemo(() => {
     return filteredIgnoringSize.filter((r) => matchesSizeFilter(r.vertical_drop, sizeFilter));
@@ -379,6 +420,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
       if (freshSnowOnly && !(r.snow_new_24h_in != null && r.snow_new_24h_in > 0)) {
         return false;
       }
+      if (openNowOnly && r.currently_open !== true) return false;
       if (withinHours > 0) {
         const dt = driveTimeByResort.get(r.id)?.get(origin.name);
         if (!dt || dt.duration_seconds > withinHours * 3600) return false;
@@ -388,7 +430,14 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
       return true;
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [resorts, featuredOnly, nightOnly, freshSnowOnly, withinHours, origin, driveTimeByResort, sizeFilter, airportFilter]);
+  }, [resorts, featuredOnly, nightOnly, freshSnowOnly, openNowOnly, withinHours, origin, driveTimeByResort, sizeFilter, airportFilter]);
+
+  // Open Now count — drives whether the chip surfaces in the
+  // FilterBar (no chip if 0 resorts qualify).
+  const openNowCount = useMemo(
+    () => resorts.filter((r) => r.currently_open === true).length,
+    [resorts],
+  );
 
   // Count of resorts hidden specifically because they have NULL vertical_drop
   // and a size filter is active. 0 when no filter active or no NULL hits.
