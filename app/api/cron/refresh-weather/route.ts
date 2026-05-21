@@ -131,6 +131,9 @@ function parseNws(forecast: NwsForecast) {
       precip_chance: primary?.probabilityOfPrecipitation?.value ?? null,
       wind_short: primary?.windSpeed ?? null,
       wind_dir_short: primary?.windDirection ?? null,
+      // NWS doesn't publish UV; mergeForecasts() fills this from
+      // Open-Meteo where available so the strip stays uniform.
+      uv_index_max: null as number | null,
     };
   });
 
@@ -163,6 +166,7 @@ type OpenMeteo = {
     precipitation_probability_max?: (number | null)[];
     wind_speed_10m_max?: (number | null)[];
     wind_direction_10m_dominant?: (number | null)[];
+    uv_index_max?: (number | null)[];
   };
 };
 function parseMeteo(j: OpenMeteo) {
@@ -224,8 +228,10 @@ function meteoToForecastDays(j: OpenMeteo) {
   if (!d?.time) return [];
   return d.time.map((date, i) => {
     const dirDeg = d.wind_direction_10m_dominant?.[i] ?? null;
+    const uvRaw = d.uv_index_max?.[i];
     return {
       date,
+      uv_index_max: typeof uvRaw === "number" ? Math.round(uvRaw * 10) / 10 : null,
       weekday: new Date(date + "T12:00:00").toLocaleDateString("en-US", { weekday: "short" }),
       temp_high_f: d.temperature_2m_max?.[i] != null ? Math.round(d.temperature_2m_max[i]!) : null,
       temp_low_f: d.temperature_2m_min?.[i] != null ? Math.round(d.temperature_2m_min[i]!) : null,
@@ -241,15 +247,25 @@ function meteoToForecastDays(j: OpenMeteo) {
 // Merge NWS days 1-7 with Open-Meteo days 8-10. Prefer NWS where both
 // have data for the same date (NWS is more accurate for the US window
 // it covers). Tail-fill from Open-Meteo for dates NWS doesn't reach.
+//
+// Special case: NWS does not publish UV index, so we enrich each NWS
+// day with `uv_index_max` from the matching-date Open-Meteo row when
+// available. This keeps the forecast strip uniform across all 10 days.
 function mergeForecasts(
   nws: ReturnType<typeof parseNws>,
   meteoDays: ReturnType<typeof meteoToForecastDays>,
 ): ReturnType<typeof parseNws> {
   if (!nws) return nws;
   if (!meteoDays.length) return nws;
-  const seen = new Set(nws.forecast_json.map((d) => d.date));
+  const meteoByDate = new Map(meteoDays.map((d) => [d.date, d]));
+  const enrichedNws = nws.forecast_json.map((d) => {
+    const meteo = meteoByDate.get(d.date);
+    if (!meteo) return d;
+    return { ...d, uv_index_max: meteo.uv_index_max ?? null };
+  });
+  const seen = new Set(enrichedNws.map((d) => d.date));
   const tail = meteoDays.filter((d) => !seen.has(d.date));
-  const combined = [...nws.forecast_json, ...tail].slice(0, 10);
+  const combined = [...enrichedNws, ...tail].slice(0, 10);
   return { ...nws, forecast_json: combined };
 }
 
@@ -268,7 +284,7 @@ async function refreshOne(resort: Resort, cached: CacheRow | undefined) {
     const meteoUrl =
       `https://api.open-meteo.com/v1/forecast?latitude=${lat.toFixed(4)}&longitude=${lng.toFixed(4)}` +
       `&current=wind_speed_10m,wind_direction_10m,wind_gusts_10m` +
-      `&daily=temperature_2m_max,temperature_2m_min,weathercode,snowfall_sum,rain_sum,precipitation_sum,precipitation_probability_max,wind_speed_10m_max,wind_direction_10m_dominant` +
+      `&daily=temperature_2m_max,temperature_2m_min,weathercode,snowfall_sum,rain_sum,precipitation_sum,precipitation_probability_max,wind_speed_10m_max,wind_direction_10m_dominant,uv_index_max` +
       `&temperature_unit=fahrenheit&precipitation_unit=inch&wind_speed_unit=mph&timezone=auto&forecast_days=10`;
     const [nws, meteo] = await Promise.all([
       fetchJson<NwsForecast>(
