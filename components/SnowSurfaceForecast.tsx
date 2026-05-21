@@ -38,9 +38,17 @@ type Props = {
   /** Up to 3 forecast dates aligned with report.forecast slots. Used as
    *  the day labels on the strip. */
   forecastDates?: Array<string | null>;
+  /** When true (May-Oct in the US), softens the subtitle so users
+   *  understand the prediction is dormant until daily snow reports
+   *  resume in November. */
+  offSeason?: boolean;
 };
 
-export default function SnowSurfaceForecast({ report, forecastDates }: Props) {
+export default function SnowSurfaceForecast({
+  report,
+  forecastDates,
+  offSeason = false,
+}: Props) {
   const [showModal, setShowModal] = useState(false);
   const today = report.today;
   const tone = toneFor(today.code);
@@ -53,7 +61,9 @@ export default function SnowSurfaceForecast({ report, forecastDates }: Props) {
             Snow surface today
           </h2>
           <p className="text-xs text-wn-charcoal/60">
-            US-standard SANY classification, predicted from the last 7 days of weather.
+            {offSeason
+              ? "US-standard SANY classification. Predictions sharpen once resorts open in November."
+              : "US-standard SANY classification, predicted from the last 7 days of weather."}
           </p>
         </div>
         <button
@@ -87,6 +97,11 @@ export default function SnowSurfaceForecast({ report, forecastDates }: Props) {
               </span>
               <ConfidenceChip confidence={today.confidence} />
             </div>
+            {today.alsoCalled && (
+              <p className="mt-0.5 text-[11px] italic text-wn-charcoal/60">
+                also called {today.alsoCalled}
+              </p>
+            )}
             <p className={`mt-1 text-sm font-semibold ${tone.headline} sm:text-base`}>
               {today.description}
             </p>
@@ -265,6 +280,11 @@ function SurfaceEducationModal({ onClose }: { onClose: () => void }) {
                         {g.label}
                       </span>
                     </div>
+                    {g.alsoCalled && (
+                      <p className="mt-0.5 text-[11px] italic text-wn-charcoal/60">
+                        also called {g.alsoCalled}
+                      </p>
+                    )}
                     <p className="mt-1 text-xs text-wn-charcoal/75 sm:text-sm">
                       <strong className="text-wn-navy">Feels like:</strong>{" "}
                       {g.feelsLike}
