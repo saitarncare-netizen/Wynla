@@ -22,6 +22,16 @@ import type { SimilarityResort } from "@/lib/similarity";
 import SnowSurfaceForecast from "@/components/SnowSurfaceForecast";
 import WhereToStay from "@/components/WhereToStay";
 import {
+  evaluateWindHold,
+  parseWindMphFromText,
+  windHoldChipClass,
+} from "@/lib/windHold";
+import {
+  computeSunTimes,
+  formatLocal,
+  timeZoneForState,
+} from "@/lib/sunTimes";
+import {
   buildSurfaceReport,
   type DailyWeather,
   type ForecastDay as SurfaceForecastDay,
@@ -39,7 +49,7 @@ export const revalidate = 600;
 // blobs). Keeping this in sync with the local Resort type is enforced by
 // TS at the cast site. ~3-5KB per detail page hit saved.
 const RESORT_DETAIL_COLS =
-  "id, slug, name, state, region, city, address, latitude, longitude, passes, tier, operating_status, vertical_drop, total_trails, total_lifts, total_acres, difficulty_pct_beginner, difficulty_pct_intermediate, difficulty_pct_advanced, difficulty_pct_expert, trails_beginner, trails_intermediate, trails_advanced, trails_expert, has_terrain_park, terrain_park_count, has_glades, has_halfpipe, has_night_skiing, longest_run_miles, elevation_base, elevation_summit, typical_season_start, typical_season_end, weekday_hours, weekend_hours, website_url, trail_map_url, ticket_booking_url, hero_image_url, hero_image_source, hero_image_alt, last_verified_at, high_speed_lifts, base_elevation_ft, summit_elevation_ft, annual_snowfall_in, season_open_text, season_close_text, snowmaking_pct, has_tubing, has_lessons, has_rentals, has_lodging_on_mountain, has_xc_skiing, has_backcountry_access, webcam_url, closest_airport_iata, closest_airport_distance_mi, snow_base_depth_in, snow_new_24h_in, snow_new_48h_in, snow_new_7d_in, trails_open_today, lifts_open_today, snow_report_status, snow_report_updated_at";
+  "id, slug, name, state, region, city, address, latitude, longitude, passes, tier, operating_status, vertical_drop, total_trails, total_lifts, total_acres, difficulty_pct_beginner, difficulty_pct_intermediate, difficulty_pct_advanced, difficulty_pct_expert, trails_beginner, trails_intermediate, trails_advanced, trails_expert, has_terrain_park, terrain_park_count, has_glades, has_halfpipe, has_night_skiing, longest_run_miles, elevation_base, elevation_summit, typical_season_start, typical_season_end, weekday_hours, weekend_hours, website_url, trail_map_url, ticket_booking_url, hero_image_url, hero_image_source, hero_image_alt, last_verified_at, high_speed_lifts, base_elevation_ft, summit_elevation_ft, annual_snowfall_in, season_open_text, season_close_text, snowmaking_pct, has_tubing, has_lessons, has_rentals, has_lodging_on_mountain, has_xc_skiing, has_backcountry_access, webcam_url, closest_airport_iata, closest_airport_distance_mi, snow_base_depth_in, snow_new_24h_in, snow_new_48h_in, snow_new_7d_in, trails_open_today, lifts_open_today, snow_report_status, snow_report_updated_at, allows_snowboards, wind_hold_mph_chair, wind_hold_mph_gondola, currently_open, season_end_date, lift_types, terrain_park_features, avalanche_zone_id";
 
 type Resort = {
   id: number;
@@ -112,6 +122,15 @@ type Resort = {
   lifts_open_today: number | null;
   snow_report_status: string | null;
   snow_report_updated_at: string | null;
+  // Phase 0 one-app additions (2026-05-21).
+  allows_snowboards: boolean | null;
+  wind_hold_mph_chair: number | null;
+  wind_hold_mph_gondola: number | null;
+  currently_open: boolean | null;
+  season_end_date: string | null;
+  lift_types: Record<string, number> | null;
+  terrain_park_features: number | null;
+  avalanche_zone_id: string | null;
 };
 
 type ForecastDay = {
@@ -124,6 +143,7 @@ type ForecastDay = {
   precip_chance: number | null;
   wind_short: string | null;
   wind_dir_short: string | null;
+  uv_index_max?: number | null;
 };
 
 type WeatherSnapshot = {
@@ -450,6 +470,14 @@ export default async function ResortPage({
               Seasonal / limited operations
             </p>
           )}
+          {resort.allows_snowboards === false && (
+            <p
+              className="mt-3 inline-block rounded bg-white/95 px-2 py-0.5 text-xs font-semibold text-wn-navy"
+              title="This resort does not permit snowboarding"
+            >
+              🎿 Skis only
+            </p>
+          )}
         </div>
       </header>
 
@@ -503,7 +531,16 @@ export default async function ResortPage({
                 : "Swipe sideways to see the full window."
             }
           >
-            <TenDayForecast days={weather.forecast_json.slice(0, 10)} />
+            <TenDayForecast
+              days={weather.forecast_json.slice(0, 10)}
+              resortWind={{
+                wind_hold_mph_chair: resort.wind_hold_mph_chair,
+                wind_hold_mph_gondola: resort.wind_hold_mph_gondola,
+                hasGondolaOrTram:
+                  (resort.lift_types?.gondola ?? 0) > 0 ||
+                  (resort.lift_types?.tram ?? 0) > 0,
+              }}
+            />
           </Section>
         )}
 
@@ -685,6 +722,19 @@ export default async function ResortPage({
 }
 
 // ---------- Helpers ----------
+
+/** Tailwind chip styling for UV index. EPA/WHO scale: 0-2 low, 3-5
+ *  moderate, 6-7 high, 8-10 very high, 11+ extreme. We treat 0-5 as
+ *  neutral grey + 6+ as accent amber. */
+function uvChipClass(uv: number): string {
+  if (uv >= 8) {
+    return "inline-flex items-center gap-1 rounded bg-red-100 px-1.5 py-0.5 text-[10px] font-bold text-red-800";
+  }
+  if (uv >= 6) {
+    return "inline-flex items-center gap-1 rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-bold text-amber-800";
+  }
+  return "inline-flex items-center gap-1 text-wn-charcoal/65";
+}
 
 function PassBadge({ pass }: { pass: string }) {
   const color = passColor(pass);
@@ -987,17 +1037,41 @@ function FullWeatherCard({
           }
           label={weather.conditions_short ?? "Weather"}
         />
-        {/* Wind column */}
-        <WeatherStat
-          icon="💨"
-          value={
-            weather.wind_mph_avg != null
-              ? `${weather.wind_mph_avg} mph${weather.wind_dir_short ? " " + weather.wind_dir_short : ""}`
-              : "—"
-          }
-          label="Wind"
-          divider
-        />
+        {/* Wind column — adds a wind-hold warning chip when forecast
+            wind exceeds the resort's chairlift/gondola hold threshold
+            (or default 35/50 mph when Phase 2 hasn't filled per-resort
+            values yet). Chip is hidden on normal wind days. */}
+        {(() => {
+          const evaluation = evaluateWindHold(weather.wind_mph_avg, {
+            wind_hold_mph_chair: resort.wind_hold_mph_chair,
+            wind_hold_mph_gondola: resort.wind_hold_mph_gondola,
+            hasGondolaOrTram:
+              (resort.lift_types?.gondola ?? 0) > 0 ||
+              (resort.lift_types?.tram ?? 0) > 0,
+          });
+          const cls = windHoldChipClass(evaluation.level);
+          return (
+            <WeatherStat
+              icon="💨"
+              value={
+                weather.wind_mph_avg != null
+                  ? `${weather.wind_mph_avg} mph${weather.wind_dir_short ? " " + weather.wind_dir_short : ""}`
+                  : "—"
+              }
+              label="Wind"
+              divider
+              warning={
+                evaluation.level === "ok"
+                  ? null
+                  : {
+                      icon: cls.icon,
+                      label: evaluation.label,
+                      class: cls.container,
+                    }
+              }
+            />
+          );
+        })()}
         {/* Snow column */}
         <WeatherStat
           icon="❄️"
@@ -1008,6 +1082,51 @@ function FullWeatherCard({
           accent={snowNew24 != null && snowNew24 > 0}
         />
       </div>
+
+      {/* Sun / UV row — sunrise, sunset, daylight hours, today's UV.
+          Sun times computed server-side from lat/lng (NOAA algorithm).
+          UV pulled from forecast_json[0].uv_index_max (Open-Meteo) when
+          available. */}
+      {(() => {
+        const sun = computeSunTimes(lat, lng);
+        const todayUv = weather.forecast_json?.[0]?.uv_index_max ?? null;
+        const tz = timeZoneForState(resort.state);
+        if (!sun && todayUv == null) return null;
+        return (
+          <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] font-medium text-wn-charcoal/70">
+            {sun && (
+              <>
+                <span>
+                  <span aria-hidden="true">🌅</span> Sunrise{" "}
+                  <span className="font-bold text-wn-navy">
+                    {formatLocal(sun.sunrise, tz)}
+                  </span>
+                </span>
+                <span aria-hidden="true">·</span>
+                <span>
+                  <span aria-hidden="true">🌇</span> Sunset{" "}
+                  <span className="font-bold text-wn-navy">
+                    {formatLocal(sun.sunset, tz)}
+                  </span>
+                </span>
+                <span aria-hidden="true">·</span>
+                <span className="text-wn-charcoal/55">
+                  {sun.daylightHours}h daylight
+                </span>
+              </>
+            )}
+            {todayUv != null && (
+              <>
+                {sun && <span aria-hidden="true">·</span>}
+                <span className={uvChipClass(todayUv)}>
+                  <span aria-hidden="true">☀️</span> UV {todayUv}
+                  {todayUv >= 6 && " — wear sunscreen"}
+                </span>
+              </>
+            )}
+          </div>
+        );
+      })()}
 
       {weather.fetched_at && (
         <p className="mt-3 text-[10px] text-wn-charcoal/45">
@@ -1038,12 +1157,15 @@ function WeatherStat({
   label,
   accent = false,
   divider = false,
+  warning,
 }: {
   icon: string;
   value: string;
   label: string;
   accent?: boolean;
   divider?: boolean;
+  /** Optional wind-hold-style warning chip rendered under the label. */
+  warning?: { icon: string; label: string; class: string } | null;
 }) {
   return (
     <div
@@ -1066,6 +1188,12 @@ function WeatherStat({
       <div className="mt-0.5 text-[10px] uppercase tracking-wide text-wn-charcoal/55 truncate">
         {label}
       </div>
+      {warning && (
+        <div className={`mt-1 ${warning.class}`}>
+          <span aria-hidden="true">{warning.icon}</span>
+          <span>{warning.label}</span>
+        </div>
+      )}
     </div>
   );
 }
@@ -1082,7 +1210,17 @@ function WeatherStat({
 // Days 8-10 visually de-emphasize (slightly muted background) because
 // Open-Meteo's accuracy past day 7 is noticeably looser than NWS days
 // 1-7. We label them with "trend" rather than promising a number.
-function TenDayForecast({ days }: { days: ForecastDay[] }) {
+function TenDayForecast({
+  days,
+  resortWind,
+}: {
+  days: ForecastDay[];
+  resortWind: {
+    wind_hold_mph_chair: number | null;
+    wind_hold_mph_gondola: number | null;
+    hasGondolaOrTram: boolean;
+  };
+}) {
   const emoji = (cond: string | null): string => {
     if (!cond) return "🌤️";
     const c = cond.toLowerCase();
@@ -1157,12 +1295,25 @@ function TenDayForecast({ days }: { days: ForecastDay[] }) {
                     {d.precip_chance}% precip
                   </div>
                 )}
-              {d.wind_short && (
-                <div className="mt-1 text-[10px] font-medium text-wn-charcoal/65">
-                  💨 {d.wind_short}
-                  {d.wind_dir_short ? ` ${d.wind_dir_short}` : ""}
-                </div>
-              )}
+              {d.wind_short && (() => {
+                const mph = parseWindMphFromText(d.wind_short);
+                const evaluation = evaluateWindHold(mph, resortWind);
+                const cls = windHoldChipClass(evaluation.level);
+                return (
+                  <>
+                    <div className="mt-1 text-[10px] font-medium text-wn-charcoal/65">
+                      💨 {d.wind_short}
+                      {d.wind_dir_short ? ` ${d.wind_dir_short}` : ""}
+                    </div>
+                    {evaluation.level !== "ok" && (
+                      <div className={`mt-1 ${cls.container}`}>
+                        <span aria-hidden="true">{cls.icon}</span>
+                        <span>{evaluation.label}</span>
+                      </div>
+                    )}
+                  </>
+                );
+              })()}
               {isTrend && (
                 <div className="mt-1 text-[9px] font-bold uppercase tracking-wide text-wn-charcoal/55">
                   trend
