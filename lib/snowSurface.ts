@@ -51,9 +51,10 @@ export type DailyWeather = {
 /** Output of classify(). */
 export type SurfaceResult = {
   code: SurfaceCode;
-  label: string;          // e.g. "Powder"
-  short: string;          // e.g. "PP"
-  emoji: string;          // mood-setting glyph (matches the badge)
+  label: string;          // official SANY label, e.g. "Packed Powder"
+  short: string;          // SANY code, e.g. "PPC"
+  emoji: string;          // legacy field — kept for backward compat, no longer rendered
+  alsoCalled?: string;    // rider-friendly alternative names (Red Bull-style vocabulary)
   description: string;    // 1-sentence "what" — neutral, factual
   reasons: string[];      // 1-3 bullets — the WHY from the data
   confidence: "low" | "medium" | "high";
@@ -70,22 +71,31 @@ export type SurfaceReport = {
 
 // ---------- Education content (used by the UI modal) ----------
 
+// Hybrid taxonomy:
+//   - `label` + `short` keep the official SANY vocabulary so users learn
+//     the same codes their resort's snow report uses (OnTheSnow, SkiReport,
+//     ski-area boards all publish in this format).
+//   - `alsoCalled` is the rider-friendly term you'd hear in the lodge
+//     ("corn snow", "slush", "crud") — what Red Bull and most skiing media
+//     actually call it. We display both so the page reads warm but stays
+//     authoritative.
 export const SURFACE_GLOSSARY: Record<SurfaceCode, {
   label: string;
   short: string;
-  emoji: string;
-  feelsLike: string;     // plain-English "what it feels like" for the modal
-  causedBy: string;      // root cause in non-jargon terms
+  emoji: string;        // legacy — not rendered anywhere after the type-chip refactor
+  alsoCalled?: string;
+  feelsLike: string;    // plain-English "what it feels like" for the modal
+  causedBy: string;     // root cause in non-jargon terms
 }> = {
-  PP:  { label: "Powder",            short: "PP",  emoji: "❄️", feelsLike: "Soft, fluffy snow that compresses under your weight. Floaty turns, quiet underfoot.",                       causedBy: "Fresh, cold snow that hasn't been groomed or skied off yet." },
-  PPC: { label: "Packed Powder",     short: "PPC", emoji: "🌨️", feelsLike: "Firm but forgiving. Edges hold without chatter; the snow doesn't fly when you carve.",                       causedBy: "Powder compacted by skier traffic or wind, while still cold enough to stay soft." },
-  MG:  { label: "Machine Groomed",   short: "MG",  emoji: "🧑‍🔧", feelsLike: "Smooth corduroy lines. Predictable underfoot — the safest fast-cruise surface.",                            causedBy: "Resort grooming overnight on packed snow, or snowmaking when natural snow is thin." },
-  LSG: { label: "Loose Granular",    short: "LSG", emoji: "🌾", feelsLike: "Pellet-y or sugary snow. Slides easily; edges can wash out if you push too hard.",                            causedBy: "Cold, dry conditions where old snow grains have broken down without melting." },
-  FG:  { label: "Frozen Granular",   short: "FG",  emoji: "🧊", feelsLike: "Like skiing on grippy gravel. Edges work but it's loud, and it gets slick if temps climb.",                   causedBy: "Snow that thawed and refroze. One melt-freeze cycle is enough." },
-  WS:  { label: "Wet Snow",          short: "WS",  emoji: "💧", feelsLike: "Heavy and sticky. Tiring on the legs; slow underfoot. Can dam up at the base of turns.",                      causedBy: "New snow falling at warm temps, or freshly fallen powder warming up through the day." },
-  WG:  { label: "Wet Granular",      short: "WG",  emoji: "🟡", feelsLike: "Slushy clumps. Edges sink in; great in spring sun, sketchy if it refreezes overnight.",                       causedBy: "Old snow surface warming above freezing — corn snow under the right conditions." },
-  IP:  { label: "Icy",               short: "IP",  emoji: "⚠️", feelsLike: "Hard, glassy patches. Edges chatter or wash. Tough on intermediates, dangerous on steeps.",                   causedBy: "Rain falling on snow, OR multiple melt-freeze cycles polishing the surface." },
-  VC:  { label: "Variable",          short: "VC",  emoji: "❔", feelsLike: "Patchy — what you find depends on aspect, time of day, and what's been groomed.",                              causedBy: "Mixed conditions where no single surface dominates." },
+  PP:  { label: "Powder",            short: "PP",  emoji: "❄️", alsoCalled: "fresh / fluff",                feelsLike: "Soft, fluffy snow that compresses under your weight. Floaty turns, quiet underfoot.",                       causedBy: "Fresh, cold snow that hasn't been groomed or skied off yet." },
+  PPC: { label: "Packed Powder",     short: "PPC", emoji: "🌨️", alsoCalled: "hard pack with soft top",      feelsLike: "Firm but forgiving. Edges hold without chatter; the snow doesn't fly when you carve.",                       causedBy: "Powder compacted by skier traffic or wind, while still cold enough to stay soft." },
+  MG:  { label: "Groomed",           short: "MG",  emoji: "🧑‍🔧", alsoCalled: "corduroy from the snowcat",   feelsLike: "Smooth corduroy lines. Predictable underfoot — the safest fast-cruise surface.",                            causedBy: "Resort grooming overnight on packed snow, or snowmaking when natural snow is thin." },
+  LSG: { label: "Loose Granular",    short: "LSG", emoji: "🌾", alsoCalled: "sugar snow / dry granular",   feelsLike: "Pellet-y or sugary snow. Slides easily; edges can wash out if you push too hard.",                            causedBy: "Cold, dry conditions where old snow grains have broken down without melting." },
+  FG:  { label: "Frozen Granular",   short: "FG",  emoji: "🧊", alsoCalled: "corn snow",                   feelsLike: "Like skiing on grippy gravel. Edges work but it's loud, and it gets slick if temps climb.",                   causedBy: "Snow that thawed and refroze. One melt-freeze cycle is enough." },
+  WS:  { label: "Wet Snow",          short: "WS",  emoji: "💧", alsoCalled: "heavy / sticky new snow",     feelsLike: "Heavy and sticky. Tiring on the legs; slow underfoot. Can dam up at the base of turns.",                      causedBy: "New snow falling at warm temps, or freshly fallen powder warming up through the day." },
+  WG:  { label: "Wet Granular",      short: "WG",  emoji: "🟡", alsoCalled: "slush",                       feelsLike: "Slushy clumps. Edges sink in; great in spring sun, sketchy if it refreezes overnight.",                       causedBy: "Old snow surface warming above freezing — corn snow under the right conditions." },
+  IP:  { label: "Icy",               short: "IP",  emoji: "⚠️", alsoCalled: "boilerplate / breakable crust", feelsLike: "Hard, glassy patches. Edges chatter or wash. Tough on intermediates, dangerous on steeps. Watch for breakable crust on aspects that took rain-on-snow then refroze.", causedBy: "Rain falling on snow, OR multiple melt-freeze cycles polishing the surface." },
+  VC:  { label: "Variable",          short: "VC",  emoji: "❔", alsoCalled: "crud / mixed",                feelsLike: "Patchy — skied-out powder mixed with hard pack and ice chunks. What you find depends on aspect, time of day, and what's been groomed.", causedBy: "Mixed conditions where no single surface dominates." },
 };
 
 // ---------- Feature extraction ----------
@@ -186,6 +196,7 @@ function makeResult(
     label: g.label,
     short: g.short,
     emoji: g.emoji,
+    alsoCalled: g.alsoCalled,
     description: g.feelsLike,
     reasons,
     confidence,

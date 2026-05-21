@@ -465,50 +465,46 @@ export default async function ResortPage({
             3-day outlook. lib/powderScore.ts + components/PowderDayScore.tsx
             stay in tree as dead code in case we want to revive it. */}
 
-        {/* CONDITIONS BLOCK — Today's weather, 10-day forecast, and the
-            Snow Surface interpretation read in a single uninterrupted
-            flow: current conditions → planning window → "what it'll
-            feel like" summary. Earlier we had Today's weather + Snow
-            Surface + 10-day forecast, which read as weather → surface →
-            back to weather and made the page feel like it backtracked. */}
+        {/* CONDITIONS BLOCK — three sections sharing a single narrative.
+            The Snow Surface card carries the headline ("what will today
+            feel like under your edges"); Today's weather is the snapshot
+            that informs it; the 10-day forecast extends the same data
+            into planning range. We lead with the surface so the killer
+            feature lands first, then drop into the supporting evidence. */}
+
+        {/* Snow Surface Forecast — interprets the 7-day weather window
+            into a SANY surface label (PP / PPC / MG / FG / IP / etc.)
+            with a 3-day outlook + a tap-to-learn glossary modal. */}
+        {surfaceReport && (
+          <SnowSurfaceForecast
+            report={surfaceReport}
+            forecastDates={forecastDateLabels}
+            offSeason={isGlobalOffSeasonNow()}
+          />
+        )}
+
+        {/* Today's weather — the current-conditions snapshot that feeds
+            the surface classifier above. Kept compact and second so the
+            page reads as "here's the surface, here's the evidence". */}
         <Section title="Today's weather">
           <FullWeatherCard resort={resort} weather={weather} lat={lat} lng={lng} />
         </Section>
 
-        {/* 10-day forecast is hidden globally during May-Oct: when the
-            resort is closed for the season nobody is planning around a
-            spring forecast for it, and the bulky cards crowd the page
-            without serving real intent. Returns in November along with
-            the Snow Surface block. */}
-        {weather?.forecast_json &&
-          weather.forecast_json.length > 0 &&
-          !isGlobalOffSeasonNow() && (
-            <Section
-              title={`${Math.min(weather.forecast_json.length, 10)}-day forecast`}
-              subtitle={
-                weather.forecast_json.length >= 8
-                  ? "Swipe sideways to see the full window. Days 8–10 are trend-only."
-                  : "Swipe sideways to see the full window."
-              }
-            >
-              <TenDayForecast days={weather.forecast_json.slice(0, 10)} />
-            </Section>
-          )}
-
-        {/* Snow Surface Forecast — predicts today's SANY surface code
-            from 7 days of weather_history + a 3-day outlook + tap-to-
-            learn glossary modal. Sits at the end of the weather block
-            as the interpretation layer.
-            Hidden globally during May-Oct: with US resorts closed there
-            is no surface to predict, and rendering a "VC · Variable ·
-            Low confidence · Mixed signals" card every page adds noise
-            without information. We pop back in November when resorts
-            open and the cron has real recent-weather data. */}
-        {surfaceReport && !isGlobalOffSeasonNow() && (
-          <SnowSurfaceForecast
-            report={surfaceReport}
-            forecastDates={forecastDateLabels}
-          />
+        {/* 10-day forecast — same Open-Meteo + NWS data extended into
+            planning range. Always rendered when forecast_json is
+            populated; the summer cards still give users a "is the
+            mountain getting cold yet" pulse leading into November. */}
+        {weather?.forecast_json && weather.forecast_json.length > 0 && (
+          <Section
+            title={`${Math.min(weather.forecast_json.length, 10)}-day forecast`}
+            subtitle={
+              weather.forecast_json.length >= 8
+                ? "Swipe sideways to see the full window. Days 8–10 are trend-only."
+                : "Swipe sideways to see the full window."
+            }
+          >
+            <TenDayForecast days={weather.forecast_json.slice(0, 10)} />
+          </Section>
         )}
 
         {/* WHERE TO STAY — three lodging partners (Booking, Vrbo,
