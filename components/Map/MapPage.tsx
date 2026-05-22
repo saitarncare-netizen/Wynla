@@ -309,6 +309,21 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   const terrainparkOnly = searchParams.get("terrainpark") === "1";
   const snowboardsOnly = searchParams.get("snowboards") === "1";
   const webcamOnly = searchParams.get("webcam") === "1";
+  // Family Mountain composite filter — ?family=1 narrows to resorts
+  // that work well for family / beginner trips. A resort qualifies if
+  // it has BOTH a ski school AND rental shop (table stakes for a family
+  // outing) AND either a chunk of beginner terrain (>=25% green) OR a
+  // dedicated learning lift (magic carpet). Strict-when-active: NULL
+  // on any required field fails.
+  const familyOnly = searchParams.get("family") === "1";
+  function matchesFamily(r: Resort): boolean {
+    if (r.has_lessons !== true) return false;
+    if (r.has_rentals !== true) return false;
+    const beginnerPct = r.difficulty_pct_beginner ?? 0;
+    const hasMagicCarpet = (r.lift_types?.magic_carpet ?? 0) >= 1;
+    if (beginnerPct < 25 && !hasMagicCarpet) return false;
+    return true;
+  }
   // Snowmaking threshold — ?snowmake=60 → only resorts with
   // snowmaking_pct >= 60. NULL fails. 0 / missing = no filter.
   const snowmakeMinRaw = searchParams.get("snowmake");
@@ -448,6 +463,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
       if (webcamOnly && !(r.webcam_url && r.webcam_url.trim() !== "")) {
         return false;
       }
+      if (familyOnly && !matchesFamily(r)) return false;
       if (snowmakeMin > 0) {
         if (r.snowmaking_pct == null || r.snowmaking_pct < snowmakeMin) {
           return false;
@@ -480,6 +496,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
     terrainparkOnly,
     snowboardsOnly,
     webcamOnly,
+    familyOnly,
     snowmakeMin,
     withinHours,
     origin,
@@ -543,6 +560,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
       if (webcamOnly && !(r.webcam_url && r.webcam_url.trim() !== "")) {
         return false;
       }
+      if (familyOnly && !matchesFamily(r)) return false;
       if (snowmakeMin > 0) {
         if (r.snowmaking_pct == null || r.snowmaking_pct < snowmakeMin) {
           return false;
@@ -573,6 +591,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
     terrainparkOnly,
     snowboardsOnly,
     webcamOnly,
+    familyOnly,
     snowmakeMin,
     withinHours,
     origin,
@@ -773,6 +792,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
                 (terrainparkOnly ? 1 : 0) +
                 (snowboardsOnly ? 1 : 0) +
                 (webcamOnly ? 1 : 0) +
+                (familyOnly ? 1 : 0) +
                 (snowmakeMin > 0 ? 1 : 0);
               return (
                 <button
@@ -1018,6 +1038,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
           (terrainparkOnly ? 1 : 0) +
           (snowboardsOnly ? 1 : 0) +
           (webcamOnly ? 1 : 0) +
+                (familyOnly ? 1 : 0) +
           (snowmakeMin > 0 ? 1 : 0)
         }
       />
@@ -1059,6 +1080,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
           (terrainparkOnly ? 1 : 0) +
           (snowboardsOnly ? 1 : 0) +
           (webcamOnly ? 1 : 0) +
+                (familyOnly ? 1 : 0) +
           (snowmakeMin > 0 ? 1 : 0)
         }
         fromPoint={{ lat: origin.lat, lng: origin.lon, label: origin.kind === "geo" ? "your location" : origin.name }}
@@ -1139,6 +1161,8 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         onLodgingChange={(v) => updateParam("lodging", v ? "1" : null)}
         webcamOnly={webcamOnly}
         onWebcamChange={(v) => updateParam("webcam", v ? "1" : null)}
+        familyOnly={familyOnly}
+        onFamilyChange={(v) => updateParam("family", v ? "1" : null)}
         liftReq={liftReq}
         onLiftReqChange={(v) => updateParam("lift", v)}
         snowmakeMin={snowmakeMin}

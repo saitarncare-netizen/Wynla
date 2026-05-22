@@ -55,6 +55,8 @@ type Props = {
   onLodgingChange: (v: boolean) => void;
   webcamOnly: boolean;
   onWebcamChange: (v: boolean) => void;
+  familyOnly: boolean;
+  onFamilyChange: (v: boolean) => void;
   liftReq: string | null;
   onLiftReqChange: (v: string | null) => void;
   snowmakeMin: number;
@@ -165,6 +167,8 @@ export default function FiltersDrawer({
   onLodgingChange,
   webcamOnly,
   onWebcamChange,
+  familyOnly,
+  onFamilyChange,
   liftReq,
   onLiftReqChange,
   snowmakeMin,
@@ -622,6 +626,27 @@ export default function FiltersDrawer({
               />
             </Section>
           )}
+
+          {/* BEST FOR — composite "personality" filters. Each one is a
+              shortcut for a multi-attribute check that's tedious to
+              dial in by hand. Today we have Family Mountain (lessons +
+              rentals + meaningful beginner terrain or a magic carpet);
+              future additions could be Steeps / Powder mountain / etc. */}
+          <Section
+            title="Best for"
+            summary={familyOnly ? "👨‍👩‍👧‍👦 Family mountain" : "Any"}
+          >
+            <FilterCheckbox
+              icon="👨‍👩‍👧‍👦"
+              label="Family mountain"
+              active={familyOnly}
+              onToggle={() => onFamilyChange(!familyOnly)}
+            />
+            <p className="mt-2 px-1 text-[10.5px] leading-snug text-wn-charcoal/55">
+              Has a ski / snowboard school, rentals, and either ≥25% beginner
+              terrain or a magic-carpet learning lift.
+            </p>
+          </Section>
 
           {/* SNOW FEATURES — terrain / surface variety. Night skiing
               stays in Conditions above (it's about time-of-day, not
