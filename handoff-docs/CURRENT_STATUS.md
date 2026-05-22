@@ -8,31 +8,7 @@ Live: https://wynla.app/ (primary) · https://ridewise-rcko.vercel.app/ (vercel 
 
 Current branch: `feat/phase-3-5-6-ui`. PR #19 open against `main`.
 
-## 🔥 P0 root cause found + code fix shipped 2026-05-21 — USER ACTION REQUIRED
-**Vercel project env vars were wiped.** All 6 most recent deploys failed with `Error: supabaseUrl is required` at /resort/[slug]/opengraph-image (edge runtime). wynla.app has been serving a stale older deploy with a separate Suspense hydration bug since then.
-
-**Code fixes shipped on `feat/phase-3-5-6-ui` (PR #19):**
-- `c8c258e` — Remove unnecessary Suspense wrapper around MapPage on `/`. The wrapper was holding the Loading fallback even after streaming completed.
-- `8f5429e` — Lazy-init `lib/supabase.ts` via Proxy so missing env vars don't break `next build`. Verified locally: build succeeds with empty .env.local.
-
-Build now passes on Vercel (preview HcoJ6jcfS ready in 59s, 2026-05-21).
-
-**REMAINING USER ACTION:** restore env vars at https://vercel.com/saitarncare-netizens-projects/ridewise/settings/environment-variables. Project + Shared tabs both currently empty. Without env vars the runtime returns 500 even though build passes.
-
-Required vars (apply to Production + Preview + Development):
-- `NEXT_PUBLIC_SUPABASE_URL` — `https://yhmzkeeaiknsotydaucs.supabase.co`
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY` — long JWT from Supabase dashboard
-- `NEXT_PUBLIC_MAPBOX_TOKEN` — verified-working `pk.eyJ1IjoiY2FyZWNhcmUwMSI...` (extractable from existing prod JS chunks)
-- `NEXT_PUBLIC_SITE_URL` — `https://wynla.app`
-- `SUPABASE_SERVICE_ROLE_KEY` — from Supabase dashboard (for crons + service-role queries)
-- `CRON_SECRET` — any strong random string (used by `vercel.json` crons)
-- Stripe (`STRIPE_SECRET_KEY`, `STRIPE_PUBLISHABLE_KEY`, `STRIPE_WEBHOOK_SECRET`) — only needed when Pro tier UI returns Season 2
-- `RESEND_API_KEY` — needed for /early welcome emails + digest cron
-- `ANTHROPIC_API_KEY` — only needed once the AI Haiku enrichment cron is wired into vercel.json (deferred per memory)
-
-After saving, redeploy (or push a new commit) and verify homepage map renders.
-
-## Original P0 bug description (now superseded by env-var root cause)
+## 🔥 Critical bug discovered 2026-05-21 (P0 — investigate before merge)
 **Homepage map shows "Loading..." forever in production.**
 - `https://wynla.app/` and `https://ridewise-rcko.vercel.app/`: `<main>` contains only `<p>Loading...</p>` (the page.tsx Suspense fallback). No map canvas, `mapboxgl` is `undefined` in window.
 - Interactive UI overlays (header, FilterBar with pass counts MC=22 / Ikon=56 / Epic=40 / Indy=209 / Independent=126, MobileQuickFilters, "Use my location") render fine — they're in a sibling div.
