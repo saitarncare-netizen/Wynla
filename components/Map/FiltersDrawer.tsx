@@ -30,6 +30,35 @@ type Props = {
   onSizeChange: (s: SizeTier | null) => void;
   onNightChange: (v: boolean) => void;
   onAirportChange: (iata: string | null) => void;
+  // Stage 4 — comprehensive filter expansion. Status / Snow features /
+  // Amenities / Lifts / Snow quality. Every URL param exposed here +
+  // in MapPage. Booleans are 1/null in the URL; liftReq is a string;
+  // snowmakeMin is an integer 0-100.
+  openNowOnly: boolean;
+  openNowCount: number;
+  onOpenNowChange: (v: boolean) => void;
+  terrainparkOnly: boolean;
+  onTerrainparkChange: (v: boolean) => void;
+  tubingOnly: boolean;
+  onTubingChange: (v: boolean) => void;
+  xcOnly: boolean;
+  onXcChange: (v: boolean) => void;
+  backcountryOnly: boolean;
+  onBackcountryChange: (v: boolean) => void;
+  snowboardsOnly: boolean;
+  onSnowboardsChange: (v: boolean) => void;
+  lessonsOnly: boolean;
+  onLessonsChange: (v: boolean) => void;
+  rentalsOnly: boolean;
+  onRentalsChange: (v: boolean) => void;
+  lodgingOnly: boolean;
+  onLodgingChange: (v: boolean) => void;
+  webcamOnly: boolean;
+  onWebcamChange: (v: boolean) => void;
+  liftReq: string | null;
+  onLiftReqChange: (v: string | null) => void;
+  snowmakeMin: number;
+  onSnowmakeMinChange: (n: number) => void;
   onClearAll: () => void;
   onClose: () => void;
 };
@@ -76,6 +105,27 @@ export const AIRPORT_OPTIONS: Array<{
 
 const DRIVE_TIME_PRESETS = [0, 3, 5, 8, 12];
 
+// Stage 4 — lift-filter options. Maps the four supported ?lift URL
+// values (gondola | tram | highspeed | nosurface) plus an "Any" entry
+// that clears the param. Ordered most-permissive → most-specific so
+// users scan the row top-to-bottom from broad to narrow.
+const LIFT_OPTIONS: Array<{
+  value: string | null;
+  label: string;
+  icon: string;
+}> = [
+  { value: null, label: "Any", icon: "" },
+  { value: "gondola", label: "Gondola", icon: "🚡" },
+  { value: "tram", label: "Aerial tram", icon: "🚠" },
+  { value: "highspeed", label: "High-speed chair", icon: "⚡" },
+  { value: "nosurface", label: "No surface-only", icon: "🚫" },
+];
+
+function liftLabel(v: string | null): string | null {
+  if (!v) return null;
+  return LIFT_OPTIONS.find((o) => o.value === v)?.label ?? null;
+}
+
 export default function FiltersDrawer({
   open,
   passFilter,
@@ -94,6 +144,31 @@ export default function FiltersDrawer({
   onSizeChange,
   onNightChange,
   onAirportChange,
+  openNowOnly,
+  openNowCount,
+  onOpenNowChange,
+  terrainparkOnly,
+  onTerrainparkChange,
+  tubingOnly,
+  onTubingChange,
+  xcOnly,
+  onXcChange,
+  backcountryOnly,
+  onBackcountryChange,
+  snowboardsOnly,
+  onSnowboardsChange,
+  lessonsOnly,
+  onLessonsChange,
+  rentalsOnly,
+  onRentalsChange,
+  lodgingOnly,
+  onLodgingChange,
+  webcamOnly,
+  onWebcamChange,
+  liftReq,
+  onLiftReqChange,
+  snowmakeMin,
+  onSnowmakeMinChange,
   onClearAll,
   onClose,
 }: Props) {
@@ -529,6 +604,183 @@ export default function FiltersDrawer({
             </div>
           </Section>
 
+          {/* STATUS — Stage 4 filter expansion. Only renders the
+              section header if at least one resort is currently open;
+              during the deep off-season (e.g. August) every resort
+              shows currently_open=false and the filter is a dead-end. */}
+          {openNowCount > 0 && (
+            <Section
+              title="Status"
+              summary={openNowOnly ? "Open now" : "Any"}
+            >
+              <FilterCheckbox
+                icon="🟢"
+                label="Currently open this season"
+                active={openNowOnly}
+                onToggle={() => onOpenNowChange(!openNowOnly)}
+                count={openNowCount}
+              />
+            </Section>
+          )}
+
+          {/* SNOW FEATURES — terrain / surface variety. Night skiing
+              stays in Conditions above (it's about time-of-day, not
+              terrain type). */}
+          <Section
+            title="Snow features"
+            summary={
+              [
+                terrainparkOnly ? "⛷ Terrain park" : null,
+                tubingOnly ? "🛷 Tubing" : null,
+                xcOnly ? "⛷ XC" : null,
+                backcountryOnly ? "🏔 Backcountry" : null,
+                snowboardsOnly ? "🏂 Snowboards" : null,
+              ]
+                .filter(Boolean)
+                .join(" · ") || "Any"
+            }
+          >
+            <div className="grid grid-cols-2 gap-1.5">
+              <FilterCheckbox
+                icon="⛷"
+                label="Terrain park"
+                active={terrainparkOnly}
+                onToggle={() => onTerrainparkChange(!terrainparkOnly)}
+              />
+              <FilterCheckbox
+                icon="🛷"
+                label="Tubing"
+                active={tubingOnly}
+                onToggle={() => onTubingChange(!tubingOnly)}
+              />
+              <FilterCheckbox
+                icon="⛷"
+                label="XC / Nordic"
+                active={xcOnly}
+                onToggle={() => onXcChange(!xcOnly)}
+              />
+              <FilterCheckbox
+                icon="🏔"
+                label="Backcountry"
+                active={backcountryOnly}
+                onToggle={() => onBackcountryChange(!backcountryOnly)}
+              />
+              <FilterCheckbox
+                icon="🏂"
+                label="Allows snowboards"
+                active={snowboardsOnly}
+                onToggle={() => onSnowboardsChange(!snowboardsOnly)}
+              />
+            </div>
+          </Section>
+
+          {/* AMENITIES — services on the mountain. Distinct from snow
+              features because these are services/infrastructure, not
+              terrain. */}
+          <Section
+            title="Amenities"
+            summary={
+              [
+                lessonsOnly ? "🎓 Lessons" : null,
+                rentalsOnly ? "🛍 Rentals" : null,
+                lodgingOnly ? "🏨 Slopeside" : null,
+                webcamOnly ? "📷 Webcam" : null,
+              ]
+                .filter(Boolean)
+                .join(" · ") || "Any"
+            }
+          >
+            <div className="grid grid-cols-2 gap-1.5">
+              <FilterCheckbox
+                icon="🎓"
+                label="Ski / snowboard school"
+                active={lessonsOnly}
+                onToggle={() => onLessonsChange(!lessonsOnly)}
+              />
+              <FilterCheckbox
+                icon="🛍"
+                label="Rentals"
+                active={rentalsOnly}
+                onToggle={() => onRentalsChange(!rentalsOnly)}
+              />
+              <FilterCheckbox
+                icon="🏨"
+                label="Slopeside lodging"
+                active={lodgingOnly}
+                onToggle={() => onLodgingChange(!lodgingOnly)}
+              />
+              <FilterCheckbox
+                icon="📷"
+                label="Live webcam"
+                active={webcamOnly}
+                onToggle={() => onWebcamChange(!webcamOnly)}
+              />
+            </div>
+          </Section>
+
+          {/* LIFTS — single-select radio matching the existing ?lift
+              URL param. "Any" clears the filter; the other four match
+              the four supported liftReq values in MapPage. */}
+          <Section
+            title="Lifts"
+            summary={liftLabel(liftReq) ?? "Any"}
+          >
+            <div className="grid grid-cols-2 gap-1.5">
+              {LIFT_OPTIONS.map((opt) => {
+                const active =
+                  opt.value === null ? liftReq === null : liftReq === opt.value;
+                return (
+                  <button
+                    key={opt.value ?? "any"}
+                    type="button"
+                    onClick={() => onLiftReqChange(opt.value)}
+                    aria-pressed={active}
+                    className={[
+                      "flex items-center justify-center gap-1.5 rounded-lg border px-2 py-2 text-xs font-semibold transition",
+                      active
+                        ? "border-wn-navy bg-wn-navy text-white"
+                        : "border-wn-charcoal/15 bg-white text-wn-charcoal hover:border-wn-charcoal/40",
+                    ].join(" ")}
+                  >
+                    {opt.icon && <span aria-hidden="true">{opt.icon}</span>}
+                    <span>{opt.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </Section>
+
+          {/* SNOW QUALITY — single slider for minimum snowmaking %.
+              0 = any, higher = stricter. Step 10 keeps it easy to
+              pick on a phone. */}
+          <Section
+            title="Snow quality"
+            summary={
+              snowmakeMin > 0 ? `≥ ${snowmakeMin}% snowmaking` : "Any"
+            }
+          >
+            <div className="flex items-center gap-3">
+              <input
+                type="range"
+                min={0}
+                max={100}
+                step={10}
+                value={snowmakeMin}
+                onChange={(e) => onSnowmakeMinChange(Number(e.target.value))}
+                aria-label="Minimum snowmaking percent"
+                className="flex-1 accent-wn-navy"
+              />
+              <span className="w-16 shrink-0 text-right text-xs font-semibold text-wn-navy">
+                {snowmakeMin > 0 ? `≥ ${snowmakeMin}%` : "Any"}
+              </span>
+            </div>
+            <p className="mt-2 text-[10px] leading-tight text-wn-charcoal/55">
+              Resorts with higher snowmaking coverage stay open longer
+              in lean snow years and offer more reliable conditions
+              early + late season.
+            </p>
+          </Section>
+
           {/* 7. MORE — Mobile-only entry point for Guides, Lists, Deals.
               Desktop surfaces these in the header; on mobile the header
               is too tight so we surface them here in the FiltersDrawer
@@ -663,5 +915,76 @@ function Section({
       </button>
       {isOpen && <div className="pb-4">{children}</div>}
     </section>
+  );
+}
+
+// Stage 4 — reusable checkbox-in-a-row for Snow features + Amenities
+// sections. Visual matches the Pass section checkboxes (square box,
+// emoji icon, label, optional count badge) but more compact.
+function FilterCheckbox({
+  icon,
+  label,
+  active,
+  onToggle,
+  count,
+}: {
+  icon: string;
+  label: string;
+  active: boolean;
+  onToggle: () => void;
+  count?: number;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onToggle}
+      aria-pressed={active}
+      className={[
+        "flex items-center gap-2 rounded-lg border px-2.5 py-2 text-left text-xs font-semibold transition",
+        active
+          ? "border-wn-navy bg-wn-navy/5"
+          : "border-wn-charcoal/15 bg-white hover:border-wn-charcoal/30",
+      ].join(" ")}
+    >
+      <span
+        className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-sm border ${
+          active
+            ? "border-wn-navy bg-wn-navy text-white"
+            : "border-wn-charcoal/30 bg-white"
+        }`}
+        aria-hidden="true"
+      >
+        {active && (
+          <svg
+            viewBox="0 0 12 12"
+            className="h-3 w-3"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+          >
+            <path
+              d="M2 6.5L5 9.5L10 3"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        )}
+      </span>
+      <span aria-hidden="true" className="text-sm leading-none">
+        {icon}
+      </span>
+      <span className="flex-1 truncate text-wn-charcoal">{label}</span>
+      {count != null && count > 0 && (
+        <span
+          className={`shrink-0 rounded-full px-1.5 py-0.5 text-[10px] font-bold ${
+            active
+              ? "bg-wn-navy text-white"
+              : "bg-wn-charcoal/10 text-wn-charcoal/70"
+          }`}
+        >
+          {count}
+        </span>
+      )}
+    </button>
   );
 }

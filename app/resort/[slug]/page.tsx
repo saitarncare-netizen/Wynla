@@ -790,10 +790,15 @@ function QuickStats({ resort }: { resort: Resort }) {
     const t = resort.lift_types;
     let value = String(resort.total_lifts);
     if (t) {
+      // Stage 4 — schema migrated from {chair_detach} to the Phase 2
+      // keys {high_speed_six, high_speed_quad, ...}. Sum HS = six + quad.
+      const hs = (Number(t.high_speed_six) || 0) + (Number(t.high_speed_quad) || 0);
+      const gondola = Number(t.gondola) || 0;
+      const tram = Number(t.tram) || 0;
       const parts: string[] = [];
-      if ((t.chair_detach ?? 0) > 0) parts.push(`${t.chair_detach} HS chair`);
-      if ((t.gondola ?? 0) > 0) parts.push(`${t.gondola} gondola`);
-      if ((t.tram ?? 0) > 0) parts.push(`${t.tram} tram`);
+      if (hs > 0) parts.push(`${hs} HS chair`);
+      if (gondola > 0) parts.push(`${gondola} gondola`);
+      if (tram > 0) parts.push(`${tram} tram`);
       if (parts.length > 0) {
         value = `${resort.total_lifts} (${parts.join(" + ")})`;
       }
