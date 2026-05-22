@@ -1,4 +1,3 @@
-import { Suspense } from "react";
 import { supabase } from "@/lib/supabase";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import MapPage from "@/components/Map/MapPage";
@@ -40,19 +39,11 @@ export default async function Home() {
   }
 
   return (
-    <Suspense
-      fallback={
-        <main className="flex min-h-dvh items-center justify-center p-8">
-          <p className="text-sm text-wn-charcoal/60">Loading...</p>
-        </main>
-      }
-    >
-      <MapPage
-        resorts={resortsRes.data ?? []}
-        driveTimes={driveTimesRes.data ?? []}
-        weather={weatherRes.data ?? []}
-        isAuthed={!!authRes.user}
-      />
-    </Suspense>
+    <MapPage
+      resorts={resortsRes.data ?? []}
+      driveTimes={driveTimesRes.data ?? []}
+      weather={weatherRes.data ?? []}
+      isAuthed={!!authRes.user}
+    />
   );
 }
