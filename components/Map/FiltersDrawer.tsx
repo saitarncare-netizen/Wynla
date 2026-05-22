@@ -370,11 +370,17 @@ export default function FiltersDrawer({
             </div>
           </Section>
 
-          {/* CONDITIONS — fresh snow + night skiing as inline toggle pills */}
+          {/* CONDITIONS TODAY — Stage 5 reorg. Merges the old "Status"
+              (Open now) into Conditions because all three controls
+              answer the same question: "what's the mountain doing
+              RIGHT NOW?". Order top→bottom is also importance order:
+              Open this season is the gating one; fresh snow + night
+              skiing are nice-to-have refinements. */}
           <Section
-            title="Conditions"
+            title="Conditions today"
             summary={
               [
+                openNowOnly ? "🟢 Open" : null,
                 freshSnowOnly ? "❄️ Fresh snow" : null,
                 nightOnly ? "🌙 Night skiing" : null,
               ]
@@ -382,6 +388,20 @@ export default function FiltersDrawer({
                 .join(" · ") || "Any conditions"
             }
           >
+            {/* Open now is conditionally rendered — section header keeps
+                showing during deep off-season but the checkbox hides
+                when zero resorts qualify so users don't dead-end. */}
+            {openNowCount > 0 && (
+              <div className="mb-2">
+                <FilterCheckbox
+                  icon="🟢"
+                  label="Currently open this season"
+                  active={openNowOnly}
+                  onToggle={() => onOpenNowChange(!openNowOnly)}
+                  count={openNowCount}
+                />
+              </div>
+            )}
             <div className="grid grid-cols-2 gap-1.5">
               {/* Stage 33 — fresh-snow chip hidden during May-Oct
                   off-season window; resorts with fresh snow are all
@@ -608,24 +628,9 @@ export default function FiltersDrawer({
             </div>
           </Section>
 
-          {/* STATUS — Stage 4 filter expansion. Only renders the
-              section header if at least one resort is currently open;
-              during the deep off-season (e.g. August) every resort
-              shows currently_open=false and the filter is a dead-end. */}
-          {openNowCount > 0 && (
-            <Section
-              title="Status"
-              summary={openNowOnly ? "Open now" : "Any"}
-            >
-              <FilterCheckbox
-                icon="🟢"
-                label="Currently open this season"
-                active={openNowOnly}
-                onToggle={() => onOpenNowChange(!openNowOnly)}
-                count={openNowCount}
-              />
-            </Section>
-          )}
+          {/* STATUS section retired in Stage 5 reorg — Open-now toggle
+              now lives at the top of Conditions today so all
+              "what's it doing right now" controls live together. */}
 
           {/* BEST FOR — composite "personality" filters. Each one is a
               shortcut for a multi-attribute check that's tedious to
@@ -648,11 +653,14 @@ export default function FiltersDrawer({
             </p>
           </Section>
 
-          {/* SNOW FEATURES — terrain / surface variety. Night skiing
-              stays in Conditions above (it's about time-of-day, not
-              terrain type). */}
+          {/* TERRAIN & SNOW — Stage 5 reorg. Merges the old "Snow
+              features" (terrain variety) with "Snow quality" (the
+              snowmaking-percent slider) because both answer "what's
+              the snow + terrain like on this mountain?". Checkboxes
+              for terrain type sit at the top, the slider at the
+              bottom feels like a natural refinement step. */}
           <Section
-            title="Snow features"
+            title="Terrain & snow"
             summary={
               [
                 terrainparkOnly ? "⛷ Terrain park" : null,
@@ -660,6 +668,7 @@ export default function FiltersDrawer({
                 xcOnly ? "⛷ XC" : null,
                 backcountryOnly ? "🏔 Backcountry" : null,
                 snowboardsOnly ? "🏂 Snowboards" : null,
+                snowmakeMin > 0 ? `≥ ${snowmakeMin}% snow` : null,
               ]
                 .filter(Boolean)
                 .join(" · ") || "Any"
@@ -696,6 +705,33 @@ export default function FiltersDrawer({
                 active={snowboardsOnly}
                 onToggle={() => onSnowboardsChange(!snowboardsOnly)}
               />
+            </div>
+            {/* Snowmaking % slider — merged from the standalone "Snow
+                quality" section in Stage 5 reorg. Higher snowmaking
+                coverage means more reliable conditions early + late
+                season + in lean snow years. */}
+            <div className="mt-4 rounded-lg border border-wn-charcoal/10 bg-wn-offwhite/40 p-3">
+              <div className="mb-1.5 flex items-center justify-between text-[11px] font-bold uppercase tracking-wide text-wn-charcoal/60">
+                <span>Minimum snowmaking</span>
+                <span className="text-wn-navy">
+                  {snowmakeMin > 0 ? `≥ ${snowmakeMin}%` : "Any"}
+                </span>
+              </div>
+              <input
+                type="range"
+                min={0}
+                max={100}
+                step={10}
+                value={snowmakeMin}
+                onChange={(e) => onSnowmakeMinChange(Number(e.target.value))}
+                aria-label="Minimum snowmaking percent"
+                className="w-full accent-wn-navy"
+              />
+              <p className="mt-1 text-[10px] leading-tight text-wn-charcoal/55">
+                Resorts with higher snowmaking coverage stay open longer
+                in lean snow years and have more reliable conditions
+                early + late season.
+              </p>
             </div>
           </Section>
 
@@ -775,36 +811,10 @@ export default function FiltersDrawer({
             </div>
           </Section>
 
-          {/* SNOW QUALITY — single slider for minimum snowmaking %.
-              0 = any, higher = stricter. Step 10 keeps it easy to
-              pick on a phone. */}
-          <Section
-            title="Snow quality"
-            summary={
-              snowmakeMin > 0 ? `≥ ${snowmakeMin}% snowmaking` : "Any"
-            }
-          >
-            <div className="flex items-center gap-3">
-              <input
-                type="range"
-                min={0}
-                max={100}
-                step={10}
-                value={snowmakeMin}
-                onChange={(e) => onSnowmakeMinChange(Number(e.target.value))}
-                aria-label="Minimum snowmaking percent"
-                className="flex-1 accent-wn-navy"
-              />
-              <span className="w-16 shrink-0 text-right text-xs font-semibold text-wn-navy">
-                {snowmakeMin > 0 ? `≥ ${snowmakeMin}%` : "Any"}
-              </span>
-            </div>
-            <p className="mt-2 text-[10px] leading-tight text-wn-charcoal/55">
-              Resorts with higher snowmaking coverage stay open longer
-              in lean snow years and offer more reliable conditions
-              early + late season.
-            </p>
-          </Section>
+          {/* SNOW QUALITY section retired in Stage 5 reorg — the
+              snowmaking-percent slider now lives at the bottom of
+              "Terrain & snow" so all snow-related controls cluster
+              together. */}
 
           {/* 7. MORE — Mobile-only entry point for Guides, Lists, Deals.
               Desktop surfaces these in the header; on mobile the header
