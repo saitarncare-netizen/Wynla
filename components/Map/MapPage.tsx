@@ -104,15 +104,22 @@ export type Resort = {
   closest_airport_distance_mi: number | null;
   // Phase 0 (one-app build, 2026-05-21) — Tier 1 verified data.
   allows_snowboards: boolean | null;
+  // Stage 4 (filter expansion, 2026-05-22) — schema updated to match
+  // the Phase 2 mass-research keys actually populated in production.
+  // Previous keys (chair_fixed / chair_detach / tbar / poma / rope /
+  // carpet) were never populated — they were a placeholder schema from
+  // Phase 0. New canonical keys below.
   lift_types: {
-    chair_fixed?: number;
-    chair_detach?: number;
+    high_speed_six?: number;
+    high_speed_quad?: number;
+    fixed_quad?: number;
+    fixed_triple?: number;
+    fixed_double?: number;
     gondola?: number;
+    bubble_chair?: number;
     tram?: number;
-    tbar?: number;
-    poma?: number;
-    rope?: number;
-    carpet?: number;
+    surface?: number;
+    magic_carpet?: number;
   } | null;
   currently_open: boolean | null;
   season_end_date: string | null;
@@ -285,8 +292,47 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   const openNowOnly = searchParams.get("open") === "1";
   // Phase 3 — lift-type requirement. ?lift=gondola|tram|highspeed|nosurface
   // filters by minimum lift inventory. Useful for "I want gondola access"
-  // (visual partners, beginners, comfort) or "no T-bars/poma" (snowboarder).
+  // (visual partners, beginners, comfort) or "no surface-only" (avoid
+  // resorts where the only uphill option is a T-bar / poma / magic carpet).
   const liftReq = searchParams.get("lift");
+  // Stage 4 (filter expansion) — amenity + snow feature URL params.
+  // All boolean flags use "?key=1" → only resorts where the column is
+  // STRICTLY true. Missing / null fails the filter (matches the
+  // size-filter pattern: filter-when-active is strict so users don't
+  // get false positives from unknown-data resorts).
+  const lessonsOnly = searchParams.get("lessons") === "1";
+  const rentalsOnly = searchParams.get("rentals") === "1";
+  const lodgingOnly = searchParams.get("lodging") === "1";
+  const tubingOnly = searchParams.get("tubing") === "1";
+  const xcOnly = searchParams.get("xc") === "1";
+  const backcountryOnly = searchParams.get("backcountry") === "1";
+  const terrainparkOnly = searchParams.get("terrainpark") === "1";
+  const snowboardsOnly = searchParams.get("snowboards") === "1";
+  const webcamOnly = searchParams.get("webcam") === "1";
+  // Family Mountain composite filter — ?family=1 narrows to resorts
+  // that work well for family / beginner trips. A resort qualifies if
+  // it has BOTH a ski school AND rental shop (table stakes for a family
+  // outing) AND either a chunk of beginner terrain (>=25% green) OR a
+  // dedicated learning lift (magic carpet). Strict-when-active: NULL
+  // on any required field fails.
+  const familyOnly = searchParams.get("family") === "1";
+  function matchesFamily(r: Resort): boolean {
+    if (r.has_lessons !== true) return false;
+    if (r.has_rentals !== true) return false;
+    const beginnerPct = r.difficulty_pct_beginner ?? 0;
+    const hasMagicCarpet = (r.lift_types?.magic_carpet ?? 0) >= 1;
+    if (beginnerPct < 25 && !hasMagicCarpet) return false;
+    return true;
+  }
+  // Snowmaking threshold — ?snowmake=60 → only resorts with
+  // snowmaking_pct >= 60. NULL fails. 0 / missing = no filter.
+  const snowmakeMinRaw = searchParams.get("snowmake");
+  const snowmakeMin = (() => {
+    if (!snowmakeMinRaw) return 0;
+    const n = Number(snowmakeMinRaw);
+    if (!Number.isFinite(n) || n <= 0) return 0;
+    return Math.min(100, Math.max(0, Math.round(n)));
+  })();
   // Stage 8 — airport filter. URL form: ?airport=DEN. Empty / missing
   // = no airport filter. Matched against resort.closest_airport_iata
   // with a 120-mile shuttle-range distance cap; resorts with NULL
@@ -378,17 +424,49 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
       if (liftReq) {
         const t = r.lift_types;
         if (!t) return false;
+        // Stage 4 — schema migrated from {chair_fixed, chair_detach}
+        // to the Phase 2 keys {high_speed_six, high_speed_quad,
+        // fixed_quad, fixed_triple, fixed_double, gondola, bubble_chair,
+        // tram, surface, magic_carpet}. Update logic in lockstep.
         if (liftReq === "gondola" && (t.gondola ?? 0) < 1) return false;
         if (liftReq === "tram" && (t.tram ?? 0) < 1) return false;
-        if (liftReq === "highspeed" && (t.chair_detach ?? 0) < 1) return false;
+        if (liftReq === "highspeed") {
+          const hs = (t.high_speed_six ?? 0) + (t.high_speed_quad ?? 0);
+          if (hs < 1) return false;
+        }
         if (liftReq === "nosurface") {
-          // exclude resorts where surface lifts are the ONLY uphill option
+          // exclude resorts where surface lifts / carpets are the
+          // ONLY uphill option. Aerial = anything that's not surface
+          // or magic_carpet.
           const aerial =
-            (t.chair_fixed ?? 0) +
-            (t.chair_detach ?? 0) +
+            (t.high_speed_six ?? 0) +
+            (t.high_speed_quad ?? 0) +
+            (t.fixed_quad ?? 0) +
+            (t.fixed_triple ?? 0) +
+            (t.fixed_double ?? 0) +
             (t.gondola ?? 0) +
-            (t.tram ?? 0);
+            (t.tram ?? 0) +
+            (t.bubble_chair ?? 0);
           if (aerial < 1) return false;
+        }
+      }
+      // Stage 4 — amenity / snow-feature filters. Strict semantics:
+      // NULL on the column fails the filter (matches size pattern).
+      if (lessonsOnly && r.has_lessons !== true) return false;
+      if (rentalsOnly && r.has_rentals !== true) return false;
+      if (lodgingOnly && r.has_lodging_on_mountain !== true) return false;
+      if (tubingOnly && r.has_tubing !== true) return false;
+      if (xcOnly && r.has_xc_skiing !== true) return false;
+      if (backcountryOnly && r.has_backcountry_access !== true) return false;
+      if (terrainparkOnly && r.has_terrain_park !== true) return false;
+      if (snowboardsOnly && r.allows_snowboards !== true) return false;
+      if (webcamOnly && !(r.webcam_url && r.webcam_url.trim() !== "")) {
+        return false;
+      }
+      if (familyOnly && !matchesFamily(r)) return false;
+      if (snowmakeMin > 0) {
+        if (r.snowmaking_pct == null || r.snowmaking_pct < snowmakeMin) {
+          return false;
         }
       }
       if (withinHours > 0) {
@@ -401,7 +479,30 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
     // matchesAirport closes over airportFilter; depending on
     // airportFilter is enough for memoization correctness.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [resorts, featuredOnly, passFilter, nightOnly, freshSnowOnly, openNowOnly, liftReq, withinHours, origin, driveTimeByResort, airportFilter]);
+  }, [
+    resorts,
+    featuredOnly,
+    passFilter,
+    nightOnly,
+    freshSnowOnly,
+    openNowOnly,
+    liftReq,
+    lessonsOnly,
+    rentalsOnly,
+    lodgingOnly,
+    tubingOnly,
+    xcOnly,
+    backcountryOnly,
+    terrainparkOnly,
+    snowboardsOnly,
+    webcamOnly,
+    familyOnly,
+    snowmakeMin,
+    withinHours,
+    origin,
+    driveTimeByResort,
+    airportFilter,
+  ]);
 
   const filtered = useMemo(() => {
     return filteredIgnoringSize.filter((r) => matchesSizeFilter(r.vertical_drop, sizeFilter));
@@ -421,6 +522,50 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         return false;
       }
       if (openNowOnly && r.currently_open !== true) return false;
+      // Stage 4 — apply all new amenity / snow / lift filters to the
+      // trip-planner picker pool as well, so a user who narrowed the
+      // map by e.g. "lessons + tubing" sees the same candidates in
+      // the planner picker. Pass is still intentionally NOT applied
+      // here (planner has its own pass-chip row inside the dialog).
+      if (liftReq) {
+        const t = r.lift_types;
+        if (!t) return false;
+        if (liftReq === "gondola" && (t.gondola ?? 0) < 1) return false;
+        if (liftReq === "tram" && (t.tram ?? 0) < 1) return false;
+        if (liftReq === "highspeed") {
+          const hs = (t.high_speed_six ?? 0) + (t.high_speed_quad ?? 0);
+          if (hs < 1) return false;
+        }
+        if (liftReq === "nosurface") {
+          const aerial =
+            (t.high_speed_six ?? 0) +
+            (t.high_speed_quad ?? 0) +
+            (t.fixed_quad ?? 0) +
+            (t.fixed_triple ?? 0) +
+            (t.fixed_double ?? 0) +
+            (t.gondola ?? 0) +
+            (t.tram ?? 0) +
+            (t.bubble_chair ?? 0);
+          if (aerial < 1) return false;
+        }
+      }
+      if (lessonsOnly && r.has_lessons !== true) return false;
+      if (rentalsOnly && r.has_rentals !== true) return false;
+      if (lodgingOnly && r.has_lodging_on_mountain !== true) return false;
+      if (tubingOnly && r.has_tubing !== true) return false;
+      if (xcOnly && r.has_xc_skiing !== true) return false;
+      if (backcountryOnly && r.has_backcountry_access !== true) return false;
+      if (terrainparkOnly && r.has_terrain_park !== true) return false;
+      if (snowboardsOnly && r.allows_snowboards !== true) return false;
+      if (webcamOnly && !(r.webcam_url && r.webcam_url.trim() !== "")) {
+        return false;
+      }
+      if (familyOnly && !matchesFamily(r)) return false;
+      if (snowmakeMin > 0) {
+        if (r.snowmaking_pct == null || r.snowmaking_pct < snowmakeMin) {
+          return false;
+        }
+      }
       if (withinHours > 0) {
         const dt = driveTimeByResort.get(r.id)?.get(origin.name);
         if (!dt || dt.duration_seconds > withinHours * 3600) return false;
@@ -430,7 +575,30 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
       return true;
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [resorts, featuredOnly, nightOnly, freshSnowOnly, openNowOnly, withinHours, origin, driveTimeByResort, sizeFilter, airportFilter]);
+  }, [
+    resorts,
+    featuredOnly,
+    nightOnly,
+    freshSnowOnly,
+    openNowOnly,
+    liftReq,
+    lessonsOnly,
+    rentalsOnly,
+    lodgingOnly,
+    tubingOnly,
+    xcOnly,
+    backcountryOnly,
+    terrainparkOnly,
+    snowboardsOnly,
+    webcamOnly,
+    familyOnly,
+    snowmakeMin,
+    withinHours,
+    origin,
+    driveTimeByResort,
+    sizeFilter,
+    airportFilter,
+  ]);
 
   // Open Now count — drives whether the chip surfaces in the
   // FilterBar (no chip if 0 resorts qualify).
@@ -609,7 +777,23 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
                 (sizeFilter ? 1 : 0) +
                 (nightOnly ? 1 : 0) +
                 (airportFilter ? 1 : 0) +
-                (origin.kind === "geo" ? 1 : 0);
+                (origin.kind === "geo" ? 1 : 0) +
+                // Stage 4 — new filters add to the badge count so users
+                // can see at a glance how many filters are stacked.
+                (freshSnowOnly ? 1 : 0) +
+                (openNowOnly ? 1 : 0) +
+                (liftReq ? 1 : 0) +
+                (lessonsOnly ? 1 : 0) +
+                (rentalsOnly ? 1 : 0) +
+                (lodgingOnly ? 1 : 0) +
+                (tubingOnly ? 1 : 0) +
+                (xcOnly ? 1 : 0) +
+                (backcountryOnly ? 1 : 0) +
+                (terrainparkOnly ? 1 : 0) +
+                (snowboardsOnly ? 1 : 0) +
+                (webcamOnly ? 1 : 0) +
+                (familyOnly ? 1 : 0) +
+                (snowmakeMin > 0 ? 1 : 0);
               return (
                 <button
                   type="button"
@@ -841,7 +1025,21 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
           (nightOnly ? 1 : 0) +
           (withinHours > 0 ? 1 : 0) +
           (airportFilter ? 1 : 0) +
-          (freshSnowOnly ? 1 : 0)
+          (freshSnowOnly ? 1 : 0) +
+          // Stage 4 — comprehensive filter expansion counted here too.
+          (openNowOnly ? 1 : 0) +
+          (liftReq ? 1 : 0) +
+          (lessonsOnly ? 1 : 0) +
+          (rentalsOnly ? 1 : 0) +
+          (lodgingOnly ? 1 : 0) +
+          (tubingOnly ? 1 : 0) +
+          (xcOnly ? 1 : 0) +
+          (backcountryOnly ? 1 : 0) +
+          (terrainparkOnly ? 1 : 0) +
+          (snowboardsOnly ? 1 : 0) +
+          (webcamOnly ? 1 : 0) +
+                (familyOnly ? 1 : 0) +
+          (snowmakeMin > 0 ? 1 : 0)
         }
       />
 
@@ -869,7 +1067,21 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
           (sizeFilter ? 1 : 0) +
           (nightOnly ? 1 : 0) +
           (withinHours > 0 ? 1 : 0) +
-          (airportFilter ? 1 : 0)
+          (airportFilter ? 1 : 0) +
+          // Stage 4 — new filters surface in the search-picker badge.
+          (openNowOnly ? 1 : 0) +
+          (liftReq ? 1 : 0) +
+          (lessonsOnly ? 1 : 0) +
+          (rentalsOnly ? 1 : 0) +
+          (lodgingOnly ? 1 : 0) +
+          (tubingOnly ? 1 : 0) +
+          (xcOnly ? 1 : 0) +
+          (backcountryOnly ? 1 : 0) +
+          (terrainparkOnly ? 1 : 0) +
+          (snowboardsOnly ? 1 : 0) +
+          (webcamOnly ? 1 : 0) +
+                (familyOnly ? 1 : 0) +
+          (snowmakeMin > 0 ? 1 : 0)
         }
         fromPoint={{ lat: origin.lat, lng: origin.lon, label: origin.kind === "geo" ? "your location" : origin.name }}
         allResorts={filtered}
@@ -925,6 +1137,36 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         freshSnowCount={resorts.filter(
           (r) => r.snow_new_24h_in != null && r.snow_new_24h_in > 0,
         ).length}
+        // Stage 4 — new filter state + handlers wired through. Each
+        // boolean → updateParam(key, on ? "1" : null). snowmakeMin is
+        // an integer 0-100 stored as a string (null when 0).
+        openNowOnly={openNowOnly}
+        openNowCount={openNowCount}
+        onOpenNowChange={(v) => updateParam("open", v ? "1" : null)}
+        terrainparkOnly={terrainparkOnly}
+        onTerrainparkChange={(v) => updateParam("terrainpark", v ? "1" : null)}
+        tubingOnly={tubingOnly}
+        onTubingChange={(v) => updateParam("tubing", v ? "1" : null)}
+        xcOnly={xcOnly}
+        onXcChange={(v) => updateParam("xc", v ? "1" : null)}
+        backcountryOnly={backcountryOnly}
+        onBackcountryChange={(v) => updateParam("backcountry", v ? "1" : null)}
+        snowboardsOnly={snowboardsOnly}
+        onSnowboardsChange={(v) => updateParam("snowboards", v ? "1" : null)}
+        lessonsOnly={lessonsOnly}
+        onLessonsChange={(v) => updateParam("lessons", v ? "1" : null)}
+        rentalsOnly={rentalsOnly}
+        onRentalsChange={(v) => updateParam("rentals", v ? "1" : null)}
+        lodgingOnly={lodgingOnly}
+        onLodgingChange={(v) => updateParam("lodging", v ? "1" : null)}
+        webcamOnly={webcamOnly}
+        onWebcamChange={(v) => updateParam("webcam", v ? "1" : null)}
+        familyOnly={familyOnly}
+        onFamilyChange={(v) => updateParam("family", v ? "1" : null)}
+        liftReq={liftReq}
+        onLiftReqChange={(v) => updateParam("lift", v)}
+        snowmakeMin={snowmakeMin}
+        onSnowmakeMinChange={(n) => updateParam("snowmake", n > 0 ? String(n) : null)}
         onWithinChange={(w) => updateParam("within", w)}
         onSizeChange={(s) => updateParam("size", s)}
         onNightChange={(v) => updateParam("night", v ? "1" : null)}
