@@ -6,7 +6,6 @@ import {
   useRef,
   useState,
   useEffect,
-  useSyncExternalStore,
 } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import MapView, { type TripRoutePoint } from "./MapView";
@@ -27,10 +26,12 @@ import RecentlyViewedStrip, {
   OPEN_RESORT_EVENT,
   type OpenResortDetail,
 } from "@/components/RecentlyViewedStrip";
-import OnboardingCard from "@/components/OnboardingCard";
+// OnboardingCard import removed — 3-step wizard retired (Round 5 polish).
+// First-time users now land directly on the full map. The file is kept
+// on disk so the work isn't lost; we may resurface a lightweight version
+// later for personalization (skill badges, sort order).
 import OffSeasonBanner from "@/components/OffSeasonBanner";
 import ProBenefitsCard from "@/components/ProBenefitsCard";
-import { isOnboarded } from "@/lib/preferences";
 // Stage 33 — matchesSkill / getPreferences are still exported for
 // future use (badges, sort order, curated lists), but the map-level
 // "🎯 For you" filter that used them was retired: it hid mid/large
@@ -190,21 +191,6 @@ function isSizeTier(v: string | null): v is SizeTier {
   return v === "small" || v === "medium" || v === "large";
 }
 
-// useSyncExternalStore plumbing for the onboarded flag. We don't have
-// real cross-tab sync needs here, so subscribe is a no-op; the snapshot
-// is just localStorage's truth. getServerSnapshot returns null to keep
-// SSR markup neutral — the client recomputes once mounted and either
-// renders the wizard or doesn't, without a hydration warning.
-function onboardedSubscribe(_cb: () => void): () => void {
-  return () => {};
-}
-function onboardedGetSnapshot(): boolean | null {
-  return isOnboarded();
-}
-function onboardedGetServerSnapshot(): boolean | null {
-  return null;
-}
-
 export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Props) {
   const weatherByResort = useMemo(
     () => new Map(weather.map((w) => [w.resort_id, w])),
@@ -246,21 +232,32 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
       setFiltersOpenRaw(false);
     }
   }
-  // Onboarding wizard — null on first render (SSR + pre-mount) so the
-  // server-rendered HTML matches the client's first paint and we avoid
-  // a hydration mismatch. useSyncExternalStore reads the onboarded flag
-  // from localStorage on every commit, but its getServerSnapshot returns
-  // null so SSR sees the un-onboarded baseline without diverging from
-  // the first client paint. (Direct setState inside useEffect would trip
-  // React 19's react-hooks/set-state-in-effect rule.)
-  const onboardedClient = useSyncExternalStore(
-    onboardedSubscribe,
-    onboardedGetSnapshot,
-    onboardedGetServerSnapshot,
-  );
-  const [onboardingDismissed, setOnboardingDismissed] = useState(false);
-  const showOnboarding: boolean | null =
-    onboardedClient === null ? null : !onboardedClient && !onboardingDismissed;
+  // Onboarding wizard removed (Round 5 polish). First-time users go
+  // straight to the full map — no skill / pass / origin questions
+  // upfront. Personalization can return later as a passive sort-order
+  // tweak instead of a blocking modal.
+
+  // Branded splash overlay state — visible on first mount until Mapbox
+  // fires `load`. 8s safety timeout in case the map never loads (missing
+  // token, network error). Reset is never wired — overlay only shows on
+  // first mount, never again, so route-internal nav doesn't flash it.
+  const [splashVisible, setSplashVisible] = useState(true);
+  const splashHideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => {
+    // Safety net: hide after 8s no matter what so users never get stuck
+    // staring at the splash if Mapbox token / network is broken.
+    splashHideTimer.current = setTimeout(() => setSplashVisible(false), 8000);
+    return () => {
+      if (splashHideTimer.current) clearTimeout(splashHideTimer.current);
+    };
+  }, []);
+  function handleMapLoaded() {
+    if (splashHideTimer.current) {
+      clearTimeout(splashHideTimer.current);
+      splashHideTimer.current = null;
+    }
+    setSplashVisible(false);
+  }
   // Stage 19.5: when the trip planner's picker is active, it
   // registers a handler here. Map pin clicks route through it
   // (treating the click as "pick this resort for the current stop")
@@ -399,6 +396,16 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
     ? airportParam.toUpperCase()
     : null;
   const AIRPORT_MAX_DISTANCE_MI = 120;
+
+  // Resolve the picked airport's coordinates from AIRPORT_OPTIONS so
+  // MapView can drop a ✈️ marker and ResortPanel can compute drive
+  // time from the airport. Null when no airport filter is active.
+  const activeAirport = useMemo(() => {
+    if (!airportFilter) return null;
+    const a = AIRPORT_OPTIONS.find((opt) => opt.iata === airportFilter);
+    if (!a) return null;
+    return { lat: a.lat, lng: a.lng, label: a.label, iata: a.iata };
+  }, [airportFilter]);
 
   // Defensive: when the planner closes, clear any trip overlays so a
   // user who saved + deleted a trip never sees lingering "in_trip"
@@ -806,7 +813,12 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
     <div className="relative h-dvh w-full overflow-hidden">
       <header
         className="absolute inset-x-0 top-0 z-10 md:border-b md:border-wn-charcoal/10 md:bg-white/95 md:backdrop-blur-sm"
-        style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}
+        // Round 5 polish — iPhone notch / Dynamic Island. The bare
+        // safe-area-inset-top value puts the button row flush with the
+        // status-bar battery/clock icons. +8px gap so there's always
+        // visual breathing room between iOS chrome and our first
+        // tappable element.
+        style={{ paddingTop: "calc(env(safe-area-inset-top, 0px) + 8px)" }}
       >
         <div className="flex items-center justify-between gap-1.5 px-2 pt-3 sm:gap-2 sm:px-6">
           <div className="flex items-baseline gap-3">
@@ -1011,6 +1023,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         originName={origin.name}
         driveTimeByResort={driveTimeByResort}
         selectedId={selectedId}
+        onMapLoaded={handleMapLoaded}
         // Stage 33 — freeze map interaction whenever a full-bleed
         // overlay is on screen. Without this, vertical scrolls inside
         // the filter drawer / search picker leak through to Mapbox's
@@ -1039,6 +1052,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         tripResortIds={tripResortIds}
         previewLeg={previewLeg}
         fitTripVersion={fitTripVersion}
+        airportMarker={activeAirport}
       />
 
       <AlaskaInset resorts={filteredForMap} />
@@ -1087,6 +1101,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
           driveTime={driveTimeByResort.get(selectedResort.id)?.get(origin.name)}
           origin={origin}
           weather={weatherByResort.get(selectedResort.id) ?? null}
+          activeAirport={activeAirport}
           onClose={() => setSelectedId(null)}
         />
       )}
@@ -1312,9 +1327,46 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         onClose={() => setFiltersOpen(false)}
       />
 
-      {showOnboarding === true && (
-        <OnboardingCard onFinished={() => setOnboardingDismissed(true)} />
-      )}
+      {/* OnboardingCard removed (Round 5 polish). First-time users
+          land directly on the full map — no questions asked. */}
+
+      {/* Branded splash overlay — covers the entire map area while
+          Mapbox library + tiles boot. Only shows on first mount; the
+          handleMapLoaded callback fires from MapView once Mapbox emits
+          its `load` event, and an 8s safety timeout hides the overlay
+          even if Mapbox never loads (missing token, network error).
+          Pointer-events flip to none during the fade so users can
+          interact with the map underneath the moment it's ready. */}
+      <div
+        aria-hidden={!splashVisible}
+        className={[
+          "absolute inset-0 z-[60] flex flex-col items-center justify-center bg-wn-navy",
+          "transition-opacity duration-500 ease-out",
+          splashVisible
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none",
+        ].join(" ")}
+      >
+        <div className="flex flex-col items-center px-6 text-center">
+          <span className="text-5xl font-extrabold tracking-tight text-white sm:text-6xl">
+            Wynla
+          </span>
+          <span className="mt-2 text-sm font-medium text-white/70 sm:text-base">
+            Plan smart. Ride better.
+          </span>
+          <span className="mt-6 inline-flex h-1.5 w-24 overflow-hidden rounded-full bg-white/15">
+            <span className="h-full w-full origin-left animate-[wynla-splash-bar_1.4s_ease-in-out_infinite] bg-white/70" />
+          </span>
+        </div>
+        <style>{`
+          @keyframes wynla-splash-bar {
+            0%   { transform: translateX(-100%); }
+            50%  { transform: translateX(0%); }
+            100% { transform: translateX(100%); }
+          }
+        `}</style>
+      </div>
+
 
       {/* Pass color legend — desktop only. On mobile, the same info
           is already conveyed by the active-filter chips and the pin

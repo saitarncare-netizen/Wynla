@@ -584,6 +584,9 @@ export default function TripPlannerPanel({
         lng: Number(r.longitude),
         label: r.name,
         kind: "resort",
+        // Round 5 polish — surface the primary pass so MapView can
+        // color the numbered trip pin to match the resort's brand.
+        primaryPass: primaryPass(r.passes),
       });
     }
     if (pendingStop) {
@@ -594,6 +597,7 @@ export default function TripPlannerPanel({
           lng: Number(pr.longitude),
           label: pr.name,
           kind: "resort",
+          primaryPass: primaryPass(pr.passes),
         });
       }
     }
@@ -688,13 +692,21 @@ export default function TripPlannerPanel({
       setPickerForIndex(null);
     }
 
-    // Stage 19.7: zoom OUT to the trip-so-far overview instead of
-    // flying in to the picked resort. The user wants planning context
-    // (home + every confirmed stop + this candidate) while deciding,
-    // not a detail close-up. The hover-zoom path (Stage 19.3) still
-    // serves the "what does this resort look like" check; explicit
-    // clicks now trigger the wider overview.
-    onViewFullRoute?.();
+    // Round 5 polish — fly the camera to the picked resort so the user
+    // can see exactly where their next stop is + the drive distance
+    // from the previous one. The dashed preview line already renders
+    // by the time we get here (set in the picker onSelect path), so
+    // the user sees route AND destination at the same time. Replaces
+    // the older Stage 19.7 "fit bounds for the whole trip" which left
+    // users staring at a tiny pin in a state-wide bounding box.
+    const r = candidateBySlug.get(slug);
+    if (r) {
+      const lat = Number(r.latitude);
+      const lng = Number(r.longitude);
+      if (Number.isFinite(lat) && Number.isFinite(lng)) {
+        onFocusResort?.({ lat, lng });
+      }
+    }
   }
 
   function adjustPendingDays(delta: number) {
@@ -931,10 +943,15 @@ export default function TripPlannerPanel({
         aria-label="Trip planner"
         className={[
           "fixed z-40 flex flex-col bg-white shadow-2xl",
-          // Mobile: capped at ~55vh so the map above stays usable.
-          // Hidden during pick phase (picker overlay shows in its
-          // place). Desktop: full-height right rail.
-          "inset-x-0 bottom-0 max-h-[55vh] rounded-t-2xl",
+          // Mobile: capped at ~80vh on the review phase so users can
+          // actually scroll the trip-name field + stops list + cost
+          // estimator without bumping into the bottom of the sheet.
+          // Other phases stay at 55vh so the map above stays usable
+          // during set-days / confirm-days. Hidden during pick phase
+          // (picker overlay shows in its place). Desktop: full-height
+          // right rail.
+          "inset-x-0 bottom-0 rounded-t-2xl",
+          wizardPhase === "review" ? "max-h-[80vh]" : "max-h-[55vh]",
           hidePlannerSheet ? "hidden md:flex" : "",
           "animate-[slideUp_220ms_cubic-bezier(0.16,1,0.3,1)]",
           "md:inset-x-auto md:right-0 md:top-0 md:bottom-0 md:flex md:w-[440px] md:max-h-none md:rounded-none",
@@ -1175,6 +1192,26 @@ export default function TripPlannerPanel({
                     </button>
                   </div>
                 )}
+                {/* Round 5 polish — trip-name input moved to TOP of the
+                    review panel. Was buried under stops + cost so users
+                    didn't realize they could rename before save. */}
+                <div className="mb-3">
+                  <label
+                    htmlFor="trip-name-mobile-top"
+                    className="mb-1 block text-[10px] font-bold uppercase tracking-[0.15em] text-wn-charcoal/55"
+                  >
+                    Name your trip
+                  </label>
+                  <input
+                    id="trip-name-mobile-top"
+                    type="text"
+                    value={draftName}
+                    onChange={(e) => setDraftName(e.target.value)}
+                    placeholder={namePlaceholder}
+                    maxLength={80}
+                    className="w-full rounded-md border border-wn-charcoal/20 bg-white px-3 py-2 text-sm font-medium text-wn-charcoal placeholder:text-wn-charcoal/35 focus:border-wn-navy focus:outline-none focus:ring-2 focus:ring-wn-navy/20"
+                  />
+                </div>
                 <ol className="flex flex-col gap-2">
                   {stops.map((stop, i) => {
                     const r = candidateBySlug.get(stop.slug);
@@ -1282,23 +1319,9 @@ export default function TripPlannerPanel({
                   </div>
                 )}
 
-                <div className="mt-3">
-                  <label
-                    htmlFor="trip-name-mobile"
-                    className="mb-1 block text-[10px] font-bold uppercase tracking-[0.15em] text-wn-charcoal/55"
-                  >
-                    Trip name
-                  </label>
-                  <input
-                    id="trip-name-mobile"
-                    type="text"
-                    value={draftName}
-                    onChange={(e) => setDraftName(e.target.value)}
-                    placeholder={namePlaceholder}
-                    maxLength={80}
-                    className="w-full rounded-md border border-wn-charcoal/20 bg-white px-3 py-2 text-sm font-medium text-wn-charcoal placeholder:text-wn-charcoal/35 focus:border-wn-navy focus:outline-none focus:ring-2 focus:ring-wn-navy/20"
-                  />
-                </div>
+                {/* Trip-name input moved to the TOP of the review (above
+                    the stops list) — Round 5 polish. The old position
+                    here was redundant. */}
 
                 <button
                   type="button"

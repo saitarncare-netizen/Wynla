@@ -8,6 +8,7 @@ import { passColor, passLabel, primaryPass } from "@/lib/passColors";
 import { formatDriveTime, type Origin } from "@/lib/origins";
 import { fetchMatrixDriveTime, type MatrixResult } from "@/lib/mapboxMatrix";
 import { parseSeasonDates } from "@/lib/seasonDates";
+import { haversineMeters, estimateDriveSeconds } from "@/lib/distance";
 import FavoriteToggle from "@/components/auth/FavoriteToggle";
 import CompareToggle from "@/components/CompareToggle";
 import SeasonCountdown from "@/components/SeasonCountdown";
@@ -19,6 +20,11 @@ type Props = {
   driveTime: DriveTime | undefined;
   origin: Origin;
   weather: WeatherSnapshot | null;
+  /** Round 5 polish — when ?airport=XXX is active, MapPage passes the
+   *  picked airport's coordinates + label so the panel can show
+   *  "✈ ~XX min from <city> (<IATA>)" alongside the existing
+   *  drive-from-origin time. Null when no airport filter is set. */
+  activeAirport?: { lat: number; lng: number; label: string; iata: string } | null;
   onClose: () => void;
 };
 
@@ -27,6 +33,7 @@ export default function ResortPanel({
   driveTime,
   origin,
   weather,
+  activeAirport,
   onClose,
 }: Props) {
   const lng = Number(resort.longitude);
@@ -79,6 +86,23 @@ export default function ResortPanel({
       lng,
     });
   }, [resort.id, resort.slug, resort.name, primary, lat, lng]);
+
+  // Round 5 polish — when the airport filter is active, compute a
+  // Haversine-based drive time from the airport to the resort so the
+  // panel can show "✈ ~XX min from Denver (DEN)" alongside the
+  // existing origin drive. We use estimateDriveSeconds (the same
+  // 1.2× / 60 mph model used everywhere else in the app) so the
+  // number is consistent with the rest of the planner. Null when no
+  // airport is active or the resort lacks coordinates.
+  const airportDriveText = (() => {
+    if (!activeAirport) return null;
+    if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
+    const meters = haversineMeters(activeAirport.lat, activeAirport.lng, lat, lng);
+    const seconds = estimateDriveSeconds(meters);
+    const minutes = Math.max(1, Math.round(seconds / 60));
+    if (minutes < 60) return `~${minutes} min`;
+    return formatDriveTime(seconds);
+  })();
 
   // Pick the best drive-time data we have for display.
   const isEstimate = matrixResult ? false : driveTime?.is_estimate ?? false;
@@ -320,6 +344,17 @@ export default function ResortPanel({
               );
             })()}
           </div>
+
+          {/* Round 5 polish — airport drive context. Shows only when
+              ?airport=XXX is active. Sits just below the 3-stat card
+              alongside the existing "drive from origin" stat so users
+              comparing fly-in routes see both numbers at a glance. */}
+          {activeAirport && airportDriveText && (
+            <p className="mt-2 text-center text-[11px] font-medium text-wn-charcoal/65">
+              <span aria-hidden="true">✈ </span>
+              {airportDriveText} from {activeAirport.label} ({activeAirport.iata})
+            </p>
+          )}
         </div>
 
         {/* Sticky footer CTA */}
