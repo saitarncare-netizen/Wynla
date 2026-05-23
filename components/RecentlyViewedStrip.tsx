@@ -24,13 +24,15 @@ export type OpenResortDetail = {
 // until there's at least one entry — empty state would be visual noise
 // on a fresh visit.
 //
-// Renders TWO simultaneous variants gated by Tailwind breakpoints:
-//   * Mobile (< md): inline block — parent mounts it in normal flow
-//     so it stacks cleanly with the brand row / quick-filter chips /
-//     off-season banner without absolute-position overlap.
-//   * Desktop (md+): fixed floating pill bottom-right, above the pass
-//     legend. Mobile fragment is hidden via `md:hidden` so they never
-//     show at the same time.
+// Stage 5 round 4 — single inline variant for all viewport sizes.
+// Previously had a desktop "fixed bottom-20 right-6" floating pill
+// variant, but the parent header uses `backdrop-blur-sm` which creates
+// a containing block for `position: fixed` (CSS spec — any element with
+// `filter` / `backdrop-filter` / `transform` etc traps fixed-positioned
+// descendants). The desktop pill rendered at TOP of the header instead
+// of bottom of viewport, overlapping the header pill row. Solution:
+// drop the desktop fixed variant and let the inline mobile variant
+// render at every size. Header already has room for it.
 export default function RecentlyViewedStrip() {
   const [list, setList] = useState<RecentResort[]>([]);
 
@@ -70,24 +72,16 @@ export default function RecentlyViewedStrip() {
   };
 
   return (
-    <>
-      {/* Mobile — inline block in normal flow, sits below off-season banner */}
-      <div
-        className="md:hidden px-3 pb-2 sm:px-6"
-        onTouchStart={stopTouchBubble}
-        onTouchMove={stopTouchBubble}
-        onTouchEnd={stopTouchBubble}
-      >
-        <Strip list={list} onChipClick={onChipClick} />
-      </div>
-      {/* Desktop — fixed pill floating above the bottom-right pass legend */}
-      <div
-        className="pointer-events-none fixed bottom-20 right-6 z-10 hidden md:block"
-        style={{ maxWidth: "calc(100vw - 3rem)" }}
-      >
-        <Strip list={list} onChipClick={onChipClick} compact />
-      </div>
-    </>
+    // Single inline strip — stacks cleanly with the header brand row,
+    // quick-filter chips, and off-season banner on every breakpoint.
+    <div
+      className="px-3 pb-2 sm:px-6"
+      onTouchStart={stopTouchBubble}
+      onTouchMove={stopTouchBubble}
+      onTouchEnd={stopTouchBubble}
+    >
+      <Strip list={list} onChipClick={onChipClick} />
+    </div>
   );
 }
 
