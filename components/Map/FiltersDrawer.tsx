@@ -51,8 +51,6 @@ type Props = {
   onXcChange: (v: boolean) => void;
   backcountryOnly: boolean;
   onBackcountryChange: (v: boolean) => void;
-  snowboardsOnly: boolean;
-  onSnowboardsChange: (v: boolean) => void;
   lessonsOnly: boolean;
   onLessonsChange: (v: boolean) => void;
   rentalsOnly: boolean;
@@ -64,9 +62,9 @@ type Props = {
   familyOnly: boolean;
   onFamilyChange: (v: boolean) => void;
   // Stage 4 — Best-for expansion. Each composite filter is a single
-  // boolean URL param wired up the same way as familyOnly.
-  powderOnly: boolean;
-  onPowderChange: (v: boolean) => void;
+  // boolean URL param wired up the same way as familyOnly. (Powder
+  // mountain removed in Stage 5 round 2 — historical-snowfall filter
+  // was misleading vs real-time Snow today PP/PPC.)
   expertOnly: boolean;
   onExpertChange: (v: boolean) => void;
   adaptiveOnly: boolean;
@@ -174,8 +172,6 @@ export default function FiltersDrawer({
   onXcChange,
   backcountryOnly,
   onBackcountryChange,
-  snowboardsOnly,
-  onSnowboardsChange,
   lessonsOnly,
   onLessonsChange,
   rentalsOnly,
@@ -186,8 +182,6 @@ export default function FiltersDrawer({
   onWebcamChange,
   familyOnly,
   onFamilyChange,
-  powderOnly,
-  onPowderChange,
   expertOnly,
   onExpertChange,
   adaptiveOnly,
@@ -393,29 +387,30 @@ export default function FiltersDrawer({
             </div>
           </Section>
 
-          {/* CONDITIONS TODAY — Stage 5 reorg. Merges the old "Status"
-              (Open now) into Conditions because all three controls
-              answer the same question: "what's the mountain doing
-              RIGHT NOW?". Order top→bottom is also importance order:
-              Open this season is the gating one; fresh snow + night
-              skiing are nice-to-have refinements. */}
+          {/* CONDITIONS TODAY — Stage 5 round 2. Merges the old "Snow
+              today" surface forecast (PP / PPC / MG) into this section
+              because both answer the same question: "what's the
+              mountain doing RIGHT NOW?". Night skiing moved OUT to
+              Terrain & snow (it's a permanent feature, not a current
+              condition). Order top→bottom matches importance: Open
+              gates everything; fresh-snow + surface forecast are
+              today-only refinements. */}
           <Section
             title="Conditions today"
-            summary={
-              [
-                openNowOnly ? "🟢 Open" : null,
-                freshSnowOnly ? "❄️ Fresh snow" : null,
-                nightOnly ? "🌙 Night skiing" : null,
-              ]
-                .filter(Boolean)
-                .join(" · ") || "Any conditions"
-            }
+            summary={(() => {
+              const parts: string[] = [];
+              if (openNowOnly) parts.push("🟢 Open");
+              if (freshSnowOnly) parts.push("❄️ Fresh snow");
+              if (surfaceFilter.includes("PP")) parts.push("🌨 Powder");
+              if (surfaceFilter.includes("PPC")) parts.push("🏔 Packed");
+              if (surfaceFilter.includes("MG")) parts.push("〰️ Groomed");
+              return parts.length > 0 ? parts.join(" · ") : "Any conditions";
+            })()}
           >
-            {/* Open now is conditionally rendered — section header keeps
-                showing during deep off-season but the checkbox hides
-                when zero resorts qualify so users don't dead-end. */}
-            {openNowCount > 0 && (
-              <div className="mb-2">
+            <div className="grid grid-cols-1 gap-1.5">
+              {/* 1. Currently open this season. Hidden when 0 resorts
+                  qualify (deep off-season) so users don't dead-end. */}
+              {openNowCount > 0 && (
                 <FilterCheckbox
                   icon="🟢"
                   label="Currently open this season"
@@ -423,118 +418,73 @@ export default function FiltersDrawer({
                   onToggle={() => onOpenNowChange(!openNowOnly)}
                   count={openNowCount}
                 />
-              </div>
-            )}
-            <div className="grid grid-cols-2 gap-1.5">
-              {/* Stage 33 — fresh-snow chip hidden during May-Oct
-                  off-season window; resorts with fresh snow are all
-                  closed/off-season anyway so the filter just dead-ends
-                  users. Show during real ski season. */}
-              {!isGlobalOffSeasonNow() && (
-                <button
-                  type="button"
-                  onClick={() => onFreshSnowChange?.(!freshSnowOnly)}
-                  aria-pressed={freshSnowOnly}
-                  disabled={!onFreshSnowChange || freshSnowCount === 0}
-                  className={[
-                    "flex items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-semibold transition disabled:cursor-not-allowed disabled:opacity-50",
-                    freshSnowOnly
-                      ? "border-wn-sky bg-wn-sky/10 text-wn-navy"
-                      : "border-wn-charcoal/15 bg-white text-wn-charcoal hover:border-wn-charcoal/40",
-                  ].join(" ")}
-                >
-                  <span aria-hidden="true">❄️</span>
-                  <span>Fresh snow</span>
-                  {freshSnowCount > 0 && (
-                    <span
-                      className={`ml-0.5 rounded-full px-1.5 py-0.5 text-[10px] font-bold ${
-                        freshSnowOnly
-                          ? "bg-wn-navy text-white"
-                          : "bg-wn-charcoal/10 text-wn-charcoal/70"
-                      }`}
-                    >
-                      {freshSnowCount}
-                    </span>
-                  )}
-                </button>
               )}
-              <button
-                type="button"
-                onClick={() => onNightChange(!nightOnly)}
-                aria-pressed={nightOnly}
-                className={[
-                  "flex items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-semibold transition",
-                  nightOnly
-                    ? "border-wn-navy bg-wn-navy text-white"
-                    : "border-wn-charcoal/15 bg-white text-wn-charcoal hover:border-wn-charcoal/40",
-                ].join(" ")}
-              >
-                <span aria-hidden="true">🌙</span>
-                <span>Night skiing</span>
-              </button>
-            </div>
-          </Section>
-
-          {/* SNOW TODAY — Inaugural Season 2026. Positive-only filter
-              over the three "good day" SANY surface classes. Multi-
-              select OR semantics: ticking multiple boxes means "any of
-              these is fine". Section hides entirely off-season when
-              the weather cron hasn't classified any resort. */}
-          {surfaceCount > 0 && (
-            <Section
-              title="Snow today"
-              summary={(() => {
-                const parts: string[] = [];
-                if (surfaceFilter.includes("PP")) parts.push("🌨 Powder");
-                if (surfaceFilter.includes("PPC")) parts.push("❄️ Packed");
-                if (surfaceFilter.includes("MG")) parts.push("🛷 Groomed");
-                return parts.length > 0 ? parts.join(" · ") : "Any";
-              })()}
-            >
-              <div className="grid grid-cols-1 gap-1.5">
-                <FilterCheckbox
-                  icon="🌨️"
-                  label="Fresh powder"
-                  active={surfaceFilter.includes("PP")}
-                  onToggle={() => {
-                    const has = surfaceFilter.includes("PP");
-                    const next = has
-                      ? surfaceFilter.filter((c) => c !== "PP")
-                      : [...surfaceFilter, "PP"];
-                    onSurfaceChange(next);
-                  }}
-                />
+              {/* 2. Fresh snow (24h) — hidden during May-Oct off-season
+                  window because resorts with fresh snow are all closed
+                  then so the filter just dead-ends users. */}
+              {!isGlobalOffSeasonNow() && freshSnowCount > 0 && (
                 <FilterCheckbox
                   icon="❄️"
-                  label="Packed powder"
-                  active={surfaceFilter.includes("PPC")}
-                  onToggle={() => {
-                    const has = surfaceFilter.includes("PPC");
-                    const next = has
-                      ? surfaceFilter.filter((c) => c !== "PPC")
-                      : [...surfaceFilter, "PPC"];
-                    onSurfaceChange(next);
-                  }}
+                  label="Fresh snow (24h)"
+                  active={freshSnowOnly}
+                  onToggle={() => onFreshSnowChange?.(!freshSnowOnly)}
+                  count={freshSnowCount}
                 />
-                <FilterCheckbox
-                  icon="🛷"
-                  label="Groomed for carving"
-                  active={surfaceFilter.includes("MG")}
-                  onToggle={() => {
-                    const has = surfaceFilter.includes("MG");
-                    const next = has
-                      ? surfaceFilter.filter((c) => c !== "MG")
-                      : [...surfaceFilter, "MG"];
-                    onSurfaceChange(next);
-                  }}
-                />
-              </div>
+              )}
+              {/* 3-5. SANY surface forecast classes — only render when
+                  the weather cron has classified at least one resort
+                  today. Icons chosen to NOT collide visually: ❄️ is
+                  already "fresh snow" above, so packed powder uses 🏔
+                  (mountain = solid base) and groomed uses 〰️ (carving
+                  lines, NOT 🛷 which reads as a tube/sled). */}
+              {surfaceCount > 0 && (
+                <>
+                  <FilterCheckbox
+                    icon="🌨️"
+                    label="Fresh powder today"
+                    active={surfaceFilter.includes("PP")}
+                    onToggle={() => {
+                      const has = surfaceFilter.includes("PP");
+                      const next = has
+                        ? surfaceFilter.filter((c) => c !== "PP")
+                        : [...surfaceFilter, "PP"];
+                      onSurfaceChange(next);
+                    }}
+                  />
+                  <FilterCheckbox
+                    icon="🏔"
+                    label="Packed powder today"
+                    active={surfaceFilter.includes("PPC")}
+                    onToggle={() => {
+                      const has = surfaceFilter.includes("PPC");
+                      const next = has
+                        ? surfaceFilter.filter((c) => c !== "PPC")
+                        : [...surfaceFilter, "PPC"];
+                      onSurfaceChange(next);
+                    }}
+                  />
+                  <FilterCheckbox
+                    icon="〰️"
+                    label="Groomed for carving today"
+                    active={surfaceFilter.includes("MG")}
+                    onToggle={() => {
+                      const has = surfaceFilter.includes("MG");
+                      const next = has
+                        ? surfaceFilter.filter((c) => c !== "MG")
+                        : [...surfaceFilter, "MG"];
+                      onSurfaceChange(next);
+                    }}
+                  />
+                </>
+              )}
+            </div>
+            {surfaceCount > 0 && (
               <p className="mt-2 px-1 text-[10.5px] leading-snug text-wn-charcoal/55">
-                Predicted from the last 7 days of weather. Multi-select OK —
-                tick whichever surface you&apos;d be happy with.
+                Surface predicted from the last 7 days of weather. Multi-select
+                OK — tick whichever surface you&apos;d be happy with.
               </p>
-            </Section>
-          )}
+            )}
+          </Section>
 
           {/* Stage 33 — ORIGIN section removed from drawer. The
               onboarding wizard already collects origin once (Use my
@@ -718,16 +668,17 @@ export default function FiltersDrawer({
 
           {/* BEST FOR — composite "personality" filters. Each one is a
               shortcut for a multi-attribute check that's tedious to
-              dial in by hand. Stage 4 expansion adds Powder Mountain
-              (annual snowfall), Expert Mountain (expert pct + vertical),
-              and Adaptive Program (certified adaptive ski school)
-              alongside the original Family Mountain composite. */}
+              dial in by hand. Stage 5 round 2 dropped Powder Mountain
+              (historical-snowfall was misleading — a "powder mountain"
+              can still be icy today, so real-time Snow today PP/PPC is
+              the right filter for powder lovers). Family / Expert /
+              Adaptive all consistently answer "this resort is good for
+              [user type]". */}
           <Section
             title="Best for"
             summary={(() => {
               const parts: string[] = [];
               if (familyOnly) parts.push("👨‍👩‍👧‍👦 Family");
-              if (powderOnly) parts.push("❄️ Powder");
               if (expertOnly) parts.push("🏔 Expert");
               if (adaptiveOnly) parts.push("♿ Adaptive");
               return parts.length > 0 ? parts.join(" · ") : "Any";
@@ -739,13 +690,6 @@ export default function FiltersDrawer({
                 label="Family mountain"
                 active={familyOnly}
                 onToggle={() => onFamilyChange(!familyOnly)}
-              />
-              <FilterCheckbox
-                icon="❄️"
-                label="Powder mountain"
-                active={powderOnly}
-                onToggle={() => onPowderChange(!powderOnly)}
-                title=">350 in/yr avg snowfall"
               />
               <FilterCheckbox
                 icon="🏔"
@@ -764,18 +708,18 @@ export default function FiltersDrawer({
             </div>
             <p className="mt-2 px-1 text-[10.5px] leading-snug text-wn-charcoal/55">
               Family = ski school + rentals + ≥25% beginner terrain (or a
-              magic carpet). Powder = &gt;350 in/yr snowfall. Expert =
-              ≥30% expert terrain &amp; ≥2000 ft vertical. Adaptive = has a
-              certified adaptive ski school.
+              magic carpet). Expert = ≥30% expert terrain &amp; ≥2000 ft
+              vertical. Adaptive = has a certified adaptive ski school.
             </p>
           </Section>
 
-          {/* TERRAIN & SNOW — Stage 5 reorg. Merges the old "Snow
-              features" (terrain variety) with "Snow quality" (the
-              snowmaking-percent slider) because both answer "what's
-              the snow + terrain like on this mountain?". Checkboxes
-              for terrain type sit at the top, the slider at the
-              bottom feels like a natural refinement step. */}
+          {/* TERRAIN & SNOW — Stage 5 round 2. Holds every "permanent
+              feature of the mountain" filter: terrain types (park /
+              tubing / XC / backcountry), night skiing (moved here from
+              Conditions today since it's an infrastructure feature, not
+              a today-thing), and the snowmaking-percent preset row.
+              "Allows snowboards" filter was dropped — only 3 US resorts
+              ban snowboards, dead weight for 99% of users. */}
           <Section
             title="Terrain & snow"
             summary={
@@ -784,19 +728,20 @@ export default function FiltersDrawer({
                 tubingOnly ? "🛷 Tubing" : null,
                 xcOnly ? "⛷ XC" : null,
                 backcountryOnly ? "🏔 Backcountry" : null,
-                snowboardsOnly ? "🏂 Snowboards" : null,
+                nightOnly ? "🌙 Night skiing" : null,
                 snowmakeMin > 0 ? `≥ ${snowmakeMin}% snow` : null,
               ]
                 .filter(Boolean)
                 .join(" · ") || "Any"
             }
           >
-            <div className="grid grid-cols-2 gap-1.5">
+            <div className="grid grid-cols-1 gap-1.5">
               <FilterCheckbox
                 icon="⛷"
                 label="Terrain park"
                 active={terrainparkOnly}
                 onToggle={() => onTerrainparkChange(!terrainparkOnly)}
+                info="Jumps, rails, half-pipes — for freestyle riders"
               />
               <FilterCheckbox
                 icon="🛷"
@@ -809,24 +754,28 @@ export default function FiltersDrawer({
                 label="XC / Nordic"
                 active={xcOnly}
                 onToggle={() => onXcChange(!xcOnly)}
+                info="Cross-country skiing on flat groomed trails (no chairlifts)"
               />
               <FilterCheckbox
                 icon="🏔"
                 label="Backcountry"
                 active={backcountryOnly}
                 onToggle={() => onBackcountryChange(!backcountryOnly)}
+                info="Access to ungroomed off-piste terrain"
               />
               <FilterCheckbox
-                icon="🏂"
-                label="Allows snowboards"
-                active={snowboardsOnly}
-                onToggle={() => onSnowboardsChange(!snowboardsOnly)}
+                icon="🌙"
+                label="Night skiing"
+                active={nightOnly}
+                onToggle={() => onNightChange(!nightOnly)}
+                info="Lit trails for skiing after dark"
               />
             </div>
-            {/* Snowmaking % slider — merged from the standalone "Snow
-                quality" section in Stage 5 reorg. Higher snowmaking
-                coverage means more reliable conditions early + late
-                season + in lean snow years. */}
+            {/* Snowmaking — preset buttons. The 0-100 slider felt too
+                granular + slow on touch; 4 fixed thresholds (Any / 25 /
+                50 / 75) cover the meaningful decisions (any coverage /
+                modest / strong / fully covered). URL param stays
+                ?snowmake=N. */}
             <div className="mt-4 rounded-lg border border-wn-charcoal/10 bg-wn-offwhite/40 p-3">
               <div className="mb-1.5 flex items-center justify-between text-[11px] font-bold uppercase tracking-wide text-wn-charcoal/60">
                 <span>Minimum snowmaking</span>
@@ -834,17 +783,28 @@ export default function FiltersDrawer({
                   {snowmakeMin > 0 ? `≥ ${snowmakeMin}%` : "Any"}
                 </span>
               </div>
-              <input
-                type="range"
-                min={0}
-                max={100}
-                step={10}
-                value={snowmakeMin}
-                onChange={(e) => onSnowmakeMinChange(Number(e.target.value))}
-                aria-label="Minimum snowmaking percent"
-                className="w-full accent-wn-navy"
-              />
-              <p className="mt-1 text-[10px] leading-tight text-wn-charcoal/55">
+              <div className="grid grid-cols-4 gap-1">
+                {[0, 25, 50, 75].map((threshold) => {
+                  const active =
+                    threshold === 0 ? snowmakeMin === 0 : snowmakeMin === threshold;
+                  return (
+                    <button
+                      key={threshold}
+                      type="button"
+                      onClick={() => onSnowmakeMinChange(threshold)}
+                      aria-pressed={active}
+                      className={`rounded-lg border px-2 py-2 text-xs font-semibold transition ${
+                        active
+                          ? "border-wn-navy bg-wn-navy text-white"
+                          : "border-wn-charcoal/15 bg-white text-wn-charcoal hover:border-wn-charcoal/40"
+                      }`}
+                    >
+                      {threshold === 0 ? "Any" : `≥ ${threshold}%`}
+                    </button>
+                  );
+                })}
+              </div>
+              <p className="mt-2 text-[10px] leading-tight text-wn-charcoal/55">
                 Resorts with higher snowmaking coverage stay open longer
                 in lean snow years and have more reliable conditions
                 early + late season.
@@ -860,7 +820,7 @@ export default function FiltersDrawer({
             summary={
               [
                 lessonsOnly ? "🎓 Lessons" : null,
-                rentalsOnly ? "🛍 Rentals" : null,
+                rentalsOnly ? "🎿 Rentals" : null,
                 lodgingOnly ? "🏨 Slopeside" : null,
                 webcamOnly ? "📷 Webcam" : null,
               ]
@@ -876,7 +836,7 @@ export default function FiltersDrawer({
                 onToggle={() => onLessonsChange(!lessonsOnly)}
               />
               <FilterCheckbox
-                icon="🛍"
+                icon="🎿"
                 label="Rentals"
                 active={rentalsOnly}
                 onToggle={() => onRentalsChange(!rentalsOnly)}
@@ -1072,7 +1032,9 @@ function Section({
 
 // Stage 4 — reusable checkbox-in-a-row for Snow features + Amenities
 // sections. Visual matches the Pass section checkboxes (square box,
-// emoji icon, label, optional count badge) but more compact.
+// emoji icon, label, optional count badge) but more compact. Stage 5
+// round 2 added an `info` subtitle below the label — used for filters
+// whose name isn't self-explanatory (Terrain park, XC/Nordic, etc).
 function FilterCheckbox({
   icon,
   label,
@@ -1080,6 +1042,7 @@ function FilterCheckbox({
   onToggle,
   count,
   title,
+  info,
 }: {
   icon: string;
   label: string;
@@ -1090,6 +1053,11 @@ function FilterCheckbox({
    *  explain the threshold (">350 in/yr", "≥30% expert", etc) without
    *  cluttering the label itself. */
   title?: string;
+  /** Optional inline subtitle rendered below the label. Use for
+   *  filter names that are jargon-y ("Terrain park", "XC / Nordic")
+   *  so first-time users get a one-line gloss. Skip on self-evident
+   *  labels (Tubing, Night skiing). */
+  info?: string;
 }) {
   return (
     <button
@@ -1098,14 +1066,14 @@ function FilterCheckbox({
       aria-pressed={active}
       title={title}
       className={[
-        "flex items-center gap-2 rounded-lg border px-2.5 py-2 text-left text-xs font-semibold transition",
+        "flex items-start gap-2 rounded-lg border px-2.5 py-2 text-left text-xs font-semibold transition",
         active
           ? "border-wn-navy bg-wn-navy/5"
           : "border-wn-charcoal/15 bg-white hover:border-wn-charcoal/30",
       ].join(" ")}
     >
       <span
-        className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-sm border ${
+        className={`mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-sm border ${
           active
             ? "border-wn-navy bg-wn-navy text-white"
             : "border-wn-charcoal/30 bg-white"
@@ -1128,13 +1096,20 @@ function FilterCheckbox({
           </svg>
         )}
       </span>
-      <span aria-hidden="true" className="text-sm leading-none">
+      <span aria-hidden="true" className="mt-0.5 text-sm leading-none">
         {icon}
       </span>
-      <span className="flex-1 truncate text-wn-charcoal">{label}</span>
+      <span className="min-w-0 flex-1">
+        <span className="block truncate text-wn-charcoal">{label}</span>
+        {info && (
+          <span className="mt-0.5 block text-[10px] font-normal leading-tight text-wn-charcoal/55">
+            {info}
+          </span>
+        )}
+      </span>
       {count != null && count > 0 && (
         <span
-          className={`shrink-0 rounded-full px-1.5 py-0.5 text-[10px] font-bold ${
+          className={`mt-0.5 shrink-0 rounded-full px-1.5 py-0.5 text-[10px] font-bold ${
             active
               ? "bg-wn-navy text-white"
               : "bg-wn-charcoal/10 text-wn-charcoal/70"

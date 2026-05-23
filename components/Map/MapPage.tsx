@@ -1,6 +1,13 @@
 "use client";
 
-import { useMemo, useRef, useState, useEffect, useSyncExternalStore } from "react";
+import {
+  useDeferredValue,
+  useMemo,
+  useRef,
+  useState,
+  useEffect,
+  useSyncExternalStore,
+} from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import MapView, { type TripRoutePoint } from "./MapView";
 import AlaskaInset from "./AlaskaInset";
@@ -317,7 +324,10 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   const xcOnly = searchParams.get("xc") === "1";
   const backcountryOnly = searchParams.get("backcountry") === "1";
   const terrainparkOnly = searchParams.get("terrainpark") === "1";
-  const snowboardsOnly = searchParams.get("snowboards") === "1";
+  // Stage 5 round 2 — removed `snowboardsOnly`. Only 3 US resorts ban
+  // snowboards (Mad River Glen, Alta, Deer Valley) so the filter was
+  // dead weight for 99% of users. URL param parsing dropped along with
+  // the predicate.
   const webcamOnly = searchParams.get("webcam") === "1";
   // Family Mountain composite filter — ?family=1 narrows to resorts
   // that work well for family / beginner trips. A resort qualifies if
@@ -334,18 +344,15 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
     if (beginnerPct < 25 && !hasMagicCarpet) return false;
     return true;
   }
-  // Stage 4 — Best-for expansion. Three additional composite filters
-  // surfaced alongside Family Mountain in the FiltersDrawer:
-  //   ?powder=1   — annual_snowfall_in >= 350 (premier powder mountains)
+  // Stage 4 — Best-for expansion. Two composite filters surfaced
+  // alongside Family Mountain in the FiltersDrawer:
   //   ?expert=1   — >=30% expert terrain AND >=2000 ft vertical
   //   ?adaptive=1 — has_adaptive_program === true (certified adaptive school)
   // Strict semantics: NULL on the required column fails the filter.
-  const powderOnly = searchParams.get("powder") === "1";
+  // (Stage 5 round 2 dropped ?powder=1 — historical snowfall was
+  // misleading vs real-time PP/PPC surface forecast.)
   const expertOnly = searchParams.get("expert") === "1";
   const adaptiveOnly = searchParams.get("adaptive") === "1";
-  function matchesPowder(r: Resort): boolean {
-    return (r.annual_snowfall_in ?? 0) >= 350;
-  }
   function matchesExpert(r: Resort): boolean {
     return (
       (r.difficulty_pct_expert ?? 0) >= 30 && (r.vertical_drop ?? 0) >= 2000
@@ -509,12 +516,10 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
       if (xcOnly && r.has_xc_skiing !== true) return false;
       if (backcountryOnly && r.has_backcountry_access !== true) return false;
       if (terrainparkOnly && r.has_terrain_park !== true) return false;
-      if (snowboardsOnly && r.allows_snowboards !== true) return false;
       if (webcamOnly && !(r.webcam_url && r.webcam_url.trim() !== "")) {
         return false;
       }
       if (familyOnly && !matchesFamily(r)) return false;
-      if (powderOnly && !matchesPowder(r)) return false;
       if (expertOnly && !matchesExpert(r)) return false;
       if (adaptiveOnly && !matchesAdaptive(r)) return false;
       if (surfaceFilter.length > 0 && !matchesSurface(r)) return false;
@@ -548,10 +553,8 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
     xcOnly,
     backcountryOnly,
     terrainparkOnly,
-    snowboardsOnly,
     webcamOnly,
     familyOnly,
-    powderOnly,
     expertOnly,
     adaptiveOnly,
     surfaceFilter,
@@ -565,6 +568,19 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   const filtered = useMemo(() => {
     return filteredIgnoringSize.filter((r) => matchesSizeFilter(r.vertical_drop, sizeFilter));
   }, [filteredIgnoringSize, sizeFilter]);
+
+  // Stage 5 round 2 — touch perf. User reported filter taps feel slow.
+  // Root cause: every filter change triggers a router.replace → URL
+  // updates → MapPage rerenders → MapView re-emits GeoJSON → Mapbox
+  // re-clusters 425 pins synchronously. Even cheap toggles read
+  // janky. Fix: keep URL update synchronous (so the checkbox visual
+  // updates immediately and stays in sync), but defer the array we
+  // hand to the map. useDeferredValue lets React paint the new
+  // checkbox state first, then re-compute the map cluster in a
+  // lower-priority pass. The deferred value lags one render behind
+  // the source when work is heavy — exactly the perceptual win we
+  // want (UI feels instant, map catches up). React 19 / Next 16. */}
+  const filteredForMap = useDeferredValue(filtered);
 
   // Pool offered to the trip-planner picker: every active filter
   // EXCEPT pass. The picker has its own pass-chip row inside the
@@ -614,12 +630,10 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
       if (xcOnly && r.has_xc_skiing !== true) return false;
       if (backcountryOnly && r.has_backcountry_access !== true) return false;
       if (terrainparkOnly && r.has_terrain_park !== true) return false;
-      if (snowboardsOnly && r.allows_snowboards !== true) return false;
       if (webcamOnly && !(r.webcam_url && r.webcam_url.trim() !== "")) {
         return false;
       }
       if (familyOnly && !matchesFamily(r)) return false;
-      if (powderOnly && !matchesPowder(r)) return false;
       if (expertOnly && !matchesExpert(r)) return false;
       if (adaptiveOnly && !matchesAdaptive(r)) return false;
       if (surfaceFilter.length > 0 && !matchesSurface(r)) return false;
@@ -651,10 +665,8 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
     xcOnly,
     backcountryOnly,
     terrainparkOnly,
-    snowboardsOnly,
     webcamOnly,
     familyOnly,
-    powderOnly,
     expertOnly,
     adaptiveOnly,
     surfaceFilter,
@@ -744,6 +756,21 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
     () => (selectedId == null ? null : resorts.find((r) => r.id === selectedId) ?? null),
     [selectedId, resorts],
   );
+
+  // Stage 5 round 2 — lock the viewport scroll on the map route only.
+  // MapPage fills `h-dvh` already, but the global legal footer in
+  // app/layout.tsx still sat below the map and let users scroll past
+  // it. We toggle a `route-map` class on <body> while MapPage is
+  // mounted; globals.css uses it to hide the layout footer and set
+  // body { overflow: hidden }. On unmount (navigating away to /early,
+  // /pro, /account, /resort/[slug], etc.) the class is removed and
+  // those routes get their normal scroll + footer back.
+  useEffect(() => {
+    document.body.classList.add("route-map");
+    return () => {
+      document.body.classList.remove("route-map");
+    };
+  }, []);
 
   // ESC key closes the panel — keyboard parity with the X button.
   useEffect(() => {
@@ -853,10 +880,8 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
                 (xcOnly ? 1 : 0) +
                 (backcountryOnly ? 1 : 0) +
                 (terrainparkOnly ? 1 : 0) +
-                (snowboardsOnly ? 1 : 0) +
                 (webcamOnly ? 1 : 0) +
                 (familyOnly ? 1 : 0) +
-                (powderOnly ? 1 : 0) +
                 (expertOnly ? 1 : 0) +
                 (adaptiveOnly ? 1 : 0) +
                 (surfaceFilter.length > 0 ? 1 : 0) +
@@ -982,7 +1007,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
 
 
       <MapView
-        resorts={filtered}
+        resorts={filteredForMap}
         originName={origin.name}
         driveTimeByResort={driveTimeByResort}
         selectedId={selectedId}
@@ -1016,7 +1041,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         fitTripVersion={fitTripVersion}
       />
 
-      <AlaskaInset resorts={filtered} />
+      <AlaskaInset resorts={filteredForMap} />
 
       {/* Empty state — only when filters return zero. The Alaska inset
           handles its own emptiness; this banner is for the main map. */}
@@ -1107,10 +1132,8 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
           (xcOnly ? 1 : 0) +
           (backcountryOnly ? 1 : 0) +
           (terrainparkOnly ? 1 : 0) +
-          (snowboardsOnly ? 1 : 0) +
           (webcamOnly ? 1 : 0) +
           (familyOnly ? 1 : 0) +
-          (powderOnly ? 1 : 0) +
           (expertOnly ? 1 : 0) +
           (adaptiveOnly ? 1 : 0) +
           (surfaceFilter.length > 0 ? 1 : 0) +
@@ -1153,10 +1176,8 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
           (xcOnly ? 1 : 0) +
           (backcountryOnly ? 1 : 0) +
           (terrainparkOnly ? 1 : 0) +
-          (snowboardsOnly ? 1 : 0) +
           (webcamOnly ? 1 : 0) +
           (familyOnly ? 1 : 0) +
-          (powderOnly ? 1 : 0) +
           (expertOnly ? 1 : 0) +
           (adaptiveOnly ? 1 : 0) +
           (surfaceFilter.length > 0 ? 1 : 0) +
@@ -1229,17 +1250,18 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         onSurfaceChange={(codes) =>
           updateParam("surface", codes.length === 0 ? null : codes.join(","))
         }
-        // Stage 4 — Best-for expansion: Powder + Expert + Adaptive
-        // composites alongside the existing Family Mountain checkbox.
-        powderOnly={powderOnly}
-        onPowderChange={(v) => updateParam("powder", v ? "1" : null)}
+        // Stage 4 — Best-for expansion: Expert + Adaptive composites
+        // alongside the existing Family Mountain checkbox. (Powder
+        // dropped Stage 5 round 2 — historical snowfall was misleading
+        // vs real-time PP/PPC surface forecast.)
         expertOnly={expertOnly}
         onExpertChange={(v) => updateParam("expert", v ? "1" : null)}
         adaptiveOnly={adaptiveOnly}
         onAdaptiveChange={(v) => updateParam("adaptive", v ? "1" : null)}
         // Stage 4 — new filter state + handlers wired through. Each
         // boolean → updateParam(key, on ? "1" : null). snowmakeMin is
-        // an integer 0-100 stored as a string (null when 0).
+        // an integer 0-100 stored as a string (null when 0). (Snowboards
+        // filter dropped Stage 5 round 2 — only 3 US resorts ban them.)
         openNowOnly={openNowOnly}
         openNowCount={openNowCount}
         onOpenNowChange={(v) => updateParam("open", v ? "1" : null)}
@@ -1251,8 +1273,6 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         onXcChange={(v) => updateParam("xc", v ? "1" : null)}
         backcountryOnly={backcountryOnly}
         onBackcountryChange={(v) => updateParam("backcountry", v ? "1" : null)}
-        snowboardsOnly={snowboardsOnly}
-        onSnowboardsChange={(v) => updateParam("snowboards", v ? "1" : null)}
         lessonsOnly={lessonsOnly}
         onLessonsChange={(v) => updateParam("lessons", v ? "1" : null)}
         rentalsOnly={rentalsOnly}
