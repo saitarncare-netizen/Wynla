@@ -237,34 +237,36 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   // upfront. Personalization can return later as a passive sort-order
   // tweak instead of a blocking modal.
 
-  // Branded splash overlay state — visible on first mount until Mapbox
-  // fires `load`. 8s safety timeout in case the map never loads (missing
-  // token, network error).
+  // Branded splash overlay state — visible on first ever mount until
+  // Mapbox fires `load`. 3s safety timeout in case the map never loads
+  // (missing token, network error).
   //
   // INTENT (do not "optimize" the delay away):
-  //   1. MINIMUM display 1500ms. The tagline "Plan smart. Ride better."
-  //      is a brand moment — on fast networks Mapbox can fire `load` in
-  //      200-400ms, which means users never get to read it. We force at
-  //      least 1.5s of splash visibility no matter how fast the map
-  //      boots. The 8s safety timeout still applies, but it ALSO
-  //      respects the 1500ms floor.
-  //   2. SESSION-STORAGE gating. Splash shows only ONCE per browser
-  //      session. After it hides for real, we set
-  //      `wynla_splash_shown=1` in sessionStorage. Subsequent re-mounts
-  //      of MapPage (user nav to /resort/:slug → back to /) detect the
-  //      flag on mount and skip the splash entirely. Closing the tab /
-  //      quitting the PWA clears sessionStorage → next open shows
-  //      splash again. Correct behavior.
-  const SPLASH_MIN_MS = 1500;
-  const SPLASH_SAFETY_MS = 8000;
-  const SPLASH_SESSION_KEY = "wynla_splash_shown";
-  // Lazy initial state — read sessionStorage at mount-time so we
-  // never flash the overlay on re-mount within the same session.
-  // SSR-safe: typeof window guard.
+  //   1. MINIMUM display 1000ms so the tagline "Plan smart. Ride better."
+  //      is readable on fast networks. The 3s safety timeout also
+  //      respects this floor.
+  //   2. LOCAL-STORAGE gating with 7-day TTL. Splash shows on the very
+  //      first visit per device. After that it skips for a week,
+  //      preventing the "flashes every time I reopen the PWA" complaint
+  //      Saitarn flagged on iPhone (iOS Safari unloads tabs aggressively
+  //      so sessionStorage clears between PWA opens). After 7 days the
+  //      splash returns once as a soft brand re-impression.
+  //   3. STORAGE FORMAT: `wynla_splash_seen_at` = unix ms of last show.
+  //      If absent OR older than 7 days, show splash; else skip.
+  const SPLASH_MIN_MS = 1000;
+  const SPLASH_SAFETY_MS = 3000;
+  const SPLASH_STORAGE_KEY = "wynla_splash_seen_at";
+  const SPLASH_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+  // Lazy initial state — read localStorage at mount-time so we never
+  // flash the overlay on returning visits within the TTL. SSR-safe.
   const [splashVisible, setSplashVisible] = useState<boolean>(() => {
     if (typeof window === "undefined") return true;
     try {
-      return window.sessionStorage.getItem(SPLASH_SESSION_KEY) !== "1";
+      const raw = window.localStorage.getItem(SPLASH_STORAGE_KEY);
+      if (!raw) return true;
+      const last = Number(raw);
+      if (!Number.isFinite(last)) return true;
+      return Date.now() - last > SPLASH_TTL_MS;
     } catch {
       return true;
     }
@@ -290,9 +292,10 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
     const commit = () => {
       setSplashVisible(false);
       try {
-        window.sessionStorage.setItem(SPLASH_SESSION_KEY, "1");
+        window.localStorage.setItem(SPLASH_STORAGE_KEY, String(Date.now()));
       } catch {
-        /* sessionStorage unavailable — splash will re-show next visit, acceptable */
+        /* localStorage unavailable (private mode / quota) —
+           splash will re-show next visit, acceptable */
       }
     };
     if (remaining === 0) {
