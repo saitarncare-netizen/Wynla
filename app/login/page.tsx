@@ -86,6 +86,29 @@ function LoginForm() {
     }
   }
 
+  // Apple OAuth handler. Mirrors the Google flow exactly — Supabase
+  // owns the provider config (Service ID, Team ID, Key ID, .p8 key).
+  // Until that's set up in Supabase Auth, the call returns
+  // "Provider is not enabled" and we surface a friendly message so the
+  // user falls back to Google or email rather than seeing a raw error.
+  async function onAppleSignIn() {
+    setStatus("sending");
+    setErrorMsg("");
+    const supabase = createSupabaseBrowserClient();
+    const callbackUrl = `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`;
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "apple",
+      options: { redirectTo: callbackUrl },
+    });
+    if (error) {
+      setStatus("error");
+      const msg = /provider is not enabled|disabled/i.test(error.message)
+        ? "Apple sign-in is being set up. Use Google or email for now."
+        : error.message;
+      setErrorMsg(msg);
+    }
+  }
+
   return (
     <main className="flex min-h-dvh items-center justify-center bg-wn-offwhite px-4 py-12">
       <div className="w-full max-w-sm">
@@ -145,6 +168,34 @@ function LoginForm() {
                 <span>Continue with Google</span>
               </button>
 
+              {/* Apple OAuth — same pattern. Disabled-feeling until
+                  Supabase Apple provider is configured; the click still
+                  works but surfaces a friendly "coming soon" message
+                  via the OAuth error path. */}
+              <button
+                type="button"
+                onClick={onAppleSignIn}
+                disabled={status === "sending"}
+                className="flex w-full items-center justify-center gap-2.5 rounded-md border border-wn-charcoal/20 bg-white px-4 py-2.5 text-sm font-semibold text-wn-charcoal transition hover:border-wn-charcoal/40 hover:bg-wn-offwhite disabled:opacity-60"
+                aria-label="Sign in with Apple"
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 18 18"
+                  aria-hidden="true"
+                >
+                  <path
+                    fill="#000"
+                    d="M14.94 9.43c-.02-2.05 1.67-3.04 1.74-3.09-.95-1.39-2.43-1.58-2.96-1.6-1.26-.13-2.46.74-3.1.74-.65 0-1.63-.72-2.69-.7-1.38.02-2.66.8-3.37 2.04-1.44 2.49-.37 6.18 1.04 8.2.69.99 1.51 2.11 2.58 2.07 1.04-.04 1.43-.67 2.69-.67s1.61.67 2.71.65c1.12-.02 1.83-1.01 2.51-2.01.79-1.15 1.12-2.27 1.14-2.33-.03-.01-2.18-.84-2.2-3.3zM12.95 3.43c.57-.7.96-1.66.86-2.62-.83.03-1.83.55-2.43 1.24-.53.62-1 1.61-.87 2.55.93.07 1.87-.47 2.44-1.17z"
+                  />
+                </svg>
+                <span>Continue with Apple</span>
+              </button>
+              <p className="-mt-1 text-center text-[10.5px] text-wn-charcoal/45">
+                Sign in with Apple — coming soon (Founder Season improvement).
+              </p>
+
               <div className="flex items-center gap-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-wn-charcoal/40">
                 <span className="h-px flex-1 bg-wn-charcoal/10" />
                 or
@@ -190,9 +241,6 @@ function LoginForm() {
               <p className="text-center text-[11px] text-wn-charcoal/55">
                 By continuing you agree to receive a one-time email. We never
                 send marketing without an explicit opt-in.
-              </p>
-              <p className="text-center text-[10.5px] text-wn-charcoal/45">
-                Google sign-in coming soon (Founder Season improvement).
               </p>
             </form>
             </div>

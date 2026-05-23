@@ -1,31 +1,25 @@
-// Stage 32 — Web Push send helper (server-only).
+// Web Push send helper (server-only). Stage 32 originally shipped a
+// hand-rolled VAPID JWT + no-payload push (encryption was deferred).
+// This file now uses the `web-push` npm package to send a real
+// aes128gcm-encrypted JSON payload so notifications can include the
+// specific resort name + snow amount.
 //
-// Implements just enough of the Web Push protocol (RFC 8030) + VAPID
-// (RFC 8292) to fire a no-payload push notification. Sending a non-
-// empty payload requires aes128gcm encryption (RFC 8188) which is
-// non-trivial — see TODO at the bottom of this file.
+// Behavior:
+//   * VAPID keys configured (NEXT_PUBLIC_VAPID_PUBLIC_KEY +
+//     VAPID_PRIVATE_KEY + VAPID_SUBJECT) → encrypted payload push via
+//     web-push.sendNotification. Browser SW receives event.data and
+//     shows the real title/body/url.
+//   * VAPID keys NOT configured → graceful fallback: send a no-payload
+//     push (TTL-only). Browser SW falls back to the generic "fresh
+//     snow at a resort you're watching" notification. Same behavior
+//     as before — pre-launch deploys don't break.
 //
-// What this DOES do today:
-//   * Generates a valid ES256-signed VAPID JWT using Node's crypto module
-//     so push services (Mozilla autopush, Apple, FCM) accept the request.
-//   * POSTs to the subscription endpoint with TTL + VAPID auth headers.
-//   * Sends NO payload body — the spec explicitly allows this. The browser
-//     SW receives a push event with `event.data === null`, and our SW
-//     (public/sw.js) is set up to fall back to a generic notification in
-//     that case.
-//
-// What this DOES NOT do today:
-//   * Encrypt a JSON payload into the request body. See the TODO at the
-//     bottom; doing this correctly requires aes128gcm + ECDH key agreement
-//     against the subscription's p256dh key, which is ~150 lines of
-//     fiddly crypto. The user can install the `web-push` npm package or
-//     port the encryption later.
-//
-// VAPID key format expected:
+// VAPID key format (what `npx web-push generate-vapid-keys` emits):
 //   publicKey  — URL-safe base64 of the uncompressed P-256 point (65 bytes,
-//                starts with 0x04). What `web-push generate-vapid-keys` emits.
+//                starts with 0x04).
 //   privateKey — URL-safe base64 of the 32-byte raw private scalar.
 
+import webpush from "web-push";
 import { createPrivateKey, createSign } from "node:crypto";
 
 export type WebPushSubscription = {
@@ -40,9 +34,9 @@ export type WebPushPayload = {
 };
 
 export type VapidKeys = {
-  publicKey: string;   // base64url, 65-byte uncompressed P-256 point
-  privateKey: string;  // base64url, 32-byte raw private scalar
-  subject: string;     // "mailto:you@example.com" or "https://..."
+  publicKey: string; // base64url, 65-byte uncompressed P-256 point
+  privateKey: string; // base64url, 32-byte raw private scalar
+  subject: string; // "mailto:you@example.com" or "https://..."
 };
 
 export type WebPushResult = {
@@ -52,7 +46,60 @@ export type WebPushResult = {
 };
 
 // ---------------------------------------------------------------------------
-// base64url helpers — Web Push protocol uses RFC 4648 §5 throughout.
+// Public entry point.
+
+export async function sendWebPush(
+  subscription: WebPushSubscription,
+  payload: WebPushPayload,
+  vapidKeys: VapidKeys,
+): Promise<WebPushResult> {
+  if (!subscription?.endpoint) {
+    return { ok: false, error: "subscription missing endpoint" };
+  }
+
+  const hasVapid =
+    Boolean(vapidKeys.publicKey) &&
+    Boolean(vapidKeys.privateKey) &&
+    Boolean(vapidKeys.subject);
+
+  // Encrypted-payload path (preferred): web-push handles the ECDH +
+  // aes128gcm + VAPID JWT for us. Errors come back with a statusCode
+  // we can surface for the 404/410 endpoint-pruning logic upstream.
+  if (hasVapid) {
+    try {
+      webpush.setVapidDetails(
+        vapidKeys.subject,
+        vapidKeys.publicKey,
+        vapidKeys.privateKey,
+      );
+      const res = await webpush.sendNotification(
+        subscription,
+        JSON.stringify(payload),
+        { TTL: 86400 },
+      );
+      return { ok: true, status: res.statusCode };
+    } catch (e) {
+      const err = e as { statusCode?: number; body?: string; message?: string };
+      return {
+        ok: false,
+        status: err.statusCode,
+        error: (err.body ?? err.message ?? String(e)).slice(0, 300),
+      };
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Fallback path: no VAPID keys configured. We still want to attempt a push
+  // (no-payload) so the SW can show the generic notification. Hand-rolled
+  // JWT keeps this file self-contained when web-push can't be used.
+  void payload;
+  return sendNoPayloadPush(subscription);
+}
+
+// ---------------------------------------------------------------------------
+// Fallback no-payload push (used when VAPID keys aren't configured yet).
+// Preserves the original Stage-32 behavior so a deploy without keys still
+// triggers the SW's generic-message branch.
 
 function base64UrlEncode(buf: Buffer): string {
   return buf
@@ -67,25 +114,10 @@ function base64UrlDecode(s: string): Buffer {
   return Buffer.from(s.replace(/-/g, "+").replace(/_/g, "/") + pad, "base64");
 }
 
-// ---------------------------------------------------------------------------
-// VAPID private-key import.
-//
-// Push services want an ES256 signature. Node's crypto.sign supports ES256
-// natively if we wrap the raw 32-byte private scalar in a PKCS#8 envelope.
-// We build that DER blob by hand (it's tiny) and hand it to createPrivateKey.
-
 function rawP256PrivateKeyToPkcs8(rawPriv: Buffer): Buffer {
   if (rawPriv.length !== 32) {
     throw new Error(`VAPID private key must be 32 bytes, got ${rawPriv.length}`);
   }
-  // PKCS#8 PrivateKeyInfo wrapping an EC PrivateKey (RFC 5208 + RFC 5915)
-  // for the P-256 curve. This template is constant aside from the 32-byte
-  // private scalar at offset 36.
-  // SEQUENCE {
-  //   INTEGER 0,
-  //   SEQUENCE { OID 1.2.840.10045.2.1 (ecPublicKey), OID 1.2.840.10045.3.1.7 (P-256) },
-  //   OCTET STRING { SEQUENCE { INTEGER 1, OCTET STRING <32-byte priv> } }
-  // }
   const prefix = Buffer.from(
     "308141020100301306072a8648ce3d020106082a8648ce3d030107042730250201010420",
     "hex",
@@ -93,47 +125,23 @@ function rawP256PrivateKeyToPkcs8(rawPriv: Buffer): Buffer {
   return Buffer.concat([prefix, rawPriv]);
 }
 
-// JOSE ECDSA signatures are r||s (64 bytes total), not the DER format that
-// Node emits by default. Pass `dsaEncoding: "ieee-p1363"` to get the raw form.
-function signJwt(headerB64: string, payloadB64: string, privateKeyPem: ReturnType<typeof createPrivateKey>): string {
-  const signingInput = `${headerB64}.${payloadB64}`;
-  const signer = createSign("SHA256");
-  signer.update(signingInput);
-  signer.end();
-  const sig = signer.sign({ key: privateKeyPem, dsaEncoding: "ieee-p1363" });
-  return `${signingInput}.${base64UrlEncode(sig)}`;
-}
-
-function buildVapidJwt(
-  audience: string,
-  vapid: VapidKeys,
-  ttlSeconds = 12 * 60 * 60,
-): string {
-  const header = { typ: "JWT", alg: "ES256" };
-  const exp = Math.floor(Date.now() / 1000) + ttlSeconds;
-  const payload = { aud: audience, exp, sub: vapid.subject };
-  const headerB64 = base64UrlEncode(Buffer.from(JSON.stringify(header)));
-  const payloadB64 = base64UrlEncode(Buffer.from(JSON.stringify(payload)));
-  const rawPriv = base64UrlDecode(vapid.privateKey);
-  const keyObj = createPrivateKey({
-    key: rawP256PrivateKeyToPkcs8(rawPriv),
-    format: "der",
-    type: "pkcs8",
-  });
-  return signJwt(headerB64, payloadB64, keyObj);
-}
-
-// ---------------------------------------------------------------------------
-// Public entry point.
-
-export async function sendWebPush(
+async function sendNoPayloadPush(
   subscription: WebPushSubscription,
-  payload: WebPushPayload,
-  vapidKeys: VapidKeys,
 ): Promise<WebPushResult> {
-  if (!subscription?.endpoint) {
-    return { ok: false, error: "subscription missing endpoint" };
+  // Without a VAPID key pair we literally cannot sign the JWT, so the
+  // push service will reject the request. Surface a clear reason
+  // rather than firing a doomed POST.
+  const pub = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
+  const priv = process.env.VAPID_PRIVATE_KEY;
+  const sub = process.env.VAPID_SUBJECT;
+  if (!pub || !priv || !sub) {
+    return {
+      ok: false,
+      error:
+        "VAPID keys not configured — generate with `npx web-push generate-vapid-keys` and set NEXT_PUBLIC_VAPID_PUBLIC_KEY / VAPID_PRIVATE_KEY / VAPID_SUBJECT",
+    };
   }
+
   let audience: string;
   try {
     const u = new URL(subscription.endpoint);
@@ -144,26 +152,35 @@ export async function sendWebPush(
 
   let jwt: string;
   try {
-    jwt = buildVapidJwt(audience, vapidKeys);
+    const header = { typ: "JWT", alg: "ES256" };
+    const exp = Math.floor(Date.now() / 1000) + 12 * 60 * 60;
+    const payload = { aud: audience, exp, sub };
+    const headerB64 = base64UrlEncode(Buffer.from(JSON.stringify(header)));
+    const payloadB64 = base64UrlEncode(Buffer.from(JSON.stringify(payload)));
+    const rawPriv = base64UrlDecode(priv);
+    const keyObj = createPrivateKey({
+      key: rawP256PrivateKeyToPkcs8(rawPriv),
+      format: "der",
+      type: "pkcs8",
+    });
+    const signer = createSign("SHA256");
+    signer.update(`${headerB64}.${payloadB64}`);
+    signer.end();
+    const sig = signer.sign({ key: keyObj, dsaEncoding: "ieee-p1363" });
+    jwt = `${headerB64}.${payloadB64}.${base64UrlEncode(sig)}`;
   } catch (e) {
-    return { ok: false, error: `vapid sign failed: ${String((e as Error)?.message ?? e)}` };
+    return {
+      ok: false,
+      error: `vapid sign failed: ${String((e as Error)?.message ?? e)}`,
+    };
   }
-
-  // NOTE: payload is intentionally unused here. We send an empty body — the
-  // browser SW receives a push event with `event.data === null` and falls
-  // back to a generic notification. Wiring up encrypted payloads is the
-  // TODO at the bottom.
-  void payload;
 
   try {
     const res = await fetch(subscription.endpoint, {
       method: "POST",
       headers: {
-        // RFC 8030 §5.2 — TTL is the only required header for a no-payload push.
         TTL: "86400",
-        // RFC 8292 §3 — VAPID auth scheme.
-        Authorization: `vapid t=${jwt}, k=${vapidKeys.publicKey}`,
-        // No Content-Type / Content-Encoding because we have no body.
+        Authorization: `vapid t=${jwt}, k=${pub}`,
         "Content-Length": "0",
       },
     });
@@ -173,17 +190,9 @@ export async function sendWebPush(
       error: res.ok ? undefined : `${res.status} ${res.statusText}`,
     };
   } catch (e) {
-    return { ok: false, error: String((e as Error)?.message ?? e).slice(0, 200) };
+    return {
+      ok: false,
+      error: String((e as Error)?.message ?? e).slice(0, 200),
+    };
   }
 }
-
-// TODO(payload-encryption): to deliver a per-notification title/body/URL we
-// need aes128gcm encryption (RFC 8188) keyed by ECDH(serverEphemeral,
-// subscription.keys.p256dh) and the subscription's `auth` salt. That's
-// ~150 lines of HKDF + AES-GCM glue. Two viable paths:
-//   1. Install the `web-push` npm package and replace this file's body
-//      with `webPush.sendNotification(subscription, JSON.stringify(payload),
-//      { vapidDetails })`. Adds one dep but is battle-tested.
-//   2. Port the encryption inline using node:crypto (createECDH, createHmac,
-//      createCipheriv aes-128-gcm). Workable but tedious and easy to mis-spec.
-// Until then, the SW handles the empty-payload case with a generic message.

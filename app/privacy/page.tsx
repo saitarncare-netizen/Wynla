@@ -2,13 +2,20 @@
 // how we handle it. This is a Stage 35 prerequisite for the iOS App
 // Store submission (Apple guideline 5.1.1 requires a privacy policy URL).
 //
-// Tone: friendly, specific to Wynla, no Termly boilerplate. The product
-// is run by a single founder pre-incorporation, so we're honest about
-// that instead of pretending to be a Fortune-500 legal department.
+// Tone: friendly, specific to Wynla, no Termly boilerplate.
 //
-// TODO (post-incorporation): replace "Wynla (operated by Saitarn Care)"
-// with the actual US legal entity name once Stripe Atlas LLC paperwork
-// completes.
+// ---------------------------------------------------------------------------
+// PRE-LAUNCH ENV CHECKLIST — set before going public
+// ---------------------------------------------------------------------------
+// NEXT_PUBLIC_OPERATOR_NAME     Legal operator name (sole-prop registration
+//                               in Thailand). Until set, the page shows
+//                               "[Operator name pending registration]".
+// NEXT_PUBLIC_OPERATOR_ADDRESS  Operator business address. Defaults to
+//                               "Bangkok, Thailand".
+// NEXT_PUBLIC_CONTACT_EMAIL     Public contact mailbox. Defaults to
+//                               "hello@wynla.app" (Resend-backed once DNS
+//                               is verified — see handoff-docs/RESEND_SETUP.md).
+// ---------------------------------------------------------------------------
 
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -22,7 +29,15 @@ export const metadata: Metadata = {
   alternates: { canonical: "/privacy" },
 };
 
-const LAST_UPDATED = "May 16, 2026";
+const LAST_UPDATED = "May 23, 2026";
+
+const OPERATOR_NAME =
+  process.env.NEXT_PUBLIC_OPERATOR_NAME ??
+  "[Operator name pending registration]";
+const OPERATOR_ADDRESS =
+  process.env.NEXT_PUBLIC_OPERATOR_ADDRESS ?? "Bangkok, Thailand";
+const CONTACT_EMAIL =
+  process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "hello@wynla.app";
 
 export default function PrivacyPage() {
   return (
@@ -49,14 +64,14 @@ export default function PrivacyPage() {
             Last updated: {LAST_UPDATED}
           </p>
           <p className="mt-4 text-sm text-wn-charcoal/75 sm:text-base">
-            Wynla is a US ski and snowboard trip planning service. This page
-            explains what we collect, why, and what your choices are. If
-            anything is unclear, reach the team at{" "}
+            Wynla is a ski and snowboard trip planning service focused on
+            the US market. This page explains what we collect, why, and what
+            your choices are. If anything is unclear, reach the team at{" "}
             <a
-              href="mailto:hello@wynla.app"
+              href={`mailto:${CONTACT_EMAIL}`}
               className="font-semibold text-wn-navy underline hover:no-underline"
             >
-              hello@wynla.app
+              {CONTACT_EMAIL}
             </a>{" "}
             — we&apos;ll answer in plain English.
           </p>
@@ -71,6 +86,21 @@ export default function PrivacyPage() {
             There is no advertising and no data brokerage involved — only
             the third-party services listed below, each of which is named
             and explained.
+          </p>
+          <p className="mt-3">
+            Wynla is operated by{" "}
+            <span className="font-semibold text-wn-navy">{OPERATOR_NAME}</span>
+            , a sole proprietorship based in {OPERATOR_ADDRESS}. The
+            product is offered globally on the public web, but it is built
+            around US ski resorts and US users. You can reach the operator
+            directly at{" "}
+            <a
+              href={`mailto:${CONTACT_EMAIL}`}
+              className="font-semibold text-wn-navy underline hover:no-underline"
+            >
+              {CONTACT_EMAIL}
+            </a>
+            .
           </p>
         </Section>
 
@@ -126,7 +156,18 @@ export default function PrivacyPage() {
               </span>{" "}
               — Vercel Analytics and Speed Insights track page views and load
               performance. No cookies, no fingerprinting, no cross-site
-              tracking.
+              tracking. If Google Analytics is enabled for a campaign, it is
+              configured without advertising features and with IP
+              anonymization on.
+            </li>
+            <li>
+              <span className="font-semibold text-wn-navy">
+                On-device history
+              </span>{" "}
+              — your recently-viewed resorts and a small set of UI
+              preferences live in your browser&apos;s <code>localStorage</code>
+              . That data never leaves your device — we don&apos;t upload
+              your search history to any server.
             </li>
           </ul>
           <p className="mt-3 text-wn-charcoal/70">
@@ -198,6 +239,21 @@ export default function PrivacyPage() {
               them.
             </li>
             <li>
+              <span className="font-semibold text-wn-navy">Resend</span> —
+              sends transactional emails (waitlist confirmations, sign-in
+              links, future digests) once the wynla.app sending domain is
+              verified. Resend processes the recipient address and the
+              message body, nothing more.
+            </li>
+            <li>
+              <span className="font-semibold text-wn-navy">
+                Google Analytics
+              </span>{" "}
+              — optional. Used only if and when we enable it, configured
+              without advertising features and with IP anonymization. Until
+              enabled, no GA data is collected.
+            </li>
+            <li>
               <span className="font-semibold text-wn-navy">
                 Booking.com, Airbnb, lift-ticket vendors
               </span>{" "}
@@ -234,10 +290,10 @@ export default function PrivacyPage() {
               <span className="font-semibold text-wn-navy">Access</span> —
               email{" "}
               <a
-                href="mailto:hello@wynla.app"
+                href={`mailto:${CONTACT_EMAIL}`}
                 className="font-semibold text-wn-navy underline hover:no-underline"
               >
-                hello@wynla.app
+                {CONTACT_EMAIL}
               </a>{" "}
               and we&apos;ll send you a copy of what we have on file.
             </li>
@@ -269,11 +325,16 @@ export default function PrivacyPage() {
             </li>
             <li>
               <span className="font-semibold text-wn-navy">
-                EU / UK / California residents
+                Cross-jurisdictional rights
               </span>{" "}
-              — we don&apos;t have a dedicated data protection officer (we
-              are not big enough yet), but if you have a GDPR or CCPA
-              request, email us and we&apos;ll honor it.
+              — Wynla is operated from Thailand, but users may have
+              additional rights under their local privacy laws, including
+              Thailand&apos;s PDPA, the EU/UK GDPR, and California&apos;s
+              CCPA/CPRA. We honor access, deletion, and portability
+              requests from any of these regimes regardless of where you
+              live. We don&apos;t have a dedicated data protection officer
+              (we are not big enough yet), but email us and we&apos;ll
+              act on the request.
             </li>
           </ul>
         </Section>
@@ -298,9 +359,14 @@ export default function PrivacyPage() {
 
         <Section title="International users">
           <p>
-            Wynla is hosted in the United States. If you use the site from
-            outside the US, your data is transferred to and stored on US
-            servers. By using Wynla you understand and consent to that.
+            Wynla is operated from Thailand by {OPERATOR_NAME} and hosted
+            on infrastructure in the United States (Vercel, Supabase). If
+            you use the site from outside the US, your data is transferred
+            to and stored on US servers. By using Wynla you understand and
+            consent to that transfer. Users in regions with stronger
+            privacy regimes (EU/UK GDPR, Thailand PDPA, California
+            CCPA/CPRA) keep all the rights described in the previous
+            section regardless of where the data lives.
           </p>
         </Section>
 
@@ -327,12 +393,13 @@ export default function PrivacyPage() {
           <p>
             Questions, requests, or concerns? Email{" "}
             <a
-              href="mailto:hello@wynla.app"
+              href={`mailto:${CONTACT_EMAIL}`}
               className="font-semibold text-wn-navy underline hover:no-underline"
             >
-              hello@wynla.app
+              {CONTACT_EMAIL}
             </a>
-            . We respond personally and aim to reply within two business days.
+            . The operator of record is {OPERATOR_NAME}, {OPERATOR_ADDRESS}.
+            We respond personally and aim to reply within two business days.
           </p>
         </Section>
 

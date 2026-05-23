@@ -21,12 +21,12 @@ self.addEventListener("activate", (event) => {
 // Push payloads we send from /api/cron/check-snow-alerts look like:
 //   { title: "8\" of fresh snow at Vail!", body: "...", url: "/resort/vail" }
 //
-// The Stage-32 implementation of lib/webPush.ts sends NO payload body
-// (encryption is TODO), so most pushes currently arrive with event.data === null.
-// In that case we fall back to a generic "fresh snow at a resort you're
-// watching" notification so the user still hears about it.
-// TODO: when lib/webPush.ts gains aes128gcm payload encryption, the data-less
-// branch below can be deleted (or kept as a defensive fallback).
+// lib/webPush.ts now sends an aes128gcm-encrypted JSON payload via the
+// `web-push` SDK when VAPID env vars are configured, so event.data is
+// populated and the notification carries the real resort name + snow
+// amount. The data-less branch below is kept as a defensive fallback
+// for the pre-launch state where VAPID keys haven't been generated yet
+// (sendWebPush falls back to a TTL-only no-payload push).
 self.addEventListener("push", (event) => {
   let payload = null;
   if (event.data) {

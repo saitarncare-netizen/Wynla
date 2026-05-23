@@ -5,10 +5,17 @@
 // Fortune-500 SaaS. Don't promise SLAs, dedicated support reps, or
 // indemnification we can't actually offer.
 //
-// TODO (post-incorporation): replace "Wynla (operated by Saitarn Care)"
-// with the registered US legal entity name, and fill in the governing-
-// law section with the actual state of incorporation (likely Delaware
-// via Stripe Atlas) plus the venue clause once the LLC is formed.
+// ---------------------------------------------------------------------------
+// PRE-LAUNCH ENV CHECKLIST — set before going public
+// ---------------------------------------------------------------------------
+// NEXT_PUBLIC_OPERATOR_NAME     Legal operator name (sole-prop registration
+//                               in Thailand). Until set, the page shows
+//                               "[Operator name pending registration]".
+// NEXT_PUBLIC_OPERATOR_ADDRESS  Operator business address. Defaults to
+//                               "Bangkok, Thailand".
+// NEXT_PUBLIC_CONTACT_EMAIL     Public contact mailbox. Defaults to
+//                               "hello@wynla.app".
+// ---------------------------------------------------------------------------
 
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -22,7 +29,15 @@ export const metadata: Metadata = {
   alternates: { canonical: "/terms" },
 };
 
-const LAST_UPDATED = "May 16, 2026";
+const LAST_UPDATED = "May 23, 2026";
+
+const OPERATOR_NAME =
+  process.env.NEXT_PUBLIC_OPERATOR_NAME ??
+  "[Operator name pending registration]";
+const OPERATOR_ADDRESS =
+  process.env.NEXT_PUBLIC_OPERATOR_ADDRESS ?? "Bangkok, Thailand";
+const CONTACT_EMAIL =
+  process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "hello@wynla.app";
 
 export default function TermsPage() {
   return (
@@ -49,14 +64,14 @@ export default function TermsPage() {
             Last updated: {LAST_UPDATED}
           </p>
           <p className="mt-4 text-sm text-wn-charcoal/75 sm:text-base">
-            Wynla is a US ski and snowboard trip planning service. These
-            terms keep things clear for everyone using the product. If
-            anything is unclear, reach the team at{" "}
+            Wynla is a ski and snowboard trip planning service focused on
+            the US market. These terms keep things clear for everyone using
+            the product. If anything is unclear, reach the team at{" "}
             <a
-              href="mailto:hello@wynla.app"
+              href={`mailto:${CONTACT_EMAIL}`}
               className="font-semibold text-wn-navy underline hover:no-underline"
             >
-              hello@wynla.app
+              {CONTACT_EMAIL}
             </a>
             .
           </p>
@@ -73,9 +88,12 @@ export default function TermsPage() {
 
         <Section title="Who runs this">
           <p>
-            Wynla is an early-stage product operated by an independent
-            founding team. We respond to support requests personally and
-            aim to reply within two business days.
+            Wynla is an early-stage product operated by{" "}
+            <span className="font-semibold text-wn-navy">{OPERATOR_NAME}</span>
+            , a sole proprietorship based in {OPERATOR_ADDRESS}. The
+            product is offered globally on the public web but is built
+            around the US ski market. We respond to support requests
+            personally and aim to reply within two business days.
           </p>
         </Section>
 
@@ -293,18 +311,20 @@ export default function TermsPage() {
 
         <Section title="Governing law">
           <p>
-            These terms are governed by the laws of the United States and
-            the state where Wynla is eventually incorporated. The
-            operating entity is currently being formed; the specific
-            state and venue will be filled in here once incorporation
-            completes. Until then, disputes will be handled in good
-            faith by email — please reach out before escalating.
+            Wynla is operated from Thailand by {OPERATOR_NAME}. These
+            terms are governed by the laws of Thailand to the extent
+            permitted, and disputes will be handled in good faith by
+            email first — please reach out before escalating.
           </p>
-          <p className="mt-3 text-xs text-wn-charcoal/60">
-            {/* TODO: replace with actual governing state + venue once US
-                LLC formation (Stripe Atlas) is complete. */}
-            (Governing law and venue: TBD until US entity formation
-            completes.)
+          <p className="mt-3">
+            Because Wynla is a public web product used from many
+            countries, users may also have rights under their local
+            consumer-protection and privacy laws (for example
+            Thailand&apos;s PDPA, the EU/UK GDPR, and California&apos;s
+            CCPA/CPRA). Nothing in these terms is intended to override a
+            mandatory right you have under your local law. If something
+            in these terms conflicts with a non-waivable protection where
+            you live, that local protection applies.
           </p>
         </Section>
 
@@ -323,12 +343,13 @@ export default function TermsPage() {
           <p>
             Questions, disputes, refund requests, or feedback? Email{" "}
             <a
-              href="mailto:hello@wynla.app"
+              href={`mailto:${CONTACT_EMAIL}`}
               className="font-semibold text-wn-navy underline hover:no-underline"
             >
-              hello@wynla.app
+              {CONTACT_EMAIL}
             </a>
-            . We respond personally to every message.
+            . The operator of record is {OPERATOR_NAME}, {OPERATOR_ADDRESS}.
+            We respond personally to every message.
           </p>
         </Section>
 
