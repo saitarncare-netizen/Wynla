@@ -20,10 +20,17 @@
   --font-mono: var(--font-geist-mono);
 }
 
-html, body {
-  /* Stop iOS Safari rubber-band from revealing white behind the map shell.
-     Drawers / sheets manage their own overscroll. */
+/* PWA polish — kill iOS Safari's overscroll bounce on the body so the
+   app feels less weby. Map page already locks scroll via .route-map,
+   but other routes (resort detail, /account, etc.) bounce by default.
+   Scrollable child elements (e.g. the horizontal recently-viewed
+   strip with `touch-action: pan-x`) keep their own overscroll because
+   we only kill it at the top level. */
+html {
   overscroll-behavior: none;
+}
+body {
+  overscroll-behavior-y: none;
 }
 
 /* Stage 5 round 2 — map route is fullscreen. MapPage adds `.route-map`
