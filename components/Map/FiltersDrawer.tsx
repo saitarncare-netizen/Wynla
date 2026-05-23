@@ -431,57 +431,51 @@ export default function FiltersDrawer({
                   count={freshSnowCount}
                 />
               )}
-              {/* 3-5. SANY surface forecast classes — only render when
-                  the weather cron has classified at least one resort
-                  today. Icons chosen to NOT collide visually: ❄️ is
-                  already "fresh snow" above, so packed powder uses 🏔
-                  (mountain = solid base) and groomed uses 〰️ (carving
-                  lines, NOT 🛷 which reads as a tube/sled). */}
+              {/* 3-5. SANY surface forecast classes — Round 5 polish:
+                  these are MUTUALLY EXCLUSIVE radio buttons. A resort's
+                  surface class is a single SANY code at any given
+                  time, so checkboxes that let users pick "PP AND PPC"
+                  were nonsense. Now: tap a chip to set it, tap again
+                  to clear ("Any"). The URL param stays ?surface=PP
+                  (single value, not a comma list). Icons chosen to
+                  NOT collide visually with the ❄️ "fresh snow" above. */}
               {surfaceCount > 0 && (
-                <>
-                  <FilterCheckbox
-                    icon="🌨️"
-                    label="Fresh powder today"
-                    active={surfaceFilter.includes("PP")}
-                    onToggle={() => {
-                      const has = surfaceFilter.includes("PP");
-                      const next = has
-                        ? surfaceFilter.filter((c) => c !== "PP")
-                        : [...surfaceFilter, "PP"];
-                      onSurfaceChange(next);
-                    }}
-                  />
-                  <FilterCheckbox
-                    icon="🏔"
-                    label="Packed powder today"
-                    active={surfaceFilter.includes("PPC")}
-                    onToggle={() => {
-                      const has = surfaceFilter.includes("PPC");
-                      const next = has
-                        ? surfaceFilter.filter((c) => c !== "PPC")
-                        : [...surfaceFilter, "PPC"];
-                      onSurfaceChange(next);
-                    }}
-                  />
-                  <FilterCheckbox
-                    icon="〰️"
-                    label="Groomed for carving today"
-                    active={surfaceFilter.includes("MG")}
-                    onToggle={() => {
-                      const has = surfaceFilter.includes("MG");
-                      const next = has
-                        ? surfaceFilter.filter((c) => c !== "MG")
-                        : [...surfaceFilter, "MG"];
-                      onSurfaceChange(next);
-                    }}
-                  />
-                </>
+                <div className="grid grid-cols-3 gap-1.5" role="radiogroup" aria-label="Snow surface today">
+                  {[
+                    { code: "PP",  icon: "🌨️", label: "Fresh powder" },
+                    { code: "PPC", icon: "🏔",  label: "Packed powder" },
+                    { code: "MG",  icon: "〰️", label: "Groomed" },
+                  ].map(({ code, icon, label }) => {
+                    const active = surfaceFilter[0] === code;
+                    return (
+                      <button
+                        key={code}
+                        type="button"
+                        role="radio"
+                        aria-checked={active}
+                        onClick={() =>
+                          onSurfaceChange(active ? [] : [code])
+                        }
+                        className={[
+                          "flex flex-col items-center justify-center gap-1 rounded-lg border px-2 py-2 text-[11px] font-semibold transition",
+                          active
+                            ? "border-wn-navy bg-wn-navy text-white"
+                            : "border-wn-charcoal/15 bg-white text-wn-charcoal hover:border-wn-charcoal/40",
+                        ].join(" ")}
+                      >
+                        <span className="text-base leading-none" aria-hidden="true">{icon}</span>
+                        <span className="text-center leading-tight">{label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
               )}
             </div>
             {surfaceCount > 0 && (
               <p className="mt-2 px-1 text-[10.5px] leading-snug text-wn-charcoal/55">
-                Surface predicted from the last 7 days of weather. Multi-select
-                OK — tick whichever surface you&apos;d be happy with.
+                Pick one surface type — these are mutually exclusive
+                (a resort can&apos;t be both fresh powder AND packed at
+                the same time). Tap the active chip to clear.
               </p>
             )}
           </Section>

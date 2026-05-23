@@ -19,6 +19,11 @@ export type TripRoutePoint = {
   lng: number;
   label: string;
   kind: "origin" | "resort";
+  /** Primary pass key (ikon, epic, indy, mountain_collective,
+   *  independent) — used to color the numbered trip-pin marker so it
+   *  matches the resort's color on the rest of the map. Defaults to
+   *  independent gray if omitted. */
+  primaryPass?: string;
 };
 
 type Props = {
@@ -27,6 +32,11 @@ type Props = {
   driveTimeByResort: Map<number, Map<string, DriveTime>>;
   selectedId: number | null;
   onResortClick: (id: number) => void;
+  /** Called once after Mapbox emits its 'load' event. Lets MapPage's
+   *  branded loading overlay fade out the moment tiles are ready. The
+   *  overlay also has its own 8s safety timeout in case the map fails
+   *  to load (e.g. missing NEXT_PUBLIC_MAPBOX_TOKEN, blocked network). */
+  onMapLoaded?: () => void;
   // Optional ordered list of points to draw as a route line + numbered
   // markers when the trip planner is open. First point is the origin.
   tripRoute?: TripRoutePoint[];
@@ -59,6 +69,10 @@ type Props = {
   // Mapbox attaches some listeners at window/document level. Killing
   // the gesture handler at the SOURCE is the only fully reliable fix.
   interactionDisabled?: boolean;
+  /** Round 5 polish — when ?airport=DEN is active, MapPage passes
+   *  the picked airport's lat/lng/label here so MapView can drop a
+   *  ✈️ marker on the map. Null when no airport filter is set. */
+  airportMarker?: { lat: number; lng: number; label: string; iata: string } | null;
 };
 
 const SOURCE_ID = "wynla-resorts";
@@ -165,11 +179,20 @@ export default function MapView({
   fitTripVersion,
   userLocation,
   interactionDisabled = false,
+  onMapLoaded,
+  airportMarker,
 }: Props) {
+  // Keep a stable ref to the latest onMapLoaded so the once-fired load
+  // listener can call the freshest callback without re-binding.
+  const onMapLoadedRef = useRef(onMapLoaded);
+  useEffect(() => {
+    onMapLoadedRef.current = onMapLoaded;
+  }, [onMapLoaded]);
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const tripMarkersRef = useRef<mapboxgl.Marker[]>([]);
   const userLocationMarkerRef = useRef<mapboxgl.Marker | null>(null);
+  const airportMarkerRef = useRef<mapboxgl.Marker | null>(null);
   // Stage 19.2 fix — flips true once the map has fully loaded (style +
   // initial sources). Every downstream effect (tripRoute, previewLeg,
   // tripResortIds, fitTripVersion, cameraTarget) gates on this so it
@@ -622,8 +645,12 @@ export default function MapView({
     // safe to add/remove sources & layers from any downstream effect.
     // Idempotent: only set once. If load already fired before we
     // register (rare, but possible under StrictMode double-mount), we
-    // catch up via map.loaded().
-    const onLoad = () => setMapReady(true);
+    // catch up via map.loaded(). Also fires the parent's onMapLoaded
+    // callback so the branded loading overlay can fade out.
+    const onLoad = () => {
+      setMapReady(true);
+      onMapLoadedRef.current?.();
+    };
     if (map.loaded()) onLoad();
     else map.once("load", onLoad);
 
@@ -753,13 +780,38 @@ export default function MapView({
       });
 
       // Numbered stop markers. Origin gets "🏠"; each resort day i gets
-      // "1", "2", … so the map reads in trip order at a glance.
+      // "1", "2", … so the map reads in trip order at a glance. Round 5
+      // polish: the resort pins are colored by their primary pass (Ikon
+      // yellow / Epic orange / etc.) instead of uniform navy so users
+      // can see at a glance which pass each trip stop is on. Origin
+      // stays navy. Bigger size + outer white ring + drop shadow makes
+      // trip pins dominate over surrounding non-trip circles.
       tripRoute.forEach((p, i) => {
         const el = document.createElement("div");
-        el.className =
-          "flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-wn-navy text-[11px] font-extrabold text-white shadow-md";
         el.style.cursor = "pointer";
-        el.textContent = p.kind === "origin" ? "🏠" : String(i);
+        if (p.kind === "origin") {
+          el.className =
+            "flex h-9 w-9 items-center justify-center rounded-full border-[3px] border-white bg-wn-navy text-[13px] font-extrabold text-white";
+          el.style.boxShadow =
+            "0 0 0 2px rgba(15,21,48,0.35), 0 4px 10px rgba(15,21,48,0.35)";
+          el.textContent = "🏠";
+        } else {
+          const pk = p.primaryPass ?? "independent";
+          const bg = passColor(pk);
+          // Ikon yellow + Independent gray both fail WCAG with white
+          // text. Use the wn-navy ink color for them so the number is
+          // always readable. Everything else gets white.
+          const fg = pk === "ikon" || pk === "independent" ? "#0F1530" : "#FFFFFF";
+          el.className =
+            "flex h-9 w-9 items-center justify-center rounded-full border-[3px] border-white text-[13px] font-extrabold";
+          el.style.backgroundColor = bg;
+          el.style.color = fg;
+          // Outer gold halo + drop shadow so the pin glows over the
+          // base resort circle below it.
+          el.style.boxShadow =
+            "0 0 0 2px rgba(212,168,75,0.85), 0 4px 10px rgba(15,21,48,0.45)";
+          el.textContent = String(i);
+        }
         el.title = p.label;
         const marker = new mapboxgl.Marker({ element: el, anchor: "center" })
           .setLngLat([p.lng, p.lat])
@@ -989,6 +1041,57 @@ export default function MapView({
       }
     };
   }, [userLocation, mapReady]);
+
+  // Airport marker — Round 5 polish. When the ?airport=DEN filter is
+  // active MapPage hands us the airport's coordinates and we drop a
+  // ✈️ pin distinct from any resort circle. Uses a DOM marker so the
+  // emoji renders cross-platform without needing to add a sprite to
+  // the Mapbox style.
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !mapReady) return;
+    if (!airportMarker) {
+      if (airportMarkerRef.current) {
+        airportMarkerRef.current.remove();
+        airportMarkerRef.current = null;
+      }
+      return;
+    }
+    // Reuse existing marker if we have one — just move it.
+    if (airportMarkerRef.current) {
+      airportMarkerRef.current.setLngLat([airportMarker.lng, airportMarker.lat]);
+      return;
+    }
+    const el = document.createElement("div");
+    el.setAttribute("aria-label", `Airport: ${airportMarker.label} (${airportMarker.iata})`);
+    el.title = `${airportMarker.label} (${airportMarker.iata})`;
+    el.style.cssText = [
+      "display:flex",
+      "align-items:center",
+      "justify-content:center",
+      "width:34px",
+      "height:34px",
+      "border-radius:9999px",
+      "background:#ffffff",
+      "border:2px solid #1E2952",
+      "box-shadow:0 0 0 3px rgba(91,175,230,0.35), 0 4px 10px rgba(15,21,48,0.35)",
+      "font-size:18px",
+      "line-height:1",
+      "cursor:default",
+      "pointer-events:none",
+    ].join(";");
+    el.textContent = "✈️";
+    const marker = new mapboxgl.Marker({ element: el, anchor: "center" })
+      .setLngLat([airportMarker.lng, airportMarker.lat])
+      .addTo(map);
+    airportMarkerRef.current = marker;
+    return () => {
+      marker.remove();
+      if (airportMarkerRef.current === marker) {
+        airportMarkerRef.current = null;
+      }
+    };
+  }, [airportMarker, mapReady]);
 
   // Stage 33 — freeze all Mapbox interaction handlers when the parent
   // signals a full-bleed overlay is open (search picker / filter
