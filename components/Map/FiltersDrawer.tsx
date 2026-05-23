@@ -26,6 +26,12 @@ type Props = {
   freshSnowOnly: boolean;
   freshSnowCount: number;
   onFreshSnowChange: (v: boolean) => void;
+  // Inaugural Season 2026 — Snow Surface Forecast filter ("Snow today").
+  // Multi-select OR over SANY codes (PP / PPC / MG). Section hides
+  // entirely when surfaceCount === 0 (off-season — no classifier output).
+  surfaceFilter: string[];
+  surfaceCount: number;
+  onSurfaceChange: (codes: string[]) => void;
   onWithinChange: (w: string | null) => void;
   onSizeChange: (s: SizeTier | null) => void;
   onNightChange: (v: boolean) => void;
@@ -57,6 +63,14 @@ type Props = {
   onWebcamChange: (v: boolean) => void;
   familyOnly: boolean;
   onFamilyChange: (v: boolean) => void;
+  // Stage 4 — Best-for expansion. Each composite filter is a single
+  // boolean URL param wired up the same way as familyOnly.
+  powderOnly: boolean;
+  onPowderChange: (v: boolean) => void;
+  expertOnly: boolean;
+  onExpertChange: (v: boolean) => void;
+  adaptiveOnly: boolean;
+  onAdaptiveChange: (v: boolean) => void;
   liftReq: string | null;
   onLiftReqChange: (v: string | null) => void;
   snowmakeMin: number;
@@ -142,6 +156,9 @@ export default function FiltersDrawer({
   freshSnowOnly,
   freshSnowCount,
   onFreshSnowChange,
+  surfaceFilter,
+  surfaceCount,
+  onSurfaceChange,
   onWithinChange,
   onSizeChange,
   onNightChange,
@@ -169,6 +186,12 @@ export default function FiltersDrawer({
   onWebcamChange,
   familyOnly,
   onFamilyChange,
+  powderOnly,
+  onPowderChange,
+  expertOnly,
+  onExpertChange,
+  adaptiveOnly,
+  onAdaptiveChange,
   liftReq,
   onLiftReqChange,
   snowmakeMin,
@@ -452,6 +475,67 @@ export default function FiltersDrawer({
             </div>
           </Section>
 
+          {/* SNOW TODAY — Inaugural Season 2026. Positive-only filter
+              over the three "good day" SANY surface classes. Multi-
+              select OR semantics: ticking multiple boxes means "any of
+              these is fine". Section hides entirely off-season when
+              the weather cron hasn't classified any resort. */}
+          {surfaceCount > 0 && (
+            <Section
+              title="Snow today"
+              summary={(() => {
+                const parts: string[] = [];
+                if (surfaceFilter.includes("PP")) parts.push("🌨 Powder");
+                if (surfaceFilter.includes("PPC")) parts.push("❄️ Packed");
+                if (surfaceFilter.includes("MG")) parts.push("🛷 Groomed");
+                return parts.length > 0 ? parts.join(" · ") : "Any";
+              })()}
+            >
+              <div className="grid grid-cols-1 gap-1.5">
+                <FilterCheckbox
+                  icon="🌨️"
+                  label="Fresh powder"
+                  active={surfaceFilter.includes("PP")}
+                  onToggle={() => {
+                    const has = surfaceFilter.includes("PP");
+                    const next = has
+                      ? surfaceFilter.filter((c) => c !== "PP")
+                      : [...surfaceFilter, "PP"];
+                    onSurfaceChange(next);
+                  }}
+                />
+                <FilterCheckbox
+                  icon="❄️"
+                  label="Packed powder"
+                  active={surfaceFilter.includes("PPC")}
+                  onToggle={() => {
+                    const has = surfaceFilter.includes("PPC");
+                    const next = has
+                      ? surfaceFilter.filter((c) => c !== "PPC")
+                      : [...surfaceFilter, "PPC"];
+                    onSurfaceChange(next);
+                  }}
+                />
+                <FilterCheckbox
+                  icon="🛷"
+                  label="Groomed for carving"
+                  active={surfaceFilter.includes("MG")}
+                  onToggle={() => {
+                    const has = surfaceFilter.includes("MG");
+                    const next = has
+                      ? surfaceFilter.filter((c) => c !== "MG")
+                      : [...surfaceFilter, "MG"];
+                    onSurfaceChange(next);
+                  }}
+                />
+              </div>
+              <p className="mt-2 px-1 text-[10.5px] leading-snug text-wn-charcoal/55">
+                Predicted from the last 7 days of weather. Multi-select OK —
+                tick whichever surface you&apos;d be happy with.
+              </p>
+            </Section>
+          )}
+
           {/* Stage 33 — ORIGIN section removed from drawer. The
               onboarding wizard already collects origin once (Use my
               location OR a city), and the floating LocationButton at
@@ -634,22 +718,55 @@ export default function FiltersDrawer({
 
           {/* BEST FOR — composite "personality" filters. Each one is a
               shortcut for a multi-attribute check that's tedious to
-              dial in by hand. Today we have Family Mountain (lessons +
-              rentals + meaningful beginner terrain or a magic carpet);
-              future additions could be Steeps / Powder mountain / etc. */}
+              dial in by hand. Stage 4 expansion adds Powder Mountain
+              (annual snowfall), Expert Mountain (expert pct + vertical),
+              and Adaptive Program (certified adaptive ski school)
+              alongside the original Family Mountain composite. */}
           <Section
             title="Best for"
-            summary={familyOnly ? "👨‍👩‍👧‍👦 Family mountain" : "Any"}
+            summary={(() => {
+              const parts: string[] = [];
+              if (familyOnly) parts.push("👨‍👩‍👧‍👦 Family");
+              if (powderOnly) parts.push("❄️ Powder");
+              if (expertOnly) parts.push("🏔 Expert");
+              if (adaptiveOnly) parts.push("♿ Adaptive");
+              return parts.length > 0 ? parts.join(" · ") : "Any";
+            })()}
           >
-            <FilterCheckbox
-              icon="👨‍👩‍👧‍👦"
-              label="Family mountain"
-              active={familyOnly}
-              onToggle={() => onFamilyChange(!familyOnly)}
-            />
+            <div className="grid grid-cols-1 gap-1.5">
+              <FilterCheckbox
+                icon="👨‍👩‍👧‍👦"
+                label="Family mountain"
+                active={familyOnly}
+                onToggle={() => onFamilyChange(!familyOnly)}
+              />
+              <FilterCheckbox
+                icon="❄️"
+                label="Powder mountain"
+                active={powderOnly}
+                onToggle={() => onPowderChange(!powderOnly)}
+                title=">350 in/yr avg snowfall"
+              />
+              <FilterCheckbox
+                icon="🏔"
+                label="Expert mountain"
+                active={expertOnly}
+                onToggle={() => onExpertChange(!expertOnly)}
+                title="≥30% expert terrain + ≥2000 ft vertical"
+              />
+              <FilterCheckbox
+                icon="♿"
+                label="Adaptive program"
+                active={adaptiveOnly}
+                onToggle={() => onAdaptiveChange(!adaptiveOnly)}
+                title="Has certified adaptive ski school"
+              />
+            </div>
             <p className="mt-2 px-1 text-[10.5px] leading-snug text-wn-charcoal/55">
-              Has a ski / snowboard school, rentals, and either ≥25% beginner
-              terrain or a magic-carpet learning lift.
+              Family = ski school + rentals + ≥25% beginner terrain (or a
+              magic carpet). Powder = &gt;350 in/yr snowfall. Expert =
+              ≥30% expert terrain &amp; ≥2000 ft vertical. Adaptive = has a
+              certified adaptive ski school.
             </p>
           </Section>
 
@@ -962,18 +1079,24 @@ function FilterCheckbox({
   active,
   onToggle,
   count,
+  title,
 }: {
   icon: string;
   label: string;
   active: boolean;
   onToggle: () => void;
   count?: number;
+  /** Optional tooltip — used by the Best-for composite filters to
+   *  explain the threshold (">350 in/yr", "≥30% expert", etc) without
+   *  cluttering the label itself. */
+  title?: string;
 }) {
   return (
     <button
       type="button"
       onClick={onToggle}
       aria-pressed={active}
+      title={title}
       className={[
         "flex items-center gap-2 rounded-lg border px-2.5 py-2 text-left text-xs font-semibold transition",
         active

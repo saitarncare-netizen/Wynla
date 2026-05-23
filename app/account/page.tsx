@@ -102,6 +102,18 @@ export default async function AccountPage() {
                 <span className="text-wn-charcoal/50">→</span>
               </Link>
             </li>
+            {/* Admin-only feedback inbox — only shown to the founder. */}
+            {user.email === "saitarncare@gmail.com" && (
+              <li>
+                <Link
+                  href="/account/feedback"
+                  className="flex items-center justify-between py-3 text-sm text-wn-charcoal transition hover:text-wn-navy"
+                >
+                  <span className="font-medium">💬 Feedback inbox</span>
+                  <span className="text-wn-charcoal/50">→</span>
+                </Link>
+              </li>
+            )}
             {/* Inaugural Season 2026 — "Wynla Pro" account section is
                 hidden during the Founder Season. /account/pro route
                 still exists for the few users who had pre-launch Pro

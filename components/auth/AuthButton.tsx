@@ -79,7 +79,7 @@ export default function AuthButton() {
             onClick={() => setMenuOpen(false)}
             className="fixed inset-0 z-40 cursor-default"
           />
-          <div className="absolute right-0 top-9 z-50 w-44 overflow-hidden rounded-md border border-wn-charcoal/10 bg-white shadow-lg">
+          <div className="absolute right-0 top-9 z-50 w-48 overflow-hidden rounded-md border border-wn-charcoal/10 bg-white shadow-lg">
             <div className="px-3 py-2 text-[11px] text-wn-charcoal/60">{user.email}</div>
             <Link
               href="/favorites"
@@ -88,6 +88,18 @@ export default function AuthButton() {
             >
               <Icon name="heart" className="h-4 w-4 text-wn-navy/70" />
               Favorites
+            </Link>
+            {/* Stage 4 — "Plan a trip" + "My trips" relocated here from
+                the map header. The header now keeps a single anon-only
+                "Plan a trip" entry; once signed in those links live
+                inside this dropdown to keep the top-of-app uncluttered. */}
+            <Link
+              href="/?plan=1"
+              onClick={() => setMenuOpen(false)}
+              className="flex items-center gap-2 border-t border-wn-charcoal/10 px-3 py-2 text-sm font-medium text-wn-charcoal transition hover:bg-wn-offwhite hover:text-wn-navy"
+            >
+              <span aria-hidden="true" className="text-base leading-none">🗺️</span>
+              Plan a trip
             </Link>
             <Link
               href="/trips"
