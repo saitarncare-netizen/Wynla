@@ -26,6 +26,19 @@ html, body {
   overscroll-behavior: none;
 }
 
+/* Stage 5 round 2 — map route is fullscreen. MapPage adds `.route-map`
+   to <body> on mount (and removes it on unmount) so the global layout
+   footer hides + body scroll locks ONLY on the home/map route. Other
+   routes (/early, /pro, /account, /resort/[slug], /terms, /privacy,
+   /guides, etc.) keep their normal scroll + footer. */
+body.route-map {
+  overflow: hidden;
+  height: 100dvh;
+}
+body.route-map > footer {
+  display: none;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);

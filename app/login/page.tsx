@@ -70,8 +70,11 @@ function LoginForm() {
 
         <div className="rounded-xl border border-wn-charcoal/10 bg-white p-6 shadow-sm">
           <h1 className="text-xl font-extrabold text-wn-navy">Sign in to Wynla</h1>
-          <p className="mt-1 text-sm text-wn-charcoal/70">
-            Save favorites, track resorts you&apos;ve viewed, plan trips. We&apos;ll email you a one-tap link — no password.
+          <p className="mt-0.5 text-[11px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
+            Passwordless sign-in
+          </p>
+          <p className="mt-2 text-sm text-wn-charcoal/70">
+            Save favorites, track resorts you&apos;ve viewed, plan trips.
           </p>
 
           {status === "sent" ? (
@@ -98,6 +101,10 @@ function LoginForm() {
                   className="w-full rounded-md border border-wn-charcoal/20 bg-white px-3 py-2 text-sm text-wn-charcoal focus:border-wn-navy focus:outline-none focus:ring-2 focus:ring-wn-sky/30"
                   disabled={status === "sending"}
                 />
+                <p className="mt-1.5 text-[11px] leading-snug text-wn-charcoal/60">
+                  We email a one-tap link instead of a password — no
+                  password to remember.
+                </p>
               </div>
 
               {status === "error" && errorMsg && (
@@ -117,6 +124,9 @@ function LoginForm() {
               <p className="text-center text-[11px] text-wn-charcoal/55">
                 By continuing you agree to receive a one-time email. We never
                 send marketing without an explicit opt-in.
+              </p>
+              <p className="text-center text-[10.5px] text-wn-charcoal/45">
+                Google sign-in coming soon (Founder Season improvement).
               </p>
             </form>
           )}
