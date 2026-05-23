@@ -253,8 +253,29 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   //      splash returns once as a soft brand re-impression.
   //   3. STORAGE FORMAT: `wynla_splash_seen_at` = unix ms of last show.
   //      If absent OR older than 7 days, show splash; else skip.
+  //   4. BACKGROUND-TAB SURVIVAL. When the PWA tab is backgrounded
+  //      during the OAuth redirect (Google sign-in pushes the user out
+  //      to a system browser), iOS Safari freezes the document timeline
+  //      AND throttles setTimeout heavily. The safety timer above can
+  //      sit pending for minutes, and any in-flight opacity transition
+  //      stays stuck at `currentTime: 0` even after the tab returns to
+  //      visible (verified via Chrome MCP: `getAnimations()` reports
+  //      `playState: "running"` with `currentTime: 0` indefinitely).
+  //      We defend in three layers:
+  //        (a) `visibilitychange` + `pageshow` listeners wake the hide
+  //            logic the instant the tab returns to foreground — these
+  //            events are NOT throttled.
+  //        (b) `splashMounted` keeps the overlay in the DOM for 600ms
+  //            after `splashVisible` flips false (long enough for the
+  //            500ms fade), then hard-unmounts. A stuck CSS transition
+  //            can leave the element opaque even with `opacity-0`
+  //            applied; unmounting forcibly removes it from the DOM
+  //            regardless of animation state.
+  //        (c) `splashVisibleRef` lets the [] mount-effect's listeners
+  //            read the latest state without stale-closure surprises.
   const SPLASH_MIN_MS = 1000;
   const SPLASH_SAFETY_MS = 3000;
+  const SPLASH_UNMOUNT_DELAY_MS = 600;
   const SPLASH_STORAGE_KEY = "wynla_splash_seen_at";
   const SPLASH_TTL_MS = 7 * 24 * 60 * 60 * 1000;
   // Lazy initial state — read localStorage at mount-time so we never
@@ -271,6 +292,19 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
       return true;
     }
   });
+  // DOM-presence state. Starts true (matches SSR-rendered HTML so
+  // hydration doesn't mismatch), then a [splashVisible] effect drops it
+  // to false 600ms after splash hides. Conditionally rendering the
+  // overlay via this flag is the only way to guarantee the navy panel
+  // leaves the screen when an iOS-frozen CSS transition refuses to
+  // advance — see layer (b) of the comment block above.
+  const [splashMounted, setSplashMounted] = useState<boolean>(true);
+  // Ref mirror of splashVisible so listeners attached in the [] mount
+  // effect see the latest value instead of the mount-time snapshot.
+  const splashVisibleRef = useRef<boolean>(splashVisible);
+  useEffect(() => {
+    splashVisibleRef.current = splashVisible;
+  }, [splashVisible]);
   // Initialized to 0; the mount-effect overwrites this with Date.now()
   // so impure-call lint passes and the start-time is captured exactly
   // when the splash actually begins displaying (mount), not earlier
@@ -278,11 +312,15 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   // skip the effect entirely so this stays 0 and is never read.
   const splashShownAtRef = useRef<number>(0);
   const splashHideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  // Centralized hide helper — respects the 1500ms floor and writes the
-  // session flag so re-mounts don't re-show the splash. Safe to call
-  // multiple times; the timer is cleared and the flag stored on the
-  // first invocation.
+  const splashUnmountTimer = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
+  // Centralized hide helper — respects the 1000ms floor and writes the
+  // localStorage flag so re-mounts don't re-show the splash. Safe to
+  // call multiple times; the timer is cleared and the flag stored on
+  // the first invocation.
   function hideSplashRespectingMin() {
+    if (!splashVisibleRef.current) return;
     const elapsed = Date.now() - splashShownAtRef.current;
     const remaining = Math.max(0, SPLASH_MIN_MS - elapsed);
     if (splashHideTimer.current) {
@@ -309,19 +347,59 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
     // skip the safety timer entirely — overlay is already hidden.
     if (!splashVisible) return;
     splashShownAtRef.current = Date.now();
-    // Safety net: schedule a hide after 8s so users never get stuck
-    // staring at the splash if Mapbox token / network is broken. The
-    // hide helper itself enforces the 1500ms minimum, but at 8s that
-    // floor is always satisfied so it's effectively immediate then.
     splashHideTimer.current = setTimeout(
       hideSplashRespectingMin,
       SPLASH_SAFETY_MS,
     );
+    // Layer (a): wake the hide path the instant the tab returns to
+    // foreground. The OAuth redirect flow puts the PWA tab into the
+    // background for the duration of the Google sign-in dance; while
+    // hidden, setTimeout is throttled to ~1/min on iOS Safari, so the
+    // SPLASH_SAFETY_MS timer above might not fire for a long time after
+    // its nominal 3s deadline. `visibilitychange` and `pageshow` (the
+    // latter covers back-forward-cache restores) fire synchronously
+    // when the tab becomes visible — perfect kick for the throttled
+    // timer. hideSplashRespectingMin is idempotent + cheap so calling
+    // it on every wake event is safe.
+    function wake() {
+      if (
+        typeof document !== "undefined" &&
+        document.visibilityState === "visible" &&
+        splashVisibleRef.current
+      ) {
+        hideSplashRespectingMin();
+      }
+    }
+    document.addEventListener("visibilitychange", wake);
+    window.addEventListener("pageshow", wake);
     return () => {
       if (splashHideTimer.current) clearTimeout(splashHideTimer.current);
+      document.removeEventListener("visibilitychange", wake);
+      window.removeEventListener("pageshow", wake);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  // Layer (b): once splashVisible flips false, give the 500ms opacity
+  // transition a 100ms buffer to play, then hard-unmount the overlay.
+  // A frozen CSS transition (iOS PWA returning from backgrounded OAuth)
+  // can leave the navy panel visually at opacity 1 even though the
+  // applied class is `opacity-0` — the only reliable escape is to take
+  // the element out of the tree entirely. splashVisible never flips
+  // back to true after going false (no resurrect path), so we only
+  // need to schedule the unmount; the mount-true initial state matches
+  // SSR-rendered HTML, keeping hydration clean.
+  useEffect(() => {
+    if (splashVisible) return;
+    splashUnmountTimer.current = setTimeout(() => {
+      setSplashMounted(false);
+    }, SPLASH_UNMOUNT_DELAY_MS);
+    return () => {
+      if (splashUnmountTimer.current) {
+        clearTimeout(splashUnmountTimer.current);
+        splashUnmountTimer.current = null;
+      }
+    };
+  }, [splashVisible]);
   function handleMapLoaded() {
     // Only act if the splash is still on-screen. Once it's hidden,
     // subsequent Mapbox style-reloads (theme switches, etc.) won't
@@ -1404,41 +1482,44 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
           land directly on the full map — no questions asked. */}
 
       {/* Branded splash overlay — covers the entire map area while
-          Mapbox library + tiles boot. Only shows on first mount; the
-          handleMapLoaded callback fires from MapView once Mapbox emits
-          its `load` event, and an 8s safety timeout hides the overlay
-          even if Mapbox never loads (missing token, network error).
-          Pointer-events flip to none during the fade so users can
-          interact with the map underneath the moment it's ready. */}
-      <div
-        aria-hidden={!splashVisible}
-        className={[
-          "absolute inset-0 z-[60] flex flex-col items-center justify-center bg-wn-navy",
-          "transition-opacity duration-500 ease-out",
-          splashVisible
-            ? "opacity-100 pointer-events-auto"
-            : "opacity-0 pointer-events-none",
-        ].join(" ")}
-      >
-        <div className="flex flex-col items-center px-6 text-center">
-          <span className="text-5xl font-extrabold tracking-tight text-white sm:text-6xl">
-            Wynla
-          </span>
-          <span className="mt-2 text-sm font-medium text-white/70 sm:text-base">
-            Plan smart. Ride better.
-          </span>
-          <span className="mt-6 inline-flex h-1.5 w-24 overflow-hidden rounded-full bg-white/15">
-            <span className="h-full w-full origin-left animate-[wynla-splash-bar_1.4s_ease-in-out_infinite] bg-white/70" />
-          </span>
+          Mapbox library + tiles boot. handleMapLoaded fires from MapView
+          once Mapbox emits its `load` event; a 3s safety timeout hides
+          the overlay even if Mapbox never loads. Conditionally mounted
+          via `splashMounted` so a frozen CSS transition (iOS PWA
+          returning from a backgrounded OAuth redirect) can't trap the
+          navy panel on screen — see the splash-state comment block
+          above for the full background-tab survival story. */}
+      {splashMounted && (
+        <div
+          aria-hidden={!splashVisible}
+          className={[
+            "absolute inset-0 z-[60] flex flex-col items-center justify-center bg-wn-navy",
+            "transition-opacity duration-500 ease-out",
+            splashVisible
+              ? "opacity-100 pointer-events-auto"
+              : "opacity-0 pointer-events-none",
+          ].join(" ")}
+        >
+          <div className="flex flex-col items-center px-6 text-center">
+            <span className="text-5xl font-extrabold tracking-tight text-white sm:text-6xl">
+              Wynla
+            </span>
+            <span className="mt-2 text-sm font-medium text-white/70 sm:text-base">
+              Plan smart. Ride better.
+            </span>
+            <span className="mt-6 inline-flex h-1.5 w-24 overflow-hidden rounded-full bg-white/15">
+              <span className="h-full w-full origin-left animate-[wynla-splash-bar_1.4s_ease-in-out_infinite] bg-white/70" />
+            </span>
+          </div>
+          <style>{`
+            @keyframes wynla-splash-bar {
+              0%   { transform: translateX(-100%); }
+              50%  { transform: translateX(0%); }
+              100% { transform: translateX(100%); }
+            }
+          `}</style>
         </div>
-        <style>{`
-          @keyframes wynla-splash-bar {
-            0%   { transform: translateX(-100%); }
-            50%  { transform: translateX(0%); }
-            100% { transform: translateX(100%); }
-          }
-        `}</style>
-      </div>
+      )}
 
 
       {/* Pass color legend — desktop only. On mobile, the same info
