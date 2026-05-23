@@ -15,16 +15,18 @@
 //   CRON_SECRET                   matches Vercel cron header
 //   NEXT_PUBLIC_SUPABASE_URL
 //   SUPABASE_SERVICE_ROLE_KEY     service role — joins snow_alerts to resorts
-//   VAPID_PUBLIC_KEY              base64url, 65-byte uncompressed P-256 point
+//   NEXT_PUBLIC_VAPID_PUBLIC_KEY  base64url, 65-byte uncompressed P-256 point
+//                                 (NEXT_PUBLIC_ because the client SW needs
+//                                 the same key when subscribing)
 //   VAPID_PRIVATE_KEY             base64url, 32-byte raw private scalar
 //   VAPID_SUBJECT                 "mailto:you@example.com"
 //
 // Without the VAPID env vars we 503 gracefully so a fresh deploy doesn't
 // blow up the run before keys are generated.
 //
-// The push body is currently empty — see lib/webPush.ts for the encryption
-// TODO. The SW (public/sw.js) shows a generic "fresh snow at a resort
-// you're watching" notification when payload is null.
+// lib/webPush.ts now uses the `web-push` SDK to encrypt the JSON payload
+// (title/body/url), so subscribers actually see the specific resort name
+// and snow amount in the notification.
 
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
@@ -69,7 +71,11 @@ export async function GET(request: Request) {
     return NextResponse.json({ ok: false, reason: "missing supabase env" }, { status: 503 });
   }
 
-  const VAPID_PUBLIC = process.env.VAPID_PUBLIC_KEY;
+  // Read NEXT_PUBLIC_VAPID_PUBLIC_KEY (same value the client SW uses
+  // when subscribing) with a legacy VAPID_PUBLIC_KEY fallback so older
+  // deploys keep working through the rename.
+  const VAPID_PUBLIC =
+    process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY ?? process.env.VAPID_PUBLIC_KEY;
   const VAPID_PRIVATE = process.env.VAPID_PRIVATE_KEY;
   const VAPID_SUBJECT = process.env.VAPID_SUBJECT;
   if (!VAPID_PUBLIC || !VAPID_PRIVATE || !VAPID_SUBJECT) {
@@ -77,7 +83,7 @@ export async function GET(request: Request) {
       {
         ok: false,
         reason:
-          "missing VAPID_PUBLIC_KEY / VAPID_PRIVATE_KEY / VAPID_SUBJECT — generate with `npx web-push generate-vapid-keys`",
+          "missing NEXT_PUBLIC_VAPID_PUBLIC_KEY / VAPID_PRIVATE_KEY / VAPID_SUBJECT — generate with `npx web-push generate-vapid-keys`",
       },
       { status: 503 },
     );

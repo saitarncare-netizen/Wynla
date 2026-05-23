@@ -27,7 +27,10 @@ Required vars (apply to Production + Preview + Development):
 - `SUPABASE_SERVICE_ROLE_KEY` — from Supabase dashboard (for crons + service-role queries)
 - `CRON_SECRET` — any strong random string (used by `vercel.json` crons)
 - Stripe (`STRIPE_SECRET_KEY`, `STRIPE_PUBLISHABLE_KEY`, `STRIPE_WEBHOOK_SECRET`) — only needed when Pro tier UI returns Season 2
-- `RESEND_API_KEY` — needed for /early welcome emails + digest cron
+- `RESEND_API_KEY` — needed for /early welcome emails + digest cron. **See `handoff-docs/RESEND_SETUP.md`** for the DNS + dashboard walkthrough.
+- `RESEND_FROM` — From-address for transactional emails, e.g. `Wynla <hello@wynla.app>`. Must be on the verified Resend domain.
+- `NEXT_PUBLIC_OPERATOR_NAME` / `NEXT_PUBLIC_OPERATOR_ADDRESS` / `NEXT_PUBLIC_CONTACT_EMAIL` — surfaced on /privacy + /terms. Defaults are placeholder copy; set these once the sole-prop is registered in Thailand.
+- `NEXT_PUBLIC_VAPID_PUBLIC_KEY` / `VAPID_PRIVATE_KEY` / `VAPID_SUBJECT` — web-push payload encryption. **Generate once** with `npx web-push generate-vapid-keys`, paste the public key into `NEXT_PUBLIC_VAPID_PUBLIC_KEY` (client SW reads it) and the private scalar into `VAPID_PRIVATE_KEY` (server cron only). `VAPID_SUBJECT = mailto:hello@wynla.app`. Until configured, snow-alert pushes fall back to the SW's generic "fresh snow at a resort you're watching" message.
 - `ANTHROPIC_API_KEY` — only needed once the AI Haiku enrichment cron is wired into vercel.json (deferred per memory)
 
 After saving, redeploy (or push a new commit) and verify homepage map renders.
