@@ -9,6 +9,7 @@ import FilterBar from "./FilterBar";
 import ResortPanel from "./ResortPanel";
 import ResortPicker from "./ResortPicker";
 import LocationButton from "./LocationButton";
+import FeedbackButton from "@/components/FeedbackButton";
 import FiltersDrawer, { AIRPORT_OPTIONS } from "./FiltersDrawer";
 import MobileQuickFilters from "./MobileQuickFilters";
 import TripPlannerPanel from "./TripPlannerPanel";
@@ -124,6 +125,15 @@ export type Resort = {
   currently_open: boolean | null;
   season_end_date: string | null;
   terrain_park_features: number | null;
+  // Inaugural Season 2026 — Snow Surface Forecast. Written by the
+  // refresh-weather cron after each daily run; off-season resorts get
+  // NULL. Filterable via ?surface=PP,PPC,MG on the URL.
+  current_surface_class: string | null;
+  current_surface_updated_at: string | null;
+  // Stage 4 — Best-for expansion. ?adaptive=1 narrows to resorts with
+  // a certified adaptive ski school. Source data filled by a separate
+  // research agent (boolean true / false / null).
+  has_adaptive_program: boolean | null;
 };
 
 export type DriveTime = {
@@ -324,6 +334,46 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
     if (beginnerPct < 25 && !hasMagicCarpet) return false;
     return true;
   }
+  // Stage 4 — Best-for expansion. Three additional composite filters
+  // surfaced alongside Family Mountain in the FiltersDrawer:
+  //   ?powder=1   — annual_snowfall_in >= 350 (premier powder mountains)
+  //   ?expert=1   — >=30% expert terrain AND >=2000 ft vertical
+  //   ?adaptive=1 — has_adaptive_program === true (certified adaptive school)
+  // Strict semantics: NULL on the required column fails the filter.
+  const powderOnly = searchParams.get("powder") === "1";
+  const expertOnly = searchParams.get("expert") === "1";
+  const adaptiveOnly = searchParams.get("adaptive") === "1";
+  function matchesPowder(r: Resort): boolean {
+    return (r.annual_snowfall_in ?? 0) >= 350;
+  }
+  function matchesExpert(r: Resort): boolean {
+    return (
+      (r.difficulty_pct_expert ?? 0) >= 30 && (r.vertical_drop ?? 0) >= 2000
+    );
+  }
+  function matchesAdaptive(r: Resort): boolean {
+    return r.has_adaptive_program === true;
+  }
+  // Inaugural Season 2026 — Snow today filter. URL form: ?surface=PP,PPC,MG
+  // (comma-separated SANY surface codes, case-insensitive). Resort
+  // matches when its current_surface_class is in the list. NULL fails
+  // strictly when the filter is active (matches the size-filter pattern).
+  const surfaceParamRaw = searchParams.get("surface");
+  const surfaceFilter = useMemo<string[]>(
+    () =>
+      surfaceParamRaw
+        ? surfaceParamRaw
+            .split(",")
+            .map((s) => s.trim().toUpperCase())
+            .filter(Boolean)
+        : [],
+    [surfaceParamRaw],
+  );
+  function matchesSurface(r: Resort): boolean {
+    if (surfaceFilter.length === 0) return true;
+    if (!r.current_surface_class) return false;
+    return surfaceFilter.includes(r.current_surface_class.toUpperCase());
+  }
   // Snowmaking threshold — ?snowmake=60 → only resorts with
   // snowmaking_pct >= 60. NULL fails. 0 / missing = no filter.
   const snowmakeMinRaw = searchParams.get("snowmake");
@@ -464,6 +514,10 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         return false;
       }
       if (familyOnly && !matchesFamily(r)) return false;
+      if (powderOnly && !matchesPowder(r)) return false;
+      if (expertOnly && !matchesExpert(r)) return false;
+      if (adaptiveOnly && !matchesAdaptive(r)) return false;
+      if (surfaceFilter.length > 0 && !matchesSurface(r)) return false;
       if (snowmakeMin > 0) {
         if (r.snowmaking_pct == null || r.snowmaking_pct < snowmakeMin) {
           return false;
@@ -497,6 +551,10 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
     snowboardsOnly,
     webcamOnly,
     familyOnly,
+    powderOnly,
+    expertOnly,
+    adaptiveOnly,
+    surfaceFilter,
     snowmakeMin,
     withinHours,
     origin,
@@ -561,6 +619,10 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         return false;
       }
       if (familyOnly && !matchesFamily(r)) return false;
+      if (powderOnly && !matchesPowder(r)) return false;
+      if (expertOnly && !matchesExpert(r)) return false;
+      if (adaptiveOnly && !matchesAdaptive(r)) return false;
+      if (surfaceFilter.length > 0 && !matchesSurface(r)) return false;
       if (snowmakeMin > 0) {
         if (r.snowmaking_pct == null || r.snowmaking_pct < snowmakeMin) {
           return false;
@@ -592,6 +654,10 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
     snowboardsOnly,
     webcamOnly,
     familyOnly,
+    powderOnly,
+    expertOnly,
+    adaptiveOnly,
+    surfaceFilter,
     snowmakeMin,
     withinHours,
     origin,
@@ -747,28 +813,25 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
               <span aria-hidden="true">🔍</span>
               <span className="hidden sm:inline">Search</span>
             </button>
-            {/* My trips */}
-            <Link
-              href="/trips"
-              className="inline-flex h-11 items-center justify-center gap-1.5 rounded-md border border-wn-charcoal/20 bg-white px-2 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 sm:px-3"
-              title="My trips"
-              aria-label="My trips"
-            >
-              <span aria-hidden="true">📋</span>
-              <span className="hidden sm:inline">My trips</span>
-            </Link>
-            {/* Plan a trip — primary navy CTA, same height as the
-                others. Icon-only on mobile, "Plan a trip" on desktop. */}
-            <button
-              type="button"
-              onClick={() => updateParam("plan", "1")}
-              className="inline-flex h-11 items-center justify-center gap-1.5 rounded-md bg-wn-navy px-2 text-xs font-semibold text-white shadow-sm transition hover:bg-wn-navy/90 active:scale-95 sm:px-3"
-              title="Plan a multi-day ski trip"
-              aria-label="Plan a trip"
-            >
-              <span aria-hidden="true">🗺️</span>
-              <span className="hidden sm:inline">Plan a trip</span>
-            </button>
+            {/* Stage 4 — "Plan a trip" + "My trips" moved into the
+                AuthButton dropdown for signed-in users (keeps the
+                header less crowded). Anonymous visitors still need a
+                discoverable entry to the planner, so we surface a
+                single "Plan a trip" CTA that bounces them through
+                /login (and back to /?plan=1) — preserves the funnel
+                without ever showing a useless "My trips" link to
+                someone who has none. */}
+            {!isAuthed && (
+              <Link
+                href="/login?next=/?plan=1"
+                className="inline-flex h-11 items-center justify-center gap-1.5 rounded-md bg-wn-navy px-2 text-xs font-semibold text-white shadow-sm transition hover:bg-wn-navy/90 active:scale-95 sm:px-3"
+                title="Plan a multi-day ski trip"
+                aria-label="Plan a trip"
+              >
+                <span aria-hidden="true">🗺️</span>
+                <span className="hidden sm:inline">Plan a trip</span>
+              </Link>
+            )}
             {/* Mobile-only Filters trigger. */}
             {(() => {
               const activeFilterCount =
@@ -793,6 +856,10 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
                 (snowboardsOnly ? 1 : 0) +
                 (webcamOnly ? 1 : 0) +
                 (familyOnly ? 1 : 0) +
+                (powderOnly ? 1 : 0) +
+                (expertOnly ? 1 : 0) +
+                (adaptiveOnly ? 1 : 0) +
+                (surfaceFilter.length > 0 ? 1 : 0) +
                 (snowmakeMin > 0 ? 1 : 0);
               return (
                 <button
@@ -869,10 +936,14 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
             idle-map state; while the user is focused on picking a
             resort or building a trip those rows just push the map down
             and add noise. Show them again the moment those flows close. */}
+        {/* Stage 4 — most-personal-context first. RecentlyViewedStrip
+            (which returns null when empty, so no clutter for new
+            users) sits ABOVE the promotional OffSeasonBanner. Hidden
+            entirely while the user is searching or planning. */}
         {!searchOpen && !plannerOpen && (
           <>
-            <OffSeasonBanner />
             <RecentlyViewedStrip />
+            <OffSeasonBanner />
           </>
         )}
         {/* Stage 35 — Pro benefits / status card. Free users see a
@@ -1038,7 +1109,11 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
           (terrainparkOnly ? 1 : 0) +
           (snowboardsOnly ? 1 : 0) +
           (webcamOnly ? 1 : 0) +
-                (familyOnly ? 1 : 0) +
+          (familyOnly ? 1 : 0) +
+          (powderOnly ? 1 : 0) +
+          (expertOnly ? 1 : 0) +
+          (adaptiveOnly ? 1 : 0) +
+          (surfaceFilter.length > 0 ? 1 : 0) +
           (snowmakeMin > 0 ? 1 : 0)
         }
       />
@@ -1080,7 +1155,11 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
           (terrainparkOnly ? 1 : 0) +
           (snowboardsOnly ? 1 : 0) +
           (webcamOnly ? 1 : 0) +
-                (familyOnly ? 1 : 0) +
+          (familyOnly ? 1 : 0) +
+          (powderOnly ? 1 : 0) +
+          (expertOnly ? 1 : 0) +
+          (adaptiveOnly ? 1 : 0) +
+          (surfaceFilter.length > 0 ? 1 : 0) +
           (snowmakeMin > 0 ? 1 : 0)
         }
         fromPoint={{ lat: origin.lat, lng: origin.lon, label: origin.kind === "geo" ? "your location" : origin.name }}
@@ -1107,6 +1186,11 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         isUsingGeo={origin.kind === "geo"}
         onUseMyLocation={handleFromGeo}
       />
+
+      {/* Inaugural Season — Floating feedback pill at the bottom-left
+          corner (mirror of LocationButton). Tap opens a modal that
+          POSTs to /api/feedback. */}
+      <FeedbackButton />
 
       {/* Compare CTA — fixed pill bottom-center (mobile) / bottom-left
           (desktop). Renders only when the localStorage list has ≥2.
@@ -1137,6 +1221,22 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         freshSnowCount={resorts.filter(
           (r) => r.snow_new_24h_in != null && r.snow_new_24h_in > 0,
         ).length}
+        // Inaugural Season 2026 — Snow today filter. surfaceCount is the
+        // total number of resorts the weather cron has classified today;
+        // FiltersDrawer hides the "Snow today" section entirely when 0.
+        surfaceFilter={surfaceFilter}
+        surfaceCount={resorts.filter((r) => r.current_surface_class != null).length}
+        onSurfaceChange={(codes) =>
+          updateParam("surface", codes.length === 0 ? null : codes.join(","))
+        }
+        // Stage 4 — Best-for expansion: Powder + Expert + Adaptive
+        // composites alongside the existing Family Mountain checkbox.
+        powderOnly={powderOnly}
+        onPowderChange={(v) => updateParam("powder", v ? "1" : null)}
+        expertOnly={expertOnly}
+        onExpertChange={(v) => updateParam("expert", v ? "1" : null)}
+        adaptiveOnly={adaptiveOnly}
+        onAdaptiveChange={(v) => updateParam("adaptive", v ? "1" : null)}
         // Stage 4 — new filter state + handlers wired through. Each
         // boolean → updateParam(key, on ? "1" : null). snowmakeMin is
         // an integer 0-100 stored as a string (null when 0).

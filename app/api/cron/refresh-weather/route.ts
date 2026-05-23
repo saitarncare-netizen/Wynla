@@ -8,9 +8,23 @@
 // .mjs script directly because Next.js' build pipeline doesn't reach
 // into scripts/. Long-term these can share a lib/ helper if the script
 // becomes runtime-shaped.
+//
+// Inaugural Season 2026 — Snow Surface Forecast addition.
+// After weather_history upserts (which add today's row to the rolling
+// 7-day window), we run the Stage 33 snowSurface classifier per resort
+// and write the result to resorts.current_surface_class +
+// current_surface_updated_at. Off-season resorts (currently_open=false)
+// are skipped entirely — their surface_class is NULLed out to avoid
+// stale "Powder today" cards while the mountain isn't operating.
+// Resorts whose rolling history is too thin to classify also write NULL.
 
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import {
+  classifyToday,
+  type DailyWeather,
+  type SurfaceCode,
+} from "@/lib/snowSurface";
 
 export const runtime = "nodejs";
 export const maxDuration = 300; // 5 minutes — comfortable for 451 resorts × 8 concurrency.
@@ -26,6 +40,9 @@ type Resort = {
   id: number;
   latitude: number | string;
   longitude: number | string;
+  currently_open: boolean | null;
+  snow_base_depth_in: number | null;
+  snow_new_24h_in: number | null;
 };
 type CacheRow = {
   resort_id: number;
@@ -352,7 +369,9 @@ export async function GET(request: Request) {
 
   const { data: resortsData, error } = await supabase
     .from("resorts")
-    .select("id, latitude, longitude")
+    .select(
+      "id, latitude, longitude, currently_open, snow_base_depth_in, snow_new_24h_in",
+    )
     .eq("active", true);
   if (error || !resortsData) {
     return NextResponse.json({ ok: false, reason: error?.message ?? "no resorts" }, { status: 500 });
@@ -439,6 +458,149 @@ export async function GET(request: Request) {
     if (histErr) historyErrors++;
   }
 
+  // Inaugural Season 2026 — Snow Surface classification.
+  //
+  // After today's row lands in weather_history, fetch the trailing 7-day
+  // window per resort and run the lib/snowSurface classifier. Writes
+  // back to resorts.current_surface_class so the map can filter on it.
+  //
+  // Off-season rule: resorts marked currently_open=false get a NULL
+  // surface class regardless of their weather data. Showing "Packed
+  // powder today!" for a closed resort is worse than showing nothing.
+  //
+  // Failures here (history fetch error, classifier returns null, write
+  // error) leave the existing value untouched for that resort — better
+  // to show yesterday's class than to blank everything out on a flaky
+  // run. The exception is the off-season skip, which actively NULLs.
+  let surfaceClassified = 0;
+  let surfaceCleared = 0;
+  let surfaceErrors = 0;
+  const surfaceNowIso = new Date().toISOString();
+
+  // Build the set of resorts we'd attempt classification on (those that
+  // produced a fresh history row today AND are currently_open). Anything
+  // else gets the NULL-clear path.
+  const resortById = new Map<number, Resort>(resorts.map((r) => [r.id, r]));
+  const eligibleIds: number[] = [];
+  const ineligibleIds: number[] = [];
+  for (const r of resorts) {
+    if (r.currently_open !== true) {
+      ineligibleIds.push(r.id);
+      continue;
+    }
+    const histRow = historyRows.find((h) => h.resort_id === r.id);
+    if (!histRow) {
+      // No fresh weather today → can't classify reliably; leave existing
+      // value alone (do not push to either list).
+      continue;
+    }
+    eligibleIds.push(r.id);
+  }
+
+  // Bulk-fetch the trailing 7-day weather_history window for every
+  // eligible resort in one query. Avoids 450+ round-trips.
+  if (eligibleIds.length > 0) {
+    const cutoff = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+      .toISOString()
+      .slice(0, 10);
+    const { data: historyData, error: historyErr } = await supabase
+      .from("weather_history")
+      .select(
+        "resort_id, observed_date, temp_high_f, temp_low_f, snow_24h_in, rain_24h_in, precip_24h_in, wind_mph_avg",
+      )
+      .in("resort_id", eligibleIds)
+      .gte("observed_date", cutoff)
+      .order("observed_date", { ascending: true });
+    if (historyErr) {
+      surfaceErrors++;
+    } else {
+      const byResort = new Map<number, DailyWeather[]>();
+      for (const row of (historyData ?? []) as Array<{
+        resort_id: number;
+        observed_date: string;
+        temp_high_f: number | null;
+        temp_low_f: number | null;
+        snow_24h_in: number | null;
+        rain_24h_in: number | null;
+        precip_24h_in: number | null;
+        wind_mph_avg: number | null;
+      }>) {
+        const arr = byResort.get(row.resort_id) ?? [];
+        arr.push({
+          observed_date: row.observed_date,
+          temp_high_f: row.temp_high_f,
+          temp_low_f: row.temp_low_f,
+          snow_24h_in: row.snow_24h_in,
+          rain_24h_in: row.rain_24h_in,
+          precip_24h_in: row.precip_24h_in,
+          wind_mph_avg: row.wind_mph_avg,
+        });
+        byResort.set(row.resort_id, arr);
+      }
+
+      // Classify per resort, then issue one UPDATE per resort. The
+      // table only has ~450 rows so a per-resort UPDATE is cheap and
+      // simpler than an SQL CASE-based bulk upsert.
+      type Update = { id: number; code: SurfaceCode | null };
+      const updates: Update[] = [];
+      for (const id of eligibleIds) {
+        const hist = byResort.get(id);
+        if (!hist || hist.length === 0) {
+          updates.push({ id, code: null });
+          continue;
+        }
+        // Resort metadata (snow base / new24h) isn't a direct classifier
+        // input — the rule tree consumes the daily weather_history rows
+        // only — but we keep the lookup here so future v2 features
+        // (resort-reported base depth as a tiebreaker) plug in cleanly.
+        void resortById.get(id);
+        const result = classifyToday(hist);
+        updates.push({ id, code: result?.code ?? null });
+      }
+
+      // Issue updates in small parallel batches to keep the cron under
+      // its 5-minute budget. Supabase doesn't have a native "update many
+      // with different values" — we just fire .update() calls.
+      const BATCH = 20;
+      for (let off = 0; off < updates.length; off += BATCH) {
+        const slice = updates.slice(off, off + BATCH);
+        await Promise.all(
+          slice.map(async (u) => {
+            const { error: upErr } = await supabase
+              .from("resorts")
+              .update({
+                current_surface_class: u.code,
+                current_surface_updated_at: surfaceNowIso,
+              })
+              .eq("id", u.id);
+            if (upErr) surfaceErrors++;
+            else if (u.code) surfaceClassified++;
+            else surfaceCleared++;
+          }),
+        );
+      }
+    }
+  }
+
+  // Off-season / closed resorts → blank the surface class. Single bulk
+  // UPDATE keyed by id IN (...) so we don't fan out one statement per
+  // resort.
+  if (ineligibleIds.length > 0) {
+    const BATCH = 100;
+    for (let off = 0; off < ineligibleIds.length; off += BATCH) {
+      const slice = ineligibleIds.slice(off, off + BATCH);
+      const { error: clearErr } = await supabase
+        .from("resorts")
+        .update({
+          current_surface_class: null,
+          current_surface_updated_at: surfaceNowIso,
+        })
+        .in("id", slice);
+      if (clearErr) surfaceErrors++;
+      else surfaceCleared += slice.length;
+    }
+  }
+
   const ok = rows.filter((r) => r.fetch_source !== "failed").length;
   return NextResponse.json({
     ok: true,
@@ -447,5 +609,8 @@ export async function GET(request: Request) {
     upsertErrors,
     historyInserted: historyRows.length,
     historyErrors,
+    surfaceClassified,
+    surfaceCleared,
+    surfaceErrors,
   });
 }
