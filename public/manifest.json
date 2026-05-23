@@ -5,7 +5,7 @@
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#FAFAF7",
+  "background_color": "#1E2952",
   "theme_color": "#1E2952",
   "categories": ["sports", "travel", "lifestyle"],
   "icons": [

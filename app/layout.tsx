@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import PwaRegistrar from "@/components/PwaRegistrar";
+import IosInstallBanner from "@/components/IosInstallBanner";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -34,7 +35,12 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     title: "Wynla",
-    statusBarStyle: "default",
+    // black-translucent → the iOS status bar (clock, battery, signal)
+    // overlays our navy header instead of pushing the app content down
+    // behind an opaque white bar. Pair with `padding-top:
+    // env(safe-area-inset-top)` on whatever sits at the top of each
+    // route so the notch / Dynamic Island doesn't eat real content.
+    statusBarStyle: "black-translucent",
   },
   openGraph: {
     type: "website",
@@ -92,6 +98,12 @@ export default function RootLayout({
         <link rel="preconnect" href="https://events.mapbox.com" />
         <link rel="dns-prefetch" href="https://a.tiles.mapbox.com" />
         <link rel="dns-prefetch" href="https://b.tiles.mapbox.com" />
+        {/* iOS PWA launch image. iOS Safari 11+ falls back to
+            manifest.json `background_color` (#1E2952 navy) for devices
+            where this image doesn't exact-match a portrait media query,
+            so this single SVG + the manifest together give every iPhone
+            a branded navy splash instead of the default white flash. */}
+        <link rel="apple-touch-startup-image" href="/splash.svg" />
         <script
           type="application/ld+json"
           // eslint-disable-next-line react/no-danger
@@ -145,6 +157,7 @@ export default function RootLayout({
           </p>
         </footer>
         <PwaRegistrar />
+        <IosInstallBanner />
         <Analytics />
         <SpeedInsights />
       </body>
