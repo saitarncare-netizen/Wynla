@@ -239,24 +239,92 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
 
   // Branded splash overlay state — visible on first mount until Mapbox
   // fires `load`. 8s safety timeout in case the map never loads (missing
-  // token, network error). Reset is never wired — overlay only shows on
-  // first mount, never again, so route-internal nav doesn't flash it.
-  const [splashVisible, setSplashVisible] = useState(true);
+  // token, network error).
+  //
+  // INTENT (do not "optimize" the delay away):
+  //   1. MINIMUM display 1500ms. The tagline "Plan smart. Ride better."
+  //      is a brand moment — on fast networks Mapbox can fire `load` in
+  //      200-400ms, which means users never get to read it. We force at
+  //      least 1.5s of splash visibility no matter how fast the map
+  //      boots. The 8s safety timeout still applies, but it ALSO
+  //      respects the 1500ms floor.
+  //   2. SESSION-STORAGE gating. Splash shows only ONCE per browser
+  //      session. After it hides for real, we set
+  //      `wynla_splash_shown=1` in sessionStorage. Subsequent re-mounts
+  //      of MapPage (user nav to /resort/:slug → back to /) detect the
+  //      flag on mount and skip the splash entirely. Closing the tab /
+  //      quitting the PWA clears sessionStorage → next open shows
+  //      splash again. Correct behavior.
+  const SPLASH_MIN_MS = 1500;
+  const SPLASH_SAFETY_MS = 8000;
+  const SPLASH_SESSION_KEY = "wynla_splash_shown";
+  // Lazy initial state — read sessionStorage at mount-time so we
+  // never flash the overlay on re-mount within the same session.
+  // SSR-safe: typeof window guard.
+  const [splashVisible, setSplashVisible] = useState<boolean>(() => {
+    if (typeof window === "undefined") return true;
+    try {
+      return window.sessionStorage.getItem(SPLASH_SESSION_KEY) !== "1";
+    } catch {
+      return true;
+    }
+  });
+  // Initialized to 0; the mount-effect overwrites this with Date.now()
+  // so impure-call lint passes and the start-time is captured exactly
+  // when the splash actually begins displaying (mount), not earlier
+  // during render. For returning visitors (splashVisible=false) we
+  // skip the effect entirely so this stays 0 and is never read.
+  const splashShownAtRef = useRef<number>(0);
   const splashHideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  useEffect(() => {
-    // Safety net: hide after 8s no matter what so users never get stuck
-    // staring at the splash if Mapbox token / network is broken.
-    splashHideTimer.current = setTimeout(() => setSplashVisible(false), 8000);
-    return () => {
-      if (splashHideTimer.current) clearTimeout(splashHideTimer.current);
-    };
-  }, []);
-  function handleMapLoaded() {
+  // Centralized hide helper — respects the 1500ms floor and writes the
+  // session flag so re-mounts don't re-show the splash. Safe to call
+  // multiple times; the timer is cleared and the flag stored on the
+  // first invocation.
+  function hideSplashRespectingMin() {
+    const elapsed = Date.now() - splashShownAtRef.current;
+    const remaining = Math.max(0, SPLASH_MIN_MS - elapsed);
     if (splashHideTimer.current) {
       clearTimeout(splashHideTimer.current);
       splashHideTimer.current = null;
     }
-    setSplashVisible(false);
+    const commit = () => {
+      setSplashVisible(false);
+      try {
+        window.sessionStorage.setItem(SPLASH_SESSION_KEY, "1");
+      } catch {
+        /* sessionStorage unavailable — splash will re-show next visit, acceptable */
+      }
+    };
+    if (remaining === 0) {
+      commit();
+    } else {
+      splashHideTimer.current = setTimeout(commit, remaining);
+    }
+  }
+  useEffect(() => {
+    // If splashVisible was initialized false (returning visitor),
+    // skip the safety timer entirely — overlay is already hidden.
+    if (!splashVisible) return;
+    splashShownAtRef.current = Date.now();
+    // Safety net: schedule a hide after 8s so users never get stuck
+    // staring at the splash if Mapbox token / network is broken. The
+    // hide helper itself enforces the 1500ms minimum, but at 8s that
+    // floor is always satisfied so it's effectively immediate then.
+    splashHideTimer.current = setTimeout(
+      hideSplashRespectingMin,
+      SPLASH_SAFETY_MS,
+    );
+    return () => {
+      if (splashHideTimer.current) clearTimeout(splashHideTimer.current);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  function handleMapLoaded() {
+    // Only act if the splash is still on-screen. Once it's hidden,
+    // subsequent Mapbox style-reloads (theme switches, etc.) won't
+    // re-trigger the splash because splashVisible is already false.
+    if (!splashVisible) return;
+    hideSplashRespectingMin();
   }
   // Stage 19.5: when the trip planner's picker is active, it
   // registers a handler here. Map pin clicks route through it
@@ -813,12 +881,14 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
     <div className="relative h-dvh w-full overflow-hidden">
       <header
         className="absolute inset-x-0 top-0 z-10 md:border-b md:border-wn-charcoal/10 md:bg-white/95 md:backdrop-blur-sm"
-        // Round 5 polish — iPhone notch / Dynamic Island. The bare
-        // safe-area-inset-top value puts the button row flush with the
-        // status-bar battery/clock icons. +8px gap so there's always
-        // visual breathing room between iOS chrome and our first
-        // tappable element.
-        style={{ paddingTop: "calc(env(safe-area-inset-top, 0px) + 8px)" }}
+        // User feedback (post-Round-5 install): the +8px bump felt like
+        // the header was floating too far below the iOS status bar.
+        // Reverted to bare env(safe-area-inset-top) so the button row
+        // sits snug under the iOS clock/battery — no extra gap. The
+        // FiltersDrawer + /resort/[slug] hero keep their +12px padding
+        // because those views don't have the same "search pill +
+        // tappable row" affordance directly below the status bar.
+        style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}
       >
         <div className="flex items-center justify-between gap-1.5 px-2 pt-3 sm:gap-2 sm:px-6">
           <div className="flex items-baseline gap-3">

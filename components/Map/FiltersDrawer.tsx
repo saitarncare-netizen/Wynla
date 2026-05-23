@@ -284,7 +284,16 @@ export default function FiltersDrawer({
           <div className="h-1 w-10 rounded-full bg-wn-charcoal/25" />
         </div>
 
-        <header className="relative shrink-0 border-b border-wn-charcoal/10 bg-white px-4 pb-3 pt-3 md:pt-4">
+        <header
+          className="relative shrink-0 border-b border-wn-charcoal/10 bg-white px-4 pb-3 md:pt-4"
+          // User feedback (post-Round-5 install): on iPhone PWA, the
+          // drawer header sat too close to the iOS status bar — the
+          // close button nearly touched the battery icon. Add safe-area
+          // padding + 12px breathing room so the header clears the
+          // status bar comfortably on any device. md:pt-4 still applies
+          // on desktop where env(safe-area-inset-top) is 0.
+          style={{ paddingTop: "calc(env(safe-area-inset-top, 0px) + 12px)" }}
+        >
           <button
             type="button"
             onClick={onClose}
