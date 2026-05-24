@@ -199,6 +199,18 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   const router = useRouter();
   const searchParams = useSearchParams();
   const [selectedId, setSelectedId] = useState<number | null>(null);
+  // Sticky highlight for the LAST resort the user opened. When the
+  // ResortPanel closes (Esc / × / outside-tap), selectedId drops to
+  // null and the bold blue ring around the pin would normally vanish
+  // immediately — Saitarn 2026-05-23: "ฉันอยากให้มันไฮไลท์ตรงข่าวที่เพิ่งจิ้ม
+  // เข้าไปดู". Solution: copy the closing id into recentlyViewedId so
+  // the map keeps a softer gold ring on the pin for ~60s. Cleared
+  // when the user opens any new resort. The "just where was that one
+  // I just looked at?" navigation problem disappears.
+  const [recentlyViewedId, setRecentlyViewedId] = useState<number | null>(null);
+  const recentlyViewedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
   const [cameraTarget, setCameraTarget] = useState<{ lat: number; lng: number; token: string } | null>(null);
   const [previewLeg, setPreviewLeg] = useState<{ fromLat: number; fromLng: number; toLat: number; toLng: number } | null>(null);
   const [tripResortIds, setTripResortIds] = useState<number[]>([]);
@@ -226,11 +238,34 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
     }
   }
   function openResort(id: number | null) {
-    setSelectedId(id);
-    if (id != null) {
+    if (id == null) {
+      // Closing the panel — promote the just-viewed resort to the
+      // recently-viewed slot so the gold ring lingers on the map.
+      if (selectedId != null) {
+        setRecentlyViewedId(selectedId);
+        if (recentlyViewedTimerRef.current) {
+          clearTimeout(recentlyViewedTimerRef.current);
+        }
+        // Gold ring expires after 60s so a forgotten panel doesn't
+        // permanently mark a pin. The user can re-tap the pin to
+        // re-anchor if they want.
+        recentlyViewedTimerRef.current = setTimeout(() => {
+          setRecentlyViewedId(null);
+        }, 60_000);
+      }
+    } else {
+      // Opening any resort clears the previous "recently viewed" so
+      // the gold ring doesn't compete with the active blue selection
+      // ring on a different pin.
+      setRecentlyViewedId(null);
+      if (recentlyViewedTimerRef.current) {
+        clearTimeout(recentlyViewedTimerRef.current);
+        recentlyViewedTimerRef.current = null;
+      }
       setSearchOpenRaw(false);
       setFiltersOpenRaw(false);
     }
+    setSelectedId(id);
   }
   // Onboarding wizard removed (Round 5 polish). First-time users go
   // straight to the full map — no skill / pass / origin questions
@@ -606,14 +641,27 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   }, [driveTimes, origin, resorts]);
 
   // Stage 8 — airport-match predicate. Reused across pipelines.
+  // Saitarn 2026-05-23 feedback: when she pins an airport AND sets
+  // a drive-time cap (e.g. "≤ 15h"), she expects the drive cap to
+  // EXPAND the radius around the airport — but the default
+  // AIRPORT_MAX_DISTANCE_MI=120 cap was hiding everything past ~2h
+  // away. New behavior: when both airport and withinHours are active,
+  // the drive-time cap (estimated as withinHours × 55 mph highway
+  // average) takes over as the distance ceiling, superseding the
+  // default 120mi shuttle-range cap. When only airport is set, the
+  // 120mi cap stays (sensible default for "fly-in skiers" who want
+  // an actual shuttle distance).
+  const EST_HWY_MPH = 55;
+  const airportDistanceCapMi =
+    withinHours > 0
+      ? Math.max(AIRPORT_MAX_DISTANCE_MI, withinHours * EST_HWY_MPH)
+      : AIRPORT_MAX_DISTANCE_MI;
   const matchesAirport = (r: Resort): boolean => {
     if (!airportFilter) return true;
     if (r.closest_airport_iata !== airportFilter) return false;
-    // Distance cap — keep the result set to realistic shuttle range so
-    // a user filtering by DEN doesn't see a resort 280 mi away.
     if (
       r.closest_airport_distance_mi != null &&
-      r.closest_airport_distance_mi > AIRPORT_MAX_DISTANCE_MI
+      r.closest_airport_distance_mi > airportDistanceCapMi
     ) {
       return false;
     }
@@ -684,7 +732,10 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
           return false;
         }
       }
-      if (withinHours > 0) {
+      if (withinHours > 0 && !airportFilter) {
+        // City-anchored drive cap. When airport is also pinned the cap
+        // is interpreted as "drive time from the airport" instead and
+        // is enforced inside matchesAirport via airportDistanceCapMi.
         const dt = driveTimeByResort.get(r.id)?.get(origin.name);
         if (!dt || dt.duration_seconds > withinHours * 3600) return false;
       }
@@ -932,10 +983,16 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   useEffect(() => {
     if (selectedId == null) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setSelectedId(null);
+      if (e.key === "Escape") openResort(null);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
+    // openResort is intentionally NOT in deps — it's a stable
+    // component-scoped function that closes over the latest state via
+    // setSelectedId/setRecentlyViewedId (which React guarantees are
+    // stable). Adding it would force the effect to re-bind on every
+    // render and would just refresh an already-correct handler.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedId]);
 
   // Recently-viewed strip dispatches OPEN_RESORT_EVENT when the user
@@ -956,6 +1013,9 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
     }
     window.addEventListener(OPEN_RESORT_EVENT, onOpenResort);
     return () => window.removeEventListener(OPEN_RESORT_EVENT, onOpenResort);
+    // openResort is stable per the [] mount-only intent; deps are
+    // empty by design. ESLint can't infer that, hence the disable.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -1174,6 +1234,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         originName={origin.name}
         driveTimeByResort={driveTimeByResort}
         selectedId={selectedId}
+        recentlyViewedId={recentlyViewedId}
         onMapLoaded={handleMapLoaded}
         // Stage 33 — freeze map interaction whenever a full-bleed
         // overlay is on screen. Without this, vertical scrolls inside
@@ -1253,7 +1314,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
           origin={origin}
           weather={weatherByResort.get(selectedResort.id) ?? null}
           activeAirport={activeAirport}
-          onClose={() => setSelectedId(null)}
+          onClose={() => openResort(null)}
         />
       )}
 

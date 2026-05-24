@@ -73,6 +73,12 @@ type Props = {
    *  the picked airport's lat/lng/label here so MapView can drop a
    *  ✈️ marker on the map. Null when no airport filter is set. */
   airportMarker?: { lat: number; lng: number; label: string; iata: string } | null;
+  /** Round 7 polish — sticky highlight for the resort the user MOST
+   *  RECENTLY opened. When the ResortPanel closes, MapPage promotes
+   *  the closing selectedId into this slot so the gold ring lingers
+   *  on the pin for ~60s. Lets users glance back at "where was I just
+   *  looking?" without re-opening the panel. Null = no recent. */
+  recentlyViewedId?: number | null;
 };
 
 const SOURCE_ID = "wynla-resorts";
@@ -171,6 +177,7 @@ export default function MapView({
   originName,
   driveTimeByResort,
   selectedId,
+  recentlyViewedId,
   onResortClick,
   tripRoute,
   cameraTarget,
@@ -386,6 +393,12 @@ export default function MapView({
             3.5,
             ["boolean", ["feature-state", "selected"], false],
             3,
+            // Round 7 polish — "recently viewed" gets a soft gold ring
+            // that's slightly thinner than the active selection so
+            // there's no visual competition when a different pin gets
+            // selected later. Same gold as in_trip but matched stroke.
+            ["boolean", ["feature-state", "recently_viewed"], false],
+            2.5,
             ["boolean", ["feature-state", "hover"], false],
             2.5,
             1.5,
@@ -396,6 +409,8 @@ export default function MapView({
             "#D4A84B",
             ["boolean", ["feature-state", "selected"], false],
             "#1E2952",
+            ["boolean", ["feature-state", "recently_viewed"], false],
+            "#D4A84B",
             "#FFFFFF",
           ],
           "circle-radius-transition": { duration: 150 },
@@ -430,6 +445,8 @@ export default function MapView({
             4,
             ["boolean", ["feature-state", "selected"], false],
             4,
+            ["boolean", ["feature-state", "recently_viewed"], false],
+            3,
             ["boolean", ["feature-state", "hover"], false],
             3,
             2,
@@ -440,6 +457,8 @@ export default function MapView({
             "#D4A84B",
             ["boolean", ["feature-state", "selected"], false],
             "#1E2952",
+            ["boolean", ["feature-state", "recently_viewed"], false],
+            "#D4A84B",
             "#FFFFFF",
           ],
           "circle-radius-transition": { duration: 150 },
@@ -737,6 +756,32 @@ export default function MapView({
     };
     if (map.getSource(SOURCE_ID)) apply();
   }, [selectedId, resorts, mapReady]);
+
+  // Round 7 polish — sync "recently_viewed" feature-state. Independent
+  // of "selected" so the gold ring keeps the just-closed pin marked
+  // while there's no active blue ring competing for attention.
+  const lastRecentlyViewedRef = useRef<number | null>(null);
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+    const apply = () => {
+      const prev = lastRecentlyViewedRef.current;
+      if (prev != null && prev !== recentlyViewedId) {
+        map.setFeatureState(
+          { source: SOURCE_ID, id: prev },
+          { recently_viewed: false },
+        );
+      }
+      if (recentlyViewedId != null) {
+        map.setFeatureState(
+          { source: SOURCE_ID, id: recentlyViewedId },
+          { recently_viewed: true },
+        );
+      }
+      lastRecentlyViewedRef.current = recentlyViewedId ?? null;
+    };
+    if (map.getSource(SOURCE_ID)) apply();
+  }, [recentlyViewedId, mapReady]);
 
   // Trip-route overlay: when the planner is open we draw a connecting
   // line between the origin and each resort in plan order, plus a small
