@@ -279,10 +279,27 @@ export default function FiltersDrawer({
           "md:inset-auto md:left-1/2 md:top-12 md:bottom-12 md:w-[440px] md:-translate-x-1/2 md:rounded-2xl",
         ].join(" ")}
       >
-        {/* Drag handle (mobile only — visual cue, taps go to backdrop) */}
-        <div className="flex shrink-0 justify-center pt-2 md:hidden" aria-hidden="true">
-          <div className="h-1 w-10 rounded-full bg-wn-charcoal/25" />
-        </div>
+        {/* Drag handle — mobile only. Tappable to close the drawer:
+            Saitarn's 2026-05-23 screenshot showed the top-right × at
+            ~80px from the iPhone viewport top (safe-area + header
+            padding put it just below the Dynamic Island), which is
+            unreachable with a one-handed thumb on a Pro Max. The
+            drag handle sits even higher BUT it's a wide horizontal
+            target the user is already drawn to as an iOS-native
+            "dismiss me" affordance — wrapping it in a full-width
+            button lets the user tap anywhere along the top strip to
+            close without trying to pinpoint the × glyph. The visible
+            pill stays small + centered (iOS-native look), the
+            button-shaped wrapper gives a comfortable 28px tall hit
+            zone spanning the full width. */}
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Close filters"
+          className="flex shrink-0 cursor-pointer justify-center py-2 md:hidden"
+        >
+          <span aria-hidden="true" className="h-1 w-10 rounded-full bg-wn-charcoal/25" />
+        </button>
 
         <header
           className="relative shrink-0 border-b border-wn-charcoal/10 bg-white px-4 pb-3 md:pt-4"
@@ -294,13 +311,21 @@ export default function FiltersDrawer({
           // on desktop where env(safe-area-inset-top) is 0.
           style={{ paddingTop: "calc(env(safe-area-inset-top, 0px) + 12px)" }}
         >
+          {/* Top-right × is desktop-only. On mobile it sat in the
+              upper-right corner well outside the thumb-reach zone
+              even with safe-area padding (verified via Saitarn's
+              21:31 screenshot). Mobile users get three other paths to
+              close — the tappable drag handle above, the "Done · Show
+              N resorts" button in the footer (the primary action), and
+              the backdrop tap. Desktop keeps the × because cursor
+              reach isn't the constraint. */}
           <button
             type="button"
             onClick={onClose}
             aria-label="Close"
-            className="absolute right-3 top-3 inline-flex h-8 w-8 items-center justify-center rounded-full bg-wn-offwhite text-wn-charcoal transition hover:bg-wn-charcoal/10"
+            className="absolute right-2 top-2 hidden h-11 w-11 items-center justify-center rounded-full bg-wn-offwhite text-wn-charcoal transition hover:bg-wn-charcoal/10 md:inline-flex"
           >
-            <span aria-hidden="true" className="text-lg leading-none">×</span>
+            <span aria-hidden="true" className="text-xl leading-none">×</span>
           </button>
           <h2 className="text-base font-extrabold tracking-tight text-wn-navy">
             Filters
