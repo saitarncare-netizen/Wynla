@@ -279,19 +279,14 @@ export default function FiltersDrawer({
           "md:inset-auto md:left-1/2 md:top-12 md:bottom-12 md:w-[440px] md:-translate-x-1/2 md:rounded-2xl",
         ].join(" ")}
       >
-        {/* Drag handle — mobile only. Tappable to close the drawer:
-            Saitarn's 2026-05-23 screenshot showed the top-right × at
-            ~80px from the iPhone viewport top (safe-area + header
-            padding put it just below the Dynamic Island), which is
-            unreachable with a one-handed thumb on a Pro Max. The
-            drag handle sits even higher BUT it's a wide horizontal
-            target the user is already drawn to as an iOS-native
-            "dismiss me" affordance — wrapping it in a full-width
-            button lets the user tap anywhere along the top strip to
-            close without trying to pinpoint the × glyph. The visible
-            pill stays small + centered (iOS-native look), the
-            button-shaped wrapper gives a comfortable 28px tall hit
-            zone spanning the full width. */}
+        {/* Drag handle — mobile only. Still tappable as a secondary
+            close path (iOS users instinctively reach for it on bottom-
+            sheets), but it's not relied on as the primary affordance
+            because PR #34's "hidden ×, drag-handle does it" test
+            failed the discoverability bar — Saitarn's 21:46 follow-up
+            screenshot showed her hunting for a close and not finding
+            one. The labeled "✕ Close" pill in the header below is the
+            real visible affordance now. */}
         <button
           type="button"
           onClick={onClose}
@@ -311,21 +306,23 @@ export default function FiltersDrawer({
           // on desktop where env(safe-area-inset-top) is 0.
           style={{ paddingTop: "calc(env(safe-area-inset-top, 0px) + 12px)" }}
         >
-          {/* Top-right × is desktop-only. On mobile it sat in the
-              upper-right corner well outside the thumb-reach zone
-              even with safe-area padding (verified via Saitarn's
-              21:31 screenshot). Mobile users get three other paths to
-              close — the tappable drag handle above, the "Done · Show
-              N resorts" button in the footer (the primary action), and
-              the backdrop tap. Desktop keeps the × because cursor
-              reach isn't the constraint. */}
+          {/* Top-right close. Desktop = compact circular ×. Mobile =
+              labeled "✕ Close" pill so the affordance is obvious even
+              to users who've never seen iOS bottom-sheet drag handles
+              (Saitarn's 21:46 PWA screenshot proved the hidden-×
+              variant from PR #34 was undiscoverable). The pill is
+              44×44 effective hit target — within thumb reach on
+              normal phones, a noticeable stretch on Pro Max, BUT
+              users now SEE there's a way out, and the footer "Done"
+              button is the easy-reach primary close anyway. */}
           <button
             type="button"
             onClick={onClose}
-            aria-label="Close"
-            className="absolute right-2 top-2 hidden h-11 w-11 items-center justify-center rounded-full bg-wn-offwhite text-wn-charcoal transition hover:bg-wn-charcoal/10 md:inline-flex"
+            aria-label="Close filters"
+            className="absolute right-2 top-2 inline-flex h-11 items-center gap-1.5 rounded-full bg-wn-offwhite px-3 text-sm font-semibold text-wn-charcoal transition hover:bg-wn-charcoal/10 md:right-2 md:top-2 md:h-11 md:w-11 md:justify-center md:gap-0 md:px-0 md:text-xl"
           >
-            <span aria-hidden="true" className="text-xl leading-none">×</span>
+            <span aria-hidden="true" className="text-lg leading-none md:text-xl">×</span>
+            <span className="md:hidden">Close</span>
           </button>
           <h2 className="text-base font-extrabold tracking-tight text-wn-navy">
             Filters
