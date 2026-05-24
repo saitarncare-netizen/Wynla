@@ -16,6 +16,7 @@ import { supabase } from "@/lib/supabase";
 import { passColor, passLabel, primaryPass } from "@/lib/passColors";
 import { getDifficultyMix, type DifficultyMix } from "@/lib/difficulty";
 import { COMPARE_MAX } from "@/lib/compareList";
+import ClearCompareButton from "./CompareActions";
 
 export const dynamic = "force-dynamic";
 
@@ -98,7 +99,10 @@ export default async function ComparePage({
 
   if (ids.length === 0) {
     return (
-      <main className="min-h-dvh bg-wn-offwhite px-4 py-12 sm:px-6">
+      <main
+        className="min-h-dvh bg-wn-offwhite px-4 py-12 sm:px-6"
+        style={{ paddingTop: "calc(env(safe-area-inset-top, 0px) + 3rem)" }}
+      >
         <div className="mx-auto max-w-2xl">
           <Link
             href="/"
@@ -189,7 +193,10 @@ export default async function ComparePage({
 
   if (resorts.length === 0) {
     return (
-      <main className="min-h-dvh bg-wn-offwhite px-4 py-12 sm:px-6">
+      <main
+        className="min-h-dvh bg-wn-offwhite px-4 py-12 sm:px-6"
+        style={{ paddingTop: "calc(env(safe-area-inset-top, 0px) + 3rem)" }}
+      >
         <div className="mx-auto max-w-2xl">
           <Link
             href="/"
@@ -207,14 +214,29 @@ export default async function ComparePage({
   }
 
   return (
-    <main className="min-h-dvh bg-wn-offwhite">
+    <main
+      className="min-h-dvh bg-wn-offwhite"
+      // iOS safe-area padding so the "← Map" link + title don't slide
+      // under the status bar (clock / battery). Without this, Saitarn's
+      // 2026-05-23 screenshot showed the "21:09" status bar overlapping
+      // "← Map" on the iPhone PWA. env(safe-area-inset-top) is 0 on
+      // desktop so this is free for non-mobile.
+      style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}
+    >
       <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-10">
-        <Link
-          href="/"
-          className="mb-3 inline-block text-xs font-semibold text-wn-charcoal/60 hover:text-wn-navy"
-        >
-          ← Map
-        </Link>
+        <div className="mb-3 flex items-center justify-between gap-2">
+          <Link
+            href="/"
+            className="inline-flex h-9 items-center rounded-md border border-wn-charcoal/15 bg-white px-3 text-xs font-semibold text-wn-charcoal/70 transition hover:border-wn-navy hover:text-wn-navy"
+          >
+            ← Map
+          </Link>
+          {/* Clear-all action — destructive so we keep it visually muted
+              (matching back-to-map weight) and to the right of the back
+              affordance, the way iOS Mail puts Delete opposite Back.
+              Resolves Saitarn's "ไม่มีปุ่มกดเคลียร์คอมแพร์" complaint. */}
+          <ClearCompareButton />
+        </div>
 
         <header className="mb-6">
           <h1 className="text-2xl font-extrabold text-wn-navy sm:text-3xl">
@@ -445,10 +467,21 @@ function MobileCompareList({
   resorts: CompareResort[];
   driveByResort: Map<number, number | null>;
 }) {
+  // Use exactly N columns matching the resort count so the layout
+  // never leaves an asymmetric half-empty row — Saitarn's complaint
+  // 2026-05-23 was the old `grid-cols-2` putting resort #3 alone on
+  // the left of row 2 every time she compared three. With N columns
+  // every metric row reads as a symmetric strip regardless of count.
+  // For 4-5 resorts on a narrow phone the cells get tight (≤78px),
+  // but the metric values are short (✓ / — / "100%" / "1,600 ft")
+  // so they still fit cleanly; resort names truncate via `truncate`.
+  const gridStyle = {
+    gridTemplateColumns: `repeat(${resorts.length}, minmax(0, 1fr))`,
+  };
   return (
     <div className="space-y-4">
       {/* Resort header strip — one card per resort, name + pass colors. */}
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+      <div className="grid gap-2" style={gridStyle}>
         {resorts.map((r) => {
           const primary = primaryPass(r.passes);
           const c = passColor(primary);
@@ -498,7 +531,7 @@ function MobileCompareList({
         />
       ))}
 
-      <div className="grid grid-cols-2 gap-2 pt-2 sm:grid-cols-4">
+      <div className="grid gap-2 pt-2" style={gridStyle}>
         {resorts.map((r) => (
           <Link
             key={r.id}
@@ -522,12 +555,19 @@ function MobileMetricCard({
   resorts: CompareResort[];
   render: MetricFn;
 }) {
+  // Mirror the MobileCompareList header strip — N equal columns so
+  // every metric row stays in lockstep with the resort header cards.
   return (
     <div className="rounded-lg border border-wn-charcoal/10 bg-white p-3">
       <div className="mb-2 text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
         {label}
       </div>
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+      <div
+        className="grid gap-2"
+        style={{
+          gridTemplateColumns: `repeat(${resorts.length}, minmax(0, 1fr))`,
+        }}
+      >
         {resorts.map((r) => (
           <div key={r.id} className="border-l border-wn-charcoal/10 pl-2 first:border-l-0 first:pl-0">
             <div className="text-[10px] text-wn-charcoal/45">{r.name.split(" ")[0]}</div>

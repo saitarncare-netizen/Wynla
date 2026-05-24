@@ -355,7 +355,24 @@ export default function ResortPicker({
       </>
       )}
 
-      <header className="shrink-0 border-b border-wn-charcoal/10 px-3 pb-2 pt-1.5 md:pt-3">
+      <header
+        className="shrink-0 border-b border-wn-charcoal/10 px-3 pb-2 pt-1.5 md:pt-3"
+        // In fullScreen mode the picker covers the whole viewport
+        // (`inset-0`), so without explicit safe-area padding the iOS
+        // status bar (clock / battery) sits ON TOP of the title +
+        // close button — Saitarn's screenshot from 2026-05-23 showed
+        // "21:10" overlapping "Find a resort 425 of 425" and the X
+        // tucked up against the Dynamic Island. The status bar is
+        // ~44-59px on modern iPhones; env(safe-area-inset-top)
+        // resolves to that exact value at runtime. Skip on desktop
+        // where the value is 0 anyway, but the inline style is
+        // cheaper than another media-query branch.
+        style={
+          fullScreen
+            ? { paddingTop: "calc(env(safe-area-inset-top, 0px) + 6px)" }
+            : undefined
+        }
+      >
         {/* Stage 33 — header slimmed: title + count + close all on one
             row (subtitle "From X · sorted by drive time" dropped — the
             same info now lives next to the sort toggles below). */}
@@ -370,7 +387,11 @@ export default function ResortPicker({
             type="button"
             onClick={onClose}
             aria-label="Close"
-            className="text-lg leading-none text-wn-charcoal/55 hover:text-wn-navy"
+            // Bigger touch target (44×44 minimum per WCAG 2.5.5 +
+            // Apple HIG). The visible × stays small; the surrounding
+            // button captures taps for the whole reachable area so
+            // the user doesn't need a pixel-perfect thumb.
+            className="-mr-1.5 -mt-1.5 inline-flex h-11 w-11 items-center justify-center text-2xl leading-none text-wn-charcoal/55 hover:text-wn-navy"
           >
             ×
           </button>
