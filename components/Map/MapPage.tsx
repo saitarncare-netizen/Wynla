@@ -207,7 +207,27 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   // the map keeps a softer gold ring on the pin for ~60s. Cleared
   // when the user opens any new resort. The "just where was that one
   // I just looked at?" navigation problem disappears.
-  const [recentlyViewedId, setRecentlyViewedId] = useState<number | null>(null);
+  //
+  // Lazy init reads ?recent=<slug> from the URL so the highlight
+  // survives a /resort/[slug] → /?recent=<slug> round-trip. That
+  // cross-route navigation (Saitarn 2026-05-23 follow-up) otherwise
+  // dropped the in-memory state set when she'd closed the panel and
+  // tapped View full details.
+  const [recentlyViewedId, setRecentlyViewedId] = useState<number | null>(
+    () => {
+      if (typeof window === "undefined") return null;
+      try {
+        const recentSlug = new URLSearchParams(window.location.search).get(
+          "recent",
+        );
+        if (!recentSlug) return null;
+        const r = resorts.find((res) => res.slug === recentSlug);
+        return r ? r.id : null;
+      } catch {
+        return null;
+      }
+    },
+  );
   const recentlyViewedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
     null,
   );
@@ -579,7 +599,11 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   const airportFilter: string | null = airportParam
     ? airportParam.toUpperCase()
     : null;
-  const AIRPORT_MAX_DISTANCE_MI = 120;
+  // AIRPORT_MAX_DISTANCE_MI = 120 was the shuttle-range cap when airport
+  // was still a filter (pre-Round-8). Kept as documentation only — the
+  // const is no longer referenced by any code path. If we ever re-enable
+  // "near airport X" filtering, this is the historical value to revive.
+  // const AIRPORT_MAX_DISTANCE_MI = 120;
 
   // Resolve the picked airport's coordinates from AIRPORT_OPTIONS so
   // MapView can drop a ✈️ marker and ResortPanel can compute drive
@@ -590,6 +614,27 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
     if (!a) return null;
     return { lat: a.lat, lng: a.lng, label: a.label, iata: a.iata };
   }, [airportFilter]);
+
+  // Round 8 (Saitarn 2026-05-23, Option A): picking an airport flies
+  // the camera to it so the user lands on the right region of the map
+  // — that's now the airport's ONLY job besides the plane marker.
+  // Re-emits whenever airportFilter changes (including to a different
+  // airport), with a fresh token so MapView's flyTo effect actually
+  // re-runs even when the new lat/lng happens to repeat.
+  const lastAirportRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (!activeAirport) {
+      lastAirportRef.current = null;
+      return;
+    }
+    if (lastAirportRef.current === activeAirport.iata) return;
+    lastAirportRef.current = activeAirport.iata;
+    setCameraTarget({
+      lat: activeAirport.lat,
+      lng: activeAirport.lng,
+      token: `airport-${activeAirport.iata}-${Date.now()}`,
+    });
+  }, [activeAirport]);
 
   // Defensive: when the planner closes, clear any trip overlays so a
   // user who saved + deleted a trip never sees lingering "in_trip"
@@ -640,33 +685,24 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
     return map;
   }, [driveTimes, origin, resorts]);
 
-  // Stage 8 — airport-match predicate. Reused across pipelines.
-  // Saitarn 2026-05-23 feedback: when she pins an airport AND sets
-  // a drive-time cap (e.g. "≤ 15h"), she expects the drive cap to
-  // EXPAND the radius around the airport — but the default
-  // AIRPORT_MAX_DISTANCE_MI=120 cap was hiding everything past ~2h
-  // away. New behavior: when both airport and withinHours are active,
-  // the drive-time cap (estimated as withinHours × 55 mph highway
-  // average) takes over as the distance ceiling, superseding the
-  // default 120mi shuttle-range cap. When only airport is set, the
-  // 120mi cap stays (sensible default for "fly-in skiers" who want
-  // an actual shuttle distance).
-  const EST_HWY_MPH = 55;
-  const airportDistanceCapMi =
-    withinHours > 0
-      ? Math.max(AIRPORT_MAX_DISTANCE_MI, withinHours * EST_HWY_MPH)
-      : AIRPORT_MAX_DISTANCE_MI;
-  const matchesAirport = (r: Resort): boolean => {
-    if (!airportFilter) return true;
-    if (r.closest_airport_iata !== airportFilter) return false;
-    if (
-      r.closest_airport_distance_mi != null &&
-      r.closest_airport_distance_mi > airportDistanceCapMi
-    ) {
-      return false;
-    }
-    return true;
-  };
+  // Round 8 (Saitarn 2026-05-23, Option A): airport is no longer a
+  // FILTER — it's just a "fly to this airport" affordance + a plane
+  // marker on the map. PR #36 tried to blend airport + drive-time
+  // into one filter and the result was a "20h drive cap" that still
+  // showed the same 12 resorts the 120mi shuttle-cap had carved out,
+  // because the cap stack was unclear. Saitarn proposed (and we
+  // agreed): drop the airport-as-filter entirely, keep drive-time
+  // anchored to the user's origin city, and surface
+  // "X min drive from {airport}" per-resort instead.
+  //
+  // matchesAirport now always returns true — the predicate is kept
+  // (rather than ripped out) so the call sites in the filter
+  // pipeline don't have to change shape, but the function is
+  // effectively a no-op. AIRPORT_MAX_DISTANCE_MI is now only used
+  // by ResortPanel + /resort/[slug] to label "Closest airport"
+  // confidence.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const matchesAirport = (_r: Resort): boolean => true;
 
   // Resorts that pass every filter EXCEPT size — used to compute the
   // "X with unknown size hidden" caption when the size chip is active.
@@ -732,13 +768,15 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
           return false;
         }
       }
-      if (withinHours > 0 && !airportFilter) {
-        // City-anchored drive cap. When airport is also pinned the cap
-        // is interpreted as "drive time from the airport" instead and
-        // is enforced inside matchesAirport via airportDistanceCapMi.
+      if (withinHours > 0) {
+        // Drive time is ALWAYS anchored to the user's origin city
+        // (Round 8 — airport is no longer a filter so there's no
+        // airport-anchored interpretation to special-case).
         const dt = driveTimeByResort.get(r.id)?.get(origin.name);
         if (!dt || dt.duration_seconds > withinHours * 3600) return false;
       }
+      // matchesAirport is a no-op post-Round-8 but kept in the chain
+      // to avoid disturbing the memoization deps + pipeline shape.
       if (!matchesAirport(r)) return false;
       return true;
     });
@@ -978,6 +1016,49 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
       document.body.classList.remove("route-map");
     };
   }, []);
+
+  // Hydrate the gold-ring timer + clean up the ?recent=<slug> param.
+  // If we mounted with recentlyViewedId already set from the URL
+  // (the cross-route round-trip from /resort/[slug]), schedule the
+  // standard 60s expiry AND strip the param so refresh doesn't keep
+  // re-applying the highlight. Camera flies to that resort once so
+  // the pin is actually visible.
+  const recentParamConsumedRef = useRef(false);
+  useEffect(() => {
+    if (recentParamConsumedRef.current) return;
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    if (!params.has("recent")) return;
+    recentParamConsumedRef.current = true;
+    // Fly the camera to the just-viewed resort so the gold ring
+    // isn't off-screen when the user lands back on the map.
+    if (recentlyViewedId != null) {
+      const r = resorts.find((res) => res.id === recentlyViewedId);
+      if (r) {
+        const lat = Number(r.latitude);
+        const lng = Number(r.longitude);
+        if (Number.isFinite(lat) && Number.isFinite(lng)) {
+          // eslint-disable-next-line react-hooks/set-state-in-effect -- one-shot URL-param hydration; we're synchronizing external state (the search-param) into local state on mount, which is exactly the documented valid case for setState-in-effect.
+          setCameraTarget({ lat, lng, token: `recent-${Date.now()}` });
+        }
+      }
+      if (recentlyViewedTimerRef.current) {
+        clearTimeout(recentlyViewedTimerRef.current);
+      }
+      recentlyViewedTimerRef.current = setTimeout(() => {
+        setRecentlyViewedId(null);
+      }, 60_000);
+    }
+    // Strip the param so a refresh / share doesn't re-trigger the
+    // highlight + flyto on a stale page reload.
+    params.delete("recent");
+    const qs = params.toString();
+    router.replace(qs ? `?${qs}` : "?", { scroll: false });
+    // recentlyViewedId is a mount-time lazy-init read from the same
+    // URL param — once consumed it shouldn't refire. We deliberately
+    // omit it from deps.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [resorts, router]);
 
   // ESC key closes the panel — keyboard parity with the X button.
   useEffect(() => {
@@ -1460,6 +1541,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
           updateParam("pass", passes.length === 0 ? null : passes.join(","))
         }
         withinHours={withinHours}
+        fromLabel={origin.kind === "geo" ? "here" : origin.short}
         sizeFilter={sizeFilter}
         nightOnly={nightOnly}
         airportFilter={airportFilter}
