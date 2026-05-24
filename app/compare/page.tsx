@@ -498,11 +498,15 @@ function MobileCompareList({
                 }}
                 aria-hidden="true"
               />
-              <div className="px-3 py-2">
-                <div className="truncate text-sm font-bold text-wn-navy">
+              <div className="px-3 py-2.5">
+                {/* Names bumped to text-base + font-extrabold + leading-snug
+                    per Saitarn 2026-05-23 feedback — previous text-sm /
+                    font-bold read as "small + faded" against the gradient
+                    strip. Tighter line-height keeps two-line names tidy. */}
+                <div className="text-base font-extrabold leading-snug text-wn-navy">
                   {r.name}
                 </div>
-                <div className="truncate text-[10px] text-wn-charcoal/60">
+                <div className="mt-0.5 truncate text-[10px] text-wn-charcoal/60">
                   {r.state}
                   {r.region ? ` · ${r.region}` : ""}
                 </div>

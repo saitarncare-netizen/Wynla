@@ -95,8 +95,9 @@ export default function FilterBar({
       onRemove: () => onPassChange([]),
     });
   }
+  // Computed once and reused for the chip strip + the dropdown label.
+  const fromShort = origin.kind === "geo" ? "here" : origin.short;
   if (driveActive) {
-    const fromShort = origin.kind === "geo" ? "here" : origin.short;
     activeChips.push({
       key: "drive",
       label: `≤ ${withinHours}h drive from ${fromShort}`,
@@ -134,7 +135,13 @@ export default function FilterBar({
     ? `${tripPreset.label}${isMultiDay ? ` ${days}d` : ""}`
     : "Anytime";
   const tripLabel = `${fromLabel} · ${tripLabelTail}`;
-  const driveLabel = driveActive ? `≤ ${withinHours}h drive` : "Any drive";
+  // Always include the from-city in the drive chip label — Saitarn
+  // 2026-05-23 feedback: bare "Any drive" / "≤ 5h drive" read ambiguously
+  // (drive from where?). Including "from NYC" / "from Boston" makes the
+  // reference point explicit at a glance.
+  const driveLabel = driveActive
+    ? `≤ ${withinHours}h drive from ${fromShort}`
+    : `Any drive from ${fromShort}`;
 
   // Pass dropdown label — multi-select aware. "All passes" when empty,
   // single label when one selected, "Ikon + Epic" when multiple.

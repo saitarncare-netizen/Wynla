@@ -297,7 +297,7 @@ export default function FiltersDrawer({
         </button>
 
         <header
-          className="relative shrink-0 border-b border-wn-charcoal/10 bg-white px-4 pb-3 md:pt-4"
+          className="shrink-0 border-b border-wn-charcoal/10 bg-white px-4 pb-3 md:pt-4"
           // User feedback (post-Round-5 install): on iPhone PWA, the
           // drawer header sat too close to the iOS status bar — the
           // close button nearly touched the battery icon. Add safe-area
@@ -306,27 +306,26 @@ export default function FiltersDrawer({
           // on desktop where env(safe-area-inset-top) is 0.
           style={{ paddingTop: "calc(env(safe-area-inset-top, 0px) + 12px)" }}
         >
-          {/* Top-right close. Desktop = compact circular ×. Mobile =
-              labeled "✕ Close" pill so the affordance is obvious even
-              to users who've never seen iOS bottom-sheet drag handles
-              (Saitarn's 21:46 PWA screenshot proved the hidden-×
-              variant from PR #34 was undiscoverable). The pill is
-              44×44 effective hit target — within thumb reach on
-              normal phones, a noticeable stretch on Pro Max, BUT
-              users now SEE there's a way out, and the footer "Done"
-              button is the easy-reach primary close anyway. */}
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close filters"
-            className="absolute right-2 top-2 inline-flex h-11 items-center gap-1.5 rounded-full bg-wn-offwhite px-3 text-sm font-semibold text-wn-charcoal transition hover:bg-wn-charcoal/10 md:right-2 md:top-2 md:h-11 md:w-11 md:justify-center md:gap-0 md:px-0 md:text-xl"
-          >
-            <span aria-hidden="true" className="text-lg leading-none md:text-xl">×</span>
-            <span className="md:hidden">Close</span>
-          </button>
-          <h2 className="text-base font-extrabold tracking-tight text-wn-navy">
-            Filters
-          </h2>
+          {/* Title + close on the same row so the close pill aligns
+              with the "Filters" baseline (Saitarn 2026-05-23 feedback
+              after PR #35 placed it absolute-top-2 above the title
+              and still felt "slightly too high"). The pill is now
+              rendered in the natural document flow alongside the
+              title — its center sits exactly on the title row. */}
+          <div className="flex items-center justify-between gap-3">
+            <h2 className="text-base font-extrabold tracking-tight text-wn-navy">
+              Filters
+            </h2>
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Close filters"
+              className="inline-flex h-11 items-center gap-1.5 rounded-full bg-wn-offwhite px-3 text-sm font-semibold text-wn-charcoal transition hover:bg-wn-charcoal/10 md:h-11 md:w-11 md:justify-center md:gap-0 md:px-0 md:text-xl"
+            >
+              <span aria-hidden="true" className="text-lg leading-none md:text-xl">×</span>
+              <span className="md:hidden">Close</span>
+            </button>
+          </div>
           <p className="mt-0.5 text-[11px] text-wn-charcoal/60">
             Showing <strong className="text-wn-navy">{filteredCount}</strong> of {totalCount} resorts
           </p>
@@ -796,20 +795,33 @@ export default function FiltersDrawer({
                 info="Lit trails for skiing after dark"
               />
             </div>
-            {/* Snowmaking — preset buttons. The 0-100 slider felt too
-                granular + slow on touch; 4 fixed thresholds (Any / 25 /
-                50 / 75) cover the meaningful decisions (any coverage /
-                modest / strong / fully covered). URL param stays
-                ?snowmake=N. */}
+            {/* Snowmaking — preset buttons with word labels (Any / Light /
+                Medium / Heavy) instead of raw percentages. Saitarn
+                2026-05-23: "≥ 25% / 50% / 75%" reads as data-dense
+                technical jargon to a non-snowmaker; the word labels are
+                instantly understandable. Threshold values stay the same
+                so the URL param + DB query are unchanged, only the
+                visible label flips. */}
             <div className="mt-4 rounded-lg border border-wn-charcoal/10 bg-wn-offwhite/40 p-3">
               <div className="mb-1.5 flex items-center justify-between text-[11px] font-bold uppercase tracking-wide text-wn-charcoal/60">
-                <span>Minimum snowmaking</span>
+                <span>Snowmaking coverage</span>
                 <span className="text-wn-navy">
-                  {snowmakeMin > 0 ? `≥ ${snowmakeMin}%` : "Any"}
+                  {snowmakeMin === 0
+                    ? "Any"
+                    : snowmakeMin === 25
+                      ? "Light+"
+                      : snowmakeMin === 50
+                        ? "Medium+"
+                        : "Heavy+"}
                 </span>
               </div>
               <div className="grid grid-cols-4 gap-1">
-                {[0, 25, 50, 75].map((threshold) => {
+                {([
+                  { threshold: 0, label: "Any" },
+                  { threshold: 25, label: "Light" },
+                  { threshold: 50, label: "Medium" },
+                  { threshold: 75, label: "Heavy" },
+                ] as const).map(({ threshold, label }) => {
                   const active =
                     threshold === 0 ? snowmakeMin === 0 : snowmakeMin === threshold;
                   return (
@@ -818,21 +830,21 @@ export default function FiltersDrawer({
                       type="button"
                       onClick={() => onSnowmakeMinChange(threshold)}
                       aria-pressed={active}
+                      title={threshold === 0 ? "Any snowmaking coverage" : `≥ ${threshold}% snowmaking`}
                       className={`rounded-lg border px-2 py-2 text-xs font-semibold transition ${
                         active
                           ? "border-wn-navy bg-wn-navy text-white"
                           : "border-wn-charcoal/15 bg-white text-wn-charcoal hover:border-wn-charcoal/40"
                       }`}
                     >
-                      {threshold === 0 ? "Any" : `≥ ${threshold}%`}
+                      {label}
                     </button>
                   );
                 })}
               </div>
               <p className="mt-2 text-[10px] leading-tight text-wn-charcoal/55">
-                Resorts with higher snowmaking coverage stay open longer
-                in lean snow years and have more reliable conditions
-                early + late season.
+                Heavier snowmaking coverage = more reliable conditions
+                early + late season + during lean snow years.
               </p>
             </div>
           </Section>
