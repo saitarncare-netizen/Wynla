@@ -18,6 +18,11 @@ type Props = {
   passCounts: Record<string, number>;
   onPassChange: (passes: string[]) => void;
   withinHours: number;
+  // Display label for the origin (e.g. "NYC", "Boston") shown in the
+  // Drive time section title — Saitarn 2026-05-23: "อยากให้เขียนว่า
+  // Drive time from NYC". Empty string falls back to bare "Drive time"
+  // so we don't render a dangling "from " label if origin isn't known.
+  fromLabel: string;
   sizeFilter: SizeTier | null;
   nightOnly: boolean;
   airportFilter: string | null;
@@ -146,6 +151,7 @@ export default function FiltersDrawer({
   passCounts,
   onPassChange,
   withinHours,
+  fromLabel,
   sizeFilter,
   nightOnly,
   airportFilter,
@@ -520,9 +526,12 @@ export default function FiltersDrawer({
               the floating geo button or clear browser data to
               re-onboard. */}
 
-          {/* DRIVE TIME (DAY 1) */}
+          {/* DRIVE TIME (DAY 1) — section title pulls the from-city in
+              so users always see "Drive time from NYC" / "Drive time
+              from Boston" instead of a bare "Drive time" that could
+              read as drive-time-from-anywhere. Saitarn 2026-05-23. */}
           <Section
-            title="Drive time (day 1)"
+            title={fromLabel ? `Drive time from ${fromLabel}` : "Drive time"}
             summary={withinHours > 0 ? `≤ ${withinHours}h` : "Any"}
           >
             <div className="grid grid-cols-5 gap-1">

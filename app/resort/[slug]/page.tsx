@@ -424,8 +424,15 @@ export default async function ResortPage({
 
         {/* Top bar — back link + compare + favorite */}
         <div className="relative z-10 mx-auto flex max-w-5xl items-center justify-between px-4 py-4 sm:px-6">
+          {/* Carry the slug back as ?recent=<slug> so the map page can
+              promote it into the recentlyViewedId slot and paint the
+              gold ring on the pin the user just visited — without that
+              hand-off, the cross-route navigation drops the state PR
+              #36 set when the user closed the in-map panel. Resolves
+              Saitarn 2026-05-23 "พอออกมายังไม่เห็นมีไฮไลท์เลย" — the
+              highlight now survives the /resort/[slug] round-trip. */}
           <Link
-            href="/"
+            href={`/?recent=${encodeURIComponent(resort.slug)}`}
             className="inline-flex items-center gap-1 rounded-md bg-white/95 px-3 py-1.5 text-xs font-semibold text-wn-navy shadow-sm backdrop-blur-sm transition hover:bg-white"
           >
             ← Map
