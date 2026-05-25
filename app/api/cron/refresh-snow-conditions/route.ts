@@ -56,6 +56,15 @@ type ResortUpdate = {
   lifts_open_today: number | null;
   snow_report_status: SnowReport["snow_report_status"] | null;
   snow_report_updated_at: string;
+  // Saitarn 2026-05-25: `currently_open` was previously a manual
+  // boolean that was set when the data was first imported and then
+  // never updated, so it drifted out of sync with the daily-refreshed
+  // `snow_report_status` — Killington / Mammoth / Timberline ended up
+  // marked open in the column even though the cron correctly reported
+  // them as closed/off-season. Now we derive it: open == scraper says
+  // "open". Any other status (closed / off-season / unknown) flips it
+  // to false. Single source of truth — the cron — eliminates the drift.
+  currently_open: boolean;
   // URL discovery columns — only set when changed.
   onthesnow_url?: string | null;
   onthesnow_url_verified_at?: string | null;
@@ -236,6 +245,7 @@ async function scrapeOne(
             lifts_open_today: parsed.lifts_open_today,
             snow_report_status: parsed.snow_report_status,
             snow_report_updated_at: now,
+            currently_open: parsed.snow_report_status === "open",
             onthesnow_url: workingUrl,
             onthesnow_url_verified_at: now,
             onthesnow_last_404_at: null,
@@ -270,6 +280,7 @@ async function scrapeOne(
         lifts_open_today: parsed.lifts_open_today,
         snow_report_status: parsed.snow_report_status,
         snow_report_updated_at: now,
+        currently_open: parsed.snow_report_status === "open",
         ...(urlJustVerified ? { onthesnow_url_verified_at: now } : {}),
       };
     }
@@ -298,6 +309,7 @@ async function scrapeOne(
       lifts_open_today: null,
       snow_report_status: "unknown",
       snow_report_updated_at: now,
+      currently_open: false,
       ...(urlJustFailed
         ? { onthesnow_url: null, onthesnow_last_404_at: now }
         : {}),
@@ -316,6 +328,7 @@ async function scrapeOne(
     lifts_open_today: null,
     snow_report_status: "unknown",
     snow_report_updated_at: now,
+    currently_open: false,
     ...(urlJustFailed
       ? { onthesnow_url: null, onthesnow_last_404_at: now }
       : {}),
@@ -378,6 +391,7 @@ export async function GET(request: Request) {
             lifts_open_today: null,
             snow_report_status: "unknown",
             snow_report_updated_at: now,
+            currently_open: false,
           });
         } else {
           state.failed++;
