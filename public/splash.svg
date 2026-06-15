@@ -1,43 +1,58 @@
-<!-- Wynla iOS PWA launch splash.
+<!-- Wynla iOS PWA launch splash — June 2026 brand refresh.
+
      Sized for iPhone 14 Pro Max portrait (1284 x 2778). Modern iOS
      Safari (11+) also falls back to manifest.json `background_color`
      when this image doesn't match a device — so the navy stays
      consistent across the iPhone lineup either way.
 
-     Composition: navy field, brand mark centered, wordmark below it,
-     tagline below that. All drawn from primitives (no font files) so
-     this renders identically on every device. -->
+     Composition: navy field, sky-blue arc with mountain mark
+     centered, wordmark below, tagline under that. The mark is the
+     June 2026 Smith design (sky arc + navy/snow peaks + gold smart
+     line). Reverse colorway: the arc is the only sky-blue, the
+     surrounding field is navy. -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1284 2778" preserveAspectRatio="xMidYMid slice">
   <!-- Navy background — matches manifest theme_color / body splash. -->
   <rect width="1284" height="2778" fill="#1E2952"/>
 
-  <!-- Brand mark: scaled-down replica of /icon.svg, centered above the
-       wordmark. Logo viewBox is 512x512; we render at 360x360 anchored
-       at (462, 1100) so it sits roughly 1/3 down the screen. -->
-  <g transform="translate(462 1100) scale(0.703125)">
-    <rect width="512" height="512" rx="96" fill="#1E2952"/>
-    <circle cx="256" cy="442" r="14" fill="#FAFAF7"/>
-    <line x1="256" y1="428" x2="256" y2="338"
-          stroke="#FAFAF7" stroke-width="22" stroke-linecap="round"/>
-    <line x1="256" y1="320" x2="95"  y2="195"
-          stroke="#FAFAF7" stroke-width="16" stroke-linecap="round" opacity="0.35"/>
-    <line x1="256" y1="320" x2="170" y2="115"
-          stroke="#FAFAF7" stroke-width="16" stroke-linecap="round" opacity="0.45"/>
-    <line x1="256" y1="320" x2="342" y2="115"
-          stroke="#FAFAF7" stroke-width="16" stroke-linecap="round" opacity="0.45"/>
-    <line x1="256" y1="320" x2="417" y2="195"
-          stroke="#FAFAF7" stroke-width="16" stroke-linecap="round" opacity="0.35"/>
-    <line x1="256" y1="320" x2="256" y2="108"
-          stroke="#F5C443" stroke-width="30" stroke-linecap="round"/>
-    <polygon points="256,58 296,122 216,122" fill="#F5C443"/>
-    <circle cx="256" cy="320" r="24" fill="#F5C443"/>
-    <circle cx="256" cy="320" r="11" fill="#1E2952"/>
+  <!-- Mark — 720x720 centered horizontally, ~1/3 down the screen.
+       Inline copy of /icon.svg's geometry, scaled to land at
+       (282, 920..1640) on the 1284x2778 canvas. Mark internally
+       uses a 512x512 coordinate space. -->
+  <g transform="translate(282 920) scale(1.40625)">
+    <!-- Sky-blue arc / squircle background of the mark. -->
+    <rect width="512" height="512" rx="96" fill="#5BAFE6"/>
+
+    <!-- Sky horizon wash. -->
+    <rect x="0" y="400" width="512" height="112" fill="#74BCEA"/>
+
+    <!-- Background ridges. -->
+    <path d="M 0,440 L 80,360 L 145,400 L 210,330 L 275,400 L 340,340 L 410,400 L 475,355 L 512,400 L 512,512 L 0,512 Z"
+          fill="#1E2952" opacity="0.55"/>
+
+    <!-- Foreground mountain. -->
+    <path d="M 56,440 L 145,330 L 195,265 L 256,120 L 320,260 L 372,335 L 456,440 Z"
+          fill="#1E2952"/>
+
+    <!-- Snow blanket on the foreground peak. -->
+    <path d="M 195,265 L 215,278 L 232,260 L 250,280 L 256,120 L 264,280 L 282,258 L 300,278 L 320,260 L 336,278 L 320,295 L 295,278 L 270,302 L 256,288 L 240,302 L 218,278 L 195,290 Z"
+          fill="#FAFAF7"/>
+
+    <!-- Gold S-curve trail. -->
+    <path d="M 256,150 C 232,210 290,255 252,310 C 220,355 290,395 256,432"
+          stroke="#F5C443"
+          stroke-width="18"
+          fill="none"
+          stroke-linecap="round"
+          stroke-linejoin="round"/>
+
+    <!-- Sun glint. -->
+    <circle cx="256" cy="118" r="9" fill="#F5C443"/>
   </g>
 
-  <!-- Wordmark: "Wynla", large bold white, centered horizontally. -->
+  <!-- Wordmark: "Wynla", slab-style classic. -->
   <text
     x="642"
-    y="1620"
+    y="1880"
     text-anchor="middle"
     fill="#FAFAF7"
     font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Helvetica, Arial, sans-serif"
@@ -49,7 +64,7 @@
   <!-- Tagline. -->
   <text
     x="642"
-    y="1710"
+    y="1970"
     text-anchor="middle"
     fill="#FAFAF7"
     fill-opacity="0.78"
