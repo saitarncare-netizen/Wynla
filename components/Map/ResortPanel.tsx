@@ -14,6 +14,10 @@ import CompareToggle from "@/components/CompareToggle";
 import SeasonCountdown from "@/components/SeasonCountdown";
 import { addRecent } from "@/lib/recentlyViewed";
 import type { Resort, DriveTime, WeatherSnapshot } from "./MapPage";
+import NearbyRestaurants from "@/components/NearbyRestaurants";
+import NearbyActivities from "@/components/NearbyActivities";
+import { fetchNearbyRestaurants, fetchNearbyActivities } from "@/lib/fetchNearby";
+import type { NearbyRow } from "@/lib/nearbyCategories";
 
 type Props = {
   resort: Resort;
@@ -355,6 +359,13 @@ export default function ResortPanel({
               {airportDriveText} from {activeAirport.label} ({activeAirport.iata})
             </p>
           )}
+
+          {/* Round 9 (2026-06) — nearby restaurants + off-mountain
+              activities. Lazy-loaded from Supabase when the panel
+              opens so the homepage SSR payload stays small (we don't
+              want to ship 425 resorts × ~30 nearby rows for every
+              map mount). Renders nothing while loading or empty. */}
+          <NearbyInPanel resortId={resort.id} />
         </div>
 
         {/* Sticky footer CTA */}
@@ -371,6 +382,38 @@ export default function ResortPanel({
     </>
   );
 }
+// Round 9 (2026-06) — lazy-loads nearby_restaurants + nearby_activities
+// for the currently-open panel resort. Keeps the homepage SSR payload
+// from ballooning with rows the user may never click through to. The
+// compact variant of the shared NearbyGroup cards renders inside the
+// panel's scroll surface.
+function NearbyInPanel({ resortId }: { resortId: number }) {
+  const [restaurants, setRestaurants] = useState<NearbyRow[]>([]);
+  const [activities, setActivities] = useState<NearbyRow[]>([]);
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const [r, a] = await Promise.all([
+        fetchNearbyRestaurants(resortId),
+        fetchNearbyActivities(resortId),
+      ]);
+      if (cancelled) return;
+      setRestaurants(r);
+      setActivities(a);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [resortId]);
+  if (restaurants.length === 0 && activities.length === 0) return null;
+  return (
+    <div className="mt-4 border-t border-wn-charcoal/10 pt-3">
+      <NearbyRestaurants rows={restaurants} variant="compact" />
+      <NearbyActivities rows={activities} variant="compact" />
+    </div>
+  );
+}
+
 function CompactStat({
   emoji,
   label,

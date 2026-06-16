@@ -21,6 +21,9 @@ import SimilarResorts from "@/components/SimilarResorts";
 import type { SimilarityResort } from "@/lib/similarity";
 import SnowSurfaceForecast from "@/components/SnowSurfaceForecast";
 import WhereToStay from "@/components/WhereToStay";
+import NearbyRestaurants from "@/components/NearbyRestaurants";
+import NearbyActivities from "@/components/NearbyActivities";
+import type { NearbyRow } from "@/lib/nearbyCategories";
 import {
   evaluateWindHold,
   parseWindMphFromText,
@@ -176,6 +179,8 @@ async function getData(
   weather: WeatherSnapshot | null;
   pool: SimilarityResort[];
   history: HistoryRow[];
+  nearbyRestaurants: NearbyRow[];
+  nearbyActivities: NearbyRow[];
 } | null> {
   // Fetch resort, weather, and the active-resort pool in parallel.
   // The pool select is trimmed to just the columns similarity.ts needs
@@ -201,7 +206,9 @@ async function getData(
   // Weather snapshot + last-7-days history. Both keyed by resort_id; the
   // history is sorted ascending so the most recent row sits at the end
   // (lib/snowSurface.deriveFeatures contract).
-  const [wxRes, historyRes] = await Promise.all([
+  // Round 9 (2026-06) also fetches nearby_restaurants + nearby_activities
+  // here so the new sections render server-side in the same round trip.
+  const [wxRes, historyRes, restaurantsRes, activitiesRes] = await Promise.all([
     supabase
       .from("weather_cache")
       .select(
@@ -217,6 +224,20 @@ async function getData(
       .eq("resort_id", resort.id)
       .order("observed_date", { ascending: true })
       .limit(7),
+    supabase
+      .from("nearby_restaurants")
+      .select(
+        "id, resort_id, name, category, description, distance_km, drive_minutes, latitude, longitude, website_url, source, confidence_score",
+      )
+      .eq("resort_id", resort.id)
+      .order("distance_km", { ascending: true }),
+    supabase
+      .from("nearby_activities")
+      .select(
+        "id, resort_id, name, category, description, distance_km, drive_minutes, latitude, longitude, website_url, source, confidence_score",
+      )
+      .eq("resort_id", resort.id)
+      .order("distance_km", { ascending: true }),
   ]);
 
   return {
@@ -224,6 +245,8 @@ async function getData(
     weather: (wxRes.data as WeatherSnapshot) ?? null,
     pool: (poolRes.data ?? []) as SimilarityResort[],
     history: (historyRes.data as HistoryRow[] | null) ?? [],
+    nearbyRestaurants: (restaurantsRes.data ?? []) as NearbyRow[],
+    nearbyActivities: (activitiesRes.data ?? []) as NearbyRow[],
   };
 }
 
@@ -263,7 +286,7 @@ export default async function ResortPage({
   const { slug } = await params;
   const data = await getData(slug);
   if (!data) notFound();
-  const { resort, weather, pool, history } = data;
+  const { resort, weather, pool, history, nearbyRestaurants, nearbyActivities } = data;
 
   // Snow Surface Forecast — build the report on the server so the
   // client island stays small. We synthesize a "today" row from
@@ -584,6 +607,19 @@ export default async function ResortPage({
 
         {/* AMENITIES — Stage 23 booleans + legacy night/halfpipe/glades. */}
         <FullAmenities resort={resort} />
+
+        {/* NEARBY EATS + OFF-MOUNTAIN — Round 9 (2026-06).
+            Curated from OpenStreetMap within ~25 km of the resort.
+            The whole section is hidden when the DB has no rows for this
+            resort (low-coverage areas during the initial sweep stay
+            quiet instead of showing an empty "Around the resort"
+            header — the Section wrapper itself doesn't self-collapse). */}
+        {(nearbyRestaurants.length > 0 || nearbyActivities.length > 0) && (
+          <Section title="Around the resort">
+            <NearbyRestaurants rows={nearbyRestaurants} />
+            <NearbyActivities rows={nearbyActivities} />
+          </Section>
+        )}
 
         {/* CLOSEST AIRPORT — Stage 23. */}
         {resort.closest_airport_iata && (
