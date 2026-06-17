@@ -58,7 +58,11 @@ export const metadata: Metadata = {
     images: ["/og-home.png"],
   },
   icons: {
-    icon: "/icon.svg",
+    icon: [
+      { url: "/icon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
     apple: [
       { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
     ],
@@ -78,7 +82,7 @@ const ORG_JSONLD = {
   "@type": "Organization",
   name: "Wynla",
   url: SITE_URL,
-  logo: `${SITE_URL}/icon.svg`,
+  logo: `${SITE_URL}/icon-512.png`,
   description:
     "Wynla is a US ski resort discovery + multi-stop trip planner with a first-of-its-kind snow surface forecast. Free for the inaugural 2026-27 season; founder pricing locked forever for early members.",
 };
@@ -101,9 +105,10 @@ export default function RootLayout({
         {/* iOS PWA launch image. iOS Safari 11+ falls back to
             manifest.json `background_color` (#1E2952 navy) for devices
             where this image doesn't exact-match a portrait media query,
-            so this single SVG + the manifest together give every iPhone
-            a branded navy splash instead of the default white flash. */}
-        <link rel="apple-touch-startup-image" href="/splash.svg" />
+            so this image + the manifest together give every iPhone a
+            branded navy splash (designer mark centred) instead of the
+            default white flash. */}
+        <link rel="apple-touch-startup-image" href="/splash.png" />
         <script
           type="application/ld+json"
           // eslint-disable-next-line react/no-danger
