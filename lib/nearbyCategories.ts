@@ -135,3 +135,20 @@ export function driveLabel(min: number | null): string {
   const m = min % 60;
   return m === 0 ? `~${h}h` : `~${h}h ${m}m`;
 }
+
+// Google Maps deep links. Every nearby place is clickable even when we
+// have no website — tapping the card opens the place on Google Maps
+// (its listing carries Google's own ratings + reviews), and the
+// Directions action drops a pin and starts navigation to the exact
+// coordinates. Both open the native Maps app on mobile.
+export function mapsPlaceUrl(name: string, lat: number | null, lng: number | null): string {
+  const query = lat != null && lng != null ? `${name} ${lat},${lng}` : name;
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+}
+
+export function mapsDirectionsUrl(name: string, lat: number | null, lng: number | null): string {
+  // Precise pin = the place's own coordinates; falls back to a name
+  // search when coordinates are missing (shouldn't happen from OSM).
+  const dest = lat != null && lng != null ? `${lat},${lng}` : name;
+  return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(dest)}`;
+}
