@@ -14,6 +14,7 @@ export type RestaurantCategory =
   | "fine_dining";
 
 export type ActivityCategory =
+  | "ski_shop"
   | "hot_springs"
   | "museum"
   | "brewery"
@@ -76,6 +77,7 @@ export const RESTAURANT_ORDER: RestaurantCategory[] = [
 ];
 
 export const ACTIVITY_CATEGORIES: Record<ActivityCategory, CategoryMeta> = {
+  ski_shop: { key: "ski_shop", label: "Ski & board shops", emoji: "🏂", blurb: "Buy or rent gear" },
   hot_springs: { key: "hot_springs", label: "Hot springs", emoji: "♨️" },
   spa: { key: "spa", label: "Spa", emoji: "💆" },
   museum: { key: "museum", label: "Museum / gallery", emoji: "🏛" },
@@ -91,6 +93,7 @@ export const ACTIVITY_CATEGORIES: Record<ActivityCategory, CategoryMeta> = {
 };
 
 export const ACTIVITY_ORDER: ActivityCategory[] = [
+  "ski_shop",
   "hot_springs",
   "spa",
   "museum",
