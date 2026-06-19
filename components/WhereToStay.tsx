@@ -15,7 +15,6 @@
 // partner links earn Wynla a commission. Booking and Vrbo pay; Airbnb
 // is a UX-courtesy handoff (Airbnb has no affiliate program in 2026).
 
-import Icon from "@/components/icons/Icon";
 import {
   airbnbUrl,
   bookingComUrl,
@@ -47,24 +46,28 @@ export default function WhereToStay({ resort }: Props) {
     title: string;
     sub: string;
     href: string;
+    emoji: string;
   }> = [
     {
       partner: "Booking.com",
       title: "Hotels & lodges",
       sub: "Browse stays near the mountain",
       href: bookingComUrl(ctx),
+      emoji: "🏨",
     },
     {
       partner: "Vrbo",
       title: "Cabins & houses",
       sub: "Group rentals with kitchens",
       href: vrboUrl(ctx),
+      emoji: "🏡",
     },
     {
       partner: "Airbnb",
       title: "Homes & rooms",
       sub: "Local hosts and unique stays",
       href: airbnbUrl(ctx),
+      emoji: "🛏️",
     },
   ];
 
@@ -89,8 +92,8 @@ export default function WhereToStay({ resort }: Props) {
             className="group flex items-center justify-between gap-3 rounded-lg border border-wn-charcoal/10 bg-white px-4 py-3 transition hover:border-wn-navy hover:shadow-sm"
           >
             <div className="flex items-center gap-3 min-w-0">
-              <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-wn-navy/5 text-wn-navy">
-                <Icon name="pin" className="h-4 w-4" />
+              <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-wn-navy/5 text-lg" aria-hidden="true">
+                {c.emoji}
               </span>
               <div className="min-w-0">
                 <div className="text-sm font-semibold text-wn-navy">
