@@ -121,6 +121,10 @@ export type NearbyRow = {
   website_url: string | null;
   source: string;
   confidence_score: number | null;
+  // ⭐ editorial "Recommended" flag — derived once from real Google
+  // ratings (top picks per category, well-rated + enough reviews). Per
+  // Google ToS we store only this boolean, never the rating values.
+  is_recommended?: boolean | null;
 };
 
 export function distanceLabel(km: number | null): string {

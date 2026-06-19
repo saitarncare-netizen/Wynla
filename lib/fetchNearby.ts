@@ -11,7 +11,7 @@ import { supabase } from "@/lib/supabase";
 import type { NearbyRow } from "./nearbyCategories";
 
 const NEARBY_COLUMNS =
-  "id, resort_id, name, category, description, distance_km, drive_minutes, latitude, longitude, website_url, source, confidence_score";
+  "id, resort_id, name, category, description, distance_km, drive_minutes, latitude, longitude, website_url, source, confidence_score, is_recommended";
 
 export async function fetchNearbyRestaurants(resortId: number): Promise<NearbyRow[]> {
   const { data, error } = await supabase
