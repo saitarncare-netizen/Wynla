@@ -31,6 +31,12 @@ export default function NearbyGroup({ emoji, label, blurb, rows, variant = "full
   if (!rows || rows.length === 0) return null;
 
   const isCompact = variant === "compact";
+  // ⭐ Recommended picks float to the front of each strip, then nearest first.
+  const sorted = [...rows].sort(
+    (a, b) =>
+      Number(!!b.is_recommended) - Number(!!a.is_recommended) ||
+      (a.distance_km ?? 1e9) - (b.distance_km ?? 1e9),
+  );
 
   return (
     <section className={isCompact ? "mt-3" : "mt-6"}>
@@ -52,17 +58,24 @@ export default function NearbyGroup({ emoji, label, blurb, rows, variant = "full
         className="-mx-2 flex snap-x snap-mandatory gap-2 overflow-x-auto px-2 pb-1"
         style={{ scrollbarWidth: "thin" }}
       >
-        {rows.map((r) => {
+        {sorted.map((r) => {
           const dist = distanceLabel(r.distance_km);
           const drive = driveLabel(r.drive_minutes);
           const meta = [dist, drive].filter(Boolean).join(" · ");
           const placeUrl = mapsPlaceUrl(r.name, r.latitude, r.longitude);
           const dirUrl = mapsDirectionsUrl(r.name, r.latitude, r.longitude);
-          const cardClass = isCompact
-            ? "flex w-[180px] shrink-0 snap-start flex-col rounded-lg border border-wn-charcoal/10 bg-white p-2"
-            : "flex w-[220px] shrink-0 snap-start flex-col rounded-lg border border-wn-charcoal/10 bg-white p-3 shadow-sm";
+          const rec = !!r.is_recommended;
+          const base = isCompact
+            ? "flex w-[180px] shrink-0 snap-start flex-col rounded-lg border bg-white p-2"
+            : "flex w-[220px] shrink-0 snap-start flex-col rounded-lg border bg-white p-3 shadow-sm";
+          const cardClass = `${base} ${rec ? "border-amber-300 bg-amber-50/60 ring-1 ring-amber-200" : "border-wn-charcoal/10"}`;
           return (
             <li key={r.id} className={cardClass}>
+              {rec && (
+                <div className="mb-1 inline-flex w-fit items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-amber-800">
+                  <span aria-hidden="true">⭐</span> Recommended
+                </div>
+              )}
               {/* Body — tap to open the place (+ its Google reviews) in Maps. */}
               <a
                 href={placeUrl}

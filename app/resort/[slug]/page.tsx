@@ -227,14 +227,14 @@ async function getData(
     supabase
       .from("nearby_restaurants")
       .select(
-        "id, resort_id, name, category, description, distance_km, drive_minutes, latitude, longitude, website_url, source, confidence_score",
+        "id, resort_id, name, category, description, distance_km, drive_minutes, latitude, longitude, website_url, source, confidence_score, is_recommended",
       )
       .eq("resort_id", resort.id)
       .order("distance_km", { ascending: true }),
     supabase
       .from("nearby_activities")
       .select(
-        "id, resort_id, name, category, description, distance_km, drive_minutes, latitude, longitude, website_url, source, confidence_score",
+        "id, resort_id, name, category, description, distance_km, drive_minutes, latitude, longitude, website_url, source, confidence_score, is_recommended",
       )
       .eq("resort_id", resort.id)
       .order("distance_km", { ascending: true }),
