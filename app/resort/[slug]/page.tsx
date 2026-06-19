@@ -39,7 +39,6 @@ import {
   type DailyWeather,
   type ForecastDay as SurfaceForecastDay,
 } from "@/lib/snowSurface";
-import Icon, { type IconName } from "@/components/icons/Icon";
 
 // ISR — resort detail data (lifts/trails/passes/coords) changes rarely.
 // Snow conditions are stamped on the row by the cron; ISR every 10 min
@@ -626,8 +625,8 @@ export default async function ResortPage({
           <Section title="Closest airport">
             <div className="rounded-lg border border-wn-charcoal/10 bg-white px-4 py-3">
               <div className="flex items-center gap-3">
-                <span className="inline-flex h-10 w-10 items-center justify-center rounded-md bg-wn-navy/5 text-wn-navy">
-                  <Icon name="plane" className="h-5 w-5" />
+                <span className="inline-flex h-10 w-10 items-center justify-center rounded-md bg-wn-navy/5 text-xl" aria-hidden="true">
+                  ✈️
                 </span>
                 <span className="text-2xl font-extrabold tracking-tight text-wn-navy">
                   {resort.closest_airport_iata}
@@ -653,7 +652,7 @@ export default async function ResortPage({
               href={googleMapsUrl(resort.name, resort.state)}
               label="Open in Google Maps"
               sub="Navigation, photos, reviews"
-              icon="pin"
+              emoji="📍"
               external
             />
             {resort.trail_map_url && (
@@ -661,7 +660,7 @@ export default async function ResortPage({
                 href={resort.trail_map_url}
                 label="Trail map"
                 sub="Lifts, runs, terrain"
-                icon="map"
+                emoji="🗺️"
                 external
               />
             )}
@@ -670,7 +669,7 @@ export default async function ResortPage({
                 href={resort.webcam_url}
                 label="Live webcam"
                 sub="Current conditions"
-                icon="camera"
+                emoji="📷"
                 external
               />
             )}
@@ -679,7 +678,7 @@ export default async function ResortPage({
                 href={resort.website_url}
                 label="Resort website"
                 sub="Hours, tickets, news"
-                icon="globe"
+                emoji="🌐"
                 external
               />
             )}
@@ -959,13 +958,13 @@ function ActionLink({
   label,
   sub,
   external,
-  icon,
+  emoji,
 }: {
   href: string;
   label: string;
   sub?: string;
   external?: boolean;
-  icon?: IconName;
+  emoji?: string;
 }) {
   return (
     <a
@@ -974,9 +973,9 @@ function ActionLink({
       className="group flex items-center justify-between gap-3 rounded-lg border border-wn-charcoal/10 bg-white px-4 py-3 transition hover:border-wn-navy hover:shadow-sm"
     >
       <div className="flex items-center gap-3 min-w-0">
-        {icon && (
-          <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-wn-navy/5 text-wn-navy">
-            <Icon name={icon} className="h-4 w-4" />
+        {emoji && (
+          <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-wn-navy/5 text-lg" aria-hidden="true">
+            {emoji}
           </span>
         )}
         <div className="min-w-0">
