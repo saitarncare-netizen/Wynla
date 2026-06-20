@@ -39,6 +39,10 @@ const sql = [
   `-- ${chosen.length} resorts get a vetted real winter hero; the rest keep the designed fallback.`,
   '-- Re-runnable: overwrites hero_image_* by slug.',
   '',
+  '-- Reset every resort first so ONLY the freshly vision-vetted photos below',
+  '-- render — this clears old/unvetted stage-25 URLs back to the gradient.',
+  'UPDATE resorts SET hero_image_url=NULL, hero_image_source=NULL, hero_image_alt=NULL, hero_image_attribution=NULL;',
+  '',
   ...chosen.map((c) =>
     `UPDATE resorts SET hero_image_url='${sqlEsc(c.url)}', hero_image_source='${sqlEsc(c.source)}', hero_image_alt='${sqlEsc(c.alt)}', hero_image_attribution='${sqlEsc(c.attribution)}' WHERE slug='${sqlEsc(c.slug)}';`
   ),
