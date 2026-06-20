@@ -637,6 +637,7 @@ export default function FiltersDrawer({
                 param). */}
             <input
               type="search"
+              aria-label="Search airports"
               placeholder="Search airports… (Denver, DEN, etc.)"
               value={airportQuery}
               onChange={(e) => setAirportQuery(e.target.value)}
