@@ -282,10 +282,12 @@ export default function ResortPanel({
           </div>
         </div>
 
-        {/* Compact body — 3-stat preview only. The full panel
-            (weather, mountain stats, amenities, airport, ticket,
-            lodging) lives at /resort/[slug] now. */}
-        <div className="flex-1 overflow-hidden px-4 py-3" style={{ touchAction: "manipulation" }}>
+        {/* Body — stat preview + nearby strips. Must scroll: the Round-9
+            NearbyInPanel adds restaurant/activity rows that overflow the
+            half-snap sheet, so this is overflow-y-auto (was overflow-hidden,
+            which clipped everything below the fold). pan-y keeps the vertical
+            scroll inside the panel instead of leaking to the Mapbox canvas. */}
+        <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3" style={{ touchAction: "pan-y" }}>
           {/* Pass badges row */}
           {resort.passes?.length > 0 && (
             <div className="mb-3 flex flex-wrap gap-1.5">
@@ -368,8 +370,11 @@ export default function ResortPanel({
           <NearbyInPanel resortId={resort.id} />
         </div>
 
-        {/* Sticky footer CTA */}
-        <div className="shrink-0 border-t border-wn-charcoal/10 bg-white p-3">
+        {/* Sticky footer CTA — pad past the iOS home indicator on notched phones */}
+        <div
+          className="shrink-0 border-t border-wn-charcoal/10 bg-white p-3"
+          style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 0.75rem)" }}
+        >
           <Link
             href={`/resort/${resort.slug}`}
             className="flex items-center justify-center gap-2 rounded-lg bg-wn-navy px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-wn-navy/90"

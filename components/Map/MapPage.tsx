@@ -177,7 +177,9 @@ export type WeatherSnapshot = {
   wind_mph_avg: number | null;
   wind_dir_short: string | null;
   fetched_at: string | null;
-  forecast_json: ForecastDay[] | null;
+  // Optional: not fetched on the homepage map payload (only /resort/[slug]
+  // needs the 10-day array). Kept on the type for the rare consumer.
+  forecast_json?: ForecastDay[] | null;
 };
 
 type Props = {

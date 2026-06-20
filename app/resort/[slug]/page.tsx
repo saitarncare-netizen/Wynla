@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { cache } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
@@ -171,7 +172,7 @@ type HistoryRow = {
   wind_mph_avg: number | null;
 };
 
-async function getData(
+async function getDataUncached(
   slug: string,
 ): Promise<{
   resort: Resort;
@@ -248,6 +249,10 @@ async function getData(
     nearbyActivities: (activitiesRes.data ?? []) as NearbyRow[],
   };
 }
+
+// Dedupe the 6 queries (incl. two ~360-row scans) across generateMetadata +
+// the page render within one request — Supabase calls aren't auto-deduped.
+const getData = cache(getDataUncached);
 
 export async function generateMetadata({
   params,

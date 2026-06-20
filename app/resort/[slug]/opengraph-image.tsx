@@ -7,11 +7,14 @@ export const alt = "Wynla resort";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-export default async function Image({ params }: { params: { slug: string } }) {
+export default async function Image({ params }: { params: Promise<{ slug: string }> }) {
+  // Next 16: params is a Promise — must await, or slug is undefined and every
+  // resort falls through to the generic card below.
+  const { slug } = await params;
   const { data: resort } = await supabase
     .from("resorts")
     .select("name, state, region, passes, vertical_drop, total_trails, total_acres")
-    .eq("slug", params.slug)
+    .eq("slug", slug)
     .eq("active", true)
     .maybeSingle();
 

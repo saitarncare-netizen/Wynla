@@ -18,8 +18,11 @@ export default async function Home() {
       .select("resort_id, origin_name, duration_seconds, distance_meters"),
     supabase
       .from("weather_cache")
+      // forecast_json (10-day array × ~360 resorts) was shipped on every map
+      // load but is never rendered here — the 10-day strip lives on
+      // /resort/[slug], which fetches its own weather row. Dropped for payload.
       .select(
-        "resort_id, temp_high_f, temp_low_f, conditions_short, snow_24h_in, snow_48h_in, wind_mph_avg, wind_dir_short, fetched_at, forecast_json",
+        "resort_id, temp_high_f, temp_low_f, conditions_short, snow_24h_in, snow_48h_in, wind_mph_avg, wind_dir_short, fetched_at",
       ),
     (async () => {
       const ssr = await createSupabaseServerClient();
