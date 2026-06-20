@@ -234,17 +234,32 @@ export default function ResortPanel({
           <div className="h-1 w-10 rounded-full bg-wn-charcoal/25" />
         </div>
 
-        {/* Hero — gradient only for now. Stage 25 collected verified
-            winter photo URLs but coverage was 23%, so the inconsistent
-            "some have photos, some don't" UX was worse than uniform
-            gradient. Data stays in DB (hero_image_url column) for a
-            future re-enable when coverage > 70%. */}
+        {/* Hero — vetted winter photo (hero_image_url) when present, else
+            the designed gradient fallback. */}
         <div
           className="relative shrink-0 overflow-hidden"
           style={{
             background: `linear-gradient(135deg, ${heroBg} 0%, #1E2952 100%)`,
           }}
         >
+          {resort.hero_image_url && (
+            <>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={resort.hero_image_url}
+                alt={resort.hero_image_alt ?? `${resort.name} in winter`}
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+              <div
+                aria-hidden="true"
+                className="absolute inset-0"
+                style={{
+                  background:
+                    "linear-gradient(180deg, rgba(15,21,48,0.35) 0%, rgba(15,21,48,0.15) 40%, rgba(15,21,48,0.8) 100%)",
+                }}
+              />
+            </>
+          )}
           <div
             aria-hidden="true"
             className="pointer-events-none absolute inset-0 opacity-[0.06] mix-blend-overlay"

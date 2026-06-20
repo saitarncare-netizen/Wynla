@@ -52,7 +52,7 @@ export const revalidate = 600;
 // blobs). Keeping this in sync with the local Resort type is enforced by
 // TS at the cast site. ~3-5KB per detail page hit saved.
 const RESORT_DETAIL_COLS =
-  "id, slug, name, state, region, city, address, latitude, longitude, passes, tier, operating_status, vertical_drop, total_trails, total_lifts, total_acres, difficulty_pct_beginner, difficulty_pct_intermediate, difficulty_pct_advanced, difficulty_pct_expert, trails_beginner, trails_intermediate, trails_advanced, trails_expert, has_terrain_park, terrain_park_count, has_glades, has_halfpipe, has_night_skiing, longest_run_miles, elevation_base, elevation_summit, typical_season_start, typical_season_end, weekday_hours, weekend_hours, website_url, trail_map_url, ticket_booking_url, hero_image_url, hero_image_source, hero_image_alt, last_verified_at, high_speed_lifts, base_elevation_ft, summit_elevation_ft, annual_snowfall_in, season_open_text, season_close_text, snowmaking_pct, has_tubing, has_lessons, has_rentals, has_lodging_on_mountain, has_xc_skiing, has_backcountry_access, webcam_url, closest_airport_iata, closest_airport_distance_mi, snow_base_depth_in, snow_new_24h_in, snow_new_48h_in, snow_new_7d_in, trails_open_today, lifts_open_today, snow_report_status, snow_report_updated_at, allows_snowboards, wind_hold_mph_chair, wind_hold_mph_gondola, currently_open, season_end_date, lift_types, terrain_park_features, avalanche_zone_id";
+  "id, slug, name, state, region, city, address, latitude, longitude, passes, tier, operating_status, vertical_drop, total_trails, total_lifts, total_acres, difficulty_pct_beginner, difficulty_pct_intermediate, difficulty_pct_advanced, difficulty_pct_expert, trails_beginner, trails_intermediate, trails_advanced, trails_expert, has_terrain_park, terrain_park_count, has_glades, has_halfpipe, has_night_skiing, longest_run_miles, elevation_base, elevation_summit, typical_season_start, typical_season_end, weekday_hours, weekend_hours, website_url, trail_map_url, ticket_booking_url, hero_image_url, hero_image_source, hero_image_alt, hero_image_attribution, last_verified_at, high_speed_lifts, base_elevation_ft, summit_elevation_ft, annual_snowfall_in, season_open_text, season_close_text, snowmaking_pct, has_tubing, has_lessons, has_rentals, has_lodging_on_mountain, has_xc_skiing, has_backcountry_access, webcam_url, closest_airport_iata, closest_airport_distance_mi, snow_base_depth_in, snow_new_24h_in, snow_new_48h_in, snow_new_7d_in, trails_open_today, lifts_open_today, snow_report_status, snow_report_updated_at, allows_snowboards, wind_hold_mph_chair, wind_hold_mph_gondola, currently_open, season_end_date, lift_types, terrain_park_features, avalanche_zone_id";
 
 type Resort = {
   id: number;
@@ -97,6 +97,7 @@ type Resort = {
   hero_image_url: string | null;
   hero_image_source: string | null;
   hero_image_alt: string | null;
+  hero_image_attribution: string | null;
   last_verified_at: string | null;
   // Stage 23 columns — preferred over the legacy elevation_base /
   // typical_season_* fields above when both exist.
@@ -412,10 +413,10 @@ export default async function ResortPage({
         }}
       />
 
-      {/* HERO — gradient only. Stage 25 hero photo data stays in DB
-          (hero_image_url) but UI keeps the uniform gradient until
-          coverage > 70%. Re-enable in Stage 25.2 once raw-HTML scraper
-          fills the gaps. */}
+      {/* HERO — vetted winter photo (hero_image_url) when present, else a
+          designed navy gradient. hero_image_url is filled by the
+          scripts/hero-*.mjs sourcing + vision-vetting pipeline (every photo
+          is a hand-vetted winter ski scene; rest fall back to the gradient). */}
       <header
         className="relative w-full overflow-hidden"
         style={{
@@ -428,6 +429,29 @@ export default async function ResortPage({
           paddingTop: "calc(env(safe-area-inset-top, 0px) + 12px)",
         }}
       >
+        {resort.hero_image_url && (
+          <>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={resort.hero_image_url}
+              alt={resort.hero_image_alt ?? `${resort.name} in winter`}
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+            <div
+              aria-hidden="true"
+              className="absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(180deg, rgba(15,21,48,0.5) 0%, rgba(15,21,48,0.2) 38%, rgba(15,21,48,0.8) 100%)",
+              }}
+            />
+            {resort.hero_image_attribution && (
+              <p className="absolute bottom-1 right-2 z-10 text-[9px] text-white/45">
+                {resort.hero_image_attribution}
+              </p>
+            )}
+          </>
+        )}
         {/* Two-stop atmosphere overlay — soft highlight top-left, deeper
             shadow bottom-right. Plus a faint SVG-grain layer that gives
             the gradient a Stripe/Linear-style depth instead of a flat fill. */}
