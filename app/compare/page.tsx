@@ -311,7 +311,7 @@ const METRICS: Array<{ label: string; render: MetricFn }> = [
 
 function boolCell(v: boolean | null): string {
   if (v === true) return "✓";
-  if (v === false) return "—";
+  if (v === false) return "✗"; // confirmed absent — distinct from "—" (unknown)
   return "—";
 }
 

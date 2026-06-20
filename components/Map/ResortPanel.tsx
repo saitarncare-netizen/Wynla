@@ -412,6 +412,10 @@ function NearbyInPanel({ resortId }: { resortId: number }) {
   const [activities, setActivities] = useState<NearbyRow[]>([]);
   useEffect(() => {
     let cancelled = false;
+    // Clear the previous resort's rows immediately so switching panels
+    // doesn't render resort A's nearby data under resort B's header.
+    setRestaurants([]);
+    setActivities([]);
     (async () => {
       const [r, a] = await Promise.all([
         fetchNearbyRestaurants(resortId),

@@ -951,7 +951,7 @@ export default function TripPlannerPanel({
           // (picker overlay shows in its place). Desktop: full-height
           // right rail.
           "inset-x-0 bottom-0 rounded-t-2xl",
-          wizardPhase === "review" ? "max-h-[80vh]" : "max-h-[55vh]",
+          wizardPhase === "review" ? "max-h-[80dvh]" : "max-h-[55dvh]",
           hidePlannerSheet ? "hidden md:flex" : "",
           "animate-[slideUp_220ms_cubic-bezier(0.16,1,0.3,1)]",
           "md:inset-x-auto md:right-0 md:top-0 md:bottom-0 md:flex md:w-[440px] md:max-h-none md:rounded-none",

@@ -10,7 +10,7 @@ export default function robots(): MetadataRoute.Robots {
         allow: "/",
         // Auth-gated and personalized pages — no value to crawl, no value to
         // surface in search results.
-        disallow: ["/login", "/auth/", "/favorites"],
+        disallow: ["/login", "/auth/", "/favorites", "/account", "/trips"],
       },
     ],
     sitemap: `${SITE_URL}/sitemap.xml`,

@@ -18,7 +18,11 @@ export async function fetchNearbyRestaurants(resortId: number): Promise<NearbyRo
     .from("nearby_restaurants")
     .select(NEARBY_COLUMNS)
     .eq("resort_id", resortId)
-    .order("distance_km", { ascending: true });
+    // Recommended first so they survive the cap, then nearest. limit bounds
+    // the payload for dense resorts (rendering caps each category anyway).
+    .order("is_recommended", { ascending: false })
+    .order("distance_km", { ascending: true })
+    .limit(60);
   if (error) return [];
   return (data ?? []) as NearbyRow[];
 }
@@ -28,7 +32,11 @@ export async function fetchNearbyActivities(resortId: number): Promise<NearbyRow
     .from("nearby_activities")
     .select(NEARBY_COLUMNS)
     .eq("resort_id", resortId)
-    .order("distance_km", { ascending: true });
+    // Recommended first so they survive the cap, then nearest. limit bounds
+    // the payload for dense resorts (rendering caps each category anyway).
+    .order("is_recommended", { ascending: false })
+    .order("distance_km", { ascending: true })
+    .limit(60);
   if (error) return [];
   return (data ?? []) as NearbyRow[];
 }
