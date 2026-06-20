@@ -111,7 +111,16 @@ async function sendViaResend(
 export async function GET(request: Request) {
   // Same auth pattern as refresh-weather: Vercel cron sends Authorization: Bearer ${CRON_SECRET}.
   const auth = request.headers.get("authorization");
-  if (process.env.CRON_SECRET && auth !== `Bearer ${process.env.CRON_SECRET}`) {
+  const cronSecret = process.env.CRON_SECRET;
+  // Fail closed: a missing secret must NOT make this service-role endpoint
+  // publicly invokable (it can blast digest emails to all subscribers).
+  if (!cronSecret) {
+    return NextResponse.json(
+      { ok: false, reason: "cron_secret_not_configured" },
+      { status: 503 },
+    );
+  }
+  if (auth !== `Bearer ${cronSecret}`) {
     return NextResponse.json({ ok: false, reason: "unauthorized" }, { status: 401 });
   }
 

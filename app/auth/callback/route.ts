@@ -9,8 +9,11 @@ export async function GET(request: Request) {
   const url = new URL(request.url);
   const code = url.searchParams.get("code");
   // `next` is set by the login page so we can return to the original
-  // destination (e.g. /resort/foo) after sign-in.
-  const next = url.searchParams.get("next") ?? "/";
+  // destination (e.g. /resort/foo) after sign-in. Only honor same-origin
+  // relative paths — an absolute or protocol-relative value (`https://evil.com`,
+  // `//evil.com`) would turn sign-in into an open-redirect / phishing relay.
+  const rawNext = url.searchParams.get("next") ?? "/";
+  const next = rawNext.startsWith("/") && !rawNext.startsWith("//") ? rawNext : "/";
 
   if (code) {
     const supabase = await createSupabaseServerClient();

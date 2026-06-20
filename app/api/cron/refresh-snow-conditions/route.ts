@@ -337,7 +337,16 @@ async function scrapeOne(
 
 export async function GET(request: Request) {
   const auth = request.headers.get("authorization");
-  if (process.env.CRON_SECRET && auth !== `Bearer ${process.env.CRON_SECRET}`) {
+  const cronSecret = process.env.CRON_SECRET;
+  // Fail closed: a missing secret must NOT make this service-role endpoint
+  // publicly invokable (it fans out hundreds of upstream calls + DB writes).
+  if (!cronSecret) {
+    return NextResponse.json(
+      { ok: false, reason: "cron_secret_not_configured" },
+      { status: 503 },
+    );
+  }
+  if (auth !== `Bearer ${cronSecret}`) {
     return NextResponse.json({ ok: false, reason: "unauthorized" }, { status: 401 });
   }
 

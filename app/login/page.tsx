@@ -30,7 +30,10 @@ function LoginShell() {
 
 function LoginForm() {
   const params = useSearchParams();
-  const next = params.get("next") ?? "/";
+  // Only follow same-origin relative paths — guards the same open-redirect the
+  // /auth/callback route does, since `next` flows into emailRedirectTo here.
+  const rawNext = params.get("next") ?? "/";
+  const next = rawNext.startsWith("/") && !rawNext.startsWith("//") ? rawNext : "/";
   const initialError = params.get("error");
 
   const [email, setEmail] = useState("");
