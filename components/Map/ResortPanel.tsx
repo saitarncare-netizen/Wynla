@@ -382,7 +382,9 @@ export default function ResortPanel({
               opens so the homepage SSR payload stays small (we don't
               want to ship 425 resorts × ~30 nearby rows for every
               map mount). Renders nothing while loading or empty. */}
-          <NearbyInPanel resortId={resort.id} />
+          {/* key by resort.id so switching resorts remounts this (fresh
+              empty state) — prevents resort A's nearby flashing under B. */}
+          <NearbyInPanel key={resort.id} resortId={resort.id} />
         </div>
 
         {/* Sticky footer CTA — pad past the iOS home indicator on notched phones */}
@@ -412,10 +414,6 @@ function NearbyInPanel({ resortId }: { resortId: number }) {
   const [activities, setActivities] = useState<NearbyRow[]>([]);
   useEffect(() => {
     let cancelled = false;
-    // Clear the previous resort's rows immediately so switching panels
-    // doesn't render resort A's nearby data under resort B's header.
-    setRestaurants([]);
-    setActivities([]);
     (async () => {
       const [r, a] = await Promise.all([
         fetchNearbyRestaurants(resortId),

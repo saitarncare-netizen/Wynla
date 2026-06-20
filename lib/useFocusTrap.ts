@@ -62,5 +62,5 @@ export function useFocusTrap(
       document.removeEventListener("keydown", onKey, true);
       prevFocused?.focus?.();
     };
-  }, [active, containerRef]);
+  }, [active, containerRef, initialFocusRef]);
 }
