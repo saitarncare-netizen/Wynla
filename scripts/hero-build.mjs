@@ -12,9 +12,24 @@ const picks = raw.result?.picks || raw.picks || [];
 
 const sqlEsc = (s) => String(s ?? '').replace(/'/g, "''");
 
+// Manual curation overrides (Saitarn's review of the contact sheet):
+// - all 9 low-confidence picks rejected
+// - 3 medium + 1 high she flagged as not good enough
+// - 4 wrong-photo dups: Wikimedia name-collisions returned another resort's
+//   shot (beaver-mountain got Beaver Creek; powderhorn got Big Powderhorn;
+//   snow-valley + solitude both got Park City). Drop to the clean fallback.
+const EXCLUDE = new Set([
+  'afton-alps', 'gunstock-mountain-resort', 'hilltop-ski-area', 'hurricane-ridge',
+  'mt-hood-skibowl', 'otis-ridge', 'snowriver', 'spout-springs', 'timberline-mountain',
+  'lee-canyon', 'alpine-meadows', 'telluride',
+  'waterville-valley',
+  'beaver-mountain', 'powderhorn', 'snow-valley', 'solitude',
+]);
+
 const chosen = [];
 const fallback = [];
 for (const p of picks) {
+  if (EXCLUDE.has(p.slug)) { fallback.push(p.slug); continue; }
   if (!p.chosenFile || !p.chosenFile.trim()) { fallback.push(p.slug); continue; }
   const entry = manifest[p.slug];
   const cand = entry?.candidates?.find((c) => c.file === p.chosenFile);
