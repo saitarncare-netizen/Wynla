@@ -47,5 +47,10 @@ next-env.d.ts
 # scratch files Claude Code creates during multi-step work
 .tmp-*
 
+# Claude Code local config + scratch handoff docs (not part of the app)
+.claude/
+MASTER_PROMPT_FOR_NEW_CHAT.md
+WYNLA_AUDIT_ROADMAP_*.md
+
 .vercel
 .env*.local

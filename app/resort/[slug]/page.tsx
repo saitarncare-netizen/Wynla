@@ -3,6 +3,7 @@ import { cache } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
+import HeroImage from "@/components/HeroImage";
 import {
   passColor,
   passLabel,
@@ -14,6 +15,7 @@ import FavoriteToggle from "@/components/auth/FavoriteToggle";
 import CompareToggle from "@/components/CompareToggle";
 import RecordRecentVisit from "@/components/RecordRecentVisit";
 import DifficultyBar from "@/components/Map/DifficultyBar";
+import { crowdForecast, CROWD_COLORS } from "@/lib/crowdForecast";
 import ResortReviews from "@/components/Map/ResortReviews";
 import SnowAlertButton from "@/components/SnowAlertButton";
 import SeasonCountdown from "@/components/SeasonCountdown";
@@ -231,14 +233,18 @@ async function getDataUncached(
         "id, resort_id, name, category, description, distance_km, drive_minutes, latitude, longitude, website_url, source, confidence_score, is_recommended",
       )
       .eq("resort_id", resort.id)
-      .order("distance_km", { ascending: true }),
+      .order("is_recommended", { ascending: false })
+      .order("distance_km", { ascending: true })
+      .limit(60),
     supabase
       .from("nearby_activities")
       .select(
         "id, resort_id, name, category, description, distance_km, drive_minutes, latitude, longitude, website_url, source, confidence_score, is_recommended",
       )
       .eq("resort_id", resort.id)
-      .order("distance_km", { ascending: true }),
+      .order("is_recommended", { ascending: false })
+      .order("distance_km", { ascending: true })
+      .limit(60),
   ]);
 
   return {
@@ -276,6 +282,7 @@ export async function generateMetadata({
   return {
     title: `${resort.name} — ${resort.state} Ski Resort`,
     description: `${resort.name} in ${resort.state}${resort.region ? " (" + resort.region + ")" : ""}. ${passSummary ? "On the " + passSummary + ". " : ""}Plan your ski or snowboard trip with weather, drive times, and resort info.`,
+    alternates: { canonical: `/resort/${slug}` },
     openGraph: {
       title: `${resort.name} · Wynla`,
       description: `Ski resort in ${resort.state}${resort.region ? " (" + resort.region + ")" : ""}`,
@@ -430,27 +437,11 @@ export default async function ResortPage({
         }}
       >
         {resort.hero_image_url && (
-          <>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={resort.hero_image_url}
-              alt={resort.hero_image_alt ?? `${resort.name} in winter`}
-              className="absolute inset-0 h-full w-full object-cover"
-            />
-            <div
-              aria-hidden="true"
-              className="absolute inset-0"
-              style={{
-                background:
-                  "linear-gradient(180deg, rgba(15,21,48,0.5) 0%, rgba(15,21,48,0.2) 38%, rgba(15,21,48,0.8) 100%)",
-              }}
-            />
-            {resort.hero_image_attribution && (
-              <p className="absolute bottom-1 right-2 z-10 text-[9px] text-white/45">
-                {resort.hero_image_attribution}
-              </p>
-            )}
-          </>
+          <HeroImage
+            src={resort.hero_image_url}
+            alt={resort.hero_image_alt ?? `${resort.name} in winter`}
+            attribution={resort.hero_image_attribution}
+          />
         )}
         {/* Two-stop atmosphere overlay — soft highlight top-left, deeper
             shadow bottom-right. Plus a faint SVG-grain layer that gives
@@ -915,6 +906,29 @@ function QuickStats({ resort }: { resort: Resort }) {
   if (resort.has_glades) features.push({ label: "Glades", emoji: "🌲" });
   if (resort.has_night_skiing) features.push({ label: "Night skiing", emoji: "🌙" });
 
+  // Expected weekend crowds — in-season only (a closed summer resort isn't busy).
+  const lat = resort.latitude == null ? null : Number(resort.latitude);
+  const lng = resort.longitude == null ? null : Number(resort.longitude);
+  const upcomingSaturday = (() => {
+    const d = new Date();
+    d.setDate(d.getDate() + ((6 - d.getDay() + 7) % 7 || 7));
+    return d;
+  })();
+  const crowd =
+    !isGlobalOffSeasonNow() && lat != null && Number.isFinite(lat) && lng != null && Number.isFinite(lng)
+      ? crowdForecast(
+          {
+            latitude: lat,
+            longitude: lng,
+            tier: resort.tier,
+            vertical_drop: resort.vertical_drop,
+            snow_new_24h_in: resort.snow_new_24h_in,
+            snow_new_48h_in: resort.snow_new_48h_in,
+          },
+          upcomingSaturday,
+        )
+      : null;
+
   return (
     <Section title="Mountain stats">
       {stats.length > 0 && (
@@ -946,6 +960,19 @@ function QuickStats({ resort }: { resort: Resort }) {
         <p className="mt-3 text-xs italic text-wn-charcoal/55">
           Difficulty mix not yet verified.
         </p>
+      )}
+
+      {crowd && (
+        <div
+          className={`mt-3 flex w-fit items-center gap-2 rounded-full border border-wn-charcoal/10 px-3 py-1.5 text-xs font-semibold ${CROWD_COLORS[crowd.level].bg} ${CROWD_COLORS[crowd.level].text}`}
+          title="Estimated from resort size, proximity to a major city, weekend/holiday timing, and fresh snow"
+        >
+          <span className={`block h-2 w-2 rounded-full ${CROWD_COLORS[crowd.level].dot}`} aria-hidden="true" />
+          <span>
+            {crowd.label} this weekend
+            {crowd.reasons[0] ? ` · ${crowd.reasons[0]}` : ""}
+          </span>
+        </div>
       )}
 
       {hasPark && (
@@ -1465,45 +1492,5 @@ function FullAmenities({ resort }: { resort: Resort }) {
         ))}
       </div>
     </Section>
-  );
-}
-
-function BestTimeStrip({ start, end }: { start: string; end: string }) {
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  // Parse "YYYY-MM-DD" or "MM-DD" or just month names — be permissive
-  const toMonthIdx = (s: string): number | null => {
-    const m = /(\d{4}-)?(\d{1,2})/.exec(s);
-    if (m) {
-      const idx = parseInt(m[2], 10) - 1;
-      return idx >= 0 && idx < 12 ? idx : null;
-    }
-    const lower = s.slice(0, 3).toLowerCase();
-    const i = months.findIndex((mm) => mm.toLowerCase() === lower);
-    return i >= 0 ? i : null;
-  };
-  const a = toMonthIdx(start);
-  const b = toMonthIdx(end);
-  if (a == null || b == null) return null;
-  const isInRange = (i: number) => {
-    if (a <= b) return i >= a && i <= b;
-    return i >= a || i <= b; // wraps year-end (e.g., Nov–Apr)
-  };
-  return (
-    <div className="rounded-lg border border-wn-charcoal/10 bg-white p-3">
-      <div className="grid grid-cols-12 gap-1">
-        {months.map((m, i) => (
-          <div
-            key={m}
-            className={`flex h-9 items-center justify-center rounded text-[10px] font-semibold ${
-              isInRange(i)
-                ? "bg-wn-navy text-white"
-                : "bg-wn-charcoal/5 text-wn-charcoal/40"
-            }`}
-          >
-            {m}
-          </div>
-        ))}
-      </div>
-    </div>
   );
 }

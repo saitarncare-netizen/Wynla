@@ -69,6 +69,7 @@ export async function generateMetadata({
       count > 0
         ? `All ${count} active ski resorts in ${stateName}, sorted by vertical drop. Top resorts: ${topThree}. Compare passes, trails, and trip plans on Wynla.`
         : `Ski resorts in ${stateName} on Wynla.`,
+    alternates: { canonical: `/state/${code.toLowerCase()}` },
     openGraph: {
       title: `${stateName} Ski Resorts · Wynla`,
       description: `${count} resorts in ${stateName}. Plan your trip with maps, passes, and drive times.`,

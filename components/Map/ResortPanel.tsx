@@ -10,6 +10,7 @@ import { fetchMatrixDriveTime, type MatrixResult } from "@/lib/mapboxMatrix";
 import { parseSeasonDates } from "@/lib/seasonDates";
 import { haversineMeters, estimateDriveSeconds } from "@/lib/distance";
 import FavoriteToggle from "@/components/auth/FavoriteToggle";
+import HeroImage from "@/components/HeroImage";
 import CompareToggle from "@/components/CompareToggle";
 import SeasonCountdown from "@/components/SeasonCountdown";
 import { addRecent } from "@/lib/recentlyViewed";
@@ -120,6 +121,12 @@ export default function ResortPanel({
       ? Math.round(displayDistanceMeters / 1609.34)
       : null;
   const originShort = origin.kind === "geo" ? "your location" : origin.short;
+  // Beyond ~10h nobody drives — a "35h from NYC" car stat reads as a bug, not
+  // a plan. Reframe those as fly trips: show the distance with a ✈️ instead of
+  // an absurd drive time. 10h cleanly splits regional road-trips (Boston→VT,
+  // NYC→VT ≈ 5-6h) from cross-country flights (NYC→Utah/Colorado ≈ 28-35h).
+  const tooFarToDrive =
+    displayDurationSeconds != null && displayDurationSeconds > 10 * 3600;
 
   // Mobile bottom-sheet snap state — half (default, ~50vh) or full
   // (85vh). No scrim on mobile so the map stays pannable behind. User
@@ -243,22 +250,11 @@ export default function ResortPanel({
           }}
         >
           {resort.hero_image_url && (
-            <>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={resort.hero_image_url}
-                alt={resort.hero_image_alt ?? `${resort.name} in winter`}
-                className="absolute inset-0 h-full w-full object-cover"
-              />
-              <div
-                aria-hidden="true"
-                className="absolute inset-0"
-                style={{
-                  background:
-                    "linear-gradient(180deg, rgba(15,21,48,0.35) 0%, rgba(15,21,48,0.15) 40%, rgba(15,21,48,0.8) 100%)",
-                }}
-              />
-            </>
+            <HeroImage
+              src={resort.hero_image_url}
+              alt={resort.hero_image_alt ?? `${resort.name} in winter`}
+              compact
+            />
           )}
           <div
             aria-hidden="true"
@@ -350,9 +346,17 @@ export default function ResortPanel({
               }
             />
             <CompactStat
-              emoji="🚗"
-              label={`from ${originShort}`}
-              value={driveText ? `${isEstimate ? "≈ " : ""}${driveText}` : "—"}
+              emoji={tooFarToDrive ? "✈️" : "🚗"}
+              label={tooFarToDrive ? `fly · ${originShort}` : `from ${originShort}`}
+              value={
+                tooFarToDrive
+                  ? distanceMiles != null
+                    ? `${distanceMiles.toLocaleString()} mi`
+                    : "Fly"
+                  : driveText
+                    ? `${isEstimate ? "≈ " : ""}${driveText}`
+                    : "—"
+              }
             />
             {(() => {
               const slot3 = pickSlot3(resort);
