@@ -15,6 +15,7 @@ import FavoriteToggle from "@/components/auth/FavoriteToggle";
 import CompareToggle from "@/components/CompareToggle";
 import RecordRecentVisit from "@/components/RecordRecentVisit";
 import DifficultyBar from "@/components/Map/DifficultyBar";
+import { crowdForecast, CROWD_COLORS } from "@/lib/crowdForecast";
 import ResortReviews from "@/components/Map/ResortReviews";
 import SnowAlertButton from "@/components/SnowAlertButton";
 import SeasonCountdown from "@/components/SeasonCountdown";
@@ -905,6 +906,29 @@ function QuickStats({ resort }: { resort: Resort }) {
   if (resort.has_glades) features.push({ label: "Glades", emoji: "🌲" });
   if (resort.has_night_skiing) features.push({ label: "Night skiing", emoji: "🌙" });
 
+  // Expected weekend crowds — in-season only (a closed summer resort isn't busy).
+  const lat = resort.latitude == null ? null : Number(resort.latitude);
+  const lng = resort.longitude == null ? null : Number(resort.longitude);
+  const upcomingSaturday = (() => {
+    const d = new Date();
+    d.setDate(d.getDate() + ((6 - d.getDay() + 7) % 7 || 7));
+    return d;
+  })();
+  const crowd =
+    !isGlobalOffSeasonNow() && lat != null && Number.isFinite(lat) && lng != null && Number.isFinite(lng)
+      ? crowdForecast(
+          {
+            latitude: lat,
+            longitude: lng,
+            tier: resort.tier,
+            vertical_drop: resort.vertical_drop,
+            snow_new_24h_in: resort.snow_new_24h_in,
+            snow_new_48h_in: resort.snow_new_48h_in,
+          },
+          upcomingSaturday,
+        )
+      : null;
+
   return (
     <Section title="Mountain stats">
       {stats.length > 0 && (
@@ -936,6 +960,19 @@ function QuickStats({ resort }: { resort: Resort }) {
         <p className="mt-3 text-xs italic text-wn-charcoal/55">
           Difficulty mix not yet verified.
         </p>
+      )}
+
+      {crowd && (
+        <div
+          className={`mt-3 flex w-fit items-center gap-2 rounded-full border border-wn-charcoal/10 px-3 py-1.5 text-xs font-semibold ${CROWD_COLORS[crowd.level].bg} ${CROWD_COLORS[crowd.level].text}`}
+          title="Estimated from resort size, proximity to a major city, weekend/holiday timing, and fresh snow"
+        >
+          <span className={`block h-2 w-2 rounded-full ${CROWD_COLORS[crowd.level].dot}`} aria-hidden="true" />
+          <span>
+            {crowd.label} this weekend
+            {crowd.reasons[0] ? ` · ${crowd.reasons[0]}` : ""}
+          </span>
+        </div>
       )}
 
       {hasPark && (
