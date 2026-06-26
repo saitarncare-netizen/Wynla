@@ -12,6 +12,16 @@ const picks = raw.result?.picks || raw.picks || [];
 
 const sqlEsc = (s) => String(s ?? '').replace(/'/g, "''");
 
+// The prototype sourcing stored the full-res Wikimedia URL under `full` (not
+// `url`). Convert a full URL to a 1280px thumb so those resorts get a
+// reasonably-sized hero instead of a multi-MB original.
+function toThumb(u) {
+  const m = String(u).match(/^(https:\/\/upload\.wikimedia\.org\/wikipedia\/[a-z]+\/)([0-9a-f]\/[0-9a-f]{2})\/(.+)$/i);
+  if (!m) return u;
+  const base = m[3].split('/').pop();
+  return `${m[1]}thumb/${m[2]}/${m[3]}/1280px-${base}`;
+}
+
 // Manual curation overrides (Saitarn's review of the contact sheet):
 // - all 9 low-confidence picks rejected
 // - 3 medium + 1 high she flagged as not good enough
@@ -33,12 +43,13 @@ for (const p of picks) {
   if (!p.chosenFile || !p.chosenFile.trim()) { fallback.push(p.slug); continue; }
   const entry = manifest[p.slug];
   const cand = entry?.candidates?.find((c) => c.file === p.chosenFile);
-  if (!cand?.url) { fallback.push(p.slug); continue; }
+  const url = cand?.url || (cand?.full ? toThumb(cand.full) : null);
+  if (!url) { fallback.push(p.slug); continue; }
   chosen.push({
     slug: p.slug,
     name: entry.name,
     state: entry.state,
-    url: cand.url,
+    url,
     source: cand.source || 'wikimedia',
     attribution: cand.attribution || 'Wikimedia Commons',
     alt: `${entry.name} — ${entry.state} ski resort in winter`,
