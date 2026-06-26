@@ -48,10 +48,13 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ error: "Missing endpoint" }, { status: 400 });
   }
   const supabase = await createSupabaseServerClient();
-  const { error } = await supabase
-    .from("push_subscriptions")
-    .delete()
-    .eq("endpoint", endpoint);
+  const { data: u } = await supabase.auth.getUser();
+  // Scope the delete to the caller so nobody can unsubscribe a device that
+  // isn't theirs by guessing/leaking its endpoint: a logged-in user can only
+  // delete their own rows; an anonymous caller only anonymous (null-owner) rows.
+  let q = supabase.from("push_subscriptions").delete().eq("endpoint", endpoint);
+  q = u.user?.id ? q.eq("user_id", u.user.id) : q.is("user_id", null);
+  const { error } = await q;
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
