@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { useFocusTrap } from "@/lib/useFocusTrap";
 // Origin import dropped Stage 33 along with the Origin section.
 import { PASS_COLORS, PASS_KEYS, PASS_LABELS } from "@/lib/passColors";
 import { SIZE_TIER_LABELS, type SizeTier } from "@/lib/sizeTier";
@@ -235,6 +236,9 @@ export default function FiltersDrawer({
     }
   }
 
+  const drawerRef = useRef<HTMLElement>(null);
+  useFocusTrap(drawerRef, open);
+
   if (!open) return null;
 
   // Stage 22 — stop touch events from bubbling to Mapbox underneath.
@@ -263,6 +267,8 @@ export default function FiltersDrawer({
       />
 
       <aside
+        ref={drawerRef}
+        tabIndex={-1}
         role="dialog"
         aria-modal="true"
         aria-label="Filters"
@@ -637,6 +643,7 @@ export default function FiltersDrawer({
                 param). */}
             <input
               type="search"
+              aria-label="Search airports"
               placeholder="Search airports… (Denver, DEN, etc.)"
               value={airportQuery}
               onChange={(e) => setAirportQuery(e.target.value)}

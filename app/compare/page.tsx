@@ -311,7 +311,7 @@ const METRICS: Array<{ label: string; render: MetricFn }> = [
 
 function boolCell(v: boolean | null): string {
   if (v === true) return "✓";
-  if (v === false) return "—";
+  if (v === false) return "✗"; // confirmed absent — distinct from "—" (unknown)
   return "—";
 }
 
@@ -503,7 +503,7 @@ function MobileCompareList({
                     per Saitarn 2026-05-23 feedback — previous text-sm /
                     font-bold read as "small + faded" against the gradient
                     strip. Tighter line-height keeps two-line names tidy. */}
-                <div className="text-base font-extrabold leading-snug text-wn-navy">
+                <div className="break-words text-base font-extrabold leading-snug text-wn-navy">
                   {r.name}
                 </div>
                 <div className="mt-0.5 truncate text-[10px] text-wn-charcoal/60">
@@ -573,9 +573,9 @@ function MobileMetricCard({
         }}
       >
         {resorts.map((r) => (
-          <div key={r.id} className="border-l border-wn-charcoal/10 pl-2 first:border-l-0 first:pl-0">
-            <div className="text-[10px] text-wn-charcoal/45">{r.name.split(" ")[0]}</div>
-            <div className="text-sm font-semibold text-wn-charcoal">{render(r)}</div>
+          <div key={r.id} className="min-w-0 border-l border-wn-charcoal/10 pl-2 first:border-l-0 first:pl-0">
+            <div className="truncate text-[10px] text-wn-charcoal/45">{r.name.split(" ")[0]}</div>
+            <div className="break-words text-sm font-semibold text-wn-charcoal">{render(r)}</div>
           </div>
         ))}
       </div>

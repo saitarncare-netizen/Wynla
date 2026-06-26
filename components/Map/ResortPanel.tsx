@@ -234,17 +234,32 @@ export default function ResortPanel({
           <div className="h-1 w-10 rounded-full bg-wn-charcoal/25" />
         </div>
 
-        {/* Hero — gradient only for now. Stage 25 collected verified
-            winter photo URLs but coverage was 23%, so the inconsistent
-            "some have photos, some don't" UX was worse than uniform
-            gradient. Data stays in DB (hero_image_url column) for a
-            future re-enable when coverage > 70%. */}
+        {/* Hero — vetted winter photo (hero_image_url) when present, else
+            the designed gradient fallback. */}
         <div
           className="relative shrink-0 overflow-hidden"
           style={{
             background: `linear-gradient(135deg, ${heroBg} 0%, #1E2952 100%)`,
           }}
         >
+          {resort.hero_image_url && (
+            <>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={resort.hero_image_url}
+                alt={resort.hero_image_alt ?? `${resort.name} in winter`}
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+              <div
+                aria-hidden="true"
+                className="absolute inset-0"
+                style={{
+                  background:
+                    "linear-gradient(180deg, rgba(15,21,48,0.35) 0%, rgba(15,21,48,0.15) 40%, rgba(15,21,48,0.8) 100%)",
+                }}
+              />
+            </>
+          )}
           <div
             aria-hidden="true"
             className="pointer-events-none absolute inset-0 opacity-[0.06] mix-blend-overlay"
@@ -282,10 +297,12 @@ export default function ResortPanel({
           </div>
         </div>
 
-        {/* Compact body — 3-stat preview only. The full panel
-            (weather, mountain stats, amenities, airport, ticket,
-            lodging) lives at /resort/[slug] now. */}
-        <div className="flex-1 overflow-hidden px-4 py-3" style={{ touchAction: "manipulation" }}>
+        {/* Body — stat preview + nearby strips. Must scroll: the Round-9
+            NearbyInPanel adds restaurant/activity rows that overflow the
+            half-snap sheet, so this is overflow-y-auto (was overflow-hidden,
+            which clipped everything below the fold). pan-y keeps the vertical
+            scroll inside the panel instead of leaking to the Mapbox canvas. */}
+        <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3" style={{ touchAction: "pan-y" }}>
           {/* Pass badges row */}
           {resort.passes?.length > 0 && (
             <div className="mb-3 flex flex-wrap gap-1.5">
@@ -365,11 +382,16 @@ export default function ResortPanel({
               opens so the homepage SSR payload stays small (we don't
               want to ship 425 resorts × ~30 nearby rows for every
               map mount). Renders nothing while loading or empty. */}
-          <NearbyInPanel resortId={resort.id} />
+          {/* key by resort.id so switching resorts remounts this (fresh
+              empty state) — prevents resort A's nearby flashing under B. */}
+          <NearbyInPanel key={resort.id} resortId={resort.id} />
         </div>
 
-        {/* Sticky footer CTA */}
-        <div className="shrink-0 border-t border-wn-charcoal/10 bg-white p-3">
+        {/* Sticky footer CTA — pad past the iOS home indicator on notched phones */}
+        <div
+          className="shrink-0 border-t border-wn-charcoal/10 bg-white p-3"
+          style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 0.75rem)" }}
+        >
           <Link
             href={`/resort/${resort.slug}`}
             className="flex items-center justify-center gap-2 rounded-lg bg-wn-navy px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-wn-navy/90"

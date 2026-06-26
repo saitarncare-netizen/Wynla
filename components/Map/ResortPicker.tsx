@@ -399,6 +399,7 @@ export default function ResortPicker({
         <input
           ref={inputRef}
           type="search"
+          aria-label="Search resorts"
           placeholder="Search resorts…"
           value={query}
           onChange={(e) => setQuery(e.target.value)}

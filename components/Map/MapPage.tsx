@@ -177,7 +177,9 @@ export type WeatherSnapshot = {
   wind_mph_avg: number | null;
   wind_dir_short: string | null;
   fetched_at: string | null;
-  forecast_json: ForecastDay[] | null;
+  // Optional: not fetched on the homepage map payload (only /resort/[slug]
+  // needs the 10-day array). Kept on the type for the rare consumer.
+  forecast_json?: ForecastDay[] | null;
 };
 
 type Props = {
@@ -1101,6 +1103,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
 
   return (
     <div className="relative h-dvh w-full overflow-hidden">
+      <h1 className="sr-only">Wynla — interactive map of every US ski resort</h1>
       <header
         className="absolute inset-x-0 top-0 z-10 md:border-b md:border-wn-charcoal/10 md:bg-white/95 md:backdrop-blur-sm"
         // User feedback (post-Round-5 install): the +8px bump felt like

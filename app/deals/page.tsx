@@ -279,7 +279,9 @@ function PassCard({ deal }: { deal: PassDeal }) {
               </span>
             </div>
             <p className="mt-0.5 text-[11px] font-semibold uppercase tracking-wider text-wn-charcoal/55">
-              Price ends {formatPriceEnd(headlineTier.priceEnds)}
+              {isPriceEnded(headlineTier.priceEnds)
+                ? "Early-bird pricing has since stepped up"
+                : `Price ends ${formatPriceEnd(headlineTier.priceEnds)}`}
             </p>
 
             {/* Other tiers */}

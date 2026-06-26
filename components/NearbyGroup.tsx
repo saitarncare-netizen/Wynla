@@ -58,7 +58,7 @@ export default function NearbyGroup({ emoji, label, blurb, rows, variant = "full
         className="-mx-2 flex snap-x snap-mandatory gap-2 overflow-x-auto px-2 pb-1"
         style={{ scrollbarWidth: "thin" }}
       >
-        {sorted.map((r) => {
+        {sorted.slice(0, isCompact ? 8 : 12).map((r) => {
           const dist = distanceLabel(r.distance_km);
           const drive = driveLabel(r.drive_minutes);
           const meta = [dist, drive].filter(Boolean).join(" · ");
@@ -104,7 +104,7 @@ export default function NearbyGroup({ emoji, label, blurb, rows, variant = "full
                   href={dirUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 rounded-md bg-wn-navy px-2 py-1 text-[11px] font-semibold text-white transition hover:bg-wn-navy/90"
+                  className="inline-flex items-center gap-1 rounded-md bg-wn-navy px-2.5 py-2 text-[11px] font-semibold text-white transition hover:bg-wn-navy/90"
                   title={`Directions to ${r.name}`}
                 >
                   <span aria-hidden="true">📍</span> Directions
@@ -114,7 +114,7 @@ export default function NearbyGroup({ emoji, label, blurb, rows, variant = "full
                     href={r.website_url}
                     target="_blank"
                     rel="noopener noreferrer nofollow"
-                    className="inline-flex items-center gap-1 rounded-md border border-wn-charcoal/15 px-2 py-1 text-[11px] font-semibold text-wn-navy transition hover:border-wn-navy"
+                    className="inline-flex items-center gap-1 rounded-md border border-wn-charcoal/15 px-2.5 py-2 text-[11px] font-semibold text-wn-navy transition hover:border-wn-navy"
                     title={`${r.name} website`}
                   >
                     Website

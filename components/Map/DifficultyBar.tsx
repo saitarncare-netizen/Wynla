@@ -42,9 +42,9 @@ export default function DifficultyBar({ mix, showSourceHint, size = "full" }: Pr
     {
       key: "advanced",
       pct: mix.advanced,
-      color: "#000000",
-      label: "Expert",
-      symbol: <span className="block h-2.5 w-2.5 rotate-45 bg-black" aria-hidden="true" />,
+      color: "#374151", // slate-700 — distinct from the pure-black expert segment
+      label: "Advanced",
+      symbol: <span className="block h-2.5 w-2.5 rotate-45 bg-gray-700" aria-hidden="true" />,
     },
     {
       key: "expert",

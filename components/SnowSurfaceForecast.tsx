@@ -326,9 +326,9 @@ function toneFor(code: SurfaceCode): {
     case "PP":
       return {
         container: "border-wn-sky/40 bg-wn-sky/10",
-        bubble: "bg-wn-sky text-white",
+        bubble: "bg-wn-sky text-wn-navy",
         headline: "text-wn-navy",
-        code: "text-wn-sky",
+        code: "text-sky-700",
       };
     case "PPC":
       return {
@@ -361,9 +361,9 @@ function toneFor(code: SurfaceCode): {
     case "WS":
       return {
         container: "border-wn-sky/30 bg-wn-sky/5",
-        bubble: "bg-wn-sky/70 text-white",
+        bubble: "bg-wn-sky/70 text-wn-navy",
         headline: "text-wn-navy",
-        code: "text-wn-sky/80",
+        code: "text-sky-700",
       };
     case "WG":
       return {

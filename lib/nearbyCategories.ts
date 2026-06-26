@@ -128,7 +128,8 @@ export type NearbyRow = {
 };
 
 export function distanceLabel(km: number | null): string {
-  if (km == null) return "";
+  // Hide 0 / sub-50m distances — those are uncomputed rows, not "0.0 mi away".
+  if (km == null || km < 0.05) return "";
   const miles = km * 0.621371;
   if (miles < 1) return `${(miles).toFixed(1)} mi`;
   if (miles < 10) return `${miles.toFixed(1)} mi`;

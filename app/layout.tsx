@@ -122,7 +122,13 @@ export default function RootLayout({
         >
           Skip to main content
         </a>
-        {children}
+        {/* Wrap children so the skip link's #main-content target exists on
+            every route. Pages render their own <main>, so this is a div (a
+            nested <main> would be invalid); tabIndex makes it focusable so
+            the keyboard bypass actually moves focus. */}
+        <div id="main-content" tabIndex={-1}>
+          {children}
+        </div>
         {/* Global legal footer. `mt-auto` plus the body's flex column keeps
             it at the very bottom without pushing the map page (the map
             fills the viewport; the footer sits below the fold for that
