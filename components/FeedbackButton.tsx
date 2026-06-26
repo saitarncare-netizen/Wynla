@@ -10,7 +10,8 @@
 // Mapbox underneath doesn't swallow the touches as map gestures while
 // the modal is open (same pattern as FiltersDrawer / RecentlyViewedStrip).
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useFocusTrap } from "@/lib/useFocusTrap";
 
 type SendState =
   | { kind: "idle" }
@@ -23,6 +24,10 @@ export default function FeedbackButton() {
   const [body, setBody] = useState("");
   const [email, setEmail] = useState("");
   const [state, setState] = useState<SendState>({ kind: "idle" });
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  // Trap focus inside the dialog (was Escape-only — keyboard could tab out).
+  useFocusTrap(dialogRef, open, textareaRef);
 
   // ESC closes the modal — keyboard parity with the X button.
   // closeModal is declared above the effect so it can be a stable
@@ -134,7 +139,11 @@ export default function FeedbackButton() {
             onClick={closeModal}
             className="absolute inset-0 cursor-default bg-wn-charcoal/40 backdrop-blur-sm"
           />
-          <div className="relative z-10 w-full max-w-md rounded-2xl border border-wn-charcoal/10 bg-white p-5 shadow-2xl">
+          <div
+            ref={dialogRef}
+            tabIndex={-1}
+            className="relative z-10 w-full max-w-md rounded-2xl border border-wn-charcoal/10 bg-white p-5 shadow-2xl"
+          >
             <button
               type="button"
               onClick={closeModal}
@@ -173,6 +182,7 @@ export default function FeedbackButton() {
                   What&apos;s on your mind?
                 </label>
                 <textarea
+                  ref={textareaRef}
                   value={body}
                   onChange={(e) => setBody(e.target.value)}
                   rows={5}

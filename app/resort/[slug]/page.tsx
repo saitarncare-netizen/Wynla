@@ -232,14 +232,18 @@ async function getDataUncached(
         "id, resort_id, name, category, description, distance_km, drive_minutes, latitude, longitude, website_url, source, confidence_score, is_recommended",
       )
       .eq("resort_id", resort.id)
-      .order("distance_km", { ascending: true }),
+      .order("is_recommended", { ascending: false })
+      .order("distance_km", { ascending: true })
+      .limit(60),
     supabase
       .from("nearby_activities")
       .select(
         "id, resort_id, name, category, description, distance_km, drive_minutes, latitude, longitude, website_url, source, confidence_score, is_recommended",
       )
       .eq("resort_id", resort.id)
-      .order("distance_km", { ascending: true }),
+      .order("is_recommended", { ascending: false })
+      .order("distance_km", { ascending: true })
+      .limit(60),
   ]);
 
   return {
