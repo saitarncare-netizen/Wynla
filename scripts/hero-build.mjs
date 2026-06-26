@@ -34,6 +34,8 @@ const EXCLUDE = new Set([
   'lee-canyon', 'alpine-meadows', 'telluride',
   'waterville-valley',
   'beaver-mountain', 'powderhorn', 'snow-valley', 'solitude',
+  // QA pass 2 — wrong-resort (name-collision grabbed a different place):
+  'mountain-high', 'snow-creek', 'snow-snake', 'nordic-valley',
 ]);
 
 const chosen = [];
