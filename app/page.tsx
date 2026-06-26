@@ -33,10 +33,9 @@ export default async function Home() {
 
   if (resortsRes.error) {
     return (
-      <main className="flex min-h-dvh items-center justify-center p-8">
-        <p className="rounded-md border border-wn-charcoal/20 bg-white px-4 py-2 font-mono text-sm text-wn-charcoal">
-          db error: {resortsRes.error.message}
-        </p>
+      <main className="flex min-h-dvh flex-col items-center justify-center gap-2 p-8 text-center">
+        <p className="text-lg font-semibold text-wn-navy">Something went wrong loading the map.</p>
+        <p className="text-sm text-wn-charcoal/70">Please refresh in a moment.</p>
       </main>
     );
   }

@@ -10,6 +10,7 @@ import { fetchMatrixDriveTime, type MatrixResult } from "@/lib/mapboxMatrix";
 import { parseSeasonDates } from "@/lib/seasonDates";
 import { haversineMeters, estimateDriveSeconds } from "@/lib/distance";
 import FavoriteToggle from "@/components/auth/FavoriteToggle";
+import HeroImage from "@/components/HeroImage";
 import CompareToggle from "@/components/CompareToggle";
 import SeasonCountdown from "@/components/SeasonCountdown";
 import { addRecent } from "@/lib/recentlyViewed";
@@ -243,22 +244,11 @@ export default function ResortPanel({
           }}
         >
           {resort.hero_image_url && (
-            <>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={resort.hero_image_url}
-                alt={resort.hero_image_alt ?? `${resort.name} in winter`}
-                className="absolute inset-0 h-full w-full object-cover"
-              />
-              <div
-                aria-hidden="true"
-                className="absolute inset-0"
-                style={{
-                  background:
-                    "linear-gradient(180deg, rgba(15,21,48,0.35) 0%, rgba(15,21,48,0.15) 40%, rgba(15,21,48,0.8) 100%)",
-                }}
-              />
-            </>
+            <HeroImage
+              src={resort.hero_image_url}
+              alt={resort.hero_image_alt ?? `${resort.name} in winter`}
+              compact
+            />
           )}
           <div
             aria-hidden="true"

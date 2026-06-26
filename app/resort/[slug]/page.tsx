@@ -3,6 +3,7 @@ import { cache } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
+import HeroImage from "@/components/HeroImage";
 import {
   passColor,
   passLabel,
@@ -276,6 +277,7 @@ export async function generateMetadata({
   return {
     title: `${resort.name} — ${resort.state} Ski Resort`,
     description: `${resort.name} in ${resort.state}${resort.region ? " (" + resort.region + ")" : ""}. ${passSummary ? "On the " + passSummary + ". " : ""}Plan your ski or snowboard trip with weather, drive times, and resort info.`,
+    alternates: { canonical: `/resort/${slug}` },
     openGraph: {
       title: `${resort.name} · Wynla`,
       description: `Ski resort in ${resort.state}${resort.region ? " (" + resort.region + ")" : ""}`,
@@ -430,27 +432,11 @@ export default async function ResortPage({
         }}
       >
         {resort.hero_image_url && (
-          <>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={resort.hero_image_url}
-              alt={resort.hero_image_alt ?? `${resort.name} in winter`}
-              className="absolute inset-0 h-full w-full object-cover"
-            />
-            <div
-              aria-hidden="true"
-              className="absolute inset-0"
-              style={{
-                background:
-                  "linear-gradient(180deg, rgba(15,21,48,0.5) 0%, rgba(15,21,48,0.2) 38%, rgba(15,21,48,0.8) 100%)",
-              }}
-            />
-            {resort.hero_image_attribution && (
-              <p className="absolute bottom-1 right-2 z-10 text-[9px] text-white/45">
-                {resort.hero_image_attribution}
-              </p>
-            )}
-          </>
+          <HeroImage
+            src={resort.hero_image_url}
+            alt={resort.hero_image_alt ?? `${resort.name} in winter`}
+            attribution={resort.hero_image_attribution}
+          />
         )}
         {/* Two-stop atmosphere overlay — soft highlight top-left, deeper
             shadow bottom-right. Plus a faint SVG-grain layer that gives
