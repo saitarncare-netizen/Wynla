@@ -351,7 +351,7 @@ export default function ResortPanel({
               value={
                 tooFarToDrive
                   ? distanceMiles != null
-                    ? `${distanceMiles.toLocaleString()} mi`
+                    ? `${isEstimate ? "≈ " : ""}${distanceMiles.toLocaleString()} mi`
                     : "Fly"
                   : driveText
                     ? `${isEstimate ? "≈ " : ""}${driveText}`
