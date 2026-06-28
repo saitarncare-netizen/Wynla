@@ -46,10 +46,14 @@ export default function EarlySignupForm({
 
   // Capture ?ref=<code> from the URL once on mount (reading
   // window.location avoids needing a Suspense boundary for useSearchParams).
+  // Validate with the SAME rule the server uses (lib/referral sanitizeRef)
+  // so a malformed/hand-edited link doesn't show the "you were invited"
+  // banner only for the server to silently drop the attribution.
   useEffect(() => {
     try {
       const r = new URLSearchParams(window.location.search).get("ref");
-      if (r) setRef(r);
+      const norm = r?.trim().toLowerCase();
+      if (norm && /^[a-z0-9]{4,16}$/.test(norm)) setRef(norm);
     } catch {
       /* no-op */
     }
@@ -127,7 +131,7 @@ export default function EarlySignupForm({
           </p>
           {count != null && (
             <p className="mt-3 text-xs text-emerald-900/70">
-              You&apos;re Founder #{count.toLocaleString()}.
+              You&apos;re one of {count.toLocaleString()} Founders.
             </p>
           )}
         </div>

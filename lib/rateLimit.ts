@@ -74,6 +74,10 @@ export function sameOriginOk(req: Request): boolean {
     host === "localhost" ||
     host.startsWith("localhost:") ||
     host.startsWith("127.0.0.1") ||
-    host.endsWith(".vercel.app")
+    // *.vercel.app is a shared multi-tenant domain, so trusting it outright
+    // would let anyone deploy evil-xyz.vercel.app and forge a valid Origin.
+    // Only honor it on our OWN preview deploys (VERCEL_ENV=preview); in
+    // production this branch is off, so foreign vercel.app origins are rejected.
+    (process.env.VERCEL_ENV === "preview" && host.endsWith(".vercel.app"))
   );
 }
