@@ -31,6 +31,7 @@ import {
   sanitizeRef,
   REFERRAL_SOURCE_PREFIX,
 } from "@/lib/referral";
+import { checkRateLimit, clientIp, sameOriginOk } from "@/lib/rateLimit";
 
 export const runtime = "nodejs";
 
@@ -44,6 +45,18 @@ export async function POST(req: NextRequest) {
     body = (await req.json()) as PostBody;
   } catch {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  }
+
+  // Abuse guards (infra-free — see lib/rateLimit.ts).
+  if (!sameOriginOk(req)) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+  const rl = checkRateLimit(`early:${clientIp(req)}`, { windowMs: 60_000, max: 6 });
+  if (!rl.ok) {
+    return NextResponse.json(
+      { error: "Too many signups — please wait a moment and try again." },
+      { status: 429, headers: { "Retry-After": String(rl.retryAfterSec) } },
+    );
   }
 
   const raw = (body.email ?? "").trim().toLowerCase();
