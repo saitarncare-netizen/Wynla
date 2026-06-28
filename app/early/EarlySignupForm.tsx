@@ -7,22 +7,30 @@
 // a success state. We show three states inline:
 //   • idle      — input + button
 //   • loading   — disabled, "Joining…"
-//   • success   — green confirmation panel (different copy for new vs
-//                 "you're already in")
+//   • success   — green confirmation panel + a referral share card
+//                 (different copy for new vs "you're already in")
 //   • error     — red error text below the input, input stays editable
 //
+// Referral loop: if the visitor arrived via ?ref=<code> we forward that
+// to the API so their signup is attributed to the referrer. On success
+// the API returns THIS member's own code + how many they've referred, so
+// we can show a share link + progress and turn every signup into a
+// potential inviter. (Attribution is schema-free — see lib/referral.ts.)
+//
 // Counter on the server-rendered page is stale by definition, so on
-// successful signup we optimistically bump it via the parent callback
-// (defined in app/early/page.tsx as a server component, so the bump
-// has to live in this client island — kept simple with a local
-// state ref instead of useReducer).
+// successful signup we optimistically bump it from the API response.
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type Status =
   | { kind: "idle" }
   | { kind: "loading" }
-  | { kind: "success"; alreadyOnList: boolean }
+  | {
+      kind: "success";
+      alreadyOnList: boolean;
+      referralCode: string | null;
+      referralCount: number;
+    }
   | { kind: "error"; message: string };
 
 export default function EarlySignupForm({
@@ -32,10 +40,20 @@ export default function EarlySignupForm({
 }) {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<Status>({ kind: "idle" });
-  // Local optimistic count — initial value from the server, bumped on a
-  // first-time signup. Stays static for "already on the list" since the
-  // count didn't change.
   const [count, setCount] = useState<number | null>(initialCount);
+  const [ref, setRef] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+
+  // Capture ?ref=<code> from the URL once on mount (reading
+  // window.location avoids needing a Suspense boundary for useSearchParams).
+  useEffect(() => {
+    try {
+      const r = new URLSearchParams(window.location.search).get("ref");
+      if (r) setRef(r);
+    } catch {
+      /* no-op */
+    }
+  }, []);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -45,12 +63,14 @@ export default function EarlySignupForm({
       const res = await fetch("/api/early", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, ref }),
       });
       const data: {
         ok?: boolean;
         alreadyOnList?: boolean;
         count?: number | null;
+        referralCode?: string | null;
+        referralCount?: number;
         error?: string;
       } = await res.json().catch(() => ({}));
       if (!res.ok || !data.ok) {
@@ -65,6 +85,8 @@ export default function EarlySignupForm({
       setStatus({
         kind: "success",
         alreadyOnList: Boolean(data.alreadyOnList),
+        referralCode: data.referralCode ?? null,
+        referralCount: data.referralCount ?? 0,
       });
     } catch (err) {
       console.error(err);
@@ -76,20 +98,73 @@ export default function EarlySignupForm({
   };
 
   if (status.kind === "success") {
+    const shareUrl =
+      status.referralCode != null
+        ? `${typeof window !== "undefined" ? window.location.origin : "https://wynla.app"}/early?ref=${status.referralCode}`
+        : null;
+
+    const copy = async () => {
+      if (!shareUrl) return;
+      try {
+        await navigator.clipboard.writeText(shareUrl);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      } catch {
+        /* clipboard blocked — the link is still visible to copy by hand */
+      }
+    };
+
     return (
-      <div className="rounded-xl border border-emerald-500/30 bg-emerald-50 p-5 text-emerald-900">
-        <div className="text-base font-bold">
-          {status.alreadyOnList ? "You're already in." : "You're in."}
-        </div>
-        <p className="mt-1 text-sm">
-          {status.alreadyOnList
-            ? "Your email is already on the Founder list. We'll send your welcome the morning Wynla opens for the inaugural season (November 2026)."
-            : "Check your inbox for the welcome message. You're now a Founder Member — your founder rate is locked forever when Wynla moves to paid plans for Season 2."}
-        </p>
-        {count != null && (
-          <p className="mt-3 text-xs text-emerald-900/70">
-            You&apos;re Founder #{count.toLocaleString()}.
+      <div className="space-y-3">
+        <div className="rounded-xl border border-emerald-500/30 bg-emerald-50 p-5 text-emerald-900">
+          <div className="text-base font-bold">
+            {status.alreadyOnList ? "You're already in." : "You're in."}
+          </div>
+          <p className="mt-1 text-sm">
+            {status.alreadyOnList
+              ? "Your email is already on the Founder list. We'll send your welcome the morning Wynla opens for the inaugural season (November 2026)."
+              : "Check your inbox for the welcome message. You're now a Founder Member — your founder rate is locked forever when Wynla moves to paid plans for Season 2."}
           </p>
+          {count != null && (
+            <p className="mt-3 text-xs text-emerald-900/70">
+              You&apos;re Founder #{count.toLocaleString()}.
+            </p>
+          )}
+        </div>
+
+        {/* Referral share card — turn this Founder into an inviter. */}
+        {shareUrl && (
+          <div className="rounded-xl border border-wn-gold/40 bg-wn-gold/10 p-5">
+            <div className="text-sm font-bold text-wn-navy">
+              Move up the list — invite friends
+            </div>
+            <p className="mt-1 text-xs leading-relaxed text-wn-charcoal/75">
+              Every friend who joins with your link is one more reason
+              you&apos;re first in line when Wynla opens. Share it anywhere.
+            </p>
+            <div className="mt-3 flex flex-col gap-2 sm:flex-row">
+              <input
+                readOnly
+                value={shareUrl}
+                aria-label="Your referral link"
+                onFocus={(e) => e.currentTarget.select()}
+                className="h-10 flex-1 select-all rounded-md border border-wn-charcoal/20 bg-white px-3 text-xs text-wn-charcoal focus:border-wn-navy focus:outline-none focus:ring-2 focus:ring-wn-navy/20"
+              />
+              <button
+                type="button"
+                onClick={copy}
+                className="inline-flex h-10 items-center justify-center rounded-md bg-wn-navy px-4 text-xs font-bold text-white transition hover:bg-wn-navy/90 active:scale-[0.98]"
+              >
+                {copied ? "Copied!" : "Copy link"}
+              </button>
+            </div>
+            {status.referralCount > 0 && (
+              <p className="mt-3 text-xs font-semibold text-wn-navy">
+                🎉 {status.referralCount.toLocaleString()} friend
+                {status.referralCount === 1 ? "" : "s"} joined through you.
+              </p>
+            )}
+          </div>
         )}
       </div>
     );
@@ -121,6 +196,11 @@ export default function EarlySignupForm({
       {status.kind === "error" && (
         <p role="alert" className="text-xs text-red-700">
           {status.message}
+        </p>
+      )}
+      {ref && (
+        <p className="text-[11px] font-medium text-wn-navy/70">
+          ✓ You were invited by a Founder — you&apos;ll both move up the list.
         </p>
       )}
       <p className="text-[11px] text-wn-charcoal/55">

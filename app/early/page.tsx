@@ -41,7 +41,7 @@ async function fetchFounderCount(): Promise<number | null> {
     const { count, error } = await sb
       .from("pro_waitlist")
       .select("id", { count: "exact", head: true })
-      .eq("source", "founder");
+      .like("source", "founder%");
     if (error) return null;
     return count ?? 0;
   } catch {
