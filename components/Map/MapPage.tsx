@@ -1197,11 +1197,16 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
                 <button
                   type="button"
                   onClick={() => setFiltersOpen(true)}
-                  className="relative inline-flex h-11 items-center justify-center gap-1.5 rounded-md border border-wn-charcoal/20 bg-white px-2 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 md:hidden"
-                  title="Filters"
+                  className="relative inline-flex h-11 items-center justify-center gap-1.5 rounded-md border border-wn-charcoal/20 bg-white px-2 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 md:px-3"
+                  title="All filters"
                   aria-label={`Filters${activeFilterCount > 0 ? ` (${activeFilterCount} active)` : ""}`}
                 >
                   <span aria-hidden="true" className="text-base leading-none">☰</span>
+                  {/* Label on desktop — the inline FilterBar covers the
+                      common filters, but the full drawer (terrain, amenities,
+                      lifts, surface, snowmaking, adaptive…) was previously
+                      mobile-only. Desktop users now get the same escape hatch. */}
+                  <span className="hidden md:inline">All filters</span>
                   {activeFilterCount > 0 && (
                     <span className="inline-flex h-4 min-w-[16px] items-center justify-center rounded-full bg-wn-navy px-1 text-[10px] font-bold text-white">
                       {activeFilterCount}
