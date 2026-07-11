@@ -1642,6 +1642,14 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
           above for the full background-tab survival story. */}
       {splashMounted && (
         <div
+          id="wynla-splash"
+          // SSR always renders the splash visible (the server can't read
+          // localStorage), while a returning visitor's client initializes
+          // splashVisible=false — an intentional divergence, so silence
+          // React's hydration-mismatch error for this element's attributes.
+          // The inline script below (not React) is what actually hides it
+          // pre-paint for returning visitors.
+          suppressHydrationWarning
           aria-hidden={!splashVisible}
           className={[
             "absolute inset-0 z-[60] flex flex-col items-center justify-center bg-wn-navy",
@@ -1670,6 +1678,23 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
             }
           `}</style>
         </div>
+      )}
+      {/* FOUC killer for the splash: this inline script executes during
+          HTML parse — BEFORE first paint and long before hydration — so a
+          returning visitor (localStorage TTL stamp fresh) never sees even
+          one frame of the navy overlay. React reaches the same conclusion
+          at hydration (lazy initializer) and unmounts the node ~600ms in;
+          until then the imperative display:none keeps it invisible. Keep
+          the storage key + TTL in sync with the constants above. */}
+      {splashMounted && (
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              `try{var t=+localStorage.getItem(${JSON.stringify(SPLASH_STORAGE_KEY)});` +
+              `if(t&&Date.now()-t<${SPLASH_TTL_MS}){` +
+              `var e=document.getElementById("wynla-splash");if(e)e.style.display="none"}}catch(_){}`,
+          }}
+        />
       )}
 
 
