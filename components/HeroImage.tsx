@@ -18,9 +18,22 @@ type Props = {
   attribution?: string | null;
   /** Panel hero is shorter — slightly lighter scrim. */
   compact?: boolean;
+  /**
+   * Layout-accurate `sizes` for the optimizer. The two consumers differ a
+   * lot: the resort-page header is full-bleed (100vw at every breakpoint),
+   * while the ResortPanel rail is 380px wide on desktop — one shared value
+   * either softens the header LCP or over-downloads for the panel.
+   */
+  sizes?: string;
 };
 
-export default function HeroImage({ src, alt, attribution, compact }: Props) {
+export default function HeroImage({
+  src,
+  alt,
+  attribution,
+  compact,
+  sizes = "100vw",
+}: Props) {
   const [failed, setFailed] = useState(false);
   if (!src || failed) return null;
   const scrim = compact
@@ -35,10 +48,7 @@ export default function HeroImage({ src, alt, attribution, compact }: Props) {
         onError={() => setFailed(true)}
         // LCP element — preload + skip lazy-loading.
         priority
-        // Hero spans the full viewport width on mobile; capped article
-        // width on desktop. Keeps the optimizer from shipping 1280px
-        // images to 400px phones.
-        sizes="(max-width: 768px) 100vw, 1024px"
+        sizes={sizes}
         className="object-cover"
         // The source photos are already curated 1280px thumbs; mild
         // compression on top is fine for a scrimmed hero.

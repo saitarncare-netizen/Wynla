@@ -12,6 +12,10 @@ const nextConfig: NextConfig = {
         pathname: "/storage/v1/object/public/resort-heroes/**",
       },
     ],
+    // Next 16 snaps any requested quality to this list (default [75]) —
+    // without registering 70 here, HeroImage's quality={70} is silently
+    // coerced to 75 and the intended compression never applies.
+    qualities: [70, 75],
   },
   // PWA install fix — when Saitarn installed the PWA on her iPhone she
   // accidentally pinned the ridewise-rcko.vercel.app default URL

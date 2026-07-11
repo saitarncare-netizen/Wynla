@@ -254,6 +254,8 @@ export default function ResortPanel({
               src={resort.hero_image_url}
               alt={resort.hero_image_alt ?? `${resort.name} in winter`}
               compact
+              // Panel is a 380px rail on desktop, full-width sheet on mobile.
+              sizes="(max-width: 767px) 100vw, 380px"
             />
           )}
           <div
