@@ -73,6 +73,7 @@ export async function generateMetadata({
     openGraph: {
       title: `${stateName} Ski Resorts · Wynla`,
       description: `${count} resorts in ${stateName}. Plan your trip with maps, passes, and drive times.`,
+      url: `/state/${code.toLowerCase()}`,
     },
   };
 }

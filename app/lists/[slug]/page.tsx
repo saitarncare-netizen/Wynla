@@ -53,6 +53,7 @@ export async function generateMetadata({
     openGraph: {
       title: `${list.title} · Wynla`,
       description: list.intro,
+      url: `/lists/${slug}`,
     },
   };
 }

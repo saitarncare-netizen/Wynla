@@ -286,6 +286,7 @@ export async function generateMetadata({
     openGraph: {
       title: `${resort.name} · Wynla`,
       description: `Ski resort in ${resort.state}${resort.region ? " (" + resort.region + ")" : ""}`,
+      url: `/resort/${slug}`,
     },
   };
 }

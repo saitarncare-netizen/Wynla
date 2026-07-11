@@ -29,6 +29,7 @@ export async function generateMetadata({
       description: guide.description,
       type: "article",
       publishedTime: guide.publishedAt,
+      url: `/guides/${slug}`,
     },
     twitter: {
       card: "summary_large_image",

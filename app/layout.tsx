@@ -31,7 +31,11 @@ export const metadata: Metadata = {
     "Every US ski resort on one map, with pass info, drive time, weather, and the snow surface forecast. Free for the inaugural 2026-27 season — founder pricing locked forever for early members.",
   applicationName: "Wynla",
   manifest: "/manifest.json",
-  alternates: { canonical: "/" },
+  // NOTE: no `alternates.canonical` here — a canonical set in the root
+  // layout cascades to EVERY route, which told Google all ~480 pages were
+  // duplicates of the homepage (mass de-indexing risk, caught in the
+  // 2026-06-28 live sweep). The homepage sets its own canonical in
+  // app/page.tsx; SEO pages set theirs in their generateMetadata.
   appleWebApp: {
     capable: true,
     title: "Wynla",
@@ -51,11 +55,14 @@ export const metadata: Metadata = {
     url: SITE_URL,
     images: [{ url: "/og-home.png", width: 1200, height: 630, alt: "Wynla — US ski resort map" }],
   },
+  // Card type ONLY — no title/description/images here. A full twitter
+  // block in the root layout cascades over every page that doesn't define
+  // its own, so resort shares on X were showing the generic homepage card
+  // instead of the per-resort dynamic image. With just `card`, X falls
+  // back to each page's og:title/og:image (per-resort file-convention
+  // image included), which is exactly what we want.
   twitter: {
     card: "summary_large_image",
-    title: "Wynla — Free for the inaugural ski season.",
-    description: "Plan your 2026-27 ski trip with one map. Free inaugural season.",
-    images: ["/og-home.png"],
   },
   icons: {
     icon: [

@@ -20,7 +20,9 @@ export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 export const metadata: Metadata = {
-  title: "Wynla — Founder Members get early access",
+  // No "Wynla —" prefix: the layout title template appends "· Wynla",
+  // which was rendering the brand twice ("Wynla — … · Wynla").
+  title: "Founder Members get early access",
   description:
     "Wynla opens free for the inaugural 2026-27 ski season. Founder Members keep a special founder rate locked forever for Season 2 and beyond.",
   alternates: { canonical: "/early" },
@@ -29,6 +31,10 @@ export const metadata: Metadata = {
     description:
       "Free inaugural season. Founder pricing locked forever for early members.",
     url: "/early",
+    // Defining openGraph here replaces the layout's block wholesale, which
+    // silently dropped og:image — and /early is the most-shared page
+    // (marketing referral loop). Re-add the brand card explicitly.
+    images: [{ url: "/og-home.png", width: 1200, height: 630, alt: "Wynla — US ski resort map" }],
   },
 };
 

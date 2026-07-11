@@ -1,8 +1,15 @@
+import type { Metadata } from "next";
 import { supabase } from "@/lib/supabase";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import MapPage from "@/components/Map/MapPage";
 
 export const dynamic = "force-dynamic";
+
+// Homepage-only canonical. This used to live in the root layout, where it
+// cascaded to every route and marked the whole site as a duplicate of "/".
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 export default async function Home() {
   const [resortsRes, driveTimesRes, weatherRes, authRes] = await Promise.all([
