@@ -20,7 +20,27 @@
 // Counter on the server-rendered page is stale by definition, so on
 // successful signup we optimistically bump it from the API response.
 
-import { useEffect, useState } from "react";
+import { useState, useSyncExternalStore } from "react";
+
+// ?ref=<code> reader — validated with the SAME rule the server uses
+// (lib/referral sanitizeRef) so the "invited by a Founder" banner never
+// promises an attribution the server would silently drop. Read via
+// useSyncExternalStore with a no-op subscribe: the server snapshot is
+// null (SSR has no URL search params), and React re-renders with the
+// client snapshot right after hydration — no setState-in-effect lint
+// error, no hydration mismatch. The value never changes after load, so
+// the subscription never needs to fire.
+const noopSubscribe = () => () => {};
+const getServerRef = () => null;
+function readRefFromUrl(): string | null {
+  try {
+    const r = new URLSearchParams(window.location.search).get("ref");
+    const norm = r?.trim().toLowerCase();
+    return norm && /^[a-z0-9]{4,16}$/.test(norm) ? norm : null;
+  } catch {
+    return null;
+  }
+}
 
 type Status =
   | { kind: "idle" }
@@ -41,23 +61,9 @@ export default function EarlySignupForm({
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<Status>({ kind: "idle" });
   const [count, setCount] = useState<number | null>(initialCount);
-  const [ref, setRef] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
-
-  // Capture ?ref=<code> from the URL once on mount (reading
-  // window.location avoids needing a Suspense boundary for useSearchParams).
-  // Validate with the SAME rule the server uses (lib/referral sanitizeRef)
-  // so a malformed/hand-edited link doesn't show the "you were invited"
-  // banner only for the server to silently drop the attribution.
-  useEffect(() => {
-    try {
-      const r = new URLSearchParams(window.location.search).get("ref");
-      const norm = r?.trim().toLowerCase();
-      if (norm && /^[a-z0-9]{4,16}$/.test(norm)) setRef(norm);
-    } catch {
-      /* no-op */
-    }
-  }, []);
+  // Validated ?ref code (or null) — see readRefFromUrl above.
+  const ref = useSyncExternalStore(noopSubscribe, readRefFromUrl, getServerRef);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
