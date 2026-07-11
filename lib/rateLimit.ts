@@ -71,9 +71,12 @@ export function sameOriginOk(req: Request): boolean {
   return (
     host === siteHost ||
     host === "wynla.app" ||
-    host === "localhost" ||
-    host.startsWith("localhost:") ||
-    host.startsWith("127.0.0.1") ||
+    // localhost is a dev convenience only — in production a page running
+    // on the visitor's own machine shouldn't pass the cross-origin check.
+    (process.env.NODE_ENV !== "production" &&
+      (host === "localhost" ||
+        host.startsWith("localhost:") ||
+        host.startsWith("127.0.0.1"))) ||
     // *.vercel.app is a shared multi-tenant domain, so trusting it outright
     // would let anyone deploy evil-xyz.vercel.app and forge a valid Origin.
     // Only honor it on our OWN preview deploys (VERCEL_ENV=preview); in
