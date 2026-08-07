@@ -22,6 +22,7 @@ import TripPlannerPanel from "./TripPlannerPanel";
 import AuthButton from "@/components/auth/AuthButton";
 import ProBadge from "@/components/ProBadge";
 import CompareFloatingButton from "@/components/CompareFloatingButton";
+import ActiveTripChip from "@/components/Map/ActiveTripChip";
 import RecentlyViewedStrip, {
   OPEN_RESORT_EVENT,
   type OpenResortDetail,
@@ -1279,6 +1280,10 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
             entirely while the user is searching or planning. */}
         {!searchOpen && !plannerOpen && (
           <>
+            {/* Trip-mode discoverability — active trip jumps out at the
+                user instead of hiding inside /trips. Auth-gated so anon
+                users never pay the query. */}
+            {isAuthed && <ActiveTripChip />}
             <RecentlyViewedStrip />
             <OffSeasonBanner />
           </>

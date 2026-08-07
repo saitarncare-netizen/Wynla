@@ -47,6 +47,14 @@ export default async function TripsPage() {
 
   const trips = data ?? [];
 
+  // Resolve resort names for the cards — "3-day trip · Basecamp" says
+  // nothing; "Killington → Stowe" is the trip. One deduped lookup.
+  const allSlugs = Array.from(new Set(trips.flatMap((t) => t.resort_slugs)));
+  const { data: resortNames } = allSlugs.length
+    ? await supabase.from("resorts").select("slug, name").in("slug", allSlugs)
+    : { data: [] as { slug: string; name: string }[] };
+  const nameBySlug = new Map((resortNames ?? []).map((r) => [r.slug, r.name]));
+
   return (
     <main className="min-h-dvh bg-wn-offwhite px-4 py-10 sm:px-6">
       <div className="mx-auto max-w-3xl">
@@ -92,6 +100,16 @@ export default async function TripsPage() {
               const progress = trip.total_days
                 ? Math.round((totalCompleted / trip.total_days) * 100)
                 : 0;
+              const finished = isActive && totalCompleted >= trip.total_days;
+              // Unique stops in order, e.g. "Killington → Stowe → Sugarbush".
+              const stopNames: string[] = [];
+              for (const s of trip.resort_slugs) {
+                const n = nameBySlug.get(s) ?? s;
+                if (stopNames[stopNames.length - 1] !== n) stopNames.push(n);
+              }
+              const routeLabel =
+                stopNames.slice(0, 3).join(" → ") +
+                (stopNames.length > 3 ? ` +${stopNames.length - 3}` : "");
               return (
                 <li
                   key={trip.id}
@@ -104,17 +122,26 @@ export default async function TripsPage() {
                       </h3>
                       <span
                         className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${
-                          isActive
-                            ? "bg-wn-navy/10 text-wn-navy"
-                            : "bg-wn-charcoal/10 text-wn-charcoal/70"
+                          finished
+                            ? "bg-emerald-100 text-emerald-800"
+                            : isActive
+                              ? "bg-wn-navy/10 text-wn-navy"
+                              : "bg-wn-charcoal/10 text-wn-charcoal/70"
                         }`}
                       >
-                        {isActive
-                          ? `Day ${trip.current_day ?? 1} of ${trip.total_days}`
-                          : "Not started"}
+                        {finished
+                          ? "🎉 Complete"
+                          : isActive
+                            ? `Day ${trip.current_day ?? 1} of ${trip.total_days}`
+                            : "Not started"}
                       </span>
                     </div>
-                    <p className="mt-1 text-xs text-wn-charcoal/65">
+                    {stopNames.length > 0 && (
+                      <p className="mt-1 truncate text-[13px] font-semibold text-wn-charcoal/80">
+                        {routeLabel}
+                      </p>
+                    )}
+                    <p className="mt-0.5 text-xs text-wn-charcoal/65">
                       {trip.lodging_mode === "basecamp" ? "🏠 Basecamp" : "🛣️ Road trip"}
                       {" · "}
                       {trip.total_days} days
