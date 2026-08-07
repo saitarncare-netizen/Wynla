@@ -44,26 +44,47 @@ export default function DayPlan({ tripId, day, initialPlans, nearby, completed }
   const plansRef = useRef(plans);
   plansRef.current = plans;
 
-  async function persist(next: DayPlans, rollback: DayPlans) {
+  // Read-merge-write. Each day card holds its own snapshot of the whole
+  // day_plans object, so writing our local copy wholesale would CLOBBER a
+  // sibling day's just-saved edits (edit day 1, then day 2 → day 2's
+  // write resurrects day 1's old note). Re-fetch the current column and
+  // merge only THIS day's plan over it before writing. .select("id")
+  // exposes the RLS 0-row case (non-owner) as an error instead of a
+  // silent fake success.
+  async function persist(update: DayPlanT, rollback: DayPlans) {
     setSaveState("saving");
     const sb = createSupabaseBrowserClient();
-    const { error } = await sb
+    const { data: freshRow, error: readErr } = await sb
       .from("trips")
-      .update({ day_plans: next })
-      .eq("id", tripId);
-    if (error) {
+      .select("day_plans")
+      .eq("id", tripId)
+      .maybeSingle<{ day_plans: unknown }>();
+    if (readErr || !freshRow) {
+      setPlans(rollback);
+      setSaveState("error");
+      return;
+    }
+    const merged = withDayPlan(parseDayPlans(freshRow.day_plans), day, update);
+    const { data: updated, error } = await sb
+      .from("trips")
+      .update({ day_plans: merged })
+      .eq("id", tripId)
+      .select("id");
+    if (error || !updated || updated.length === 0) {
       setPlans(rollback);
       setSaveState("error");
     } else {
+      setPlans(merged);
       setSaveState("idle");
     }
   }
 
   function commit(update: DayPlanT) {
     const prev = plansRef.current;
-    const next = withDayPlan(prev, day, update);
-    setPlans(next);
-    void persist(next, prev);
+    // Optimistic local view of this day; persist() recomputes against the
+    // fresh server copy so sibling days are never clobbered.
+    setPlans(withDayPlan(prev, day, update));
+    void persist(update, prev);
   }
 
   // Debounced note save.

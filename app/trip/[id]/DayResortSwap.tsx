@@ -84,15 +84,18 @@ export default function DayResortSwap({ tripId, day, expandedSlugs, currentName 
     const nextSlugs = [...expandedSlugs];
     nextSlugs[day - 1] = slug;
     const sb = createSupabaseBrowserClient();
-    const { error: err } = await sb
+    // .select("id") turns the RLS 0-row case (not the owner) into a
+    // visible error instead of a silent fake success.
+    const { data: updated, error: err } = await sb
       .from("trips")
       .update({
         resort_slugs: nextSlugs,
         days_per_resort: nextSlugs.map(() => 1),
       })
-      .eq("id", tripId);
+      .eq("id", tripId)
+      .select("id");
     setBusy(false);
-    if (err) {
+    if (err || !updated || updated.length === 0) {
       setError("Couldn't change the resort — try again.");
       return;
     }
