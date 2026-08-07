@@ -15,19 +15,31 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+import { parseDayPlans, withDayPlan } from "@/lib/dayPlans";
 
 type SlimResort = { slug: string; name: string; state: string };
+
+// Same expansion the trip page uses — one slug per day.
+function expandSlugs(slugs: string[], daysPer: number[] | null): string[] {
+  if (daysPer && daysPer.length === slugs.length) {
+    const out: string[] = [];
+    for (let i = 0; i < slugs.length; i++) {
+      const reps = Math.max(1, daysPer[i] ?? 1);
+      for (let j = 0; j < reps; j++) out.push(slugs[i]);
+    }
+    return out;
+  }
+  return slugs;
+}
 
 type Props = {
   tripId: string;
   /** 1-based expanded day number this control edits. */
   day: number;
-  /** The full expanded slug list (one entry per day). */
-  expandedSlugs: string[];
   currentName: string;
 };
 
-export default function DayResortSwap({ tripId, day, expandedSlugs, currentName }: Props) {
+export default function DayResortSwap({ tripId, day, currentName }: Props) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [options, setOptions] = useState<SlimResort[] | null>(null);
@@ -80,18 +92,57 @@ export default function DayResortSwap({ tripId, day, expandedSlugs, currentName 
     if (busy) return;
     setBusy(true);
     setError(null);
-    // Normalize to one-slug-per-day, then swap this day.
-    const nextSlugs = [...expandedSlugs];
-    nextSlugs[day - 1] = slug;
     const sb = createSupabaseBrowserClient();
-    // .select("id") turns the RLS 0-row case (not the owner) into a
-    // visible error instead of a silent fake success.
+    // Read-merge-write (same class of bug as day_plans): the server-
+    // rendered expandedSlugs prop goes stale the moment ANOTHER day is
+    // swapped — writing from the prop would silently revert that swap.
+    // Re-fetch the trip fresh, expand, then swap this day. select("*")
+    // also brings day_plans along IF that column exists yet.
+    const { data: fresh, error: readErr } = await sb
+      .from("trips")
+      .select("*")
+      .eq("id", tripId)
+      .maybeSingle<{
+        resort_slugs: string[];
+        days_per_resort: number[] | null;
+        day_plans?: unknown;
+      }>();
+    if (readErr || !fresh) {
+      setBusy(false);
+      setError("Couldn't change the resort — try again.");
+      return;
+    }
+    const freshExpanded = expandSlugs(fresh.resort_slugs, fresh.days_per_resort);
+    if (day < 1 || day > freshExpanded.length) {
+      // Trip shape changed under us (another tab shortened it).
+      setBusy(false);
+      setError("This trip changed — reload the page and try again.");
+      return;
+    }
+    const nextSlugs = [...freshExpanded];
+    const oldSlug = nextSlugs[day - 1];
+    nextSlugs[day - 1] = slug;
+
+    // Attached places belong to the OLD mountain's town — keep the note
+    // but drop the places for this day so the plan doesn't silently mix
+    // two towns. Only touch day_plans when the column already exists.
+    const payload: Record<string, unknown> = {
+      resort_slugs: nextSlugs,
+      days_per_resort: nextSlugs.map(() => 1),
+    };
+    if (oldSlug !== slug && "day_plans" in fresh && fresh.day_plans !== undefined) {
+      const plans = parseDayPlans(fresh.day_plans);
+      const cur = plans[String(day)];
+      if (cur?.places?.length) {
+        payload.day_plans = withDayPlan(plans, day, { note: cur.note, places: [] });
+      }
+    }
+
+    // .select("id") turns the RLS 0-row case (e.g. session expired in
+    // another tab) into a visible error instead of a silent fake success.
     const { data: updated, error: err } = await sb
       .from("trips")
-      .update({
-        resort_slugs: nextSlugs,
-        days_per_resort: nextSlugs.map(() => 1),
-      })
+      .update(payload)
       .eq("id", tripId)
       .select("id");
     setBusy(false);

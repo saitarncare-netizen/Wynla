@@ -35,7 +35,9 @@ export default function ActiveTripChip() {
         .eq("user_id", u.user.id)
         .not("started_at", "is", null)
         .order("started_at", { ascending: false })
-        .limit(5);
+        // 20, not 5 — a user whose 5 newest started trips are all finished
+        // would otherwise never see their older still-active trip.
+        .limit(20);
       if (cancelled || !data) return;
       const active = data.find(
         (t) => (t.completed_days?.length ?? 0) < t.total_days,

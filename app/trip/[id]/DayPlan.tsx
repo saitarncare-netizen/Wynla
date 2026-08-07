@@ -43,6 +43,13 @@ export default function DayPlan({ tripId, day, initialPlans, nearby, completed }
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const plansRef = useRef(plans);
   plansRef.current = plans;
+  // Live textarea value + whether a debounced save is still pending.
+  // Place edits and the unmount flush read THESE, never the plans state —
+  // after a failed save the plans state rolls back but the textarea keeps
+  // the user's text, and that visible text is the truth to persist.
+  const noteRef = useRef(note);
+  noteRef.current = note;
+  const notePendingRef = useRef(false);
 
   // Read-merge-write. Each day card holds its own snapshot of the whole
   // day_plans object, so writing our local copy wholesale would CLOBBER a
@@ -87,18 +94,33 @@ export default function DayPlan({ tripId, day, initialPlans, nearby, completed }
     void persist(update, prev);
   }
 
-  // Debounced note save.
+  // Debounced note save. "Saving…" shows from the first keystroke so the
+  // user always has an unsaved-work cue during the debounce window.
   function onNoteChange(v: string) {
     setNote(v);
+    notePendingRef.current = true;
+    setSaveState("saving");
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
+      notePendingRef.current = false;
       commit({ note: v, places: plansRef.current[String(day)]?.places });
     }, 800);
   }
+  // Unmount: FLUSH a pending note instead of discarding it — "type a note,
+  // tap ← All trips within 800ms" must not silently lose the text. The
+  // fire-and-forget persist is safe; React ignores setState after unmount.
   useEffect(
     () => () => {
       if (debounceRef.current) clearTimeout(debounceRef.current);
+      if (notePendingRef.current) {
+        notePendingRef.current = false;
+        commit({
+          note: noteRef.current,
+          places: plansRef.current[String(day)]?.places,
+        });
+      }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
 
@@ -106,15 +128,17 @@ export default function DayPlan({ tripId, day, initialPlans, nearby, completed }
   const attachedIds = new Set(places.map((p) => `${p.kind}:${p.id}`));
   const addable = nearby.filter((n) => !attachedIds.has(`${n.kind}:${n.id}`));
 
+  // Place edits carry the LIVE textarea note (noteRef), not the plans
+  // state — otherwise a place edit right after a failed note save would
+  // persist the rolled-back old note while the screen shows the new one.
   function addPlace(n: NearbyOption) {
-    commit({
-      note: plansRef.current[String(day)]?.note,
-      places: [...places, { ...n }],
-    });
+    notePendingRef.current = false;
+    commit({ note: noteRef.current, places: [...places, { ...n }] });
   }
   function removePlace(p: DayPlace) {
+    notePendingRef.current = false;
     commit({
-      note: plansRef.current[String(day)]?.note,
+      note: noteRef.current,
       places: places.filter((x) => !(x.kind === p.kind && x.id === p.id)),
     });
   }

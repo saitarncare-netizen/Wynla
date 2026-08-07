@@ -118,22 +118,35 @@ export default async function TripPage({
   const nearbyByResortId = new Map<number, NearbyOption[]>();
   if (dayPlansEnabled && (resortData ?? []).length > 0) {
     const resortIds = (resortData ?? []).map((r) => r.id);
-    const [restRes, actRes] = await Promise.all([
-      supabase
-        .from("nearby_restaurants")
-        .select("id, resort_id, name, category, latitude, longitude, website_url, is_recommended, distance_km")
-        .in("resort_id", resortIds)
-        .order("is_recommended", { ascending: false })
-        .order("distance_km", { ascending: true })
-        .limit(12 * resortIds.length),
-      supabase
-        .from("nearby_activities")
-        .select("id, resort_id, name, category, latitude, longitude, website_url, is_recommended, distance_km")
-        .in("resort_id", resortIds)
-        .order("is_recommended", { ascending: false })
-        .order("distance_km", { ascending: true })
-        .limit(10 * resortIds.length),
-    ]);
+    // Per-resort queries (not one global .in + shared limit): a dense
+    // resort town's many recommended sub-1km rows would otherwise eat the
+    // whole row budget and leave a sparser co-trip resort's add-list
+    // empty. Trips have ≤ a handful of unique resorts, so the extra
+    // round-trips are trivial.
+    const NEARBY_COLS =
+      "id, resort_id, name, category, latitude, longitude, website_url, is_recommended, distance_km";
+    const perResort = await Promise.all(
+      resortIds.map((rid) =>
+        Promise.all([
+          supabase
+            .from("nearby_restaurants")
+            .select(NEARBY_COLS)
+            .eq("resort_id", rid)
+            .order("is_recommended", { ascending: false })
+            .order("distance_km", { ascending: true })
+            .limit(10),
+          supabase
+            .from("nearby_activities")
+            .select(NEARBY_COLS)
+            .eq("resort_id", rid)
+            .order("is_recommended", { ascending: false })
+            .order("distance_km", { ascending: true })
+            .limit(8),
+        ]),
+      ),
+    );
+    const restRes = { data: perResort.flatMap(([r]) => r.data ?? []) };
+    const actRes = { data: perResort.flatMap(([, a]) => a.data ?? []) };
     type NearbyRowDb = {
       id: number;
       resort_id: number;
@@ -411,7 +424,6 @@ export default async function TripPage({
                       <DayResortSwap
                         tripId={trip.id}
                         day={dayNum}
-                        expandedSlugs={expandedSlugs}
                         currentName={r?.name ?? slug}
                       />
                     )}
