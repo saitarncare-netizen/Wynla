@@ -17,6 +17,10 @@ export const metadata: Metadata = {
     title: "Wynla Guides · Pass choices, regions, trip planning",
     description:
       "Long-form guides for ski-trip planners — pass comparisons, regional advice, and first-trip walk-throughs.",
+    // Defining openGraph replaces the layout block wholesale — without an
+    // explicit image this page would share imageless (layout twitter no
+    // longer carries a fallback image).
+    images: [{ url: "/og-home.png", width: 1200, height: 630, alt: "Wynla — US ski resort map" }],
   },
 };
 

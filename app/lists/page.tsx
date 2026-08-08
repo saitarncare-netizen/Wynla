@@ -17,6 +17,10 @@ export const metadata: Metadata = {
     title: "Curated Ski Resort Lists · Wynla",
     description:
       "Hand-picked resort lists for specific trips, skill levels, and passes.",
+    // Defining openGraph replaces the layout block wholesale — without an
+    // explicit image this page would share imageless (layout twitter no
+    // longer carries a fallback image).
+    images: [{ url: "/og-home.png", width: 1200, height: 630, alt: "Wynla — US ski resort map" }],
   },
 };
 

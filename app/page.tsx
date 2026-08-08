@@ -1,8 +1,15 @@
+import type { Metadata } from "next";
 import { supabase } from "@/lib/supabase";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import MapPage from "@/components/Map/MapPage";
 
 export const dynamic = "force-dynamic";
+
+// Homepage-only canonical. This used to live in the root layout, where it
+// cascaded to every route and marked the whole site as a duplicate of "/".
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 export default async function Home() {
   const [resortsRes, driveTimesRes, weatherRes, authRes] = await Promise.all([
@@ -33,10 +40,9 @@ export default async function Home() {
 
   if (resortsRes.error) {
     return (
-      <main className="flex min-h-dvh items-center justify-center p-8">
-        <p className="rounded-md border border-wn-charcoal/20 bg-white px-4 py-2 font-mono text-sm text-wn-charcoal">
-          db error: {resortsRes.error.message}
-        </p>
+      <main className="flex min-h-dvh flex-col items-center justify-center gap-2 p-8 text-center">
+        <p className="text-lg font-semibold text-wn-navy">Something went wrong loading the map.</p>
+        <p className="text-sm text-wn-charcoal/70">Please refresh in a moment.</p>
       </main>
     );
   }

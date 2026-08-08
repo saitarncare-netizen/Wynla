@@ -26,12 +26,18 @@ import {
   isResendConfigured,
 } from "@/lib/email/resendClient";
 import { founderWelcomeEmail } from "@/lib/email/templates/founderWelcome";
+import {
+  referralCode,
+  sanitizeRef,
+  REFERRAL_SOURCE_PREFIX,
+} from "@/lib/referral";
+import { checkRateLimit, clientIp, sameOriginOk } from "@/lib/rateLimit";
 
 export const runtime = "nodejs";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-type PostBody = { email?: string };
+type PostBody = { email?: string; ref?: string };
 
 export async function POST(req: NextRequest) {
   let body: PostBody = {};
@@ -39,6 +45,18 @@ export async function POST(req: NextRequest) {
     body = (await req.json()) as PostBody;
   } catch {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  }
+
+  // Abuse guards (infra-free — see lib/rateLimit.ts).
+  if (!sameOriginOk(req)) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+  const rl = checkRateLimit(`early:${clientIp(req)}`, { windowMs: 60_000, max: 6 });
+  if (!rl.ok) {
+    return NextResponse.json(
+      { error: "Too many signups — please wait a moment and try again." },
+      { status: 429, headers: { "Retry-After": String(rl.retryAfterSec) } },
+    );
   }
 
   const raw = (body.email ?? "").trim().toLowerCase();
@@ -62,10 +80,16 @@ export async function POST(req: NextRequest) {
     auth: { persistSession: false },
   });
 
+  // Referral attribution (schema-free — see lib/referral.ts). A valid
+  // ?ref code tags this signup as "founder:ref:<code>"; otherwise plain
+  // "founder". Either way it counts as a founder for the total counter.
+  const ref = sanitizeRef(body.ref);
+  const source = ref ? `${REFERRAL_SOURCE_PREFIX}${ref}` : "founder";
+
   // Insert; treat "duplicate email" as success.
   const { error: insertError } = await sb
     .from("pro_waitlist")
-    .insert({ email: raw, source: "founder" });
+    .insert({ email: raw, source });
 
   // Detect Postgres unique-violation (23505) — Supabase returns the SQL
   // state code as `code`. Anything else is a real failure.
@@ -82,11 +106,19 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  // Count current founder signups for the page counter.
+  // Count all founder signups (direct + referred) for the page counter.
   const { count } = await sb
     .from("pro_waitlist")
     .select("id", { count: "exact", head: true })
-    .eq("source", "founder");
+    .like("source", "founder%");
+
+  // This member's own referral code + how many they've brought in, so the
+  // success screen can show their share link and progress.
+  const myCode = referralCode(raw);
+  const { count: myReferrals } = await sb
+    .from("pro_waitlist")
+    .select("id", { count: "exact", head: true })
+    .eq("source", `${REFERRAL_SOURCE_PREFIX}${myCode}`);
 
   // Best-effort welcome email. Wrapped so any Resend issue doesn't
   // break the signup response.
@@ -100,6 +132,8 @@ export async function POST(req: NextRequest) {
     ok: true,
     alreadyOnList,
     count: count ?? null,
+    referralCode: myCode,
+    referralCount: myReferrals ?? 0,
   });
 }
 

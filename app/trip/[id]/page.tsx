@@ -12,6 +12,9 @@ import TripActions from "./TripActions";
 import TripNameEditor from "./TripNameEditor";
 import TripShareButton from "./TripShareButton";
 import TripCalendarExport from "@/components/TripCalendarExport";
+import DayPlan, { type NearbyOption } from "./DayPlan";
+import DayResortSwap from "./DayResortSwap";
+import { parseDayPlans } from "@/lib/dayPlans";
 
 export const dynamic = "force-dynamic";
 
@@ -30,6 +33,8 @@ type Trip = {
   current_day: number | null;
   completed_days: number[];
   created_at: string;
+  /** jsonb; undefined until the day-plans DDL has run (feature-detected). */
+  day_plans?: unknown;
 };
 
 type ResortRow = {
@@ -57,11 +62,11 @@ export default async function TripPage({
     redirect(`/login?next=/trip/${id}`);
   }
 
+  // select * (single row) so day_plans rides along IF the column exists —
+  // the itinerary-v2 UI feature-detects it and hides until the DDL runs.
   const { data: tripData, error: tripErr } = await supabase
     .from("trips")
-    .select(
-      "id, user_id, name, origin_lat, origin_lng, origin_label, resort_slugs, days_per_resort, lodging_mode, total_days, started_at, current_day, completed_days, created_at",
-    )
+    .select("*")
     .eq("id", id)
     .maybeSingle<Trip>();
 
@@ -103,6 +108,75 @@ export default async function TripPage({
     .in("slug", uniqueSlugs)
     .returns<ResortRow[]>();
   const bySlug = new Map((resortData ?? []).map((r) => [r.slug, r]));
+
+  // Itinerary v2 — day plans. Feature-enabled only once the day_plans
+  // column exists (select * returns it). Nearby options are fetched per
+  // unique resort (recommended-first, capped) and attached to each day
+  // card so the user can one-tap places onto their day.
+  const dayPlansEnabled = "day_plans" in trip && trip.day_plans !== undefined;
+  const dayPlans = dayPlansEnabled ? parseDayPlans(trip.day_plans) : {};
+  const nearbyByResortId = new Map<number, NearbyOption[]>();
+  if (dayPlansEnabled && (resortData ?? []).length > 0) {
+    const resortIds = (resortData ?? []).map((r) => r.id);
+    // Per-resort queries (not one global .in + shared limit): a dense
+    // resort town's many recommended sub-1km rows would otherwise eat the
+    // whole row budget and leave a sparser co-trip resort's add-list
+    // empty. Trips have ≤ a handful of unique resorts, so the extra
+    // round-trips are trivial.
+    const NEARBY_COLS =
+      "id, resort_id, name, category, latitude, longitude, website_url, is_recommended, distance_km";
+    const perResort = await Promise.all(
+      resortIds.map((rid) =>
+        Promise.all([
+          supabase
+            .from("nearby_restaurants")
+            .select(NEARBY_COLS)
+            .eq("resort_id", rid)
+            .order("is_recommended", { ascending: false })
+            .order("distance_km", { ascending: true })
+            .limit(10),
+          supabase
+            .from("nearby_activities")
+            .select(NEARBY_COLS)
+            .eq("resort_id", rid)
+            .order("is_recommended", { ascending: false })
+            .order("distance_km", { ascending: true })
+            .limit(8),
+        ]),
+      ),
+    );
+    const restRes = { data: perResort.flatMap(([r]) => r.data ?? []) };
+    const actRes = { data: perResort.flatMap(([, a]) => a.data ?? []) };
+    type NearbyRowDb = {
+      id: number;
+      resort_id: number;
+      name: string;
+      category: string | null;
+      latitude: number | string | null;
+      longitude: number | string | null;
+      website_url: string | null;
+      is_recommended: boolean | null;
+    };
+    const push = (rows: NearbyRowDb[] | null, kind: "restaurant" | "activity", cap: number) => {
+      for (const row of rows ?? []) {
+        const list = nearbyByResortId.get(row.resort_id) ?? [];
+        if (list.filter((x) => x.kind === kind).length >= cap) continue;
+        list.push({
+          id: row.id,
+          kind,
+          name: row.name,
+          category: row.category,
+          latitude: row.latitude == null ? null : Number(row.latitude),
+          longitude: row.longitude == null ? null : Number(row.longitude),
+          website_url: row.website_url,
+          is_recommended: !!row.is_recommended,
+        });
+        nearbyByResortId.set(row.resort_id, list);
+      }
+    };
+    push(restRes.data as NearbyRowDb[] | null, "restaurant", 10);
+    push(actRes.data as NearbyRowDb[] | null, "activity", 8);
+  }
 
   // Build legs from origin → r1 → r2 → … using Haversine estimates.
   // Exact times can be computed client-side later via Mapbox Matrix.
@@ -337,13 +411,22 @@ export default async function TripPage({
                         : "border-wn-charcoal/10"
                   }`}
                 >
-                  <div className="mb-1 text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
+                  <div className="mb-1 flex items-center justify-between text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
                     <span>
                       Day {dayNum}
                       {completed && <span className="ml-2 text-emerald-700">✓ done</span>}
                       {isCurrent && <span className="ml-2 text-wn-navy">today</span>}
                       {isFuture && <span className="ml-2 text-wn-charcoal/45">upcoming</span>}
                     </span>
+                    {/* "ปักหมุดทีหลัง" — swap this day's mountain from the
+                        trip page. Not offered once the day is done. */}
+                    {!completed && (
+                      <DayResortSwap
+                        tripId={trip.id}
+                        day={dayNum}
+                        currentName={r?.name ?? slug}
+                      />
+                    )}
                   </div>
                   <div className="flex items-center gap-2">
                     <span
@@ -384,6 +467,17 @@ export default async function TripPage({
                       {r.vertical_drop && r.total_trails ? " · " : ""}
                       {r.total_trails != null && `${r.total_trails} trails`}
                     </p>
+                  )}
+                  {/* Itinerary v2 — per-day note + attached places. Hidden
+                      until the day_plans DDL has run (feature-detected). */}
+                  {dayPlansEnabled && (
+                    <DayPlan
+                      tripId={trip.id}
+                      day={dayNum}
+                      initialPlans={dayPlans}
+                      nearby={r ? (nearbyByResortId.get(r.id) ?? []) : []}
+                      completed={completed}
+                    />
                   )}
                 </div>
               </li>

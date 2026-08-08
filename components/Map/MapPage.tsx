@@ -22,6 +22,7 @@ import TripPlannerPanel from "./TripPlannerPanel";
 import AuthButton from "@/components/auth/AuthButton";
 import ProBadge from "@/components/ProBadge";
 import CompareFloatingButton from "@/components/CompareFloatingButton";
+import ActiveTripChip from "@/components/Map/ActiveTripChip";
 import RecentlyViewedStrip, {
   OPEN_RESORT_EVENT,
   type OpenResortDetail,
@@ -1197,11 +1198,16 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
                 <button
                   type="button"
                   onClick={() => setFiltersOpen(true)}
-                  className="relative inline-flex h-11 items-center justify-center gap-1.5 rounded-md border border-wn-charcoal/20 bg-white px-2 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 md:hidden"
-                  title="Filters"
+                  className="relative inline-flex h-11 items-center justify-center gap-1.5 rounded-md border border-wn-charcoal/20 bg-white px-2 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 md:px-3"
+                  title="All filters"
                   aria-label={`Filters${activeFilterCount > 0 ? ` (${activeFilterCount} active)` : ""}`}
                 >
                   <span aria-hidden="true" className="text-base leading-none">☰</span>
+                  {/* Label on desktop — the inline FilterBar covers the
+                      common filters, but the full drawer (terrain, amenities,
+                      lifts, surface, snowmaking, adaptive…) was previously
+                      mobile-only. Desktop users now get the same escape hatch. */}
+                  <span className="hidden md:inline">All filters</span>
                   {activeFilterCount > 0 && (
                     <span className="inline-flex h-4 min-w-[16px] items-center justify-center rounded-full bg-wn-navy px-1 text-[10px] font-bold text-white">
                       {activeFilterCount}
@@ -1274,6 +1280,10 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
             entirely while the user is searching or planning. */}
         {!searchOpen && !plannerOpen && (
           <>
+            {/* Trip-mode discoverability — active trip jumps out at the
+                user instead of hiding inside /trips. Auth-gated so anon
+                users never pay the query. */}
+            {isAuthed && <ActiveTripChip />}
             <RecentlyViewedStrip />
             <OffSeasonBanner />
           </>
@@ -1637,6 +1647,14 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
           above for the full background-tab survival story. */}
       {splashMounted && (
         <div
+          id="wynla-splash"
+          // SSR always renders the splash visible (the server can't read
+          // localStorage), while a returning visitor's client initializes
+          // splashVisible=false — an intentional divergence, so silence
+          // React's hydration-mismatch error for this element's attributes.
+          // The inline script below (not React) is what actually hides it
+          // pre-paint for returning visitors.
+          suppressHydrationWarning
           aria-hidden={!splashVisible}
           className={[
             "absolute inset-0 z-[60] flex flex-col items-center justify-center bg-wn-navy",
@@ -1665,6 +1683,23 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
             }
           `}</style>
         </div>
+      )}
+      {/* FOUC killer for the splash: this inline script executes during
+          HTML parse — BEFORE first paint and long before hydration — so a
+          returning visitor (localStorage TTL stamp fresh) never sees even
+          one frame of the navy overlay. React reaches the same conclusion
+          at hydration (lazy initializer) and unmounts the node ~600ms in;
+          until then the imperative display:none keeps it invisible. Keep
+          the storage key + TTL in sync with the constants above. */}
+      {splashMounted && (
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              `try{var t=+localStorage.getItem(${JSON.stringify(SPLASH_STORAGE_KEY)});` +
+              `if(t&&Date.now()-t<${SPLASH_TTL_MS}){` +
+              `var e=document.getElementById("wynla-splash");if(e)e.style.display="none"}}catch(_){}`,
+          }}
+        />
       )}
 
 

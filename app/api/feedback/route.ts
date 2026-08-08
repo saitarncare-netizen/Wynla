@@ -14,6 +14,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { checkRateLimit, clientIp, sameOriginOk } from "@/lib/rateLimit";
 
 export const runtime = "nodejs";
 
@@ -29,6 +30,18 @@ export async function POST(req: NextRequest) {
     payload = (await req.json()) as PostBody;
   } catch {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  }
+
+  // Abuse guards (infra-free — see lib/rateLimit.ts).
+  if (!sameOriginOk(req)) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+  const rl = checkRateLimit(`feedback:${clientIp(req)}`, { windowMs: 60_000, max: 4 });
+  if (!rl.ok) {
+    return NextResponse.json(
+      { error: "Too many messages — please wait a moment." },
+      { status: 429, headers: { "Retry-After": String(rl.retryAfterSec) } },
+    );
   }
 
   // body — required, trimmed, 5-5000 chars.

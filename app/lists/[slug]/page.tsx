@@ -49,9 +49,11 @@ export async function generateMetadata({
   return {
     title: list.title,
     description: list.intro,
+    alternates: { canonical: `/lists/${slug}` },
     openGraph: {
       title: `${list.title} · Wynla`,
       description: list.intro,
+      url: `/lists/${slug}`,
     },
   };
 }

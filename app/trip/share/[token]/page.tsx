@@ -4,6 +4,7 @@
 
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { createClient } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase";
 import { passColor, primaryPass } from "@/lib/passColors";
 import { formatDriveTime } from "@/lib/origins";
@@ -34,22 +35,31 @@ type ResortRow = {
 };
 
 async function getData(token: string) {
-  const { data: share } = await supabase
+  // Resolve the token then read the user-owned trips table with a SERVICE-ROLE
+  // client so the anon client never touches trips directly (no id-enumeration
+  // outside the token flow, regardless of RLS). Falls back to the anon client
+  // if the service key isn't configured, keeping the feature working.
+  const svcKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const db =
+    svcKey && url
+      ? createClient(url, svcKey, { auth: { persistSession: false } })
+      : supabase;
+
+  const { data: share } = await db
     .from("trip_shares")
     .select("trip_id, view_count")
     .eq("share_token", token)
     .maybeSingle();
   if (!share) return null;
-  // Bump view count (best-effort; ignore errors). Anyone-can-update
-  // would normally violate RLS, but view_count is non-sensitive.
-  // We fire-and-forget; if RLS blocks it, the count just stops.
-  void supabase
+  // Bump view count (best-effort; fire-and-forget).
+  void db
     .from("trip_shares")
     .update({ view_count: ((share as { view_count: number }).view_count ?? 0) + 1 })
     .eq("share_token", token);
 
   const tripId = (share as { trip_id: string }).trip_id;
-  const { data: trip } = await supabase
+  const { data: trip } = await db
     .from("trips")
     .select(
       "id, name, origin_lat, origin_lng, origin_label, resort_slugs, days_per_resort, total_days, created_at",

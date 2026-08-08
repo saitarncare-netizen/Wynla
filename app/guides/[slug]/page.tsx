@@ -23,11 +23,13 @@ export async function generateMetadata({
   return {
     title: guide.title,
     description: guide.description,
+    alternates: { canonical: `/guides/${slug}` },
     openGraph: {
       title: `${guide.title} · Wynla`,
       description: guide.description,
       type: "article",
       publishedTime: guide.publishedAt,
+      url: `/guides/${slug}`,
     },
     twitter: {
       card: "summary_large_image",

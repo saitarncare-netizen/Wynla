@@ -27,7 +27,8 @@ export function useFocusTrap(
 
     const items = () =>
       Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE)).filter(
-        (el) => el.offsetParent !== null || el === document.activeElement,
+        // getClientRects (not offsetParent) so position:fixed focusables aren't dropped.
+        (el) => el.getClientRects().length > 0 || el === document.activeElement,
       );
 
     // Move focus inside on open (next frame so the content is mounted/visible).
@@ -50,7 +51,7 @@ export function useFocusTrap(
       if (e.shiftKey && (activeEl === first || !container!.contains(activeEl))) {
         e.preventDefault();
         last.focus();
-      } else if (!e.shiftKey && activeEl === last) {
+      } else if (!e.shiftKey && (activeEl === last || !container!.contains(activeEl))) {
         e.preventDefault();
         first.focus();
       }

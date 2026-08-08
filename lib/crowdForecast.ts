@@ -8,6 +8,8 @@
 // of plain-language reasons — it's a planning nudge ("go midweek / try a
 // quieter mountain"), not a promise.
 
+import { sizeTier } from "./sizeTier";
+
 export type CrowdLevel = "quiet" | "moderate" | "busy" | "packed";
 
 export type CrowdForecast = {
@@ -21,7 +23,7 @@ type CrowdInput = {
   latitude: number | null;
   longitude: number | null;
   tier?: string | null; // "featured" resorts draw more
-  size_tier?: string | null; // "large" | "medium" | "small" (lib/sizeTier)
+  vertical_drop?: number | null; // size derived via sizeTier()
   snow_new_24h_in?: number | string | null;
   snow_new_48h_in?: number | string | null;
 };
@@ -94,8 +96,9 @@ export function crowdForecast(r: CrowdInput, date: Date = new Date()): CrowdFore
   if (r.tier === "featured") {
     score += 18;
   }
-  if (r.size_tier === "large") score += 14;
-  else if (r.size_tier === "medium") score += 5;
+  const size = sizeTier(r.vertical_drop ?? null);
+  if (size === "large") score += 14;
+  else if (size === "medium") score += 5;
 
   // Day-trip pressure from the nearest big city.
   if (r.latitude != null && r.longitude != null) {
