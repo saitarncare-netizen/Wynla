@@ -22,7 +22,9 @@ import { parseGoParams } from "@/lib/saturday/url";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const GOLD = "#D4A84B";
+// OG images cannot read CSS variables: literal of --color-wn-gold-halo
+// (app/globals.css, handoff-docs/DESIGN_GUIDE.md section 2).
+const GOLD = "#CEA846";
 
 // A geo card is rendered only for points inside the contiguous US: the
 // launch footprint is East and Midwest, and an arbitrary ?lat=&lng= would

@@ -16,6 +16,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
+import Card from "@/components/ui/Card";
+import Notice from "@/components/ui/Notice";
+import PageHeader from "@/components/ui/PageHeader";
 import { getStateName } from "@/lib/usStates";
 import {
   commonsSearchUrl,
@@ -145,38 +148,35 @@ export default async function CreditsPage() {
   const cardCount = terrainCardCount();
 
   return (
-    <main className="min-h-dvh bg-wn-offwhite px-4 py-10 sm:px-6 sm:py-16">
-      <div className="mx-auto max-w-3xl">
-        <Link href="/" className="inline-flex min-h-11 items-center text-xs font-semibold text-wn-charcoal/60 hover:text-wn-navy">
-          ← Map
-        </Link>
-
-        <header className="mt-4 mb-8 sm:mt-6 sm:mb-10">
-          <span className="inline-flex items-center rounded bg-wn-navy/10 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-wn-navy">
-            Credits
-          </span>
-          <h1 className="mt-3 text-3xl font-extrabold text-wn-navy sm:text-4xl">Photo credits</h1>
-          <p className="mt-4 text-sm text-wn-charcoal/75 sm:text-base">
+    <main className="min-h-dvh bg-wn-offwhite pb-10 sm:pb-16">
+      <PageHeader
+        width="max-w-3xl"
+        eyebrow="Credits"
+        title="Photo credits"
+        description={
+          <>
             Every resort photo on Wynla is a Creative Commons or public-domain photograph from Wikimedia Commons, re-hosted on our
             own storage, resized and possibly cropped. The photographer, licence and source file are listed below for each one
             ({credits.length} photo{credits.length === 1 ? "" : "s"} credited). Resorts without a vetted photo show a terrain render
             instead; see the last section.
-          </p>
-        </header>
+          </>
+        }
+      />
 
+      <div className="mx-auto mt-8 max-w-3xl px-4 sm:px-6">
         {error && (
-          <p className="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
+          <Notice tone="warning" className="mb-6">
             The credit list could not be loaded right now ({error}). Each resort page still carries its own credit line.
-          </p>
+          </Notice>
         )}
 
         {states.map((state) => (
-          <section key={state} className="mb-6 rounded-xl border border-wn-charcoal/10 bg-white p-5 shadow-sm sm:p-6">
+          <Card key={state} padding="lg" className="mb-6">
             <h2 className="mb-3 text-base font-bold text-wn-navy sm:text-lg">
               {getStateName(state) ?? state}
-              <span className="ml-2 text-xs font-semibold text-wn-charcoal/50">{byState.get(state)?.length}</span>
+              <span className="ml-2 text-xs font-semibold text-wn-muted">{byState.get(state)?.length}</span>
             </h2>
-            <ul className="divide-y divide-wn-charcoal/10">
+            <ul className="divide-y divide-wn-line">
               {(byState.get(state) ?? []).map((c) => (
                 <li key={c.slug} className="py-3 first:pt-0 last:pb-0 text-sm text-wn-charcoal/80">
                   <Link
@@ -204,15 +204,15 @@ export default async function CreditsPage() {
                       {c.sourceLabel}
                     </a>
                     <span aria-hidden="true">·</span>
-                    <span className="text-wn-charcoal/70">resized, may be cropped</span>
+                    <span className="text-wn-muted">resized, may be cropped</span>
                   </p>
                 </li>
               ))}
             </ul>
-          </section>
+          </Card>
         ))}
 
-        <section className="mb-8 rounded-xl border border-wn-charcoal/10 bg-white p-5 shadow-sm sm:p-6">
+        <Card padding="lg" className="mb-8">
           <h2 className="mb-3 text-base font-bold text-wn-navy sm:text-lg">Terrain renders</h2>
           <div className="space-y-2 text-sm text-wn-charcoal/80 sm:text-base">
             <p>
@@ -230,11 +230,11 @@ export default async function CreditsPage() {
               open dataset (Mapzen terrarium encoding). {cardCount} renders are on file. Each one is labelled as a terrain render
               on the page that shows it; none is a photograph.
             </p>
-            <p className="text-xs text-wn-charcoal/60">Elevation data courtesy of the U.S. Geological Survey and NASA JPL, public domain.</p>
+            <p className="text-xs text-wn-muted">Elevation data courtesy of the U.S. Geological Survey and NASA JPL, public domain.</p>
           </div>
-        </section>
+        </Card>
 
-        <section className="mb-8 rounded-xl border border-wn-charcoal/10 bg-white p-5 shadow-sm sm:p-6">
+        <Card padding="lg" className="mb-8">
           <h2 className="mb-3 text-base font-bold text-wn-navy sm:text-lg">Take-downs and corrections</h2>
           <p className="text-sm text-wn-charcoal/80 sm:text-base">
             If you are the photographer and the credit is wrong, or you want a photo removed, email{" "}
@@ -243,9 +243,9 @@ export default async function CreditsPage() {
             </a>{" "}
             with the resort name. We fix or remove it within one business day.
           </p>
-        </section>
+        </Card>
 
-        <p className="text-xs text-wn-charcoal/55">
+        <p className="text-xs text-wn-muted">
           See also{" "}
           <Link href="/data-sources" className="font-semibold text-wn-navy underline hover:no-underline">
             data sources

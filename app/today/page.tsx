@@ -20,6 +20,12 @@ import { localDate } from "@/lib/weather/time";
 import { loadNextTrip, loadTodayRows, type NextTrip, type TodayRow } from "./data";
 import { BlackoutNote, LocalDate, RowThumb, UpdatedAgo } from "./ClientBits";
 import VerdictPill from "./VerdictPill";
+import Icon from "@/components/icons/Icon";
+import Button from "@/components/ui/Button";
+import Card from "@/components/ui/Card";
+import EmptyState from "@/components/ui/EmptyState";
+import Notice from "@/components/ui/Notice";
+import PageHeader from "@/components/ui/PageHeader";
 
 export const dynamic = "force-dynamic";
 
@@ -65,41 +71,36 @@ export default async function TodayPage() {
   });
 
   return (
-    <main className="min-h-dvh bg-wn-offwhite px-4 pb-10 pt-6 sm:px-6 sm:pt-10">
-      <div className="mx-auto max-w-2xl">
-        <Link
-          href="/"
-          className="mb-4 inline-flex min-h-11 items-center text-xs font-semibold text-wn-charcoal/60 hover:text-wn-navy"
-        >
-          ← Map
-        </Link>
+    <main className="min-h-dvh bg-wn-offwhite pb-10">
+      <PageHeader
+        width="max-w-2xl"
+        eyebrow={<LocalDate fallback={`${serverDate} · UTC`} />}
+        title={displayName ? `${displayName}, your mountains today` : "My mountains today"}
+        description={
+          rows.length === 0
+            ? "Save a mountain and it shows up here every morning."
+            : allDormant
+              ? "Nothing is running yet. Verdicts start the day the lifts spin."
+              : "One call per mountain, with the reason and where each number came from."
+        }
+      />
 
-        <header className="mb-5">
-          <p className="text-[11px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
-            <LocalDate fallback={`${serverDate} · UTC`} />
-          </p>
-          <h1 className="mt-1 text-2xl font-extrabold tracking-tight text-wn-navy sm:text-3xl">
-            {displayName ? `${displayName}, your mountains today` : "My mountains today"}
-          </h1>
-          <p className="mt-1 text-sm text-wn-charcoal/70">
-            {rows.length === 0
-              ? "Save a mountain and it shows up here every morning."
-              : allDormant
-                ? "Nothing is running yet. Verdicts start the day the lifts spin."
-                : "One call per mountain, with the reason and where each number came from."}
-          </p>
-        </header>
-
+      <div className="mx-auto mt-5 max-w-2xl px-4 sm:px-6">
         {today.error && (
-          <p className="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-2 text-sm text-red-800">
+          <Notice tone="danger" className="mb-4">
             Failed to load favorites: {today.error}
-          </p>
+          </Notice>
         )}
 
         {powder.length > 0 && <PowderBanner rows={powder} />}
 
         {rows.length === 0 && !today.error ? (
-          <EmptyState />
+          <EmptyState
+            icon="mountain"
+            title="Save a mountain"
+            body="Tap the heart on any resort. Every morning it shows up here with a Go, Wait or Skip and the reason."
+            action={<Button href="/">Open the map</Button>}
+          />
         ) : (
           <ul className="flex flex-col gap-2.5">
             {rows.map((row) => (
@@ -109,7 +110,7 @@ export default async function TodayPage() {
         )}
 
         {allDormant && (
-          <p className="mt-3 text-xs text-wn-charcoal/60">
+          <p className="mt-3 text-xs text-wn-muted">
             Each row shows the opening date we have. Once a mountain reports open, its row switches to Go, Wait or Skip
             with the reason.
           </p>
@@ -136,10 +137,10 @@ function PowderBanner({ rows }: { rows: TodayRow[] }) {
   return (
     <div
       role="status"
-      className="mb-4 rounded-xl bg-wn-navy px-4 py-3 text-white shadow-sm ring-1 ring-wn-sky/40"
+      className="on-dark mb-4 rounded-wn-md bg-wn-navy px-4 py-3 text-white shadow-wn-sm ring-1 ring-wn-sky/40"
     >
-      <p className="text-sm font-extrabold">
-        <span aria-hidden="true">❄️ </span>
+      <p className="flex items-center gap-1.5 text-sm font-extrabold">
+        <Icon name="snowflake" className="h-4 w-4 shrink-0 text-wn-sky" />
         Powder day
       </p>
       <p className="mt-0.5 text-xs text-white/85">
@@ -157,7 +158,7 @@ function TodayRowCard({ row }: { row: TodayRow }) {
     <li>
       <Link
         href={`/resort/${resort.slug}`}
-        className="flex gap-3 rounded-xl border border-wn-charcoal/10 bg-white p-3 shadow-sm transition hover:border-wn-navy/30 active:bg-wn-offwhite"
+        className="flex gap-3 rounded-wn-md border border-wn-line bg-white p-3 shadow-wn-sm transition hover:border-wn-navy/30 active:bg-wn-offwhite"
       >
         <RowThumb
           src={row.hero.thumb}
@@ -169,26 +170,26 @@ function TodayRowCard({ row }: { row: TodayRow }) {
           <div className="flex items-start justify-between gap-2">
             <div className="min-w-0">
               <h2 className="truncate text-sm font-bold text-wn-navy">{resort.name}</h2>
-              <p className="text-[11px] text-wn-charcoal/55">
+              <p className="text-xs text-wn-muted">
                 {resort.state}
                 {resort.region ? ` · ${resort.region}` : ""}
               </p>
             </div>
             <VerdictPill v={v} />
           </div>
-          <p className="mt-1.5 text-[13px] font-semibold leading-snug text-wn-charcoal">
+          <p className="mt-1.5 text-sm font-semibold leading-snug text-wn-charcoal">
             {v.dormant ? v.status.label : v.headline}
             {!v.dormant && v.verdict !== "unknown" && (
-              <span className="ml-1 font-normal text-wn-charcoal/55">· {v.confidence} confidence</span>
+              <span className="ml-1 font-normal text-wn-muted">· {v.confidence} confidence</span>
             )}
           </p>
-          <p className="mt-0.5 text-xs leading-snug text-wn-charcoal/75">{v.reasons[0]}</p>
+          <p className="mt-0.5 text-xs leading-snug text-wn-muted">{v.reasons[0]}</p>
           {labels.length > 0 && (
-            <ul className="mt-1.5 flex flex-wrap gap-x-2 gap-y-1 text-[11px] text-wn-charcoal/65">
+            <ul className="mt-1.5 flex flex-wrap gap-x-2 gap-y-1 text-xs text-wn-muted">
               {labels.map((l) => (
                 <li key={`${l.text}-${l.source}`} className="whitespace-nowrap">
                   <span className="font-medium text-wn-charcoal/80">{l.text}</span>
-                  <span className="text-wn-charcoal/50">
+                  <span className="text-wn-muted">
                     {" · "}
                     {l.source}
                     {l.at ? ` ${formatStampInZone(new Date(l.at), v.timeZone)}` : ""}
@@ -204,26 +205,6 @@ function TodayRowCard({ row }: { row: TodayRow }) {
   );
 }
 
-function EmptyState() {
-  return (
-    <div className="rounded-xl border border-dashed border-wn-charcoal/20 bg-white p-8 text-center">
-      <div className="mb-2 text-3xl" aria-hidden="true">
-        🏔️
-      </div>
-      <h2 className="text-base font-bold text-wn-navy">Save a mountain</h2>
-      <p className="mx-auto mt-1 max-w-xs text-sm text-wn-charcoal/70">
-        Tap the heart on any resort. Every morning it shows up here with a Go, Wait or Skip and the reason.
-      </p>
-      <Link
-        href="/"
-        className="mt-4 inline-flex min-h-11 items-center gap-1 rounded-md bg-wn-navy px-4 py-2 text-sm font-semibold text-white transition hover:bg-wn-navy/90"
-      >
-        Open the map
-      </Link>
-    </div>
-  );
-}
-
 function formatTripDate(iso: string): string {
   return new Date(`${iso}T12:00:00Z`).toLocaleDateString("en-US", {
     weekday: "short",
@@ -235,23 +216,23 @@ function formatTripDate(iso: string): string {
 
 function NextTripCard({ trip }: { trip: NextTrip | null }) {
   return (
-    <section className="mt-6 rounded-xl border border-wn-charcoal/10 bg-white p-4 shadow-sm">
+    <Card className="mt-6">
       <div className="flex items-center justify-between gap-2">
         <h2 className="text-sm font-bold text-wn-navy">{trip?.upcoming ? "Next trip" : "Latest trip"}</h2>
-        <Link href="/trips" className="inline-flex min-h-11 items-center text-xs font-semibold text-wn-charcoal/60 hover:text-wn-navy">
+        <Link href="/trips" className="inline-flex min-h-11 items-center text-xs font-semibold text-wn-muted hover:text-wn-navy">
           All trips →
         </Link>
       </div>
       {trip ? (
-        <Link href={`/trip/${trip.id}`} className="mt-1 block rounded-lg transition hover:bg-wn-offwhite">
+        <Link href={`/trip/${trip.id}`} className="mt-1 block rounded-wn-sm transition hover:bg-wn-offwhite">
           <p className="text-base font-bold text-wn-navy">{trip.name ?? `${trip.total_days}-day trip`}</p>
           {trip.stopNames.length > 0 && (
-            <p className="truncate text-[13px] font-semibold text-wn-charcoal/80">
+            <p className="truncate text-sm font-semibold text-wn-charcoal/80">
               {trip.stopNames.slice(0, 3).join(" → ")}
               {trip.stopNames.length > 3 ? ` +${trip.stopNames.length - 3}` : ""}
             </p>
           )}
-          <p className="mt-0.5 text-xs text-wn-charcoal/65">
+          <p className="mt-0.5 text-xs text-wn-muted">
             {trip.start_date
               ? `Starts ${formatTripDate(trip.start_date)}`
               : trip.started_at
@@ -264,16 +245,13 @@ function NextTripCard({ trip }: { trip: NextTrip | null }) {
         </Link>
       ) : (
         <div className="mt-1">
-          <p className="text-sm text-wn-charcoal/70">No trips yet. Plan a multi-day route from the map.</p>
-          <Link
-            href="/?days=3&plan=1"
-            className="mt-3 inline-flex min-h-11 items-center rounded-md bg-wn-navy px-4 py-2 text-sm font-semibold text-white transition hover:bg-wn-navy/90"
-          >
+          <p className="text-sm text-wn-muted">No trips yet. Plan a multi-day route from the map.</p>
+          <Button href="/?days=3&plan=1" className="mt-3">
             Plan a trip
-          </Link>
+          </Button>
         </div>
       )}
-    </section>
+    </Card>
   );
 }
 
@@ -287,7 +265,7 @@ function DataFooter({
   hasRows: boolean;
 }) {
   return (
-    <footer className="mt-6 text-[11px] leading-relaxed text-wn-charcoal/55">
+    <footer className="mt-6 text-xs leading-relaxed text-wn-muted">
       <p>
         {hasRows && updatedAt ? (
           <>

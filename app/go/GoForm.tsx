@@ -9,6 +9,8 @@ import { useState, useTransition } from "react";
 import type { PassFamily } from "@/lib/passAccess";
 import type { GoState } from "@/lib/saturday/url";
 import { goPath } from "@/lib/saturday/url";
+import Button from "@/components/ui/Button";
+import { HIT_AREA_44 } from "@/lib/hitArea";
 
 type ProductOption = { productKey: string; product: string };
 
@@ -24,8 +26,8 @@ type Props = {
 const MAX_OPTIONS = [2, 3, 4, 5, 6, 8, 10, 12];
 
 const selectClass =
-  "block min-h-11 w-full rounded-lg border border-wn-charcoal/20 bg-white px-3 text-base text-wn-charcoal focus:border-wn-navy focus:outline-none focus:ring-2 focus:ring-wn-sky";
-const labelClass = "mb-1 block text-[11px] font-bold uppercase tracking-wide text-wn-charcoal/60";
+  "block min-h-11 w-full rounded-wn-sm border border-wn-line bg-white px-3 text-base text-wn-charcoal focus:border-wn-navy focus:outline-none focus:ring-2 focus:ring-wn-navy/25";
+const labelClass = "mb-1 block text-eyebrow font-bold uppercase text-wn-muted";
 
 export default function GoForm({ state, cities, families, productsByFamily, unknownCity }: Props) {
   const router = useRouter();
@@ -122,9 +124,9 @@ export default function GoForm({ state, cities, families, productsByFamily, unkn
             <input type="hidden" name="lng" value={draft.lng} />
           </>
         )}
-        {geoStatus === "asking" && <p className="mt-1 text-xs text-wn-charcoal/60">Finding your location…</p>}
+        {geoStatus === "asking" && <p className="mt-1 text-xs text-wn-muted">Finding your location…</p>}
         {geoStatus === "denied" && (
-          <p className="mt-1 text-xs text-red-700">Location not available. Pick a city instead.</p>
+          <p className="mt-1 text-xs text-wn-danger">Location not available. Pick a city instead.</p>
         )}
       </div>
 
@@ -158,7 +160,7 @@ export default function GoForm({ state, cities, families, productsByFamily, unkn
           value={draft.product ?? ""}
           onChange={(e) => navigate({ ...draft, product: e.target.value || null })}
           disabled={!draft.pass}
-          className={`${selectClass} disabled:bg-wn-charcoal/5 disabled:text-wn-charcoal/50`}
+          className={`${selectClass} disabled:bg-wn-charcoal/5 disabled:text-wn-muted`}
         >
           <option value="">{draft.pass ? "Any product" : "Pick a pass first"}</option>
           {products.map((p) => (
@@ -190,14 +192,14 @@ export default function GoForm({ state, cities, families, productsByFamily, unkn
 
       <div>
         <span className={labelClass}>Day</span>
-        <div className="grid grid-cols-2 gap-1 rounded-lg bg-wn-charcoal/5 p-1" role="radiogroup" aria-label="Day">
+        <div className="grid grid-cols-2 gap-1 rounded-wn-sm bg-wn-charcoal/5 p-1" role="radiogroup" aria-label="Day">
           {(["sat", "sun"] as const).map((d) => {
             const active = draft.day === d;
             return (
               <label
                 key={d}
-                className={`flex min-h-10 cursor-pointer items-center justify-center rounded-md text-sm font-semibold ${
-                  active ? "bg-white text-wn-navy shadow-sm" : "text-wn-charcoal/60"
+                className={`${HIT_AREA_44} flex min-h-10 cursor-pointer items-center justify-center rounded-md text-sm font-semibold ${
+                  active ? "bg-white text-wn-navy shadow-wn-sm" : "text-wn-muted"
                 }`}
               >
                 <input
@@ -216,13 +218,9 @@ export default function GoForm({ state, cities, families, productsByFamily, unkn
       </div>
 
       <div className="sm:col-span-2 lg:col-span-5">
-        <button
-          type="submit"
-          className="inline-flex min-h-11 w-full items-center justify-center rounded-lg bg-wn-navy px-4 text-sm font-semibold text-white hover:bg-wn-navy/90 disabled:opacity-60 sm:w-auto"
-          disabled={pending}
-        >
+        <Button type="submit" className="w-full sm:w-auto" disabled={pending}>
           {pending ? "Ranking…" : "Show picks"}
-        </button>
+        </Button>
       </div>
     </form>
   );

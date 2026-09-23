@@ -1877,7 +1877,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
               strokeLinejoin="round"
             >
               {/* Mountain outline — three peaks with a sun behind */}
-              <circle cx="46" cy="16" r="5" stroke="#D4A84B" />
+              <circle cx="46" cy="16" r="5" className="stroke-wn-gold-halo" />
               <path d="M4 50 L20 26 L30 38 L42 18 L60 50 Z" />
               <path d="M20 26 L24 32 L28 28" opacity="0.5" />
               <path d="M42 18 L48 28 L52 24" opacity="0.5" />
@@ -2195,7 +2195,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
           ].join(" ")}
         >
           <div className="flex flex-col items-center px-6 text-center">
-            <span className="text-5xl font-extrabold tracking-tight text-white sm:text-6xl">
+            <span className="text-wn-5xl font-extrabold tracking-tight text-white">
               Wynla
             </span>
             <span className="mt-2 text-sm font-medium text-white/70 sm:text-base">

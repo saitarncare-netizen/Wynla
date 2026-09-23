@@ -9,8 +9,10 @@
 // table, FAQ) is preserved in git history. To restore for Season 2:
 // `git show <stage-35-commit>:app/pro/page.tsx > app/pro/page.tsx`.
 
-import Link from "next/link";
 import type { Metadata } from "next";
+import Icon from "@/components/icons/Icon";
+import Button from "@/components/ui/Button";
+import Card from "@/components/ui/Card";
 
 export const dynamic = "force-static";
 
@@ -28,46 +30,36 @@ export default function ProPage() {
       className="min-h-dvh bg-wn-offwhite px-4 py-12 sm:px-6 sm:py-20"
     >
       <div className="mx-auto max-w-xl">
-        <Link
-          href="/"
-          className="text-xs font-semibold text-wn-charcoal/60 hover:text-wn-navy"
-        >
-          ← Map
-        </Link>
-
-        <div className="mt-6 rounded-2xl border border-wn-charcoal/10 bg-white p-6 shadow-sm sm:p-8">
-          <span className="inline-flex items-center rounded bg-wn-gold/95 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-wn-navy">
+        <Card padding="none" className="p-6 sm:p-8">
+          <span className="inline-flex items-center rounded-wn-sm bg-wn-gold/95 px-2 py-1 text-eyebrow font-bold uppercase text-wn-navy">
             Inaugural Season 2026
           </span>
-          <h1 className="mt-4 text-2xl font-extrabold text-wn-navy sm:text-4xl">
+          <h1 className="mt-4 text-wn-2xl font-extrabold text-wn-navy sm:text-wn-4xl">
             Free for everyone, all season.
           </h1>
-          <p className="mt-3 text-sm text-wn-charcoal/75 sm:text-base">
+          <p className="mt-3 text-sm text-wn-muted sm:text-base">
             Wynla is built for skiers and snowboarders, and our first
             season (November 2026 – April 2027) is on the house. Every
             feature — the map, trip planner, snow surface forecast,
             favorites, alerts — is unlocked, no credit card, no trial
             countdown.
           </p>
-          <p className="mt-3 text-sm text-wn-charcoal/75 sm:text-base">
+          <p className="mt-3 text-sm text-wn-muted sm:text-base">
             Paid plans return for Season 2. Anyone who joins the
             waitlist now becomes a <strong>Founder Member</strong> and
             locks in a special founder rate forever — never disclosed
             publicly, only sent in the welcome email.
           </p>
 
-          <Link
-            href="/early"
-            className="mt-6 inline-flex h-12 w-full items-center justify-center rounded-md bg-wn-navy px-4 text-sm font-bold text-white shadow-sm transition hover:bg-wn-navy/90 sm:w-auto sm:px-6"
-          >
-            Join the waitlist →
-          </Link>
+          <Button href="/early" className="mt-6 w-full sm:w-auto sm:px-6" iconRight={<Icon name="arrow-right" />}>
+            Join the waitlist
+          </Button>
 
-          <p className="mt-4 text-[11px] text-wn-charcoal/55">
+          <p className="mt-4 text-xs text-wn-muted">
             Already on the waitlist? You&apos;re in. We&apos;ll send
             your welcome the morning the inaugural season opens.
           </p>
-        </div>
+        </Card>
       </div>
     </main>
   );

@@ -4,18 +4,18 @@
 import type { Verdict } from "@/lib/goWaitSkip";
 
 const VERDICT_PILL: Record<Verdict["verdict"], { text: string; cls: string; dot: string }> = {
-  go: { text: "Go", cls: "bg-emerald-50 text-emerald-800 ring-1 ring-emerald-200", dot: "bg-emerald-500" },
-  wait: { text: "Wait", cls: "bg-amber-50 text-amber-800 ring-1 ring-amber-200", dot: "bg-amber-500" },
-  skip: { text: "Skip", cls: "bg-red-50 text-red-800 ring-1 ring-red-200", dot: "bg-red-500" },
-  unknown: { text: "Unknown", cls: "bg-wn-charcoal/5 text-wn-charcoal/70 ring-1 ring-wn-charcoal/10", dot: "bg-wn-charcoal/40" },
+  go: { text: "Go", cls: "bg-wn-success-bg text-wn-success ring-1 ring-wn-success/30", dot: "bg-wn-success" },
+  wait: { text: "Wait", cls: "bg-wn-warning-bg text-wn-warning ring-1 ring-wn-warning/30", dot: "bg-wn-warning" },
+  skip: { text: "Skip", cls: "bg-wn-danger-bg text-wn-danger ring-1 ring-wn-danger/30", dot: "bg-wn-danger" },
+  unknown: { text: "Unknown", cls: "bg-wn-charcoal/5 text-wn-muted ring-1 ring-wn-line", dot: "bg-wn-charcoal/40" },
 };
 
 const STATUS_TONE: Record<Verdict["status"]["tone"], { cls: string; dot: string }> = {
-  green: { cls: "bg-emerald-50 text-emerald-800 ring-1 ring-emerald-200", dot: "bg-emerald-500" },
-  amber: { cls: "bg-amber-50 text-amber-800 ring-1 ring-amber-200", dot: "bg-amber-500" },
-  red: { cls: "bg-red-50 text-red-800 ring-1 ring-red-200", dot: "bg-red-500" },
+  green: { cls: "bg-wn-success-bg text-wn-success ring-1 ring-wn-success/30", dot: "bg-wn-success" },
+  amber: { cls: "bg-wn-warning-bg text-wn-warning ring-1 ring-wn-warning/30", dot: "bg-wn-warning" },
+  red: { cls: "bg-wn-danger-bg text-wn-danger ring-1 ring-wn-danger/30", dot: "bg-wn-danger" },
   navy: { cls: "bg-wn-navy text-white", dot: "bg-wn-sky" },
-  muted: { cls: "bg-wn-charcoal/5 text-wn-charcoal/70 ring-1 ring-wn-charcoal/10", dot: "bg-wn-charcoal/40" },
+  muted: { cls: "bg-wn-charcoal/5 text-wn-muted ring-1 ring-wn-line", dot: "bg-wn-charcoal/40" },
 };
 
 /** Go / Wait / Skip / Unknown, or the opening status while dormant
@@ -28,7 +28,7 @@ export default function VerdictPill({ v, size = "sm" }: { v: Verdict; size?: "sm
     <span
       className={[
         "inline-flex max-w-full shrink-0 items-center gap-1.5 rounded-full font-semibold",
-        size === "md" ? "px-3 py-1.5 text-sm" : "px-2 py-1 text-[11px]",
+        size === "md" ? "px-3 py-1.5 text-sm" : "px-2 py-1 text-xs",
         look.cls,
       ].join(" ")}
     >

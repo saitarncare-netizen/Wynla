@@ -5,6 +5,8 @@
 // recipient sees the same three mountains and the OG card matches.
 
 import { useState } from "react";
+import Icon from "@/components/icons/Icon";
+import Button from "@/components/ui/Button";
 
 type Props = { url: string; title: string; text: string };
 
@@ -29,14 +31,8 @@ export default function ShareButton({ url, title, text }: Props) {
   }
 
   return (
-    <button
-      type="button"
-      onClick={share}
-      className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-wn-charcoal/20 bg-white px-4 text-sm font-semibold text-wn-navy hover:border-wn-navy"
-      aria-live="polite"
-    >
-      <span aria-hidden="true">↗</span>
+    <Button variant="secondary" onClick={share} aria-live="polite" iconLeft={<Icon name="share" />}>
       {status === "copied" ? "Link copied" : status === "failed" ? "Could not share" : "Share"}
-    </button>
+    </Button>
   );
 }

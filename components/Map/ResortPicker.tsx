@@ -487,7 +487,7 @@ export default function ResortPicker({
             // Apple HIG). The visible × stays small; the surrounding
             // button captures taps for the whole reachable area so
             // the user doesn't need a pixel-perfect thumb.
-            className="-mr-1.5 -mt-1.5 inline-flex h-11 w-11 items-center justify-center text-2xl leading-none text-wn-charcoal/55 hover:text-wn-navy"
+            className="-mr-1.5 -mt-1.5 inline-flex h-11 w-11 items-center justify-center text-wn-2xl leading-none text-wn-charcoal/55 hover:text-wn-navy"
           >
             ×
           </button>
