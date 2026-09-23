@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 // useEffect/useState used by the matrix-driven drive-time refinement;
 // useRef + the snap state below drive the mobile bottom-sheet drag.
 import Link from "next/link";
@@ -18,6 +18,11 @@ import type { Resort, DriveTime, WeatherSnapshot } from "./MapPage";
 import NearbyGroup from "@/components/NearbyGroup";
 import { fetchNearbyRestaurants, fetchNearbyActivities } from "@/lib/fetchNearby";
 import type { NearbyRow } from "@/lib/nearbyCategories";
+
+// Families that have per-product rules in lib/data/passAccess.json. Kept
+// local (not imported from lib/passAccess) so the map bundle does not pull
+// the dataset in; the dynamic import below loads it on first tap.
+const PASS_FAMILIES_WITH_RULES = new Set(["epic", "ikon", "indy", "mountain_collective"]);
 
 type Props = {
   resort: Resort;
@@ -74,6 +79,67 @@ export default function ResortPanel({
       });
     return () => ctrl.abort();
   }, [matrixKey, lat, lng, origin]);
+
+  // Pass chip detail: tapping / hovering a pass badge reveals a one-line
+  // per-product summary ("Ikon: unlimited · Ikon Base: 5 days, blackouts
+  // Dec 26-30, …"). The dataset behind it is ~500 KB of JSON, so it is
+  // loaded with a dynamic import on first use instead of riding in the
+  // map bundle; results are cached per resort + family for the session.
+  // `line` is undefined while loading, null when the family has no
+  // verified rows for this resort. `openedBy` records whether a hover or
+  // a tap opened it: a mouse click lands on a chip that hover already
+  // opened, so a click must only CLOSE a detail that a tap opened, or the
+  // first click on desktop would open and immediately hide the line.
+  type PassDetail = { id: number; family: string; line: string | null | undefined; openedBy: "hover" | "tap" };
+  const [passDetail, setPassDetail] = useState<PassDetail | null>(null);
+  const passSummaryCache = useRef(new Map<string, string | null>());
+  const loadPassSummary = useCallback(
+    async (family: string): Promise<string | null> => {
+      const key = `${resort.slug}|${family}`;
+      const cached = passSummaryCache.current.get(key);
+      if (cached !== undefined) return cached;
+      const mod = await import("@/lib/passAccess");
+      const line = mod.isPassFamily(family) ? mod.summaryLine(resort.slug, family) : null;
+      passSummaryCache.current.set(key, line);
+      return line;
+    },
+    [resort.slug],
+  );
+  const openPassDetail = useCallback(
+    (family: string, openedBy: "hover" | "tap") => {
+      const id = resort.id;
+      setPassDetail({ id, family, line: passSummaryCache.current.get(`${resort.slug}|${family}`), openedBy });
+      void loadPassSummary(family).then((line) => {
+        setPassDetail((cur) => (cur && cur.id === id && cur.family === family ? { ...cur, line } : cur));
+      });
+    },
+    [resort.id, resort.slug, loadPassSummary],
+  );
+  // Hover only counts for a real mouse: a finger's pointerenter is the
+  // start of a tap and the click handler owns that. There is no onFocus
+  // hook on purpose (Android Chrome focuses a button before click, which
+  // used to open and then toggle the line closed in one tap); keyboard
+  // users open it with Enter or Space, which fire click.
+  const hoverPassDetail = (family: string, pointerType: string) => {
+    if (pointerType !== "mouse") return;
+    if (passDetail && passDetail.id === resort.id && passDetail.family === family) return;
+    openPassDetail(family, "hover");
+  };
+  // Tap (touch, mouse click or Enter/Space): opens, or promotes a
+  // hover-opened line to "tap" so a click never hides what hover showed;
+  // a second tap on the same chip closes it.
+  const tapPassDetail = (family: string) => {
+    const same = passDetail !== null && passDetail.id === resort.id && passDetail.family === family;
+    if (same && passDetail.openedBy === "tap") {
+      setPassDetail(null);
+    } else if (same) {
+      setPassDetail({ ...passDetail, openedBy: "tap" });
+    } else {
+      openPassDetail(family, "tap");
+    }
+  };
+  const activePassDetail = passDetail && passDetail.id === resort.id ? passDetail : null;
+  const passDetailId = `pass-detail-${resort.id}`;
 
   // Record this resort in the localStorage "recently viewed" list so
   // the homepage strip can show it next time. We push the minimum
@@ -303,18 +369,65 @@ export default function ResortPanel({
             which clipped everything below the fold). pan-y keeps the vertical
             scroll inside the panel instead of leaking to the Mapbox canvas. */}
         <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3" style={{ touchAction: "pan-y" }}>
-          {/* Pass badges row */}
+          {/* Pass badges row. Each multi-resort pass badge is a button:
+              tap (touch or click, Enter/Space from the keyboard) or mouse
+              hover shows the per-product summary line under the row; the
+              independent badge stays inert. The chip itself keeps its
+              size, only the line below appears. */}
           {resort.passes?.length > 0 && (
-            <div className="mb-3 flex flex-wrap gap-1.5">
-              {resort.passes.map((p) => (
-                <span
-                  key={p}
-                  className="inline-block rounded-md px-2 py-0.5 text-[11px] font-semibold text-white"
-                  style={{ backgroundColor: passColor(p) }}
+            <div className="mb-3">
+              <div className="flex flex-wrap gap-1.5">
+                {resort.passes.map((p) => {
+                  const fg = p === "ikon" ? "#1E2952" : "#FFFFFF";
+                  if (!PASS_FAMILIES_WITH_RULES.has(p)) {
+                    return (
+                      <span
+                        key={p}
+                        className="inline-block rounded-md px-2 py-0.5 text-[11px] font-semibold"
+                        style={{ backgroundColor: passColor(p), color: fg }}
+                      >
+                        {passLabel(p)}
+                      </span>
+                    );
+                  }
+                  const open = activePassDetail?.family === p;
+                  return (
+                    <button
+                      key={p}
+                      type="button"
+                      onClick={() => tapPassDetail(p)}
+                      onPointerEnter={(e) => hoverPassDetail(p, e.pointerType)}
+                      aria-expanded={open}
+                      aria-controls={activePassDetail ? passDetailId : undefined}
+                      title={`${passLabel(p)}: days and blackout dates here`}
+                      className={`inline-block rounded-md px-2 py-0.5 text-[11px] font-semibold transition ${
+                        open ? "ring-2 ring-wn-navy/40 ring-offset-1" : "hover:brightness-110"
+                      }`}
+                      style={{ backgroundColor: passColor(p), color: fg }}
+                    >
+                      {passLabel(p)}
+                    </button>
+                  );
+                })}
+              </div>
+              {activePassDetail && (
+                <p
+                  id={passDetailId}
+                  className="mt-1.5 text-[11px] leading-snug text-wn-charcoal/80"
+                  aria-live="polite"
                 >
-                  {passLabel(p)}
-                </span>
-              ))}
+                  {activePassDetail.line === undefined
+                    ? "Loading pass rules…"
+                    : activePassDetail.line ??
+                      `${passLabel(activePassDetail.family)} rules for this resort are not verified yet.`}{" "}
+                  <Link
+                    href={`/resort/${resort.slug}#pass-access`}
+                    className="whitespace-nowrap font-semibold text-wn-navy underline underline-offset-2"
+                  >
+                    Full rules →
+                  </Link>
+                </p>
+              )}
             </div>
           )}
 

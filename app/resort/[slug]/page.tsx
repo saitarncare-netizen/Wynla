@@ -8,7 +8,20 @@ import {
   passColor,
   passLabel,
   primaryPass,
+  PASS_KEYS,
 } from "@/lib/passColors";
+import {
+  blackoutText,
+  familyInfo,
+  formatVerifiedOn,
+  getFamilyAccess,
+  isPassFamily,
+  sourceHost,
+  PASS_ACCESS_SEASON,
+  PASS_ACCESS_VERIFIED_ON,
+  type PassFamily,
+  type PassProductAccess,
+} from "@/lib/passAccess";
 import { googleMapsUrl } from "@/lib/externalLinks";
 import { getDifficultyMix } from "@/lib/difficulty";
 import FavoriteToggle from "@/components/auth/FavoriteToggle";
@@ -578,8 +591,11 @@ export default async function ResortPage({
         {/* Hero content */}
         <div className="relative z-10 mx-auto max-w-5xl px-4 pb-12 pt-8 sm:px-6 sm:pb-16 sm:pt-12">
           <div className="mb-3 flex flex-wrap items-center gap-1.5">
+            {/* A pass badge jumps to the Pass access section, where the
+                per-product days and blackout dates live; the independent
+                badge has nothing to jump to. */}
             {(resort.passes ?? []).map((p) => (
-              <PassBadge key={p} pass={p} />
+              <PassBadge key={p} pass={p} href={isPassFamily(p) ? "#pass-access" : undefined} />
             ))}
           </div>
           <h1 className="text-4xl font-extrabold leading-[0.95] tracking-tight text-white sm:text-7xl md:text-[7.5rem] md:tracking-[-0.025em]">
@@ -681,6 +697,23 @@ export default async function ResortPage({
             difficulty mix, weekend crowds). Below the conditions block so
             the page opens on what changes daily, not on what never does. */}
         <QuickStats resort={resort} status={status} tz={tz} now={now} />
+
+        {/* PASS ACCESS — tier-aware rules behind each pass chip: every
+            product of every family the resort is on, with days, blackout
+            dates, reservation and bonus-mountain flags, and the verified
+            date + official source. resorts.passes[] still decides WHICH
+            families appear (and the pin colour); lib/passAccess.ts only
+            adds the detail. Sits with the static profile because pass
+            rules change a few times a year, not daily. */}
+        {(resort.passes ?? []).some(isPassFamily) && (
+          <Section
+            id="pass-access"
+            title="Pass access"
+            subtitle={`Days, blackout dates and reservation rules per pass product for the ${PASS_ACCESS_SEASON} season.`}
+          >
+            <PassAccessSection slug={resort.slug} passes={resort.passes ?? []} />
+          </Section>
+        )}
 
         {/* Inaugural Season 2026 — Powder Day Score retired from the
             UI. The Snow Surface Forecast (above) covers the same
@@ -884,16 +917,188 @@ function uvChipClass(uv: number): string {
   return "inline-flex items-center gap-1 text-wn-charcoal/65";
 }
 
-function PassBadge({ pass }: { pass: string }) {
+function PassBadge({ pass, href }: { pass: string; href?: string }) {
   const color = passColor(pass);
   const fg = pass === "ikon" ? "#1E2952" : "#FFFFFF";
+  const className = "inline-block rounded-md px-2 py-0.5 text-[11px] font-semibold";
+  if (href) {
+    return (
+      <a
+        href={href}
+        className={`${className} transition hover:brightness-110`}
+        style={{ backgroundColor: color, color: fg }}
+        title={`${passLabel(pass)} rules at this resort`}
+      >
+        {passLabel(pass)}
+      </a>
+    );
+  }
   return (
-    <span
-      className="inline-block rounded-md px-2 py-0.5 text-[11px] font-semibold"
-      style={{ backgroundColor: color, color: fg }}
-    >
+    <span className={className} style={{ backgroundColor: color, color: fg }}>
       {passLabel(pass)}
     </span>
+  );
+}
+
+// ---------- Pass access ----------
+
+/** One card per pass family the resort is on (priority order, same as the
+ *  pin colour), each listing every product with days + blackouts. A family
+ *  the DB tags but the dataset has not verified gets an honest "not
+ *  verified yet" line rather than nothing. */
+function PassAccessSection({ slug, passes }: { slug: string; passes: string[] }) {
+  const families = PASS_KEYS.filter(
+    (key): key is PassFamily => passes.includes(key) && isPassFamily(key),
+  );
+  return (
+    <div className="space-y-4">
+      {families.map((family) => (
+        <PassFamilyCard key={family} family={family} rows={getFamilyAccess(slug, family)} />
+      ))}
+      {/* Nominative use only: the names identify which passes work here.
+          Said once for the whole section, not per card. */}
+      <p className="text-[11px] leading-relaxed text-wn-charcoal/55">
+        Epic Pass, Ikon Pass, Indy Pass and Mountain Collective are the names of
+        their operators&apos; products, used here only to say which passes work at
+        this resort. Wynla is not affiliated with any pass operator. Rules can
+        change during the season, so confirm on the official page before you
+        buy or travel.
+      </p>
+    </div>
+  );
+}
+
+function PassFamilyCard({ family, rows }: { family: PassFamily; rows: PassProductAccess[] }) {
+  const info = familyInfo(family);
+  const verifiedOn = rows[0]?.verifiedOn ?? PASS_ACCESS_VERIFIED_ON;
+  // Distinct official pages behind these rows, labelled by host so the
+  // reader knows they are leaving for ikonpass.com, not a blog.
+  const sources = Array.from(new Set(rows.flatMap((r) => r.sourceUrls))).slice(0, 3);
+  const bonus = rows.some((r) => r.isBonusMountain);
+  return (
+    <article className="overflow-hidden rounded-xl border border-wn-navy/10 bg-white shadow-sm">
+      <header className="flex flex-wrap items-center justify-between gap-2 border-b border-wn-navy/10 px-4 py-3">
+        <div className="flex items-center gap-2">
+          <PassBadge pass={family} />
+          <h3 className="text-sm font-bold text-wn-navy">{passLabel(family)}</h3>
+        </div>
+        <a
+          href={info.officialUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-xs font-semibold text-wn-navy/70 underline-offset-2 hover:text-wn-navy hover:underline"
+        >
+          Official site ↗
+        </a>
+      </header>
+
+      {bonus && (
+        <p className="border-b border-wn-navy/10 bg-wn-gold/15 px-4 py-2 text-xs font-semibold text-wn-navy">
+          Bonus mountain: 2 days on the full Ikon Pass only. Not on Ikon Base or Ikon Session.
+        </p>
+      )}
+
+      {rows.length === 0 ? (
+        <p className="px-4 py-3 text-sm text-wn-charcoal/70">
+          This resort is on the {passLabel(family)}, but its per-product days and
+          blackout dates have not been verified yet. Check the official page
+          before you go.
+        </p>
+      ) : (
+        <ul className="divide-y divide-wn-navy/10">
+          {rows.map((row) => (
+            <PassProductRow key={`${row.productKey}|${row.qualifier ?? ""}`} row={row} />
+          ))}
+        </ul>
+      )}
+
+      <footer className="space-y-1 border-t border-wn-navy/10 bg-wn-offwhite px-4 py-2 text-[11px] leading-relaxed text-wn-charcoal/60">
+        <p>{info.note}</p>
+        <p>
+          Verified {formatVerifiedOn(verifiedOn)}
+          {sources.length > 0 && (
+            <>
+              {" · Source: "}
+              {sources.map((url, i) => (
+                <span key={url}>
+                  {i > 0 && ", "}
+                  <a
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline underline-offset-2 hover:text-wn-navy"
+                  >
+                    {sourceHost(url)}
+                  </a>
+                </span>
+              ))}
+            </>
+          )}
+        </p>
+      </footer>
+    </article>
+  );
+}
+
+/** One product: name (+ tier qualifier) on the left, the days allotment on
+ *  the right, then the blackout sentence and any flags. Stacked so it reads
+ *  top-to-bottom on a phone; the two-column head still lines up on wide
+ *  screens. */
+function PassProductRow({ row }: { row: PassProductAccess }) {
+  const noAccess = row.days.kind === "none";
+  const days = row.days.short.charAt(0).toUpperCase() + row.days.short.slice(1);
+  const blackout = blackoutText(row.blackouts);
+  return (
+    <li className={`px-4 py-3 ${noAccess ? "opacity-70" : ""}`}>
+      <div className="flex items-baseline justify-between gap-3">
+        <p className="min-w-0 text-sm font-semibold text-wn-navy">
+          {row.product}
+          {row.qualifier && (
+            <span className="font-normal text-wn-charcoal/60"> · {row.qualifier}</span>
+          )}
+        </p>
+        <p
+          className={`shrink-0 text-sm font-bold ${noAccess ? "text-wn-charcoal/50" : "text-wn-navy"}`}
+          aria-label={`Days on this pass: ${days}`}
+        >
+          {days}
+        </p>
+      </div>
+      {row.days.qualifier && (
+        <p className="mt-0.5 text-xs text-wn-charcoal/65">{row.days.qualifier}</p>
+      )}
+      {blackout && (
+        <p
+          className={`mt-1 text-xs ${
+            row.blackouts.status === "none" ? "text-wn-charcoal/60" : "text-wn-charcoal/80"
+          }`}
+        >
+          {blackout}
+        </p>
+      )}
+      {(row.reservationRequired || row.isBonusMountain || row.newFor2026_27) && (
+        <div className="mt-1.5 flex flex-wrap gap-1.5">
+          {row.reservationRequired && (
+            <span
+              className="inline-flex items-center rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-bold text-amber-800"
+              title="Book a lift reservation through the pass operator before you go"
+            >
+              Reservation required
+            </span>
+          )}
+          {row.isBonusMountain && !noAccess && (
+            <span className="inline-flex items-center rounded bg-wn-gold/25 px-1.5 py-0.5 text-[10px] font-bold text-wn-navy">
+              Bonus mountain
+            </span>
+          )}
+          {row.newFor2026_27 && (
+            <span className="inline-flex items-center rounded bg-wn-sky/20 px-1.5 py-0.5 text-[10px] font-bold text-wn-navy">
+              New for {PASS_ACCESS_SEASON}
+            </span>
+          )}
+        </div>
+      )}
+    </li>
   );
 }
 
