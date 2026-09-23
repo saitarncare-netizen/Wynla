@@ -76,6 +76,13 @@ describe("bug 2 — snow showers and flurries are snow, not rain", () => {
     expect(wordingLooksRainy("Chance Snow Showers", 30)).toBe(false);
     expect(wordingLooksRainy("Flurries", 20)).toBe(false);
     expect(wordingLooksRainy("Snow showers", 25)).toBe(false);
+    // Spring days: NWS still writes "Snow Showers" at 36-40°F and the
+    // temperature must not turn that into rain (review finding).
+    expect(wordingLooksRainy("Snow Showers Likely", 36)).toBe(false);
+    expect(wordingLooksRainy("Chance Snow Showers", 40)).toBe(false);
+    expect(wordingLooksRainy("Flurries", 38)).toBe(false);
+    expect(wordingLooksRainy("Rain And Snow Showers", 36)).toBe(true);
+    expect(wordingLooksRainy("Rain And Snow Showers", 30)).toBe(false);
     expect(wordingLooksRainy("Rain Showers", 40)).toBe(true);
     expect(wordingLooksRainy("Chance Showers And Thunderstorms", 55)).toBe(true);
     expect(wordingLooksRainy("Drizzle", 36)).toBe(true);
@@ -206,6 +213,20 @@ describe("dormant reports", () => {
     expect(r.dormant).toBe(false);
   });
 
+  it("goes dormant with an unknown open state and no evidence of operation", () => {
+    // Review probe: Oct 20, scraper blind, no season text, 7 days of
+    // 44°/28° with 0.4" rain used to produce "IP high" beside a "Check
+    // resort" pill. The calendar alone is not proof the lifts spin.
+    const octoberNow = new Date("2026-10-20T18:00:00Z");
+    const hist = days(7, (i) => ({ temp_high_f: 44, temp_low_f: 28, rain_24h_in: i === 5 ? 0.4 : 0, precip_24h_in: i === 5 ? 0.4 : 0 }), "2026-10-20");
+    const r = buildSurfaceReport(hist, [], { isOpen: null, offSeason: false, inSeason: false, now: octoberNow });
+    expect(r.dormant).toBe(true);
+    if (r.dormant) expect(r.reason).toBe("unconfirmed");
+    // A reported base or lifts counted open is positive evidence.
+    expect(buildSurfaceReport(hist, [], { isOpen: null, offSeason: false, inSeason: false, baseDepthIn: 12, now: octoberNow }).dormant).toBe(false);
+    expect(buildSurfaceReport(hist, [], { isOpen: null, offSeason: false, inSeason: false, hasSnowpack: true, now: octoberNow }).dormant).toBe(false);
+  });
+
   it("stays active on fresh inputs and exposes the evidence", () => {
     const r = buildSurfaceReport(
       days(7, (i) => ({ snow_24h_in: i === 6 ? 6 : 0, temp_high_f: 22, temp_low_f: 8 })),
@@ -215,7 +236,7 @@ describe("dormant reports", () => {
     expect(r.dormant).toBe(false);
     if (!r.dormant) {
       expect(r.today.code).toBe("PP");
-      expect(r.basedOn[0]).toBe("7 days of weather through 2027-01-20");
+      expect(r.basedOn[0]).toBe("7 days of weather through Jan 20");
       expect(r.basedOn).toContain('6" new snow in 7 days');
       expect(r.basedOn).toContain('48" base (resort report)');
       expect(r.features.window_days).toBe(7);

@@ -28,18 +28,20 @@ import { useState } from "react";
 import {
   SURFACE_GLOSSARY,
   confidenceLabel,
+  type DormantReason,
   type SurfaceCode,
   type SurfaceReport,
   type SurfaceResult,
 } from "@/lib/snowSurface";
+import SurfaceIcon from "@/components/icons/SurfaceIcon";
 
-/** Facts the dormant card shows instead of a classification. */
+/** Facts the dormant card shows instead of a classification. The
+ *  opening date is deliberately absent — the status pill above the
+ *  card already says it. */
 export type SeasonPreview = {
   resortName: string;
   /** e.g. "late November – mid April", or null when unknown. */
   seasonWindow: string | null;
-  /** e.g. "Opens ~Nov 22 · in 61 days", or null. */
-  opensLine: string | null;
   annualSnowfallIn: number | null;
   /** ISO date last season ended, when it is in the past. */
   lastSeasonEnded: string | null;
@@ -82,7 +84,7 @@ export default function SnowSurfaceForecast({ report, forecastDates, preview }: 
       </div>
 
       {report.dormant ? (
-        <DormantCard headline={report.headline} message={report.message} preview={preview} />
+        <DormantCard reason={report.reason} headline={report.headline} message={report.message} preview={preview} />
       ) : (
         <>
           <TodayCard today={report.today} basedOn={report.basedOn} />
@@ -120,13 +122,14 @@ function TodayCard({ today, basedOn }: { today: SurfaceResult; basedOn: string[]
   return (
     <div className={`rounded-xl border p-4 shadow-sm sm:p-5 ${tone.container}`}>
       <div className="flex items-start gap-4">
+        {/* The bubble carries the surface ICON, not the code: a beginner
+            should meet the plain-English label first and the SANY code
+            only once, in the small mono tag beside it. */}
         <div
           aria-hidden="true"
           className={`relative flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ${tone.bubble} sm:h-16 sm:w-16`}
         >
-          <span className="text-lg font-extrabold tracking-tight sm:text-xl">
-            {today.short}
-          </span>
+          <SurfaceIcon code={today.code} className="h-7 w-7 sm:h-8 sm:w-8" />
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex flex-wrap items-center gap-2">
@@ -174,16 +177,21 @@ function TodayCard({ today, basedOn }: { today: SurfaceResult; basedOn: string[]
 }
 
 function DormantCard({
+  reason,
   headline,
   message,
   preview,
 }: {
+  reason: DormantReason;
   headline: string;
   message: string;
   preview?: SeasonPreview;
 }) {
+  // "Season preview" only makes sense while the mountain is not running;
+  // a stale or missing feed mid-season is a data problem, not a season
+  // preview, and the eyebrow says so.
+  const eyebrow = reason === "stale" || reason === "no-data" ? "Surface forecast" : "Season preview";
   const facts: Array<{ label: string; value: string }> = [];
-  if (preview?.opensLine) facts.push({ label: "Next opening", value: preview.opensLine });
   if (preview?.seasonWindow) facts.push({ label: "Typical season", value: preview.seasonWindow });
   if (preview?.annualSnowfallIn != null) {
     facts.push({ label: "Average snowfall", value: `${preview.annualSnowfallIn}" per season` });
@@ -210,7 +218,7 @@ function DormantCard({
         </div>
         <div className="flex-1 min-w-0">
           <div className="text-[11px] font-bold uppercase tracking-wider text-wn-charcoal/55">
-            Season preview
+            {eyebrow}
           </div>
           <h3 className="mt-0.5 text-lg font-extrabold leading-tight text-wn-navy sm:text-xl">
             {headline}
@@ -299,6 +307,12 @@ function ForecastSlot({
       <div className="text-[10px] font-bold uppercase tracking-wider text-wn-navy">
         {headerLabel}
       </div>
+      <div
+        aria-hidden="true"
+        className={`mx-auto mt-1.5 flex h-7 w-7 items-center justify-center rounded-lg ${tone.bubble}`}
+      >
+        <SurfaceIcon code={result.code} className="h-4 w-4" />
+      </div>
       <div className={`mt-1.5 text-sm font-extrabold leading-tight ${tone.headline}`}>
         {result.label}
       </div>
@@ -360,9 +374,7 @@ function SurfaceEducationModal({ onClose }: { onClose: () => void }) {
                     aria-hidden="true"
                     className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${tone.bubble}`}
                   >
-                    <span className="text-xs font-extrabold tracking-tight">
-                      {c}
-                    </span>
+                    <SurfaceIcon code={c} className="h-6 w-6" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex flex-wrap items-baseline gap-2">

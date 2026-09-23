@@ -23,7 +23,6 @@ import {
   resolveSeasonInfo,
   deriveResortStatus,
   seasonWindowText,
-  isGlobalOffSeasonNow,
   type ResortStatus,
 } from "@/lib/seasonDates";
 import SimilarResorts from "@/components/SimilarResorts";
@@ -398,18 +397,27 @@ export default async function ResortPage({
     }));
 
   // Context the classifier needs beyond the weather rows. isOpen is a
-  // three-state: only an explicit live/season signal makes it false, so
-  // a mid-January "unknown" from a broken scraper still classifies.
+  // three-state: a live/season signal makes it true, a dormant status
+  // makes it false, and "Check resort" leaves it null. With null the
+  // classifier only runs on positive evidence of operation (a parsed
+  // season window, a reported base, lifts counted open) — the calendar
+  // alone is not evidence, or every resort the broken scraper cannot see
+  // would get a confident class from mid-October until it actually opens.
   const isOpen: boolean | null =
     status.kind === "open" || status.kind === "limited" || status.kind === "likely-open"
       ? true
       : status.dormant
         ? false
         : null;
+  const liveSnowpack =
+    status.kind === "open" ||
+    status.kind === "limited" ||
+    (resort.snow_base_depth_in ?? 0) > 0 ||
+    (resort.lifts_open_today ?? 0) > 0;
   const surfaceReport: SurfaceReport = buildSurfaceReport(surfaceHistory, surfaceForecastDays, {
     baseDepthIn: resort.snow_base_depth_in,
-    hasSnowpack: status.kind === "open" || status.kind === "limited" ? true : null,
-    inSeason: seasonInfo.status === "in-season" || (seasonInfo.status === "unknown" && !isGlobalOffSeasonNow(now)),
+    hasSnowpack: liveSnowpack ? true : null,
+    inSeason: seasonInfo.status === "in-season",
     isOpen,
     offSeason: status.kind === "off-season" || status.kind === "opens",
     lastObservedAt: weather?.fetched_at ?? null,
@@ -431,10 +439,11 @@ export default async function ResortPage({
     resort.season_end_date && new Date(resort.season_end_date + "T00:00:00Z") < now
       ? resort.season_end_date
       : null;
+  // The opening date itself is NOT repeated here: the status pill in the
+  // at-a-glance strip and the weather card already carry it.
   const seasonPreview: SeasonPreview = {
     resortName: resort.name,
     seasonWindow: seasonWindowText(resort),
-    opensLine: status.kind === "opens" ? `${status.label}${status.detail ? ` · ${status.detail}` : ""}` : null,
     annualSnowfallIn: resort.annual_snowfall_in,
     lastSeasonEnded,
   };
@@ -569,10 +578,12 @@ export default async function ResortPage({
           <h1 className="text-4xl font-extrabold leading-[0.95] tracking-tight text-white sm:text-7xl md:text-[7.5rem] md:tracking-[-0.025em]">
             {resort.name}
           </h1>
-          {/* Season countdown — sits just under the hero title for
-              high visibility whenever a season date could be parsed
-              (from season_open_text or the legacy typical_season_start). */}
-          {seasonInfo.status !== "unknown" && (
+          {/* Season countdown — sits just under the hero title while the
+              season is running ("Season runs to Apr 15 · 85 days left").
+              Off-season the at-a-glance pill already says "Opens ~Nov 15 ·
+              in 53 days", so repeating it here (the review counted the
+              same fact four times on one screen) adds nothing. */}
+          {seasonInfo.status === "in-season" && (
             <div className="mt-4">
               <SeasonCountdown info={seasonInfo} variant="hero" />
             </div>

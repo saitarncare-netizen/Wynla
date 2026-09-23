@@ -320,8 +320,30 @@ export default function ResortPanel({
               panels showed no status at all in September), plus the
               season countdown whenever a season date could be parsed. */}
           {(() => {
-            const seasonInfo = resolveSeasonInfo(resort);
-            const status = deriveResortStatus(resort, seasonInfo);
+            // Fields are passed explicitly so the panel and the resort
+            // page derive the SAME status from the same inputs; if the
+            // map's Resort type ever drops one of these, tsc fails here
+            // instead of the panel silently losing a fallback.
+            const seasonInfo = resolveSeasonInfo({
+              season_open_text: resort.season_open_text,
+              season_close_text: resort.season_close_text,
+              typical_season_start: resort.typical_season_start,
+              typical_season_end: resort.typical_season_end,
+            });
+            const status = deriveResortStatus(
+              {
+                currently_open: resort.currently_open,
+                snow_report_status: resort.snow_report_status,
+                snow_report_updated_at: resort.snow_report_updated_at,
+                operating_status: resort.operating_status,
+                lifts_open_today: resort.lifts_open_today,
+                total_lifts: resort.total_lifts,
+                trails_open_today: resort.trails_open_today,
+                total_trails: resort.total_trails,
+                season_end_date: resort.season_end_date,
+              },
+              seasonInfo,
+            );
             // The pill already says "Opens ~Nov 22 · in 61 days" for an
             // off-season resort with dates; the countdown adds value only
             // for the in-season "N days left" reading.

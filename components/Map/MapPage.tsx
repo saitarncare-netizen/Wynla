@@ -83,6 +83,12 @@ export type Resort = {
   annual_snowfall_in: number | null;
   season_open_text: string | null;
   season_close_text: string | null;
+  // Legacy season pair + operating flag: the panel's status pill needs
+  // them to agree with the resort page (both read through
+  // lib/seasonDates resolveSeasonInfo / deriveResortStatus).
+  typical_season_start: string | null;
+  typical_season_end: string | null;
+  operating_status: string | null;
   snowmaking_pct: number | null;
   hero_image_url: string | null;
   hero_image_alt: string | null;

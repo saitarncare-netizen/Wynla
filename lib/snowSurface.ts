@@ -94,7 +94,7 @@ export type SurfaceContext = {
   now?: Date;
 };
 
-export type DormantReason = "closed" | "off-season" | "stale" | "no-data";
+export type DormantReason = "closed" | "off-season" | "unconfirmed" | "stale" | "no-data";
 
 /** Report when we decline to classify. Never carries a code. */
 export type DormantSurfaceReport = {
@@ -280,6 +280,19 @@ export function hasSnowpackEvidence(f: SurfaceFeatures, ctx: SurfaceContext): bo
   if (ctx.hasSnowpack === true) return true;
   if (f.snow_7d_in > 0) return true;
   return ctx.inSeason === true;
+}
+
+/**
+ * Does the context (not the weather) say the mountain is operating?
+ * Used by the dormancy gate when the live open state is unknown: a
+ * parsed season window, a resort-reported base or an explicit snowpack
+ * flag are positive evidence; a snowy week is not (it snows on closed
+ * mountains too).
+ */
+export function hasOperatingEvidence(ctx: SurfaceContext): boolean {
+  if (ctx.inSeason === true) return true;
+  if (ctx.hasSnowpack === true) return true;
+  return ctx.baseDepthIn != null && ctx.baseDepthIn > 0;
 }
 
 /**
@@ -500,9 +513,15 @@ function parseWindMph(short: string | null | undefined): number | null {
 export function wordingLooksRainy(conditions: string | null | undefined, tempHighF: number | null | undefined): boolean {
   const c = (conditions ?? "").toLowerCase();
   if (!c) return false;
-  const mentionsSnow = /snow|flurr|wintry|sleet|blizzard/.test(c);
-  const mentionsRain = /rain|drizzle|thunder|shower/.test(c);
+  // "Snow showers" and "flurries" are frozen precipitation whatever the
+  // temperature — NWS writes "Snow Showers Likely" on 36°F spring days —
+  // so they are removed before the rain test rather than deferring to
+  // the temperature rule. The temperature rule is only for genuinely
+  // mixed wording ("Rain and snow", "Wintry mix").
+  const frozenStripped = c.replace(/snow\s*showers?/g, " ").replace(/flurr\w*/g, " ");
+  const mentionsRain = /rain|drizzle|thunder|shower/.test(frozenStripped);
   if (!mentionsRain) return false;
+  const mentionsSnow = /snow|wintry|sleet|blizzard/.test(c);
   if (!mentionsSnow) return true;
   return tempHighF != null && tempHighF >= 34;
 }
@@ -603,6 +622,19 @@ export function dormantReason(history: DailyWeather[], ctx: SurfaceContext): Dor
           message: "No lifts are running, so there is no skiable surface to call.",
         };
   }
+  // Open state unknown AND nothing says the mountain is operating (no
+  // season window, no reported base, no explicit snowpack flag): a
+  // confident class here would be the audit's headline bug re-created
+  // for every resort the scraper cannot see once summer ends. The
+  // weather alone cannot tell us lifts are spinning.
+  if (ctx.isOpen == null && !hasOperatingEvidence(ctx)) {
+    return {
+      dormant: true,
+      reason: "unconfirmed",
+      headline: "Waiting for the lifts",
+      message: "We cannot confirm this resort is running yet, so there is no surface call. Check the resort's own snow report for opening day.",
+    };
+  }
   if (history.length === 0) {
     return {
       dormant: true,
@@ -626,10 +658,18 @@ export function dormantReason(history: DailyWeather[], ctx: SurfaceContext): Dor
   return null;
 }
 
+/** "2027-01-20" → "Jan 20", matching the date style the resort page uses
+ *  everywhere else; an unparsable string is returned as-is. */
+function shortDate(isoDate: string): string {
+  const d = new Date(`${isoDate}T12:00:00Z`);
+  if (!Number.isFinite(d.getTime())) return isoDate;
+  return d.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" });
+}
+
 /** Plain-English list of the inputs a classification rests on. */
 export function describeInputs(f: SurfaceFeatures, ctx: SurfaceContext = {}): string[] {
   const out: string[] = [];
-  out.push(`${f.window_days} day${f.window_days === 1 ? "" : "s"} of weather through ${f.latest_observed_date}`);
+  out.push(`${f.window_days} day${f.window_days === 1 ? "" : "s"} of weather through ${shortDate(f.latest_observed_date)}`);
   if (f.temp_high_today_f != null || f.temp_low_today_f != null) {
     const hi = f.temp_high_today_f != null ? `${f.temp_high_today_f}°` : "—";
     const lo = f.temp_low_today_f != null ? `${f.temp_low_today_f}°` : "—";

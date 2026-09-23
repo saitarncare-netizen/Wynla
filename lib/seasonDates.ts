@@ -27,7 +27,10 @@
 // Years are never hard-coded: a text without a year is anchored on the
 // reference year and rolled forward when the date has already passed,
 // so "Late November" read in September 2027 means November 2027, and read
-// in December 2027 means November 2028.
+// in December 2027 means November 2028. An explicit year more than a
+// year in the past ("November 27, 2026" still in the DB in 2028) is
+// treated as the resort's habitual month/day and re-anchored the same
+// way, flagged approximate.
 //
 // The window can WRAP year-end — ski resorts open in Nov and close in Apr.
 // If parsed `close` < `open` we treat it as "open → close of NEXT year"
@@ -407,9 +410,25 @@ function parseSingleSeasonText(
   );
 }
 
+/** An explicit year older than this (relative to the reference date) is
+ *  last season's data that nobody refreshed — "November 27, 2026" read
+ *  in September 2028. We keep the month/day as the resort's habitual
+ *  date and re-anchor the year, flagged approximate so the UI shows "~". */
+const STALE_EXPLICIT_YEAR_DAYS = 365;
+
+/** Assumed season length when only one edge is known. ~5 months covers
+ *  the typical late-Nov → mid-Apr US season without stretching a March
+ *  close back into October. */
+const TYPICAL_SEASON_DAYS = 150;
+
+/** A live snow report older than this is not evidence that lifts are
+ *  running today; the status derivation then falls back to season text. */
+const LIVE_REPORT_MAX_AGE_DAYS = 7;
+
 /** Build the date for `parsedYear ?? referenceYear`; when the year was
- *  implicit and the date has already passed, rebuild it for the next
- *  year (holidays and nth-weekdays move, so we recompute, not add 365). */
+ *  implicit (or explicit but more than a year stale) and the date has
+ *  already passed, rebuild it for the next year (holidays and
+ *  nth-weekdays move, so we recompute, not add 365). */
 function rollForward(
   build: (year: number) => Date,
   parsedYear: number | null,
@@ -417,9 +436,15 @@ function rollForward(
   referenceToday: Date,
   approximate: boolean,
 ): ParsedSide {
-  if (parsedYear !== null) return { date: build(parsedYear), approximate };
+  const today = startOfDayUTC(referenceToday);
+  if (parsedYear !== null) {
+    const explicit = build(parsedYear);
+    if (diffDays(today, explicit) <= STALE_EXPLICIT_YEAR_DAYS) return { date: explicit, approximate };
+    // Fall through: treat the stale explicit date as a month/day template.
+    approximate = true;
+  }
   let candidate = build(referenceYear);
-  if (candidate < startOfDayUTC(referenceToday)) candidate = build(referenceYear + 1);
+  if (candidate < today) candidate = build(referenceYear + 1);
   return { date: candidate, approximate };
 }
 
@@ -476,16 +501,30 @@ export function parseSeasonDates(
 
   if (!open && !close) return UNKNOWN_SEASON;
 
-  // If we only have one side, infer status from it alone.
+  // One-sided text: we only know when the season starts OR when it ends,
+  // so the other edge is guessed from a typical US season length. Both
+  // branches also defer to the global summer switch — a close date in
+  // March never makes a September mountain "in-season" (review finding:
+  // spout-springs / magic-mountain-id showed a green "Likely open" pill
+  // and a confident surface class in September from close-only text).
+  const summer = isGlobalOffSeasonNow(todayUTC);
   if (open && !close) {
     const days = diffDays(open.date, todayUTC);
-    if (days <= 0) {
-      // Past the open date but no close known — call it in-season w/o close.
+    // `open.date` is already rolled forward, so the most recent opening
+    // is one year earlier (a few days off for moving holidays, which is
+    // fine for a season-length check).
+    const lastOpen = makeUTCDate(open.date.getUTCFullYear() - 1, open.date.getUTCMonth(), open.date.getUTCDate());
+    const sinceLastOpen = diffDays(todayUTC, lastOpen);
+    const openedToday = days <= 0;
+    // Mt Lemmon ("mid December", no close text) used to count down to
+    // NEXT December all winter long once Dec 15 passed.
+    const withinSeason = !summer && sinceLastOpen >= 0 && sinceLastOpen <= TYPICAL_SEASON_DAYS;
+    if (openedToday || withinSeason) {
       return {
         status: "in-season",
         daysUntilOpen: null,
         daysUntilClose: null,
-        nextOpenDate: open.date,
+        nextOpenDate: openedToday ? open.date : lastOpen,
         nextCloseDate: null,
         approximate,
       };
@@ -511,14 +550,20 @@ export function parseSeasonDates(
         approximate,
       };
     }
-    return {
-      status: "in-season",
-      daysUntilOpen: null,
-      daysUntilClose: days,
-      nextOpenDate: null,
-      nextCloseDate: close.date,
-      approximate,
-    };
+    if (!summer && days <= TYPICAL_SEASON_DAYS) {
+      return {
+        status: "in-season",
+        daysUntilOpen: null,
+        daysUntilClose: days,
+        nextOpenDate: null,
+        nextCloseDate: close.date,
+        approximate,
+      };
+    }
+    // Too early to assume lifts are running: the status stays unknown
+    // (so the pill falls through to off-season / check-resort) but the
+    // close date is kept for the season-preview copy.
+    return { ...UNKNOWN_SEASON, nextCloseDate: close.date, approximate };
   }
 
   // Both present. Handle the year-wrap case where close < open in calendar
@@ -646,7 +691,19 @@ export type ResortStatusSource = {
   trails_open_today?: number | null;
   total_trails?: number | null;
   season_end_date?: string | null;
+  /** When the scraper last wrote snow_report_status; an old stamp makes
+   *  an "open" report worthless as evidence for today. */
+  snow_report_updated_at?: string | null;
 };
+
+/** Is the live snow report fresh enough to say what lifts do TODAY?
+ *  No stamp at all is trusted (older rows predate the column). */
+function liveReportIsFresh(r: ResortStatusSource, now: Date): boolean {
+  if (!r.snow_report_updated_at) return true;
+  const stamp = new Date(r.snow_report_updated_at).getTime();
+  if (!Number.isFinite(stamp)) return true;
+  return now.getTime() - stamp <= LIVE_REPORT_MAX_AGE_DAYS * MS_PER_DAY;
+}
 
 /**
  * One status for every resort, in priority order: live scrape → parsed
@@ -661,8 +718,11 @@ export function deriveResortStatus(
   if (r.operating_status === "closed") {
     return { kind: "closed-permanent", label: "Permanently closed", detail: null, tone: "red", dormant: true };
   }
-  const report = (r.snow_report_status ?? "").toLowerCase();
-  if (r.currently_open === true || report === "open") {
+  // A scraped "open" only counts while the scrape is recent; a stale
+  // report would otherwise keep a resort "Open today" all summer.
+  const fresh = liveReportIsFresh(r, now);
+  const report = fresh ? (r.snow_report_status ?? "").toLowerCase() : "";
+  if ((fresh && r.currently_open === true) || report === "open") {
     const lifts =
       r.lifts_open_today != null && r.total_lifts != null && r.total_lifts > 0
         ? `${r.lifts_open_today}/${r.total_lifts} lifts`
@@ -671,11 +731,14 @@ export function deriveResortStatus(
       r.trails_open_today != null && r.total_trails != null && r.total_trails > 0
         ? `${r.trails_open_today}/${r.total_trails} trails`
         : null;
+    // resorts.season_end_date is LAST season's date until the scraper
+    // refreshes it, so it is only usable as "until …" while still ahead.
+    const seasonEnd = r.season_end_date ? new Date(r.season_end_date + "T00:00:00Z") : null;
     const until =
       season.status === "in-season" && season.nextCloseDate
         ? `until ${season.approximate ? "~" : ""}${formatShortDate(season.nextCloseDate)}`
-        : r.season_end_date
-          ? `until ${formatShortDate(new Date(r.season_end_date + "T00:00:00Z"))}`
+        : seasonEnd && Number.isFinite(seasonEnd.getTime()) && seasonEnd >= startOfDayUTC(now)
+          ? `until ${formatShortDate(seasonEnd)}`
           : null;
     return {
       kind: "open",
