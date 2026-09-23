@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import type { AuthError } from "@supabase/supabase-js";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
-import { safeNext } from "@/lib/safeNext";
+import { emailLinkRedirectTo, safeNext } from "@/lib/safeNext";
 import { isLoginErrorCode, LOGIN_ERROR_COPY } from "@/lib/authErrorCode";
 
 // Sign-in page. The primary path is a 6-digit code typed into this page:
@@ -22,6 +22,12 @@ const CODE_LENGTH = 6;
 // If the OAuth redirect never happens (popup blocked, bfcache restore) the
 // button would stay disabled forever; release it after this long.
 const OAUTH_WATCHDOG_MS = 10_000;
+// `next` is resolved against the same origin on the server and the client
+// so the two renders agree (reading window.location.origin on the client
+// only would make an absolute same-origin `next` hydrate differently).
+// Every internal `next` is a relative path, which resolves the same against
+// any origin; an absolute preview/localhost URL simply falls back to "/".
+const SITE_ORIGIN = new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://wynla.app").origin;
 
 // useSearchParams forces dynamic rendering — wrap in Suspense so the page
 // still passes Next 16's static-prerender phase.
@@ -91,7 +97,7 @@ function verifyErrorCopy(error: AuthError): string {
 function LoginForm() {
   const router = useRouter();
   const params = useSearchParams();
-  const next = safeNext(params.get("next"), typeof window === "undefined" ? "https://wynla.app" : window.location.origin);
+  const next = safeNext(params.get("next"), SITE_ORIGIN);
   const errorParam = params.get("e");
 
   const [step, setStep] = useState<"email" | "code">("email");
@@ -171,11 +177,14 @@ function LoginForm() {
       const supabase = createSupabaseBrowserClient();
       // The link in the email lands on /auth/confirm, which verifies a token
       // hash server-side and needs no PKCE verifier, so it works in any
-      // browser. `next` rides along so the person ends up where they started.
-      const emailRedirectTo = `${window.location.origin}/auth/confirm?next=${encodeURIComponent(next)}`;
+      // browser. `next` rides along (double-encoded, see emailLinkRedirectTo)
+      // so the person ends up where they started.
       const { error: sendError } = await supabase.auth.signInWithOtp({
         email: address,
-        options: { shouldCreateUser: true, emailRedirectTo },
+        options: {
+          shouldCreateUser: true,
+          emailRedirectTo: emailLinkRedirectTo(window.location.origin, next),
+        },
       });
       setBusy("idle");
       if (sendError) {
@@ -221,6 +230,9 @@ function LoginForm() {
     [email, next, router],
   );
 
+  // No maxLength on the input: a pasted or autofilled "123 456" / "123-456"
+  // would be cut to five characters before this filter could strip the
+  // separator. Keeping only the digits here gives the right six.
   function onCodeChange(raw: string) {
     const digits = raw.replace(/\D/g, "").slice(0, CODE_LENGTH);
     setCode(digits);
@@ -300,7 +312,6 @@ function LoginForm() {
                   inputMode="numeric"
                   autoComplete="one-time-code"
                   pattern="[0-9]*"
-                  maxLength={CODE_LENGTH}
                   placeholder="123456"
                   value={code}
                   onChange={(e) => onCodeChange(e.target.value)}

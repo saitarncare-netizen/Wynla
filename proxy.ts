@@ -12,7 +12,9 @@
 // comes from lib/supabase/sessionMaxAge.ts (90 days) and is shared with
 // lib/supabase/server.ts. HTTP Set-Cookie from here is not subject to
 // Safari's 7-day cap on script-written cookies, so this write is the one
-// that keeps iPhone users signed in.
+// that keeps iPhone users signed in; because the SDK itself only writes on
+// a refresh, the proxy also re-issues the incoming session cookie on every
+// request it handles (see the end of proxy()).
 //
 // Matcher
 // -------
@@ -27,10 +29,18 @@
 
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
-import { withSessionMaxAge } from "@/lib/supabase/sessionMaxAge";
+import {
+  isSessionCookieName,
+  SESSION_COOKIE_OPTIONS,
+  withSessionMaxAge,
+} from "@/lib/supabase/sessionMaxAge";
 
 export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request });
+  // @supabase/ssr only calls setAll when auth-js changed its storage, i.e.
+  // on a token refresh (about once an hour) or a sign-out. Remember whether
+  // that happened so the re-issue below can fill the gap.
+  let sdkWroteCookies = false;
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -41,6 +51,7 @@ export async function proxy(request: NextRequest) {
           return request.cookies.getAll();
         },
         setAll(cookiesToSet) {
+          sdkWroteCookies = true;
           // Re-inject into the request first so Server Components rendered
           // in this same pass read the refreshed token.
           for (const { name, value } of cookiesToSet) {
@@ -59,8 +70,32 @@ export async function proxy(request: NextRequest) {
   );
 
   // Touch the user — this refreshes the session cookie if the token is near
-  // expiry. We don't read the result; the side-effect is what matters.
-  await supabase.auth.getUser();
+  // expiry (setAll above then writes it with the 90-day life).
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  // Re-issue the session cookie over HTTP on every proxied request.
+  //
+  // The primary sign-in (6-digit code) verifies in the browser, so the
+  // cookie is first written by document.cookie; the browser client's own
+  // hourly refresh writes it the same way. Safari and iOS WebKit (ITP) cap
+  // every script-written cookie at 7 days, whatever maxAge says, so an
+  // iPhone user who signs in with the code and comes back after a week is
+  // signed out again. The SDK only re-emits cookies from here when it
+  // refreshed the token, which is rarely the request a week-old cookie
+  // needs. Copying the incoming session cookie onto the response as HTTP
+  // Set-Cookie with the 90-day life resets that cap on every page view or
+  // API call (the service worker caches nothing, so every one reaches
+  // here). Only done when the session is valid: a rejected session is
+  // deleted by the SDK (setAll ran), and a merely unreachable Supabase
+  // must not turn a stale cookie into a 90-day one.
+  if (user && !sdkWroteCookies) {
+    for (const { name, value } of request.cookies.getAll()) {
+      if (!isSessionCookieName(name) || value === "") continue;
+      response.cookies.set(name, value, withSessionMaxAge(value, SESSION_COOKIE_OPTIONS));
+    }
+  }
 
   return response;
 }

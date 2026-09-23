@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { nextFromRedirectTo, safeNext } from "./safeNext";
+import { emailLinkRedirectTo, nextFromRedirectTo, safeNext } from "./safeNext";
 
 const ORIGIN = "https://wynla.app";
 
@@ -79,5 +79,34 @@ describe("nextFromRedirectTo", () => {
       nextFromRedirectTo("https://wynla.app/auth/confirm?next=https%3A%2F%2Fevil.com", ORIGIN),
     ).toBe("/");
     expect(nextFromRedirectTo("https://wynla.app/auth/confirm", ORIGIN)).toBe("/");
+  });
+});
+
+describe("emailLinkRedirectTo round trip through the email template", () => {
+  // The template pastes {{ .RedirectTo }} verbatim as the last query param
+  // of the link; /auth/confirm then reads redirect_to with URLSearchParams
+  // (one decode) and nextFromRedirectTo parses the result (second decode).
+  function viaTemplate(next: string): string {
+    const redirectTo = emailLinkRedirectTo(ORIGIN, next);
+    const link = new URL(
+      `${ORIGIN}/auth/confirm?token_hash=abc&type=email&redirect_to=${redirectTo}`,
+    );
+    return nextFromRedirectTo(link.searchParams.get("redirect_to"), ORIGIN);
+  }
+
+  it("keeps a destination whose own query has several params", () => {
+    expect(viaTemplate("/?plan=1&resort=vail")).toBe("/?plan=1&resort=vail");
+    expect(viaTemplate("/resort/vail?tab=snow&day=sat#lifts")).toBe(
+      "/resort/vail?tab=snow&day=sat#lifts",
+    );
+  });
+
+  it("keeps simple paths and the root", () => {
+    expect(viaTemplate("/favorites")).toBe("/favorites");
+    expect(viaTemplate("/")).toBe("/");
+  });
+
+  it("stays on the /auth/** allow-list entry", () => {
+    expect(emailLinkRedirectTo(ORIGIN, "/trips")).toMatch(/^https:\/\/wynla\.app\/auth\/confirm\?next=/);
   });
 });

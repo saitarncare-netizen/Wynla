@@ -56,22 +56,6 @@ export default function AuthButton() {
   async function signOut() {
     if (signingOut) return;
     setSigningOut(true);
-    // Best effort: stop this device's snow-alert push subscription so the
-    // next person on a shared phone does not keep getting this account's
-    // alerts. The row belongs to the signed-in user, so this has to run
-    // BEFORE the session is gone.
-    try {
-      const reg = await navigator.serviceWorker?.getRegistration();
-      const push = await reg?.pushManager.getSubscription();
-      if (push) {
-        await fetch(`/api/push/subscribe?endpoint=${encodeURIComponent(push.endpoint)}`, {
-          method: "DELETE",
-        });
-        await push.unsubscribe();
-      }
-    } catch {
-      // No service worker, or push not granted: nothing to clean up.
-    }
     // Local scope: only this browser's session is revoked. The SDK default
     // (global) revoked every device's refresh token, so signing out on the
     // phone silently killed the laptop on its next refresh. "Sign out of all
@@ -126,7 +110,9 @@ export default function AuthButton() {
         aria-label="Account menu"
         aria-haspopup="menu"
         aria-expanded={menuOpen}
-        aria-controls="account-menu"
+        // Only point at the menu while it exists in the DOM; a dangling id
+        // is flagged by axe and announced as an unreachable control.
+        aria-controls={menuOpen ? "account-menu" : undefined}
         className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-wn-navy text-sm font-bold text-white shadow-sm transition hover:bg-wn-navy/90 active:scale-95"
       >
         {initial}

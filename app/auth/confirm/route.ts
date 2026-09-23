@@ -31,9 +31,10 @@ export async function GET(request: Request) {
   const url = new URL(request.url);
   const tokenHash = url.searchParams.get("token_hash");
   const rawType = url.searchParams.get("type");
-  // The template can carry the destination either as our own `next` or as
-  // Supabase's `redirect_to` (= the emailRedirectTo we passed, which wraps
-  // `next`). Prefer the explicit one.
+  // The documented template carries the destination as Supabase's
+  // `redirect_to` (= the emailRedirectTo we passed, which wraps a
+  // double-encoded `next`; see emailLinkRedirectTo). A template written
+  // with a plain `next=` param is honoured too.
   const next = url.searchParams.has("next")
     ? safeNext(url.searchParams.get("next"), url.origin)
     : nextFromRedirectTo(url.searchParams.get("redirect_to"), url.origin);

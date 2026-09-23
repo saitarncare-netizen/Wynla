@@ -18,6 +18,29 @@ import type { CookieOptions } from "@supabase/ssr";
 
 export const SESSION_MAX_AGE_SECONDS = 90 * 24 * 60 * 60;
 
+// The attributes @supabase/ssr itself uses for auth cookies
+// (DEFAULT_COOKIE_OPTIONS, minus the lifetime). Mirrored here so a cookie
+// the proxy re-issues is byte-for-byte the SDK's cookie with a longer
+// life: same path (one cookie, not a duplicate scoped to a sub-path), not
+// httpOnly (the browser client has to read it) and no `secure`, which the
+// SDK also omits so http://localhost works.
+export const SESSION_COOKIE_OPTIONS: CookieOptions = {
+  path: "/",
+  sameSite: "lax",
+  httpOnly: false,
+};
+
+// Names of the cookies that hold the session: supabase-js stores it under
+// `sb-<project-ref>-auth-token`, and @supabase/ssr splits values over ~3 KB
+// into `<name>.0`, `<name>.1`, ... (utils/chunker.js). Anything else under
+// the `sb-` prefix (the PKCE `-code-verifier`, for one) is not the session
+// and must not be given a longer life.
+const SESSION_COOKIE_NAME = /^sb-.+-auth-token(?:\.\d+)?$/;
+
+export function isSessionCookieName(name: string): boolean {
+  return SESSION_COOKIE_NAME.test(name);
+}
+
 // Apply the 90-day lifetime to a cookie the SDK is writing, unless the SDK
 // is deleting it. @supabase/ssr removes cookies by writing an empty value
 // with maxAge 0 (cookies.js); blindly extending those would leave empty

@@ -1,12 +1,19 @@
 # Auth setup — Supabase dashboard steps (2026-09-23)
 
-The code for the new sign-in flow is merged (6-digit email code as the
-primary path, `/auth/confirm` link that works in any browser, 90-day
-sessions, local-scope sign-out). Everything below is **dashboard
-configuration** that only the founder (or Claude signed in with her
-Supabase / Resend logins) can do. Until step 1 is done the email still
-contains only the old link, so the code box on `/login` has nothing to
-accept — do step 1 first.
+The new sign-in flow (6-digit email code as the primary path,
+`/auth/confirm` link that works in any browser, 90-day sessions,
+local-scope sign-out) ships on branch `wf/auth-2026-09-23` and is live
+only once that branch is merged and deployed. Everything below is
+**dashboard configuration** that only the founder (or Claude signed in
+with her Supabase / Resend logins) can do.
+
+**Order matters.** Do step 1 (email templates) only **after** the deploy
+that contains this branch is live on wynla.app. The current production
+build has no `/auth/confirm` route and its login page cannot accept a
+code, so switching the templates early would break sign-in for everyone
+until the deploy lands. Once the deploy is live, do step 1 straight away:
+until then the email still contains only the old link and the code box on
+`/login` has nothing to accept.
 
 Supabase project: the one whose URL is in `NEXT_PUBLIC_SUPABASE_URL`
 (`.env.local`). Dashboard: <https://supabase.com/dashboard>.
@@ -63,7 +70,11 @@ of `email`, which verifies both new and existing users, and
   `{{ .ConfirmationURL }}` only worked in the exact browser that
   requested the email.
 - `redirect_to={{ .RedirectTo }}` carries the page the person was on
-  (`/auth/confirm?next=/favorites`), which `/auth/confirm` unwraps.
+  (`/auth/confirm?next=<encoded path>`), which `/auth/confirm` unwraps.
+  Keep it as the **last** parameter of the link and do not wrap it in
+  another encoding: Supabase pastes the value in verbatim and the app
+  already encodes `next` so that a destination with its own query
+  (`/?plan=1&resort=vail`) survives the trip.
 - Link scanners (Outlook Safe Links, corporate Gmail) can still open the
   link before the person does and consume it. That is why the code is
   primary and the link is secondary; the page copy says so.
@@ -151,6 +162,14 @@ authorized redirect URI in Google Cloud set to
    expired..." — expected, links are single-use.
 6. Sign in on the phone and the laptop, sign out on the phone: the laptop
    stays signed in (local-scope sign-out).
+7. iPhone only, over the following weeks: sign in with the **code** in the
+   installed Wynla app (home-screen icon), use it for a few minutes, then
+   leave it closed for more than 7 days. Opening it again should still show
+   you signed in. Safari caps cookies written by page scripts at 7 days;
+   the proxy re-issues the session cookie over HTTP on every request to
+   lift that cap, and this is the only way to confirm it on a real device.
+   If it fails, note the iOS version and whether the app was opened at all
+   during those 7 days.
 
 ## What the code already handles (no dashboard work)
 
@@ -159,6 +178,9 @@ authorized redirect URI in Google Cloud set to
 - 60 s resend cooldown, "Use a different email", spam-folder hint.
 - 90-day session cookie (`lib/supabase/sessionMaxAge.ts`), shared by
   `proxy.ts` and `lib/supabase/server.ts`; deletions are not extended.
+  The proxy also re-issues the session cookie as HTTP `Set-Cookie` on
+  every request so Safari's 7-day cap on script-written cookies does not
+  apply to code sign-ins.
 - Proxy skips `sw.js`, `manifest.json`, `robots.txt`, `sitemap.xml`,
   `/offline`, `/api/cron/*`, `/api/health`, Open Graph image routes and
   static files.
