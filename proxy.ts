@@ -1,34 +1,33 @@
-// Next.js 16 proxy (formerly middleware) — runs on every request. Its only
-// job for Wynla is to keep the Supabase auth cookie fresh by calling
-// `supabase.auth.getUser()`, which triggers a session refresh if the access
-// token expired. Without this the user gets silently logged out after an hour.
+// Next.js 16 proxy (formerly middleware). Its only job for Wynla is to keep
+// the Supabase auth cookie fresh by calling `supabase.auth.getUser()`, which
+// refreshes the session if the access token is about to expire, and to write
+// the refreshed cookies back with a season-long lifetime.
 //
-// Session lifetime (Round 5 polish, 2026-05-23)
-// ---------------------------------------------
-// Supabase's @supabase/ssr defaults set the auth cookie's maxAge to ~1h —
-// which meant users who returned to /trips after a meeting or overnight
-// were silently logged out and had to magic-link again. We extend every
-// auth cookie this middleware writes to 7 days (604800s) so the session
-// persists across normal browsing patterns. The Supabase access token
-// itself still rotates every hour (the refresh token does the refreshing
-// inside getUser() below), but the COOKIE that carries the session
-// survives so we always have something to refresh on the user's next
-// visit.
+// Session lifetime
+// ----------------
+// @supabase/ssr's own cookie default is ~400 days (not 1 hour, as an older
+// comment here claimed). The 7-day override we used to apply was therefore
+// not fixing a short default; it was CREATING a 7-day inactivity timeout,
+// which is why people who skipped a week got signed out. The lifetime now
+// comes from lib/supabase/sessionMaxAge.ts (90 days) and is shared with
+// lib/supabase/server.ts. HTTP Set-Cookie from here is not subject to
+// Safari's 7-day cap on script-written cookies, so this write is the one
+// that keeps iPhone users signed in.
 //
-// Matcher: we match every page route + every API route, excluding only
-// static assets + Next internals. /trips, /trip/[id], /account,
-// /favorites etc. all flow through here so their cookies get refreshed
-// on every visit. Be careful when changing the matcher regex below —
-// excluding /trip would silently kill session refresh for the trip page.
+// Matcher
+// -------
+// Every page route and every user-facing API route flows through here so
+// their cookies get refreshed (/trips, /trip/[id], /account, /favorites,
+// /api/me/*, /api/push/* ...). Requests that never carry a user session are
+// excluded so they skip the Supabase round trip: Next internals, the service
+// worker, manifest, robots/sitemap, cron endpoints (secret-authenticated,
+// no cookie), the health check, Open Graph image routes and static files.
+// Be careful when changing the regex: excluding /trip or /account would
+// silently kill session refresh on those routes.
 
 import { NextResponse, type NextRequest } from "next/server";
-import { createServerClient, type CookieOptions } from "@supabase/ssr";
-
-// 7 days in seconds. Long enough that someone who installs the PWA on
-// Monday and opens it again on Friday is still signed in; short enough
-// that a stolen laptop's session expires within a normal "I'd realize
-// it was gone" window.
-const SESSION_MAX_AGE_SECONDS = 7 * 24 * 60 * 60;
+import { createServerClient } from "@supabase/ssr";
+import { withSessionMaxAge } from "@/lib/supabase/sessionMaxAge";
 
 export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request });
@@ -42,21 +41,17 @@ export async function proxy(request: NextRequest) {
           return request.cookies.getAll();
         },
         setAll(cookiesToSet) {
+          // Re-inject into the request first so Server Components rendered
+          // in this same pass read the refreshed token.
           for (const { name, value } of cookiesToSet) {
             request.cookies.set(name, value);
           }
           response = NextResponse.next({ request });
           for (const { name, value, options } of cookiesToSet) {
-            // Extend maxAge to 7 days for every auth cookie we set —
-            // Supabase's default is 1h, which silently logged users
-            // out between sessions. We preserve every other option
-            // (httpOnly, sameSite, secure, path) the SDK chose so
-            // we're not opening a security hole.
-            const extended: CookieOptions = {
-              ...options,
-              maxAge: SESSION_MAX_AGE_SECONDS,
-            };
-            response.cookies.set(name, value, extended);
+            // Preserve every option the SDK chose (httpOnly, sameSite,
+            // secure, path); only the lifetime changes, and deletions are
+            // left alone so sign-out really clears the cookie.
+            response.cookies.set(name, value, withSessionMaxAge(value, options));
           }
         },
       },
@@ -72,12 +67,12 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    // Match all paths EXCEPT static assets and Next internals. Note:
-    // this MUST include /trips, /trip/:id, /account, /favorites — those
-    // routes rely on the proxy to refresh the session cookie. Be
-    // careful: the regex below uses negative lookahead on the prefixes
-    // we want to skip; do NOT add /trip or /account here unless you
-    // mean to also skip session refresh on those routes.
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    // Negative lookahead on everything that never needs a session. Static
+    // file extensions are matched at the end of the path so app routes like
+    // /resort/vail are unaffected. Literal dots are written as `[.]`: Next
+    // runs this string through path-to-regexp, which strips a single
+    // backslash escape, so `\\.` would silently become "any character" and
+    // skip routes such as /guides/best-json.
+    "/((?!_next/static|_next/image|favicon[.]ico|sw[.]js|manifest[.]json|robots[.]txt|sitemap[.]xml|offline(?:/|$)|api/cron/|api/health(?:/|$)|.*/opengraph-image|.*[.](?:svg|png|jpg|jpeg|gif|webp|ico|css|js|map|json|txt|xml|woff|woff2|ttf|webmanifest)$).*)",
   ],
 };

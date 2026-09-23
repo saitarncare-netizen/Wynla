@@ -4,16 +4,16 @@
 // Use this in any `app/**` server file that needs `supabase.auth.getUser()`
 // or RLS-aware queries on behalf of the logged-in user.
 //
-// Session lifetime: cookies written here also use the 7-day maxAge so
-// they line up with the proxy's session lifetime. Without this, a route
-// handler that wrote auth cookies (e.g. /auth/callback) would default
-// to Supabase's 1h, leading to a confusing "I just signed in but the
-// cookie expires in 1h" situation. Keep this in sync with proxy.ts.
+// Session lifetime: cookies written here (e.g. by /auth/callback and
+// /auth/confirm right after sign-in) get the same 90-day maxAge the proxy
+// applies, via the shared helper in lib/supabase/sessionMaxAge.ts, so a
+// fresh sign-in and a refreshed session expire on the same schedule.
+// Cookie deletions (sign-out, failed refresh) are passed through untouched
+// so they actually delete.
 
-import { createServerClient, type CookieOptions } from "@supabase/ssr";
+import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
-
-const SESSION_MAX_AGE_SECONDS = 7 * 24 * 60 * 60;
+import { withSessionMaxAge } from "@/lib/supabase/sessionMaxAge";
 
 export async function createSupabaseServerClient() {
   const cookieStore = await cookies();
@@ -29,11 +29,7 @@ export async function createSupabaseServerClient() {
         setAll(cookiesToSet) {
           try {
             for (const { name, value, options } of cookiesToSet) {
-              const extended: CookieOptions = {
-                ...options,
-                maxAge: SESSION_MAX_AGE_SECONDS,
-              };
-              cookieStore.set(name, value, extended);
+              cookieStore.set(name, value, withSessionMaxAge(value, options));
             }
           } catch {
             // The setAll method was called from a Server Component (read-only).
