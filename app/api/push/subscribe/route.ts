@@ -1,12 +1,47 @@
-// Stage 29 — store a PushSubscription so the snow-alert cron can fire
-// notifications at it later. RLS handles auth; we just upsert by endpoint.
+// Store / refresh / remove a device's Web Push subscription so the
+// snow-alert cron can fan out notifications to it.
 //
 // POST body: { subscription: PushSubscription, userAgent?: string }
+//   Upserts by endpoint. Requires a signed-in user: snow_alerts rows are
+//   per user, so an anonymous subscription could never be matched to an
+//   alert anyway.
+//
+//   Why the service-role client: the live push_subscriptions table has
+//   SELECT / INSERT / DELETE policies but no UPDATE policy, and a
+//   supabase-js upsert is INSERT ... ON CONFLICT DO UPDATE, which Postgres
+//   checks against UPDATE policies on the conflict path. The second enable
+//   on the same device (e.g. alerts for a second resort, or after
+//   sign-out/sign-in) therefore fails under RLS. handoff-docs/sql/
+//   2026-09-23-alerts.sql adds the policy; until it runs, and as a belt
+//   and braces after, the write happens with the service role AFTER this
+//   handler has verified the caller owns the endpoint (see below).
+//
+// DELETE ?endpoint=...  Removes the caller's row for that endpoint. Runs
+//   through the cookie client so RLS scopes it to the signed-in user.
 
 import { NextRequest, NextResponse } from "next/server";
+import { createClient } from "@supabase/supabase-js";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export const runtime = "nodejs";
+
+type PushSubscriptionJSON = {
+  endpoint?: string;
+  keys?: { p256dh?: string; auth?: string };
+};
+
+type StoredSub = {
+  user_id: string | null;
+  p256dh: string;
+  auth: string;
+};
+
+function serviceClient() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !key) return null;
+  return createClient(url, key, { auth: { persistSession: false } });
+}
 
 export async function POST(req: NextRequest) {
   let body: { subscription?: PushSubscriptionJSON; userAgent?: string };
@@ -19,26 +54,72 @@ export async function POST(req: NextRequest) {
   if (!sub?.endpoint || !sub.keys?.p256dh || !sub.keys?.auth) {
     return NextResponse.json({ error: "Missing subscription fields" }, { status: 400 });
   }
+  let endpointUrl: URL;
+  try {
+    endpointUrl = new URL(sub.endpoint);
+  } catch {
+    return NextResponse.json({ error: "Invalid endpoint" }, { status: 400 });
+  }
+  if (endpointUrl.protocol !== "https:" || sub.endpoint.length > 2048) {
+    return NextResponse.json({ error: "Invalid endpoint" }, { status: 400 });
+  }
 
   const supabase = await createSupabaseServerClient();
   const { data: u } = await supabase.auth.getUser();
+  const userId = u.user?.id;
+  if (!userId) {
+    return NextResponse.json({ error: "Sign in to enable alerts" }, { status: 401 });
+  }
 
   const row = {
-    user_id: u.user?.id ?? null,
+    user_id: userId,
     endpoint: sub.endpoint,
     p256dh: sub.keys.p256dh,
     auth: sub.keys.auth,
-    user_agent: body.userAgent ?? null,
+    user_agent: (body.userAgent ?? "").slice(0, 512) || null,
     last_seen_at: new Date().toISOString(),
   };
 
-  const { error } = await supabase
+  const admin = serviceClient();
+  if (!admin) {
+    // No service key in this environment: fall back to the RLS path. The
+    // first insert works; a re-enable on the same device needs the UPDATE
+    // policy from the SQL file.
+    const { error } = await supabase.from("push_subscriptions").upsert(row, { onConflict: "endpoint" });
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ ok: true });
+  }
+
+  // Ownership check before the privileged write. The endpoint row may
+  // already belong to another account on a shared device; the caller may
+  // take it over only by presenting the subscription's own keys, which
+  // only the browser holding the subscription knows. Otherwise refuse.
+  const { data: existing, error: readErr } = await admin
+    .from("push_subscriptions")
+    .select("user_id, p256dh, auth")
+    .eq("endpoint", sub.endpoint)
+    .maybeSingle();
+  if (readErr) {
+    return NextResponse.json({ error: readErr.message }, { status: 500 });
+  }
+  const prior = existing as StoredSub | null;
+  if (prior && prior.user_id && prior.user_id !== userId) {
+    const sameKeys = prior.p256dh === row.p256dh && prior.auth === row.auth;
+    if (!sameKeys) {
+      return NextResponse.json(
+        { error: "This device is registered to another account" },
+        { status: 403 },
+      );
+    }
+  }
+
+  const { error } = await admin
     .from("push_subscriptions")
     .upsert(row, { onConflict: "endpoint" });
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
-  return NextResponse.json({ ok: true });
+  return NextResponse.json({ ok: true, rebound: Boolean(prior && prior.user_id !== userId) });
 }
 
 export async function DELETE(req: NextRequest) {
@@ -49,19 +130,19 @@ export async function DELETE(req: NextRequest) {
   }
   const supabase = await createSupabaseServerClient();
   const { data: u } = await supabase.auth.getUser();
-  // Scope the delete to the caller so nobody can unsubscribe a device that
-  // isn't theirs by guessing/leaking its endpoint: a logged-in user can only
-  // delete their own rows; an anonymous caller only anonymous (null-owner) rows.
-  let q = supabase.from("push_subscriptions").delete().eq("endpoint", endpoint);
-  q = u.user?.id ? q.eq("user_id", u.user.id) : q.is("user_id", null);
-  const { error } = await q;
+  if (!u.user?.id) {
+    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+  }
+  // Scoped to the caller both here and by RLS (push_subs_delete_own), so
+  // nobody can unsubscribe a device that is not theirs by leaking its
+  // endpoint URL.
+  const { error } = await supabase
+    .from("push_subscriptions")
+    .delete()
+    .eq("endpoint", endpoint)
+    .eq("user_id", u.user.id);
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
   return NextResponse.json({ ok: true });
 }
-
-type PushSubscriptionJSON = {
-  endpoint: string;
-  keys?: { p256dh?: string; auth?: string };
-};
