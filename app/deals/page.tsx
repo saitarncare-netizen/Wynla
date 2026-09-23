@@ -216,6 +216,27 @@ export default function DealsPage() {
             {newestCheck ? ` (last check ${formatDate(newestCheck)})` : ""}
             , so always confirm on the operator&apos;s page before you buy.
           </p>
+          {/* The price is only half the question: days, blackout dates and
+              reservation rules differ at every resort. Those live on each
+              resort page (Pass access section); the map links filter by
+              pass so a reader can find a resort to check. */}
+          <p className="mt-3 text-sm text-wn-charcoal/75 sm:text-base">
+            Days, blackout dates and reservation rules differ by resort. Open
+            any resort page and look for Pass access, or browse the map by
+            pass:{" "}
+            {PASS_DEALS.map((deal, i) => (
+              <span key={deal.pass}>
+                {i > 0 && " · "}
+                <Link
+                  href={`/?pass=${deal.pass}`}
+                  className="font-semibold text-wn-navy underline underline-offset-2"
+                >
+                  {passLabel(deal.pass)}
+                </Link>
+              </span>
+            ))}
+            .
+          </p>
         </header>
 
         {/* Pass cards. The h2 keeps the heading order h1 → h2 → h3 for
