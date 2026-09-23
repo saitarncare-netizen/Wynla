@@ -46,12 +46,15 @@ export default function NearbyRestaurants({ rows, variant = "full" }: Props) {
   }
 
   const isCompact = variant === "compact";
+  // The full variant sits inside the resort page's "Around the resort"
+  // section (an h2), so it is an h3 there; compact keeps its h2.
+  const Heading = isCompact ? "h2" : "h3";
   return (
     <div className={isCompact ? "mt-4" : "mt-8"}>
       <header className={isCompact ? "mb-1" : "mb-3"}>
-        <h2 className={isCompact ? "text-base font-extrabold text-wn-navy" : "text-lg font-extrabold text-wn-navy"}>
+        <Heading className={isCompact ? "text-base font-extrabold text-wn-navy" : "text-lg font-extrabold text-wn-navy"}>
           <span aria-hidden="true">🍴</span> Eat nearby
-        </h2>
+        </Heading>
         {!isCompact && (
           <p className="text-xs text-wn-muted">
             Restaurants within ~25 km of the resort, sourced from

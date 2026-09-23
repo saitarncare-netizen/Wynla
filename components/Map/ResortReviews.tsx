@@ -170,7 +170,6 @@ export default function ResortReviews({ resortId }: Props) {
             aria-label="Review text (optional)"
             rows={3}
             maxLength={1000}
-            invalid={!!error}
             className="mt-2"
           />
           {error && (
@@ -256,7 +255,7 @@ function StarPicker({
         >
           <span
             className={
-              n <= value ? "text-amber-500" : "text-wn-subtle hover:text-amber-300"
+              n <= value ? "text-wn-gold-halo" : "text-wn-subtle hover:text-wn-gold"
             }
           >
             ★

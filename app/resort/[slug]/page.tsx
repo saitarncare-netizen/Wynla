@@ -14,7 +14,6 @@ import {
 import { accentOnNavy, textOn } from "@/lib/contrast";
 import Icon, { type IconName } from "@/components/icons/Icon";
 import Button from "@/components/ui/Button";
-import Chip from "@/components/ui/Chip";
 import UiSection from "@/components/ui/Section";
 import {
   blackoutText,
@@ -831,11 +830,24 @@ export default async function ResortPage({
           }}
         />
 
-        {/* Top bar — plan + compare + favorite. The "← Map" pill that
-            used to sit on the left is gone: the AppShell bar above the
-            hero owns back navigation on every non-map route (design
-            guide section 6). */}
-        <div className="relative z-10 mx-auto flex max-w-5xl items-center justify-end px-4 py-4 sm:px-6">
+        {/* Top bar — back link + plan + compare + favorite.
+            The Map pill stays (for now) even though the AppShell bar
+            also links to the map: it carries the slug back as
+            ?recent=<slug> so the map page promotes it into the
+            recentlyViewedId slot and paints the gold ring on the pin the
+            user just visited (Saitarn 2026-05-23 "พอออกมายังไม่เห็นมีไฮไลท์เลย").
+            lib/nav.ts backLinkFor() returns a plain "/" for /resort/*, so
+            the shell link alone would drop that highlight. Once
+            backLinkFor returns /?recent=<slug> for resort pages, this
+            pill can go. */}
+        <div className="relative z-10 mx-auto flex max-w-5xl items-center justify-between px-4 py-4 sm:px-6">
+          <Link
+            href={`/?recent=${encodeURIComponent(resort.slug)}`}
+            className="inline-flex h-11 items-center gap-1 rounded-full bg-white/95 px-3 text-xs font-semibold text-wn-navy shadow-wn-md backdrop-blur-sm transition hover:bg-white sm:h-9"
+          >
+            <Icon name="arrow-left" className="h-4 w-4" />
+            Map
+          </Link>
           <div className="flex items-center gap-2">
             {/* Opens the planner with this resort as day 1, so the page
                 is a doorway into a trip rather than a dead end (audit
@@ -865,7 +877,7 @@ export default async function ResortPage({
               <PassBadge key={p} pass={p} href={isPassFamily(p) ? "#pass-access" : undefined} />
             ))}
           </div>
-          <h1 className="text-wn-4xl font-extrabold leading-[0.95] tracking-tight text-white sm:text-7xl md:text-[7.5rem] md:tracking-[-0.025em]">
+          <h1 className="text-wn-3xl font-extrabold leading-[0.95] tracking-tight text-white sm:text-7xl md:text-[7.5rem] md:tracking-[-0.025em]">
             {resort.name}
           </h1>
           {/* Season countdown — sits just under the hero title while the
@@ -1156,7 +1168,8 @@ export default async function ResortPage({
               href={`mailto:hello@wynla.app?subject=Incorrect%20info%20for%20${encodeURIComponent(resort.name)}&body=${encodeURIComponent(`Resort: ${resort.name}\nURL: https://wynla.app/resort/${resort.slug}\n\nWhat's wrong:\n`)}`}
               className="inline-flex min-h-11 items-center font-medium text-wn-charcoal underline hover:text-wn-navy sm:min-h-0"
             >
-              Report incorrect info →
+              Report incorrect info
+              <Icon name="arrow-right" className="ml-1 h-3.5 w-3.5" />
             </a>
           </div>
           <p className="mt-2">
@@ -1404,13 +1417,14 @@ function Section({
   // Thin adapter over the design-system Section (one H2 style). The body
   // is wrapped so the primitive's space-y rhythm never adds to the
   // margins the blocks inside already carry. Anchor targets clear the
-  // sticky AppShell bar.
+  // sticky AppShell bar through the global
+  // `body:not(.route-map) [id] { scroll-margin-top }` rule in globals.css
+  // (unlayered, so a scroll-mt utility here would lose to it anyway).
   return (
     <UiSection
       id={id}
       title={title}
       description={subtitle}
-      className={id ? "scroll-mt-[calc(var(--wn-shell-h)+1rem)]" : undefined}
     >
       <div>{children}</div>
     </UiSection>
@@ -1681,7 +1695,7 @@ function QuickStats({
       {hasPark && (
         <div className="mt-3 inline-flex items-center gap-2 rounded-full border border-wn-line bg-white px-3 py-1.5 text-xs font-medium text-wn-charcoal">
           <span
-            className="block h-2.5 w-5 rounded-full bg-orange-500"
+            className="block h-2.5 w-5 rounded-full bg-wn-warning"
             aria-hidden="true"
           />
           <span>
@@ -1698,9 +1712,9 @@ function QuickStats({
       {features.length > 0 && (
         <div className="mt-3 flex flex-wrap gap-2">
           {features.map((f) => (
-            <Chip key={f.label} iconLeft={<span aria-hidden="true">{f.emoji}</span>}>
+            <StaticTag key={f.label} emoji={f.emoji}>
               {f.label}
-            </Chip>
+            </StaticTag>
           ))}
         </div>
       )}
@@ -2062,8 +2076,8 @@ function TenDayForecast({
                 // them as less-trusted, but drop the muted background.
                 // The faded-text variant was unreadable on mobile.
                 isTrend
-                  ? "w-[88px] border-dashed border-wn-subtle/50 bg-white"
-                  : "w-[88px] border-wn-line bg-white",
+                  ? "w-[96px] border-dashed border-wn-subtle/50 bg-white"
+                  : "w-[96px] border-wn-line bg-white",
               ].join(" ")}
             >
               <div className="text-eyebrow font-bold uppercase text-wn-navy">
@@ -2144,6 +2158,18 @@ function TenDayForecast({
   );
 }
 
+/** Non-interactive feature / amenity tag. Same shape and tokens as the
+ *  ui Chip, but without its hover affordance (these are not links) and
+ *  at the old ~28 px height so the rows do not grow. */
+function StaticTag({ emoji, children }: { emoji: string; children: React.ReactNode }) {
+  return (
+    <span className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-wn-line bg-white px-3 py-1 text-sm font-medium text-wn-charcoal">
+      <span aria-hidden="true">{emoji}</span>
+      {children}
+    </span>
+  );
+}
+
 function FullAmenities({ resort }: { resort: Resort }) {
   // Stage 33 — night skiing / glades / halfpipe removed from this list
   // because they already render as feature chips inside QuickStats
@@ -2164,9 +2190,9 @@ function FullAmenities({ resort }: { resort: Resort }) {
     <Section title="Amenities">
       <div className="flex flex-wrap gap-2">
         {active.map((i) => (
-          <Chip key={i.key} iconLeft={<span aria-hidden="true">{i.emoji}</span>}>
+          <StaticTag key={i.key} emoji={i.emoji}>
             {i.label}
-          </Chip>
+          </StaticTag>
         ))}
       </div>
     </Section>

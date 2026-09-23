@@ -80,7 +80,7 @@ export default function NearbyGroup({ emoji, label, blurb, rows, variant = "full
           const base = isCompact
             ? "flex w-[180px] shrink-0 snap-start flex-col rounded-wn-sm border bg-white p-2"
             : "flex w-[220px] shrink-0 snap-start flex-col rounded-wn-sm border bg-white p-3 shadow-wn-sm";
-          const cardClass = `${base} ${rec ? "border-amber-300 bg-amber-50/60 ring-1 ring-amber-200" : "border-wn-line"}`;
+          const cardClass = `${base} ${rec ? "border-wn-gold-halo/60 bg-wn-warning-bg/60 ring-1 ring-wn-gold/40" : "border-wn-line"}`;
           return (
             <li key={r.id} className={cardClass}>
               {rec && (
