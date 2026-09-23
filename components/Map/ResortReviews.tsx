@@ -126,6 +126,15 @@ export default function ResortReviews({ resortId }: Props) {
   const myReview = userId ? reviews.find((r) => r.user_id === userId) : null;
   const otherReviews = userId ? reviews.filter((r) => r.user_id !== userId) : reviews;
 
+  // Hide-when-empty: a signed-out visitor can neither read nor write
+  // anything here when the resort has no reviews, so an empty "No
+  // reviews yet · Sign in" block is dead weight on every page (audit
+  // resort-panel-detail-24). Signed-in users still get the form so the
+  // first review can be written. Nothing renders while loading either —
+  // the section pops in only when it has something to show.
+  if (loading) return null;
+  if (!userId && reviews.length === 0) return null;
+
   return (
     <section className="rounded-lg border border-wn-charcoal/10 bg-white p-4">
       <div className="mb-3 flex items-baseline justify-between gap-2">
@@ -143,11 +152,7 @@ export default function ResortReviews({ resortId }: Props) {
         )}
       </div>
 
-      {loading && (
-        <p className="text-xs text-wn-charcoal/55">Loading reviews…</p>
-      )}
-
-      {!loading && userId && (
+      {userId && (
         <div className="mb-4 rounded-lg border border-wn-navy/15 bg-wn-offwhite p-3">
           <div className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
             {myReview ? "Your review" : "Leave a review"}
@@ -188,7 +193,7 @@ export default function ResortReviews({ resortId }: Props) {
         </div>
       )}
 
-      {!loading && !userId && (
+      {!userId && (
         <p className="mb-3 text-xs text-wn-charcoal/65">
           <Link href="/login" className="font-semibold text-wn-navy underline">
             Sign in
@@ -197,7 +202,7 @@ export default function ResortReviews({ resortId }: Props) {
         </p>
       )}
 
-      {!loading && otherReviews.length === 0 && !myReview && (
+      {otherReviews.length === 0 && !myReview && (
         <p className="text-sm text-wn-charcoal/55">
           No reviews yet. Be the first to share your experience.
         </p>

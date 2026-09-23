@@ -7,16 +7,15 @@ import Link from "next/link";
 import { passColor, passLabel, primaryPass } from "@/lib/passColors";
 import { formatDriveTime, type Origin } from "@/lib/origins";
 import { fetchMatrixDriveTime, type MatrixResult } from "@/lib/mapboxMatrix";
-import { parseSeasonDates } from "@/lib/seasonDates";
+import { resolveSeasonInfo, deriveResortStatus } from "@/lib/seasonDates";
 import { haversineMeters, estimateDriveSeconds } from "@/lib/distance";
 import FavoriteToggle from "@/components/auth/FavoriteToggle";
 import HeroImage from "@/components/HeroImage";
 import CompareToggle from "@/components/CompareToggle";
-import SeasonCountdown from "@/components/SeasonCountdown";
+import SeasonCountdown, { ResortStatusPill } from "@/components/SeasonCountdown";
 import { addRecent } from "@/lib/recentlyViewed";
 import type { Resort, DriveTime, WeatherSnapshot } from "./MapPage";
-import NearbyRestaurants from "@/components/NearbyRestaurants";
-import NearbyActivities from "@/components/NearbyActivities";
+import NearbyGroup from "@/components/NearbyGroup";
 import { fetchNearbyRestaurants, fetchNearbyActivities } from "@/lib/fetchNearby";
 import type { NearbyRow } from "@/lib/nearbyCategories";
 
@@ -316,18 +315,21 @@ export default function ResortPanel({
             </div>
           )}
 
-          {/* Season-status badge — small countdown sitting just above
-              the 3-stat grid. Hidden when both season fields are
-              unparseable (status "unknown") to keep the preview tight. */}
+          {/* Status row — every resort gets an open / closed / opens-on /
+              check-resort pill above the stats (the audit found 96% of
+              panels showed no status at all in September), plus the
+              season countdown whenever a season date could be parsed. */}
           {(() => {
-            const seasonInfo = parseSeasonDates(
-              resort.season_open_text,
-              resort.season_close_text,
-            );
-            if (seasonInfo.status === "unknown") return null;
+            const seasonInfo = resolveSeasonInfo(resort);
+            const status = deriveResortStatus(resort, seasonInfo);
+            // The pill already says "Opens ~Nov 22 · in 61 days" for an
+            // off-season resort with dates; the countdown adds value only
+            // for the in-season "N days left" reading.
+            const showCountdown = seasonInfo.status === "in-season" && seasonInfo.nextCloseDate != null;
             return (
-              <div className="mb-3">
-                <SeasonCountdown info={seasonInfo} variant="badge" />
+              <div className="mb-3 flex flex-wrap items-center gap-1.5">
+                <ResortStatusPill status={status} />
+                {showCountdown && <SeasonCountdown info={seasonInfo} variant="badge" />}
               </div>
             );
           })()}
@@ -390,7 +392,7 @@ export default function ResortPanel({
               map mount). Renders nothing while loading or empty. */}
           {/* key by resort.id so switching resorts remounts this (fresh
               empty state) — prevents resort A's nearby flashing under B. */}
-          <NearbyInPanel key={resort.id} resortId={resort.id} />
+          <NearbyInPanel key={resort.id} resortId={resort.id} slug={resort.slug} />
         </div>
 
         {/* Sticky footer CTA — pad past the iOS home indicator on notched phones */}
@@ -412,12 +414,25 @@ export default function ResortPanel({
 }
 // Round 9 (2026-06) — lazy-loads nearby_restaurants + nearby_activities
 // for the currently-open panel resort. Keeps the homepage SSR payload
-// from ballooning with rows the user may never click through to. The
-// compact variant of the shared NearbyGroup cards renders inside the
-// panel's scroll surface.
-function NearbyInPanel({ resortId }: { resortId: number }) {
-  const [restaurants, setRestaurants] = useState<NearbyRow[]>([]);
-  const [activities, setActivities] = useState<NearbyRow[]>([]);
+// from ballooning with rows the user may never click through to.
+//
+// Audit round 2 (resort-panel-detail-10): the panel used to render every
+// category strip (up to 18 strips × 8 cards inside a 50vh sheet). It
+// now shows ONE merged "Top picks nearby" strip — recommended places
+// first, then nearest — capped at 6, with a link into the full section
+// on the resort page for the rest.
+const TOP_PICKS_LIMIT = 6;
+
+function rankNearby(rows: NearbyRow[]): NearbyRow[] {
+  return [...rows].sort(
+    (a, b) =>
+      Number(!!b.is_recommended) - Number(!!a.is_recommended) ||
+      (a.distance_km ?? Number.POSITIVE_INFINITY) - (b.distance_km ?? Number.POSITIVE_INFINITY),
+  );
+}
+
+function NearbyInPanel({ resortId, slug }: { resortId: number; slug: string }) {
+  const [rows, setRows] = useState<NearbyRow[]>([]);
   useEffect(() => {
     let cancelled = false;
     (async () => {
@@ -426,18 +441,25 @@ function NearbyInPanel({ resortId }: { resortId: number }) {
         fetchNearbyActivities(resortId),
       ]);
       if (cancelled) return;
-      setRestaurants(r);
-      setActivities(a);
+      setRows(rankNearby([...r, ...a]));
     })();
     return () => {
       cancelled = true;
     };
   }, [resortId]);
-  if (restaurants.length === 0 && activities.length === 0) return null;
+  if (rows.length === 0) return null;
+  const picks = rows.slice(0, TOP_PICKS_LIMIT);
   return (
-    <div className="mt-4 border-t border-wn-charcoal/10 pt-3">
-      <NearbyRestaurants rows={restaurants} variant="compact" />
-      <NearbyActivities rows={activities} variant="compact" />
+    <div className="mt-4 border-t border-wn-charcoal/10 pt-1">
+      <NearbyGroup emoji="⭐" label="Top picks nearby" rows={picks} variant="compact" />
+      {rows.length > picks.length && (
+        <Link
+          href={`/resort/${slug}#around-the-resort`}
+          className="mt-1 inline-block text-[12px] font-semibold text-wn-navy underline-offset-2 hover:underline"
+        >
+          See all {rows.length} places nearby →
+        </Link>
+      )}
     </div>
   );
 }

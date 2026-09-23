@@ -3,14 +3,22 @@
 // Inaugural Season 2026 — Snow Surface Forecast UI.
 //
 // Renders three things on the resort detail page:
-//   1. A prominent "Today's surface" card with the SANY code +
-//      plain-English label, an emoji, the WHY reasons, and a
-//      confidence chip.
+//   1. A prominent "Today's surface" card: the plain-English surface name
+//      as the headline, the "feels like" sentence under it, the SANY code
+//      as a small mono tag, the WHY bullets, a confidence chip and a
+//      "Based on" evidence line.
 //   2. A horizontal 3-day forecast strip showing the predicted
 //      surface for tomorrow / +2 / +3 days.
-//   3. A clickable info button that opens the SANY education modal —
+//   3. A clickable info button that opens the education modal —
 //      8 cards, one per code, with "feels like" + "caused by" copy
 //      from lib/snowSurface.ts SURFACE_GLOSSARY.
+//
+// When the report is DORMANT (closed / off-season / stale inputs) the
+// card becomes a compact "Season preview": typical opening window,
+// annual snowfall, last season's end, and a line saying the forecast
+// starts when the lifts spin. No code, no confidence, no 3-day strip —
+// the audit's most-repeated complaint was "VC Variable · Low confidence"
+// on a closed mountain in September.
 //
 // The server passes a pre-classified `report` so this client island
 // doesn't import the classifier directly. Keeps the page payload thin
@@ -25,132 +33,220 @@ import {
   type SurfaceResult,
 } from "@/lib/snowSurface";
 
-// Inaugural Season 2026 (v2 — icons retired). The 8 SANY codes are
-// rendered as bold typography chips inside the tone bubble instead of
-// custom-drawn SVG icons. At 16-28px viewport the type-only chip is
-// dramatically more legible and matches the industry convention used
-// by OnTheSnow / SkiReport / Snocountry. components/icons/SurfaceIcon.tsx
-// stays in tree as dead code in case we want to revive a pictogram
-// version with a real designer.
+/** Facts the dormant card shows instead of a classification. */
+export type SeasonPreview = {
+  resortName: string;
+  /** e.g. "late November – mid April", or null when unknown. */
+  seasonWindow: string | null;
+  /** e.g. "Opens ~Nov 22 · in 61 days", or null. */
+  opensLine: string | null;
+  annualSnowfallIn: number | null;
+  /** ISO date last season ended, when it is in the past. */
+  lastSeasonEnded: string | null;
+};
 
 type Props = {
   report: SurfaceReport;
   /** Up to 3 forecast dates aligned with report.forecast slots. Used as
    *  the day labels on the strip. */
   forecastDates?: Array<string | null>;
-  /** When true (May-Oct in the US), softens the subtitle so users
-   *  understand the prediction is dormant until daily snow reports
-   *  resume in November. */
-  offSeason?: boolean;
+  /** Shown when the report is dormant. */
+  preview?: SeasonPreview;
 };
 
-export default function SnowSurfaceForecast({
-  report,
-  forecastDates,
-  offSeason = false,
-}: Props) {
+export default function SnowSurfaceForecast({ report, forecastDates, preview }: Props) {
   const [showModal, setShowModal] = useState(false);
-  const today = report.today;
-  const tone = toneFor(today.code);
 
   return (
     <section aria-label="Snow surface forecast">
       <div className="mb-3 flex items-center justify-between gap-3">
         <div>
           <h2 className="text-lg font-bold text-wn-navy sm:text-xl">
-            Snow surface today
+            {report.dormant ? "Snow surface" : "Snow surface today"}
           </h2>
           <p className="text-xs text-wn-charcoal/60">
-            {offSeason
-              ? "US-standard SANY classification. Predictions sharpen once resorts open in November."
-              : "US-standard SANY classification, predicted from the last 7 days of weather."}
+            {report.dormant
+              ? "What the snow will feel like under your edges, once the lifts are running."
+              : "What the snow feels like under your edges, worked out from the last 7 days of weather."}
           </p>
         </div>
         <button
           type="button"
           onClick={() => setShowModal(true)}
-          className="inline-flex items-center gap-1 rounded-full border border-wn-charcoal/15 bg-white px-2.5 py-1 text-[11px] font-semibold text-wn-charcoal/80 transition hover:border-wn-navy hover:text-wn-navy"
-          aria-label="Learn what each surface code means"
+          className="inline-flex shrink-0 items-center gap-1 rounded-full border border-wn-charcoal/15 bg-white px-2.5 py-1 text-[11px] font-semibold text-wn-charcoal/80 transition hover:border-wn-navy hover:text-wn-navy"
+          aria-label="Learn what each surface type means"
         >
           <span aria-hidden="true">ⓘ</span>
-          <span>What do these mean?</span>
+          <span>Surface types</span>
         </button>
       </div>
 
-      {/* TODAY'S SURFACE CARD */}
-      <div
-        className={`rounded-xl border p-4 shadow-sm sm:p-5 ${tone.container}`}
-      >
-        <div className="flex items-start gap-4">
-          <div
-            aria-hidden="true"
-            className={`relative flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ${tone.bubble} sm:h-16 sm:w-16`}
-          >
-            <span className="text-lg font-extrabold tracking-tight sm:text-xl">
-              {today.short}
-            </span>
-          </div>
-          <div className="flex-1 min-w-0">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className={`text-[11px] font-bold uppercase tracking-wider ${tone.code}`}>
-                {today.label}
-              </span>
-              <ConfidenceChip confidence={today.confidence} />
-            </div>
-            {today.alsoCalled && (
-              <p className="mt-0.5 text-[11px] italic text-wn-charcoal/60">
-                also called {today.alsoCalled}
-              </p>
-            )}
-            <p className={`mt-1 text-sm font-semibold ${tone.headline} sm:text-base`}>
-              {today.description}
-            </p>
-            {today.reasons.length > 0 && (
-              <ul className="mt-2 space-y-0.5">
-                {today.reasons.map((r, i) => (
-                  <li
-                    key={`${i}-${r}`}
-                    className="text-xs text-wn-charcoal/75 sm:text-sm"
-                  >
-                    · {r}
-                  </li>
+      {report.dormant ? (
+        <DormantCard headline={report.headline} message={report.message} preview={preview} />
+      ) : (
+        <>
+          <TodayCard today={report.today} basedOn={report.basedOn} />
+          {report.forecast.some(Boolean) && (
+            <div className="mt-4">
+              <div className="mb-2 text-[11px] font-bold uppercase tracking-wider text-wn-charcoal/55">
+                3-day surface outlook
+              </div>
+              <div className="grid grid-cols-3 gap-2">
+                {report.forecast.map((r, i) => (
+                  <ForecastSlot
+                    key={i}
+                    result={r}
+                    dateLabel={forecastDates?.[i] ?? null}
+                    dayIndex={i}
+                  />
                 ))}
-              </ul>
-            )}
-            {today.when && (
-              <p className="mt-2 text-xs font-semibold text-wn-navy/80 sm:text-sm">
-                {today.when}
+              </div>
+              <p className="mt-2 text-[10px] text-wn-charcoal/50">
+                Confidence drops with distance — day 3 is trend only.
               </p>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* 3-DAY FORECAST STRIP */}
-      {report.forecast.some(Boolean) && (
-        <div className="mt-4">
-          <div className="mb-2 text-[11px] font-bold uppercase tracking-wider text-wn-charcoal/55">
-            3-day surface outlook
-          </div>
-          <div className="grid grid-cols-3 gap-2">
-            {report.forecast.map((r, i) => (
-              <ForecastSlot
-                key={i}
-                result={r}
-                dateLabel={forecastDates?.[i] ?? null}
-                dayIndex={i}
-              />
-            ))}
-          </div>
-          <p className="mt-2 text-[10px] text-wn-charcoal/50">
-            Confidence drops with distance — day 3 is trend only.
-          </p>
-        </div>
+            </div>
+          )}
+        </>
       )}
 
       {/* EDUCATION MODAL */}
       {showModal && <SurfaceEducationModal onClose={() => setShowModal(false)} />}
     </section>
+  );
+}
+
+function TodayCard({ today, basedOn }: { today: SurfaceResult; basedOn: string[] }) {
+  const tone = toneFor(today.code);
+  return (
+    <div className={`rounded-xl border p-4 shadow-sm sm:p-5 ${tone.container}`}>
+      <div className="flex items-start gap-4">
+        <div
+          aria-hidden="true"
+          className={`relative flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ${tone.bubble} sm:h-16 sm:w-16`}
+        >
+          <span className="text-lg font-extrabold tracking-tight sm:text-xl">
+            {today.short}
+          </span>
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex flex-wrap items-center gap-2">
+            <h3 className={`text-lg font-extrabold leading-tight ${tone.headline} sm:text-xl`}>
+              {today.label}
+            </h3>
+            <CodeTag code={today.short} />
+            <ConfidenceChip confidence={today.confidence} />
+          </div>
+          {today.alsoCalled && (
+            <p className="mt-0.5 text-[11px] italic text-wn-charcoal/60">
+              also called {today.alsoCalled}
+            </p>
+          )}
+          <p className="mt-1 text-sm text-wn-charcoal/85 sm:text-base">
+            {today.description}
+          </p>
+          {today.reasons.length > 0 && (
+            <ul className="mt-2 space-y-0.5">
+              {today.reasons.map((r, i) => (
+                <li
+                  key={`${i}-${r}`}
+                  className="text-xs text-wn-charcoal/75 sm:text-sm"
+                >
+                  · {r}
+                </li>
+              ))}
+            </ul>
+          )}
+          {today.when && (
+            <p className="mt-2 text-xs font-semibold text-wn-navy/80 sm:text-sm">
+              {today.when}
+            </p>
+          )}
+          {basedOn.length > 0 && (
+            <p className="mt-3 text-[11px] leading-snug text-wn-charcoal/55">
+              <span className="font-semibold text-wn-charcoal/70">Based on:</span>{" "}
+              {basedOn.join(" · ")}
+            </p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function DormantCard({
+  headline,
+  message,
+  preview,
+}: {
+  headline: string;
+  message: string;
+  preview?: SeasonPreview;
+}) {
+  const facts: Array<{ label: string; value: string }> = [];
+  if (preview?.opensLine) facts.push({ label: "Next opening", value: preview.opensLine });
+  if (preview?.seasonWindow) facts.push({ label: "Typical season", value: preview.seasonWindow });
+  if (preview?.annualSnowfallIn != null) {
+    facts.push({ label: "Average snowfall", value: `${preview.annualSnowfallIn}" per season` });
+  }
+  if (preview?.lastSeasonEnded) {
+    facts.push({
+      label: "Last season ended",
+      value: new Date(preview.lastSeasonEnded + "T00:00:00Z").toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+        timeZone: "UTC",
+      }),
+    });
+  }
+  return (
+    <div className="rounded-xl border border-wn-charcoal/10 bg-wn-offwhite p-4 shadow-sm sm:p-5">
+      <div className="flex items-start gap-4">
+        <div
+          aria-hidden="true"
+          className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-wn-navy/10 text-2xl sm:h-16 sm:w-16"
+        >
+          🏔️
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="text-[11px] font-bold uppercase tracking-wider text-wn-charcoal/55">
+            Season preview
+          </div>
+          <h3 className="mt-0.5 text-lg font-extrabold leading-tight text-wn-navy sm:text-xl">
+            {headline}
+          </h3>
+          <p className="mt-1 text-sm text-wn-charcoal/80">{message}</p>
+          {facts.length > 0 && (
+            <dl className="mt-3 grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-2">
+              {facts.map((f) => (
+                <div key={f.label}>
+                  <dt className="text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/50">
+                    {f.label}
+                  </dt>
+                  <dd className="text-sm font-semibold text-wn-navy">{f.value}</dd>
+                </div>
+              ))}
+            </dl>
+          )}
+          {facts.length === 0 && preview && (
+            <p className="mt-2 text-xs text-wn-charcoal/55">
+              Opening dates for {preview.resortName} are not published yet — most US resorts open between late November and mid December.
+            </p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CodeTag({ code }: { code: string }) {
+  return (
+    <span
+      className="inline-flex items-center rounded border border-wn-charcoal/15 bg-white/70 px-1.5 py-0.5 font-mono text-[10px] font-semibold tracking-wide text-wn-charcoal/70"
+      title="The code resorts use in their snow reports"
+    >
+      {code}
+    </span>
   );
 }
 
@@ -203,15 +299,11 @@ function ForecastSlot({
       <div className="text-[10px] font-bold uppercase tracking-wider text-wn-navy">
         {headerLabel}
       </div>
-      <div
-        className={`my-1.5 inline-flex h-9 w-9 items-center justify-center rounded-lg ${tone.bubble}`}
-      >
-        <span className="text-xs font-extrabold tracking-tight">
-          {result.short}
-        </span>
-      </div>
-      <div className="mt-0.5 text-[10px] font-medium text-wn-charcoal/70 truncate">
+      <div className={`mt-1.5 text-sm font-extrabold leading-tight ${tone.headline}`}>
         {result.label}
+      </div>
+      <div className="mt-1 font-mono text-[10px] font-semibold text-wn-charcoal/55">
+        {result.short}
       </div>
     </div>
   );
@@ -238,7 +330,7 @@ function SurfaceEducationModal({ onClose }: { onClose: () => void }) {
             id="surface-edu-title"
             className="text-base font-bold text-wn-navy sm:text-lg"
           >
-            Snow surface classes (US standard)
+            The eight snow surfaces
           </h3>
           <button
             type="button"
@@ -251,8 +343,9 @@ function SurfaceEducationModal({ onClose }: { onClose: () => void }) {
         </div>
         <div className="space-y-3 px-5 py-4">
           <p className="text-xs text-wn-charcoal/65">
-            These are the surface codes US resorts use in their daily snow reports.
-            Wynla predicts which one you&apos;ll be skiing on, from the last 7 days of weather.
+            These are the surface types US resorts use in their daily snow reports, with the
+            short code each one goes by. Wynla predicts which one you&apos;ll be skiing on from
+            the last 7 days of weather.
           </p>
           <ul className="space-y-3">
             {codes.map((c) => {
@@ -273,12 +366,10 @@ function SurfaceEducationModal({ onClose }: { onClose: () => void }) {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex flex-wrap items-baseline gap-2">
-                      <span className={`text-xs font-extrabold uppercase tracking-wider ${tone.code}`}>
-                        {g.short}
-                      </span>
                       <span className="text-sm font-bold text-wn-navy">
                         {g.label}
                       </span>
+                      <CodeTag code={g.short} />
                     </div>
                     {g.alsoCalled && (
                       <p className="mt-0.5 text-[11px] italic text-wn-charcoal/60">
