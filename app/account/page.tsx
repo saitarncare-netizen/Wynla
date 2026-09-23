@@ -11,7 +11,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { ORIGINS } from "@/lib/origins";
 import ProfileForm from "./ProfileForm";
 import DeleteAccount from "./DeleteAccount";
 import { InstallRow } from "@/components/InstallPrompt";
@@ -66,7 +65,6 @@ export default async function AccountPage() {
           <ProfileForm
             initialDisplayName={p?.display_name ?? ""}
             initialPreferredOrigin={p?.preferred_origin ?? ""}
-            originOptions={ORIGINS.map((o) => ({ code: o.code, label: o.name }))}
           />
         </section>
 

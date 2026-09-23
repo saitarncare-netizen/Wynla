@@ -10,17 +10,21 @@ import {
   DEFAULT_ORIGIN,
   ORIGINS,
   decodeStoredOrigin,
+  driveFilterLabel,
   encodeStoredOrigin,
   findOrigin,
   formatDriveTimeLabel,
   hasCachedDriveTimes,
   originByCode,
   originLabel,
+  originOptionLabel,
+  originShort,
   originsForPicker,
   resolveOrigin,
   resolveOriginWithFallback,
   storedToOrigin,
   originToStored,
+  withEstimateMark,
 } from "@/lib/origins";
 
 describe("ORIGINS catalog", () => {
@@ -61,16 +65,33 @@ describe("ORIGINS catalog", () => {
     }
   });
 
-  it("lists cached cities first in the picker, then the rest A-Z", () => {
+  it("lists cached cities first in the picker, then the rest A-Z by label", () => {
     const list = originsForPicker();
     expect(list.slice(0, 4).every((o) => o.cached)).toBe(true);
-    const rest = list.slice(4).map((o) => o.name);
+    const rest = list.slice(4).map(originLabel);
     expect(rest).toEqual([...rest].sort((a, b) => a.localeCompare(b)));
+    // The two Portlands sit next to each other, Maine before Oregon.
+    const me = rest.indexOf("Portland, ME");
+    expect(rest[me + 1]).toBe("Portland, OR");
   });
 
-  it("labels cities with their state", () => {
+  it("labels cities with their state exactly once", () => {
     expect(originLabel(originByCode("denver"))).toBe("Denver, CO");
     expect(originLabel(originByCode("nyc"))).toBe("New York City, NY");
+    // Regression: these used to render as "Portland OR, OR" / "Washington DC, DC".
+    expect(originLabel(originByCode("portland"))).toBe("Portland, OR");
+    expect(originLabel(originByCode("portland-me"))).toBe("Portland, ME");
+    expect(originLabel(originByCode("washington-dc"))).toBe("Washington, DC");
+    for (const o of ORIGINS) {
+      expect(originLabel(o).split(", ").length, o.code).toBe(2);
+    }
+  });
+
+  it("keeps the two Portlands apart in chips via the short label", () => {
+    expect(originByCode("portland").short).toBe("Portland OR");
+    expect(originByCode("portland-me").short).toBe("Portland ME");
+    expect(originShort(originByCode("portland"))).toBe("Portland OR");
+    expect(originShort(resolveOrigin("geo", "40", "-74"))).toBe("here");
   });
 });
 
@@ -132,10 +153,10 @@ describe("stored origin encoding", () => {
     expect(decodeStoredOrigin("city:salt-lake-city")).toEqual(stored);
   });
 
-  it("round-trips a geo origin at 5 decimals", () => {
+  it("stores a geo origin at 2 decimals so the cookie never pins a street address", () => {
     const encoded = encodeStoredOrigin({ kind: "geo", lat: 40.123456, lon: -74.987654 });
-    expect(encoded).toBe("geo:40.12346,-74.98765");
-    expect(decodeStoredOrigin(encoded)).toEqual({ kind: "geo", lat: 40.12346, lon: -74.98765 });
+    expect(encoded).toBe("geo:40.12,-74.99");
+    expect(decodeStoredOrigin(encoded)).toEqual({ kind: "geo", lat: 40.12, lon: -74.99 });
   });
 
   it("rejects garbage, unknown cities and out-of-range coordinates", () => {
@@ -165,8 +186,31 @@ describe("estimate labelling", () => {
   });
 
   it("prefixes estimates with ≈ and leaves cached routes bare", () => {
+    expect(withEstimateMark("2.5 h", true)).toBe("≈ 2.5 h");
+    expect(withEstimateMark("2.5 h", false)).toBe("2.5 h");
     expect(formatDriveTimeLabel(9000, true)).toBe("≈ 2h 30m");
     expect(formatDriveTimeLabel(9000, false)).toBe("2h 30m");
     expect(formatDriveTimeLabel(300, true)).toBe("≈ 0h 05m");
+  });
+
+  it("marks uncached cities in the picker option label and leaves cached ones plain", () => {
+    expect(originOptionLabel(originByCode("nyc"))).toBe("New York City, NY");
+    expect(originOptionLabel(originByCode("boston"))).toBe("Boston, MA");
+    expect(originOptionLabel(originByCode("denver"))).toBe("Denver, CO (≈ estimated)");
+    const marked = originsForPicker().filter((o) => originOptionLabel(o).includes("≈"));
+    expect(marked.every((o) => !o.cached)).toBe(true);
+    expect(marked.length).toBe(ORIGINS.length - 4);
+  });
+
+  it("builds the drive-time filter label the From button and the chip share", () => {
+    const nyc = originByCode("nyc");
+    const denver = originByCode("denver");
+    const here = resolveOrigin("geo", "39.74", "-104.99");
+    expect(driveFilterLabel(5, nyc, false)).toBe("≤ 5h drive from NYC");
+    expect(driveFilterLabel(0, nyc, false)).toBe("Any drive from NYC");
+    expect(driveFilterLabel(5, denver, true)).toBe("≈ ≤ 5h drive from Denver");
+    expect(driveFilterLabel(3, here, true)).toBe("≈ ≤ 3h drive from here");
+    // A cached city whose rows have not loaded is still an estimate.
+    expect(driveFilterLabel(5, nyc, true)).toBe("≈ ≤ 5h drive from NYC");
   });
 });

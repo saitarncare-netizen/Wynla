@@ -154,7 +154,8 @@ export function matchesSkill(
 //   - a small cookie: lets server-rendered routes (/compare) use the
 //     same origin without a client round-trip. Not HttpOnly on purpose,
 //     the client writes it; it carries no secret, only a city code or
-//     rounded coordinates the user already put in the URL.
+//     coordinates rounded to about a kilometre (encodeStoredOrigin), so
+//     a year of request logs never holds a home address.
 // Signed-in users additionally get profiles.preferred_origin synced by
 // MapPage / ProfileForm so the choice follows them across devices.
 // ---------------------------------------------------------------------

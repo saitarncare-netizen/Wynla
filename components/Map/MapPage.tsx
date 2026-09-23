@@ -14,10 +14,10 @@ import type { TripRoutePoint } from "./MapView";
 import FilterBar, { type ActiveFilterChip } from "./FilterBar";
 // FilterDrawer removed in Stage 14 — Size + Night now inline pills.
 import ResortPanel from "./ResortPanel";
-import ResortPicker from "./ResortPicker";
+import ResortPicker, { primeSearchKeyboard } from "./ResortPicker";
 import LocationButton from "./LocationButton";
 import FeedbackButton from "@/components/FeedbackButton";
-import FiltersDrawer, { AIRPORT_OPTIONS, liftLabel } from "./FiltersDrawer";
+import FiltersDrawer, { AIRPORT_OPTIONS, liftLabel, type NearAirportResort } from "./FiltersDrawer";
 import MobileQuickFilters from "./MobileQuickFilters";
 import TripPlannerPanel from "./TripPlannerPanel";
 import AuthButton from "@/components/auth/AuthButton";
@@ -42,6 +42,7 @@ import ProBenefitsCard from "@/components/ProBenefitsCard";
 // for both users and resorts.
 import Link from "next/link";
 import {
+  driveFilterLabel,
   findOrigin,
   hasCachedDriveTimes,
   resolveOriginWithFallback,
@@ -778,20 +779,23 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   }, [airportFilter]);
 
   // Resorts within roughly two hours' drive of the picked airport, by
-  // the same Haversine estimate the rest of the app labels "≈". Shown
-  // in the Fly to section so the jump answers "what can I reach from
-  // here" without hiding the rest of the map.
-  const nearAirportCount = useMemo(() => {
-    if (!activeAirport) return 0;
-    let n = 0;
+  // the same Haversine estimate the rest of the app labels "≈", nearest
+  // first. Listed in the Fly to section so the jump answers "what can I
+  // reach from here" without hiding the rest of the map.
+  const nearAirportResorts = useMemo((): NearAirportResort[] => {
+    if (!activeAirport) return [];
+    const out: NearAirportResort[] = [];
     for (const r of resorts) {
       const lat = Number(r.latitude);
       const lon = Number(r.longitude);
       if (!Number.isFinite(lat) || !Number.isFinite(lon)) continue;
       const meters = haversineMeters(activeAirport.lat, activeAirport.lng, lat, lon);
-      if (estimateDriveSeconds(meters) <= AIRPORT_REACH_SECONDS) n += 1;
+      const seconds = estimateDriveSeconds(meters);
+      if (seconds <= AIRPORT_REACH_SECONDS) {
+        out.push({ id: r.id, name: r.name, state: r.state, seconds });
+      }
     }
-    return n;
+    return out.sort((a, b) => a.seconds - b.seconds);
   }, [activeAirport, resorts]);
 
   // Round 8 (Saitarn 2026-05-23, Option A): picking an airport flies
@@ -1176,9 +1180,13 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
 
   // Clears every filter. The origin is not a filter, so it survives:
   // resolveOriginWithFallback re-reads the stored choice once ?from= is
-  // gone, which keeps "Drive time from Denver" after a Clear all.
+  // gone, which keeps "Drive time from Denver" after a Clear all. The
+  // Fly to airport is a camera jump, not a filter either, so it stays
+  // in the URL and the plane marker does not vanish on Clear all.
   function clearAll() {
-    writeQuery(new URLSearchParams());
+    const next = new URLSearchParams();
+    if (airportFilter) next.set("airport", airportFilter);
+    writeQuery(next);
   }
 
   // One list of every active filter, each with its own clear action.
@@ -1202,7 +1210,9 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   if (withinHours > 0) {
     activeChips.push({
       key: "drive",
-      label: `≤ ${withinHours}h drive from ${origin.kind === "geo" ? "here" : origin.short}`,
+      // Same formatter as the desktop From button, so the chip carries
+      // the "≈" whenever the origin's times are estimates.
+      label: driveFilterLabel(withinHours, origin, originIsEstimate),
       onRemove: () => updateParam("within", null),
     });
   }
@@ -1427,7 +1437,13 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
                 origin so results are sorted by drive time. */}
             <button
               type="button"
-              onClick={() => setSearchOpen(true)}
+              onClick={() => {
+                // Must run inside the tap: iOS only opens the keyboard
+                // for a synchronous focus, and the search input mounts
+                // on the next render (see primeSearchKeyboard).
+                primeSearchKeyboard();
+                setSearchOpen(true);
+              }}
               className="inline-flex h-11 items-center justify-center gap-1.5 rounded-md border border-wn-charcoal/20 bg-white px-2 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 sm:px-3"
               title="Search resorts"
               aria-label="Search resorts"
@@ -1844,7 +1860,17 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         sizeFilter={sizeFilter}
         nightOnly={nightOnly}
         airportFilter={airportFilter}
-        nearAirportCount={nearAirportCount}
+        nearAirportResorts={nearAirportResorts}
+        onJumpToResort={(id) => {
+          const r = resorts.find((c) => c.id === id);
+          if (!r) return;
+          openResort(r.id);
+          setCameraTarget({
+            lat: Number(r.latitude),
+            lng: Number(r.longitude),
+            token: `flyto-${Date.now()}`,
+          });
+        }}
         filteredCount={filtered.length}
         totalCount={resorts.length}
         freshSnowOnly={freshSnowOnly}

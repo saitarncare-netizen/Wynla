@@ -22,6 +22,7 @@ import {
   findOrigin,
   hasCachedDriveTimes,
   resolveOriginWithFallback,
+  withEstimateMark,
   type Origin,
   type StoredOrigin,
 } from "@/lib/origins";
@@ -445,14 +446,19 @@ function boolCell(v: boolean | null): string {
   return "—";
 }
 
+// Compact form for the table cells ("2.5 h" rather than "2h 30m"), with
+// the same estimate mark the map uses.
 function formatDriveTime(cell: DriveCell | undefined): string {
   const seconds = cell?.seconds;
   if (seconds == null || !Number.isFinite(seconds)) return "—";
   const hours = seconds / 3600;
-  const mark = cell?.estimate ? "≈ " : "";
-  if (hours < 1) return `${mark}${Math.round(seconds / 60)} min`;
-  if (hours < 10) return `${mark}${hours.toFixed(1)} h`;
-  return `${mark}${Math.round(hours)} h`;
+  const compact =
+    hours < 1
+      ? `${Math.round(seconds / 60)} min`
+      : hours < 10
+        ? `${hours.toFixed(1)} h`
+        : `${Math.round(hours)} h`;
+  return withEstimateMark(compact, cell?.estimate === true);
 }
 
 function difficultyText(mix: DifficultyMix | null): string {

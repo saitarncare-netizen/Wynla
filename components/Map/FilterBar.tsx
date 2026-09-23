@@ -1,7 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { originLabel, originsForPicker, type Origin } from "@/lib/origins";
+import {
+  driveFilterLabel,
+  originOptionLabel,
+  originsForPicker,
+  type Origin,
+} from "@/lib/origins";
 import { PASS_COLORS, PASS_KEYS, PASS_LABELS } from "@/lib/passColors";
 import { SIZE_TIER_LABELS, type SizeTier } from "@/lib/sizeTier";
 
@@ -62,17 +67,14 @@ export default function FilterBar({
 }: Props) {
   const totalPass = Object.values(passCounts).reduce((a, b) => a + b, 0);
   const driveActive = withinHours > 0;
-  const fromShort = origin.kind === "geo" ? "here" : origin.short;
 
   // Always include the from-city in the drive chip label — Saitarn
   // 2026-05-23 feedback: bare "Any drive" / "≤ 5h drive" read ambiguously
   // (drive from where?). Including "from NYC" / "from Boston" makes the
-  // reference point explicit at a glance. The "≈" prefix marks origins
-  // whose drive times are estimates rather than cached road routes.
-  const estimateMark = originIsEstimate ? "≈ " : "";
-  const driveLabel = driveActive
-    ? `${estimateMark}≤ ${withinHours}h drive from ${fromShort}`
-    : `${estimateMark}Any drive from ${fromShort}`;
+  // reference point explicit at a glance. driveFilterLabel adds the "≈"
+  // for origins whose drive times are estimates rather than cached road
+  // routes; the active-filter chip in MapPage uses the same formatter.
+  const driveLabel = driveFilterLabel(withinHours, origin, originIsEstimate);
 
   // Pass dropdown label — multi-select aware. "All passes" when empty,
   // single label when one selected, "Ikon + Epic" when multiple.
@@ -474,8 +476,7 @@ function FromDropdown({
             )}
             {originsForPicker().map((o) => (
               <option key={o.code} value={o.code}>
-                {originLabel(o)}
-                {o.cached ? "" : " (≈ estimated)"}
+                {originOptionLabel(o)}
               </option>
             ))}
           </select>

@@ -52,16 +52,19 @@ const city = (
 
 // Cached Northeast cities first (their `name` is the drive_time_cache
 // key, do not rename), then the rest of the country roughly east to
-// west. Coordinates are city-hall / downtown centroids.
+// west. Coordinates are city-hall / downtown centroids. `name` is the
+// plain city name; the state suffix from originLabel() is what tells
+// the two Portlands apart, and `short` carries it for chips where the
+// full label would not fit.
 export const ORIGINS: readonly CityOrigin[] = [
   city("nyc",            "NYC",            "NYC",          "NY", 40.7128, -74.006,   true),
   city("boston",         "Boston",         "Boston",       "MA", 42.3601, -71.0589,  true),
   city("philadelphia",   "Philadelphia",   "Philly",       "PA", 39.9526, -75.1652,  true),
   city("hartford",       "Hartford",       "Hartford",     "CT", 41.7637, -72.6851,  true),
-  city("washington-dc",  "Washington DC",  "DC",           "DC", 38.9072, -77.0369),
+  city("washington-dc",  "Washington",     "DC",           "DC", 38.9072, -77.0369),
   city("albany",         "Albany",         "Albany",       "NY", 42.6526, -73.7562),
   city("burlington",     "Burlington",     "Burlington",   "VT", 44.4759, -73.2121),
-  city("portland-me",    "Portland ME",    "Portland ME",  "ME", 43.6591, -70.2568),
+  city("portland-me",    "Portland",       "Portland ME",  "ME", 43.6591, -70.2568),
   city("pittsburgh",     "Pittsburgh",     "Pittsburgh",   "PA", 40.4406, -79.9959),
   city("buffalo",        "Buffalo",        "Buffalo",      "NY", 42.8864, -78.8784),
   city("cleveland",      "Cleveland",      "Cleveland",    "OH", 41.4993, -81.6944),
@@ -78,7 +81,7 @@ export const ORIGINS: readonly CityOrigin[] = [
   city("albuquerque",    "Albuquerque",    "ABQ",          "NM", 35.0844, -106.6504),
   city("spokane",        "Spokane",        "Spokane",      "WA", 47.6588, -117.426),
   city("seattle",        "Seattle",        "Seattle",      "WA", 47.6062, -122.3321),
-  city("portland",       "Portland OR",    "Portland OR",  "OR", 45.5152, -122.6784),
+  city("portland",       "Portland",       "Portland OR",  "OR", 45.5152, -122.6784),
   city("sacramento",     "Sacramento",     "Sacramento",   "CA", 38.5816, -121.4944),
   city("san-francisco",  "San Francisco",  "SF",           "CA", 37.7749, -122.4194),
   city("los-angeles",    "Los Angeles",    "LA",           "CA", 34.0522, -118.2437),
@@ -93,12 +96,52 @@ export function originLabel(o: CityOrigin): string {
   return o.code === "nyc" ? "New York City, NY" : `${o.name}, ${o.state}`;
 }
 
+/** The estimate marker every drive-time surface uses. Kept in one place
+ *  so a label can never say "estimated" one way in the drawer and
+ *  another way in /compare. */
+export const ESTIMATE_MARK = "≈";
+
+/** Prefixes a label with the estimate mark when the value behind it is
+ *  a Haversine estimate rather than a cached road route. */
+export function withEstimateMark(label: string, isEstimate: boolean): string {
+  return isEstimate ? `${ESTIMATE_MARK} ${label}` : label;
+}
+
+/** The label a city gets in the origin pickers (drawer, desktop From
+ *  dropdown, account default): the full label plus an explicit
+ *  "(≈ estimated)" for cities without cached routes, so the user knows
+ *  before picking that the times will be rough. */
+export function originOptionLabel(o: CityOrigin): string {
+  return o.cached ? originLabel(o) : `${originLabel(o)} (${ESTIMATE_MARK} estimated)`;
+}
+
+/** Short form for chips and section titles: "NYC", "Denver", "here". */
+export function originShort(origin: Origin): string {
+  return origin.kind === "geo" ? "here" : origin.short;
+}
+
+/** The drive-time filter's own label, shared by the desktop From button
+ *  and the active-filter chip so both carry the same "≈" when the
+ *  origin's times are estimates. `withinHours` 0 means no cap. */
+export function driveFilterLabel(
+  withinHours: number,
+  origin: Origin,
+  isEstimate: boolean,
+): string {
+  const base =
+    withinHours > 0
+      ? `≤ ${withinHours}h drive from ${originShort(origin)}`
+      : `Any drive from ${originShort(origin)}`;
+  return withEstimateMark(base, isEstimate);
+}
+
 /** ORIGINS sorted for pickers: cached cities first (exact drive times),
- *  then everything else A-Z. */
+ *  then everything else A-Z by their display label, so the two
+ *  Portlands sort by state. */
 export function originsForPicker(): CityOrigin[] {
   const cached = ORIGINS.filter((o) => o.cached);
   const rest = ORIGINS.filter((o) => !o.cached).sort((a, b) =>
-    a.name.localeCompare(b.name),
+    originLabel(a).localeCompare(originLabel(b)),
   );
   return [...cached, ...rest];
 }
@@ -192,11 +235,17 @@ export function originToStored(origin: Origin): StoredOrigin {
 }
 
 // Compact cookie encoding shared by the map (writer) and server routes
-// such as /compare (reader): "city:denver" or "geo:40.71234,-74.00600".
-// Coordinates are rounded to 5 decimals (about a metre), matching what
-// the URL carries.
+// such as /compare (reader): "city:denver" or "geo:40.71,-74.01".
+// Geo coordinates are rounded to 2 decimals (about a kilometre). The
+// stored copy lives for a year and rides every request as a cookie, so
+// it must not pin a home address; drive-time estimates are far coarser
+// than a kilometre anyway. The URL keeps the per-visit 5-decimal value.
+export const STORED_GEO_DECIMALS = 2;
+
 export function encodeStoredOrigin(stored: StoredOrigin): string {
-  if (stored.kind === "geo") return `geo:${stored.lat.toFixed(5)},${stored.lon.toFixed(5)}`;
+  if (stored.kind === "geo") {
+    return `geo:${stored.lat.toFixed(STORED_GEO_DECIMALS)},${stored.lon.toFixed(STORED_GEO_DECIMALS)}`;
+  }
   return `city:${stored.code}`;
 }
 
@@ -223,6 +272,5 @@ export function formatDriveTime(seconds: number): string {
 /** Drive time with the estimate marker the whole app uses: "≈ 2h 30m"
  *  for Haversine estimates, plain "2h 30m" for cached road routes. */
 export function formatDriveTimeLabel(seconds: number, isEstimate: boolean): string {
-  const base = formatDriveTime(seconds);
-  return isEstimate ? `≈ ${base}` : base;
+  return withEstimateMark(formatDriveTime(seconds), isEstimate);
 }

@@ -11,7 +11,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { haversineMeters, estimateDriveSeconds } from "@/lib/distance";
-import { formatDriveTime } from "@/lib/origins";
+import { formatDriveTimeLabel } from "@/lib/origins";
 import { PASS_COLORS, PASS_KEYS, PASS_LABELS } from "@/lib/passColors";
 import { isGlobalOffSeasonNow } from "@/lib/seasonDates";
 import { US_STATES } from "@/lib/usStates";
@@ -21,6 +21,44 @@ import type { Resort } from "./MapPage";
 // drawers). Autofocus waits for it so the iOS keyboard does not fight
 // the animation and the caret lands in a settled input.
 const SHEET_ANIMATION_MS = 240;
+
+// iOS Safari raises the keyboard only for a focus() that runs
+// synchronously inside the user's tap. The picker's input does not
+// exist yet at that moment (the sheet mounts on the next render), so
+// the tap handler focuses this tiny off-screen input instead; once the
+// keyboard is up, iOS lets focus move to another input programmatically
+// without dropping it. ResortPicker hands focus to the real input after
+// the sheet animation and removes the primer. Desktop and Android do
+// not need this and skip it (they honour a deferred focus).
+const KEYBOARD_PRIMER_ID = "wynla-search-keyboard-primer";
+
+function isMobileViewport(): boolean {
+  return typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches;
+}
+
+/** Call synchronously from the tap that opens the header search. */
+export function primeSearchKeyboard(): void {
+  if (typeof document === "undefined" || !isMobileViewport()) return;
+  let primer = document.getElementById(KEYBOARD_PRIMER_ID) as HTMLInputElement | null;
+  if (!primer) {
+    primer = document.createElement("input");
+    primer.id = KEYBOARD_PRIMER_ID;
+    primer.type = "search";
+    primer.setAttribute("aria-hidden", "true");
+    primer.tabIndex = -1;
+    // Visible to the focus system (not display:none) but not to the eye;
+    // 16px keeps iOS from zooming the viewport on focus.
+    primer.style.cssText =
+      "position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;border:0;padding:0;font-size:16px;pointer-events:none;";
+    document.body.appendChild(primer);
+  }
+  primer.focus({ preventScroll: true });
+}
+
+function releaseSearchKeyboardPrimer(): void {
+  if (typeof document === "undefined") return;
+  document.getElementById(KEYBOARD_PRIMER_ID)?.remove();
+}
 
 // Search normaliser: lower-case, strip everything but letters and
 // digits, so "Blue wood" matches "Bluewood", "park-city" matches
@@ -196,25 +234,35 @@ export default function ResortPicker({
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (!open) return;
-    const mobile =
-      typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches;
+    if (!open) {
+      // Closed before the hand-off (or opened without a primer): drop
+      // the primer so a stray focused input cannot keep the keyboard up.
+      releaseSearchKeyboardPrimer();
+      return;
+    }
+    const mobile = isMobileViewport();
     // Snap-sheet mode (trip planner) keeps the map visible, so popping
     // the keyboard on open would hide the candidates the user wants to
     // see. The full-screen header search has no map behind it: there
     // the user opened it to type, and needing a second tap to start
     // was the first thing mobile testers hit (audit mobile-ergonomics-12).
-    // The focus waits for the slide-in so the keyboard animation does
-    // not stack on the sheet animation.
     if (mobile && !fullScreen) return;
     if (!mobile) {
       requestAnimationFrame(() => inputRef.current?.focus());
       return;
     }
+    // Mobile: the keyboard is already up if the opener called
+    // primeSearchKeyboard() in its tap handler; moving focus here keeps
+    // it. The wait lets the slide-in finish so the keyboard animation
+    // does not stack on the sheet animation.
     const t = setTimeout(() => {
       inputRef.current?.focus({ preventScroll: true });
+      releaseSearchKeyboardPrimer();
     }, SHEET_ANIMATION_MS);
-    return () => clearTimeout(t);
+    return () => {
+      clearTimeout(t);
+      releaseSearchKeyboardPrimer();
+    };
   }, [open, fullScreen]);
 
   // ESC to close.
@@ -677,7 +725,7 @@ export default function ResortPicker({
                   className="shrink-0 rounded bg-wn-offwhite px-2 py-0.5 text-[11px] font-semibold text-wn-navy"
                   title="Estimated drive time"
                 >
-                  ≈ {formatDriveTime(r.driveSeconds)}
+                  {formatDriveTimeLabel(r.driveSeconds, true)}
                 </span>
               </button>
             </li>

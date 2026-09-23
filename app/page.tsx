@@ -70,7 +70,11 @@ const getCachedResorts = unstable_cache(
     if (error) throw new Error(`resorts: ${error.message}`);
     return (data ?? []) as unknown as Resort[];
   },
-  ["home-resorts"],
+  // Bump the key suffix whenever RESORT_COLUMNS changes: the data cache
+  // outlives a deploy, so without it the old column set is served for
+  // up to HOME_DATA_REVALIDATE_SECONDS (the header search's town match
+  // would silently see no `city` in that window).
+  ["home-resorts", "v2"],
   { revalidate: HOME_DATA_REVALIDATE_SECONDS, tags: [HOME_DATA_CACHE_TAG] },
 );
 

@@ -3,7 +3,13 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useFocusTrap } from "@/lib/useFocusTrap";
-import { originLabel, originsForPicker, type Origin } from "@/lib/origins";
+import {
+  formatDriveTimeLabel,
+  originLabel,
+  originOptionLabel,
+  originsForPicker,
+  type Origin,
+} from "@/lib/origins";
 import { PASS_COLORS, PASS_KEYS, PASS_LABELS } from "@/lib/passColors";
 import { SIZE_TIER_LABELS, type SizeTier } from "@/lib/sizeTier";
 import { isGlobalOffSeasonNow } from "@/lib/seasonDates";
@@ -33,8 +39,11 @@ type Props = {
   // "Fly to" airport jump (not a filter): IATA code or null.
   airportFilter: string | null;
   /** Resorts within about two hours of the picked airport, by the
-   *  lib/distance estimate. 0 when no airport is picked. */
-  nearAirportCount: number;
+   *  lib/distance estimate, nearest first. Empty when no airport is
+   *  picked. */
+  nearAirportResorts: NearAirportResort[];
+  /** Opens a resort from the Fly to list (panel + camera). */
+  onJumpToResort: (id: number) => void;
   filteredCount: number;
   totalCount: number;
   freshSnowOnly: boolean;
@@ -149,6 +158,18 @@ const LIFT_OPTIONS: Array<{
   { value: "nosurface", label: "No surface-only", icon: "🚫" },
 ];
 
+export type NearAirportResort = {
+  id: number;
+  name: string;
+  state: string;
+  /** Estimated drive from the airport (lib/distance), never routed. */
+  seconds: number;
+};
+
+// How many Fly to rows show before the list folds behind "+N more".
+// Six is about one phone screen under the airport search box.
+const NEAR_AIRPORT_PREVIEW = 6;
+
 export function liftLabel(v: string | null): string | null {
   if (!v) return null;
   return LIFT_OPTIONS.find((o) => o.value === v)?.label ?? null;
@@ -167,7 +188,8 @@ export default function FiltersDrawer({
   sizeFilter,
   nightOnly,
   airportFilter,
-  nearAirportCount,
+  nearAirportResorts,
+  onJumpToResort,
   filteredCount,
   totalCount,
   freshSnowOnly,
@@ -228,6 +250,8 @@ export default function FiltersDrawer({
   // types so the section is browsable for travellers who don't know
   // the IATA codes off-hand.
   const [airportQuery, setAirportQuery] = useState("");
+  // Fly to list folds after NEAR_AIRPORT_PREVIEW rows; this unfolds it.
+  const [showAllNearAirport, setShowAllNearAirport] = useState(false);
   // "Use my location" state for the origin picker. Mirrors the desktop
   // FromDropdown; the error copy points at the floating 📍 button whose
   // help modal walks through re-enabling a denied permission.
@@ -600,8 +624,7 @@ export default function FiltersDrawer({
                   )}
                   {originsForPicker().map((o) => (
                     <option key={o.code} value={o.code}>
-                      {originLabel(o)}
-                      {o.cached ? "" : " (≈ estimated)"}
+                      {originOptionLabel(o)}
                     </option>
                   ))}
                 </select>
@@ -720,22 +743,58 @@ export default function FiltersDrawer({
             title="Fly to"
             summary={
               airportFilter
-                ? `${AIRPORT_OPTIONS.find((a) => a.iata === airportFilter)?.label ?? airportFilter} · ${nearAirportCount} resort${nearAirportCount === 1 ? "" : "s"} within ≈ 2 h`
+                ? `${AIRPORT_OPTIONS.find((a) => a.iata === airportFilter)?.label ?? airportFilter} · ${nearAirportResorts.length} resort${nearAirportResorts.length === 1 ? "" : "s"} within ≈ 2 h`
                 : "Jump the map to an airport"
             }
           >
             <p className="mb-2 text-[11px] leading-snug text-wn-charcoal/60">
-              Jumps the map to the airport. It does not hide resorts, so the
-              count below only tells you what is within reach.
+              Jumps the map to the airport. It does not hide resorts and
+              survives Clear all; the list below only tells you what is
+              within reach.
             </p>
             {airportFilter && (
-              <p className="mb-2 rounded-lg bg-wn-navy/5 px-3 py-2 text-xs font-semibold text-wn-navy">
-                {nearAirportCount} resort{nearAirportCount === 1 ? "" : "s"} within ≈ 2 h
-                drive of {AIRPORT_OPTIONS.find((a) => a.iata === airportFilter)?.label ?? airportFilter}
-                <span className="block text-[10px] font-normal text-wn-charcoal/55">
-                  Estimated from straight-line distance
-                </span>
-              </p>
+              <div className="mb-2 rounded-lg bg-wn-navy/5 px-3 py-2">
+                <p className="text-xs font-semibold text-wn-navy">
+                  {nearAirportResorts.length} resort{nearAirportResorts.length === 1 ? "" : "s"} within ≈ 2 h
+                  drive of {AIRPORT_OPTIONS.find((a) => a.iata === airportFilter)?.label ?? airportFilter}
+                  <span className="block text-[10px] font-normal text-wn-charcoal/55">
+                    Estimated from straight-line distance, nearest first
+                  </span>
+                </p>
+                {nearAirportResorts.length > 0 && (
+                  <ul className="mt-1.5 divide-y divide-wn-navy/10">
+                    {(showAllNearAirport
+                      ? nearAirportResorts
+                      : nearAirportResorts.slice(0, NEAR_AIRPORT_PREVIEW)
+                    ).map((r) => (
+                      <li key={r.id}>
+                        <button
+                          type="button"
+                          onClick={() => onJumpToResort(r.id)}
+                          className="flex min-h-[44px] w-full items-center gap-2 py-1 text-left text-sm text-wn-charcoal hover:text-wn-navy"
+                        >
+                          <span className="min-w-0 flex-1 truncate font-semibold">{r.name}</span>
+                          <span className="shrink-0 text-[11px] text-wn-charcoal/55">{r.state}</span>
+                          <span className="shrink-0 rounded bg-white px-2 py-0.5 text-[11px] font-semibold text-wn-navy">
+                            {formatDriveTimeLabel(r.seconds, true)}
+                          </span>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {nearAirportResorts.length > NEAR_AIRPORT_PREVIEW && (
+                  <button
+                    type="button"
+                    onClick={() => setShowAllNearAirport((v) => !v)}
+                    className="mt-1 min-h-[44px] w-full text-left text-xs font-semibold text-wn-navy underline-offset-2 hover:underline"
+                  >
+                    {showAllNearAirport
+                      ? "Show fewer"
+                      : `+${nearAirportResorts.length - NEAR_AIRPORT_PREVIEW} more`}
+                  </button>
+                )}
+              </div>
             )}
             <input
               type="search"

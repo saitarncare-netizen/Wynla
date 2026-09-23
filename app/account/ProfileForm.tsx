@@ -11,20 +11,25 @@
 // fresh-eyes-power-13).
 
 import { useState, useTransition } from "react";
+import { originOptionLabel, originsForPicker } from "@/lib/origins";
 import { clearStoredOrigin, setStoredOrigin } from "@/lib/preferences";
-
-type OriginOption = { code: string; label: string };
 
 type Props = {
   initialDisplayName: string;
   initialPreferredOrigin: string;
-  originOptions: OriginOption[];
 };
+
+// Same order and labels as the map's pickers (cached cities first, then
+// A-Z with "(≈ estimated)"), so the account page never shows a
+// different list from the one the user sees on the map.
+const ORIGIN_OPTIONS = originsForPicker().map((o) => ({
+  code: o.code,
+  label: originOptionLabel(o),
+}));
 
 export default function ProfileForm({
   initialDisplayName,
   initialPreferredOrigin,
-  originOptions,
 }: Props) {
   const [displayName, setDisplayName] = useState(initialDisplayName);
   const [preferredOrigin, setPreferredOrigin] = useState(initialPreferredOrigin);
@@ -105,7 +110,7 @@ export default function ProfileForm({
           className="w-full rounded-md border border-wn-charcoal/20 bg-white px-3 py-2 text-sm text-wn-charcoal focus:border-wn-navy focus:outline-none focus:ring-1 focus:ring-wn-navy"
         >
           <option value="">No default — ask each visit</option>
-          {originOptions.map((o) => (
+          {ORIGIN_OPTIONS.map((o) => (
             <option key={o.code} value={o.code}>
               {o.label}
             </option>
