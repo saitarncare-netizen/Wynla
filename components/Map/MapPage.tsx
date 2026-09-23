@@ -46,6 +46,7 @@ import {
   driveFilterLabel,
   findOrigin,
   hasCachedDriveTimes,
+  launchCityByCode,
   resolveOriginWithFallback,
   type StoredOrigin,
 } from "@/lib/origins";
@@ -842,6 +843,12 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   // True when every drive time on screen is a Haversine estimate: geo
   // origins and cities outside the cached Northeast four. The drawer
   // and FilterBar show this so a "≈ 4h 10m" is never read as measured.
+  // Entry to the Saturday picks page. The map's origin rides along as
+  // ?city= only when it is one of /go's launch cities (lib/origins
+  // LAUNCH_CITIES); for any other origin /go asks for a city itself
+  // rather than answering for the wrong one.
+  const goHref =
+    origin.kind === "city" && launchCityByCode(origin.code) ? `/go?city=${origin.code}` : "/go";
   const cachedRows = origin.kind === "city" ? driveTimes[origin.name] : undefined;
   const originIsEstimate =
     !hasCachedDriveTimes(origin) || !cachedRows || cachedRows.length === 0;
@@ -1485,6 +1492,21 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
                 <span className="hidden sm:inline">Plan a trip</span>
               </button>
             )}
+            {/* "Where to ride Saturday" (/go). Desktop-only here so the
+                icon-only phone row does not wrap; phones get the pill in
+                the chip rows below. Short label until lg, where the full
+                phrase (footer / account / /get wording) fits. */}
+            <Link
+              href={goHref}
+              className="hidden h-11 items-center justify-center gap-1.5 rounded-md border border-wn-charcoal/20 bg-white px-3 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 md:inline-flex"
+              title="Where to ride Saturday"
+              aria-label="Where to ride Saturday"
+            >
+              <span aria-hidden="true">🏔️</span>
+              <span>
+                <span className="hidden lg:inline">Where to ride </span>Saturday
+              </span>
+            </Link>
             {/* Mobile-only Filters trigger. */}
             {(() => {
               return (
@@ -1594,6 +1616,28 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
             {isAuthed && selectedId == null && !filtersOpen && (
               <div className="[&_a]:pointer-events-auto">
                 <TodayChip />
+              </div>
+            )}
+            {/* "Where to ride Saturday" entry for phones (md+ has the
+                header link). Same pill as ActiveTripChip / TodayChip so
+                the rows read as one set, and hidden with a sheet or
+                drawer up for the same reason. Not auth-gated: /go is
+                public and this is its main entry from the map. */}
+            {selectedId == null && !filtersOpen && (
+              <div className="flex justify-center px-3 pt-2 md:hidden [&_a]:pointer-events-auto">
+                <Link
+                  href={goHref}
+                  className="inline-flex min-h-11 items-center gap-2 rounded-full border border-wn-navy/20 bg-white/95 py-1.5 pl-3 pr-2.5 text-xs font-bold text-wn-navy shadow-lg backdrop-blur-sm transition hover:border-wn-navy hover:shadow-xl active:scale-95"
+                >
+                  <span aria-hidden="true">🏔️</span>
+                  <span>Where to ride Saturday</span>
+                  <span
+                    aria-hidden="true"
+                    className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-wn-navy text-[11px] text-white"
+                  >
+                    →
+                  </span>
+                </Link>
               </div>
             )}
             {/* RecentlyViewedStrip already marks its scroll strip
