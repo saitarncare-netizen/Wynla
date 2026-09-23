@@ -16,15 +16,25 @@
 //      off-white above a per-resort snow line (halfway up the resort's own
 //      vertical when the row has base and summit, else the 75th percentile
 //      of the window).
-//   4. Overlay the resort name, state, a gold rule and a small provenance
-//      note ("Terrain from USGS 3DEP via AWS"), export 1600x900 and 800x450
-//      WebP, upload to the public Storage bucket `resort-cards` and record
-//      the URLs in lib/data/terrainCards.json (the runtime source of truth
-//      for lib/heroSource.ts).
+//   4. Export three WebP variants:
+//        hero   1600x900, hillshade + vignette/scrim only, NO text. The
+//               resort page and the map panel lay their own h1, state
+//               line and buttons over the hero, and object-cover crops the
+//               sides on a phone, so drawn-in text would be cut off and
+//               doubled under the real heading.
+//        thumb  800x450 of the hero; at 56 px any drawn-in text is noise.
+//        share  1600x900 with the resort name, state, gold rule, brand
+//               mark and provenance note drawn in, for share and OG use
+//               where the card stands alone.
+//      Upload to the public Storage bucket `resort-cards` under
+//      content-addressed names (<slug>-<variant>-<sha8>.webp) and record
+//      them in lib/data/terrainCards.json, the runtime source of truth for
+//      lib/heroSource.ts. A re-render always yields a new URL, so the
+//      1-year cache can never serve a stale card.
 //
 // Writes: Supabase Storage only (bucket resort-cards). No database rows.
-// Resume-safe: a slug already in terrainCards.json is skipped unless
-// --force. --preview N also writes the first N cards to
+// Resume-safe: a slug already in terrainCards.json (current format) is
+// skipped unless --force. --preview N also writes the first N cards to
 // .tmp-photo-candidates/cards-preview/ for a visual check.
 
 import sharp from "sharp";
@@ -41,6 +51,8 @@ import {
   writeJson,
   parseArgs,
   mapLimit,
+  contentHash,
+  publicObjectUrl,
   REPORTS_DIR,
 } from "./_shared.mjs";
 
@@ -165,8 +177,13 @@ const smoothstep = (e0, e1, x) => {
   return t * t * (3 - 2 * t);
 };
 
-/** Shade + elevation -> RGB buffer for the crop window. */
-function colourise(elev, shade, crop, snowlineM, halfBandM) {
+/**
+ * Shade + elevation -> RGB buffer for the crop window. `snowArea`, when
+ * set, is {cx, cy, r} in crop pixels: snow is only painted inside that
+ * circle (feathered over its outer 30%), see the low-relief note in
+ * renderCard.
+ */
+function colourise(elev, shade, crop, snowlineM, halfBandM, snowArea = null) {
   const rgb = Buffer.alloc(crop.w * crop.h * 3);
   for (let y = 0; y < crop.h; y++) {
     for (let x = 0; x < crop.w; x++) {
@@ -177,7 +194,11 @@ function colourise(elev, shade, crop, snowlineM, halfBandM) {
       const base = s < 0.5 ? mix(NAVY_DEEP, NAVY, s * 2) : mix(NAVY, SKY, (s - 0.5) * 2);
       // Snow: fades in across a band around the snow line, and is itself
       // shaded so ridges stay readable in the white.
-      const w = smoothstep(snowlineM - halfBandM, snowlineM + halfBandM, e);
+      let w = smoothstep(snowlineM - halfBandM, snowlineM + halfBandM, e);
+      if (snowArea && w > 0) {
+        const d = Math.hypot(x - snowArea.cx, y - snowArea.cy);
+        w *= 1 - smoothstep(snowArea.r * 0.7, snowArea.r, d);
+      }
       const snow = mix(SNOW_SHADE, SNOW, Math.pow(s, 0.8));
       const c = mix(base, snow, w * 0.9);
       rgb[k * 3] = c[0];
@@ -192,7 +213,8 @@ function colourise(elev, shade, crop, snowlineM, halfBandM) {
 
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 
-function overlaySvg(resort) {
+/** Vignette + bottom scrim, and (for the share variant only) the text. */
+function overlaySvg(resort, { text }) {
   const name = resort.name;
   // Long names shrink so the wordmark never runs off the 1600 px card.
   const size = Math.max(40, Math.min(72, Math.floor((OUT_W * 0.86) / (name.length * 0.56))));
@@ -210,11 +232,11 @@ function overlaySvg(resort) {
     </radialGradient>
   </defs>
   <rect width="100%" height="100%" fill="url(#vignette)"/>
-  <rect width="100%" height="100%" fill="url(#scrim)"/>
+  <rect width="100%" height="100%" fill="url(#scrim)"/>${text ? `
   <rect x="96" y="${OUT_H - 96 - size - 84}" width="96" height="6" rx="3" fill="#F5C443"/>
   <text x="96" y="${OUT_H - 96 - 44}" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif" font-size="${size}" font-weight="700" fill="#FAFAF7" letter-spacing="-0.5">${esc(name)}</text>
   <text x="96" y="${OUT_H - 96}" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif" font-size="26" font-weight="600" fill="#5BAFE6" letter-spacing="4">${esc(String(resort.state ?? "").toUpperCase())}</text>
-  <text x="${OUT_W - 64}" y="${OUT_H - 40}" text-anchor="end" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif" font-size="18" fill="#FAFAF7" fill-opacity="0.62">${esc(note)}</text>
+  <text x="${OUT_W - 64}" y="${OUT_H - 40}" text-anchor="end" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif" font-size="18" fill="#FAFAF7" fill-opacity="0.62">${esc(note)}</text>` : ""}
 </svg>`);
 }
 
@@ -262,29 +284,47 @@ async function renderCard(resort) {
     snowlineM = percentile(window, 0.75);
     halfBandM = 80;
   }
-  // Low-relief country (an Ohio or Minnesota hill) sits almost entirely
-  // above its own mid-vertical, which would wash the whole card white.
-  // Keep at least the lower two-thirds of the window navy so the brand
-  // reads and the hill itself is the highlight.
-  const floorM = percentile(window, 0.66);
-  if (snowlineM < floorM) snowlineM = floorM;
+  // Low-relief resorts (under 200 m of vertical, or a window with under
+  // 200 m of relief when the row has no base/summit) are mostly bluffs and
+  // river-valley hills: the farmland around them is as high as the summit,
+  // so any elevation rule paints the fields white and the card reads as
+  // clouds over a valley (Afton Alps did). For those, snow is limited to
+  // about 1.5 km around the resort point and the snow line is the resort's
+  // own mid-vertical; the hillshade carries the rest of the card.
+  const verticalM = baseM != null && summitM != null && summitM > baseM ? summitM - baseM : null;
+  const lowRelief = verticalM != null ? verticalM < 200 : percentile(window, 0.9) - percentile(window, 0.1) < 200;
+  let snowArea = null;
+  if (lowRelief) {
+    snowArea = { cx: px - crop.x, cy: py - crop.y, r: 1500 / cell };
+  } else {
+    // Mountain country: keep at least the lower two-thirds of the window
+    // navy so the brand reads and the high ground is the highlight.
+    const floorM = percentile(window, 0.66);
+    if (snowlineM < floorM) snowlineM = floorM;
+  }
   // The fade band must also fit the window's own relief: a 40 m band on
   // a hill with 60 m of relief tints every pixel half-white. Cap it at
   // half the spread between the snow line and the 90th percentile.
-  halfBandM = Math.max(8, Math.min(halfBandM, (percentile(window, 0.9) - snowlineM) / 2));
-  const rgb = colourise(elev, shade, crop, snowlineM, halfBandM);
+  if (!lowRelief) halfBandM = Math.max(8, Math.min(halfBandM, (percentile(window, 0.9) - snowlineM) / 2));
+  const rgb = colourise(elev, shade, crop, snowlineM, halfBandM, snowArea);
 
-  const composites = [{ input: overlaySvg(resort), top: 0, left: 0 }];
-  const mark = await brandMark();
-  if (mark) composites.push({ input: mark, top: 56, left: OUT_W - 56 - 88 });
-
-  const card1600 = await sharp(rgb, { raw: { width: crop.w, height: crop.h, channels: 3 } })
+  const base = await sharp(rgb, { raw: { width: crop.w, height: crop.h, channels: 3 } })
     .resize(OUT_W, OUT_H, { kernel: "lanczos3" })
-    .composite(composites)
+    .png()
+    .toBuffer();
+
+  const hero = await sharp(base)
+    .composite([{ input: overlaySvg(resort, { text: false }), top: 0, left: 0 }])
     .webp({ quality: 82, effort: 5 })
     .toBuffer();
-  const card800 = await sharp(card1600).resize(OUT_W / 2, OUT_H / 2, { kernel: "lanczos3" }).webp({ quality: 80, effort: 5 }).toBuffer();
-  return { card1600, card800, snowlineM: Math.round(snowlineM), crop, cell: Math.round(cell * 10) / 10 };
+  const thumb = await sharp(hero).resize(OUT_W / 2, OUT_H / 2, { kernel: "lanczos3" }).webp({ quality: 80, effort: 5 }).toBuffer();
+
+  const shareLayers = [{ input: overlaySvg(resort, { text: true }), top: 0, left: 0 }];
+  const mark = await brandMark();
+  if (mark) shareLayers.push({ input: mark, top: 56, left: OUT_W - 56 - 88 });
+  const share = await sharp(base).composite(shareLayers).webp({ quality: 82, effort: 5 }).toBuffer();
+
+  return { hero, thumb, share, snowlineM: Math.round(snowlineM), lowRelief, crop, cell: Math.round(cell * 10) / 10 };
 }
 
 // ------------------------------------------------------------------- main
@@ -296,8 +336,21 @@ if (args.slug) {
 }
 if (args.limit) resorts = resorts.slice(0, Number(args.limit));
 
-const cards = readJsonIfExists(CARDS_JSON, {});
-const todo = args.force ? resorts : resorts.filter((r) => !cards[r.slug]);
+
+// terrainCards.json: { base, cards: { slug: { hero, thumb, share } } }.
+// `base` is the public URL prefix of the bucket the objects were uploaded
+// to and each variant is an object name, which keeps the file small (it
+// ships to the client with lib/heroSource.ts) and makes the host explicit.
+const file = readJsonIfExists(CARDS_JSON, {});
+const cards = file.cards && typeof file.cards === "object" ? file.cards : {};
+const base = publicObjectUrl(env, BUCKET, "");
+if (file.base && file.base !== base) {
+  // Mixing hosts in one file would point some cards at a project that
+  // never received them. Re-render everything against the new host.
+  logger.log(`terrainCards.json was written for ${file.base}; this run uploads to ${base}. Pass --force to re-render every card for the new host.`);
+  if (!args.force) process.exit(1);
+}
+const todo = args.force ? resorts : resorts.filter((r) => !cards[r.slug]?.hero);
 logger.log(`terrain cards: ${resorts.length} resorts, ${todo.length} to render (${upload ? "upload on" : "upload off"})`);
 
 if (upload && todo.length > 0) {
@@ -312,35 +365,54 @@ let previews = 0;
 const report = readJsonIfExists(join(REPORTS_DIR, "terrain-cards-report.json"), { cards: {} });
 const persist = () => {
   // Sorted keys keep the JSON diff readable when a single card is re-rendered.
-  writeJson(CARDS_JSON, Object.fromEntries(Object.entries(cards).sort(([a], [b]) => a.localeCompare(b))));
+  writeJson(CARDS_JSON, { base, cards: Object.fromEntries(Object.entries(cards).sort(([a], [b]) => a.localeCompare(b))) });
   writeJson(join(REPORTS_DIR, "terrain-cards-report.json"), { ...report, updatedAt: new Date().toISOString() });
 };
 
 await mapLimit(todo, concurrency, async (resort) => {
   try {
-    const { card1600, card800, snowlineM, crop, cell } = await renderCard(resort);
+    const { hero, thumb, share, snowlineM, lowRelief, crop, cell } = await renderCard(resort);
     if (previews < previewCount) {
       previews++;
-      writeFileSync(join(PREVIEW_DIR, `${resort.slug}-1600.webp`), card1600);
+      writeFileSync(join(PREVIEW_DIR, `${resort.slug}-hero.webp`), hero);
+      writeFileSync(join(PREVIEW_DIR, `${resort.slug}-share.webp`), share);
     }
-    let url1600 = null;
-    let url800 = null;
     if (upload) {
-      url1600 = await uploadObject(env, BUCKET, `${resort.slug}-1600.webp`, card1600, "image/webp");
-      url800 = await uploadObject(env, BUCKET, `${resort.slug}-800.webp`, card800, "image/webp");
-      cards[resort.slug] = { url1600, url800, generatedAt: new Date().toISOString() };
+      const names = {
+        hero: `${resort.slug}-hero-${contentHash(hero)}.webp`,
+        thumb: `${resort.slug}-thumb-${contentHash(thumb)}.webp`,
+        share: `${resort.slug}-share-${contentHash(share)}.webp`,
+      };
+      await uploadObject(env, BUCKET, names.hero, hero, "image/webp");
+      await uploadObject(env, BUCKET, names.thumb, thumb, "image/webp");
+      await uploadObject(env, BUCKET, names.share, share, "image/webp");
+      // No timestamp here: the file ships to the client, and the render
+      // time is already in the report and the log.
+      cards[resort.slug] = names;
     }
-    report.cards[resort.slug] = { snowlineM, cropX: crop.x, cropY: crop.y, metresPerPixel: cell, bytes1600: card1600.length, bytes800: card800.length, uploaded: upload };
+    report.cards[resort.slug] = {
+      renderedAt: new Date().toISOString(),
+      snowlineM,
+      lowRelief,
+      cropX: crop.x,
+      cropY: crop.y,
+      metresPerPixel: cell,
+      bytesHero: hero.length,
+      bytesThumb: thumb.length,
+      bytesShare: share.length,
+      uploaded: upload,
+    };
     done++;
-    if (done % 10 === 0 || done === todo.length) persist();
+    // A --no-upload run has no URLs to record, so it never touches the JSON.
+    if (upload && (done % 10 === 0 || done === todo.length)) persist();
     logger.progress({ total: todo.length, done, failed, current: resort.slug });
-    logger.log(`${resort.slug}: snowline ${snowlineM} m, ${Math.round(card1600.length / 1024)} KB / ${Math.round(card800.length / 1024)} KB${upload ? "" : " (not uploaded)"}`);
+    logger.log(`${resort.slug}: snowline ${snowlineM} m, hero ${Math.round(hero.length / 1024)} KB, thumb ${Math.round(thumb.length / 1024)} KB, share ${Math.round(share.length / 1024)} KB${upload ? "" : " (not uploaded)"}`);
   } catch (e) {
     failed++;
     report.cards[resort.slug] = { error: e.message };
     logger.log(`${resort.slug}: FAILED ${e.message}`);
   }
 });
-persist();
+if (upload) persist();
 logger.progress({ total: todo.length, done, failed, current: null, finishedAt: new Date().toISOString() });
 logger.log(`terrain cards finished: ${done} rendered, ${failed} failed, ${Object.keys(cards).length} in ${CARDS_JSON}`);

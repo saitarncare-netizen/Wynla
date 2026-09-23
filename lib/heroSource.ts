@@ -4,21 +4,30 @@
 // thumbnails, /go cards, /credits):
 //
 //   photo    hero_image_url points at OUR Supabase Storage bucket
-//            (resort-heroes) and the row has not been flagged
-//            hero_image_verified_winter = false. Only re-hosted, vetted,
+//            (resort-heroes), the row has not been flagged
+//            hero_image_verified_winter = false, and the object is not in
+//            lib/data/heroDenylist.json. Only re-hosted, vetted,
 //            licence-clear photos live in that bucket, so the host check
 //            doubles as the copyright check: a hotlinked third-party URL
 //            (the 2026-05 Ikon / Indy marketing images) is never shown,
-//            whatever the column says.
+//            whatever the column says. The denylist covers the 2026-06
+//            heroes that the 2026-09-23 re-check found to show a different
+//            resort or to sit outside the licence allow-list; it applies
+//            here so they disappear on deploy, before anyone runs
+//            scripts/photos/legacy/legacy-heroes.sql.
 //   card     no usable photo, but scripts/photos/2-terrain-cards.mjs has
 //            rendered a terrain card for the slug (lib/data/terrainCards.json).
-//            Public-domain USGS elevation, branded, labelled as a render.
+//            Public-domain USGS elevation with no drawn-in text (the page
+//            lays its own heading over it); the caller labels it a render.
 //   gradient neither: the caller keeps its designed navy gradient.
 //
 // Pure and dependency-free so it runs in server components, client
-// components and unit tests alike.
+// components and unit tests alike. Both JSON imports are small (about
+// 75 KB and 2 KB raw, a few KB gzipped); a client component that calls
+// this (the map panel) ships them once.
 
 import terrainCards from "@/lib/data/terrainCards.json";
+import heroDenylist from "@/lib/data/heroDenylist.json";
 
 export type HeroKind = "photo" | "card" | "gradient";
 
@@ -46,8 +55,24 @@ export type HeroResortInput = {
   hero_image_verified_winter?: boolean | null;
 };
 
-type TerrainCard = { url1600: string; url800: string; generatedAt: string };
-const CARDS = terrainCards as Record<string, TerrainCard>;
+/**
+ * lib/data/terrainCards.json as written by scripts/photos/2-terrain-cards.mjs:
+ * `base` is the public URL prefix of the resort-cards bucket and each card
+ * lists three content-addressed object names (a re-render always yields
+ * new names, so the 1-year cache never serves a stale card).
+ *   hero   1600x900, no text: resort page header and map panel.
+ *   thumb  800x450 of the hero: 56 px list thumbnails.
+ *   share  1600x900 with the resort name, state and provenance note drawn
+ *          in, for share / OG use where the card stands alone.
+ */
+type TerrainCardsFile = { base: string; cards: Record<string, { hero: string; thumb: string; share: string }> };
+const CARDS_FILE = terrainCards as TerrainCardsFile;
+
+export type TerrainCard = { hero: string; thumb: string; share: string };
+
+type DenylistEntry = { object: string; reason: string };
+const DENYLIST = heroDenylist as Record<string, DenylistEntry>;
+const DENIED_OBJECTS = new Set(Object.values(DENYLIST).map((d) => d.object));
 
 export const HERO_BUCKET = "resort-heroes";
 export const CARD_BUCKET = "resort-cards";
@@ -85,27 +110,66 @@ export function isStorageHeroUrl(url: string | null | undefined, hosts: string[]
   return parsed.pathname.startsWith(`/storage/v1/object/public/${HERO_BUCKET}/`);
 }
 
+/** Object name inside resort-heroes for a storage hero URL, else null. */
+export function heroObjectName(url: string | null | undefined): string | null {
+  if (!url) return null;
+  try {
+    const path = new URL(url).pathname;
+    const prefix = `/storage/v1/object/public/${HERO_BUCKET}/`;
+    return path.startsWith(prefix) ? decodeURIComponent(path.slice(prefix.length)) : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * True when this hero object was reviewed and rejected (wrong resort, or a
+ * licence outside the allow-list). With a slug the entry must be that
+ * resort's; without one (a caller that only has the URL) any entry
+ * matches, which is safe because object names are per slug. A photo
+ * published later gets a new content-addressed name, so an old entry
+ * never catches it.
+ */
+export function isDeniedHero(url: string | null | undefined, slug?: string): boolean {
+  const object = heroObjectName(url);
+  if (!object) return false;
+  if (slug != null) return DENYLIST[slug]?.object === object;
+  return DENIED_OBJECTS.has(object);
+}
+
+/** Full URLs of a resort's terrain card variants, or null when none was rendered. */
 export function terrainCardFor(slug: string): TerrainCard | null {
-  return CARDS[slug] ?? null;
+  const card = CARDS_FILE.cards?.[slug];
+  if (!card) return null;
+  return { hero: CARDS_FILE.base + card.hero, thumb: CARDS_FILE.base + card.thumb, share: CARDS_FILE.base + card.share };
+}
+
+/** How many resorts have a terrain card on file (for /credits). */
+export function terrainCardCount(): number {
+  return Object.keys(CARDS_FILE.cards ?? {}).length;
 }
 
 export function heroSourceFor(resort: HeroResortInput, hosts?: string[]): HeroSource {
   const photoAlt = resort.hero_image_alt?.trim() || `${resort.name} in winter`;
-  if (isStorageHeroUrl(resort.hero_image_url, hosts) && resort.hero_image_verified_winter !== false) {
+  if (
+    isStorageHeroUrl(resort.hero_image_url, hosts) &&
+    resort.hero_image_verified_winter !== false &&
+    !isDeniedHero(resort.hero_image_url, resort.slug)
+  ) {
     return {
       kind: "photo",
       src: resort.hero_image_url as string,
       thumb: resort.hero_image_url as string,
       alt: photoAlt,
-      credit: resort.hero_image_attribution?.trim() || null,
+      credit: tidyAttribution(resort.hero_image_attribution),
     };
   }
   const card = terrainCardFor(resort.slug);
   if (card) {
     return {
       kind: "card",
-      src: card.url1600,
-      thumb: card.url800,
+      src: card.hero,
+      thumb: card.thumb,
       alt: `Terrain render of ${resort.name}${resort.state ? `, ${resort.state}` : ""}`,
       credit: CARD_CREDIT,
     };
@@ -134,6 +198,20 @@ export function parseAttribution(value: string | null | undefined): ParsedAttrib
   const author = text.slice(0, idx).trim() || null;
   const licence = text.slice(idx + 3).trim() || null;
   return { author, licence };
+}
+
+/**
+ * The attribution column as a printable credit. The 2026-06 batch stored
+ * Commons' rendered {{unknown|author}} template verbatim ("Unknown
+ * authorUnknown author or not provided / Public domain"); print the
+ * licence alone for those. scripts/photos/legacy/legacy-heroes.sql fixes
+ * the column itself; this keeps the page clean until it is applied.
+ */
+export function tidyAttribution(value: string | null | undefined): string | null {
+  const { author, licence } = parseAttribution(value);
+  const cleanAuthor = author && !/^unknown author|not provided$/i.test(author) ? author : null;
+  if (cleanAuthor && licence) return `${cleanAuthor} / ${licence}`;
+  return cleanAuthor ?? licence ?? null;
 }
 
 function looksLikeLicence(s: string): boolean {
