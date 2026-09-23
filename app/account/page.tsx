@@ -11,7 +11,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { ORIGINS } from "@/lib/origins";
+import { LAUNCH_CITIES } from "@/lib/origins";
 import ProfileForm from "./ProfileForm";
 import DeleteAccount from "./DeleteAccount";
 import { InstallRow } from "@/components/InstallPrompt";
@@ -66,7 +66,7 @@ export default async function AccountPage() {
           <ProfileForm
             initialDisplayName={p?.display_name ?? ""}
             initialPreferredOrigin={p?.preferred_origin ?? ""}
-            originOptions={ORIGINS.map((o) => ({ code: o.code, label: o.name }))}
+            originOptions={LAUNCH_CITIES.map((o) => ({ code: o.code, label: o.name }))}
           />
         </section>
 
@@ -100,6 +100,15 @@ export default async function AccountPage() {
                 className="flex items-center justify-between py-3 text-sm text-wn-charcoal transition hover:text-wn-navy"
               >
                 <span className="font-medium">📬 Email digest</span>
+                <span className="text-wn-charcoal/50">→</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                href={p?.preferred_origin ? `/go?city=${encodeURIComponent(p.preferred_origin)}` : "/go"}
+                className="flex items-center justify-between py-3 text-sm text-wn-charcoal transition hover:text-wn-navy"
+              >
+                <span className="font-medium">🏔️ Where to ride Saturday</span>
                 <span className="text-wn-charcoal/50">→</span>
               </Link>
             </li>
