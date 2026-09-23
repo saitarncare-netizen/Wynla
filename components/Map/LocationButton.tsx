@@ -177,8 +177,9 @@ export default function LocationButton({ isUsingGeo, onUseMyLocation }: Props) {
               </ol>
             )}
             <p className="mb-4 text-[11px] leading-relaxed text-wn-charcoal/55">
-              Or pick a city / ZIP from the <strong>From</strong> dropdown for
-              now — drive times will use that origin instead.
+              Or pick a starting city under <strong>Filters → Drive time</strong>{" "}
+              (desktop: the <strong>From</strong> dropdown, which also takes a
+              ZIP). Drive times will use that origin instead.
             </p>
             <div className="flex justify-end gap-2">
               <button

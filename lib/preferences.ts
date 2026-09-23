@@ -8,6 +8,12 @@
 // null/false instead of throwing) so callers can use them inside React
 // effects without try/catch noise.
 
+import {
+  decodeStoredOrigin,
+  encodeStoredOrigin,
+  type StoredOrigin,
+} from "@/lib/origins";
+
 export type SkillLevel = "beginner" | "intermediate" | "advanced" | "any";
 
 export type Preferences = {
@@ -134,4 +140,66 @@ export function matchesSkill(
   if (skill === "intermediate") return (intm ?? 0) >= 35;
   if (skill === "advanced") return (adv ?? 0) >= 25 || (exp ?? 0) >= 10;
   return true;
+}
+
+// ---------------------------------------------------------------------
+// Chosen drive-time origin (Round 2 filters package).
+//
+// The map's "From" choice used to live only in the URL, so it reset on
+// every visit and everyone silently got "Drive time from NYC" (audit
+// map-core-8 / fresh-eyes-power-12). It is now persisted twice:
+//   - localStorage: read by MapPage on mount, wins over the account
+//     default because it is the most recent explicit choice on this
+//     device.
+//   - a small cookie: lets server-rendered routes (/compare) use the
+//     same origin without a client round-trip. Not HttpOnly on purpose,
+//     the client writes it; it carries no secret, only a city code or
+//     coordinates rounded to about a kilometre (encodeStoredOrigin), so
+//     a year of request logs never holds a home address.
+// Signed-in users additionally get profiles.preferred_origin synced by
+// MapPage / ProfileForm so the choice follows them across devices.
+// ---------------------------------------------------------------------
+
+const ORIGIN_KEY = "wynla_origin_v1";
+export const ORIGIN_COOKIE = "wynla_origin";
+const ORIGIN_COOKIE_MAX_AGE_S = 60 * 60 * 24 * 365;
+
+export function getStoredOrigin(): StoredOrigin | null {
+  if (!isBrowser()) return null;
+  try {
+    return decodeStoredOrigin(window.localStorage.getItem(ORIGIN_KEY));
+  } catch {
+    return null;
+  }
+}
+
+export function setStoredOrigin(stored: StoredOrigin): void {
+  if (!isBrowser()) return;
+  const encoded = encodeStoredOrigin(stored);
+  try {
+    window.localStorage.setItem(ORIGIN_KEY, encoded);
+  } catch {
+    // Private mode / quota: the URL still carries the origin for this
+    // visit, so failing silently is fine.
+  }
+  try {
+    const secure = window.location.protocol === "https:" ? "; Secure" : "";
+    document.cookie = `${ORIGIN_COOKIE}=${encodeURIComponent(encoded)}; Path=/; Max-Age=${ORIGIN_COOKIE_MAX_AGE_S}; SameSite=Lax${secure}`;
+  } catch {
+    // ignore
+  }
+}
+
+export function clearStoredOrigin(): void {
+  if (!isBrowser()) return;
+  try {
+    window.localStorage.removeItem(ORIGIN_KEY);
+  } catch {
+    // ignore
+  }
+  try {
+    document.cookie = `${ORIGIN_COOKIE}=; Path=/; Max-Age=0; SameSite=Lax`;
+  } catch {
+    // ignore
+  }
 }
