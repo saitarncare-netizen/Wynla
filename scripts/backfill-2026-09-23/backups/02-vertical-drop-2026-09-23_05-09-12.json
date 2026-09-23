@@ -1,0 +1,1430 @@
+{
+  "step": "02-vertical-drop",
+  "table": "resorts",
+  "mode": "applied",
+  "taken_at": "2026-09-23T05:09:12.999Z",
+  "columns": [
+    "vertical_drop"
+  ],
+  "rows": [
+    {
+      "id": 38,
+      "slug": "mount-peter",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 473
+      },
+      "source": "summit 1250 - base 777"
+    },
+    {
+      "id": 60,
+      "slug": "arapahoe-basin",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 2399
+      },
+      "source": "summit 13050 - base 10651"
+    },
+    {
+      "id": 68,
+      "slug": "copper-mountain",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 2729
+      },
+      "source": "summit 12441 - base 9712"
+    },
+    {
+      "id": 72,
+      "slug": "eldora",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 1320
+      },
+      "source": "summit 10600 - base 9280"
+    },
+    {
+      "id": 74,
+      "slug": "hesperus-ski-area",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 680
+      },
+      "source": "summit 8880 - base 8200"
+    },
+    {
+      "id": 83,
+      "slug": "purgatory",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 2029
+      },
+      "source": "summit 10822 - base 8793"
+    },
+    {
+      "id": 85,
+      "slug": "ski-cooper",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 1200
+      },
+      "source": "summit 11700 - base 10500"
+    },
+    {
+      "id": 91,
+      "slug": "wolf-creek",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 1604
+      },
+      "source": "summit 11904 - base 10300"
+    },
+    {
+      "id": 94,
+      "slug": "brian-head",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 1707
+      },
+      "source": "summit 11307 - base 9600"
+    },
+    {
+      "id": 97,
+      "slug": "deer-valley",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 3040
+      },
+      "source": "summit 9570 - base 6530"
+    },
+    {
+      "id": 100,
+      "slug": "powder-mountain",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 2522
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/utah/powder-mountain/ski-resort"
+    },
+    {
+      "id": 104,
+      "slug": "solitude",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 2494
+      },
+      "source": "summit 10488 - base 7994"
+    },
+    {
+      "id": 105,
+      "slug": "sundance",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 2150
+      },
+      "source": "summit 8250 - base 6100"
+    },
+    {
+      "id": 107,
+      "slug": "nordic-valley",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 960
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/utah/wolf-creek/ski-resort"
+    },
+    {
+      "id": 111,
+      "slug": "hogadon",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 615
+      },
+      "source": "summit 8000 - base 7385"
+    },
+    {
+      "id": 112,
+      "slug": "snowy-range",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 865
+      },
+      "source": "summit 9663 - base 8798"
+    },
+    {
+      "id": 115,
+      "slug": "sleeping-giant",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 798
+      },
+      "source": "summit 7430 - base 6632"
+    },
+    {
+      "id": 122,
+      "slug": "discovery",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 2381
+      },
+      "source": "summit 8150 - base 5769"
+    },
+    {
+      "id": 124,
+      "slug": "great-divide",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 1542
+      },
+      "source": "summit 7291 - base 5749"
+    },
+    {
+      "id": 127,
+      "slug": "maverick-mountain",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 2019
+      },
+      "source": "summit 8519 - base 6500"
+    },
+    {
+      "id": 129,
+      "slug": "showdown",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 1400
+      },
+      "source": "summit 8200 - base 6800"
+    },
+    {
+      "id": 130,
+      "slug": "teton-pass",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 1010
+      },
+      "source": "summit 7200 - base 6190"
+    },
+    {
+      "id": 133,
+      "slug": "yellowstone-club",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 2699
+      },
+      "source": "summit 9859 - base 7160"
+    },
+    {
+      "id": 138,
+      "slug": "bogus-basin",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 1432
+      },
+      "source": "summit 7582 - base 6150"
+    },
+    {
+      "id": 144,
+      "slug": "magic-mountain-id",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 740
+      },
+      "source": "summit 7240 - base 6500"
+    },
+    {
+      "id": 146,
+      "slug": "snowhaven",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 400
+      },
+      "source": "summit 5600 - base 5200"
+    },
+    {
+      "id": 155,
+      "slug": "palisades-tahoe",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 2850
+      },
+      "source": "summit 9050 - base 6200"
+    },
+    {
+      "id": 160,
+      "slug": "sierra-at-tahoe",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 2212
+      },
+      "source": "summit 8852 - base 6640"
+    },
+    {
+      "id": 161,
+      "slug": "homewood-mountain-resort",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 1651
+      },
+      "source": "summit 7881 - base 6230"
+    },
+    {
+      "id": 162,
+      "slug": "boreal-mountain-resort",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 500
+      },
+      "source": "summit 7700 - base 7200"
+    },
+    {
+      "id": 163,
+      "slug": "soda-springs",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 652
+      },
+      "source": "summit 7352 - base 6700"
+    },
+    {
+      "id": 164,
+      "slug": "donner-ski-ranch",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 751
+      },
+      "source": "summit 7781 - base 7030"
+    },
+    {
+      "id": 165,
+      "slug": "sugar-bowl-resort",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 1500
+      },
+      "source": "summit 8383 - base 6883"
+    },
+    {
+      "id": 166,
+      "slug": "tahoe-donner-downhill",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 600
+      },
+      "source": "summit 7350 - base 6750"
+    },
+    {
+      "id": 169,
+      "slug": "lee-canyon",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 860
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/nevada/lee-canyon/ski-resort"
+    },
+    {
+      "id": 170,
+      "slug": "elko-snobowl",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 700
+      },
+      "source": "summit 7000 - base 6300"
+    },
+    {
+      "id": 172,
+      "slug": "june-mountain",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 2545
+      },
+      "source": "summit 10090 - base 7545"
+    },
+    {
+      "id": 176,
+      "slug": "badger-pass",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 600
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/california/badger-pass/ski-resort"
+    },
+    {
+      "id": 178,
+      "slug": "snow-valley",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 1041
+      },
+      "source": "summit 7841 - base 6800"
+    },
+    {
+      "id": 179,
+      "slug": "snow-summit",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 1212
+      },
+      "source": "summit 8200 - base 6988"
+    },
+    {
+      "id": 180,
+      "slug": "bear-mountain",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 1665
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/california/bear-mountain/ski-resort"
+    },
+    {
+      "id": 181,
+      "slug": "mt-baldy",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 2100
+      },
+      "source": "summit 8600 - base 6500"
+    },
+    {
+      "id": 182,
+      "slug": "mt-waterman",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 1040
+      },
+      "source": "summit 8018 - base 6978"
+    },
+    {
+      "id": 184,
+      "slug": "mt-bachelor",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 3365
+      },
+      "source": "summit 9065 - base 5700"
+    },
+    {
+      "id": 187,
+      "slug": "mt-hood-skibowl",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 1390
+      },
+      "source": "summit 5027 - base 3637"
+    },
+    {
+      "id": 192,
+      "slug": "anthony-lakes",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 900
+      },
+      "source": "summit 8000 - base 7100"
+    },
+    {
+      "id": 193,
+      "slug": "spout-springs",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 559
+      },
+      "source": "summit 5479 - base 4920"
+    },
+    {
+      "id": 195,
+      "slug": "warner-canyon",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 781
+      },
+      "source": "summit 6480 - base 5699"
+    },
+    {
+      "id": 196,
+      "slug": "crystal-mountain",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 2612
+      },
+      "source": "summit 7012 - base 4400"
+    },
+    {
+      "id": 203,
+      "slug": "mt-spokane",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 2000
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/washington/mt-spokane-ski-and-snowboard-park/ski-resort"
+    },
+    {
+      "id": 208,
+      "slug": "badger-mountain-wa",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 405
+      },
+      "source": "summit 3477 - base 3072"
+    },
+    {
+      "id": 211,
+      "slug": "ski-santa-fe",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 1725
+      },
+      "source": "summit 12075 - base 10350"
+    },
+    {
+      "id": 212,
+      "slug": "angel-fire-resort",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 2077
+      },
+      "source": "summit 10677 - base 8600"
+    },
+    {
+      "id": 213,
+      "slug": "red-river-ski-area",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 1600
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/new-mexico/red-river/ski-resort"
+    },
+    {
+      "id": 216,
+      "slug": "sandia-peak",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 1700
+      },
+      "source": "summit 10378 - base 8678"
+    },
+    {
+      "id": 217,
+      "slug": "ski-apache",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 1851
+      },
+      "source": "summit 11451 - base 9600"
+    },
+    {
+      "id": 219,
+      "slug": "sunrise-park-resort",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 1900
+      },
+      "source": "summit 11100 - base 9200"
+    },
+    {
+      "id": 225,
+      "slug": "mt-abram",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 1050
+      },
+      "source": "summit 1996 - base 946"
+    },
+    {
+      "id": 226,
+      "slug": "shawnee-peak",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 1350
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/maine/pleasant-mountain/ski-resort"
+    },
+    {
+      "id": 229,
+      "slug": "mount-jefferson-ski-area",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 432
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/maine/mt-jefferson/ski-resort"
+    },
+    {
+      "id": 231,
+      "slug": "big-squaw-mountain",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 660
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/maine/big-squaw-mountain-ski-resort/ski-resort"
+    },
+    {
+      "id": 233,
+      "slug": "hermon-mountain",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 350
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/maine/new-hermon-mountain/ski-resort"
+    },
+    {
+      "id": 234,
+      "slug": "titcomb-mountain",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 313
+      },
+      "source": "summit 720 - base 407"
+    },
+    {
+      "id": 239,
+      "slug": "crotched-mountain",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 1016
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/new-hampshire/crotched-mountain/ski-resort"
+    },
+    {
+      "id": 245,
+      "slug": "gunstock-mountain-resort",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 1400
+      },
+      "source": "summit 2267 - base 867"
+    },
+    {
+      "id": 255,
+      "slug": "pico-mountain",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 1966
+      },
+      "source": "summit 3967 - base 2001"
+    },
+    {
+      "id": 256,
+      "slug": "sugarbush",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 2600
+      },
+      "source": "summit 4083 - base 1483"
+    },
+    {
+      "id": 259,
+      "slug": "smugglers-notch",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 2610
+      },
+      "source": "summit 3640 - base 1030"
+    },
+    {
+      "id": 261,
+      "slug": "mad-river-glen",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 2037
+      },
+      "source": "summit 3637 - base 1600"
+    },
+    {
+      "id": 271,
+      "slug": "holiday-mountain",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 400
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/new-york/holiday-mountain/ski-resort"
+    },
+    {
+      "id": 274,
+      "slug": "holimont",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 702
+      },
+      "source": "summit 2261 - base 1559"
+    },
+    {
+      "id": 276,
+      "slug": "holiday-valley",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 750
+      },
+      "source": "summit 2250 - base 1500"
+    },
+    {
+      "id": 279,
+      "slug": "kissing-bridge",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 508
+      },
+      "source": "summit 1703 - base 1195"
+    },
+    {
+      "id": 281,
+      "slug": "song-mountain",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 654
+      },
+      "source": "summit 1930 - base 1276"
+    },
+    {
+      "id": 282,
+      "slug": "labrador-mountain",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 695
+      },
+      "source": "summit 1848 - base 1153"
+    },
+    {
+      "id": 283,
+      "slug": "woods-valley",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 500
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/new-york/woods-valley-ski-area/ski-resort"
+    },
+    {
+      "id": 285,
+      "slug": "oak-mountain",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 651
+      },
+      "source": "summit 2401 - base 1750"
+    },
+    {
+      "id": 288,
+      "slug": "royal-mountain",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 550
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/new-york/royal-mountain-ski-area/ski-resort"
+    },
+    {
+      "id": 292,
+      "slug": "liberty-mountain",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 597
+      },
+      "source": "summit 1178 - base 581"
+    },
+    {
+      "id": 293,
+      "slug": "roundtop-mountain-resort",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 600
+      },
+      "source": "summit 1370 - base 770"
+    },
+    {
+      "id": 295,
+      "slug": "seven-springs",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 750
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/pennsylvania/seven-springs/ski-resort"
+    },
+    {
+      "id": 301,
+      "slug": "spring-mountain",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 389
+      },
+      "source": "summit 510 - base 121"
+    },
+    {
+      "id": 305,
+      "slug": "boyne-mountain",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 433
+      },
+      "source": "summit 1152 - base 719"
+    },
+    {
+      "id": 306,
+      "slug": "the-highlands",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 513
+      },
+      "source": "summit 1300 - base 787"
+    },
+    {
+      "id": 308,
+      "slug": "mount-bohemia",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 900
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/michigan/mount-bohemia/ski-resort"
+    },
+    {
+      "id": 312,
+      "slug": "porcupine-mountains",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 630
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/michigan/porkies/ski-resort"
+    },
+    {
+      "id": 313,
+      "slug": "ski-brule",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 500
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/michigan/ski-brule/ski-resort"
+    },
+    {
+      "id": 323,
+      "slug": "homestead-resort",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 320
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/michigan/the-homestead/ski-resort"
+    },
+    {
+      "id": 324,
+      "slug": "mount-holly",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 350
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/michigan/mount-holly/ski-resort"
+    },
+    {
+      "id": 325,
+      "slug": "pine-knob",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 300
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/michigan/pine-knob-ski-resort/ski-resort"
+    },
+    {
+      "id": 327,
+      "slug": "snow-snake",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 210
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/michigan/snow-snake-mountain-ski-area/ski-resort"
+    },
+    {
+      "id": 328,
+      "slug": "apple-mountain",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 220
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/michigan/apple-mountain/ski-resort"
+    },
+    {
+      "id": 330,
+      "slug": "cannonsburg",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 250
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/michigan/cannonsburg/ski-resort"
+    },
+    {
+      "id": 331,
+      "slug": "timber-ridge",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 240
+      },
+      "source": "summit 850 - base 610"
+    },
+    {
+      "id": 332,
+      "slug": "swiss-valley",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 224
+      },
+      "source": "summit 1197 - base 973"
+    },
+    {
+      "id": 335,
+      "slug": "wilmot-mountain",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 190
+      },
+      "source": "summit 960 - base 770"
+    },
+    {
+      "id": 338,
+      "slug": "cascade-mountain",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 450
+      },
+      "source": "summit 1270 - base 820"
+    },
+    {
+      "id": 339,
+      "slug": "devils-head",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 501
+      },
+      "source": "summit 995 - base 494"
+    },
+    {
+      "id": 341,
+      "slug": "alpine-valley-wi",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 388
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/wisconsin/alpine-valley-resort/ski-resort"
+    },
+    {
+      "id": 346,
+      "slug": "christmas-mountain",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 250
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/wisconsin/christmas-mountain/ski-resort"
+    },
+    {
+      "id": 351,
+      "slug": "afton-alps",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 350
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/minnesota/afton-alps/ski-resort"
+    },
+    {
+      "id": 352,
+      "slug": "welch-village",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 360
+      },
+      "source": "summit 1060 - base 700"
+    },
+    {
+      "id": 353,
+      "slug": "buck-hill",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 262
+      },
+      "source": "summit 1211 - base 949"
+    },
+    {
+      "id": 359,
+      "slug": "giants-ridge",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 500
+      },
+      "source": "summit 1972 - base 1472"
+    },
+    {
+      "id": 360,
+      "slug": "wild-mountain",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 300
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/minnesota/wild-mountain-ski-snowboard-area/ski-resort"
+    },
+    {
+      "id": 363,
+      "slug": "buena-vista",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 230
+      },
+      "source": "summit 1526 - base 1296"
+    },
+    {
+      "id": 365,
+      "slug": "seven-oaks",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 275
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/iowa/seven-oaks/ski-resort"
+    },
+    {
+      "id": 367,
+      "slug": "mt-crescent",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 299
+      },
+      "source": "summit 1500 - base 1201"
+    },
+    {
+      "id": 369,
+      "slug": "four-lakes",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 100
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/illinois/four-lakes/ski-resort"
+    },
+    {
+      "id": 370,
+      "slug": "villa-olivia",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 180
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/illinois/villa-olivia/ski-resort"
+    },
+    {
+      "id": 372,
+      "slug": "perfect-north",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 400
+      },
+      "source": "summit 800 - base 400"
+    },
+    {
+      "id": 373,
+      "slug": "paoli-peaks",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 289
+      },
+      "source": "summit 862 - base 573"
+    },
+    {
+      "id": 377,
+      "slug": "mad-river-mountain",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 301
+      },
+      "source": "summit 1460 - base 1159"
+    },
+    {
+      "id": 378,
+      "slug": "snow-trails",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 266
+      },
+      "source": "summit 1460 - base 1194"
+    },
+    {
+      "id": 381,
+      "slug": "frost-fire-park",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 323
+      },
+      "source": "summit 1400 - base 1077"
+    },
+    {
+      "id": 386,
+      "slug": "wisp-resort",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 700
+      },
+      "source": "summit 3115 - base 2415"
+    },
+    {
+      "id": 389,
+      "slug": "the-omni-homestead-resort",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 700
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/virginia/the-homestead-ski-area/ski-resort"
+    },
+    {
+      "id": 393,
+      "slug": "snowshoe-mountain",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 1500
+      },
+      "source": "summit 4848 - base 3348"
+    },
+    {
+      "id": 394,
+      "slug": "timberline-mountain",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 1000
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/west-virginia/timberline-four-seasons/ski-resort"
+    },
+    {
+      "id": 399,
+      "slug": "sapphire-valley-resort",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 250
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/north-carolina/sapphire-valley/ski-resort"
+    },
+    {
+      "id": 401,
+      "slug": "sugar-mountain-resort",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 1200
+      },
+      "source": "summit 5300 - base 4100"
+    },
+    {
+      "id": 403,
+      "slug": "cloudmont-ski-resort",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 149
+      },
+      "source": "summit 1799 - base 1650"
+    },
+    {
+      "id": 404,
+      "slug": "powder-ridge-mountain-park",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 550
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/connecticut/powder-ridge-park/ski-resort"
+    },
+    {
+      "id": 406,
+      "slug": "blue-hills-ski-area",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 319
+      },
+      "source": "summit 613 - base 294"
+    },
+    {
+      "id": 409,
+      "slug": "nashoba-valley-ski-area",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 228
+      },
+      "source": "summit 422 - base 194"
+    },
+    {
+      "id": 410,
+      "slug": "otis-ridge",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 400
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/massachusetts/otis-ridge-ski-area/ski-resort"
+    },
+    {
+      "id": 411,
+      "slug": "ski-bradford",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 248
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/massachusetts/bradford-ski-area/ski-resort"
+    },
+    {
+      "id": 412,
+      "slug": "ski-ward",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 210
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/massachusetts/ski-ward/ski-resort"
+    },
+    {
+      "id": 414,
+      "slug": "campgaw-mountain",
+      "before": {
+        "vertical_drop": null
+      },
+      "after": {
+        "vertical_drop": 266
+      },
+      "source": "summit 726 - base 460"
+    }
+  ]
+}

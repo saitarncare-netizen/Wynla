@@ -1,0 +1,507 @@
+{
+  "step": "03-duplicates",
+  "table": "resorts",
+  "mode": "applied",
+  "taken_at": "2026-09-23T04:56:29.289Z",
+  "columns": [
+    "active",
+    "latitude",
+    "longitude",
+    "vertical_drop",
+    "total_acres",
+    "total_trails",
+    "total_lifts",
+    "base_elevation_ft",
+    "summit_elevation_ft",
+    "annual_snowfall_in",
+    "website_url",
+    "webcam_url",
+    "lift_types",
+    "high_speed_lifts",
+    "season_end_date",
+    "passes",
+    "city",
+    "hero_image_url",
+    "hero_image_credit",
+    "hero_image_source",
+    "hero_image_alt",
+    "hero_image_attribution",
+    "hero_image_verified_winter"
+  ],
+  "rows": [
+    {
+      "id": 44,
+      "slug": "big-boulder",
+      "before": {
+        "active": true,
+        "latitude": 41.111,
+        "longitude": -75.652,
+        "vertical_drop": 600,
+        "total_acres": 55,
+        "total_trails": 16,
+        "total_lifts": 8,
+        "base_elevation_ft": 1675,
+        "summit_elevation_ft": 2275,
+        "annual_snowfall_in": 35,
+        "website_url": "https://www.jfbb.com",
+        "webcam_url": null,
+        "lift_types": {
+          "tram": 0,
+          "gondola": 0,
+          "surface": 1,
+          "fixed_quad": 0,
+          "bubble_chair": 0,
+          "fixed_double": 5,
+          "fixed_triple": 2,
+          "magic_carpet": 0,
+          "high_speed_six": 0,
+          "high_speed_quad": 0
+        },
+        "high_speed_lifts": 0,
+        "season_end_date": "2026-03-15",
+        "passes": [
+          "epic"
+        ],
+        "city": "Lake Harmony",
+        "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/big-boulder.jpg",
+        "hero_image_credit": null,
+        "hero_image_source": "supabase",
+        "hero_image_alt": "Big Boulder — PA ski resort in winter",
+        "hero_image_attribution": "Mikeh0303 at en.wikipedia / CC BY 2.5",
+        "hero_image_verified_winter": true
+      },
+      "after": {
+        "latitude": 41.0490822,
+        "longitude": -75.6022198
+      }
+    },
+    {
+      "id": 61,
+      "slug": "aspen-mountain",
+      "before": {
+        "active": true,
+        "latitude": 39.1844,
+        "longitude": -106.8175,
+        "vertical_drop": null,
+        "total_acres": null,
+        "total_trails": 76,
+        "total_lifts": 9,
+        "base_elevation_ft": 7946,
+        "summit_elevation_ft": 11213,
+        "annual_snowfall_in": 300,
+        "website_url": "https://www.aspensnowmass.com",
+        "webcam_url": null,
+        "lift_types": {
+          "tram": 0,
+          "gondola": 1,
+          "surface": 2,
+          "fixed_quad": 1,
+          "bubble_chair": 0,
+          "fixed_double": 2,
+          "fixed_triple": 1,
+          "magic_carpet": 0,
+          "high_speed_six": 0,
+          "high_speed_quad": 2
+        },
+        "high_speed_lifts": 3,
+        "season_end_date": "2026-04-19",
+        "passes": [
+          "ikon",
+          "mountain_collective"
+        ],
+        "city": null,
+        "hero_image_url": null,
+        "hero_image_credit": null,
+        "hero_image_source": null,
+        "hero_image_alt": null,
+        "hero_image_attribution": null,
+        "hero_image_verified_winter": true
+      },
+      "after": {
+        "vertical_drop": 3267,
+        "total_acres": 673,
+        "webcam_url": "https://www.aspensnowmass.com/four-mountains/aspen-mountain/mountain-cams",
+        "city": "Aspen"
+      }
+    },
+    {
+      "id": 62,
+      "slug": "aspen-highlands",
+      "before": {
+        "active": true,
+        "latitude": 39.1825,
+        "longitude": -106.8556,
+        "vertical_drop": null,
+        "total_acres": null,
+        "total_trails": 118,
+        "total_lifts": 5,
+        "base_elevation_ft": 8040,
+        "summit_elevation_ft": 11676,
+        "annual_snowfall_in": 300,
+        "website_url": "https://www.aspensnowmass.com",
+        "webcam_url": null,
+        "lift_types": {
+          "tram": 0,
+          "gondola": 0,
+          "surface": 0,
+          "fixed_quad": 0,
+          "bubble_chair": 0,
+          "fixed_double": 0,
+          "fixed_triple": 2,
+          "magic_carpet": 0,
+          "high_speed_six": 0,
+          "high_speed_quad": 3
+        },
+        "high_speed_lifts": 3,
+        "season_end_date": "2026-03-29",
+        "passes": [
+          "ikon",
+          "mountain_collective"
+        ],
+        "city": null,
+        "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/aspen-highlands.jpg",
+        "hero_image_credit": null,
+        "hero_image_source": "supabase",
+        "hero_image_alt": "Aspen Highlands — CO ski resort in winter",
+        "hero_image_attribution": "This Photo was taken by Wolfgang Moroder.  \n\nFeel free to use my photos, but ple / CC BY-SA 3.0",
+        "hero_image_verified_winter": true
+      },
+      "after": {
+        "vertical_drop": 3635,
+        "total_acres": 1010,
+        "city": "Aspen"
+      }
+    },
+    {
+      "id": 63,
+      "slug": "buttermilk",
+      "before": {
+        "active": true,
+        "latitude": 39.2061,
+        "longitude": -106.865,
+        "vertical_drop": null,
+        "total_acres": null,
+        "total_trails": 44,
+        "total_lifts": 8,
+        "base_elevation_ft": 7870,
+        "summit_elevation_ft": 9900,
+        "annual_snowfall_in": 200,
+        "website_url": "https://www.aspensnowmass.com",
+        "webcam_url": null,
+        "lift_types": {
+          "tram": 0,
+          "gondola": 0,
+          "surface": 2,
+          "fixed_quad": 0,
+          "bubble_chair": 0,
+          "fixed_double": 1,
+          "fixed_triple": 0,
+          "magic_carpet": 2,
+          "high_speed_six": 0,
+          "high_speed_quad": 3
+        },
+        "high_speed_lifts": 3,
+        "season_end_date": "2026-03-25",
+        "passes": [
+          "ikon",
+          "mountain_collective"
+        ],
+        "city": null,
+        "hero_image_url": null,
+        "hero_image_credit": null,
+        "hero_image_source": null,
+        "hero_image_alt": null,
+        "hero_image_attribution": null,
+        "hero_image_verified_winter": true
+      },
+      "after": {
+        "vertical_drop": 2030,
+        "total_acres": 435,
+        "city": "Aspen"
+      }
+    },
+    {
+      "id": 64,
+      "slug": "snowmass",
+      "before": {
+        "active": true,
+        "latitude": 39.2089,
+        "longitude": -106.9489,
+        "vertical_drop": null,
+        "total_acres": null,
+        "total_trails": 94,
+        "total_lifts": 17,
+        "base_elevation_ft": 8104,
+        "summit_elevation_ft": 12510,
+        "annual_snowfall_in": 299,
+        "website_url": "https://www.aspensnowmass.com",
+        "webcam_url": "https://www.aspensnowmass.com/four-mountains/snowmass/mountain-cams",
+        "lift_types": {
+          "tram": 0,
+          "gondola": 3,
+          "surface": 2,
+          "fixed_quad": 2,
+          "bubble_chair": 0,
+          "fixed_double": 1,
+          "fixed_triple": 0,
+          "magic_carpet": 0,
+          "high_speed_six": 2,
+          "high_speed_quad": 7
+        },
+        "high_speed_lifts": 9,
+        "season_end_date": "2026-04-05",
+        "passes": [
+          "ikon",
+          "mountain_collective"
+        ],
+        "city": null,
+        "hero_image_url": null,
+        "hero_image_credit": null,
+        "hero_image_source": null,
+        "hero_image_alt": null,
+        "hero_image_attribution": null,
+        "hero_image_verified_winter": null
+      },
+      "after": {
+        "vertical_drop": 4406,
+        "total_acres": 3362,
+        "city": "Snowmass Village"
+      }
+    },
+    {
+      "id": 340,
+      "slug": "tyrol-basin",
+      "before": {
+        "active": true,
+        "latitude": 43.0931,
+        "longitude": -89.7019,
+        "vertical_drop": null,
+        "total_acres": null,
+        "total_trails": 24,
+        "total_lifts": 6,
+        "base_elevation_ft": 860,
+        "summit_elevation_ft": 1142,
+        "annual_snowfall_in": null,
+        "website_url": "https://www.tyrolbasin.com",
+        "webcam_url": "https://tyrolbasin.com/live-cam/",
+        "lift_types": {
+          "tram": 0,
+          "gondola": 0,
+          "surface": 2,
+          "fixed_quad": 0,
+          "bubble_chair": 0,
+          "fixed_double": 0,
+          "fixed_triple": 3,
+          "magic_carpet": 1,
+          "high_speed_six": 0,
+          "high_speed_quad": 0
+        },
+        "high_speed_lifts": 0,
+        "season_end_date": "2026-03-15",
+        "passes": [
+          "indy"
+        ],
+        "city": "Mount Horeb",
+        "hero_image_url": null,
+        "hero_image_credit": null,
+        "hero_image_source": null,
+        "hero_image_alt": null,
+        "hero_image_attribution": null,
+        "hero_image_verified_winter": null
+      },
+      "after": {
+        "latitude": 43.0460807,
+        "longitude": -89.7850082,
+        "vertical_drop": 300
+      }
+    },
+    {
+      "id": 344,
+      "slug": "sunburst",
+      "before": {
+        "active": true,
+        "latitude": 43.4467,
+        "longitude": -88.2089,
+        "vertical_drop": null,
+        "total_acres": null,
+        "total_trails": 11,
+        "total_lifts": 7,
+        "base_elevation_ft": null,
+        "summit_elevation_ft": 1136,
+        "annual_snowfall_in": null,
+        "website_url": "https://www.skisunburst.com",
+        "webcam_url": "https://skisunburst.com/cams/",
+        "lift_types": null,
+        "high_speed_lifts": null,
+        "season_end_date": null,
+        "passes": [
+          "indy"
+        ],
+        "city": "Kewaskum",
+        "hero_image_url": null,
+        "hero_image_credit": null,
+        "hero_image_source": null,
+        "hero_image_alt": null,
+        "hero_image_attribution": null,
+        "hero_image_verified_winter": null
+      },
+      "after": {
+        "latitude": 43.4940578,
+        "longitude": -88.2241075,
+        "vertical_drop": 196,
+        "lift_types": {
+          "tram": 0,
+          "gondola": 0,
+          "surface": 3,
+          "fixed_quad": 0,
+          "bubble_chair": 0,
+          "fixed_double": 3,
+          "fixed_triple": 0,
+          "magic_carpet": 1,
+          "high_speed_six": 0,
+          "high_speed_quad": 0
+        },
+        "high_speed_lifts": 0,
+        "season_end_date": "2026-03-15"
+      }
+    },
+    {
+      "id": 427,
+      "slug": "aspen-snowmass",
+      "before": {
+        "active": true,
+        "latitude": 39.205,
+        "longitude": -106.9489,
+        "vertical_drop": 4406,
+        "total_acres": 3362,
+        "total_trails": 366,
+        "total_lifts": 16,
+        "base_elevation_ft": null,
+        "summit_elevation_ft": null,
+        "annual_snowfall_in": 300,
+        "website_url": null,
+        "webcam_url": "https://www.aspensnowmass.com/four-mountains/aspen-mountain/mountain-cams",
+        "lift_types": {
+          "tram": 0,
+          "gondola": 3,
+          "surface": 2,
+          "fixed_quad": 10,
+          "bubble_chair": 0,
+          "fixed_double": 0,
+          "fixed_triple": 0,
+          "magic_carpet": 5,
+          "high_speed_six": 0,
+          "high_speed_quad": 18,
+          "high_speed_eight": 0,
+          "high_speed_triple": 0
+        },
+        "high_speed_lifts": 18,
+        "season_end_date": "2026-04-19",
+        "passes": [
+          "ikon",
+          "mountain_collective"
+        ],
+        "city": null,
+        "hero_image_url": null,
+        "hero_image_credit": null,
+        "hero_image_source": null,
+        "hero_image_alt": null,
+        "hero_image_attribution": null,
+        "hero_image_verified_winter": true
+      },
+      "after": {
+        "active": false
+      }
+    },
+    {
+      "id": 482,
+      "slug": "sunburst-area",
+      "before": {
+        "active": true,
+        "latitude": 43.493936,
+        "longitude": -88.2265819,
+        "vertical_drop": 196,
+        "total_acres": null,
+        "total_trails": 11,
+        "total_lifts": 7,
+        "base_elevation_ft": null,
+        "summit_elevation_ft": 1136,
+        "annual_snowfall_in": null,
+        "website_url": "https://skisunburst.com/",
+        "webcam_url": "https://skisunburst.com/cams/",
+        "lift_types": {
+          "tram": 0,
+          "gondola": 0,
+          "surface": 3,
+          "fixed_quad": 0,
+          "bubble_chair": 0,
+          "fixed_double": 3,
+          "fixed_triple": 0,
+          "magic_carpet": 1,
+          "high_speed_six": 0,
+          "high_speed_quad": 0
+        },
+        "high_speed_lifts": 0,
+        "season_end_date": "2026-03-15",
+        "passes": [
+          "indy"
+        ],
+        "city": "Kewaskum",
+        "hero_image_url": null,
+        "hero_image_credit": null,
+        "hero_image_source": null,
+        "hero_image_alt": null,
+        "hero_image_attribution": null,
+        "hero_image_verified_winter": null
+      },
+      "after": {
+        "active": false
+      }
+    },
+    {
+      "id": 483,
+      "slug": "tyrol-basin-and-snowboard",
+      "before": {
+        "active": true,
+        "latitude": 43.0447546,
+        "longitude": -89.7855207,
+        "vertical_drop": 300,
+        "total_acres": null,
+        "total_trails": 24,
+        "total_lifts": 6,
+        "base_elevation_ft": 867,
+        "summit_elevation_ft": 1151,
+        "annual_snowfall_in": null,
+        "website_url": "https://www.tyrolbasin.com",
+        "webcam_url": "https://tyrolbasin.com/live-cam/",
+        "lift_types": {
+          "tram": 0,
+          "gondola": 0,
+          "surface": 2,
+          "fixed_quad": 0,
+          "bubble_chair": 0,
+          "fixed_double": 0,
+          "fixed_triple": 3,
+          "magic_carpet": 1,
+          "high_speed_six": 0,
+          "high_speed_quad": 0
+        },
+        "high_speed_lifts": 0,
+        "season_end_date": "2026-03-15",
+        "passes": [
+          "indy"
+        ],
+        "city": "Mount Horeb",
+        "hero_image_url": null,
+        "hero_image_credit": null,
+        "hero_image_source": null,
+        "hero_image_alt": null,
+        "hero_image_attribution": null,
+        "hero_image_verified_winter": null
+      },
+      "after": {
+        "active": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,5439 @@
+{
+  "step": "06-season-dates",
+  "table": "resorts",
+  "mode": "applied",
+  "taken_at": "2026-09-23T05:10:17.598Z",
+  "columns": [
+    "season_open_text",
+    "season_close_text",
+    "typical_season_start",
+    "typical_season_end"
+  ],
+  "rows": [
+    {
+      "id": 1,
+      "slug": "hunter-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": "Mid-November",
+        "typical_season_end": "Mid-April"
+      },
+      "after": {
+        "season_open_text": "November 21, 2026",
+        "season_close_text": "April 4, 2027"
+      },
+      "source": "https://www.onthesnow.com/new-york/hunter-mountain/ski-resort"
+    },
+    {
+      "id": 31,
+      "slug": "windham-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 28, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/new-york/windham-mountain/ski-resort"
+    },
+    {
+      "id": 32,
+      "slug": "belleayre-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 20, 2026",
+        "typical_season_start": "Mid-November",
+        "season_close_text": "April 11, 2027",
+        "typical_season_end": "Mid-April"
+      },
+      "source": "https://www.onthesnow.com/new-york/belleayre/ski-resort"
+    },
+    {
+      "id": 33,
+      "slug": "plattekill-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 12, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 28, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/new-york/plattekill-mountain/ski-resort"
+    },
+    {
+      "id": 34,
+      "slug": "gore-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 20, 2026",
+        "typical_season_start": "Mid-November",
+        "season_close_text": "April 11, 2027",
+        "typical_season_end": "Mid-April"
+      },
+      "source": "https://www.onthesnow.com/new-york/gore-mountain/ski-resort"
+    },
+    {
+      "id": 35,
+      "slug": "whiteface-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 21, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "April 18, 2027",
+        "typical_season_end": "Mid-April"
+      },
+      "source": "https://www.onthesnow.com/new-york/whiteface-mountain-resort/ski-resort"
+    },
+    {
+      "id": 37,
+      "slug": "thunder-ridge-ski-area",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 26, 2026",
+        "typical_season_start": "Late December",
+        "season_close_text": "March 28, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/new-york/thunder-ridge/ski-resort"
+    },
+    {
+      "id": 38,
+      "slug": "mount-peter",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": "mid March",
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 5, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/new-york/mount-peter/ski-resort"
+    },
+    {
+      "id": 39,
+      "slug": "mountain-creek",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": "mid March",
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 5, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/new-jersey/mountain-creek-resort/ski-resort"
+    },
+    {
+      "id": 40,
+      "slug": "camelback-mountain-resort",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 11, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "May 5, 2027",
+        "typical_season_end": "Early May"
+      },
+      "source": "https://www.onthesnow.com/pennsylvania/camelback-mountain-resort/ski-resort"
+    },
+    {
+      "id": 41,
+      "slug": "blue-mountain-resort",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 28, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/pennsylvania/blue-mountain-ski-area/ski-resort"
+    },
+    {
+      "id": 42,
+      "slug": "shawnee-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": "Late November",
+        "typical_season_end": "Mid-to-late March"
+      },
+      "after": {
+        "season_open_text": "December 11, 2026",
+        "season_close_text": "March 14, 2027"
+      },
+      "source": "https://www.onthesnow.com/pennsylvania/shawnee-mountain-ski-area/ski-resort"
+    },
+    {
+      "id": 43,
+      "slug": "jack-frost-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/pennsylvania/jack-frost/ski-resort"
+    },
+    {
+      "id": 44,
+      "slug": "big-boulder",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 12, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/pennsylvania/big-boulder/ski-resort"
+    },
+    {
+      "id": 45,
+      "slug": "montage-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 9, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/pennsylvania/montage-mountain/ski-resort"
+    },
+    {
+      "id": 46,
+      "slug": "elk-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 11, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/pennsylvania/elk-mountain-ski-resort/ski-resort"
+    },
+    {
+      "id": 47,
+      "slug": "mohawk-mountain-ski-area",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 18, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/connecticut/mohawk-mountain/ski-resort"
+    },
+    {
+      "id": 48,
+      "slug": "mount-southington",
+      "before": {
+        "season_open_text": "mid December",
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 12, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/connecticut/mount-southington-ski-area/ski-resort"
+    },
+    {
+      "id": 49,
+      "slug": "berkshire-east",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 11, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "April 3, 2027",
+        "typical_season_end": "Early April"
+      },
+      "source": "https://www.onthesnow.com/massachusetts/berkshire-east/ski-resort"
+    },
+    {
+      "id": 51,
+      "slug": "jiminy-peak",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": "Mid-November",
+        "typical_season_end": "Early April"
+      },
+      "after": {
+        "season_open_text": "November 27, 2026",
+        "season_close_text": "April 4, 2027"
+      },
+      "source": "https://www.onthesnow.com/massachusetts/jiminy-peak/ski-resort"
+    },
+    {
+      "id": 52,
+      "slug": "wachusett-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 21, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "April 9, 2027",
+        "typical_season_end": "Early April"
+      },
+      "source": "https://www.onthesnow.com/massachusetts/wachusett-mountain-ski-area/ski-resort"
+    },
+    {
+      "id": 53,
+      "slug": "stratton-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": "Mid-November",
+        "typical_season_end": "Mid-April"
+      },
+      "after": {
+        "season_open_text": "November 18, 2026",
+        "season_close_text": "April 12, 2027"
+      },
+      "source": "https://snowbrains.com/ikon-pass-resorts-opening-dates-2026-27/ (Ikon Pass announcement, 2026-09) + https://www.onthesnow.com/vermont/stratton-mountain/ski-resort"
+    },
+    {
+      "id": 54,
+      "slug": "mount-snow",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 21, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "April 18, 2027",
+        "typical_season_end": "Mid-April"
+      },
+      "source": "https://www.onthesnow.com/vermont/mount-snow/ski-resort"
+    },
+    {
+      "id": 55,
+      "slug": "magic-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 5, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "April 3, 2027",
+        "typical_season_end": "Early April"
+      },
+      "source": "https://www.onthesnow.com/vermont/magic-mountain/ski-resort"
+    },
+    {
+      "id": 56,
+      "slug": "bromley-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 27, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "April 4, 2027",
+        "typical_season_end": "Early April"
+      },
+      "source": "https://www.onthesnow.com/vermont/bromley-mountain/ski-resort"
+    },
+    {
+      "id": 57,
+      "slug": "okemo-mountain-resort",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 20, 2026",
+        "typical_season_start": "Mid-November",
+        "season_close_text": "April 11, 2027",
+        "typical_season_end": "Mid-April"
+      },
+      "source": "https://www.onthesnow.com/vermont/okemo-mountain-resort/ski-resort"
+    },
+    {
+      "id": 58,
+      "slug": "loon-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": "Mid-November",
+        "typical_season_end": "Mid-April"
+      },
+      "after": {
+        "season_open_text": "November 20, 2026",
+        "season_close_text": "April 18, 2027"
+      },
+      "source": "https://www.onthesnow.com/new-hampshire/loon-mountain/ski-resort"
+    },
+    {
+      "id": 59,
+      "slug": "cannon-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 27, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "April 11, 2027",
+        "typical_season_end": "Mid-April"
+      },
+      "source": "https://www.onthesnow.com/new-hampshire/cannon-mountain/ski-resort"
+    },
+    {
+      "id": 60,
+      "slug": "arapahoe-basin",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": "May 17",
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "October 9, 2026",
+        "typical_season_start": "Early October",
+        "season_close_text": "May 16, 2027",
+        "typical_season_end": "Mid-May"
+      },
+      "source": "https://www.onthesnow.com/colorado/arapahoe-basin-ski-area/ski-resort"
+    },
+    {
+      "id": 61,
+      "slug": "aspen-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 26, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "April 18, 2027",
+        "typical_season_end": "Mid-April"
+      },
+      "source": "https://www.aspensnowmass.com/four-mountains/aspen-mountain (season Nov 26, 2026 - Apr 18, 2027)"
+    },
+    {
+      "id": 62,
+      "slug": "aspen-highlands",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 12, 2026",
+        "typical_season_start": "Mid-December",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://snowbrains.com/ikon-pass-resorts-opening-dates-2026-27/ (Ikon Pass announcement, 2026-09)"
+    },
+    {
+      "id": 63,
+      "slug": "buttermilk",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 12, 2026",
+        "typical_season_start": "Mid-December",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://snowbrains.com/ikon-pass-resorts-opening-dates-2026-27/ (Ikon Pass announcement, 2026-09)"
+    },
+    {
+      "id": 64,
+      "slug": "snowmass",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 26, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "April 18, 2027",
+        "typical_season_end": "Mid-April"
+      },
+      "source": "https://snowbrains.com/ikon-pass-resorts-opening-dates-2026-27/ (Ikon Pass announcement, 2026-09) + https://www.onthesnow.com/colorado/aspen-snowmass/ski-resort"
+    },
+    {
+      "id": 65,
+      "slug": "beaver-creek",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 25, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "March 28, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://snowbrains.com/vail-resorts-announces-2026-27-opening-dates-for-11-resorts/ (Vail Resorts release, 2026-08-18) + https://www.onthesnow.com/colorado/beaver-creek/ski-resort"
+    },
+    {
+      "id": 66,
+      "slug": "breckenridge",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 6, 2026",
+        "typical_season_start": "Early November",
+        "season_close_text": "April 24, 2027",
+        "typical_season_end": "Late April"
+      },
+      "source": "https://snowbrains.com/vail-resorts-announces-2026-27-opening-dates-for-11-resorts/ (Vail Resorts release, 2026-08-18) + https://www.onthesnow.com/colorado/breckenridge/ski-resort"
+    },
+    {
+      "id": 68,
+      "slug": "copper-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 6, 2026",
+        "typical_season_start": "Early November",
+        "season_close_text": "May 2, 2027",
+        "typical_season_end": "Early May"
+      },
+      "source": "https://snowbrains.com/ikon-pass-resorts-opening-dates-2026-27/ (Ikon Pass announcement, 2026-09) + https://www.onthesnow.com/colorado/copper-mountain-resort/ski-resort"
+    },
+    {
+      "id": 70,
+      "slug": "crested-butte",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 25, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "April 4, 2027",
+        "typical_season_end": "Early April"
+      },
+      "source": "https://snowbrains.com/vail-resorts-announces-2026-27-opening-dates-for-11-resorts/ (Vail Resorts release, 2026-08-18) + https://www.onthesnow.com/colorado/crested-butte-mountain-resort/ski-resort"
+    },
+    {
+      "id": 71,
+      "slug": "echo-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 12, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "April 4, 2027",
+        "typical_season_end": "Early April"
+      },
+      "source": "https://www.onthesnow.com/colorado/echo-mountain/ski-resort"
+    },
+    {
+      "id": 72,
+      "slug": "eldora",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 13, 2026",
+        "typical_season_start": "Mid-November",
+        "season_close_text": "April 4, 2027",
+        "typical_season_end": "Early April"
+      },
+      "source": "https://snowbrains.com/ikon-pass-resorts-opening-dates-2026-27/ (Ikon Pass announcement, 2026-09) + https://www.onthesnow.com/colorado/eldora-mountain-resort/ski-resort"
+    },
+    {
+      "id": 73,
+      "slug": "granby-ranch",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 27, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "March 28, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/colorado/ski-granby-ranch/ski-resort"
+    },
+    {
+      "id": 76,
+      "slug": "howelsen-hill",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 5, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/colorado/howelsen-hill/ski-resort"
+    },
+    {
+      "id": 77,
+      "slug": "keystone",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "October 31, 2026",
+        "typical_season_start": "Late October",
+        "season_close_text": "April 4, 2027",
+        "typical_season_end": "Early April"
+      },
+      "source": "https://www.onthesnow.com/colorado/keystone/ski-resort"
+    },
+    {
+      "id": 80,
+      "slug": "loveland",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 6, 2026",
+        "typical_season_start": "Early November",
+        "season_close_text": "May 9, 2027",
+        "typical_season_end": "Early May"
+      },
+      "source": "https://www.onthesnow.com/colorado/loveland/ski-resort"
+    },
+    {
+      "id": 81,
+      "slug": "monarch-mountain",
+      "before": {
+        "season_open_text": "Late November",
+        "season_close_text": null,
+        "typical_season_start": "Late November",
+        "typical_season_end": "Early April"
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "season_close_text": "March 28, 2027"
+      },
+      "source": "https://www.onthesnow.com/colorado/monarch-mountain/ski-resort"
+    },
+    {
+      "id": 82,
+      "slug": "powderhorn",
+      "before": {
+        "season_open_text": "late November",
+        "season_close_text": "early April",
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/colorado/powderhorn/ski-resort"
+    },
+    {
+      "id": 83,
+      "slug": "purgatory",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 27, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "March 28, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/colorado/durango-mountain-resort/ski-resort"
+    },
+    {
+      "id": 84,
+      "slug": "silverton-mountain",
+      "before": {
+        "season_open_text": "December",
+        "season_close_text": "April",
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 31, 2026",
+        "typical_season_start": "Late December",
+        "season_close_text": "April 11, 2027",
+        "typical_season_end": "Mid-April"
+      },
+      "source": "https://www.onthesnow.com/colorado/silverton-mountain/ski-resort"
+    },
+    {
+      "id": 85,
+      "slug": "ski-cooper",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 9, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/colorado/ski-cooper/ski-resort"
+    },
+    {
+      "id": 86,
+      "slug": "steamboat",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 21, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "April 4, 2027",
+        "typical_season_end": "Early April"
+      },
+      "source": "https://snowbrains.com/ikon-pass-resorts-opening-dates-2026-27/ (Ikon Pass announcement, 2026-09) + https://www.onthesnow.com/colorado/steamboat/ski-resort"
+    },
+    {
+      "id": 87,
+      "slug": "sunlight-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 12, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/colorado/sunlight-mountain-resort/ski-resort"
+    },
+    {
+      "id": 88,
+      "slug": "telluride",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 26, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "April 4, 2027",
+        "typical_season_end": "Early April"
+      },
+      "source": "https://www.onthesnow.com/colorado/telluride/ski-resort"
+    },
+    {
+      "id": 89,
+      "slug": "vail",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 13, 2026",
+        "typical_season_start": "Mid-November",
+        "season_close_text": "April 11, 2027",
+        "typical_season_end": "Mid-April"
+      },
+      "source": "https://snowbrains.com/vail-resorts-announces-2026-27-opening-dates-for-11-resorts/ (Vail Resorts release, 2026-08-18) + https://www.onthesnow.com/colorado/vail/ski-resort"
+    },
+    {
+      "id": 90,
+      "slug": "winter-park",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "October 30, 2026",
+        "typical_season_start": "Late October",
+        "season_close_text": "May 2, 2027",
+        "typical_season_end": "Early May"
+      },
+      "source": "https://www.onthesnow.com/colorado/winter-park-resort/ski-resort"
+    },
+    {
+      "id": 91,
+      "slug": "wolf-creek",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 21, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "April 4, 2027",
+        "typical_season_end": "Early April"
+      },
+      "source": "https://www.onthesnow.com/colorado/wolf-creek-ski-area/ski-resort"
+    },
+    {
+      "id": 92,
+      "slug": "alta",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 20, 2026",
+        "typical_season_start": "Mid-November",
+        "season_close_text": "April 25, 2027",
+        "typical_season_end": "Late April"
+      },
+      "source": "https://snowbrains.com/ikon-pass-resorts-opening-dates-2026-27/ (Ikon Pass announcement, 2026-09) + https://www.onthesnow.com/utah/alta-ski-area/ski-resort"
+    },
+    {
+      "id": 93,
+      "slug": "beaver-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 26, 2026",
+        "typical_season_start": "Late December",
+        "season_close_text": "March 28, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/utah/beaver-mountain/ski-resort"
+    },
+    {
+      "id": 94,
+      "slug": "brian-head",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 20, 2026",
+        "typical_season_start": "Mid-November",
+        "season_close_text": "May 2, 2027",
+        "typical_season_end": "Early May"
+      },
+      "source": "https://www.onthesnow.com/utah/brian-head-resort/ski-resort"
+    },
+    {
+      "id": 95,
+      "slug": "brighton",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "May 9, 2027",
+        "typical_season_end": "Early May"
+      },
+      "source": "https://www.onthesnow.com/utah/brighton-resort/ski-resort"
+    },
+    {
+      "id": 97,
+      "slug": "deer-valley",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 5, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 28, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://snowbrains.com/ikon-pass-resorts-opening-dates-2026-27/ (Ikon Pass announcement, 2026-09) + https://www.onthesnow.com/utah/deer-valley-resort/ski-resort"
+    },
+    {
+      "id": 98,
+      "slug": "eagle-point",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 18, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/utah/eagle-point/ski-resort"
+    },
+    {
+      "id": 99,
+      "slug": "park-city",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 20, 2026",
+        "typical_season_start": "Mid-November",
+        "season_close_text": "April 4, 2027",
+        "typical_season_end": "Early April"
+      },
+      "source": "https://snowbrains.com/vail-resorts-announces-2026-27-opening-dates-for-11-resorts/ (Vail Resorts release, 2026-08-18) + https://www.onthesnow.com/utah/park-city-mountain-resort/ski-resort"
+    },
+    {
+      "id": 100,
+      "slug": "powder-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 11, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "April 11, 2027",
+        "typical_season_end": "Mid-April"
+      },
+      "source": "https://www.onthesnow.com/utah/powder-mountain/ski-resort"
+    },
+    {
+      "id": 101,
+      "slug": "snowbasin",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 27, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "March 28, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://snowbrains.com/ikon-pass-resorts-opening-dates-2026-27/ (Ikon Pass announcement, 2026-09) + https://www.onthesnow.com/utah/snowbasin/ski-resort"
+    },
+    {
+      "id": 102,
+      "slug": "snowbird",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 27, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "May 9, 2027",
+        "typical_season_end": "Early May"
+      },
+      "source": "https://snowbrains.com/ikon-pass-resorts-opening-dates-2026-27/ (Ikon Pass announcement, 2026-09) + https://www.onthesnow.com/utah/snowbird/ski-resort"
+    },
+    {
+      "id": 104,
+      "slug": "solitude",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 20, 2026",
+        "typical_season_start": "Mid-November",
+        "season_close_text": "May 23, 2027",
+        "typical_season_end": "Late May"
+      },
+      "source": "https://snowbrains.com/ikon-pass-resorts-opening-dates-2026-27/ (Ikon Pass announcement, 2026-09) + https://www.onthesnow.com/utah/solitude-mountain-resort/ski-resort"
+    },
+    {
+      "id": 105,
+      "slug": "sundance",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 28, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/utah/sundance/ski-resort"
+    },
+    {
+      "id": 107,
+      "slug": "nordic-valley",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 18, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 28, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/utah/wolf-creek/ski-resort"
+    },
+    {
+      "id": 108,
+      "slug": "jackson-hole",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 27, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "April 11, 2027",
+        "typical_season_end": "Mid-April"
+      },
+      "source": "https://snowbrains.com/ikon-pass-resorts-opening-dates-2026-27/ (Ikon Pass announcement, 2026-09) + https://www.onthesnow.com/wyoming/jackson-hole/ski-resort"
+    },
+    {
+      "id": 109,
+      "slug": "grand-targhee",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": "Late November",
+        "typical_season_end": "Mid-April"
+      },
+      "after": {
+        "season_open_text": "November 20, 2026",
+        "season_close_text": "April 18, 2027"
+      },
+      "source": "https://www.onthesnow.com/wyoming/grand-targhee-resort/ski-resort"
+    },
+    {
+      "id": 110,
+      "slug": "snow-king",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/wyoming/snow-king-resort/ski-resort"
+    },
+    {
+      "id": 111,
+      "slug": "hogadon",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": "December",
+        "typical_season_end": "April"
+      },
+      "after": {
+        "season_open_text": "December 12, 2026",
+        "season_close_text": "March 21, 2027"
+      },
+      "source": "https://www.onthesnow.com/wyoming/hogadon/ski-resort"
+    },
+    {
+      "id": 112,
+      "slug": "snowy-range",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 11, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 28, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/wyoming/snowy-range-ski-recreation-area/ski-resort"
+    },
+    {
+      "id": 113,
+      "slug": "white-pine",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 19, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/wyoming/white-pine-ski-area/ski-resort"
+    },
+    {
+      "id": 115,
+      "slug": "sleeping-giant",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 27, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/wyoming/sleeping-giant-ski-resort/ski-resort"
+    },
+    {
+      "id": 116,
+      "slug": "meadowlark",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 12, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "April 4, 2027",
+        "typical_season_end": "Early April"
+      },
+      "source": "https://www.onthesnow.com/wyoming/meadowlark-ski-lodge/ski-resort"
+    },
+    {
+      "id": 118,
+      "slug": "big-sky",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 25, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "April 25, 2027",
+        "typical_season_end": "Late April"
+      },
+      "source": "https://snowbrains.com/ikon-pass-resorts-opening-dates-2026-27/ (Ikon Pass announcement, 2026-09) + https://www.onthesnow.com/montana/big-sky-resort/ski-resort"
+    },
+    {
+      "id": 119,
+      "slug": "whitefish",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "April 4, 2027",
+        "typical_season_end": "Early April"
+      },
+      "source": "https://www.onthesnow.com/montana/whitefish-mountain-resort/ski-resort"
+    },
+    {
+      "id": 120,
+      "slug": "bridger-bowl",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 18, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/montana/bridger-bowl/ski-resort"
+    },
+    {
+      "id": 121,
+      "slug": "red-lodge",
+      "before": {
+        "season_open_text": "late November",
+        "season_close_text": null,
+        "typical_season_start": "Day after Thanksgiving",
+        "typical_season_end": "Second Sunday in April"
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "season_close_text": "April 11, 2027"
+      },
+      "source": "https://www.onthesnow.com/montana/red-lodge-mountain/ski-resort"
+    },
+    {
+      "id": 122,
+      "slug": "discovery",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "April 4, 2027",
+        "typical_season_end": "Early April"
+      },
+      "source": "https://www.onthesnow.com/montana/discovery-ski-area/ski-resort"
+    },
+    {
+      "id": 123,
+      "slug": "blacktail",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 26, 2026",
+        "typical_season_start": "Late December",
+        "season_close_text": "March 28, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/montana/blacktail-mountain-ski-area/ski-resort"
+    },
+    {
+      "id": 124,
+      "slug": "great-divide",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 27, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "April 2, 2027",
+        "typical_season_end": "Early April"
+      },
+      "source": "https://www.onthesnow.com/montana/great-divide/ski-resort"
+    },
+    {
+      "id": 126,
+      "slug": "lost-trail",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 11, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 28, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/montana/lost-trail-powder-mtn/ski-resort"
+    },
+    {
+      "id": 127,
+      "slug": "maverick-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 19, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 28, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/montana/maverick-mountain/ski-resort"
+    },
+    {
+      "id": 128,
+      "slug": "montana-snowbowl",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "April 4, 2027",
+        "typical_season_end": "Early April"
+      },
+      "source": "https://www.onthesnow.com/montana/montana-snowbowl/ski-resort"
+    },
+    {
+      "id": 129,
+      "slug": "showdown",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 11, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "April 11, 2027",
+        "typical_season_end": "Mid-April"
+      },
+      "source": "https://www.onthesnow.com/montana/showdown-ski-area/ski-resort"
+    },
+    {
+      "id": 130,
+      "slug": "teton-pass",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 18, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "April 10, 2027",
+        "typical_season_end": "Early April"
+      },
+      "source": "https://www.onthesnow.com/montana/teton-pass-ski-area/ski-resort"
+    },
+    {
+      "id": 134,
+      "slug": "sun-valley",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 26, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "April 11, 2027",
+        "typical_season_end": "Mid-April"
+      },
+      "source": "https://snowbrains.com/ikon-pass-resorts-opening-dates-2026-27/ (Ikon Pass announcement, 2026-09) + https://www.onthesnow.com/idaho/sun-valley/ski-resort"
+    },
+    {
+      "id": 135,
+      "slug": "schweitzer",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": "Late November",
+        "typical_season_end": "Early/mid April"
+      },
+      "after": {
+        "season_open_text": "November 27, 2026",
+        "season_close_text": "April 11, 2027"
+      },
+      "source": "https://snowbrains.com/ikon-pass-resorts-opening-dates-2026-27/ (Ikon Pass announcement, 2026-09) + https://www.onthesnow.com/idaho/schweitzer/ski-resort"
+    },
+    {
+      "id": 136,
+      "slug": "brundage-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": "Mid-November",
+        "typical_season_end": "Mid-April"
+      },
+      "after": {
+        "season_open_text": "November 27, 2026",
+        "season_close_text": "April 11, 2027"
+      },
+      "source": "https://www.onthesnow.com/idaho/brundage-mountain-resort/ski-resort"
+    },
+    {
+      "id": 137,
+      "slug": "tamarack",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "October 27, 2026",
+        "typical_season_start": "Late October",
+        "season_close_text": "April 11, 2027",
+        "typical_season_end": "Mid-April"
+      },
+      "source": "https://www.onthesnow.com/idaho/tamarack-resort/ski-resort"
+    },
+    {
+      "id": 138,
+      "slug": "bogus-basin",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 28, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/idaho/bogus-basin/ski-resort"
+    },
+    {
+      "id": 139,
+      "slug": "silver-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 28, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "April 18, 2027",
+        "typical_season_end": "Mid-April"
+      },
+      "source": "https://www.onthesnow.com/idaho/silver-mountain/ski-resort"
+    },
+    {
+      "id": 140,
+      "slug": "soldier-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 27, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/idaho/soldier-mountain-ski-area/ski-resort"
+    },
+    {
+      "id": 141,
+      "slug": "pebble-creek",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": "Mid-December",
+        "typical_season_end": "Late March"
+      },
+      "after": {
+        "season_open_text": "December 26, 2026",
+        "season_close_text": "March 21, 2027"
+      },
+      "source": "https://www.onthesnow.com/idaho/pebble-creek-ski-area/ski-resort"
+    },
+    {
+      "id": 142,
+      "slug": "kelly-canyon",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/idaho/kelly-canyon-ski-area/ski-resort"
+    },
+    {
+      "id": 143,
+      "slug": "pomerelle",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 18, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/idaho/pomerelle-mountain-resort/ski-resort"
+    },
+    {
+      "id": 144,
+      "slug": "magic-mountain-id",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/idaho/magic-mountain-ski-area/ski-resort"
+    },
+    {
+      "id": 149,
+      "slug": "alyeska-resort",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 28, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "April 25, 2027",
+        "typical_season_end": "Late April"
+      },
+      "source": "https://snowbrains.com/ikon-pass-resorts-opening-dates-2026-27/ (Ikon Pass announcement, 2026-09) + https://www.onthesnow.com/alaska/alyeska-resort/ski-resort"
+    },
+    {
+      "id": 150,
+      "slug": "eaglecrest-ski-area",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 12, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "April 11, 2027",
+        "typical_season_end": "Mid-April"
+      },
+      "source": "https://www.onthesnow.com/alaska/eaglecrest-ski-area/ski-resort"
+    },
+    {
+      "id": 151,
+      "slug": "hilltop-ski-area",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 28, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "April 11, 2027",
+        "typical_season_end": "Mid-April"
+      },
+      "source": "https://www.onthesnow.com/alaska/hilltop-ski-area/ski-resort"
+    },
+    {
+      "id": 155,
+      "slug": "palisades-tahoe",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 25, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "May 23, 2027",
+        "typical_season_end": "Late May"
+      },
+      "source": "https://snowbrains.com/ikon-pass-resorts-opening-dates-2026-27/ (Ikon Pass announcement, 2026-09) + https://www.onthesnow.com/california/palisades-tahoe/ski-resort"
+    },
+    {
+      "id": 157,
+      "slug": "heavenly-mountain-resort",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 20, 2026",
+        "typical_season_start": "Mid-November",
+        "season_close_text": "April 4, 2027",
+        "typical_season_end": "Early April"
+      },
+      "source": "https://snowbrains.com/vail-resorts-announces-2026-27-opening-dates-for-11-resorts/ (Vail Resorts release, 2026-08-18) + https://www.onthesnow.com/california/heavenly-mountain-resort/ski-resort"
+    },
+    {
+      "id": 158,
+      "slug": "northstar-california",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 20, 2026",
+        "typical_season_start": "Mid-November",
+        "season_close_text": "April 4, 2027",
+        "typical_season_end": "Early April"
+      },
+      "source": "https://snowbrains.com/vail-resorts-announces-2026-27-opening-dates-for-11-resorts/ (Vail Resorts release, 2026-08-18) + https://www.onthesnow.com/california/northstar-california/ski-resort"
+    },
+    {
+      "id": 159,
+      "slug": "kirkwood-mountain-resort",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "April 11, 2027",
+        "typical_season_end": "Mid-April"
+      },
+      "source": "https://snowbrains.com/vail-resorts-announces-2026-27-opening-dates-for-11-resorts/ (Vail Resorts release, 2026-08-18) + https://www.onthesnow.com/california/kirkwood/ski-resort"
+    },
+    {
+      "id": 160,
+      "slug": "sierra-at-tahoe",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 26, 2026",
+        "typical_season_start": "Late December",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/california/sierra-at-tahoe/ski-resort"
+    },
+    {
+      "id": 161,
+      "slug": "homewood-mountain-resort",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 26, 2026",
+        "typical_season_start": "Late December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/california/homewood-mountain-resort/ski-resort"
+    },
+    {
+      "id": 162,
+      "slug": "boreal-mountain-resort",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 27, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "April 11, 2027",
+        "typical_season_end": "Mid-April"
+      },
+      "source": "https://www.onthesnow.com/california/boreal/ski-resort"
+    },
+    {
+      "id": 163,
+      "slug": "soda-springs",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 18, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/california/soda-springs/ski-resort"
+    },
+    {
+      "id": 164,
+      "slug": "donner-ski-ranch",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 11, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 28, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/california/donner-ski-ranch/ski-resort"
+    },
+    {
+      "id": 165,
+      "slug": "sugar-bowl-resort",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "April 11, 2027",
+        "typical_season_end": "Mid-April"
+      },
+      "source": "https://www.onthesnow.com/california/sugar-bowl-resort/ski-resort"
+    },
+    {
+      "id": 166,
+      "slug": "tahoe-donner-downhill",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 12, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "April 4, 2027",
+        "typical_season_end": "Early April"
+      },
+      "source": "https://www.onthesnow.com/california/tahoe-donner/ski-resort"
+    },
+    {
+      "id": 167,
+      "slug": "diamond-peak",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": "Early December",
+        "typical_season_end": "Mid-April"
+      },
+      "after": {
+        "season_open_text": "December 3, 2026",
+        "season_close_text": "April 18, 2027"
+      },
+      "source": "https://www.onthesnow.com/nevada/diamond-peak/ski-resort"
+    },
+    {
+      "id": 168,
+      "slug": "mt-rose-ski-tahoe",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 20, 2026",
+        "typical_season_start": "Mid-November",
+        "season_close_text": "April 18, 2027",
+        "typical_season_end": "Mid-April"
+      },
+      "source": "https://www.onthesnow.com/nevada/mt-rose-ski-tahoe/ski-resort"
+    },
+    {
+      "id": 169,
+      "slug": "lee-canyon",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 27, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/nevada/lee-canyon/ski-resort"
+    },
+    {
+      "id": 170,
+      "slug": "elko-snobowl",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 30, 2026",
+        "typical_season_start": "Late December",
+        "season_close_text": "March 7, 2027",
+        "typical_season_end": "Early March"
+      },
+      "source": "https://www.onthesnow.com/nevada/elko-snobowl/ski-resort"
+    },
+    {
+      "id": 171,
+      "slug": "mammoth-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 13, 2026",
+        "typical_season_start": "Mid-November",
+        "season_close_text": "June 6, 2027",
+        "typical_season_end": "Early June"
+      },
+      "source": "https://snowbrains.com/ikon-pass-resorts-opening-dates-2026-27/ (Ikon Pass announcement, 2026-09) + https://www.onthesnow.com/california/mammoth-mountain-ski-area/ski-resort"
+    },
+    {
+      "id": 172,
+      "slug": "june-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 19, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "April 11, 2027",
+        "typical_season_end": "Mid-April"
+      },
+      "source": "https://snowbrains.com/ikon-pass-resorts-opening-dates-2026-27/ (Ikon Pass announcement, 2026-09) + https://www.onthesnow.com/california/june-mountain/ski-resort"
+    },
+    {
+      "id": 173,
+      "slug": "bear-valley-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 27, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "March 28, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/california/bear-valley/ski-resort"
+    },
+    {
+      "id": 174,
+      "slug": "dodge-ridge",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 26, 2026",
+        "typical_season_start": "Late December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/california/dodge-ridge/ski-resort"
+    },
+    {
+      "id": 175,
+      "slug": "china-peak",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 27, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "March 28, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/california/ski-china-peak/ski-resort"
+    },
+    {
+      "id": 176,
+      "slug": "badger-pass",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 26, 2026",
+        "typical_season_start": "Late December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/california/badger-pass/ski-resort"
+    },
+    {
+      "id": 177,
+      "slug": "mountain-high",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 27, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "March 28, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/california/mountain-high/ski-resort"
+    },
+    {
+      "id": 178,
+      "slug": "snow-valley",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/california/snow-valley/ski-resort"
+    },
+    {
+      "id": 179,
+      "slug": "snow-summit",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/california/snow-summit/ski-resort"
+    },
+    {
+      "id": 180,
+      "slug": "bear-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 27, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/california/bear-mountain/ski-resort"
+    },
+    {
+      "id": 181,
+      "slug": "mt-baldy",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 27, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "April 4, 2027",
+        "typical_season_end": "Early April"
+      },
+      "source": "https://www.onthesnow.com/california/mt-baldy/ski-resort"
+    },
+    {
+      "id": 183,
+      "slug": "mt-shasta-ski-park",
+      "before": {
+        "season_open_text": "mid December",
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 26, 2026",
+        "typical_season_start": "Late December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/california/mount-shasta-board-ski-park/ski-resort"
+    },
+    {
+      "id": 184,
+      "slug": "mt-bachelor",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "May 31, 2027",
+        "typical_season_end": "Late May"
+      },
+      "source": "https://snowbrains.com/ikon-pass-resorts-opening-dates-2026-27/ (Ikon Pass announcement, 2026-09) + https://www.onthesnow.com/oregon/mt-bachelor/ski-resort"
+    },
+    {
+      "id": 185,
+      "slug": "timberline-lodge",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 26, 2026",
+        "typical_season_start": "Late December",
+        "season_close_text": "July 19, 2026",
+        "typical_season_end": "Mid-July"
+      },
+      "source": "https://www.onthesnow.com/oregon/timberline-lodge/ski-resort"
+    },
+    {
+      "id": 186,
+      "slug": "mt-hood-meadows",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 18, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "April 18, 2027",
+        "typical_season_end": "Mid-April"
+      },
+      "source": "https://www.onthesnow.com/oregon/mt-hood-meadows/ski-resort"
+    },
+    {
+      "id": 187,
+      "slug": "mt-hood-skibowl",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 27, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "March 28, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/oregon/mt-hood-ski-bowl/ski-resort"
+    },
+    {
+      "id": 191,
+      "slug": "willamette-pass",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 26, 2026",
+        "typical_season_start": "Late December",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/oregon/willamette-pass/ski-resort"
+    },
+    {
+      "id": 192,
+      "slug": "anthony-lakes",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 19, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "April 4, 2027",
+        "typical_season_end": "Early April"
+      },
+      "source": "https://www.onthesnow.com/oregon/anthony-lakes-mountain-resort/ski-resort"
+    },
+    {
+      "id": 193,
+      "slug": "spout-springs",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_close_text": "March 31, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/oregon/spout-springs/ski-resort"
+    },
+    {
+      "id": 196,
+      "slug": "crystal-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 27, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "April 4, 2027",
+        "typical_season_end": "Early April"
+      },
+      "source": "https://snowbrains.com/ikon-pass-resorts-opening-dates-2026-27/ (Ikon Pass announcement, 2026-09) + https://www.onthesnow.com/washington/crystal-mountain/ski-resort"
+    },
+    {
+      "id": 197,
+      "slug": "stevens-pass",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "April 11, 2027",
+        "typical_season_end": "Mid-April"
+      },
+      "source": "https://snowbrains.com/vail-resorts-announces-2026-27-opening-dates-for-11-resorts/ (Vail Resorts release, 2026-08-18) + https://www.onthesnow.com/washington/stevens-pass-resort/ski-resort"
+    },
+    {
+      "id": 198,
+      "slug": "the-summit-at-snoqualmie",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 26, 2026",
+        "typical_season_start": "Late December",
+        "season_close_text": "April 11, 2027",
+        "typical_season_end": "Mid-April"
+      },
+      "source": "https://www.onthesnow.com/washington/the-summit-at-snoqualmie/ski-resort"
+    },
+    {
+      "id": 199,
+      "slug": "mt-baker-ski-area",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": "late April",
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 18, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "April 18, 2027",
+        "typical_season_end": "Mid-April"
+      },
+      "source": "https://www.onthesnow.com/washington/mt-baker/ski-resort"
+    },
+    {
+      "id": 200,
+      "slug": "mission-ridge",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "April 18, 2027",
+        "typical_season_end": "Mid-April"
+      },
+      "source": "https://www.onthesnow.com/washington/mission-ridge/ski-resort"
+    },
+    {
+      "id": 201,
+      "slug": "white-pass",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 20, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "April 25, 2027",
+        "typical_season_end": "Late April"
+      },
+      "source": "https://www.onthesnow.com/washington/white-pass/ski-resort"
+    },
+    {
+      "id": 202,
+      "slug": "49-degrees-north",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 30, 2026",
+        "typical_season_start": "Late December",
+        "season_close_text": "April 25, 2027",
+        "typical_season_end": "Late April"
+      },
+      "source": "https://www.onthesnow.com/washington/49-degrees-north/ski-resort"
+    },
+    {
+      "id": 203,
+      "slug": "mt-spokane",
+      "before": {
+        "season_open_text": "early December",
+        "season_close_text": "early April",
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 26, 2026",
+        "typical_season_start": "Late December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/washington/mt-spokane-ski-and-snowboard-park/ski-resort"
+    },
+    {
+      "id": 204,
+      "slug": "bluewood",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 26, 2026",
+        "typical_season_start": "Late December",
+        "season_close_text": "March 28, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/washington/bluewood/ski-resort"
+    },
+    {
+      "id": 210,
+      "slug": "taos-ski-valley",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 26, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "March 28, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://snowbrains.com/ikon-pass-resorts-opening-dates-2026-27/ (Ikon Pass announcement, 2026-09) + https://www.onthesnow.com/new-mexico/taos-ski-valley/ski-resort"
+    },
+    {
+      "id": 211,
+      "slug": "ski-santa-fe",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 26, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "April 4, 2027",
+        "typical_season_end": "Early April"
+      },
+      "source": "https://www.onthesnow.com/new-mexico/ski-santa-fe/ski-resort"
+    },
+    {
+      "id": 212,
+      "slug": "angel-fire-resort",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 11, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/new-mexico/angel-fire-resort/ski-resort"
+    },
+    {
+      "id": 213,
+      "slug": "red-river-ski-area",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 26, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/new-mexico/red-river/ski-resort"
+    },
+    {
+      "id": 214,
+      "slug": "pajarito-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": "Mid-December",
+        "typical_season_end": "Mid-March"
+      },
+      "after": {
+        "season_open_text": "December 26, 2026",
+        "season_close_text": "March 7, 2027"
+      },
+      "source": "https://www.onthesnow.com/new-mexico/pajarito-mountain-ski-area/ski-resort"
+    },
+    {
+      "id": 215,
+      "slug": "sipapu",
+      "before": {
+        "season_open_text": "November",
+        "season_close_text": "April",
+        "typical_season_start": "November",
+        "typical_season_end": "April"
+      },
+      "after": {
+        "season_open_text": "November 20, 2026",
+        "season_close_text": "March 28, 2027"
+      },
+      "source": "https://www.onthesnow.com/new-mexico/sipapu-ski-and-summer-resort/ski-resort"
+    },
+    {
+      "id": 216,
+      "slug": "sandia-peak",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 11, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/new-mexico/sandia-peak/ski-resort"
+    },
+    {
+      "id": 217,
+      "slug": "ski-apache",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 28, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "March 7, 2027",
+        "typical_season_end": "Early March"
+      },
+      "source": "https://www.onthesnow.com/new-mexico/ski-apache/ski-resort"
+    },
+    {
+      "id": 218,
+      "slug": "arizona-snowbowl",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": "Mid-November",
+        "typical_season_end": "Early to late May"
+      },
+      "after": {
+        "season_open_text": "November 20, 2026",
+        "season_close_text": "April 18, 2027"
+      },
+      "source": "https://www.onthesnow.com/arizona/arizona-snowbowl/ski-resort"
+    },
+    {
+      "id": 219,
+      "slug": "sunrise-park-resort",
+      "before": {
+        "season_open_text": "Thanksgiving",
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 11, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/arizona/sunrise-park-resort/ski-resort"
+    },
+    {
+      "id": 221,
+      "slug": "sunday-river",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 15, 2026",
+        "typical_season_start": "Mid-November",
+        "season_close_text": "April 18, 2027",
+        "typical_season_end": "Mid-April"
+      },
+      "source": "https://snowbrains.com/ikon-pass-resorts-opening-dates-2026-27/ (Ikon Pass announcement, 2026-09) + https://www.onthesnow.com/maine/sunday-river/ski-resort"
+    },
+    {
+      "id": 222,
+      "slug": "sugarloaf",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 20, 2026",
+        "typical_season_start": "Mid-November",
+        "season_close_text": "April 25, 2027",
+        "typical_season_end": "Late April"
+      },
+      "source": "https://snowbrains.com/ikon-pass-resorts-opening-dates-2026-27/ (Ikon Pass announcement, 2026-09) + https://www.onthesnow.com/maine/sugarloaf/ski-resort"
+    },
+    {
+      "id": 223,
+      "slug": "saddleback",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "April 18, 2027",
+        "typical_season_end": "Mid-April"
+      },
+      "source": "https://www.onthesnow.com/maine/saddleback-inc/ski-resort"
+    },
+    {
+      "id": 224,
+      "slug": "black-mountain-of-maine",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 26, 2026",
+        "typical_season_start": "Late December",
+        "season_close_text": "March 28, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/maine/black-mountain-of-maine/ski-resort"
+    },
+    {
+      "id": 225,
+      "slug": "mt-abram",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": "late March",
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 19, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 28, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/maine/mt-abram-ski-resort/ski-resort"
+    },
+    {
+      "id": 226,
+      "slug": "shawnee-peak",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "April 4, 2027",
+        "typical_season_end": "Early April"
+      },
+      "source": "https://www.onthesnow.com/maine/pleasant-mountain/ski-resort"
+    },
+    {
+      "id": 227,
+      "slug": "lost-valley",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 5, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 28, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/maine/lost-valley/ski-resort"
+    },
+    {
+      "id": 228,
+      "slug": "camden-snow-bowl",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 18, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/maine/camden-snow-bowl/ski-resort"
+    },
+    {
+      "id": 229,
+      "slug": "mount-jefferson-ski-area",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 26, 2026",
+        "typical_season_start": "Late December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/maine/mt-jefferson/ski-resort"
+    },
+    {
+      "id": 231,
+      "slug": "big-squaw-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 26, 2026",
+        "typical_season_start": "Late December",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/maine/big-squaw-mountain-ski-resort/ski-resort"
+    },
+    {
+      "id": 233,
+      "slug": "hermon-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 18, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/maine/new-hermon-mountain/ski-resort"
+    },
+    {
+      "id": 237,
+      "slug": "attitash",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "April 4, 2027",
+        "typical_season_end": "Early April"
+      },
+      "source": "https://www.onthesnow.com/new-hampshire/attitash/ski-resort"
+    },
+    {
+      "id": 238,
+      "slug": "wildcat-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 2, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "April 4, 2027",
+        "typical_season_end": "Early April"
+      },
+      "source": "https://www.onthesnow.com/new-hampshire/wildcat-mountain/ski-resort"
+    },
+    {
+      "id": 239,
+      "slug": "crotched-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 11, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 28, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/new-hampshire/crotched-mountain/ski-resort"
+    },
+    {
+      "id": 240,
+      "slug": "mount-sunapee",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": "mid April",
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "April 4, 2027",
+        "typical_season_end": "Early April"
+      },
+      "source": "https://www.onthesnow.com/new-hampshire/mount-sunapee/ski-resort"
+    },
+    {
+      "id": 241,
+      "slug": "bretton-woods",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 14, 2026",
+        "typical_season_start": "Mid-November",
+        "season_close_text": "April 11, 2027",
+        "typical_season_end": "Mid-April"
+      },
+      "source": "https://www.onthesnow.com/new-hampshire/bretton-woods/ski-resort"
+    },
+    {
+      "id": 242,
+      "slug": "waterville-valley",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 28, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "April 11, 2027",
+        "typical_season_end": "Mid-April"
+      },
+      "source": "https://www.onthesnow.com/new-hampshire/waterville-valley/ski-resort"
+    },
+    {
+      "id": 243,
+      "slug": "pats-peak",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 5, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 28, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/new-hampshire/pats-peak/ski-resort"
+    },
+    {
+      "id": 245,
+      "slug": "gunstock-mountain-resort",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "April 3, 2027",
+        "typical_season_end": "Early April"
+      },
+      "source": "https://www.onthesnow.com/new-hampshire/gunstock/ski-resort"
+    },
+    {
+      "id": 246,
+      "slug": "ragged-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "April 4, 2027",
+        "typical_season_end": "Early April"
+      },
+      "source": "https://www.onthesnow.com/new-hampshire/ragged-mountain-resort/ski-resort"
+    },
+    {
+      "id": 247,
+      "slug": "black-mountain-nh",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 15, 2026",
+        "typical_season_start": "Mid-November",
+        "season_close_text": "May 2, 2027",
+        "typical_season_end": "Early May"
+      },
+      "source": "https://www.onthesnow.com/new-hampshire/black-mountain/ski-resort"
+    },
+    {
+      "id": 248,
+      "slug": "dartmouth-skiway",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 18, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/new-hampshire/dartmouth-skiway/ski-resort"
+    },
+    {
+      "id": 249,
+      "slug": "king-pine",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 11, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 28, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/new-hampshire/king-pine/ski-resort"
+    },
+    {
+      "id": 251,
+      "slug": "tenney-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 5, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "April 11, 2027",
+        "typical_season_end": "Mid-April"
+      },
+      "source": "https://www.onthesnow.com/new-hampshire/tenney-mountain/ski-resort"
+    },
+    {
+      "id": 252,
+      "slug": "whaleback-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 26, 2026",
+        "typical_season_start": "Late December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/new-hampshire/whaleback-mountain/ski-resort"
+    },
+    {
+      "id": 254,
+      "slug": "killington",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 11, 2026",
+        "typical_season_start": "Mid-November",
+        "season_close_text": "May 24, 2027",
+        "typical_season_end": "Late May"
+      },
+      "source": "https://www.onthesnow.com/vermont/killington-resort/ski-resort"
+    },
+    {
+      "id": 255,
+      "slug": "pico-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 11, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "April 4, 2027",
+        "typical_season_end": "Early April"
+      },
+      "source": "https://snowbrains.com/ikon-pass-resorts-opening-dates-2026-27/ (Ikon Pass announcement, 2026-09) + https://www.onthesnow.com/vermont/pico-mountain-at-killington/ski-resort"
+    },
+    {
+      "id": 256,
+      "slug": "sugarbush",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 21, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "May 2, 2027",
+        "typical_season_end": "Early May"
+      },
+      "source": "https://snowbrains.com/ikon-pass-resorts-opening-dates-2026-27/ (Ikon Pass announcement, 2026-09) + https://www.onthesnow.com/vermont/sugarbush/ski-resort"
+    },
+    {
+      "id": 257,
+      "slug": "stowe-mountain-resort",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 20, 2026",
+        "typical_season_start": "Mid-November",
+        "season_close_text": "April 25, 2027",
+        "typical_season_end": "Late April"
+      },
+      "source": "https://www.onthesnow.com/vermont/stowe-mountain-resort/ski-resort"
+    },
+    {
+      "id": 258,
+      "slug": "jay-peak",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 22, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "May 16, 2027",
+        "typical_season_end": "Mid-May"
+      },
+      "source": "https://www.onthesnow.com/vermont/jay-peak/ski-resort"
+    },
+    {
+      "id": 259,
+      "slug": "smugglers-notch",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 27, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "April 11, 2027",
+        "typical_season_end": "Mid-April"
+      },
+      "source": "https://www.onthesnow.com/vermont/smugglers-notch-resort/ski-resort"
+    },
+    {
+      "id": 260,
+      "slug": "bolton-valley",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 21, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "April 11, 2027",
+        "typical_season_end": "Mid-April"
+      },
+      "source": "https://www.onthesnow.com/vermont/bolton-valley/ski-resort"
+    },
+    {
+      "id": 261,
+      "slug": "mad-river-glen",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 12, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "April 3, 2027",
+        "typical_season_end": "Early April"
+      },
+      "source": "https://www.onthesnow.com/vermont/mad-river-glen/ski-resort"
+    },
+    {
+      "id": 262,
+      "slug": "burke-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 5, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "April 11, 2027",
+        "typical_season_end": "Mid-April"
+      },
+      "source": "https://www.onthesnow.com/vermont/burke-mountain/ski-resort"
+    },
+    {
+      "id": 271,
+      "slug": "holiday-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 19, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/new-york/holiday-mountain/ski-resort"
+    },
+    {
+      "id": 272,
+      "slug": "west-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 12, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "April 11, 2027",
+        "typical_season_end": "Mid-April"
+      },
+      "source": "https://www.onthesnow.com/new-york/west-mountain/ski-resort"
+    },
+    {
+      "id": 273,
+      "slug": "greek-peak",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 27, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "March 28, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/new-york/greek-peak/ski-resort"
+    },
+    {
+      "id": 274,
+      "slug": "holimont",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 12, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "April 3, 2027",
+        "typical_season_end": "Early April"
+      },
+      "source": "https://www.onthesnow.com/new-york/holimont-ski-area/ski-resort"
+    },
+    {
+      "id": 275,
+      "slug": "snow-ridge",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 12, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "April 4, 2027",
+        "typical_season_end": "Early April"
+      },
+      "source": "https://www.onthesnow.com/new-york/snow-ridge/ski-resort"
+    },
+    {
+      "id": 276,
+      "slug": "holiday-valley",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 27, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "April 4, 2027",
+        "typical_season_end": "Early April"
+      },
+      "source": "https://www.onthesnow.com/new-york/holiday-valley/ski-resort"
+    },
+    {
+      "id": 277,
+      "slug": "bristol-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 11, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "April 4, 2027",
+        "typical_season_end": "Early April"
+      },
+      "source": "https://www.onthesnow.com/new-york/bristol-mountain/ski-resort"
+    },
+    {
+      "id": 278,
+      "slug": "swain-resort",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 19, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 28, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/new-york/swain/ski-resort"
+    },
+    {
+      "id": 279,
+      "slug": "kissing-bridge",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 26, 2026",
+        "typical_season_start": "Late December",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/new-york/kissing-bridge/ski-resort"
+    },
+    {
+      "id": 280,
+      "slug": "peek-n-peak",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 5, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/new-york/peekn-peak/ski-resort"
+    },
+    {
+      "id": 281,
+      "slug": "song-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 12, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "April 4, 2027",
+        "typical_season_end": "Early April"
+      },
+      "source": "https://www.onthesnow.com/new-york/song-mountain/ski-resort"
+    },
+    {
+      "id": 282,
+      "slug": "labrador-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 11, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/new-york/labrador-mt/ski-resort"
+    },
+    {
+      "id": 283,
+      "slug": "woods-valley",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 12, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "April 4, 2027",
+        "typical_season_end": "Early April"
+      },
+      "source": "https://www.onthesnow.com/new-york/woods-valley-ski-area/ski-resort"
+    },
+    {
+      "id": 284,
+      "slug": "mccauley-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "April 4, 2027",
+        "typical_season_end": "Early April"
+      },
+      "source": "https://www.onthesnow.com/new-york/mccauley-mountain-ski-center/ski-resort"
+    },
+    {
+      "id": 285,
+      "slug": "oak-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 12, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/new-york/oak-mountain/ski-resort"
+    },
+    {
+      "id": 286,
+      "slug": "titus-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 5, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 28, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/new-york/titus-mountain/ski-resort"
+    },
+    {
+      "id": 287,
+      "slug": "willard-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 16, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/new-york/willard-mountain/ski-resort"
+    },
+    {
+      "id": 288,
+      "slug": "royal-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 6, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "April 3, 2027",
+        "typical_season_end": "Early April"
+      },
+      "source": "https://www.onthesnow.com/new-york/royal-mountain-ski-area/ski-resort"
+    },
+    {
+      "id": 289,
+      "slug": "buffalo-ski-club",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 19, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/new-york/buffalo-ski-club-ski-area/ski-resort"
+    },
+    {
+      "id": 291,
+      "slug": "maple-ski-ridge",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 12, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/new-york/maple-ski-ridge/ski-resort"
+    },
+    {
+      "id": 292,
+      "slug": "liberty-mountain",
+      "before": {
+        "season_open_text": "December",
+        "season_close_text": "mid-March",
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 19, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/pennsylvania/liberty/ski-resort"
+    },
+    {
+      "id": 293,
+      "slug": "roundtop-mountain-resort",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 12, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/pennsylvania/roundtop-mountain-resort/ski-resort"
+    },
+    {
+      "id": 294,
+      "slug": "whitetail-resort",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 12, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/pennsylvania/whitetail-resort/ski-resort"
+    },
+    {
+      "id": 295,
+      "slug": "seven-springs",
+      "before": {
+        "season_open_text": "late November",
+        "season_close_text": "mid-April",
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 5, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/pennsylvania/seven-springs/ski-resort"
+    },
+    {
+      "id": 296,
+      "slug": "hidden-valley",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 12, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/pennsylvania/hidden-valley-resort/ski-resort"
+    },
+    {
+      "id": 299,
+      "slug": "tussey-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 12, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/pennsylvania/tussey-mountain/ski-resort"
+    },
+    {
+      "id": 300,
+      "slug": "bear-creek-mountain-resort",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 5, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/pennsylvania/bear-creek-mountain-resort/ski-resort"
+    },
+    {
+      "id": 301,
+      "slug": "spring-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 12, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/pennsylvania/spring-mountain-ski-area/ski-resort"
+    },
+    {
+      "id": 302,
+      "slug": "ski-sawmill",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 12, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/pennsylvania/ski-sawmill/ski-resort"
+    },
+    {
+      "id": 305,
+      "slug": "boyne-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "May 24, 2027",
+        "typical_season_end": "Late May"
+      },
+      "source": "https://www.onthesnow.com/michigan/boyne-mountain-resort/ski-resort"
+    },
+    {
+      "id": 306,
+      "slug": "the-highlands",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 11, 2026",
+        "typical_season_start": "Mid-December",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://snowbrains.com/ikon-pass-resorts-opening-dates-2026-27/ (Ikon Pass announcement, 2026-09)"
+    },
+    {
+      "id": 307,
+      "slug": "mt-brighton",
+      "before": {
+        "season_open_text": "early December",
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 9, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/michigan/mount-brighton/ski-resort"
+    },
+    {
+      "id": 308,
+      "slug": "mount-bohemia",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 5, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "April 30, 2027",
+        "typical_season_end": "Late April"
+      },
+      "source": "https://www.onthesnow.com/michigan/mount-bohemia/ski-resort"
+    },
+    {
+      "id": 309,
+      "slug": "indianhead-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 27, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "April 11, 2027",
+        "typical_season_end": "Mid-April"
+      },
+      "source": "https://www.onthesnow.com/michigan/indianhead-mountain/ski-resort"
+    },
+    {
+      "id": 310,
+      "slug": "blackjack-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 27, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "April 11, 2027",
+        "typical_season_end": "Mid-April"
+      },
+      "source": "https://www.onthesnow.com/michigan/blackjack-ski-resort/ski-resort"
+    },
+    {
+      "id": 311,
+      "slug": "big-powderhorn-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 26, 2026",
+        "typical_season_start": "Late December",
+        "season_close_text": "March 28, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/michigan/big-powderhorn-mountain/ski-resort"
+    },
+    {
+      "id": 312,
+      "slug": "porcupine-mountains",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 26, 2026",
+        "typical_season_start": "Late December",
+        "season_close_text": "March 28, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/michigan/porkies/ski-resort"
+    },
+    {
+      "id": 313,
+      "slug": "ski-brule",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 22, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "April 11, 2027",
+        "typical_season_end": "Mid-April"
+      },
+      "source": "https://www.onthesnow.com/michigan/ski-brule/ski-resort"
+    },
+    {
+      "id": 314,
+      "slug": "marquette-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 11, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "April 11, 2027",
+        "typical_season_end": "Mid-April"
+      },
+      "source": "https://www.onthesnow.com/michigan/marquette-mountain/ski-resort"
+    },
+    {
+      "id": 315,
+      "slug": "mont-ripley",
+      "before": {
+        "season_open_text": "late November",
+        "season_close_text": null,
+        "typical_season_start": "December",
+        "typical_season_end": "March"
+      },
+      "after": {
+        "season_open_text": "December 12, 2026",
+        "season_close_text": "March 28, 2027"
+      },
+      "source": "https://www.onthesnow.com/michigan/mont-ripley/ski-resort"
+    },
+    {
+      "id": 316,
+      "slug": "pine-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 19, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "April 4, 2027",
+        "typical_season_end": "Early April"
+      },
+      "source": "https://www.onthesnow.com/michigan/pine-mountain/ski-resort"
+    },
+    {
+      "id": 317,
+      "slug": "norway-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 12, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "April 30, 2027",
+        "typical_season_end": "Late April"
+      },
+      "source": "https://www.onthesnow.com/michigan/norway-mountain/ski-resort"
+    },
+    {
+      "id": 318,
+      "slug": "crystal-mountain-mi",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": "early April",
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 27, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "April 4, 2027",
+        "typical_season_end": "Early April"
+      },
+      "source": "https://www.onthesnow.com/michigan/crystal-mountain/ski-resort"
+    },
+    {
+      "id": 319,
+      "slug": "shanty-creek",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 6, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/michigan/shanty-creek/ski-resort"
+    },
+    {
+      "id": 320,
+      "slug": "nubs-nob",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 5, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "April 4, 2027",
+        "typical_season_end": "Early April"
+      },
+      "source": "https://www.onthesnow.com/michigan/nubs-nob-ski-area/ski-resort"
+    },
+    {
+      "id": 321,
+      "slug": "treetops-resort",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 5, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/michigan/treetops-resort/ski-resort"
+    },
+    {
+      "id": 322,
+      "slug": "caberfae-peaks",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 5, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 28, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/michigan/caberfae-peaks-ski-golf-resort/ski-resort"
+    },
+    {
+      "id": 323,
+      "slug": "homestead-resort",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 26, 2026",
+        "typical_season_start": "Late December",
+        "season_close_text": "March 7, 2027",
+        "typical_season_end": "Early March"
+      },
+      "source": "https://www.onthesnow.com/michigan/the-homestead/ski-resort"
+    },
+    {
+      "id": 324,
+      "slug": "mount-holly",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 11, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/michigan/mount-holly/ski-resort"
+    },
+    {
+      "id": 325,
+      "slug": "pine-knob",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 28, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/michigan/pine-knob-ski-resort/ski-resort"
+    },
+    {
+      "id": 327,
+      "slug": "snow-snake",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 5, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/michigan/snow-snake-mountain-ski-area/ski-resort"
+    },
+    {
+      "id": 328,
+      "slug": "apple-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 13, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/michigan/apple-mountain/ski-resort"
+    },
+    {
+      "id": 329,
+      "slug": "bittersweet-ski-resort",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/michigan/bittersweet-ski-area/ski-resort"
+    },
+    {
+      "id": 330,
+      "slug": "cannonsburg",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 12, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/michigan/cannonsburg/ski-resort"
+    },
+    {
+      "id": 331,
+      "slug": "timber-ridge",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 26, 2026",
+        "typical_season_start": "Late December",
+        "season_close_text": "March 7, 2027",
+        "typical_season_end": "Early March"
+      },
+      "source": "https://www.onthesnow.com/michigan/timber-ridge/ski-resort"
+    },
+    {
+      "id": 332,
+      "slug": "swiss-valley",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 11, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/michigan/swiss-valley/ski-resort"
+    },
+    {
+      "id": 334,
+      "slug": "granite-peak",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 21, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "April 4, 2027",
+        "typical_season_end": "Early April"
+      },
+      "source": "https://snowbrains.com/ikon-pass-resorts-opening-dates-2026-27/ (Ikon Pass announcement, 2026-09) + https://www.onthesnow.com/wisconsin/granite-peak-ski-area/ski-resort"
+    },
+    {
+      "id": 335,
+      "slug": "wilmot-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 7, 2027",
+        "typical_season_end": "Early March"
+      },
+      "source": "https://www.onthesnow.com/wisconsin/wilmot-mountain/ski-resort"
+    },
+    {
+      "id": 336,
+      "slug": "trollhaugen",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 13, 2026",
+        "typical_season_start": "Mid-November",
+        "season_close_text": "March 28, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/wisconsin/trollhaugen/ski-resort"
+    },
+    {
+      "id": 337,
+      "slug": "whitecap-mountains",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 19, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 28, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/wisconsin/whitecap-mountain/ski-resort"
+    },
+    {
+      "id": 338,
+      "slug": "cascade-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 28, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/wisconsin/cascade-mountain/ski-resort"
+    },
+    {
+      "id": 339,
+      "slug": "devils-head",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 11, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 7, 2027",
+        "typical_season_end": "Early March"
+      },
+      "source": "https://www.onthesnow.com/wisconsin/devils-head/ski-resort"
+    },
+    {
+      "id": 340,
+      "slug": "tyrol-basin",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/wisconsin/tyrol-basin/ski-resort"
+    },
+    {
+      "id": 341,
+      "slug": "alpine-valley-wi",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 11, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/wisconsin/alpine-valley-resort/ski-resort"
+    },
+    {
+      "id": 342,
+      "slug": "little-switzerland",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 28, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "March 7, 2027",
+        "typical_season_end": "Early March"
+      },
+      "source": "https://www.onthesnow.com/wisconsin/little-switzerland/ski-resort"
+    },
+    {
+      "id": 344,
+      "slug": "sunburst",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 7, 2027",
+        "typical_season_end": "Early March"
+      },
+      "source": "https://www.onthesnow.com/wisconsin/sunburst/ski-resort"
+    },
+    {
+      "id": 345,
+      "slug": "nordic-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/wisconsin/nordic-mountain/ski-resort"
+    },
+    {
+      "id": 346,
+      "slug": "christmas-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 19, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 7, 2027",
+        "typical_season_end": "Early March"
+      },
+      "source": "https://www.onthesnow.com/wisconsin/christmas-mountain/ski-resort"
+    },
+    {
+      "id": 349,
+      "slug": "lutsen-mountains",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 21, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "May 2, 2027",
+        "typical_season_end": "Early May"
+      },
+      "source": "https://snowbrains.com/ikon-pass-resorts-opening-dates-2026-27/ (Ikon Pass announcement, 2026-09) + https://www.onthesnow.com/minnesota/lutsen-mountains/ski-resort"
+    },
+    {
+      "id": 350,
+      "slug": "spirit-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 28, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/minnesota/spirit-mountain/ski-resort"
+    },
+    {
+      "id": 351,
+      "slug": "afton-alps",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/minnesota/afton-alps/ski-resort"
+    },
+    {
+      "id": 352,
+      "slug": "welch-village",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/minnesota/welch-village/ski-resort"
+    },
+    {
+      "id": 353,
+      "slug": "buck-hill",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/minnesota/buck-hill/ski-resort"
+    },
+    {
+      "id": 354,
+      "slug": "hyland-hills",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 11, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/minnesota/hyland-ski-snowboard-area/ski-resort"
+    },
+    {
+      "id": 356,
+      "slug": "mount-kato",
+      "before": {
+        "season_open_text": "early December",
+        "season_close_text": "late March",
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 5, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/minnesota/mount-kato-ski-area/ski-resort"
+    },
+    {
+      "id": 357,
+      "slug": "powder-ridge",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": "late March",
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 28, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/minnesota/powder-ridge-ski-area/ski-resort"
+    },
+    {
+      "id": 358,
+      "slug": "andes-tower-hills",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 27, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/minnesota/andes-tower-hills-ski-area/ski-resort"
+    },
+    {
+      "id": 359,
+      "slug": "giants-ridge",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 28, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "April 3, 2027",
+        "typical_season_end": "Early April"
+      },
+      "source": "https://www.onthesnow.com/minnesota/giants-ridge-resort/ski-resort"
+    },
+    {
+      "id": 360,
+      "slug": "wild-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 13, 2026",
+        "typical_season_start": "Mid-November",
+        "season_close_text": "March 28, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/minnesota/wild-mountain-ski-snowboard-area/ski-resort"
+    },
+    {
+      "id": 363,
+      "slug": "buena-vista",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 5, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/minnesota/buena-vista-ski-area/ski-resort"
+    },
+    {
+      "id": 364,
+      "slug": "sundown-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 7, 2027",
+        "typical_season_end": "Early March"
+      },
+      "source": "https://www.onthesnow.com/iowa/sundown-mountain/ski-resort"
+    },
+    {
+      "id": 365,
+      "slug": "seven-oaks",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 7, 2027",
+        "typical_season_end": "Early March"
+      },
+      "source": "https://www.onthesnow.com/iowa/seven-oaks/ski-resort"
+    },
+    {
+      "id": 367,
+      "slug": "mt-crescent",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 19, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 7, 2027",
+        "typical_season_end": "Early March"
+      },
+      "source": "https://www.onthesnow.com/iowa/mt-crescent-ski-area/ski-resort"
+    },
+    {
+      "id": 368,
+      "slug": "chestnut-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 7, 2027",
+        "typical_season_end": "Early March"
+      },
+      "source": "https://www.onthesnow.com/illinois/chestnut-mountain-resort/ski-resort"
+    },
+    {
+      "id": 369,
+      "slug": "four-lakes",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 12, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 7, 2027",
+        "typical_season_end": "Early March"
+      },
+      "source": "https://www.onthesnow.com/illinois/four-lakes/ski-resort"
+    },
+    {
+      "id": 370,
+      "slug": "villa-olivia",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 18, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 7, 2027",
+        "typical_season_end": "Early March"
+      },
+      "source": "https://www.onthesnow.com/illinois/villa-olivia/ski-resort"
+    },
+    {
+      "id": 371,
+      "slug": "snowstar",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 11, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 7, 2027",
+        "typical_season_end": "Early March"
+      },
+      "source": "https://www.onthesnow.com/illinois/ski-snowstar-winter-sports-park/ski-resort"
+    },
+    {
+      "id": 372,
+      "slug": "perfect-north",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/indiana/perfect-north-slopes/ski-resort"
+    },
+    {
+      "id": 373,
+      "slug": "paoli-peaks",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 18, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 7, 2027",
+        "typical_season_end": "Early March"
+      },
+      "source": "https://www.onthesnow.com/indiana/paoli-peaks/ski-resort"
+    },
+    {
+      "id": 374,
+      "slug": "boston-mills",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 18, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 7, 2027",
+        "typical_season_end": "Early March"
+      },
+      "source": "https://www.onthesnow.com/ohio/boston-mills/ski-resort"
+    },
+    {
+      "id": 375,
+      "slug": "brandywine",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 26, 2026",
+        "typical_season_start": "Late December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/ohio/brandywine/ski-resort"
+    },
+    {
+      "id": 376,
+      "slug": "alpine-valley-oh",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 19, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 7, 2027",
+        "typical_season_end": "Early March"
+      },
+      "source": "https://www.onthesnow.com/ohio/alpine-valley/ski-resort"
+    },
+    {
+      "id": 377,
+      "slug": "mad-river-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 11, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/ohio/mad-river-mountain/ski-resort"
+    },
+    {
+      "id": 378,
+      "slug": "snow-trails",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": "Second week of December",
+        "typical_season_end": "March"
+      },
+      "after": {
+        "season_open_text": "December 11, 2026",
+        "season_close_text": "March 14, 2027"
+      },
+      "source": "https://www.onthesnow.com/ohio/snow-trails/ski-resort"
+    },
+    {
+      "id": 379,
+      "slug": "hidden-valley-mo",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 12, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 7, 2027",
+        "typical_season_end": "Early March"
+      },
+      "source": "https://www.onthesnow.com/missouri/hidden-valley-ski-area/ski-resort"
+    },
+    {
+      "id": 380,
+      "slug": "snow-creek",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 26, 2026",
+        "typical_season_start": "Late December",
+        "season_close_text": "March 7, 2027",
+        "typical_season_end": "Early March"
+      },
+      "source": "https://www.onthesnow.com/missouri/snow-creek/ski-resort"
+    },
+    {
+      "id": 384,
+      "slug": "terry-peak",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 28, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/south-dakota/terry-peak-ski-area/ski-resort"
+    },
+    {
+      "id": 386,
+      "slug": "wisp-resort",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/maryland/wisp/ski-resort"
+    },
+    {
+      "id": 387,
+      "slug": "bryce-resort",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 9, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/virginia/bryce-resort/ski-resort"
+    },
+    {
+      "id": 388,
+      "slug": "massanutten-resort",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 5, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/virginia/massanutten/ski-resort"
+    },
+    {
+      "id": 389,
+      "slug": "the-omni-homestead-resort",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 26, 2026",
+        "typical_season_start": "Late December",
+        "season_close_text": "March 7, 2027",
+        "typical_season_end": "Early March"
+      },
+      "source": "https://www.onthesnow.com/virginia/the-homestead-ski-area/ski-resort"
+    },
+    {
+      "id": 390,
+      "slug": "wintergreen-resort",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/virginia/wintergreen-resort/ski-resort"
+    },
+    {
+      "id": 391,
+      "slug": "canaan-valley-resort",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 11, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 7, 2027",
+        "typical_season_end": "Early March"
+      },
+      "source": "https://www.onthesnow.com/west-virginia/canaan-valley-resort/ski-resort"
+    },
+    {
+      "id": 393,
+      "slug": "snowshoe-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 25, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://snowbrains.com/ikon-pass-resorts-opening-dates-2026-27/ (Ikon Pass announcement, 2026-09) + https://www.onthesnow.com/west-virginia/snowshoe-mountain-resort/ski-resort"
+    },
+    {
+      "id": 394,
+      "slug": "timberline-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/west-virginia/timberline-four-seasons/ski-resort"
+    },
+    {
+      "id": 395,
+      "slug": "winterplace-ski-resort",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": "Early December",
+        "typical_season_end": "Mid-March"
+      },
+      "after": {
+        "season_open_text": "December 5, 2026",
+        "season_close_text": "March 7, 2027"
+      },
+      "source": "https://www.onthesnow.com/west-virginia/winterplace-ski-resort/ski-resort"
+    },
+    {
+      "id": 396,
+      "slug": "ober-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 26, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "March 7, 2027",
+        "typical_season_end": "Early March"
+      },
+      "source": "https://www.onthesnow.com/tennessee/ober-gatlinburg-ski-resort/ski-resort"
+    },
+    {
+      "id": 397,
+      "slug": "appalachian-ski-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": "Mid-November",
+        "typical_season_end": "Mid-March"
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "season_close_text": "March 14, 2027"
+      },
+      "source": "https://www.onthesnow.com/north-carolina/appalachian-ski-mtn/ski-resort"
+    },
+    {
+      "id": 398,
+      "slug": "cataloochee-ski-area",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 28, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/north-carolina/cataloochee-ski-area/ski-resort"
+    },
+    {
+      "id": 399,
+      "slug": "sapphire-valley-resort",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 18, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 7, 2027",
+        "typical_season_end": "Early March"
+      },
+      "source": "https://www.onthesnow.com/north-carolina/sapphire-valley/ski-resort"
+    },
+    {
+      "id": 400,
+      "slug": "beech-mountain-resort",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/north-carolina/ski-beech-mountain-resort/ski-resort"
+    },
+    {
+      "id": 401,
+      "slug": "sugar-mountain-resort",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 11, 2026",
+        "typical_season_start": "Mid-November",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/north-carolina/sugar-mountain-resort/ski-resort"
+    },
+    {
+      "id": 402,
+      "slug": "hatley-pointe",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 26, 2026",
+        "typical_season_start": "Late December",
+        "season_close_text": "March 7, 2027",
+        "typical_season_end": "Early March"
+      },
+      "source": "https://www.onthesnow.com/north-carolina/wolf-ridge-ski-resort/ski-resort"
+    },
+    {
+      "id": 404,
+      "slug": "powder-ridge-mountain-park",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 19, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/connecticut/powder-ridge-park/ski-resort"
+    },
+    {
+      "id": 405,
+      "slug": "ski-sundown",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": "Early December",
+        "typical_season_end": "Late March"
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "season_close_text": "March 28, 2027"
+      },
+      "source": "https://www.onthesnow.com/connecticut/ski-sundown/ski-resort"
+    },
+    {
+      "id": 406,
+      "slug": "blue-hills-ski-area",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 19, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/massachusetts/blue-hills-ski-area/ski-resort"
+    },
+    {
+      "id": 407,
+      "slug": "bousquet-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 11, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 28, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/massachusetts/bousquet-ski-area/ski-resort"
+    },
+    {
+      "id": 408,
+      "slug": "ski-butternut",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 11, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 28, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/massachusetts/ski-butternut/ski-resort"
+    },
+    {
+      "id": 409,
+      "slug": "nashoba-valley-ski-area",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 12, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/massachusetts/nashoba-valley/ski-resort"
+    },
+    {
+      "id": 410,
+      "slug": "otis-ridge",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 18, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/massachusetts/otis-ridge-ski-area/ski-resort"
+    },
+    {
+      "id": 411,
+      "slug": "ski-bradford",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 19, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/massachusetts/bradford-ski-area/ski-resort"
+    },
+    {
+      "id": 412,
+      "slug": "ski-ward",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 14, 2026",
+        "typical_season_start": "Mid-November",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/massachusetts/ski-ward/ski-resort"
+    },
+    {
+      "id": 414,
+      "slug": "campgaw-mountain",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 18, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/new-jersey/campgaw-mountain/ski-resort"
+    },
+    {
+      "id": 440,
+      "slug": "mt-holiday",
+      "before": {
+        "season_open_text": "mid December",
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 19, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/michigan/mount-holiday-ski-area/ski-resort"
+    },
+    {
+      "id": 442,
+      "slug": "snowriver",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 21, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "April 11, 2027",
+        "typical_season_end": "Mid-April"
+      },
+      "source": "https://snowbrains.com/ikon-pass-resorts-opening-dates-2026-27/ (Ikon Pass announcement, 2026-09) + https://www.onthesnow.com/michigan/snowriver-mountain-resort/ski-resort"
+    },
+    {
+      "id": 458,
+      "slug": "dry-hill-area",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 2, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/new-york/dry-hill-ski-area/ski-resort"
+    },
+    {
+      "id": 460,
+      "slug": "hunt-hollow-club",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 12, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/new-york/hunt-hollow-ski-club/ski-resort"
+    },
+    {
+      "id": 462,
+      "slug": "cooper-spur-area",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 26, 2026",
+        "typical_season_start": "Late December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/oregon/cooper-spur/ski-resort"
+    },
+    {
+      "id": 463,
+      "slug": "hoodoo",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "November 27, 2026",
+        "typical_season_start": "Late November",
+        "season_close_text": "March 28, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/oregon/hoodoo-ski-area/ski-resort"
+    },
+    {
+      "id": 464,
+      "slug": "big-bear-pa",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 11, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 14, 2027",
+        "typical_season_end": "Mid-March"
+      },
+      "source": "https://www.onthesnow.com/pennsylvania/big-bear/ski-resort"
+    },
+    {
+      "id": 469,
+      "slug": "saskadena-six-area",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 19, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 29, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/vermont/suicide-six/ski-resort"
+    },
+    {
+      "id": 475,
+      "slug": "bruce-mound-winter-sports-area",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 19, 2026",
+        "typical_season_start": "Mid-December",
+        "season_close_text": "March 7, 2027",
+        "typical_season_end": "Early March"
+      },
+      "source": "https://www.onthesnow.com/wisconsin/bruce-mound/ski-resort"
+    },
+    {
+      "id": 477,
+      "slug": "christie",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 5, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 21, 2027",
+        "typical_season_end": "Late March"
+      },
+      "source": "https://www.onthesnow.com/wisconsin/christie-mountain/ski-resort"
+    },
+    {
+      "id": 480,
+      "slug": "mt-la-crosse",
+      "before": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "after": {
+        "season_open_text": "December 4, 2026",
+        "typical_season_start": "Early December",
+        "season_close_text": "March 7, 2027",
+        "typical_season_end": "Early March"
+      },
+      "source": "https://www.onthesnow.com/wisconsin/mount-la-crosse/ski-resort"
+    }
+  ]
+}

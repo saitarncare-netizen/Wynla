@@ -1,0 +1,140 @@
+{
+  "step": "03-duplicates",
+  "table": "resorts",
+  "mode": "applied",
+  "taken_at": "2026-09-23T04:59:40.028Z",
+  "columns": [
+    "active",
+    "latitude",
+    "longitude",
+    "vertical_drop",
+    "total_acres",
+    "total_trails",
+    "total_lifts",
+    "base_elevation_ft",
+    "summit_elevation_ft",
+    "annual_snowfall_in",
+    "website_url",
+    "webcam_url",
+    "lift_types",
+    "high_speed_lifts",
+    "season_end_date",
+    "passes",
+    "city",
+    "hero_image_url",
+    "hero_image_credit",
+    "hero_image_source",
+    "hero_image_alt",
+    "hero_image_attribution",
+    "hero_image_verified_winter"
+  ],
+  "rows": [
+    {
+      "id": 319,
+      "slug": "shanty-creek",
+      "before": {
+        "active": true,
+        "latitude": 44.9786,
+        "longitude": -85.1922,
+        "vertical_drop": null,
+        "total_acres": null,
+        "total_trails": 42,
+        "total_lifts": 8,
+        "base_elevation_ft": null,
+        "summit_elevation_ft": null,
+        "annual_snowfall_in": null,
+        "website_url": "https://www.shantycreek.com",
+        "webcam_url": "https://www.shantycreek.com/ski/conditions-cams/",
+        "lift_types": {
+          "tram": 0,
+          "gondola": 0,
+          "surface": 2,
+          "fixed_quad": 5,
+          "bubble_chair": 0,
+          "fixed_double": 0,
+          "fixed_triple": 0,
+          "magic_carpet": 1,
+          "high_speed_six": 0,
+          "high_speed_quad": 0
+        },
+        "high_speed_lifts": 0,
+        "season_end_date": "2026-03-22",
+        "passes": [
+          "independent"
+        ],
+        "city": "Bellaire",
+        "hero_image_url": null,
+        "hero_image_credit": null,
+        "hero_image_source": null,
+        "hero_image_alt": null,
+        "hero_image_attribution": null,
+        "hero_image_verified_winter": null
+      },
+      "after": {
+        "latitude": 44.940947,
+        "longitude": -85.1357063,
+        "vertical_drop": 450,
+        "lift_types": {
+          "tram": 0,
+          "gondola": 0,
+          "surface": 1,
+          "fixed_quad": 1,
+          "bubble_chair": 0,
+          "fixed_double": 2,
+          "fixed_triple": 2,
+          "magic_carpet": 1,
+          "high_speed_six": 0,
+          "high_speed_quad": 0
+        },
+        "passes": [
+          "indy"
+        ]
+      }
+    },
+    {
+      "id": 441,
+      "slug": "schuss-shanty-creek",
+      "before": {
+        "active": true,
+        "latitude": 44.940947,
+        "longitude": -85.1357063,
+        "vertical_drop": 450,
+        "total_acres": null,
+        "total_trails": 42,
+        "total_lifts": 7,
+        "base_elevation_ft": null,
+        "summit_elevation_ft": null,
+        "annual_snowfall_in": null,
+        "website_url": "https://www.shantycreek.com",
+        "webcam_url": "https://www.shantycreek.com/ski/conditions-cams/",
+        "lift_types": {
+          "tram": 0,
+          "gondola": 0,
+          "surface": 1,
+          "fixed_quad": 1,
+          "bubble_chair": 0,
+          "fixed_double": 2,
+          "fixed_triple": 2,
+          "magic_carpet": 1,
+          "high_speed_six": 0,
+          "high_speed_quad": 0
+        },
+        "high_speed_lifts": 0,
+        "season_end_date": "2026-03-29",
+        "passes": [
+          "indy"
+        ],
+        "city": null,
+        "hero_image_url": null,
+        "hero_image_credit": null,
+        "hero_image_source": null,
+        "hero_image_alt": null,
+        "hero_image_attribution": null,
+        "hero_image_verified_winter": null
+      },
+      "after": {
+        "active": false
+      }
+    }
+  ]
+}
