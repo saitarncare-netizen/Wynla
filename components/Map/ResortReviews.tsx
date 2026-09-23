@@ -10,6 +10,8 @@ import { useEffect, useMemo, useState } from "react";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import Link from "next/link";
 import ConfirmButton from "@/components/ConfirmButton";
+import Button from "@/components/ui/Button";
+import { Textarea } from "@/components/ui/Input";
 
 type Review = {
   id: number;
@@ -136,16 +138,16 @@ export default function ResortReviews({ resortId }: Props) {
   if (!userId && reviews.length === 0) return null;
 
   return (
-    <section className="rounded-lg border border-wn-charcoal/10 bg-white p-4">
+    <section className="rounded-wn-md border border-wn-line bg-white p-4">
       <div className="mb-3 flex items-baseline justify-between gap-2">
         <h3 className="text-lg font-bold text-wn-navy">Reviews</h3>
         {reviews.length > 0 && (
           <div className="flex items-baseline gap-2">
-            <span className="text-xl font-extrabold text-wn-navy">
+            <span className="text-wn-xl font-extrabold text-wn-navy">
               {"★".repeat(Math.round(avg))}
               <span className="text-wn-charcoal/25">{"★".repeat(5 - Math.round(avg))}</span>
             </span>
-            <span className="text-sm font-semibold text-wn-charcoal/70">
+            <span className="text-sm font-semibold text-wn-muted">
               {avg.toFixed(1)} ({reviews.length})
             </span>
           </div>
@@ -153,40 +155,40 @@ export default function ResortReviews({ resortId }: Props) {
       </div>
 
       {userId && (
-        <div className="mb-4 rounded-lg border border-wn-navy/15 bg-wn-offwhite p-3">
-          <div className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
+        <div className="mb-4 rounded-wn-sm border border-wn-line bg-wn-offwhite p-3">
+          <div className="mb-2 text-eyebrow font-semibold uppercase text-wn-muted">
             {myReview ? "Your review" : "Leave a review"}
           </div>
           <StarPicker
             value={myDraft.rating}
             onChange={(v) => setMyDraft((p) => ({ ...p, rating: v }))}
           />
-          <textarea
+          <Textarea
             value={myDraft.body}
             onChange={(e) => setMyDraft((p) => ({ ...p, body: e.target.value }))}
             placeholder="What's it like? (optional)"
+            aria-label="Review text (optional)"
             rows={3}
             maxLength={1000}
-            className="mt-2 w-full rounded-md border border-wn-charcoal/15 bg-white px-2 py-1.5 text-sm text-wn-charcoal focus:border-wn-navy focus:outline-none focus:ring-2 focus:ring-wn-navy/20"
+            className="mt-2"
           />
-          {error && <p className="mt-1 text-[11px] text-red-700">{error}</p>}
+          {error && (
+            <p role="alert" className="mt-1 text-xs text-wn-danger">
+              {error}
+            </p>
+          )}
           <div className="mt-2 flex items-center gap-2">
-            <button
-              type="button"
-              onClick={submitReview}
-              disabled={saving || myDraft.rating === 0}
-              className="rounded-md bg-wn-navy px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-wn-navy/90 disabled:opacity-50"
-            >
+            <Button onClick={submitReview} disabled={saving || myDraft.rating === 0}>
               {saving ? "Saving…" : myReview ? "Update" : "Post"}
-            </button>
+            </Button>
             {myReview && (
               <ConfirmButton
                 onConfirm={deleteMyReview}
                 busy={saving}
                 label="Delete"
                 confirmLabel="Tap to confirm"
-                className="text-xs font-semibold text-wn-charcoal/60 underline-offset-2 hover:text-red-700 hover:underline"
-                armedClassName="text-xs font-semibold text-red-700 underline"
+                className="inline-flex min-h-11 items-center px-2 text-sm font-semibold text-wn-muted underline-offset-2 hover:text-wn-danger hover:underline"
+                armedClassName="inline-flex min-h-11 items-center px-2 text-sm font-semibold text-wn-danger underline"
               />
             )}
           </div>
@@ -194,7 +196,7 @@ export default function ResortReviews({ resortId }: Props) {
       )}
 
       {!userId && (
-        <p className="mb-3 text-xs text-wn-charcoal/65">
+        <p className="mb-3 text-xs text-wn-muted">
           <Link href="/login" className="font-semibold text-wn-navy underline">
             Sign in
           </Link>{" "}
@@ -203,20 +205,20 @@ export default function ResortReviews({ resortId }: Props) {
       )}
 
       {otherReviews.length === 0 && !myReview && (
-        <p className="text-sm text-wn-charcoal/55">
+        <p className="text-sm text-wn-muted">
           No reviews yet. Be the first to share your experience.
         </p>
       )}
 
       <ul className="flex flex-col gap-3">
         {otherReviews.map((r) => (
-          <li key={r.id} className="rounded-md border border-wn-charcoal/10 bg-white px-3 py-2">
+          <li key={r.id} className="rounded-wn-sm border border-wn-line bg-white px-3 py-2">
             <div className="mb-1 flex items-baseline justify-between gap-2">
               <span className="text-sm font-bold text-wn-navy">
                 {"★".repeat(r.rating)}
                 <span className="text-wn-charcoal/25">{"★".repeat(5 - r.rating)}</span>
               </span>
-              <span className="text-[10px] text-wn-charcoal/45">
+              <span className="text-xs text-wn-muted">
                 {new Date(r.created_at).toLocaleDateString(undefined, {
                   month: "short",
                   day: "numeric",
@@ -242,18 +244,18 @@ function StarPicker({
   onChange: (v: number) => void;
 }) {
   return (
-    <div className="flex gap-1">
+    <div className="-ml-2 flex">
       {[1, 2, 3, 4, 5].map((n) => (
         <button
           key={n}
           type="button"
           onClick={() => onChange(n)}
           aria-label={`${n} star${n === 1 ? "" : "s"}`}
-          className="text-2xl leading-none transition active:scale-90"
+          className="inline-flex h-11 w-11 items-center justify-center text-wn-2xl leading-none transition active:scale-90"
         >
           <span
             className={
-              n <= value ? "text-amber-500" : "text-wn-charcoal/25 hover:text-amber-300"
+              n <= value ? "text-wn-gold-halo" : "text-wn-subtle hover:text-wn-gold"
             }
           >
             ★

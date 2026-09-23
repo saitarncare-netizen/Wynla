@@ -1,5 +1,6 @@
-import Link from "next/link";
 import type { Metadata } from "next";
+import Button from "@/components/ui/Button";
+import EmptyState from "@/components/ui/EmptyState";
 
 export const metadata: Metadata = {
   title: "Page not found",
@@ -12,30 +13,22 @@ export const metadata: Metadata = {
  */
 export default function NotFound() {
   return (
-    <main className="flex min-h-dvh flex-col items-center justify-center bg-wn-offwhite px-6 py-12 text-center">
-      <div className="max-w-md">
-        <div className="text-5xl">⛷️</div>
-        <h1 className="mt-4 text-2xl font-extrabold text-wn-navy sm:text-3xl">
-          We couldn&apos;t find that page.
-        </h1>
-        <p className="mt-3 text-sm text-wn-charcoal/75">
-          The link might be old, mistyped, or the resort may have a
-          different slug now. Try the map — every US resort lives there.
-        </p>
-        <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-          <Link
-            href="/"
-            className="inline-flex h-11 items-center justify-center rounded-lg bg-wn-navy px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-wn-navy/90"
-          >
-            Open the map
-          </Link>
-          <Link
-            href="/deals"
-            className="inline-flex h-11 items-center justify-center rounded-lg border border-wn-navy/20 bg-white px-5 text-sm font-semibold text-wn-navy transition hover:bg-white/80"
-          >
-            Pass deals
-          </Link>
-        </div>
+    <main className="flex min-h-dvh flex-col items-center justify-center bg-wn-offwhite px-6 py-12">
+      <div className="w-full max-w-md">
+        <EmptyState
+          tone="bare"
+          icon="compass"
+          title={<h1 className="text-wn-2xl font-extrabold text-wn-navy sm:text-wn-3xl">We couldn&apos;t find that page.</h1>}
+          body="The link might be old, mistyped, or the resort may have a different slug now. Try the map — every US resort lives there."
+          action={
+            <>
+              <Button href="/">Open the map</Button>
+              <Button href="/deals" variant="secondary">
+                Pass deals
+              </Button>
+            </>
+          }
+        />
       </div>
     </main>
   );

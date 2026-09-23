@@ -1,39 +1,53 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
-// useEffect/useState used by the matrix-driven drive-time refinement;
-// useRef + the snap state below drive the mobile bottom-sheet drag.
+// Resort detail for the map: a three-snap bottom sheet on phones
+// (ResortSheet.tsx) and a 380 px right rail on desktop, both built from
+// the same content pieces in ResortSheetContent.tsx. This file owns the
+// data resolution (drive time upgrade, status, tiles) and the snap state.
+
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { passColor, passLabel, primaryPass } from "@/lib/passColors";
+import { passColor, primaryPass } from "@/lib/passColors";
 import { formatDriveTime, type Origin } from "@/lib/origins";
 import { fetchMatrixDriveTime, type MatrixResult } from "@/lib/mapboxMatrix";
 import { resolveSeasonInfo, deriveResortStatus } from "@/lib/seasonDates";
 import { haversineMeters, estimateDriveSeconds } from "@/lib/distance";
-import FavoriteToggle from "@/components/auth/FavoriteToggle";
-import HeroImage from "@/components/HeroImage";
-import CompareToggle from "@/components/CompareToggle";
-import SeasonCountdown, { ResortStatusPill } from "@/components/SeasonCountdown";
+import SeasonCountdown from "@/components/SeasonCountdown";
 import { addRecent } from "@/lib/recentlyViewed";
 import type { Resort, DriveTime, WeatherSnapshot } from "./MapPage";
-import NearbyGroup from "@/components/NearbyGroup";
-import { fetchNearbyRestaurants, fetchNearbyActivities } from "@/lib/fetchNearby";
-import type { NearbyRow } from "@/lib/nearbyCategories";
-
-// Families that have per-product rules in lib/data/passAccess.json. Kept
-// local (not imported from lib/passAccess) so the map bundle does not pull
-// the dataset in; the dynamic import below loads it on first tap.
-const PASS_FAMILIES_WITH_RULES = new Set(["epic", "ikon", "indy", "mountain_collective"]);
+import ResortSheet, { type SheetSnap } from "./ResortSheet";
+import {
+  ActionBar,
+  HeroBackdrop,
+  HeroStatusPill,
+  NearbyInPanel,
+  PassChips,
+  RailControls,
+  StatRow,
+  StatusRow,
+  buildStatTiles,
+  pickKeyStat,
+  type DriveDisplay,
+} from "./ResortSheetContent";
+import { mapBottomPadding, snapHeights } from "./ResortSheetMath";
 
 type Props = {
   resort: Resort;
   driveTime: DriveTime | undefined;
   origin: Origin;
   weather: WeatherSnapshot | null;
-  /** Round 5 polish — when ?airport=XXX is active, MapPage passes the
-   *  picked airport's coordinates + label so the panel can show
-   *  "✈ ~XX min from <city> (<IATA>)" alongside the existing
-   *  drive-from-origin time. Null when no airport filter is set. */
+  /** When ?airport=XXX is active, the picked airport's coordinates + label
+   *  so the panel can show "✈ ~XX min from <city> (<IATA>)" alongside the
+   *  drive-from-origin time. Null when no airport is set. */
   activeAirport?: { lat: number; lng: number; label: string; iata: string } | null;
+  /** True below md: render the bottom sheet instead of the rail. */
+  mobile: boolean;
+  /** Snap the sheet is at; MapPage owns it so a map tap can collapse it. */
+  snap: SheetSnap;
+  onSnapChange: (snap: SheetSnap) => void;
+  /** Settled sheet height → map padding + the bottom pill stack. */
+  onSheetHeightChange?: (height: number | null) => void;
+  onPlanTrip: () => void;
   onClose: () => void;
 };
 
@@ -43,26 +57,26 @@ export default function ResortPanel({
   origin,
   weather,
   activeAirport,
+  mobile,
+  snap,
+  onSnapChange,
+  onSheetHeightChange,
+  onPlanTrip,
   onClose,
 }: Props) {
   const lng = Number(resort.longitude);
   const lat = Number(resort.latitude);
 
-  // Typographic hero — pass-color gradient instead of imagery. All resorts
-  // get equal visual treatment regardless of tier. Primary pass drives the
-  // gradient hue (matches the pin color on the map for visual continuity).
+  // Pass-colour gradient behind the photo (or instead of it). The primary
+  // pass drives the hue so the sheet matches the pin the user tapped.
   const primary = primaryPass(resort.passes);
   const heroBg = passColor(primary);
 
-  // Phase B: when the origin is the user's geolocation the initial drive
-  // time is a Haversine ESTIMATE. We upgrade it to a Mapbox Matrix exact
-  // value once the panel opens. The state is keyed on resort.id + origin
-  // signature so stale results from a previous pin are ignored without
-  // having to call setState synchronously inside the effect.
-  type MatrixState = {
-    key: string;
-    result: MatrixResult;
-  };
+  // When the origin is the user's geolocation the initial drive time is a
+  // Haversine ESTIMATE; upgrade it to a Mapbox Matrix value once the panel
+  // opens. Keyed on resort + origin so a stale result for a previous pin
+  // is ignored.
+  type MatrixState = { key: string; result: MatrixResult };
   const matrixKey = `${resort.id}|${origin.kind}|${origin.lat.toFixed(5)}|${origin.lon.toFixed(5)}`;
   const [matrixState, setMatrixState] = useState<MatrixState | null>(null);
   const matrixResult = matrixState?.key === matrixKey ? matrixState.result : null;
@@ -72,98 +86,22 @@ export default function ResortPanel({
     const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
     if (!token) return;
     const ctrl = new AbortController();
-    fetchMatrixDriveTime({ lat: origin.lat, lng: origin.lon }, { lat, lng }, token, ctrl.signal)
-      .then((res) => {
-        if (ctrl.signal.aborted || !res) return;
-        setMatrixState({ key: matrixKey, result: res });
-      });
+    fetchMatrixDriveTime({ lat: origin.lat, lng: origin.lon }, { lat, lng }, token, ctrl.signal).then((res) => {
+      if (ctrl.signal.aborted || !res) return;
+      setMatrixState({ key: matrixKey, result: res });
+    });
     return () => ctrl.abort();
   }, [matrixKey, lat, lng, origin]);
 
-  // Pass chip detail: tapping / hovering a pass badge reveals a one-line
-  // per-product summary ("Ikon: unlimited · Ikon Base: 5 days, blackouts
-  // Dec 26-30, …"). The dataset behind it is ~500 KB of JSON, so it is
-  // loaded with a dynamic import on first use instead of riding in the
-  // map bundle; results are cached per resort + family for the session.
-  // `line` is undefined while loading, null when the family has no
-  // verified rows for this resort. `openedBy` records whether a hover or
-  // a tap opened it: a mouse click lands on a chip that hover already
-  // opened, so a click must only CLOSE a detail that a tap opened, or the
-  // first click on desktop would open and immediately hide the line.
-  type PassDetail = { id: number; family: string; line: string | null | undefined; openedBy: "hover" | "tap" };
-  const [passDetail, setPassDetail] = useState<PassDetail | null>(null);
-  const passSummaryCache = useRef(new Map<string, string | null>());
-  const loadPassSummary = useCallback(
-    async (family: string): Promise<string | null> => {
-      const key = `${resort.slug}|${family}`;
-      const cached = passSummaryCache.current.get(key);
-      if (cached !== undefined) return cached;
-      const mod = await import("@/lib/passAccess");
-      const line = mod.isPassFamily(family) ? mod.summaryLine(resort.slug, family) : null;
-      passSummaryCache.current.set(key, line);
-      return line;
-    },
-    [resort.slug],
-  );
-  const openPassDetail = useCallback(
-    (family: string, openedBy: "hover" | "tap") => {
-      const id = resort.id;
-      setPassDetail({ id, family, line: passSummaryCache.current.get(`${resort.slug}|${family}`), openedBy });
-      void loadPassSummary(family).then((line) => {
-        setPassDetail((cur) => (cur && cur.id === id && cur.family === family ? { ...cur, line } : cur));
-      });
-    },
-    [resort.id, resort.slug, loadPassSummary],
-  );
-  // Hover only counts for a real mouse: a finger's pointerenter is the
-  // start of a tap and the click handler owns that. There is no onFocus
-  // hook on purpose (Android Chrome focuses a button before click, which
-  // used to open and then toggle the line closed in one tap); keyboard
-  // users open it with Enter or Space, which fire click.
-  const hoverPassDetail = (family: string, pointerType: string) => {
-    if (pointerType !== "mouse") return;
-    if (passDetail && passDetail.id === resort.id && passDetail.family === family) return;
-    openPassDetail(family, "hover");
-  };
-  // Tap (touch, mouse click or Enter/Space): opens, or promotes a
-  // hover-opened line to "tap" so a click never hides what hover showed;
-  // a second tap on the same chip closes it.
-  const tapPassDetail = (family: string) => {
-    const same = passDetail !== null && passDetail.id === resort.id && passDetail.family === family;
-    if (same && passDetail.openedBy === "tap") {
-      setPassDetail(null);
-    } else if (same) {
-      setPassDetail({ ...passDetail, openedBy: "tap" });
-    } else {
-      openPassDetail(family, "tap");
-    }
-  };
-  const activePassDetail = passDetail && passDetail.id === resort.id ? passDetail : null;
-  const passDetailId = `pass-detail-${resort.id}`;
-
-  // Record this resort in the localStorage "recently viewed" list so
-  // the homepage strip can show it next time. We push the minimum
-  // projection needed to render the chip + drive the camera flyTo
-  // (id, slug, name, primary pass for the color dot, lat/lng).
+  // Record the resort in the localStorage "recently viewed" list (the
+  // header strip). Minimum projection the chip + camera flyTo need.
   useEffect(() => {
     if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
-    addRecent({
-      id: resort.id,
-      slug: resort.slug,
-      name: resort.name,
-      primary_pass: primary,
-      lat,
-      lng,
-    });
+    addRecent({ id: resort.id, slug: resort.slug, name: resort.name, primary_pass: primary, lat, lng });
   }, [resort.id, resort.slug, resort.name, primary, lat, lng]);
 
-  // Round 5 polish — when the airport filter is active, compute a
-  // Haversine-based drive time from the airport to the resort so the
-  // panel can show "✈ ~XX min from Denver (DEN)" alongside the
-  // existing origin drive. We use estimateDriveSeconds (the same
-  // 1.2× / 60 mph model used everywhere else in the app) so the
-  // number is consistent with the rest of the planner. Null when no
-  // airport is active or the resort lacks coordinates.
+  // Airport drive context (Haversine, the same 1.2x / 60 mph model as the
+  // planner) — only when ?airport= is active.
   const airportDriveText = (() => {
     if (!activeAirport) return null;
     if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
@@ -174,523 +112,240 @@ export default function ResortPanel({
     return formatDriveTime(seconds);
   })();
 
-  // Pick the best drive-time data we have for display.
-  const isEstimate = matrixResult ? false : driveTime?.is_estimate ?? false;
-  const displayDurationSeconds = matrixResult?.durationSeconds ?? driveTime?.duration_seconds ?? null;
-  const displayDistanceMeters =
-    matrixResult?.distanceMeters ?? driveTime?.distance_meters ?? null;
-  const driveText =
-    displayDurationSeconds != null ? formatDriveTime(displayDurationSeconds) : null;
-  const distanceMiles =
-    displayDistanceMeters != null
-      ? Math.round(displayDistanceMeters / 1609.34)
-      : null;
-  const originShort = origin.kind === "geo" ? "your location" : origin.short;
-  // Beyond ~10h nobody drives — a "35h from NYC" car stat reads as a bug, not
-  // a plan. Reframe those as fly trips: show the distance with a ✈️ instead of
-  // an absurd drive time. 10h cleanly splits regional road-trips (Boston→VT,
-  // NYC→VT ≈ 5-6h) from cross-country flights (NYC→Utah/Colorado ≈ 28-35h).
-  const tooFarToDrive =
-    displayDurationSeconds != null && displayDurationSeconds > 10 * 3600;
+  // Best drive-time data on hand. Beyond ~10 h nobody drives — "35h from
+  // NYC" reads as a bug — so those are reframed as fly trips with the
+  // distance instead. 10 h splits regional road trips (NYC → VT ≈ 5-6 h)
+  // from cross-country flights (NYC → Utah ≈ 28-35 h).
+  const drive: DriveDisplay | null = useMemo(() => {
+    const seconds = matrixResult?.durationSeconds ?? driveTime?.duration_seconds ?? null;
+    if (seconds == null) return null;
+    const meters = matrixResult?.distanceMeters ?? driveTime?.distance_meters ?? null;
+    const estimate = matrixResult ? false : driveTime?.is_estimate ?? false;
+    const originShort = origin.kind === "geo" ? "your location" : origin.short;
+    const fly = seconds > 10 * 3600;
+    if (fly) {
+      const miles = meters != null ? Math.round(meters / 1609.34) : null;
+      return {
+        value: miles != null ? `${miles.toLocaleString()} mi` : "Fly",
+        label: `fly · ${originShort}`,
+        estimate,
+        fly,
+      };
+    }
+    return { value: formatDriveTime(seconds), label: `from ${originShort}`, estimate, fly };
+  }, [matrixResult, driveTime, origin]);
 
-  // Mobile bottom-sheet snap state — half (default, ~50vh) or full
-  // (85vh). No scrim on mobile so the map stays pannable behind. User
-  // can drag the handle up/down between snaps, or X out to close. On
-  // desktop this state is unused (the panel is a fixed right rail).
-  type Snap = "half" | "full";
-  const [snap, setSnap] = useState<Snap>("half");
-  const [dragHeight, setDragHeight] = useState<number | null>(null);
-  const [vh, setVh] = useState(800);
-  const [isMobile, setIsMobile] = useState(false);
-  const dragRef = useRef<{ startY: number; startHeight: number } | null>(null);
+  // Status: the same inputs and helpers as the resort page, so the sheet
+  // and the page never disagree. Fields are passed explicitly so a dropped
+  // column fails tsc here instead of silently losing a fallback.
+  const seasonInfo = useMemo(
+    () =>
+      resolveSeasonInfo({
+        season_open_text: resort.season_open_text,
+        season_close_text: resort.season_close_text,
+        typical_season_start: resort.typical_season_start,
+        typical_season_end: resort.typical_season_end,
+      }),
+    [resort.season_open_text, resort.season_close_text, resort.typical_season_start, resort.typical_season_end],
+  );
+  const status = useMemo(
+    () =>
+      deriveResortStatus(
+        {
+          currently_open: resort.currently_open,
+          snow_report_status: resort.snow_report_status,
+          snow_report_updated_at: resort.snow_report_updated_at,
+          operating_status: resort.operating_status,
+          lifts_open_today: resort.lifts_open_today,
+          total_lifts: resort.total_lifts,
+          trails_open_today: resort.trails_open_today,
+          total_trails: resort.total_trails,
+          season_end_date: resort.season_end_date,
+        },
+        seasonInfo,
+      ),
+    [resort, seasonInfo],
+  );
+  // The pill already says "Opens ~Nov 22 · in 61 days" off-season; the
+  // countdown adds value only for the in-season "N days left" reading.
+  const showCountdown = seasonInfo.status === "in-season" && seasonInfo.nextCloseDate != null;
+  const tiles = useMemo(() => buildStatTiles(resort, weather, status), [resort, weather, status]);
+  const keyStat = pickKeyStat(resort);
 
+  // Sheet height → parent (map padding + bottom stack). Only settled snaps
+  // are forwarded; the in-flight drag would otherwise re-pad the map on
+  // every frame.
+  const lastSettledRef = useRef<number | null>(null);
+  function handleHeightChange(height: number, settled: boolean) {
+    if (!settled || !onSheetHeightChange) return;
+    if (lastSettledRef.current === height) return;
+    lastSettledRef.current = height;
+    onSheetHeightChange(height);
+  }
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    const compute = () => {
-      setVh(window.innerHeight);
-      setIsMobile(window.matchMedia("(max-width: 767px)").matches);
-    };
-    compute();
-    window.addEventListener("resize", compute);
-    return () => window.removeEventListener("resize", compute);
+    return () => onSheetHeightChange?.(null);
+    // Fire once on unmount only.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function snapToPx(s: Snap) {
-    return Math.round(vh * (s === "half" ? 0.5 : 0.85));
-  }
-  function nearestSnap(px: number): Snap {
-    return Math.abs(px - snapToPx("half")) < Math.abs(px - snapToPx("full"))
-      ? "half"
-      : "full";
-  }
+  const driveLine = drive ? (
+    <span className="inline-flex items-center gap-1 whitespace-nowrap">
+      <span aria-hidden="true">{drive.fly ? "✈️" : "🚗"}</span>
+      <span>
+        {drive.estimate ? "≈ " : ""}
+        {drive.value} {drive.label}
+      </span>
+    </span>
+  ) : null;
 
-  function handleTouchStart(e: React.TouchEvent) {
-    if (!isMobile) return;
-    const t = e.touches[0];
-    dragRef.current = {
-      startY: t.clientY,
-      startHeight: dragHeight ?? snapToPx(snap),
-    };
-  }
-  function handleTouchMove(e: React.TouchEvent) {
-    if (!dragRef.current) return;
-    const t = e.touches[0];
-    const dy = dragRef.current.startY - t.clientY;
-    const proposed = dragRef.current.startHeight + dy;
-    // Allow drag below half so the user can flick down to close.
-    setDragHeight(Math.max(80, Math.min(vh * 0.95, proposed)));
-  }
-  function handleTouchEnd() {
-    if (!dragRef.current) return;
-    const finalH = dragHeight ?? snapToPx(snap);
-    // Drag-down past half closes the panel — common bottom-sheet UX.
-    if (finalH < snapToPx("half") - 80) {
-      onClose();
-    } else {
-      setSnap(nearestSnap(finalH));
-    }
-    setDragHeight(null);
-    dragRef.current = null;
-  }
-
-  const sheetHeight = isMobile ? (dragHeight ?? snapToPx(snap)) : undefined;
-
-  // Stage 33 — stop touch propagation at both React + DOM layers.
-  // Mapbox attaches its drag/pan listener at window/document level, so
-  // React.stopPropagation alone wasn't enough; stopImmediatePropagation
-  // on the native event keeps the panel's body from triggering a map
-  // pan when the user scrolls the 3-stat card or taps the CTA.
-  const stopTouchBubble = (e: React.TouchEvent) => {
-    e.stopPropagation();
-    e.nativeEvent.stopImmediatePropagation();
-  };
-
-  return (
-    <>
-      {/* No mobile scrim — Stage 21. Map stays fully pannable behind
-          the resort detail card so the user can keep exploring while
-          reading. Tap the X (top-right of card) or flick the sheet
-          down to close. */}
-      <aside
-        role="complementary"
-        aria-label={`${resort.name} details`}
-        onTouchStart={stopTouchBubble}
-        onTouchMove={stopTouchBubble}
-        onTouchEnd={stopTouchBubble}
-        className={[
-          "fixed z-40 flex flex-col bg-white shadow-2xl",
-          // mobile bottom sheet — slides up from bottom on open
-          "inset-x-0 bottom-0 rounded-t-2xl",
-          "animate-[slideUp_220ms_cubic-bezier(0.16,1,0.3,1)]",
-          // desktop right side panel — slides in from right. Starts below
-          // the header (MapPage publishes its measured height as
-          // --wn-header-h) so Sign in / Deals / Guides / Lists stay
-          // reachable while a resort is open.
-          "md:inset-x-auto md:right-0 md:top-[var(--wn-header-h,64px)] md:bottom-0 md:w-[380px] md:max-h-none md:rounded-none",
-          "md:animate-[slideLeft_220ms_cubic-bezier(0.16,1,0.3,1)]",
-        ].join(" ")}
-        style={{
-          height: sheetHeight != null ? `${sheetHeight}px` : undefined,
-          transition:
-            dragHeight !== null
-              ? "none"
-              : "height 220ms cubic-bezier(0.16,1,0.3,1)",
-        }}
-      >
-        {/* Mobile drag handle — touch handlers attached so the user
-            can resize between half/full or flick down to close. */}
-        <div
-          className="flex shrink-0 cursor-grab justify-center py-2 active:cursor-grabbing md:hidden"
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-          aria-hidden="true"
+  const body = (
+    <div className="space-y-3 px-4 py-3">
+      <StatRow tiles={tiles} />
+      <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-wn-charcoal/65">
+        <span>
+          {drive
+            ? drive.estimate
+              ? "Drive time estimated from straight-line distance"
+              : "Drive time from cached road routing"
+            : "Drive time unavailable"}
+        </span>
+        <Link
+          href={`/resort/${resort.slug}`}
+          className="whitespace-nowrap font-semibold text-wn-navy underline-offset-2 hover:underline"
         >
-          <div className="h-1 w-10 rounded-full bg-wn-charcoal/25" />
-        </div>
+          Full resort page →
+        </Link>
+      </div>
+      {activeAirport && airportDriveText && (
+        <p className="text-[11px] font-medium text-wn-charcoal/65">
+          <span aria-hidden="true">✈ </span>
+          ≈ {airportDriveText} from {activeAirport.label} ({activeAirport.iata}) · estimated
+        </p>
+      )}
+      <PassChips resort={resort} />
+      {showCountdown && (
+        <StatusRow status={status} countdown={<SeasonCountdown info={seasonInfo} variant="badge" />} />
+      )}
+      <NearbyInPanel key={resort.id} resortId={resort.id} slug={resort.slug} />
+    </div>
+  );
 
-        {/* Hero — vetted winter photo (hero_image_url) when present, else
-            the designed gradient fallback. */}
-        <div
-          className="relative shrink-0 overflow-hidden"
-          style={{
-            background: `linear-gradient(135deg, ${heroBg} 0%, #1E2952 100%)`,
-          }}
-        >
-          {resort.hero_image_url && (
-            <HeroImage
-              src={resort.hero_image_url}
-              alt={resort.hero_image_alt ?? `${resort.name} in winter`}
-              compact
-              // Panel is a 380px rail on desktop, full-width sheet on mobile.
-              sizes="(max-width: 767px) 100vw, 380px"
-            />
-          )}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 opacity-[0.06] mix-blend-overlay"
-            style={{
-              backgroundImage:
-                "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.85'/></svg>\")",
-              backgroundSize: "160px 160px",
-            }}
-          />
-          <div className="relative h-32 px-4 pt-4 pb-3 md:h-36">
-            {/* Top-right: Compare + Favorite + Close */}
-            <div className="absolute right-3 top-3 flex items-center gap-2 z-10">
-              <CompareToggle resortId={resort.id} />
-              <FavoriteToggle resortId={resort.id} />
+  const actionBar = (
+    <ActionBar
+      resort={resort}
+      lat={lat}
+      lng={lng}
+      onPlanTrip={onPlanTrip}
+      safeArea={mobile}
+      // The rail has CompareToggle in its hero (RailControls); the phone
+      // sheet's hero has no room for it, so it joins the action bar.
+      showCompare={mobile}
+    />
+  );
+
+  if (mobile) {
+    return (
+      <ResortSheet
+        entryId={resort.id}
+        snap={snap}
+        onSnapChange={onSnapChange}
+        onClose={onClose}
+        onHeightChange={handleHeightChange}
+        ariaLabel={`${resort.name} details`}
+        resetScrollKey={resort.id}
+        footer={actionBar}
+        renderHero={({ heroHeight, collapsed }) => {
+          // Past the midpoint the photo has faded and the strip reads as a
+          // white title bar, so the text flips to navy.
+          const bar = collapsed > 0.5;
+          const fade = 1 - collapsed;
+          return (
+            <>
+              <HeroBackdrop
+                resort={resort}
+                passHex={heroBg}
+                sizes="100vw"
+                opacity={fade}
+              />
               <button
                 type="button"
                 onClick={onClose}
                 aria-label="Close"
-                className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/95 text-wn-navy shadow-md backdrop-blur-sm transition hover:bg-white"
+                className={[
+                  "absolute right-2 top-2 z-10 inline-flex h-11 w-11 items-center justify-center rounded-full transition",
+                  bar ? "text-wn-navy hover:bg-wn-navy/5" : "bg-white/90 text-wn-navy shadow-md backdrop-blur-sm",
+                ].join(" ")}
               >
-                <span aria-hidden="true" className="text-lg leading-none">×</span>
+                <span aria-hidden="true" className="text-xl leading-none">×</span>
               </button>
-            </div>
-
-            {/* Title block bottom-left */}
-            <div className="absolute inset-x-4 bottom-3">
-              <h2 className="text-2xl font-extrabold leading-tight text-white drop-shadow-md sm:text-3xl">
-                {resort.name}
-              </h2>
-              <p className="mt-0.5 text-xs text-white/90 drop-shadow">
-                {resort.state}
-                {resort.region ? " · " + resort.region : ""}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Body — stat preview + nearby strips. Must scroll: the Round-9
-            NearbyInPanel adds restaurant/activity rows that overflow the
-            half-snap sheet, so this is overflow-y-auto (was overflow-hidden,
-            which clipped everything below the fold). pan-y keeps the vertical
-            scroll inside the panel instead of leaking to the Mapbox canvas. */}
-        <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3" style={{ touchAction: "pan-y" }}>
-          {/* Pass badges row. Each multi-resort pass badge is a button:
-              tap (touch or click, Enter/Space from the keyboard) or mouse
-              hover shows the per-product summary line under the row; the
-              independent badge stays inert. The chip itself keeps its
-              size, only the line below appears. */}
-          {resort.passes?.length > 0 && (
-            <div className="mb-3">
-              <div className="flex flex-wrap gap-1.5">
-                {resort.passes.map((p) => {
-                  const fg = p === "ikon" ? "#1E2952" : "#FFFFFF";
-                  if (!PASS_FAMILIES_WITH_RULES.has(p)) {
-                    return (
-                      <span
-                        key={p}
-                        className="inline-block rounded-md px-2 py-0.5 text-[11px] font-semibold"
-                        style={{ backgroundColor: passColor(p), color: fg }}
-                      >
-                        {passLabel(p)}
-                      </span>
-                    );
-                  }
-                  const open = activePassDetail?.family === p;
-                  return (
-                    <button
-                      key={p}
-                      type="button"
-                      onClick={() => tapPassDetail(p)}
-                      onPointerEnter={(e) => hoverPassDetail(p, e.pointerType)}
-                      aria-expanded={open}
-                      aria-controls={activePassDetail ? passDetailId : undefined}
-                      title={`${passLabel(p)}: days and blackout dates here`}
-                      className={`inline-block rounded-md px-2 py-0.5 text-[11px] font-semibold transition ${
-                        open ? "ring-2 ring-wn-navy/40 ring-offset-1" : "hover:brightness-110"
-                      }`}
-                      style={{ backgroundColor: passColor(p), color: fg }}
-                    >
-                      {passLabel(p)}
-                    </button>
-                  );
-                })}
-              </div>
-              {activePassDetail && (
-                <p
-                  id={passDetailId}
-                  className="mt-1.5 text-[11px] leading-snug text-wn-charcoal/80"
-                  aria-live="polite"
+              <div
+                className="absolute inset-x-4 bottom-0 flex flex-col justify-end pb-3"
+                style={{ height: `${heroHeight}px` }}
+              >
+                <h2
+                  className={[
+                    "truncate pr-12 font-extrabold leading-tight tracking-tight transition-colors",
+                    bar ? "text-base text-wn-navy" : "text-[22px] text-white drop-shadow-md",
+                  ].join(" ")}
                 >
-                  {activePassDetail.line === undefined
-                    ? "Loading pass rules…"
-                    : activePassDetail.line ??
-                      `${passLabel(activePassDetail.family)} rules for this resort are not verified yet.`}{" "}
-                  <Link
-                    href={`/resort/${resort.slug}#pass-access`}
-                    className="whitespace-nowrap font-semibold text-wn-navy underline underline-offset-2"
-                  >
-                    Full rules →
-                  </Link>
-                </p>
-              )}
-            </div>
-          )}
-
-          {/* Status row — every resort gets an open / closed / opens-on /
-              check-resort pill above the stats (the audit found 96% of
-              panels showed no status at all in September), plus the
-              season countdown whenever a season date could be parsed. */}
-          {(() => {
-            // Fields are passed explicitly so the panel and the resort
-            // page derive the SAME status from the same inputs; if the
-            // map's Resort type ever drops one of these, tsc fails here
-            // instead of the panel silently losing a fallback.
-            const seasonInfo = resolveSeasonInfo({
-              season_open_text: resort.season_open_text,
-              season_close_text: resort.season_close_text,
-              typical_season_start: resort.typical_season_start,
-              typical_season_end: resort.typical_season_end,
-            });
-            const status = deriveResortStatus(
-              {
-                currently_open: resort.currently_open,
-                snow_report_status: resort.snow_report_status,
-                snow_report_updated_at: resort.snow_report_updated_at,
-                operating_status: resort.operating_status,
-                lifts_open_today: resort.lifts_open_today,
-                total_lifts: resort.total_lifts,
-                trails_open_today: resort.trails_open_today,
-                total_trails: resort.total_trails,
-                season_end_date: resort.season_end_date,
-              },
-              seasonInfo,
-            );
-            // The pill already says "Opens ~Nov 22 · in 61 days" for an
-            // off-season resort with dates; the countdown adds value only
-            // for the in-season "N days left" reading.
-            const showCountdown = seasonInfo.status === "in-season" && seasonInfo.nextCloseDate != null;
-            return (
-              <div className="mb-3 flex flex-wrap items-center gap-1.5">
-                <ResortStatusPill status={status} />
-                {showCountdown && <SeasonCountdown info={seasonInfo} variant="badge" />}
+                  {resort.name}
+                </h2>
+                <div style={{ opacity: fade, height: collapsed >= 0.98 ? 0 : undefined, overflow: "hidden" }}>
+                  <p className="mt-0.5 truncate text-[11px] text-white/90 drop-shadow">
+                    {resort.state}
+                    {resort.region ? ` · ${resort.region}` : ""}
+                  </p>
+                  <div className="mt-1.5 flex items-center gap-2 overflow-hidden text-[12px] font-semibold text-white drop-shadow">
+                    <HeroStatusPill status={status} />
+                    {driveLine}
+                    <span className="inline-flex items-center gap-1 whitespace-nowrap">
+                      <span aria-hidden="true">{keyStat.emoji}</span>
+                      <span>{keyStat.text}</span>
+                    </span>
+                  </div>
+                </div>
               </div>
-            );
-          })()}
-
-          {/* 3-stat compact card: weather / drive / [smart slot 3].
-              Slot 3 is context-aware — see pickSlot3() below. Priority:
-              fresh snow > % open > vertical drop > trail count. The
-              point is to surface the single most decision-relevant
-              number at a glance, not a fixed "size" stat. */}
-          <div className="grid grid-cols-3 gap-2 rounded-lg border border-wn-charcoal/10 bg-white p-3">
-            <CompactStat
-              emoji={weatherEmoji(weather?.conditions_short)}
-              label={weather?.conditions_short ?? "Weather"}
-              value={
-                weather?.temp_high_f != null
-                  ? `${weather.temp_high_f}°F`
-                  : "—"
-              }
-            />
-            <CompactStat
-              emoji={tooFarToDrive ? "✈️" : "🚗"}
-              label={tooFarToDrive ? `fly · ${originShort}` : `from ${originShort}`}
-              value={
-                tooFarToDrive
-                  ? distanceMiles != null
-                    ? `${isEstimate ? "≈ " : ""}${distanceMiles.toLocaleString()} mi`
-                    : "Fly"
-                  : driveText
-                    ? `${isEstimate ? "≈ " : ""}${driveText}`
-                    : "—"
-              }
-            />
-            {(() => {
-              const slot3 = pickSlot3(resort);
-              return (
-                <CompactStat
-                  emoji={slot3.emoji}
-                  label={slot3.label}
-                  value={slot3.value}
-                />
-              );
-            })()}
-          </div>
-
-          {/* Round 5 polish — airport drive context. Shows only when
-              ?airport=XXX is active. Sits just below the 3-stat card
-              alongside the existing "drive from origin" stat so users
-              comparing fly-in routes see both numbers at a glance. */}
-          {activeAirport && airportDriveText && (
-            <p className="mt-2 text-center text-[11px] font-medium text-wn-charcoal/65">
-              <span aria-hidden="true">✈ </span>
-              {airportDriveText} from {activeAirport.label} ({activeAirport.iata})
-            </p>
-          )}
-
-          {/* Round 9 (2026-06) — nearby restaurants + off-mountain
-              activities. Lazy-loaded from Supabase when the panel
-              opens so the homepage SSR payload stays small (we don't
-              want to ship 425 resorts × ~30 nearby rows for every
-              map mount). Renders nothing while loading or empty. */}
-          {/* key by resort.id so switching resorts remounts this (fresh
-              empty state) — prevents resort A's nearby flashing under B. */}
-          <NearbyInPanel key={resort.id} resortId={resort.id} slug={resort.slug} />
-        </div>
-
-        {/* Sticky footer CTA — pad past the iOS home indicator on notched phones */}
-        <div
-          className="shrink-0 border-t border-wn-charcoal/10 bg-white p-3"
-          style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 0.75rem)" }}
-        >
-          <Link
-            href={`/resort/${resort.slug}`}
-            className="flex items-center justify-center gap-2 rounded-lg bg-wn-navy px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-wn-navy/90"
-          >
-            View full details
-            <span aria-hidden="true">→</span>
-          </Link>
-        </div>
-      </aside>
-    </>
-  );
-}
-// Round 9 (2026-06) — lazy-loads nearby_restaurants + nearby_activities
-// for the currently-open panel resort. Keeps the homepage SSR payload
-// from ballooning with rows the user may never click through to.
-//
-// Audit round 2 (resort-panel-detail-10): the panel used to render every
-// category strip (up to 18 strips × 8 cards inside a 50vh sheet). It
-// now shows ONE merged "Top picks nearby" strip — recommended places
-// first, then nearest — capped at 6, with a link into the full section
-// on the resort page for the rest.
-const TOP_PICKS_LIMIT = 6;
-
-function rankNearby(rows: NearbyRow[]): NearbyRow[] {
-  return [...rows].sort(
-    (a, b) =>
-      Number(!!b.is_recommended) - Number(!!a.is_recommended) ||
-      (a.distance_km ?? Number.POSITIVE_INFINITY) - (b.distance_km ?? Number.POSITIVE_INFINITY),
-  );
-}
-
-function NearbyInPanel({ resortId, slug }: { resortId: number; slug: string }) {
-  const [rows, setRows] = useState<NearbyRow[]>([]);
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      const [r, a] = await Promise.all([
-        fetchNearbyRestaurants(resortId),
-        fetchNearbyActivities(resortId),
-      ]);
-      if (cancelled) return;
-      setRows(rankNearby([...r, ...a]));
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [resortId]);
-  if (rows.length === 0) return null;
-  const picks = rows.slice(0, TOP_PICKS_LIMIT);
-  return (
-    <div className="mt-4 border-t border-wn-charcoal/10 pt-1">
-      <NearbyGroup emoji="⭐" label="Top picks nearby" rows={picks} variant="compact" />
-      {rows.length > picks.length && (
-        <Link
-          href={`/resort/${slug}#around-the-resort`}
-          className="mt-1 inline-block text-[12px] font-semibold text-wn-navy underline-offset-2 hover:underline"
-        >
-          See all {rows.length} places nearby →
-        </Link>
-      )}
-    </div>
-  );
-}
-
-function CompactStat({
-  emoji,
-  label,
-  value,
-}: {
-  emoji: string;
-  label: string;
-  value: string;
-}) {
-  return (
-    <div className="text-center">
-      <div className="text-2xl leading-none" aria-hidden="true">{emoji}</div>
-      <div className="mt-1 text-base font-extrabold tracking-tight text-wn-navy">
-        {value}
-      </div>
-      <div className="text-[10px] font-medium uppercase tracking-wide text-wn-charcoal/55 truncate">
-        {label}
-      </div>
-    </div>
-  );
-}
-
-// Smart slot 3 — picks the single most decision-relevant stat to
-// show in the compact preview card. Order of preference:
-//   1. ❄️ Fresh snow in last 24h (only when > 0) — emotional + actionable
-//   2. 🟢 % terrain open today — actionable, "is it worth the drive?"
-//   3. ⛰ Vertical drop — universal size signal that doesn't go stale
-//   4. ⛷️ Trail count — fallback when nothing better is known
-//
-// Slots 1 & 2 light up only when the Stage 26 snow-report cron has
-// populated the relevant columns. Until that cron runs (deferred to
-// fall 2026), most resorts will fall through to slot 3 (vertical
-// drop) which is the meaningful "size" hint we have for almost every
-// resort in the catalog.
-function pickSlot3(resort: {
-  snow_new_24h_in: number | null;
-  trails_open_today: number | null;
-  total_trails: number | null;
-  currently_open: boolean | null;
-  vertical_drop: number | null;
-}): { emoji: string; label: string; value: string } {
-  if (resort.snow_new_24h_in != null && resort.snow_new_24h_in > 0) {
-    return {
-      emoji: "❄️",
-      label: "new (24h)",
-      value: `${resort.snow_new_24h_in}"`,
-    };
-  }
-  // trails_open_today is only written by a licensed snow-report feed, and
-  // currently_open is the verified open flag (snow_report_status is now
-  // just 'no_feed' | 'reported').
-  if (
-    resort.currently_open === true &&
-    resort.trails_open_today != null &&
-    resort.total_trails != null &&
-    resort.total_trails > 0
-  ) {
-    const pct = Math.round(
-      (resort.trails_open_today / resort.total_trails) * 100,
+            </>
+          );
+        }}
+      >
+        {body}
+      </ResortSheet>
     );
-    return {
-      emoji: "🟢",
-      label: "open today",
-      value: `${pct}%`,
-    };
   }
-  if (resort.vertical_drop != null) {
-    return {
-      emoji: "⛰",
-      label: "vertical",
-      value: `${resort.vertical_drop.toLocaleString()} ft`,
-    };
-  }
-  return {
-    emoji: "⛷️",
-    label: "trails",
-    value: resort.total_trails != null ? String(resort.total_trails) : "—",
-  };
+
+  // Desktop rail. Starts below the header (MapPage publishes its measured
+  // height as --wn-header-h) so Sign in / Deals / Guides / Lists stay
+  // reachable while a resort is open.
+  return (
+    <aside
+      role="complementary"
+      aria-label={`${resort.name} details`}
+      className="fixed bottom-0 right-0 z-40 flex w-[380px] flex-col bg-white shadow-2xl animate-[slideLeft_220ms_cubic-bezier(0.16,1,0.3,1)] motion-reduce:animate-none"
+      style={{ top: "var(--wn-header-h, 64px)" }}
+    >
+      <div className="relative h-40 shrink-0">
+        <HeroBackdrop resort={resort} passHex={heroBg} sizes="380px" />
+        <RailControls resortId={resort.id} onClose={onClose} />
+        <div className="absolute inset-x-4 bottom-3">
+          <h2 className="text-2xl font-extrabold leading-tight text-white drop-shadow-md">{resort.name}</h2>
+          <p className="mt-0.5 text-xs text-white/90 drop-shadow">
+            {resort.state}
+            {resort.region ? ` · ${resort.region}` : ""}
+          </p>
+          <div className="mt-1.5 flex items-center gap-2 text-[12px] font-semibold text-white drop-shadow">
+            <HeroStatusPill status={status} />
+            {driveLine}
+          </div>
+        </div>
+      </div>
+      <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">{body}</div>
+      {actionBar}
+    </aside>
+  );
 }
 
-function weatherEmoji(cond: string | null | undefined): string {
-  if (!cond) return "🌤️";
-  const c = cond.toLowerCase();
-  if (c.includes("snow")) return "🌨️";
-  if (c.includes("rain") || c.includes("shower")) return "🌧️";
-  if (c.includes("thunder")) return "⛈️";
-  if (c.includes("cloud")) return "☁️";
-  if (c.includes("clear") || c.includes("sun")) return "☀️";
-  if (c.includes("fog") || c.includes("mist")) return "🌫️";
-  return "🌤️";
+/** Height (px) the map should keep clear for a settled sheet height. */
+export function sheetMapPadding(height: number, viewportH: number): number {
+  return mapBottomPadding(height, snapHeights(viewportH));
 }
-

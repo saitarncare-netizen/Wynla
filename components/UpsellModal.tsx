@@ -11,6 +11,8 @@
 import Link from "next/link";
 import { useEffect, useId, useRef } from "react";
 import { LIMIT_LABELS, UPSELL_TAGLINES, type TierLimitKey } from "@/lib/tierLimits";
+import Icon from "@/components/icons/Icon";
+import Button, { buttonClasses } from "@/components/ui/Button";
 
 type Props = {
   open: boolean;
@@ -83,20 +85,20 @@ export default function UpsellModal({ open, onClose, gate, title, detail }: Prop
 
       {/* Card / sheet */}
       <div
-        className="relative w-full max-w-md rounded-t-2xl bg-white p-5 shadow-2xl sm:rounded-2xl"
+        className="relative w-full max-w-md rounded-t-wn-lg bg-white p-5 shadow-2xl sm:rounded-wn-lg"
         style={{
           paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 1.25rem)",
         }}
       >
         <div className="flex items-start gap-3">
-          <span aria-hidden="true" className="text-3xl">✨</span>
+          <Icon name="sparkle" className="h-8 w-8 shrink-0 text-wn-gold-halo" />
           <div className="flex-1">
-            <div className="text-[10px] font-bold uppercase tracking-wider text-wn-gold">
+            <div className="text-eyebrow font-bold uppercase text-wn-muted">
               Wynla Pro
             </div>
             <h2
               id={headlineId}
-              className="mt-0.5 text-lg font-extrabold text-wn-navy sm:text-xl"
+              className="mt-0.5 text-lg font-extrabold text-wn-navy sm:text-wn-xl"
             >
               {headline}
             </h2>
@@ -105,15 +107,15 @@ export default function UpsellModal({ open, onClose, gate, title, detail }: Prop
             type="button"
             onClick={onClose}
             aria-label="Close"
-            className="-mr-1 -mt-1 inline-flex h-8 w-8 items-center justify-center rounded-full text-wn-charcoal/60 transition hover:bg-wn-charcoal/5 hover:text-wn-navy"
+            className="-mr-2.5 -mt-2.5 inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-wn-muted transition hover:bg-wn-charcoal/5 hover:text-wn-navy"
           >
-            <span aria-hidden="true" className="text-lg leading-none">×</span>
+            <Icon name="close" className="h-5 w-5" />
           </button>
         </div>
 
-        <dl className="mt-4 grid grid-cols-2 gap-3 rounded-lg border border-wn-charcoal/10 bg-wn-offwhite p-3">
+        <dl className="mt-4 grid grid-cols-2 gap-3 rounded-wn-sm border border-wn-line bg-wn-offwhite p-3">
           <div>
-            <dt className="text-[10px] font-bold uppercase tracking-wider text-wn-charcoal/55">
+            <dt className="text-eyebrow font-bold uppercase text-wn-muted">
               Free
             </dt>
             <dd className="mt-1 text-sm font-semibold text-wn-charcoal">
@@ -121,7 +123,7 @@ export default function UpsellModal({ open, onClose, gate, title, detail }: Prop
             </dd>
           </div>
           <div>
-            <dt className="text-[10px] font-bold uppercase tracking-wider text-wn-gold">
+            <dt className="text-eyebrow font-bold uppercase text-wn-navy">
               Pro
             </dt>
             <dd className="mt-1 text-sm font-semibold text-wn-navy">
@@ -131,12 +133,12 @@ export default function UpsellModal({ open, onClose, gate, title, detail }: Prop
         </dl>
 
         {detail && (
-          <p id={detailId} className="mt-3 text-xs text-wn-charcoal/70">
+          <p id={detailId} className="mt-3 text-xs text-wn-muted">
             {detail}
           </p>
         )}
 
-        <p className="mt-3 text-xs text-wn-charcoal/65">
+        <p className="mt-3 text-xs text-wn-muted">
           7-day free trial. Cancel anytime. $7/mo or $59/year (save 30%).
         </p>
 
@@ -145,17 +147,13 @@ export default function UpsellModal({ open, onClose, gate, title, detail }: Prop
             href={proHref}
             ref={ctaRef}
             onClick={onClose}
-            className="inline-flex h-11 flex-1 items-center justify-center rounded-lg bg-wn-navy px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-wn-navy/90"
+            className={buttonClasses({ className: "flex-1" })}
           >
             Try Pro free for 7 days
           </Link>
-          <button
-            type="button"
-            onClick={onClose}
-            className="inline-flex h-11 items-center justify-center rounded-lg border border-wn-charcoal/20 bg-white px-4 text-sm font-semibold text-wn-charcoal transition hover:border-wn-charcoal/40"
-          >
+          <Button variant="secondary" onClick={onClose}>
             Maybe later
-          </button>
+          </Button>
         </div>
       </div>
     </div>

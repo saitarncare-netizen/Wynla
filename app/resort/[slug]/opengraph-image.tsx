@@ -1,6 +1,7 @@
 import { ImageResponse } from "next/og";
 import { supabase } from "@/lib/supabase";
 import { passColor, passLabel, primaryPass } from "@/lib/passColors";
+import { textOn } from "@/lib/contrast";
 
 export const runtime = "edge";
 export const alt = "Wynla resort";
@@ -134,7 +135,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
                     fontSize: 22,
                     fontWeight: 700,
                     background: passColor(p),
-                    color: p === "ikon" ? "#1E2952" : "white",
+                    color: textOn(passColor(p)),
                     padding: "6px 16px",
                     borderRadius: 10,
                   }}

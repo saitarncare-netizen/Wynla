@@ -1,0 +1,107 @@
+[
+  {
+    "id": 1,
+    "slug": "sugarbush",
+    "name": "Sugarbush",
+    "state": "VT",
+    "latitude": 44.136,
+    "longitude": -72.894,
+    "passes": [
+      "ikon"
+    ],
+    "tier": "featured",
+    "vertical_drop": 2000,
+    "total_lifts": 6,
+    "lifts_open_today": 0,
+    "snow_base_depth_in": null,
+    "snow_new_24h_in": 0,
+    "snow_new_48h_in": 0,
+    "current_surface_class": null,
+    "current_surface_updated_at": null,
+    "wind_hold_mph_chair": null,
+    "wind_hold_mph_gondola": null,
+    "lift_types": {
+      "high_speed_quad": 3,
+      "fixed_quad": 2,
+      "fixed_triple": 1,
+      "gondola": 0,
+      "tram": 0
+    },
+    "season_open_text": "November 21, 2026",
+    "season_close_text": "April 18, 2027",
+    "currently_open": false,
+    "snow_report_status": "no_feed",
+    "snow_report_updated_at": "2026-09-23T11:00:00Z",
+    "operating_status": "open"
+  },
+  {
+    "id": 2,
+    "slug": "killington",
+    "name": "Killington",
+    "state": "VT",
+    "latitude": 43.6045,
+    "longitude": -72.8201,
+    "passes": [
+      "ikon"
+    ],
+    "tier": "featured",
+    "vertical_drop": 2000,
+    "total_lifts": 6,
+    "lifts_open_today": 0,
+    "snow_base_depth_in": null,
+    "snow_new_24h_in": 0,
+    "snow_new_48h_in": 0,
+    "current_surface_class": null,
+    "current_surface_updated_at": null,
+    "wind_hold_mph_chair": null,
+    "wind_hold_mph_gondola": null,
+    "lift_types": {
+      "high_speed_quad": 3,
+      "fixed_quad": 2,
+      "fixed_triple": 1,
+      "gondola": 0,
+      "tram": 0
+    },
+    "season_open_text": "November 14, 2026 (projected)",
+    "season_close_text": "May 30, 2027 (projected)",
+    "currently_open": false,
+    "snow_report_status": "no_feed",
+    "snow_report_updated_at": "2026-09-23T11:00:00Z",
+    "operating_status": "open"
+  },
+  {
+    "id": 3,
+    "slug": "hunter-mountain",
+    "name": "Hunter Mountain",
+    "state": "NY",
+    "latitude": 42.2039,
+    "longitude": -74.2303,
+    "passes": [
+      "epic"
+    ],
+    "tier": "featured",
+    "vertical_drop": 2000,
+    "total_lifts": 6,
+    "lifts_open_today": 0,
+    "snow_base_depth_in": null,
+    "snow_new_24h_in": 0,
+    "snow_new_48h_in": 0,
+    "current_surface_class": null,
+    "current_surface_updated_at": null,
+    "wind_hold_mph_chair": null,
+    "wind_hold_mph_gondola": null,
+    "lift_types": {
+      "high_speed_quad": 3,
+      "fixed_quad": 2,
+      "fixed_triple": 1,
+      "gondola": 0,
+      "tram": 0
+    },
+    "season_open_text": "Late November",
+    "season_close_text": "Early April",
+    "currently_open": false,
+    "snow_report_status": "no_feed",
+    "snow_report_updated_at": "2026-09-23T11:00:00Z",
+    "operating_status": "open"
+  }
+]
