@@ -70,12 +70,14 @@ comment on table public.saturday_predictions is
 
 -- ---------------------------------------------------------------------------
 -- 3. Optional: drive_time_cache rows for the new launch cities. The /go
---    page estimates drive times ("≈") for Washington DC, Chicago,
---    Minneapolis and Detroit until the cache job (scripts/…drive-time…)
---    is run with origin_name set to the exact strings in
---    lib/origins.ts LAUNCH_CITIES ("Washington DC", "Chicago",
---    "Minneapolis", "Detroit"). Once rows exist, flip `driveCache: true`
---    on those entries so the page reads them. Philadelphia is listed as
---    cached in lib/origins.ts but had no rows on 2026-09-23; the loader
---    falls back to the estimate when the query returns nothing.
+--    page (and the map) estimate drive times ("≈") for Washington DC,
+--    Chicago, Minneapolis and Detroit until the cache job
+--    (scripts/compute-drive-times.mjs) is run with origin_name set to
+--    the exact `name` strings in lib/origins.ts ORIGINS ("Washington",
+--    "Chicago", "Minneapolis", "Detroit" — note DC's name is plain
+--    "Washington" since the round-2 integration). Once rows exist, flip
+--    `cached` to true on those entries (the last argument of city())
+--    so both surfaces read them. Philadelphia is listed as cached in
+--    lib/origins.ts but had no rows on 2026-09-23; the loader falls
+--    back to the estimate when the query returns nothing.
 -- ---------------------------------------------------------------------------
