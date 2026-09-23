@@ -162,8 +162,15 @@ export default function RootLayout({
         {/* Top bar on every non-map route (components/AppShell.tsx). It
             renders nothing on "/" where MapPage owns its floating header,
             and sits before #main-content so the skip link jumps past it.
-            Sign-in state is resolved in the browser; AppShell.tsx explains
-            why the layout does not read the auth cookie. */}
+            Sign-in state is resolved in the browser, deliberately: reading
+            the session here (cookies() via the server Supabase client)
+            would opt every route under this layout into per-request
+            rendering, including the revalidate/ISR guides, lists, deals,
+            state and resort pages, for one avatar letter. AppShell reads
+            the auth cookie's presence during hydration instead, so
+            signed-out visitors see "Sign in" with no swap. If the app
+            later enables cacheComponents, a server loader inside
+            <Suspense> can pass `initialUser` without that cost. */}
         <AppShell />
         {/* Wrap children so the skip link's #main-content target exists on
             every route. Pages render their own <main>, so this is a div (a

@@ -19,21 +19,29 @@
 // -------------
 // The root layout is shared by ~480 ISR pages, and reading the auth
 // cookie there (cookies() in a server component) would force every one
-// of them to render per request. So the shell resolves the state in the
-// browser from the Supabase session (local, no network) and accepts an
-// optional `initialUser` for any page that already has the user on the
-// server and wants zero flicker. Until the state is known the phone slot
-// stays empty at a fixed width and desktop shows a neutral "Account"
-// link, which redirects to /login when signed out, so nothing is a dead
-// end during the first paint.
+// of them to render per request. So the state is resolved in three
+// steps, cheapest first:
+//   1. A page that already has the user on the server passes
+//      `initialUser` (zero flicker, no client work).
+//   2. Otherwise, the presence of the Supabase auth cookie is read from
+//      document.cookie during hydration (@supabase/ssr writes it
+//      httpOnly: false because the browser client has to read it). No
+//      cookie means signed out, so the common case — a signed-out visitor
+//      on an ISR page — paints "Sign in" straight away instead of a
+//      neutral "Account" that swaps a moment later.
+//   3. getSession (local, no network) confirms the user and supplies the
+//      email initial for the avatar; onAuthStateChange keeps it fresh.
+// Until step 3 settles for a visitor who does have a cookie, the phone
+// slot stays empty at a fixed width and desktop shows a neutral "Account"
+// link, which redirects to /login when the session turns out to be dead.
 //
 // The bar is sticky and pads its top by env(safe-area-inset-top) so the
 // installed-app status bar never covers it; app/globals.css subtracts
-// --wn-header-h from each page's min-height.
+// --wn-shell-h from each page's min-height.
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { activeNavItem, backLinkFor, isFlowRoute, isMapRoute, NAV_ITEMS } from "@/lib/nav";
 import BrandMark from "@/components/BrandMark";
@@ -45,8 +53,32 @@ export type ShellUser = { email: string | null } | null;
 
 type AuthState = { known: false } | { known: true; user: ShellUser };
 
+// @supabase/ssr stores the session as sb-<ref>-auth-token, split into
+// .0 / .1 chunks when it outgrows one cookie. <ref> is the first label of
+// the Supabase hostname, which can contain hyphens on a custom domain.
+// Only the presence is read; the value is never parsed here. A false
+// negative only costs the old behaviour (a "Sign in" that getSession
+// corrects a moment later), never a wrong signed-in state.
+const AUTH_COOKIE = /(?:^|;\s*)sb-[a-z0-9-]+-auth-token(?:\.\d+)?=/i;
+
+function readAuthCookieHint(): boolean {
+  try {
+    return AUTH_COOKIE.test(document.cookie);
+  } catch {
+    return false;
+  }
+}
+
+// The cookie only changes through Supabase auth events, which
+// onAuthStateChange below already reports, so nothing to subscribe to.
+const subscribeNoop = () => () => {};
+const serverCookieHint = () => null;
+
 function useShellAuth(initialUser: ShellUser | undefined): AuthState {
   const [state, setState] = useState<AuthState>(initialUser === undefined ? { known: false } : { known: true, user: initialUser });
+  // null while hydrating (matches the server HTML, so no mismatch), then
+  // the real boolean on the render React schedules right after.
+  const cookieHint = useSyncExternalStore(subscribeNoop, readAuthCookieHint, serverCookieHint);
 
   useEffect(() => {
     const supabase = createSupabaseBrowserClient();
@@ -69,7 +101,25 @@ function useShellAuth(initialUser: ShellUser | undefined): AuthState {
     };
   }, []);
 
+  if (state.known) return state;
+  // No auth cookie at all: there is no session for getSession to find.
+  if (cookieHint === false) return { known: true, user: null };
   return state;
+}
+
+// useSearchParams needs a Suspense boundary on statically rendered pages
+// (Next renders the fallback at build time and the real link on the
+// client), which is why the sign-in link is its own component: `next`
+// has to keep the query string, so /trip/abc?tab=cost comes back to the
+// same tab after the code entry.
+function SignInLink({ pathname, className }: { pathname: string; className: string }) {
+  const search = useSearchParams()?.toString();
+  const next = search ? `${pathname}?${search}` : pathname;
+  return (
+    <Link href={`/login?next=${encodeURIComponent(next)}`} className={className}>
+      Sign in
+    </Link>
+  );
 }
 
 export default function AppShell({ initialUser }: { initialUser?: ShellUser }) {
@@ -81,16 +131,18 @@ export default function AppShell({ initialUser }: { initialUser?: ShellUser }) {
   const flow = isFlowRoute(pathname);
   const back = backLinkFor(pathname);
   const active = activeNavItem(pathname);
-  const loginHref = `/login?next=${encodeURIComponent(pathname)}`;
   const signedIn = auth.known && auth.user !== null;
   const initial = auth.known && auth.user?.email ? auth.user.email.slice(0, 1).toUpperCase() : null;
+  // Phone action buttons are 44 px (the guide's phone minimum) and drop
+  // to the 36 px dense size only inside the desktop bar.
+  const actionSize = "md:min-h-9 md:px-3";
 
   return (
     <header
       className="sticky top-0 z-40 border-b border-wn-line bg-white/95 backdrop-blur-sm"
       style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}
     >
-      <div className="mx-auto flex h-[var(--wn-header-h)] max-w-6xl items-center gap-1 px-2 sm:gap-2 sm:px-4 lg:px-6">
+      <div className="mx-auto flex h-[var(--wn-shell-h)] max-w-6xl items-center gap-1 px-2 sm:gap-2 sm:px-4 lg:px-6">
         {/* Phone: back link. Desktop has the full link row instead. */}
         <Link
           href={back.href}
@@ -100,7 +152,8 @@ export default function AppShell({ initialUser }: { initialUser?: ShellUser }) {
           <span className="sr-only sm:not-sr-only">{back.label}</span>
         </Link>
 
-        <BrandMark variant="lockup" priority className="px-1" />
+        {/* min-h-11: the lockup image is ~28 px tall; the link box is 44. */}
+        <BrandMark variant="lockup" priority className="min-h-11 px-1" />
 
         {!flow && (
           <nav aria-label="Primary" className="ml-4 hidden items-center gap-0.5 md:flex">
@@ -132,11 +185,14 @@ export default function AppShell({ initialUser }: { initialUser?: ShellUser }) {
           ) : signedIn ? (
             <>
               {/* Phone: the Saturday pick is the one destination the tab
-                  bar does not carry. Desktop: it is in the link row. */}
-              <Link href="/go" className={cx(buttonClasses({ variant: "secondary", size: "sm" }), "md:hidden")}>
-                <Icon name="compass" className="h-4 w-4" />
-                Saturday
-              </Link>
+                  bar does not carry. Desktop: it is in the link row. Not
+                  shown on /go itself (a link to the current page). */}
+              {active?.href !== "/go" && (
+                <Link href="/go" className={cx(buttonClasses({ variant: "secondary", size: "md" }), "md:hidden")}>
+                  <Icon name="compass" className="h-4 w-4" />
+                  Saturday
+                </Link>
+              )}
               <Link
                 href="/account"
                 aria-label="Account"
@@ -147,9 +203,15 @@ export default function AppShell({ initialUser }: { initialUser?: ShellUser }) {
               </Link>
             </>
           ) : (
-            <Link href={loginHref} className={buttonClasses({ variant: "primary", size: "sm" })}>
-              Sign in
-            </Link>
+            <Suspense
+              fallback={
+                <Link href={`/login?next=${encodeURIComponent(pathname)}`} className={buttonClasses({ variant: "primary", size: "md", className: actionSize })}>
+                  Sign in
+                </Link>
+              }
+            >
+              <SignInLink pathname={pathname} className={buttonClasses({ variant: "primary", size: "md", className: actionSize })} />
+            </Suspense>
           )}
         </div>
       </div>
