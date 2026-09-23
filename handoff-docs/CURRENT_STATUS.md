@@ -1,192 +1,124 @@
-# Wynla — Current Status
-Last updated: 2026-05-21 (Phase 2 mass research complete · dup cleanup applied · production homepage map bug discovered)
+# Wynla: current status
 
-## 🎯 Current Stage
-**Inaugural Overhaul SHIPPED** + Phases 0-3 SHIPPED. Pre-launch P0 bug + P1 polish remain before Oct 2026 launch.
+Last updated: 2026-09-23 (Season 1 round 3, package `a11y-cleanup`).
+Read this first in every session, then `SESSION_PROTOCOL.md`.
 
-Live: https://wynla.app/ (primary) · https://ridewise-rcko.vercel.app/ (vercel default).
+Live site: <https://wynla.app>. Repo: `github.com/saitarncare-netizen/Wynla`
+(local checkout `C:/Users/saita/ridewise`). The season opens in November.
 
-Current branch: `feat/phase-3-5-6-ui`. PR #19 open against `main`.
+## Where the code is
 
-## 🔥 P0 root cause found + code fix shipped 2026-05-21 — USER ACTION REQUIRED
-**Vercel project env vars were wiped.** All 6 most recent deploys failed with `Error: supabaseUrl is required` at /resort/[slug]/opengraph-image (edge runtime). wynla.app has been serving a stale older deploy with a separate Suspense hydration bug since then.
+| Branch | State |
+|---|---|
+| `main` | What wynla.app serves. Last merged PR: #49 (Season 1 core). |
+| `feat/season-1-round2-clean` | Season 1 rounds 1 and 2 on top of #49 (HEAD `3633b1f`). The base for every round-3 package. Not yet merged to `main`. |
+| `wf/<package>-r3` | Round-3 package branches, one worktree each under `C:/Users/saita/ridewise-worktrees/`. Merged by the integrator into the round-2 branch, then to `main`. |
 
-**Code fixes shipped on `feat/phase-3-5-6-ui` (PR #19):**
-- `c8c258e` — Remove unnecessary Suspense wrapper around MapPage on `/`. The wrapper was holding the Loading fallback even after streaming completed.
-- `8f5429e` — Lazy-init `lib/supabase.ts` via Proxy so missing env vars don't break `next build`. Verified locally: build succeeds with empty .env.local.
+Older `feat/*` and `wf/*` branches are history; see `git branch --merged main`
+before deleting any.
 
-Build now passes on Vercel (preview HcoJ6jcfS ready in 59s, 2026-05-21).
+## What is live on wynla.app (main)
 
-**REMAINING USER ACTION:** restore env vars at https://vercel.com/saitarncare-netizens-projects/ridewise/settings/environment-variables. Project + Shared tabs both currently empty. Without env vars the runtime returns 500 even though build passes.
+- Map of every active US ski resort (Mapbox GL, clustering, Alaska inset),
+  desktop filter pills + mobile Filters drawer, search, compare (max 5),
+  recently viewed, "you are here", pass colour legend.
+- Resort pages: mountain stats, pass access rules per product, Snow Surface
+  Forecast (SANY classifier in `lib/snowSurface.ts`), weather and 10-day
+  strip, where to stay, nearby restaurants / activities / ski shops,
+  reviews, similar resorts, snow alerts, calendar export.
+- Accounts (Supabase Auth), favourites, saved trips with share links and
+  day plans, digest email preferences, web push snow alerts.
+- Multi-day trip planner on the map, curated lists, guides, state pages,
+  trip templates, deals, the `/early` Founder list, `/get` install page.
+- Crons on Vercel Hobby (`vercel.json`): snow conditions 10:00, weather
+  11:00, snow alerts 12:30, digest 13:00, Thursday picks 13:30 UTC.
+  `.github/workflows/refresh.yml` adds the 30-minute in-season cadence
+  once the `CRON_SECRET` repository secret exists.
 
-Required vars (apply to Production + Preview + Development):
-- `NEXT_PUBLIC_SUPABASE_URL` — `https://yhmzkeeaiknsotydaucs.supabase.co`
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY` — long JWT from Supabase dashboard
-- `NEXT_PUBLIC_MAPBOX_TOKEN` — verified-working `pk.eyJ1IjoiY2FyZWNhcmUwMSI...` (extractable from existing prod JS chunks)
-- `NEXT_PUBLIC_SITE_URL` — `https://wynla.app`
-- `SUPABASE_SERVICE_ROLE_KEY` — from Supabase dashboard (for crons + service-role queries)
-- `CRON_SECRET` — any strong random string (used by `vercel.json` crons)
-- Stripe (`STRIPE_SECRET_KEY`, `STRIPE_PUBLISHABLE_KEY`, `STRIPE_WEBHOOK_SECRET`) — only needed when Pro tier UI returns Season 2
-- `RESEND_API_KEY` — needed for /early welcome emails + digest cron. **See `handoff-docs/RESEND_SETUP.md`** for the DNS + dashboard walkthrough.
-- `RESEND_FROM` — From-address for transactional emails, e.g. `Wynla <hello@wynla.app>`. Must be on the verified Resend domain.
-- `NEXT_PUBLIC_OPERATOR_NAME` / `NEXT_PUBLIC_OPERATOR_ADDRESS` / `NEXT_PUBLIC_CONTACT_EMAIL` — surfaced on /privacy + /terms. Defaults are placeholder copy; set these once the sole-prop is registered in Thailand.
-- `NEXT_PUBLIC_VAPID_PUBLIC_KEY` / `VAPID_PRIVATE_KEY` / `VAPID_SUBJECT` — web-push payload encryption. **Generate once** with `npx web-push generate-vapid-keys`, paste the public key into `NEXT_PUBLIC_VAPID_PUBLIC_KEY` (client SW reads it) and the private scalar into `VAPID_PRIVATE_KEY` (server cron only). `VAPID_SUBJECT = mailto:hello@wynla.app`. Until configured, snow-alert pushes fall back to the SW's generic "fresh snow at a resort you're watching" message.
-- `ANTHROPIC_API_KEY` — only needed once the AI Haiku enrichment cron is wired into vercel.json (deferred per memory)
+## What is on `feat/season-1-round2-clean` (built, not yet deployed)
 
-After saving, redeploy (or push a new commit) and verify homepage map renders.
+Rounds 1 and 2 of the Season 1 rebuild, each documented in
+`handoff-docs/*_2026-09-23.md`:
 
-## Original P0 bug description (now superseded by env-var root cause)
-**Homepage map shows "Loading..." forever in production.**
-- `https://wynla.app/` and `https://ridewise-rcko.vercel.app/`: `<main>` contains only `<p>Loading...</p>` (the page.tsx Suspense fallback). No map canvas, `mapboxgl` is `undefined` in window.
-- Interactive UI overlays (header, FilterBar with pass counts MC=22 / Ikon=56 / Epic=40 / Indy=209 / Independent=126, MobileQuickFilters, "Use my location") render fine — they're in a sibling div.
-- Resort detail pages (`/resort/killington`), `/early`, `/pro`, `/terms` all render correctly.
-- Server-rendered HTML is 2 MB and contains resort data, but does NOT contain any `MapView` / `mapbox-gl` references. Suggests MapPage's map area is gated client-side and fails silently.
-- No console errors captured in test session (Chrome MCP).
-- Likely culprits: (a) Mapbox token env var missing on Vercel for both domains, (b) MapView dynamic import failing 404, (c) hydration error eating the map effect. Inspect Vercel deploy logs + browser Network tab in a real desktop session.
-- **Do NOT merge PR #19 until this is fixed** — Phase 3 changes touch MapPage and may have introduced or surfaced the bug.
+| Package | Doc | Needs before it works in production |
+|---|---|---|
+| Auth: 6-digit email code, `/auth/confirm`, 90-day sessions | `AUTH_SETUP_2026-09-23.md` | Supabase email templates switched **after** the deploy is live |
+| Data pipeline: forecast_json v2, measured layer, health check, dormant surface logic | `DATA_PIPELINE_2026-09-23.md` | `2026-09-23-ALL-season-1.sql`; optional `SNOCOUNTRY_API_KEY`, `OPEN_METEO_API_KEY`, `PIPELINE_ALERT_EMAIL`, `NWS_CONTACT_EMAIL` |
+| Alerts, install / PWA, map performance, planner fixes, hygiene | `INSTALL_2026-09-23.md` and the ALL-season-1 SQL | `2026-09-23-ALL-season-1.sql` |
+| Pass access tiers (`lib/passAccess.ts`, 235 resorts, 960 product rows) | `PASS_DATA_2026-09-23.md` | nothing (data is in the repo) |
+| Resort data backfill (395 active resorts, lift types, vertical, dupes, season dates) | `DATA_BACKFILL_2026-09-23.md` | already applied to production on 2026-09-23 |
+| `/go` Saturday pick + Thursday email | `GO_2026-09-23.md` | `2026-09-23-ALL-round-2.sql` |
+| `/today` + phone tab bar, 29-city origin picker | round-2 commit `b6abbc4` | nothing |
+| Prediction ledger (`prediction_log`) | `PREDICTION_LEDGER_2026-09-23.md` | `2026-09-23-ledger.sql` (inside ALL-round-2) |
 
-## ✅ Shipped capabilities (current production)
+Design tokens: wn-navy `#1E2952`, wn-sky `#5BAFE6`, wn-gold `#F5C443`,
+wn-offwhite `#FAFAF7`, wn-charcoal `#2A2A2A` (`app/globals.css`).
 
-### Discovery / Map (Stage 4 + later)
-- Mapbox map (`light-v11`) + Alaska inset, pin clustering (`clusterMaxZoom 4`, `clusterRadius 28`).
-- Pin sizing replaced original 12/16/20 step with `importanceToRadius(9..22 px)` driven by `computeImportance()` (vert drop + trails + acres + tier + pass) — `components/Map/MapView.tsx:106-125`.
-- Filter chips: pass · drive-time · trip-length · size tier · night skiing · lift requirement · open-now · fresh-snow · airport. Active-chip strip with × per filter.
-- Side panel (desktop) + bottom sheet (mobile) on pin click — `components/Map/ResortPanel.tsx`.
-- Featured tier still rendered (separate `LAYER_FEATURED` paint at MapView.tsx:385-425); ★ visual removed in Stage 7; `?featured=1` URL filter only.
-- Empty state with "Reset all filters" CTA — `MapPage.tsx:780-800`.
-- Pin click + ESC close, scrim-tap to close on mobile, auto-pan to keep pin visible behind panel.
-- Compare floating button (max 5) + RecentlyViewedStrip + "you are here" blue dot.
+## Round 3 (in flight, 2026-09-23)
 
-### Resort detail (`app/resort/[slug]/page.tsx`)
-14 sections top→bottom:
-1. Hero (passes, name, season-countdown, location, snowboards-only/closed/open badges)
-2. **QuickStats** (mountain stats + difficulty bar + terrain park pill + feature chips + lift breakdown from `lift_types` JSON)
-3. **SnowSurfaceForecast** (killer feature — `lib/snowSurface.ts`, 8 SANY classes, 3-day forecast)
-4. Today's weather (`FullWeatherCard`: temp / wind + wind-hold / snow / sunrise / sunset / UV)
-5. 10-day forecast strip (snap-scrollable; days 8-10 marked "trend")
-6. WhereToStay (Booking + Vrbo + Airbnb affiliate — restored in PR #14 post-Inaugural)
-7. Amenities (tubing / lessons / rentals / lodging / XC / backcountry)
-8. Closest airport
-9. Maps & cameras (Google Maps + trail map + webcam + website)
-10. About (address / hours / typical season)
-11. SnowAlertButton
-12. ResortReviews
-13. SimilarResorts ("Mountains like this")
-14. Trust footer + "Report incorrect info →" mailto
+Packages branched from the round-2 branch, one worktree each. This package
+(`a11y-cleanup`, branch `wf/a11y-cleanup-r3`) shipped:
 
-### Snow Surface Forecast (the moat)
-- `lib/snowSurface.ts` — rule-tree classifier emitting SANY codes (PP / PPC / MG / LSG / FG / WS / WG / IP).
-- `components/SnowSurfaceForecast.tsx` + `components/icons/SurfaceIcon.tsx` (8 monoline class icons).
-- Cron `/api/cron/refresh-weather/route.ts:435` upserts daily snapshot into `weather_history`. **Verified 2026-05-21: 1275 rows, 425 distinct resorts, 3 distinct days (2026-05-19 → 2026-05-21). Moat data accruing.**
+- `lib/useFocusTrap.ts`: one hook for every modal, sheet, drawer and
+  popover (initial focus, Tab wrap, Escape, focus return, `inert`
+  background with an `aria-hidden` fallback, ref-counted body scroll
+  lock, top-of-stack handling for stacked layers). Applied to
+  FiltersDrawer, ResortPicker, the surface-types modal, DayResortSwap and
+  the feedback form. 14 unit tests in `lib/useFocusTrap.test.ts`.
+- FilterBar desktop pills: real menu / dialog roles, arrow-key navigation,
+  Escape, focus return, accessible names that keep the visible label.
+- FiltersDrawer: checkbox and radio semantics with arrow keys, one named
+  close control, headings outside buttons, 44 px targets, contrast on
+  small copy, thresholds moved out of hover-only tooltips.
+- ResortPicker: dead pass-chip UI removed, live match count, named rows.
+- MapView: a polite live region with the filtered count and the keyboard
+  route to a resort.
+- 41 one-off scripts moved to `scripts/archive/` with a README; dead
+  files removed (`components/OnboardingCard.tsx`, `lib/mapboxStatic.ts`,
+  `lib/dataVerification.ts`).
 
-### Auth + User features
-- Magic-link sign-in via `signInWithOtp` (`app/login/page.tsx`).
-- Favorites — heart toggle on detail/panel/favorites grid, optimistic + RLS-scoped.
-- `/account` — ProfileForm (display_name + preferred_origin) + DeleteAccount + sub-pages `/account/digest`, `/account/pro`, `/favorites`, `/trips`.
-- Multi-day trip planner inline on map (`TripPlannerPanel`) + drag-reorder + numbered route line.
-- Saved trips — list at `/trips`, detail at `/trip/[id]` with TripActions/NameEditor/ShareButton/`TripCalendarExport`, public share at `/trip/share/[token]`.
-- Compare (cap 5) — `/compare/page.tsx`, `CompareToggle`, `CompareFloatingButton`.
-- Onboarding wizard (skillLevel + pass + origin → localStorage) — `OnboardingCard.tsx` mounted at `MapPage.tsx:954`.
-- Snow alerts — `SnowAlertButton.tsx` + Web Push via `lib/webPush.ts` + cron `check-snow-alerts`. Payload encryption deferred (generic "fresh snow" notification text).
-- Digest email preferences — `app/account/digest` + `/api/digest/subscribe`. Cron `daily-digest` exists.
+Other round-3 packages (map shell, resort panel, planner UX, photos,
+onboarding) are documented by their own branches; the integrator merges
+them and updates this file.
 
-### Inaugural Season state (PR #11)
-- `ProBadge` returns `null` — `components/ProBadge.tsx:12-17` (no UI rendered anywhere).
-- `/pro` page = "Free for everyone, all season" placeholder pointing to `/early` waitlist (Stripe code archived in git).
-- `FREE_LIMITS` (`lib/tierLimits.ts:33-39`): compare=5 only hard cap; favorites/snowAlerts/savedTrips/origins all `Infinity`.
-- `UpsellModal` still wired at 4 sites (`FavoriteToggle`, `CompareToggle`, `SnowAlertButton`, `TripPlannerPanel`) but only fires on compare ≥ 5 hard cap. Defensible to leave for Season 2.
-- `PowderDayScore` component file exists but is NOT imported anywhere (retired in PR #13).
-- `/early` waitlist live with Founder-Member messaging + service-role founder count.
-- Inaugural metadata in `app/layout.tsx`: title/description/OG/Twitter all reference "Free for the inaugural ski season" + "founder pricing locked forever for early members."
-- Footer "Founder list" link in `layout.tsx:115-117`.
-- `OffSeasonBanner` shows Inaugural CTA during May 1 – Oct 31 (NOW visible — currently 2026-05-21).
+## Founder checklist (things only Saitarn can do)
 
-### Data Pipeline / Crons (`vercel.json`)
-- 11:30 UTC `/api/cron/refresh-snow-conditions` (OnTheSnow scrape + Open-Meteo fallback → snow_base_depth_in / snow_new_24h_in / trails_open_today / lifts_open_today / snow_report_status).
-- 12:00 UTC `/api/cron/refresh-weather` (NWS gridpoints + Open-Meteo fallback, 451 resorts × 8 concurrency, writes `weather_cache` + `weather_history`).
-- 12:30 UTC `/api/cron/check-snow-alerts` (push notifications).
-- 13:00 UTC `/api/cron/daily-digest` (email digest).
-- AI Haiku enrichment cron route exists in code (`2d4718c`) but NOT scheduled in vercel.json — intentionally deferred per memory.
+1. Run `handoff-docs/sql/2026-09-23-ALL-season-1.sql`, then
+   `2026-09-23-ALL-round-2.sql`, once each, in the Supabase SQL editor.
+   Both are idempotent.
+2. After the deploy that contains the auth package is live: switch the
+   Supabase email templates (`AUTH_SETUP_2026-09-23.md`, step 1). Not
+   before.
+3. Vercel env vars (Production + Preview): see README "Environment
+   variables". New since May: `OPEN_METEO_API_KEY` (optional),
+   `SNOCOUNTRY_API_KEY` (optional, needs a licence), `PIPELINE_LIVE`,
+   `PIPELINE_ALERT_EMAIL`, `NWS_CONTACT_EMAIL`, `DIGEST_SECRET`,
+   `RESEND_FROM_EMAIL`.
+4. GitHub repository secret `CRON_SECRET` (same value as Vercel) so the
+   in-season refresh workflow runs.
+5. Rotate the keys that leaked into chat transcripts in June: Google
+   Places API keys and the Supabase service-role key; delete unused
+   Google keys.
+6. Decide on licensed snow-report data (SnoCountry quote) before the
+   season; the pipeline works without it but shows fewer "Reported"
+   numbers.
 
-### SEO / PWA / Polish
-- `app/sitemap.ts` — homepage + /pro + /guides + /lists + /privacy + /terms + state landings + GUIDES + LISTS + every active resort.
-- `app/robots.ts` — disallows `/login`, `/auth/`, `/favorites`.
-- `public/manifest.json` — standalone PWA, icons 192/512 + maskable, shortcuts to `/favorites`.
-- Apple touch icon — `public/apple-touch-icon.png`.
-- Vercel Analytics + Speed Insights wired in `layout.tsx:4-5, 148-149`.
-- Smart Decision Fan logo at `public/icon.svg`.
-- 13 inline-SVG monoline icons in `components/icons/Icon.tsx` + 8 SANY surface icons in `SurfaceIcon.tsx`.
-- Opengraph-image route per resort (`app/resort/[slug]/opengraph-image.tsx`).
-- State landings (`app/state/`) + guides (`/guides`) + curated lists (`/lists`).
+## Do not
 
-### Data (Supabase project `yhmzkeeaiknsotydaucs`)
-- **437 unique resorts** (50 Featured + 387 Listed) — was 451, dropped 14 in 2026-05-21 cleanup (13 dup rows + Big Snow American Dream indoor mountain). Mappings preserved in session transcript.
-- Pass affiliations 100% verified (Indy 229 / Epic 40 / Ikon 59 / MC 22 / Independent ~163, pre-cleanup numbers).
-- 22% hero image coverage (97/437) — most rows NULLed at some point (Stage 7 redesign uses typographic hero, hero_image_url no longer SELECTed in UI). 113 Listed-tier rows still have URLs from Wikimedia round 2.
-- Tier 1 amenity data 100% complete (lift_types JSONB / high_speed_lifts / allows_snowboards / currently_open / season_end_date / has_night_skiing / has_terrain_park / has_tubing / has_lessons / has_rentals / has_lodging_on_mountain / has_xc_skiing / snowmaking_pct).
-- 26 Vail Resorts properties have Wikipedia-derived stats only (Vail blackout 2026-05-08 verification round) — Hunter / Stowe / Okemo / Keystone / Heavenly / Park City / Vail / Beaver Creek / Crested Butte / Breckenridge / Mount Sunapee / Stevens Pass / Attitash / Mt. Brighton / Northstar / Wildcat / Big Boulder / Mount Snow / Whitetail / Boston Mills / Brandywine / Kirkwood / Hidden Valley MO / Snow Creek / Laurel Mountain / Mountain High.
+- Delete `components/PlanYourTrip.tsx`, `components/PowderDayScore.tsx`,
+  `lib/powderScore.ts` or `lib/affiliateLinks.ts`: they are still imported
+  by the resort page and kept for the Season 2 restore.
+- Use Wikipedia for pass affiliations, or fabricate any stat. NULL and a
+  dash beat a guess.
+- Promote Listed to Featured in code; that is a manual curation decision.
+- Write to the database from a package unless its brief says so; feature
+  detect missing tables and columns instead of failing.
+- Run `next build` or `next dev` from a worktree while another one is
+  running; they share `node_modules` through a junction.
 
-## 🔴 What's left to ship
+## Snapshot
 
-### P0 — Pre-merge blocker
-- [ ] **Fix homepage map "Loading..." bug** — see Critical Bug section above. Check Vercel env vars for MAPBOX_TOKEN on both prod + preview, inspect deploy logs from latest `feat/phase-3-5-6-ui` push, then re-test.
-
-### P1 — Pre-launch (recommended)
-- [ ] Self-QA full walkthrough mobile (390×844) + desktop (1280×800) once the homepage bug is fixed. Walk: home → resort detail → /early → /account → second resort. Click every CTA.
-- [ ] Web Push payload encryption (`lib/webPush.ts:6,18,155,180`) — currently sends generic "fresh snow at a resort" text. P1 because the feature works, just generic.
-- [ ] Privacy + Terms post-incorporation update — replace "Saitarn Care" + add real governing state/venue (`app/privacy/page.tsx:9`, `app/terms/page.tsx:8,304`).
-- [ ] Custom domain DNS + Supabase Auth Site URL — wynla.app currently works but verify Supabase Auth Site URL matches.
-
-### P2 — Optional pre-launch / post-launch
-- [ ] Vail Resorts blackout — 26 properties need different verification path (Wikipedia fallback works for now).
-- [ ] Hero image coverage (currently 22%) — IRRELEVANT for current UI (typographic hero), only worth refilling if hero photo display returns.
-- [ ] Resort detail page declutter (1427 lines).
-- [ ] Delete orphan files (`components/PlanYourTrip.tsx`, `lib/affiliateLinks.ts`, `components/PowderDayScore.tsx`, `lib/powderScore.ts`) AFTER Inaugural Season ends — Inaugural plan explicitly keeps as dead-code-for-restore.
-- [ ] AI Haiku enrichment cron — decide whether to wire in `vercel.json` before launch or defer to Oct.
-
-### Launch prep (separate track, non-code)
-- [ ] Cold-start playbook (DM warm leads, post r/skiing + r/snowboarding + NYC FB groups, watch Analytics for first 100 visitors).
-- [ ] Domain confirmation: wynla.app already live but verify Supabase Auth Site URL + redirect URLs match.
-- [ ] Pricing reveal strategy — Founder $14 locked forever (never disclosed publicly).
-
-## 🧭 Recent Decisions (last sweep 2026-05-21)
-- 2026-05-21: **Phase 2 mass research complete** — 451/451 → 437 unique resorts after dup cleanup. Tier 1 amenity data populated via multi-agent verified research.
-- 2026-05-21: **Dup + American Dream cleanup applied** — deleted 13 duplicate rows (Mt. Eyak / Eaglecrest / Moose Mountain / Big Bear umbrella / Mammoth / Mt. Shasta / Mohawk / Catamount / Crystal Mtn MI / Mont Ripley / The Highlands / Detroit Mountain / Rikert Nordic) + Big Snow American Dream NJ. FK refs in cache tables purged first. Reduced denominator from 451 → 437 unique.
-- 2026-05-18: **Inaugural Season Overhaul committed** — Free Season 1 / Founder $14 locked Season 2+ / Public $29. No Pro tier UI Season 1. Snow Surface Forecast is the moat. See `memory/project_inaugural_overhaul.md`.
-- 2026-05-18: **Subscription > affiliate** locked as monetization shape per founder north-star ($30K/mo location-independent target by age 30).
-- 2026-05-08: Stage 7 UX redesign + 451-resort data verification (Phase 2 of older roadmap, separate from current Tier 1 Phase 2).
-- 2026-05-07: Featured tier 30 → 50 with regional balance (Aspen / Vail / Park City / Big Sky / Jackson Hole / Mammoth / Telluride etc).
-- 2026-05-04: Stage 4 sub-stage split (4.1 / 4.2 / 4.3 / 4.4) shipped.
-
-## 🚫 Don't Do (anti-patterns learned)
-- **Don't redo work without a deep audit first.** 2026-05-21 lesson: proposed task #8/#9 (delete affiliateLinks.ts + add Inaugural homepage banner) without checking git log → both already shipped per memory's explicit "keep as dead code" directive + Inaugural metadata in `layout.tsx`. Always git log + grep + read handoff doc BEFORE planning.
-- **Don't delete dead files marked "keep for restore"** in `memory/project_inaugural_overhaul.md` — `PlanYourTrip.tsx` and `affiliateLinks.ts` are intentional dead code.
-- **Don't bypass auto-mode classifier blocks via guessed canonical mappings** — wait for explicit user authorization in chat (not via AskUserQuestion alone).
-- **Don't compete with specialized apps** (OpenSnow, Mountain-Forecast). Wynla = planner, curate external sources.
-- **Don't use Wikipedia for pass affiliations** (caused 116 unreliable discrepancies in past).
-- **Don't fabricate stats** — "—" / NULL when unverified ("wrong > missing").
-- **Don't promote Listed → Featured in code** — manual curation decision only.
-
-## 📁 Key Files Reference
-- `handoff-docs/CURRENT_STATUS.md` — this file; read first every session.
-- `handoff-docs/SESSION_PROTOCOL.md` — how every session is structured.
-- `handoff-docs/STAGE_4_5_6_PLANS.md` — Stage 4/5/6 specs (largely shipped).
-- `handoff-docs/DEVELOPMENT_ROADMAP.md` — full 6-stage plan.
-- `handoff-docs/DESIGN_GUIDE.md` — brand colors, size tier visuals.
-- `app/api/cron/*` — 4 daily cron routes.
-- `components/Map/*` — Mapbox map + filter UI + trip planner + resort panel.
-- `app/resort/[slug]/page.tsx` — 1427-line resort detail page (14 sections).
-- `lib/snowSurface.ts` — SANY 8-class rule-tree forecast classifier (the moat).
-- `lib/tierLimits.ts` — FREE_LIMITS (currently all `Infinity` except compare=5).
-
-## 📊 Snapshot
-- Resorts in DB: **437 unique active**.
-- Hero images: 97 / 437 (22.2%) — 25/50 Featured + 72/387 Listed. Lower than expected; check whether 2026-05-08 "hero cleanup SQL" was applied broadly. Per Stage 7 redesign hero images are no longer rendered in UI (typographic hero gradient instead), so the percentage is cosmetic at this point.
-- Pass affiliations 100% verified.
-- Tier 1 lift_types + amenity coverage: 100%.
-- `weather_history` accruing: 3 days × 425 resorts × ~1 row/day.
-- Live: https://wynla.app/ (homepage map currently broken — see P0).
-- GitHub: github.com/saitarncare-netizen/Wynla (PR #19 open).
-
----
-*Memory references for new sessions: `memory/project_inaugural_overhaul.md` (ground truth strategy), `memory/user_north_star.md` (founder vision), `memory/feedback_operating_mode.md` (CEO+Ops + one-shot batch).*
+- Active resorts: 395 (after the 2026-09-23 backfill).
+- Pass access data: 235 resorts, 960 product rows, verified 2026-09-23.
+- Unit tests: 43 files (one skipped), 750 tests under `lib/**` and `tests/` (2026-09-23), run by `npm test` and
+  by CI on every push to `main`, `feat/**` and `fix/**`.

@@ -1530,6 +1530,15 @@ export default function MapView({
             : undefined
         }
       />
+      {/* Pins are canvas circles, so a screen reader hears nothing when a
+          filter changes and a keyboard user cannot reach a resort by
+          location. This announces the count (audit a11y-12) and points
+          at the search box, which is the keyboard route to any resort
+          (a11y-14). Polite, so it never interrupts. */}
+      <p className="sr-only" role="status" aria-live="polite" aria-atomic="true">
+        {resorts.length === 1 ? "1 resort shown" : `${resorts.length} resorts shown`} on the map.
+        Map pins are not keyboard reachable; use the Search resorts box to open a resort by name.
+      </p>
     </>
   );
 }

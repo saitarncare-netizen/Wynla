@@ -14,7 +14,7 @@ import { resolve, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const ROOT = resolve(__dirname, "..");
+const ROOT = resolve(__dirname, "..", "..");
 const OUTDIR = join(ROOT, "output");
 
 const SUPABASE_URL = "https://yhmzkeeaiknsotydaucs.supabase.co";
