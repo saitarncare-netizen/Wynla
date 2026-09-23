@@ -1,0 +1,32 @@
+{
+ "results": [
+  {
+   "layerId": 2,
+   "layerName": "Footprint",
+   "attributes": {
+    "idp_validtime": "9/22/2026 9:00:00 PM"
+   }
+  },
+  {
+   "layerId": 3,
+   "layerName": "Image",
+   "attributes": {
+    "Service Pixel Value": "68.58"
+   }
+  },
+  {
+   "layerId": 6,
+   "layerName": "Footprint",
+   "attributes": {
+    "idp_validtime": "9/23/2026"
+   }
+  },
+  {
+   "layerId": 7,
+   "layerName": "Image",
+   "attributes": {
+    "Service Pixel Value": "41111"
+   }
+  }
+ ]
+}

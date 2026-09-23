@@ -1,7 +1,8 @@
 // Stage 32 — snow-alert firing cron.
 //
-// Vercel cron hits this at 12:30 UTC (30 min after refresh-weather has
-// finished writing fresh snow_new_24h_in values onto resorts rows). We
+// Vercel cron hits this at 12:30 UTC, after refresh-weather (11:00 UTC,
+// measured snow → resorts.snow_new_24h_in) and refresh-snow-conditions
+// (10:00 UTC, resort-reported snow when a feed is licensed). We
 // find snow_alerts rows whose resort's measured snowfall now meets or
 // exceeds the user's threshold, then push a web notification per matching
 // push_subscriptions row.
@@ -49,6 +50,7 @@ type ResortRow = {
   slug: string;
   name: string;
   snow_new_24h_in: number | null;
+  currently_open: boolean | null;
 };
 
 type SubRow = {
@@ -126,7 +128,7 @@ export async function GET(request: Request) {
   const resortIds = Array.from(new Set(alerts.map((a) => a.resort_id)));
   const { data: resortsData, error: resortsErr } = await supabase
     .from("resorts")
-    .select("id, slug, name, snow_new_24h_in")
+    .select("id, slug, name, snow_new_24h_in, currently_open")
     .in("id", resortIds);
   if (resortsErr) {
     return NextResponse.json({ ok: false, reason: resortsErr.message }, { status: 500 });
@@ -141,11 +143,18 @@ export async function GET(request: Request) {
   const firing: Firing[] = [];
   let skippedCooldown = 0;
   let skippedBelowThreshold = 0;
+  let skippedClosed = 0;
 
   for (const a of alerts) {
     const r = resortMap.get(a.resort_id);
     if (!r || r.snow_new_24h_in == null) {
       skippedBelowThreshold++;
+      continue;
+    }
+    // Measured snow falls on closed mountains too; never push "fresh snow
+    // at X" for a resort we know is shut (unknown status still alerts).
+    if (r.currently_open === false) {
+      skippedClosed++;
       continue;
     }
     if (r.snow_new_24h_in < a.threshold_in) {
@@ -168,6 +177,7 @@ export async function GET(request: Request) {
       fired: 0,
       skippedCooldown,
       skippedBelowThreshold,
+      skippedClosed,
     });
   }
 
@@ -245,6 +255,7 @@ export async function GET(request: Request) {
     fired,
     skippedCooldown,
     skippedBelowThreshold,
+    skippedClosed,
     expiredPruned: expiredEndpoints.length,
     errors,
   });

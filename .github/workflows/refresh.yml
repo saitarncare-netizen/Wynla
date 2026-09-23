@@ -1,0 +1,82 @@
+# In-season data refresh on the Vercel Hobby plan.
+#
+# Vercel Hobby allows one cron run per day per route, so this workflow
+# supplies the in-season cadence instead: every 30 minutes from November
+# through April it calls the same cron endpoints with the same
+# CRON_SECRET, then asks /api/health to email the founder if the data is
+# stale. Each call is idempotent (resorts refreshed within 45 minutes are
+# skipped), so overlapping with the daily Vercel run is harmless.
+#
+# INACTIVE until the repository secret CRON_SECRET exists
+# (Settings → Secrets and variables → Actions → New repository secret,
+# value = the CRON_SECRET set in Vercel). The optional variable SITE_URL
+# overrides https://wynla.app. Without the secret every step is skipped.
+#
+# GitHub schedules are UTC and may drift by a few minutes under load.
+
+name: Refresh weather and snow data
+
+on:
+  schedule:
+    # Every 30 minutes, November through April (season).
+    - cron: "*/30 * * 11,12,1,2,3,4 *"
+    # Once a day at 14:00 UTC in the off-season so /api/health keeps
+    # getting a founder alert if the daily Vercel cron dies.
+    - cron: "0 14 * 5,6,7,8,9,10 *"
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Ignore the 45-minute freshness floor (1 = yes)"
+        required: false
+        default: "0"
+
+concurrency:
+  group: refresh-data
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      SITE_URL: ${{ vars.SITE_URL || 'https://wynla.app' }}
+      CRON_SECRET: ${{ secrets.CRON_SECRET }}
+      FORCE: ${{ github.event.inputs.force || '0' }}
+    steps:
+      - name: Check secret
+        id: gate
+        run: |
+          if [ -z "$CRON_SECRET" ]; then
+            echo "CRON_SECRET is not set; skipping (see .github/workflows/refresh.yml)"
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Season status and snow report
+        if: steps.gate.outputs.enabled == 'true'
+        run: |
+          curl --silent --show-error --fail-with-body --max-time 180 \
+            -H "Authorization: Bearer $CRON_SECRET" \
+            "$SITE_URL/api/cron/refresh-snow-conditions" | head -c 4000; echo
+
+      - name: Weather, observations and measured snow (stalest resorts first)
+        if: steps.gate.outputs.enabled == 'true'
+        run: |
+          curl --silent --show-error --fail-with-body --max-time 330 \
+            -H "Authorization: Bearer $CRON_SECRET" \
+            "$SITE_URL/api/cron/refresh-weather?force=$FORCE" | head -c 4000; echo
+
+      - name: Snow alerts
+        if: steps.gate.outputs.enabled == 'true'
+        run: |
+          curl --silent --show-error --fail-with-body --max-time 330 \
+            -H "Authorization: Bearer $CRON_SECRET" \
+            "$SITE_URL/api/cron/check-snow-alerts" | head -c 4000; echo
+
+      - name: Health check (emails the founder when stale)
+        if: steps.gate.outputs.enabled == 'true'
+        run: |
+          # 503 means stale/dead; the email is already sent by the route, so
+          # do not fail the workflow on it.
+          curl --silent --show-error --max-time 60 "$SITE_URL/api/health?notify=1" | head -c 4000; echo

@@ -42,6 +42,7 @@ import {
   type DailyWeather,
   type ForecastDay as SurfaceForecastDay,
 } from "@/lib/snowSurface";
+import { forecastDaysFrom } from "@/lib/weather/forecastJson";
 
 // ISR — resort detail data (lifts/trails/passes/coords) changes rarely.
 // Snow conditions are stamped on the row by the cron; ISR every 10 min
@@ -162,7 +163,8 @@ type WeatherSnapshot = {
   wind_mph_avg: number | null;
   wind_dir_short: string | null;
   fetched_at: string | null;
-  forecast_json: ForecastDay[] | null;
+  /** v1 array or v2 object; always read through forecastDaysFrom(). */
+  forecast_json: ForecastDay[] | { v: 2; days: ForecastDay[] } | null;
 };
 
 type HistoryRow = {
@@ -341,9 +343,10 @@ export default async function ResortPage({
     return fromHistory;
   })();
 
-  const surfaceForecastDays: SurfaceForecastDay[] = (
-    weather?.forecast_json ?? []
-  )
+  // forecast_json is v1 (bare array) or v2 ({ v: 2, days: [...] }) —
+  // forecastDaysFrom() reads both while rows roll over.
+  const forecastDays = forecastDaysFrom(weather?.forecast_json);
+  const surfaceForecastDays: SurfaceForecastDay[] = forecastDays
     .slice(1, 4)
     .map((d) => ({
       date: d.date,
@@ -586,17 +589,17 @@ export default async function ResortPage({
             planning range. Always rendered when forecast_json is
             populated; the summer cards still give users a "is the
             mountain getting cold yet" pulse leading into November. */}
-        {weather?.forecast_json && weather.forecast_json.length > 0 && (
+        {forecastDays.length > 0 && (
           <Section
-            title={`${Math.min(weather.forecast_json.length, 10)}-day forecast`}
+            title={`${Math.min(forecastDays.length, 10)}-day forecast`}
             subtitle={
-              weather.forecast_json.length >= 8
+              forecastDays.length >= 8
                 ? "Swipe sideways to see the full window. Days 8–10 are trend-only."
                 : "Swipe sideways to see the full window."
             }
           >
             <TenDayForecast
-              days={weather.forecast_json.slice(0, 10)}
+              days={forecastDays.slice(0, 10)}
               resortWind={{
                 wind_hold_mph_chair: resort.wind_hold_mph_chair,
                 wind_hold_mph_gondola: resort.wind_hold_mph_gondola,
@@ -1219,7 +1222,7 @@ function FullWeatherCard({
           available. */}
       {(() => {
         const sun = computeSunTimes(lat, lng);
-        const todayUv = weather.forecast_json?.[0]?.uv_index_max ?? null;
+        const todayUv = forecastDaysFrom(weather.forecast_json)[0]?.uv_index_max ?? null;
         const tz = timeZoneForState(resort.state);
         if (!sun && todayUv == null) return null;
         return (

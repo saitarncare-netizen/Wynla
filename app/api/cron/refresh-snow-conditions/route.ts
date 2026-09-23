@@ -1,455 +1,181 @@
-// Stage 33 — daily snow-conditions scraper.
+// Season-status + snow-report job (replaces the OnTheSnow scraper, which
+// died when OnTheSnow moved to React Server Components and whose terms
+// forbade the use anyway).
 //
-// Vercel cron hits this at 11:30 UTC, 30 min before refresh-weather and
-// 90 min before check-snow-alerts. We populate the columns added in
-// stage-26-schema.sql (snow_base_depth_in, snow_new_24h_in, ...,
-// snow_report_status, snow_report_updated_at) by:
+// What it writes, per active resort:
+//   - With a licensed feed (SNOCOUNTRY_API_KEY set): the resort-reported
+//     numbers via lib/snowReport (base depth, 24 h / 48 h snow, lifts and
+//     trails open), snow_report_status = 'reported', snow_report_updated_at
+//     = the resort's own report time, currently_open from the reported
+//     status when it is affirmative.
+//   - Without a feed: snow_report_status = 'no_feed' and currently_open
+//     derived from the season evidence we hold (lib/snowReport/seasonStatus)
+//     — true / false only with evidence, null otherwise, never false by
+//     default. The measured snow numbers for these resorts are written by
+//     refresh-weather from NOHRSC / SNOTEL.
 //
-//   1. Scraping each resort's OnTheSnow.com snow-report page.
-//   2. Caching the discovered URL in resorts.onthesnow_url so we don't
-//      re-probe on every run.
-//   3. Falling back to Open-Meteo's previous-day snowfall_sum when
-//      OnTheSnow fails (404, 5xx, parse failure). The fallback gives us
-//      rough 24h snow + sets status="unknown"; lifts/trails stay null.
-//   4. Bailing the whole run if OnTheSnow rate-limits us (403/429) so we
-//      don't burn through all 442 resorts antagonising their CDN.
+// Schedule: daily at 10:00 UTC on Hobby (before refresh-weather, whose
+// surface classifier reads currently_open); every 30 min in season via
+// the GitHub workflow once a feed exists. Pro cadence would be
+// "*/15 4-10 * * *" local-morning polling per the SnoCountry guidance.
 //
-// Env vars (same as refresh-weather):
-//   CRON_SECRET                 matches Vercel cron Authorization header
-//   NEXT_PUBLIC_SUPABASE_URL
-//   SUPABASE_SERVICE_ROLE_KEY   service-role client; updates resorts rows
-//
-// Output JSON: { ok, scraped, fallback, failed, total, rateLimited? }.
+// Dry run: ?dryRun=1 calls the feed (using the public demo key when no
+// real key is set), reports the normalized mapping in the JSON summary
+// and writes NOTHING. Demo data never reaches the database.
 
-import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
-import { parseOnTheSnowHTML, type SnowReport } from "@/lib/onthesnowParser";
-import { US_STATES } from "@/lib/usStates";
+import { runCron, type CronContext } from "@/lib/cronRun";
+import { isGlobalOffSeasonNow } from "@/lib/seasonDates";
+import type { NormalizedReport, ProviderResortRef } from "@/lib/snowReport/provider";
+import { deriveSeasonStatus, type SeasonEvidence } from "@/lib/snowReport/seasonStatus";
+import { getConfiguredProvider, SNOCOUNTRY_DEMO_KEY, SnoCountryProvider } from "@/lib/snowReport/snocountry";
 
 export const runtime = "nodejs";
-export const maxDuration = 300; // 5 min — 442 resorts × concurrency-4, ~2s/req.
+export const maxDuration = 120;
 
-const USER_AGENT = "Wynla/1.0 (+https://ridewise-rcko.vercel.app)";
-const CONCURRENCY = 4;
-const FETCH_TIMEOUT_MS = 10_000;
-const REVERIFY_404_AFTER_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
+const REEVALUATE_AFTER_HOURS = 12;
+const FAIL_SHARE_LIMIT = 0.3;
 
-type Resort = {
-  id: number;
-  slug: string;
-  name: string;
-  state: string | null;
-  latitude: number | string | null;
-  longitude: number | string | null;
-  onthesnow_url: string | null;
-  onthesnow_url_verified_at: string | null;
-  onthesnow_last_404_at: string | null;
-};
+type ResortRow = ProviderResortRef &
+  SeasonEvidence & {
+    currently_open: boolean | null;
+    snow_report_status: string | null;
+    snow_report_updated_at: string | null;
+  };
 
 type ResortUpdate = {
   id: number;
-  snow_base_depth_in: number | null;
-  snow_new_24h_in: number | null;
-  snow_new_48h_in: number | null;
-  snow_new_7d_in: number | null;
-  trails_open_today: number | null;
-  lifts_open_today: number | null;
-  snow_report_status: SnowReport["snow_report_status"] | null;
+  currently_open?: boolean | null;
+  snow_report_status: string;
   snow_report_updated_at: string;
-  // Saitarn 2026-05-25: `currently_open` was previously a manual
-  // boolean that was set when the data was first imported and then
-  // never updated, so it drifted out of sync with the daily-refreshed
-  // `snow_report_status` — Killington / Mammoth / Timberline ended up
-  // marked open in the column even though the cron correctly reported
-  // them as closed/off-season. Now we derive it: open == scraper says
-  // "open". Any other status (closed / off-season / unknown) flips it
-  // to false. Single source of truth — the cron — eliminates the drift.
-  currently_open: boolean;
-  // URL discovery columns — only set when changed.
-  onthesnow_url?: string | null;
-  onthesnow_url_verified_at?: string | null;
-  onthesnow_last_404_at?: string | null;
+  snow_base_depth_in?: number | null;
+  snow_new_24h_in?: number | null;
+  snow_new_48h_in?: number | null;
+  trails_open_today?: number | null;
+  lifts_open_today?: number | null;
 };
 
-// Slugify a resort name OnTheSnow-style: lowercase, strip apostrophes /
-// ampersands / periods, dashes for spaces, collapse multi-dashes.
-function slugifyResort(name: string): string {
-  return name
-    .toLowerCase()
-    .replace(/['’`]/g, "")
-    .replace(/&/g, "and")
-    .replace(/[.,/\\(){}[\]:;!?]/g, "")
-    .replace(/\s+/g, "-")
-    .replace(/-+/g, "-")
-    .replace(/^-|-$/g, "");
+function reportedUpdate(r: ResortRow, rep: NormalizedReport, now: string): ResortUpdate {
+  const u: ResortUpdate = {
+    id: r.id,
+    snow_report_status: "reported",
+    snow_report_updated_at: rep.reportedAt ?? now,
+    snow_base_depth_in: rep.baseDepthIn,
+    snow_new_24h_in: rep.new24In,
+    snow_new_48h_in: rep.new48In,
+    trails_open_today: rep.trailsOpen,
+    lifts_open_today: rep.liftsOpen,
+  };
+  if (rep.status === "open") u.currently_open = true;
+  else if (rep.status === "closed" || rep.status === "off-season") u.currently_open = false;
+  return u;
 }
 
-function stateSlug(stateCode: string | null): string | null {
-  if (!stateCode) return null;
-  const name = US_STATES[stateCode.toUpperCase()];
-  if (!name) return null;
-  return name.toLowerCase().replace(/\s+/g, "-");
-}
+async function run(ctx: CronContext, request: Request) {
+  const { supabase, startedAt } = ctx;
+  const now = startedAt.toISOString();
+  const url = new URL(request.url);
+  const dryRun = url.searchParams.get("dryRun") === "1";
 
-// Strip generic "ski resort" / "mountain resort" suffixes — many
-// OnTheSnow slugs drop these (e.g. "Park City Mountain Resort" → "park-city").
-function trimSlugSuffix(slug: string): string {
-  return slug
-    .replace(/-(?:mountain-resort|ski-resort|ski-area|mountain|resort)$/i, "")
-    .replace(/-+$/, "");
-}
+  const { data, error } = await supabase
+    .from("resorts")
+    .select(
+      "id, slug, name, state, operating_status, season_open_text, season_close_text, typical_season_start, typical_season_end, season_end_date, currently_open, snow_report_status, snow_report_updated_at",
+    )
+    .eq("active", true);
+  if (error || !data) return { ok: false, reason: `resorts: ${error?.message ?? "none"}` };
+  const resorts = data as ResortRow[];
 
-// Build a small ordered list of OnTheSnow URLs to probe. Empirically
-// (sitemap scan + sampling 12 resorts) OnTheSnow uses
-// `/{state-slug}/{resort-slug}/ski-resort` where the resort-slug often
-// has — but sometimes lacks — a `-ski-area` / `-ski-resort` / `-resort`
-// suffix. We try base-slug first, then trimmed, then add suffixes back.
-// Cap at ~6 attempts per resort to keep discovery polite.
-function candidateUrls(resort: Resort): string[] {
-  const baseSlug = slugifyResort(resort.name);
-  if (!baseSlug) return [];
-  const trimmed = trimSlugSuffix(baseSlug);
-  const st = stateSlug(resort.state);
-
-  const slugVariants = new Set<string>();
-  slugVariants.add(baseSlug);
-  if (trimmed) slugVariants.add(trimmed);
-  // Add common suffix variants when the resort's name doesn't already
-  // include them. Helps "Mammoth Mountain" → "mammoth-mountain-ski-area".
-  const root = trimmed || baseSlug;
-  for (const suffix of ["ski-area", "ski-resort", "resort", "mountain-resort"]) {
-    if (!baseSlug.endsWith(`-${suffix}`)) {
-      slugVariants.add(`${root}-${suffix}`);
+  // Feed: the configured provider, or the demo key for a dry run only.
+  let provider = getConfiguredProvider();
+  if (!provider && dryRun) provider = new SnoCountryProvider(SNOCOUNTRY_DEMO_KEY);
+  const demo = provider instanceof SnoCountryProvider && provider.isDemoKey();
+  let reports: NormalizedReport[] = [];
+  let feedError: string | null = null;
+  if (provider) {
+    try {
+      reports = await provider.getReports(resorts);
+    } catch (e) {
+      feedError = String((e as Error)?.message ?? e).slice(0, 200);
     }
   }
+  const reportsById = new Map(reports.map((r) => [r.resortId, r]));
+  const unmatched = provider instanceof SnoCountryProvider ? provider.lastUnmatched : [];
 
-  const out: string[] = [];
-  for (const s of slugVariants) {
-    if (st) out.push(`https://www.onthesnow.com/${st}/${s}/ski-resort`);
-  }
-  // No-state-slug variant as a last resort (covers a few legacy paths).
-  if (st) out.push(`https://www.onthesnow.com/${st}/${baseSlug}/ski-resort`);
-  return out.slice(0, 6);
-}
-
-type FetchOutcome =
-  | { kind: "ok"; html: string; url: string }
-  | { kind: "404"; url: string }
-  | { kind: "blocked"; status: number; url: string }
-  | { kind: "error"; url: string; reason: string };
-
-async function fetchHtml(url: string, signal: AbortSignal): Promise<FetchOutcome> {
-  try {
-    const r = await fetch(url, {
-      headers: {
-        "User-Agent": USER_AGENT,
-        Accept: "text/html,application/xhtml+xml",
-        "Accept-Language": "en-US,en;q=0.9",
-      },
-      redirect: "follow",
-      signal,
-    });
-    if (r.status === 404) return { kind: "404", url };
-    if (r.status === 403 || r.status === 429) {
-      return { kind: "blocked", status: r.status, url };
+  // Build updates. Season-derived rows are only rewritten when something
+  // changed or the last evaluation is older than REEVALUATE_AFTER_HOURS,
+  // so a 30-minute cadence does not churn 425 rows every run.
+  const updates: ResortUpdate[] = [];
+  const counts = { reported: 0, no_feed: 0, open_true: 0, open_false: 0, open_null: 0, unchanged: 0 };
+  const reasons: Record<string, number> = {};
+  for (const r of resorts) {
+    const rep = reportsById.get(r.id);
+    if (rep) {
+      counts.reported++;
+      const u = reportedUpdate(r, rep, now);
+      if (u.currently_open === true) counts.open_true++;
+      else if (u.currently_open === false) counts.open_false++;
+      else counts.open_null++;
+      updates.push(u);
+      continue;
     }
-    if (!r.ok) return { kind: "error", url, reason: `${r.status} ${r.statusText}` };
-    const html = await r.text();
-    return { kind: "ok", html, url };
-  } catch (e) {
-    return { kind: "error", url, reason: String((e as Error)?.message ?? e).slice(0, 120) };
-  }
-}
-
-function withTimeout(ms: number): { signal: AbortSignal; cancel: () => void } {
-  const ac = new AbortController();
-  const t = setTimeout(() => ac.abort(), ms);
-  return { signal: ac.signal, cancel: () => clearTimeout(t) };
-}
-
-async function jitter(): Promise<void> {
-  const ms = 50 + Math.floor(Math.random() * 150);
-  await new Promise((r) => setTimeout(r, ms));
-}
-
-async function openMeteoFallback(
-  lat: number,
-  lng: number,
-): Promise<{ snow_new_24h_in: number | null }> {
-  const url =
-    `https://api.open-meteo.com/v1/forecast?latitude=${lat.toFixed(4)}&longitude=${lng.toFixed(4)}` +
-    `&daily=snowfall_sum&past_days=1&forecast_days=1` +
-    `&precipitation_unit=inch&timezone=auto`;
-  const { signal, cancel } = withTimeout(FETCH_TIMEOUT_MS);
-  try {
-    const r = await fetch(url, { headers: { "User-Agent": USER_AGENT }, signal });
-    if (!r.ok) return { snow_new_24h_in: null };
-    const j = (await r.json()) as { daily?: { snowfall_sum?: (number | null)[] } };
-    const arr = j?.daily?.snowfall_sum ?? [];
-    // past_days=1 → arr[0] is yesterday, arr[1] would be today's forecast.
-    const yesterday = typeof arr[0] === "number" ? arr[0] : null;
-    if (yesterday == null || !Number.isFinite(yesterday)) return { snow_new_24h_in: null };
-    return { snow_new_24h_in: Math.max(0, Math.round(yesterday)) };
-  } catch {
-    return { snow_new_24h_in: null };
-  } finally {
-    cancel();
-  }
-}
-
-type RunState = {
-  scraped: number;
-  fallback: number;
-  failed: number;
-  rateLimited: boolean;
-};
-
-async function scrapeOne(
-  resort: Resort,
-  state: RunState,
-): Promise<ResortUpdate | null> {
-  if (state.rateLimited) return null; // bail short once we've hit a block
-
-  const now = new Date().toISOString();
-  let workingUrl: string | null = resort.onthesnow_url;
-  let urlJustVerified = false;
-  let urlJustFailed = false;
-
-  // Discovery path: if no cached URL, try a small set of guesses
-  // (unless we 404'd recently and should give it a rest).
-  if (!workingUrl) {
-    const recently404 =
-      resort.onthesnow_last_404_at &&
-      Date.now() - new Date(resort.onthesnow_last_404_at).getTime() < REVERIFY_404_AFTER_MS;
-    if (!recently404) {
-      const candidates = candidateUrls(resort);
-      for (const url of candidates) {
-        if (state.rateLimited) break;
-        const { signal, cancel } = withTimeout(FETCH_TIMEOUT_MS);
-        const res = await fetchHtml(url, signal);
-        cancel();
-        await jitter();
-        if (res.kind === "ok") {
-          workingUrl = res.url;
-          urlJustVerified = true;
-          // We'll parse the same HTML below instead of re-fetching.
-          const parsed = parseOnTheSnowHTML(res.html);
-          state.scraped++;
-          return {
-            id: resort.id,
-            snow_base_depth_in: parsed.snow_base_depth_in,
-            snow_new_24h_in: parsed.snow_new_24h_in,
-            snow_new_48h_in: parsed.snow_new_48h_in,
-            snow_new_7d_in: parsed.snow_new_7d_in,
-            trails_open_today: parsed.trails_open_today,
-            lifts_open_today: parsed.lifts_open_today,
-            snow_report_status: parsed.snow_report_status,
-            snow_report_updated_at: now,
-            currently_open: parsed.snow_report_status === "open",
-            onthesnow_url: workingUrl,
-            onthesnow_url_verified_at: now,
-            onthesnow_last_404_at: null,
-          };
-        }
-        if (res.kind === "blocked") {
-          state.rateLimited = true;
-          break;
-        }
-        // 404 / error → try next candidate
-      }
-      if (!workingUrl) urlJustFailed = true;
+    counts.no_feed++;
+    const verdict = deriveSeasonStatus(r, startedAt);
+    reasons[verdict.reason.split(" (")[0]] = (reasons[verdict.reason.split(" (")[0]] ?? 0) + 1;
+    if (verdict.currently_open === true) counts.open_true++;
+    else if (verdict.currently_open === false) counts.open_false++;
+    else counts.open_null++;
+    const lastEval = r.snow_report_updated_at ? Date.parse(r.snow_report_updated_at) : 0;
+    const stale = startedAt.getTime() - lastEval > REEVALUATE_AFTER_HOURS * 3_600_000;
+    const changed = r.currently_open !== verdict.currently_open || r.snow_report_status !== "no_feed";
+    if (!changed && !stale) {
+      counts.unchanged++;
+      continue;
     }
-  }
-
-  // Cached URL path.
-  if (workingUrl && !state.rateLimited) {
-    const { signal, cancel } = withTimeout(FETCH_TIMEOUT_MS);
-    const res = await fetchHtml(workingUrl, signal);
-    cancel();
-    await jitter();
-    if (res.kind === "ok") {
-      const parsed = parseOnTheSnowHTML(res.html);
-      state.scraped++;
-      return {
-        id: resort.id,
-        snow_base_depth_in: parsed.snow_base_depth_in,
-        snow_new_24h_in: parsed.snow_new_24h_in,
-        snow_new_48h_in: parsed.snow_new_48h_in,
-        snow_new_7d_in: parsed.snow_new_7d_in,
-        trails_open_today: parsed.trails_open_today,
-        lifts_open_today: parsed.lifts_open_today,
-        snow_report_status: parsed.snow_report_status,
-        snow_report_updated_at: now,
-        currently_open: parsed.snow_report_status === "open",
-        ...(urlJustVerified ? { onthesnow_url_verified_at: now } : {}),
-      };
-    }
-    if (res.kind === "blocked") {
-      state.rateLimited = true;
-    } else if (res.kind === "404") {
-      // The previously cached URL stopped working — clear it so next
-      // run does discovery again.
-      urlJustFailed = true;
-      workingUrl = null;
-    }
-  }
-
-  // Fallback: Open-Meteo prior-day snowfall.
-  const lat = resort.latitude != null ? Number(resort.latitude) : NaN;
-  const lng = resort.longitude != null ? Number(resort.longitude) : NaN;
-  if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
-    state.failed++;
-    return {
-      id: resort.id,
-      snow_base_depth_in: null,
-      snow_new_24h_in: null,
-      snow_new_48h_in: null,
-      snow_new_7d_in: null,
-      trails_open_today: null,
-      lifts_open_today: null,
-      snow_report_status: "unknown",
+    updates.push({
+      id: r.id,
+      currently_open: verdict.currently_open,
+      snow_report_status: "no_feed",
       snow_report_updated_at: now,
-      currently_open: false,
-      ...(urlJustFailed
-        ? { onthesnow_url: null, onthesnow_last_404_at: now }
-        : {}),
-    };
+    });
   }
 
-  const meteo = await openMeteoFallback(lat, lng);
-  state.fallback++;
+  let written = 0;
+  let writeErrors = 0;
+  if (!dryRun && !demo) {
+    const BATCH = 20;
+    for (let off = 0; off < updates.length; off += BATCH) {
+      const results = await Promise.all(
+        updates.slice(off, off + BATCH).map(({ id, ...cols }) => supabase.from("resorts").update(cols).eq("id", id)),
+      );
+      for (const res of results) {
+        if (res.error) writeErrors++;
+        else written++;
+      }
+    }
+  }
+
+  const inSeason = !isGlobalOffSeasonNow(startedAt);
+  const feedDead = !!provider && !demo && !dryRun && reports.length === 0 && inSeason;
+  const writeFailShare = updates.length ? writeErrors / updates.length : 0;
+  const ok = !feedDead && writeFailShare <= FAIL_SHARE_LIMIT && !feedError;
   return {
-    id: resort.id,
-    snow_base_depth_in: null,
-    snow_new_24h_in: meteo.snow_new_24h_in,
-    snow_new_48h_in: null,
-    snow_new_7d_in: null,
-    trails_open_today: null,
-    lifts_open_today: null,
-    snow_report_status: "unknown",
-    snow_report_updated_at: now,
-    currently_open: false,
-    ...(urlJustFailed
-      ? { onthesnow_url: null, onthesnow_last_404_at: now }
-      : {}),
+    ok,
+    reason: !ok ? (feedError ? `feed_error: ${feedError}` : feedDead ? "feed_returned_no_reports_in_season" : "db_errors") : undefined,
+    dry_run: dryRun || demo,
+    provider: provider?.name ?? null,
+    demo_key: demo,
+    reports: reports.length,
+    unmatched_feed_items: unmatched.length,
+    unmatched_sample: unmatched.slice(0, 10),
+    counts,
+    season_reasons: reasons,
+    updates_prepared: updates.length,
+    written,
+    write_errors: writeErrors,
+    ...(dryRun ? { report_sample: reports.slice(0, 5) } : {}),
   };
 }
 
 export async function GET(request: Request) {
-  const auth = request.headers.get("authorization");
-  const cronSecret = process.env.CRON_SECRET;
-  // Fail closed: a missing secret must NOT make this service-role endpoint
-  // publicly invokable (it fans out hundreds of upstream calls + DB writes).
-  if (!cronSecret) {
-    return NextResponse.json(
-      { ok: false, reason: "cron_secret_not_configured" },
-      { status: 503 },
-    );
-  }
-  if (auth !== `Bearer ${cronSecret}`) {
-    return NextResponse.json({ ok: false, reason: "unauthorized" }, { status: 401 });
-  }
-
-  const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!SUPABASE_URL || !SERVICE_KEY) {
-    return NextResponse.json({ ok: false, reason: "missing supabase env" }, { status: 500 });
-  }
-  const supabase = createClient(SUPABASE_URL, SERVICE_KEY, {
-    auth: { persistSession: false },
-  });
-
-  const { data: resortsData, error } = await supabase
-    .from("resorts")
-    .select(
-      "id, slug, name, state, latitude, longitude, onthesnow_url, onthesnow_url_verified_at, onthesnow_last_404_at",
-    )
-    .eq("active", true);
-  if (error || !resortsData) {
-    return NextResponse.json(
-      { ok: false, reason: error?.message ?? "no resorts" },
-      { status: 500 },
-    );
-  }
-  const resorts: Resort[] = resortsData as Resort[];
-
-  const state: RunState = { scraped: 0, fallback: 0, failed: 0, rateLimited: false };
-  const updates: ResortUpdate[] = [];
-
-  let i = 0;
-  async function worker() {
-    while (i < resorts.length) {
-      const idx = i++;
-      if (state.rateLimited) {
-        // Once we're rate-limited by OnTheSnow we switch every remaining
-        // resort to fallback-only without further OnTheSnow probes.
-        const r = resorts[idx];
-        const lat = r.latitude != null ? Number(r.latitude) : NaN;
-        const lng = r.longitude != null ? Number(r.longitude) : NaN;
-        const now = new Date().toISOString();
-        if (Number.isFinite(lat) && Number.isFinite(lng)) {
-          const meteo = await openMeteoFallback(lat, lng);
-          state.fallback++;
-          updates.push({
-            id: r.id,
-            snow_base_depth_in: null,
-            snow_new_24h_in: meteo.snow_new_24h_in,
-            snow_new_48h_in: null,
-            snow_new_7d_in: null,
-            trails_open_today: null,
-            lifts_open_today: null,
-            snow_report_status: "unknown",
-            snow_report_updated_at: now,
-            currently_open: false,
-          });
-        } else {
-          state.failed++;
-        }
-        continue;
-      }
-      try {
-        const up = await scrapeOne(resorts[idx], state);
-        if (up) updates.push(up);
-      } catch (e) {
-        state.failed++;
-        // Log shape mirrored from refresh-weather; never crash the run.
-        console.error(
-          `[refresh-snow-conditions] resort ${resorts[idx].id} (${resorts[idx].slug}) failed:`,
-          String((e as Error)?.message ?? e).slice(0, 160),
-        );
-      }
-    }
-  }
-
-  await Promise.all(Array.from({ length: CONCURRENCY }, () => worker()));
-
-  // Upsert resorts rows in chunks. We use update (not upsert) because
-  // we're touching an existing row keyed by id, and we don't want to
-  // accidentally insert phantom resorts.
-  const CHUNK = 100;
-  let upsertErrors = 0;
-  for (let off = 0; off < updates.length; off += CHUNK) {
-    const chunk = updates.slice(off, off + CHUNK);
-    // Supabase doesn't support batch UPDATE — do one at a time per row
-    // but in parallel within the chunk to keep wall-clock down.
-    const results = await Promise.all(
-      chunk.map((row) => {
-        const { id, ...rest } = row;
-        return supabase.from("resorts").update(rest).eq("id", id);
-      }),
-    );
-    for (const r of results) {
-      if (r.error) upsertErrors++;
-    }
-  }
-
-  return NextResponse.json({
-    ok: true,
-    scraped: state.scraped,
-    fallback: state.fallback,
-    failed: state.failed,
-    total: resorts.length,
-    upsertErrors,
-    ...(state.rateLimited ? { rateLimited: true } : {}),
-  });
+  return runCron(request, "refresh-snow-conditions", maxDuration, (ctx) => run(ctx, request));
 }

@@ -1,0 +1,160 @@
+{
+ "features": [
+  {
+   "properties": {
+    "timestamp": "2026-09-23T04:05:00+00:00",
+    "temperature": {
+     "unitCode": "wmoUnit:degC",
+     "value": null,
+     "qualityControl": "Z"
+    },
+    "windSpeed": {
+     "unitCode": "wmoUnit:km_h-1",
+     "value": 24.876,
+     "qualityControl": "V"
+    },
+    "windGust": {
+     "unitCode": "wmoUnit:km_h-1",
+     "value": 30.636,
+     "qualityControl": "S"
+    },
+    "windDirection": {
+     "unitCode": "wmoUnit:degree_(angle)",
+     "value": 84,
+     "qualityControl": "V"
+    },
+    "textDescription": ""
+   }
+  },
+  {
+   "properties": {
+    "timestamp": "2026-09-23T03:05:00+00:00",
+    "temperature": {
+     "unitCode": "wmoUnit:degC",
+     "value": null,
+     "qualityControl": "Z"
+    },
+    "windSpeed": {
+     "unitCode": "wmoUnit:km_h-1",
+     "value": 26.172,
+     "qualityControl": "V"
+    },
+    "windGust": {
+     "unitCode": "wmoUnit:km_h-1",
+     "value": null,
+     "qualityControl": "Z"
+    },
+    "windDirection": {
+     "unitCode": "wmoUnit:degree_(angle)",
+     "value": 85,
+     "qualityControl": "V"
+    },
+    "textDescription": ""
+   }
+  },
+  {
+   "properties": {
+    "timestamp": "2026-09-23T02:05:00+00:00",
+    "temperature": {
+     "unitCode": "wmoUnit:degC",
+     "value": null,
+     "qualityControl": "Z"
+    },
+    "windSpeed": {
+     "unitCode": "wmoUnit:km_h-1",
+     "value": 20.772,
+     "qualityControl": "V"
+    },
+    "windGust": {
+     "unitCode": "wmoUnit:km_h-1",
+     "value": null,
+     "qualityControl": "Z"
+    },
+    "windDirection": {
+     "unitCode": "wmoUnit:degree_(angle)",
+     "value": 73,
+     "qualityControl": "V"
+    },
+    "textDescription": ""
+   }
+  },
+  {
+   "properties": {
+    "timestamp": "2026-09-23T01:05:00+00:00",
+    "temperature": {
+     "unitCode": "wmoUnit:degC",
+     "value": null,
+     "qualityControl": "Z"
+    },
+    "windSpeed": {
+     "unitCode": "wmoUnit:km_h-1",
+     "value": 17.424,
+     "qualityControl": "V"
+    },
+    "windGust": {
+     "unitCode": "wmoUnit:km_h-1",
+     "value": 25.344,
+     "qualityControl": "S"
+    },
+    "windDirection": {
+     "unitCode": "wmoUnit:degree_(angle)",
+     "value": 110,
+     "qualityControl": "V"
+    },
+    "textDescription": ""
+   }
+  },
+  {
+   "properties": {
+    "timestamp": "2026-09-23T00:05:00+00:00",
+    "temperature": {
+     "unitCode": "wmoUnit:degC",
+     "value": null,
+     "qualityControl": "Z"
+    },
+    "windSpeed": {
+     "unitCode": "wmoUnit:km_h-1",
+     "value": 12.636,
+     "qualityControl": "V"
+    },
+    "windGust": {
+     "unitCode": "wmoUnit:km_h-1",
+     "value": 18.504,
+     "qualityControl": "S"
+    },
+    "windDirection": {
+     "unitCode": "wmoUnit:degree_(angle)",
+     "value": 89,
+     "qualityControl": "V"
+    },
+    "textDescription": ""
+   }
+  },
+  {
+   "properties": {
+    "timestamp": "2026-09-22T23:05:00+00:00",
+    "temperature": {
+     "unitCode": "wmoUnit:degC",
+     "value": null,
+     "qualityControl": "Z"
+    },
+    "windSpeed": {
+     "unitCode": "wmoUnit:km_h-1",
+     "value": 12.672,
+     "qualityControl": "V"
+    },
+    "windGust": {
+     "unitCode": "wmoUnit:km_h-1",
+     "value": null,
+     "qualityControl": "Z"
+    },
+    "windDirection": {
+     "unitCode": "wmoUnit:degree_(angle)",
+     "value": 41,
+     "qualityControl": "V"
+    },
+    "textDescription": ""
+   }
+  }
+ ]
+}
