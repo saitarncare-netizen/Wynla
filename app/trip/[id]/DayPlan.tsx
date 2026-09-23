@@ -42,14 +42,20 @@ export default function DayPlan({ tripId, day, initialPlans, nearby, completed }
   const [saveState, setSaveState] = useState<"idle" | "saving" | "error">("idle");
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const plansRef = useRef(plans);
-  plansRef.current = plans;
   // Live textarea value + whether a debounced save is still pending.
   // Place edits and the unmount flush read THESE, never the plans state —
   // after a failed save the plans state rolls back but the textarea keeps
   // the user's text, and that visible text is the truth to persist.
   const noteRef = useRef(note);
-  noteRef.current = note;
   const notePendingRef = useRef(false);
+  // Mirror state into refs after commit (writing refs during render is a
+  // react-hooks/refs lint error and unsafe under concurrent rendering).
+  useEffect(() => {
+    plansRef.current = plans;
+  }, [plans]);
+  useEffect(() => {
+    noteRef.current = note;
+  }, [note]);
 
   // Read-merge-write. Each day card holds its own snapshot of the whole
   // day_plans object, so writing our local copy wholesale would CLOBBER a
