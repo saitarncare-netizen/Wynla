@@ -20,6 +20,8 @@
 
 import type { Metadata } from "next";
 import Link from "next/link";
+import PageHeader from "@/components/ui/PageHeader";
+import UiSection from "@/components/ui/Section";
 
 export const revalidate = 86400;
 
@@ -41,41 +43,25 @@ const CONTACT_EMAIL =
 
 export default function TermsPage() {
   return (
-    <main
-      id="main-content"
-      className="min-h-dvh bg-wn-offwhite px-4 py-10 sm:px-6 sm:py-16"
-    >
-      <div className="mx-auto max-w-3xl">
-        <Link
-          href="/"
-          className="text-xs font-semibold text-wn-charcoal/60 hover:text-wn-navy"
-        >
-          ← Map
-        </Link>
-
-        <header className="mt-6 mb-8 sm:mt-8 sm:mb-10">
-          <span className="inline-flex items-center rounded bg-wn-navy/10 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-wn-navy">
-            Legal
-          </span>
-          <h1 className="mt-3 text-3xl font-extrabold text-wn-navy sm:text-4xl">
-            Terms of Service
-          </h1>
-          <p className="mt-2 text-xs text-wn-charcoal/55">
-            Last updated: {LAST_UPDATED}
-          </p>
-          <p className="mt-4 text-sm text-wn-charcoal/75 sm:text-base">
-            Wynla is a ski and snowboard trip planning service focused on
-            the US market. These terms keep things clear for everyone using
-            the product. If anything is unclear, reach the team at{" "}
-            <a
-              href={`mailto:${CONTACT_EMAIL}`}
-              className="font-semibold text-wn-navy underline hover:no-underline"
-            >
+    <main className="min-h-dvh bg-wn-offwhite">
+      <PageHeader
+        width="max-w-3xl"
+        eyebrow="Legal"
+        title="Terms of service"
+        meta={`Last updated ${LAST_UPDATED}`}
+        description={
+          <>
+            Wynla is a ski and snowboard trip planning service focused on the US market. These terms keep things clear
+            for everyone using the product. If anything is unclear, reach the team at{" "}
+            <a href={`mailto:${CONTACT_EMAIL}`} className="font-semibold text-wn-navy underline hover:no-underline">
               {CONTACT_EMAIL}
             </a>
             .
-          </p>
-        </header>
+          </>
+        }
+      />
+
+      <div className="mx-auto max-w-3xl space-y-8 px-4 pb-12 pt-6 sm:px-6 sm:pb-16">
 
         <Section title="Acceptance">
           <p>
@@ -353,7 +339,7 @@ export default function TermsPage() {
           </p>
         </Section>
 
-        <p className="mt-12 text-center text-xs text-wn-charcoal/55">
+        <p className="pt-4 text-center text-xs text-wn-muted">
           Thanks for using Wynla. Ride well, ride safe.
         </p>
       </div>
@@ -361,6 +347,9 @@ export default function TermsPage() {
   );
 }
 
+// Legal sections: the shared Section primitive inside a Card, with the
+// body copy at full charcoal (this is the text people came to read, not
+// secondary detail).
 function Section({
   title,
   children,
@@ -369,13 +358,10 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section className="mb-8 rounded-xl border border-wn-charcoal/10 bg-white p-5 shadow-sm sm:p-6">
-      <h2 className="mb-3 text-base font-bold text-wn-navy sm:text-lg">
-        {title}
-      </h2>
-      <div className="space-y-2 text-sm text-wn-charcoal/80 sm:text-base">
+    <UiSection title={title} card>
+      <div className="space-y-2 text-sm text-wn-charcoal sm:text-base">
         {children}
       </div>
-    </section>
+    </UiSection>
   );
 }

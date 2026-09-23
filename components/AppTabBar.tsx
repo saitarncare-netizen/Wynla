@@ -1,8 +1,10 @@
 "use client";
 
 // Phone tab bar: Map / Today / Trips / Account. Fixed to the bottom on
-// screens under md, hidden on desktop where the header carries the
-// same links. 44 px targets, padded by the home-indicator inset.
+// screens under md, hidden on desktop where the AppShell top bar carries
+// the same links. 44 px targets, padded by the home-indicator inset.
+// The items, their icons and the active-route rules come from lib/nav.ts
+// so this bar and the top bar can never disagree.
 //
 // Two attributes on <html> tie it to the rest of the app:
 //   data-tab-bar="1"   set while the bar is visible; app/globals.css
@@ -17,31 +19,8 @@
 import { useEffect, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-const HIDDEN_PREFIXES = ["/login", "/auth/", "/trip/share/", "/get"];
-
-type Tab = { href: string; label: string; icon: string; match: (path: string) => boolean };
-
-const TABS: Tab[] = [
-  {
-    href: "/",
-    label: "Map",
-    icon: "🗺️",
-    match: (p) => p === "/" || p.startsWith("/resort/") || p.startsWith("/state/") || p === "/compare",
-  },
-  { href: "/today", label: "Today", icon: "☀️", match: (p) => p === "/today" },
-  { href: "/trips", label: "Trips", icon: "🎿", match: (p) => p === "/trips" || p.startsWith("/trip/") },
-  {
-    href: "/account",
-    label: "Account",
-    icon: "👤",
-    match: (p) => p === "/account" || p.startsWith("/account/") || p === "/favorites",
-  },
-];
-
-function isHiddenRoute(path: string): boolean {
-  return HIDDEN_PREFIXES.some((prefix) => path === prefix || path.startsWith(prefix.endsWith("/") ? prefix : `${prefix}/`));
-}
+import Icon from "@/components/icons/Icon";
+import { isFlowRoute, TAB_ITEMS } from "@/lib/nav";
 
 // The map writes data-sheet-open outside React's tree; the attribute is
 // treated as an external store (MutationObserver = subscribe) instead of
@@ -63,7 +42,7 @@ export default function AppTabBar() {
   const pathname = usePathname() ?? "/";
   const sheetOpen = useSyncExternalStore(subscribeSheetOpen, readSheetOpen, serverSheetOpen);
 
-  const hidden = isHiddenRoute(pathname) || (pathname === "/" && sheetOpen);
+  const hidden = isFlowRoute(pathname) || (pathname === "/" && sheetOpen);
 
   // Publish visibility for the CSS padding rule. The layout ships
   // data-tab-bar="1" in the server HTML so the first paint already has
@@ -77,25 +56,25 @@ export default function AppTabBar() {
   return (
     <nav
       aria-label="Primary"
-      className="fixed inset-x-0 bottom-0 z-50 border-t border-wn-charcoal/10 bg-white/95 backdrop-blur-sm md:hidden"
+      className="fixed inset-x-0 bottom-0 z-50 border-t border-wn-line bg-white/95 backdrop-blur-sm md:hidden"
       style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
     >
       <ul className="flex h-14 items-stretch">
-        {TABS.map((tab) => {
+        {TAB_ITEMS.map((tab) => {
           const active = tab.match(pathname);
           return (
             <li key={tab.href} className="flex-1">
               <Link
                 href={tab.href}
                 aria-current={active ? "page" : undefined}
+                // 12 px labels: text-eyebrow (11 px, tracked) is reserved
+                // for uppercase labels, and these are sentence-case words.
                 className={[
-                  "flex h-full min-h-11 flex-col items-center justify-center gap-0.5 text-[11px] font-semibold transition",
-                  active ? "text-wn-navy" : "text-wn-charcoal/55 hover:text-wn-navy",
+                  "flex h-full min-h-11 flex-col items-center justify-center gap-0.5 text-xs font-semibold transition-colors",
+                  active ? "text-wn-navy" : "text-wn-muted hover:text-wn-navy",
                 ].join(" ")}
               >
-                <span aria-hidden="true" className={active ? "text-lg" : "text-lg opacity-80 grayscale"}>
-                  {tab.icon}
-                </span>
+                <Icon name={tab.icon} className={active ? "h-6 w-6" : "h-6 w-6 opacity-80"} strokeWidth={active ? 2 : 1.5} />
                 {tab.label}
               </Link>
             </li>

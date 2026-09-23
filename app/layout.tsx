@@ -1,11 +1,12 @@
 import type { Metadata, Viewport } from "next";
-import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import PwaRegistrar from "@/components/PwaRegistrar";
 import InstallPrompt from "@/components/InstallPrompt";
 import AppTabBar from "@/components/AppTabBar";
+import AppShell from "@/components/AppShell";
+import Footer from "@/components/Footer";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -148,7 +149,6 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: INSTALL_CAPTURE_SCRIPT }} />
         <script
           type="application/ld+json"
-          // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{ __html: JSON.stringify(ORG_JSONLD) }}
         />
       </head>
@@ -159,6 +159,19 @@ export default function RootLayout({
         >
           Skip to main content
         </a>
+        {/* Top bar on every non-map route (components/AppShell.tsx). It
+            renders nothing on "/" where MapPage owns its floating header,
+            and sits before #main-content so the skip link jumps past it.
+            Sign-in state is resolved in the browser, deliberately: reading
+            the session here (cookies() via the server Supabase client)
+            would opt every route under this layout into per-request
+            rendering, including the revalidate/ISR guides, lists, deals,
+            state and resort pages, for one avatar letter. AppShell reads
+            the auth cookie's presence during hydration instead, so
+            signed-out visitors see "Sign in" with no swap. If the app
+            later enables cacheComponents, a server loader inside
+            <Suspense> can pass `initialUser` without that cost. */}
+        <AppShell />
         {/* Wrap children so the skip link's #main-content target exists on
             every route. Pages render their own <main>, so this is a div (a
             nested <main> would be invalid); tabIndex makes it focusable so
@@ -166,56 +179,10 @@ export default function RootLayout({
         <div id="main-content" tabIndex={-1}>
           {children}
         </div>
-        {/* Global legal footer. `mt-auto` plus the body's flex column keeps
-            it at the very bottom without pushing the map page (the map
-            fills the viewport; the footer sits below the fold for that
-            route). Kept tiny so it never competes with primary UI. */}
-        <footer className="mt-auto flex flex-col items-center gap-1 px-4 py-3 text-[11px] text-wn-charcoal/55">
-          <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
-            <Link href="/early" className="font-semibold text-wn-navy hover:text-wn-navy/80">
-              Founder list
-            </Link>
-            <span aria-hidden="true">·</span>
-            <Link href="/go" className="hover:text-wn-navy">
-              Where to ride Saturday
-            </Link>
-            <span aria-hidden="true">·</span>
-            <Link href="/trip-templates" className="hover:text-wn-navy">
-              Trip ideas
-            </Link>
-            <span aria-hidden="true">·</span>
-            <Link href="/data-sources" className="hover:text-wn-navy">
-              Data sources
-            </Link>
-            <span aria-hidden="true">·</span>
-            <Link href="/privacy" className="hover:text-wn-navy">
-              Privacy
-            </Link>
-            <span aria-hidden="true">·</span>
-            <Link href="/terms" className="hover:text-wn-navy">
-              Terms
-            </Link>
-            <span aria-hidden="true">·</span>
-            <a
-              href="mailto:hello@wynla.app"
-              className="hover:text-wn-navy"
-            >
-              Contact
-            </a>
-          </div>
-          {/* FTC affiliate disclosure — required wherever Wynla
-              deep-links to a partner that pays commission. Currently
-              that's Booking.com + Vrbo on the resort detail page; if
-              the affiliate surface ever expands, the disclosure stays
-              valid because it covers "partner links" generically. */}
-          <p className="max-w-md text-center text-[10px] text-wn-charcoal/45">
-            Wynla may earn a commission from purchases made through
-            partner links, at no extra cost to you.
-          </p>
-          <p className="mt-1 text-[10px] text-wn-charcoal/40">
-            &copy; {new Date().getFullYear()} Wynla. All rights reserved.
-          </p>
-        </footer>
+        {/* Global footer (components/Footer.tsx). `mt-auto` plus the body's
+            flex column keeps it at the very bottom; the map route hides it
+            via app/globals.css so the map keeps the whole viewport. */}
+        <Footer />
         <PwaRegistrar />
         <InstallPrompt />
         {/* Phone-only bottom tabs (Map / Today / Trips / Account). */}

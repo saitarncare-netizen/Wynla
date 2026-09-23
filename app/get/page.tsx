@@ -8,8 +8,11 @@
 // the card can open the guided sheet immediately on arrival.
 
 import type { Metadata } from "next";
-import Link from "next/link";
 import { InstallCard } from "@/components/InstallPrompt";
+import Button from "@/components/ui/Button";
+import Card from "@/components/ui/Card";
+import PageHeader from "@/components/ui/PageHeader";
+import Icon, { type IconName } from "@/components/icons/Icon";
 
 export const metadata: Metadata = {
   title: "Get the app",
@@ -18,19 +21,19 @@ export const metadata: Metadata = {
   alternates: { canonical: "/get" },
 };
 
-const BENEFITS: Array<{ icon: string; title: string; body: string }> = [
+const BENEFITS: Array<{ icon: IconName; title: string; body: string }> = [
   {
-    icon: "🔔",
+    icon: "bell",
     title: "Powder alerts",
     body: "Snow alerts only work from the installed app on iPhone. Pick a resort and a threshold, and we ping you when it hits.",
   },
   {
-    icon: "⚡",
+    icon: "sparkle",
     title: "One tap from your home screen",
     body: "Opens full screen like a native app, with no address bar in the way of the map.",
   },
   {
-    icon: "🗺️",
+    icon: "map",
     title: "Your trips and favorites",
     body: "Saved resorts, planned trips, and the compare list are right there every time you open it.",
   },
@@ -49,81 +52,71 @@ export default async function GetPage({
 
   return (
     <main className="min-h-dvh bg-wn-offwhite">
-      <section className="bg-wn-navy px-4 pb-10 pt-8 text-white sm:px-6 sm:pt-12">
-        <div className="mx-auto max-w-2xl">
-          <Link href="/" className="text-xs font-semibold text-white/70 hover:text-white">
-            ← Map
-          </Link>
-          <h1 className="mt-4 text-3xl font-extrabold leading-tight sm:text-4xl">
-            Wynla on your home screen
-          </h1>
-          <p className="mt-3 max-w-lg text-sm leading-relaxed text-white/80 sm:text-base">
-            Every US ski resort on one map, the snow surface forecast, drive times, and powder
-            alerts. It installs from the browser in seconds and takes almost no space.
-          </p>
-        </div>
-      </section>
+      <PageHeader
+        tone="navy"
+        width="max-w-2xl"
+        eyebrow="Install"
+        title="Wynla on your home screen"
+        description="Every US ski resort on one map, the snow surface forecast, drive times, and powder alerts. It installs from the browser in seconds and takes almost no space."
+      />
 
-      <div className="mx-auto -mt-6 max-w-2xl space-y-6 px-4 pb-16 sm:px-6">
+      <div className="mx-auto -mt-4 max-w-2xl space-y-6 px-4 pb-16 sm:px-6">
         <InstallCard from={from} autoOpenGuide={Boolean(from)} />
 
-        <section className="rounded-2xl border border-wn-charcoal/10 bg-white p-5 shadow-sm">
-          <h2 className="text-base font-bold text-wn-navy">Why install</h2>
+        <Card padding="lg">
+          <h2 className="text-lg font-bold text-wn-navy">Why install</h2>
           <ul className="mt-3 space-y-4">
             {BENEFITS.map((b) => (
               <li key={b.title} className="flex items-start gap-3">
-                <span aria-hidden="true" className="text-xl leading-none">
-                  {b.icon}
+                <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-wn-navy/5 text-wn-navy" aria-hidden="true">
+                  <Icon name={b.icon} className="h-5 w-5" />
                 </span>
                 <div>
                   <p className="text-sm font-semibold text-wn-charcoal">{b.title}</p>
-                  <p className="mt-0.5 text-sm text-wn-charcoal/70">{b.body}</p>
+                  <p className="mt-0.5 text-sm text-wn-muted">{b.body}</p>
                 </div>
               </li>
             ))}
           </ul>
-        </section>
+        </Card>
 
-        <section className="rounded-2xl border border-wn-charcoal/10 bg-white p-5 shadow-sm">
-          <h2 className="text-base font-bold text-wn-navy">Where to ride Saturday</h2>
-          <p className="mt-2 text-sm text-wn-charcoal/70">
-            Pick your pass and your city and get the three best mountains for this
-            Saturday, with the snow surface and the drive. No sign-in needed.
+        <Card padding="lg">
+          <h2 className="text-lg font-bold text-wn-navy">Where to ride Saturday</h2>
+          <p className="mt-2 text-sm text-wn-muted">
+            Pick your pass and your city and get the three best mountains for this Saturday, with the snow surface and
+            the drive. No sign-in needed.
           </p>
-          <Link
-            href="/go"
-            className="mt-3 inline-flex min-h-11 items-center rounded-lg bg-wn-navy px-4 text-sm font-semibold text-white hover:bg-wn-navy/90"
-          >
+          <Button href="/go" className="mt-3" iconLeft={<Icon name="compass" />}>
             Find my Saturday
-          </Link>
-        </section>
+          </Button>
+        </Card>
 
-        <section className="rounded-2xl border border-wn-charcoal/10 bg-white p-5 shadow-sm">
-          <h2 className="text-base font-bold text-wn-navy">Good to know</h2>
+        <Card padding="lg">
+          <h2 className="text-lg font-bold text-wn-navy">Good to know</h2>
           <dl className="mt-3 space-y-3 text-sm">
             <div>
               <dt className="font-semibold text-wn-charcoal">Is it a real app?</dt>
-              <dd className="mt-0.5 text-wn-charcoal/70">
-                It is a web app that installs straight from the browser. Same features as
-                wynla.app, updated automatically, nothing to download from an app store.
+              <dd className="mt-0.5 text-wn-muted">
+                It is a web app that installs straight from the browser. Same features as wynla.app, updated
+                automatically, nothing to download from an app store.
               </dd>
             </div>
             <div>
               <dt className="font-semibold text-wn-charcoal">Why two taps on iPhone?</dt>
-              <dd className="mt-0.5 text-wn-charcoal/70">
-                Apple does not let any website install itself with one tap. Share, then Add to
-                Home Screen, is the route for every web app on iOS.
+              <dd className="mt-0.5 text-wn-muted">
+                Apple does not let any website install itself with one tap. Share, then Add to Home Screen, is the route
+                for every web app on iOS.
               </dd>
             </div>
             <div>
               <dt className="font-semibold text-wn-charcoal">Coming from TikTok or Instagram?</dt>
-              <dd className="mt-0.5 text-wn-charcoal/70">
-                Their built-in browsers cannot install apps. Use the button above to open this
-                page in Safari or Chrome first.
+              <dd className="mt-0.5 text-wn-muted">
+                Their built-in browsers cannot install apps. Use the button above to open this page in Safari or Chrome
+                first.
               </dd>
             </div>
           </dl>
-        </section>
+        </Card>
       </div>
     </main>
   );
