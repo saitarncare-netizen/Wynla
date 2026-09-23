@@ -18,6 +18,10 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { passColor, passLabel, type Pass } from "@/lib/passColors";
 
+// ISR so the "more than a month ago" staleness note and the next-increase
+// countdown are re-evaluated daily instead of frozen at build time.
+export const revalidate = 86400; // 24h
+
 export const metadata: Metadata = {
   // Title template in app/layout.tsx already appends " · Wynla". Don't
   // duplicate it here.
