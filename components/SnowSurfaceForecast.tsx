@@ -24,7 +24,8 @@
 // doesn't import the classifier directly. Keeps the page payload thin
 // and lets us evolve the algorithm without re-shipping the UI.
 
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { useFocusTrap } from "@/lib/useFocusTrap";
 import {
   SURFACE_GLOSSARY,
   confidenceLabel,
@@ -75,8 +76,10 @@ export default function SnowSurfaceForecast({ report, forecastDates, preview }: 
         <button
           type="button"
           onClick={() => setShowModal(true)}
-          className="inline-flex shrink-0 items-center gap-1 rounded-full border border-wn-charcoal/15 bg-white px-2.5 py-1 text-[11px] font-semibold text-wn-charcoal/80 transition hover:border-wn-navy hover:text-wn-navy"
-          aria-label="Learn what each surface type means"
+          aria-haspopup="dialog"
+          aria-expanded={showModal}
+          className="inline-flex min-h-[44px] shrink-0 touch-manipulation items-center gap-1 rounded-full border border-wn-charcoal/15 bg-white px-3 text-xs font-semibold text-wn-charcoal/80 transition hover:border-wn-navy hover:text-wn-navy"
+          aria-label="Surface types: what each one means"
         >
           <span aria-hidden="true">ⓘ</span>
           <span>Surface types</span>
@@ -327,16 +330,24 @@ function SurfaceEducationModal({ onClose }: { onClose: () => void }) {
   // 8 user-facing codes; we hide VC from the education list since it's
   // a fallback bucket, not something the resort would report.
   const codes: SurfaceCode[] = ["PP", "PPC", "MG", "LSG", "FG", "WS", "WG", "IP"];
+  const dialogRef = useRef<HTMLDivElement>(null);
+  // Focus moves in on open, Tab stays inside, Escape closes, the page
+  // behind goes inert and scroll-locked, focus returns to the button
+  // that opened it (audit resort-panel-detail-34).
+  useFocusTrap(dialogRef, true, { onEscape: onClose });
   return (
     <div
+      ref={dialogRef}
+      tabIndex={-1}
       role="dialog"
       aria-modal="true"
       aria-labelledby="surface-edu-title"
-      className="fixed inset-0 z-50 flex items-end justify-center bg-wn-charcoal/50 p-0 backdrop-blur-sm sm:items-center sm:p-4"
+      className="fixed inset-0 z-50 flex items-end justify-center bg-wn-charcoal/50 p-0 outline-none backdrop-blur-sm sm:items-center sm:p-4"
       onClick={onClose}
     >
       <div
         className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-t-2xl bg-white shadow-2xl sm:max-h-[80vh] sm:rounded-2xl"
+        style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="sticky top-0 z-10 flex items-center justify-between border-b border-wn-charcoal/10 bg-white px-5 py-3">
@@ -349,8 +360,8 @@ function SurfaceEducationModal({ onClose }: { onClose: () => void }) {
           <button
             type="button"
             onClick={onClose}
-            aria-label="Close"
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full text-wn-charcoal/60 transition hover:bg-wn-charcoal/5 hover:text-wn-navy"
+            aria-label="Close surface types"
+            className="inline-flex h-11 w-11 touch-manipulation items-center justify-center rounded-full text-wn-charcoal/60 transition hover:bg-wn-charcoal/5 hover:text-wn-navy"
           >
             <span aria-hidden="true" className="text-xl leading-none">×</span>
           </button>
