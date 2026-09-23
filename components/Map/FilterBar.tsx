@@ -200,6 +200,7 @@ function PassDropdown({
   onPassChange: (passes: string[]) => void;
 }) {
   const { open, setOpen, close, ref, triggerRef, panelId } = useDropdown("menu");
+  const hintId = `${panelId}-hint`;
   // For the button-color dot, show the first selected pass's color
   // when exactly one is active. With multi-select we drop the dot
   // entirely — the label "Ikon + Epic" already conveys the state.
@@ -244,12 +245,15 @@ function PassDropdown({
         <span aria-hidden="true" className="opacity-70">▾</span>
       </button>
       {open && (
-        <div
-          id={panelId}
-          role="menu"
-          aria-label="Pass"
-          className="absolute left-0 mt-1 w-64 rounded-lg border border-wn-charcoal/15 bg-white p-2 shadow-lg z-30"
-        >
+        <div className="absolute left-0 mt-1 w-64 rounded-lg border border-wn-charcoal/15 bg-white p-2 shadow-lg z-30">
+          {/* The hint sits outside the menu element: a menu may only
+              contain menu items, groups and separators, so a paragraph
+              inside it would be read as a stray item. The menu points at
+              it with aria-describedby instead. */}
+          <p id={hintId} className="mb-1 px-2 text-[11px] text-wn-charcoal/65">
+            Pick more than one if you own more than one pass.
+          </p>
+          <div id={panelId} role="menu" aria-label="Pass" aria-describedby={hintId}>
           <DropdownRow
             role="menuitemradio"
             active={passFilter.length === 0}
@@ -261,10 +265,7 @@ function PassDropdown({
             <span className="font-semibold">All passes</span>
             <span className="ml-auto text-wn-charcoal/65">{totalPass}</span>
           </DropdownRow>
-          <div className="my-1 h-px bg-wn-charcoal/10" />
-          <p className="mb-1 px-2 text-[11px] text-wn-charcoal/65">
-            Pick more than one if you own more than one pass.
-          </p>
+          <div role="separator" className="my-1 h-px bg-wn-charcoal/10" />
           {PASS_KEYS.map((key) => {
             const count = passCounts[key] ?? 0;
             const isActive = passFilter.includes(key);
@@ -277,10 +278,10 @@ function PassDropdown({
               >
                 {/* Checkbox indicator — square, fills navy on active */}
                 <span
-                  className={`flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-sm border ${
+                  className={`flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-sm border-2 ${
                     isActive
                       ? "border-wn-navy bg-wn-navy text-white"
-                      : "border-wn-charcoal/30 bg-white"
+                      : "border-wn-charcoal/60 bg-white"
                   }`}
                   aria-hidden="true"
                 >
@@ -300,6 +301,7 @@ function PassDropdown({
               </DropdownRow>
             );
           })}
+          </div>
         </div>
       )}
     </div>

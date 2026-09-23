@@ -32,6 +32,12 @@ const SHEET_ANIMATION_MS = 240;
 // not need this and skip it (they honour a deferred focus).
 const KEYBOARD_PRIMER_ID = "wynla-search-keyboard-primer";
 
+// The control that had focus when the primer took it. The focus trap
+// records document.activeElement when the sheet opens, which on phones
+// is the hidden primer (removed before close), so without this the
+// header search button would never get focus back.
+let searchOpener: HTMLElement | null = null;
+
 function isMobileViewport(): boolean {
   return typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches;
 }
@@ -39,6 +45,10 @@ function isMobileViewport(): boolean {
 /** Call synchronously from the tap that opens the header search. */
 export function primeSearchKeyboard(): void {
   if (typeof document === "undefined" || !isMobileViewport()) return;
+  const current = document.activeElement as HTMLElement | null;
+  if (current && current !== document.body && current.id !== KEYBOARD_PRIMER_ID) {
+    searchOpener = current;
+  }
   let primer = document.getElementById(KEYBOARD_PRIMER_ID) as HTMLInputElement | null;
   if (!primer) {
     primer = document.createElement("input");
@@ -225,10 +235,25 @@ export default function ResortPicker({
   // have focus stolen by the trap). Only the full-screen search is a
   // real modal; the trip planner's snap sheet deliberately leaves the
   // map behind it usable, so no inert / scroll lock / Tab wrap there.
+  // returnFocusRef carries the real opener when the primer had focus.
+  // Set in an effect (not during render) so a StrictMode double render
+  // cannot consume the opener twice; React runs the trap's cleanup
+  // before this effect re-runs on close, so the ref is still filled
+  // when focus is handed back.
+  const returnFocusRef = useRef<HTMLElement | null>(null);
+  useEffect(() => {
+    if (open) {
+      returnFocusRef.current = searchOpener;
+      searchOpener = null;
+    } else {
+      returnFocusRef.current = null;
+    }
+  }, [open]);
   useFocusTrap(dialogRef, open, {
     autoFocus: false,
     onEscape: onClose,
     modal: fullScreen,
+    returnFocusRef,
   });
 
   useEffect(() => {

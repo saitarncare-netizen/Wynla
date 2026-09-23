@@ -404,7 +404,7 @@ export default function FiltersDrawer({
           </div>
           {/* Live: the map behind is inert while the drawer is open, so
               its own announcer is silent and this line has to speak. */}
-          <p aria-live="polite" className="mt-0.5 text-[11px] text-wn-charcoal/65">
+          <p aria-live="polite" aria-atomic="true" className="mt-0.5 text-[11px] text-wn-charcoal/65">
             Showing <strong className="text-wn-navy">{filteredCount}</strong> of {totalCount} resorts
           </p>
         </header>

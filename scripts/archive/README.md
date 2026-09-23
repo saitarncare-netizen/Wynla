@@ -8,6 +8,15 @@ wired to `package.json`. Do not run them against production without
 reading them first. The live scripts stay in `scripts/` (see the root
 README).
 
+Eight of them resolve the repo root from their own location
+(`build-fastwork-csv`, `process-pct-csvs`, `process-trail-csvs`,
+`sync-fastwork-csv`, `round-9-enrich-google`, `round-9-fetch-nearby`,
+`round-9-fetch-ski-shops`, `round-9-import-nearby`). After the move they
+resolve it two levels up (`scripts/archive/` -> repo root), so `.env.local`
+and `data/` still land in the right place when a script is run as
+`node scripts/archive/<name>.mjs` from the repo root. The rest use relative
+paths from the working directory and must be run from the repo root.
+
 | Script | What it did (when) |
 |---|---|
 | `audit-featured-candidates.mjs` | Listed the 30 Featured resorts and scored top Listed candidates for promotion (May 2026, Featured tier went 30 → 50). |

@@ -4,8 +4,11 @@ import {
   TrapStack,
   collectInertTargets,
   nextTabTarget,
+  resolveFocusTrapOptions,
+  resolveReturnTarget,
   supportsInert,
   type InertNode,
+  type ReturnFocusCandidate,
 } from "./useFocusTrap";
 
 // No jsdom in the toolchain, so the DOM-shaped helpers are exercised with
@@ -34,6 +37,95 @@ describe("nextTabTarget", () => {
   it("pulls focus back inside when it escaped the container", () => {
     expect(nextTabTarget(items, null, false, false)).toBe("a");
     expect(nextTabTarget(items, null, true, false)).toBe("c");
+  });
+
+  it("wraps from the container itself (or a tabindex=-1 element inside it)", () => {
+    // After the fallback focus lands on the dialog, or a click on blank
+    // dialog area, the active element is inside but not a Tab stop.
+    // Shift+Tab must go to the last item, Tab to the first, so the
+    // aria-hidden fallback path cannot let focus leave the modal.
+    expect(nextTabTarget(items, "container", true, true)).toBe("c");
+    expect(nextTabTarget(items, "container", false, true)).toBe("a");
+  });
+});
+
+describe("resolveFocusTrapOptions", () => {
+  it("keeps the legacy positional call sites on Tab wrap only", () => {
+    // useFocusTrap(ref, open) and useFocusTrap(ref, open, initialRef)
+    // predate inert and scroll lock; InstallSheet's click-to-close
+    // backdrop is a sibling of the trapped panel and would go inert.
+    const bare = resolveFocusTrapOptions(undefined);
+    expect(bare).toMatchObject({ modal: true, inert: false, lockScroll: false, autoFocus: true });
+    expect(bare.initialFocusRef).toBeUndefined();
+    const initial = { current: null };
+    const withRef = resolveFocusTrapOptions(initial);
+    expect(withRef.initialFocusRef).toBe(initial);
+    expect(withRef).toMatchObject({ modal: true, inert: false, lockScroll: false });
+  });
+
+  it("gives an options object the full modal by default", () => {
+    expect(resolveFocusTrapOptions({})).toMatchObject({
+      modal: true,
+      inert: true,
+      lockScroll: true,
+      autoFocus: true,
+    });
+  });
+
+  it("derives inert and scroll lock from modal unless overridden", () => {
+    expect(resolveFocusTrapOptions({ modal: false })).toMatchObject({
+      modal: false,
+      inert: false,
+      lockScroll: false,
+    });
+    expect(resolveFocusTrapOptions({ modal: true, inert: false })).toMatchObject({
+      modal: true,
+      inert: false,
+      lockScroll: true,
+    });
+    expect(resolveFocusTrapOptions({ modal: false, lockScroll: true })).toMatchObject({
+      modal: false,
+      inert: false,
+      lockScroll: true,
+    });
+  });
+
+  it("passes the callbacks and refs through", () => {
+    const onEscape = () => {};
+    const initialFocusRef = { current: null };
+    const returnFocusRef = { current: null };
+    const r = resolveFocusTrapOptions({ onEscape, initialFocusRef, returnFocusRef, autoFocus: false });
+    expect(r.onEscape).toBe(onEscape);
+    expect(r.initialFocusRef).toBe(initialFocusRef);
+    expect(r.returnFocusRef).toBe(returnFocusRef);
+    expect(r.autoFocus).toBe(false);
+  });
+});
+
+function candidate(attrs: Record<string, string> = {}, isConnected = true): ReturnFocusCandidate {
+  return { isConnected, getAttribute: (n) => attrs[n] ?? null };
+}
+
+describe("resolveReturnTarget", () => {
+  it("prefers an explicit return target that is still in the document", () => {
+    const explicit = candidate();
+    const recorded = candidate();
+    expect(resolveReturnTarget(explicit, recorded)).toBe(explicit);
+  });
+
+  it("falls back to the recorded element when the explicit one is gone", () => {
+    const recorded = candidate();
+    expect(resolveReturnTarget(candidate({}, false), recorded)).toBe(recorded);
+    expect(resolveReturnTarget(null, recorded)).toBe(recorded);
+  });
+
+  it("never returns focus to a hidden or tabindex=-1 helper", () => {
+    // The iOS keyboard primer is aria-hidden + tabindex=-1 and is
+    // removed before close; a hidden element must not be the target.
+    expect(resolveReturnTarget(null, candidate({ "aria-hidden": "true" }))).toBeNull();
+    expect(resolveReturnTarget(null, candidate({ tabindex: "-1" }))).toBeNull();
+    expect(resolveReturnTarget(null, candidate({}, false))).toBeNull();
+    expect(resolveReturnTarget(null, null)).toBeNull();
   });
 });
 
@@ -132,6 +224,14 @@ describe("TrapStack", () => {
     expect(lockCalls).toBe(0);
     expect(s.modalCount()).toBe(0);
     s.remove("popover");
+  });
+
+  it("carries a structured lock state (overflow + padding) through to restore", () => {
+    const s = new TrapStack<string, { overflow: string; paddingRight: string }>();
+    const restored: Array<{ overflow: string; paddingRight: string }> = [];
+    s.push("a", true, () => ({ overflow: "auto", paddingRight: "" }));
+    s.remove("a", (v) => restored.push(v));
+    expect(restored).toEqual([{ overflow: "auto", paddingRight: "" }]);
   });
 
   it("removing an id that is not on the stack is harmless", () => {

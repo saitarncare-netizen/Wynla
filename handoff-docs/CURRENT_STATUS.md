@@ -120,5 +120,5 @@ them and updates this file.
 
 - Active resorts: 395 (after the 2026-09-23 backfill).
 - Pass access data: 235 resorts, 960 product rows, verified 2026-09-23.
-- Unit tests: 24 files under `lib/**` and `tests/`, run by `npm test` and
+- Unit tests: 43 files (one skipped), 750 tests under `lib/**` and `tests/` (2026-09-23), run by `npm test` and
   by CI on every push to `main`, `feat/**` and `fix/**`.

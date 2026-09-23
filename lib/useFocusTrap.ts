@@ -9,11 +9,11 @@
 //   - Escape calls `onEscape` (only the top-most open trap reacts, so a
 //     drawer stacked on a search sheet closes one layer at a time)
 //   - restores focus to whatever opened it on close
-//   - marks everything outside the container `inert` while `modal` is
+//   - marks everything outside the container `inert` while `inert` is
 //     true (aria-hidden fallback for browsers without inert), so a screen
 //     reader cannot wander onto the map behind a sheet
-//   - locks body scroll while any modal trap is open (ref-counted, so
-//     nested modals do not unlock each other)
+//   - locks body scroll while any scroll-locking trap is open
+//     (ref-counted, so nested modals do not unlock each other)
 //
 // Non-modal surfaces (a popover, a bottom sheet that intentionally leaves
 // the map usable) pass `modal: false` and still get Escape, initial focus
@@ -46,13 +46,70 @@ export type FocusTrapOptions = {
   /** true (default): Tab wraps, background is inert, body scroll locks.
    *  false: only Escape, initial focus and focus return. */
   modal?: boolean;
+  /** Hide and disable everything outside the container while open.
+   *  Defaults to `modal`. Set false for a modal whose click-to-close
+   *  backdrop is a sibling of the trapped element. */
+  inert?: boolean;
+  /** Lock body scroll while open. Defaults to `modal`. */
+  lockScroll?: boolean;
+  /** Where focus should go on close when the element that had focus at
+   *  open time is not the real opener (a hidden keyboard-primer input,
+   *  a control that unmounted). Wins over the recorded element. */
+  returnFocusRef?: RefObject<HTMLElement | null>;
 };
+
+/** Everything the effect needs, with every default applied. */
+export type ResolvedFocusTrapOptions = Required<
+  Pick<FocusTrapOptions, "autoFocus" | "modal" | "inert" | "lockScroll">
+> &
+  Pick<FocusTrapOptions, "initialFocusRef" | "onEscape" | "returnFocusRef">;
 
 /* ------------------------------------------------------------------ */
 /* Pure helpers (tested in useFocusTrap.test.ts)                       */
 /* ------------------------------------------------------------------ */
 
-/** Where Tab should land. `null` means "let the browser do it". */
+/** The older call sites pass `useFocusTrap(ref, open)` or
+ *  `useFocusTrap(ref, open, initialFocusRef)`. They were written for a
+ *  trap that only wrapped Tab, so they keep exactly that: no inert (their
+ *  click-to-close backdrops are siblings of the trapped panel and would
+ *  stop working) and no scroll lock (they manage their own). New call
+ *  sites pass an options object and get the full modal by default. */
+export function resolveFocusTrapOptions(
+  optionsOrInitialFocus?: RefObject<HTMLElement | null> | FocusTrapOptions,
+): ResolvedFocusTrapOptions {
+  const legacy =
+    optionsOrInitialFocus === undefined ||
+    optionsOrInitialFocus === null ||
+    "current" in optionsOrInitialFocus;
+  if (legacy) {
+    return {
+      initialFocusRef: (optionsOrInitialFocus as RefObject<HTMLElement | null> | undefined) ?? undefined,
+      autoFocus: true,
+      onEscape: undefined,
+      modal: true,
+      inert: false,
+      lockScroll: false,
+      returnFocusRef: undefined,
+    };
+  }
+  const o = optionsOrInitialFocus as FocusTrapOptions;
+  const modal = o.modal ?? true;
+  return {
+    initialFocusRef: o.initialFocusRef,
+    autoFocus: o.autoFocus ?? true,
+    onEscape: o.onEscape,
+    modal,
+    inert: o.inert ?? modal,
+    lockScroll: o.lockScroll ?? modal,
+    returnFocusRef: o.returnFocusRef,
+  };
+}
+
+/** Where Tab should land. `null` means "let the browser do it".
+ *  `activeItem` that is inside the container but not one of `items`
+ *  (the container itself after a fallback focus, or a tabindex=-1
+ *  element the user clicked) is treated as "before the first" on Tab
+ *  and "after the last" on Shift+Tab, so focus never leaves. */
 export function nextTabTarget<T>(
   items: readonly T[],
   activeItem: T | null,
@@ -63,8 +120,10 @@ export function nextTabTarget<T>(
   const first = items[0];
   const last = items[items.length - 1];
   if (!insideContainer) return shiftKey ? last : first;
-  if (shiftKey && activeItem === first) return last;
-  if (!shiftKey && activeItem === last) return first;
+  const idx = activeItem === null ? -1 : items.indexOf(activeItem);
+  if (idx === -1) return shiftKey ? last : first;
+  if (shiftKey && idx === 0) return last;
+  if (!shiftKey && idx === items.length - 1) return first;
   return null;
 }
 
@@ -96,24 +155,50 @@ export function collectInertTargets<N extends InertNode>(container: N, root: N |
   return out;
 }
 
-/** Stack of open traps: only the top one handles Tab and Escape, and
- *  body scroll stays locked until the last modal one closes. */
-export class TrapStack<T> {
-  private entries: Array<{ id: T; modal: boolean }> = [];
-  private savedOverflow: string | null = null;
+/** Minimal shape of a focus candidate for the return-focus decision. */
+export type ReturnFocusCandidate = {
+  isConnected: boolean;
+  getAttribute(name: string): string | null;
+};
 
-  /** `lock` runs only for the first modal entry and returns the value
-   *  `restore` receives once the last modal entry is removed. */
-  push(id: T, modal: boolean, lock?: () => string) {
-    if (modal && this.modalCount() === 0 && lock) this.savedOverflow = lock();
+/** Which element gets focus back when the trap closes.
+ *  1. an explicit `returnFocusRef` that is still in the document
+ *  2. the element that had focus when the trap opened, unless it is
+ *     gone, hidden from AT, or a tabindex=-1 helper (the iOS keyboard
+ *     primer): focusing those would strand the user on nothing
+ *  3. nothing (the browser keeps focus where the close left it) */
+export function resolveReturnTarget<E extends ReturnFocusCandidate>(
+  explicit: E | null | undefined,
+  recorded: E | null | undefined,
+): E | null {
+  if (explicit && explicit.isConnected) return explicit;
+  if (!recorded || !recorded.isConnected) return null;
+  if (recorded.getAttribute("aria-hidden") === "true") return null;
+  if (recorded.getAttribute("tabindex") === "-1") return null;
+  return recorded;
+}
+
+/** Inline styles the scroll lock overwrites, so they can be put back. */
+export type ScrollLockState = { overflow: string; paddingRight: string };
+
+/** Stack of open traps: only the top one handles Tab and Escape, and
+ *  body scroll stays locked until the last locking one closes. */
+export class TrapStack<T, S = string> {
+  private entries: Array<{ id: T; modal: boolean }> = [];
+  private saved: S | null = null;
+
+  /** `lock` runs only for the first locking entry and returns the value
+   *  `restore` receives once the last locking entry is removed. */
+  push(id: T, modal: boolean, lock?: () => S) {
+    if (modal && this.modalCount() === 0 && lock) this.saved = lock();
     this.entries.push({ id, modal });
   }
 
-  remove(id: T, restore?: (v: string) => void) {
+  remove(id: T, restore?: (v: S) => void) {
     this.entries = this.entries.filter((e) => e.id !== id);
-    if (this.modalCount() === 0 && this.savedOverflow !== null) {
-      restore?.(this.savedOverflow);
-      this.savedOverflow = null;
+    if (this.modalCount() === 0 && this.saved !== null) {
+      restore?.(this.saved);
+      this.saved = null;
     }
   }
 
@@ -138,20 +223,37 @@ export function supportsInert(proto: object | undefined = typeof HTMLElement ===
 /* Hook                                                                */
 /* ------------------------------------------------------------------ */
 
-const stack = new TrapStack<symbol>();
+const stack = new TrapStack<symbol, ScrollLockState>();
+
+function lockBodyScroll(): ScrollLockState {
+  const body = document.body;
+  const saved = { overflow: body.style.overflow, paddingRight: body.style.paddingRight };
+  // Removing the scrollbar would shift the page under the modal on
+  // desktop; pad the body by its width so nothing moves. iOS Safari has
+  // no scrollbar (0px) and also ignores overflow:hidden on body for
+  // rubber-band scrolling; that is a known gap, the sheets there are
+  // full-height so the page behind is rarely reachable.
+  const scrollbar = window.innerWidth - document.documentElement.clientWidth;
+  if (scrollbar > 0) body.style.paddingRight = `${scrollbar}px`;
+  body.style.overflow = "hidden";
+  return saved;
+}
+
+function restoreBodyScroll(saved: ScrollLockState) {
+  document.body.style.overflow = saved.overflow;
+  document.body.style.paddingRight = saved.paddingRight;
+}
 
 export function useFocusTrap(
   containerRef: RefObject<HTMLElement | null>,
   active: boolean,
   // Third argument accepts the older positional `initialFocusRef` so the
-  // existing call sites keep working, or the options object.
+  // existing call sites keep working (Tab wrap only, see
+  // resolveFocusTrapOptions), or the options object.
   optionsOrInitialFocus?: RefObject<HTMLElement | null> | FocusTrapOptions,
 ) {
-  const opts: FocusTrapOptions =
-    optionsOrInitialFocus && "current" in optionsOrInitialFocus
-      ? { initialFocusRef: optionsOrInitialFocus }
-      : (optionsOrInitialFocus ?? {});
-  const { initialFocusRef, autoFocus = true, onEscape, modal = true } = opts;
+  const { initialFocusRef, autoFocus, onEscape, modal, inert, lockScroll, returnFocusRef } =
+    resolveFocusTrapOptions(optionsOrInitialFocus);
 
   // Callers usually pass an inline arrow for onEscape. Reading it through
   // a ref keeps it out of the effect's dependencies, so a re-render while
@@ -169,6 +271,10 @@ export function useFocusTrap(
     if (!container) return;
     const id = Symbol("focus-trap");
     const prevFocused = document.activeElement as HTMLElement | null;
+    // Read at close time on purpose: the opener may be handed in after
+    // the trap mounts (ResortPicker fills it once the keyboard primer
+    // has done its job), so a snapshot taken here would be stale.
+    const explicitReturnTarget = () => returnFocusRef?.current ?? null;
 
     const items = () =>
       Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE)).filter(
@@ -180,22 +286,14 @@ export function useFocusTrap(
           (el.getClientRects().length > 0 || el === document.activeElement),
       );
 
-    stack.push(
-      id,
-      modal,
-      () => {
-        const prev = document.body.style.overflow;
-        document.body.style.overflow = "hidden";
-        return prev;
-      },
-    );
+    stack.push(id, lockScroll, lockBodyScroll);
 
     // Hide the rest of the page from assistive tech. `inert` also blocks
     // pointer and keyboard input, which is what a modal wants; the
     // aria-hidden fallback only hides it from screen readers.
     const inerted: HTMLElement[] = [];
     const useInert = supportsInert();
-    if (modal) {
+    if (inert) {
       for (const el of collectInertTargets(container as unknown as InertNode, document.body as unknown as InertNode) as unknown as HTMLElement[]) {
         if (useInert) {
           el.setAttribute("inert", "");
@@ -250,11 +348,10 @@ export function useFocusTrap(
         if (useInert) el.removeAttribute("inert");
         else el.removeAttribute("aria-hidden");
       }
-      stack.remove(id, (v) => {
-        document.body.style.overflow = v;
-      });
+      stack.remove(id, restoreBodyScroll);
       // Return focus to the opener if it is still on the page.
-      if (prevFocused && prevFocused.isConnected) prevFocused.focus?.({ preventScroll: true });
+      const back = resolveReturnTarget(explicitReturnTarget(), prevFocused);
+      back?.focus?.({ preventScroll: true });
     };
-  }, [active, containerRef, initialFocusRef, autoFocus, modal]);
+  }, [active, containerRef, initialFocusRef, autoFocus, modal, inert, lockScroll, returnFocusRef]);
 }

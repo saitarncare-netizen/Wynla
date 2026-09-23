@@ -12,7 +12,7 @@ Project context for people and agents lives in `handoff-docs/`: start with
 
 ```bash
 npm ci
-cp .env.example .env.local   # if present; otherwise create it from the table below
+# create .env.local by hand from the table under "Environment variables" below
 npm run dev                  # http://localhost:3000
 ```
 
