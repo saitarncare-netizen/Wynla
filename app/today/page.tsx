@@ -16,6 +16,7 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { passColor, primaryPass } from "@/lib/passColors";
 import { formatStampInZone } from "@/lib/sunTimes";
 import { isPowderDay, POWDER_IN } from "@/lib/goWaitSkip";
+import { localDate } from "@/lib/weather/time";
 import { loadNextTrip, loadTodayRows, type NextTrip, type TodayRow } from "./data";
 import { BlackoutNote, LocalDate, RowThumb, UpdatedAgo } from "./ClientBits";
 import VerdictPill from "./VerdictPill";
@@ -38,10 +39,17 @@ export default async function TodayPage() {
   }
 
   const now = new Date();
-  const todayUTC = now.toISOString().slice(0, 10);
+  // The verdict rows use each resort's own calendar day. The trip card
+  // does not know its resorts' zones before it has picked a trip, so it
+  // uses the earliest calendar day anywhere in the US (Alaska): a trip
+  // that starts today never drops off the card while the day is still
+  // running in its own zone, at the cost of lingering a few hours into
+  // the next morning on the East Coast. UTC would drop a same-day trip
+  // at 7 pm Eastern.
+  const tripFloorISO = localDate(now, "America/Anchorage");
   const [today, nextTrip, profileRes] = await Promise.all([
     loadTodayRows(supabase, { now, withHistory: true }),
-    loadNextTrip(supabase, todayUTC),
+    loadNextTrip(supabase, tripFloorISO),
     supabase.from("profiles").select("display_name").eq("id", user.id).maybeSingle(),
   ]);
   const displayName = (profileRes.data as { display_name: string | null } | null)?.display_name?.trim() || null;

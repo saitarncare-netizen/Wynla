@@ -20,9 +20,10 @@ export default async function FavoritesPage() {
     redirect("/login?next=/favorites");
   }
 
-  // RLS makes this implicitly user-scoped. History is skipped here: the
-  // pill only needs status + weather; /today runs the surface classifier.
-  const { rows, error } = await loadTodayRows(supabase, { now: new Date(), withHistory: false });
+  // RLS makes this implicitly user-scoped. History is loaded here too
+  // (one indexed query) so the surface classifier sees the same week as
+  // /today and the two pages never disagree on the same resort.
+  const { rows, error } = await loadTodayRows(supabase, { now: new Date(), withHistory: true });
 
   if (error) {
     return (

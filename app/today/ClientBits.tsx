@@ -88,7 +88,9 @@ export function RowThumb({
           alt={alt}
           fill
           sizes="56px"
-          quality={60}
+          // 70 is one of next.config.ts images.qualities; any other value
+          // is a 400 from the optimizer, not a smaller file.
+          quality={70}
           className="object-cover"
           onError={() => setFailed(true)}
         />
@@ -109,7 +111,9 @@ export function RowThumb({
  * product they hold, so the copy says "check which pass you hold".
  */
 export function BlackoutNote({ slug, dateISO }: { slug: string; dateISO: string }) {
-  const [products, setProducts] = useState<string[]>([]);
+  // Full blackouts and "no 9 am to 3 pm access" rows are worded apart, so
+  // a night-skiing-only restriction never reads as a closed day.
+  const [blocked, setBlocked] = useState<{ full: string[]; dayAccess: string[] }>({ full: [], dayAccess: [] });
   useEffect(() => {
     let cancelled = false;
     const picked = getPreferences()?.passes ?? [];
@@ -119,22 +123,27 @@ export function BlackoutNote({ slug, dateISO }: { slug: string; dateISO: string 
     // for everyone).
     void import("@/lib/passAccess").then((mod) => {
       if (cancelled) return;
-      const blocked: string[] = [];
+      const full: string[] = [];
+      const dayAccess: string[] = [];
       for (const family of picked.filter((p): p is PassFamily => mod.isPassFamily(p))) {
         for (const entry of mod.getFamilyAccess(slug, family)) {
-          if (mod.isBlackedOutFor(entry, dateISO) === true) blocked.push(entry.product);
+          if (mod.isBlackedOutFor(entry, dateISO) !== true) continue;
+          (entry.blackouts.scope === "day-access" ? dayAccess : full).push(entry.product);
         }
       }
-      setProducts(blocked);
+      setBlocked({ full, dayAccess });
     });
     return () => {
       cancelled = true;
     };
   }, [slug, dateISO]);
-  if (products.length === 0) return null;
+  if (blocked.full.length === 0 && blocked.dayAccess.length === 0) return null;
+  const parts: string[] = [];
+  if (blocked.full.length > 0) parts.push(`Blackout today on ${blocked.full.join(", ")}`);
+  if (blocked.dayAccess.length > 0) parts.push(`No 9 am to 3 pm access today on ${blocked.dayAccess.join(", ")}`);
   return (
     <p className="mt-1 rounded-md bg-amber-50 px-2 py-1 text-[11px] font-medium text-amber-900">
-      Blackout today on {products.join(", ")} · Reported · check which pass you hold
+      {parts.join(" · ")} · Reported · check which pass you hold
     </p>
   );
 }

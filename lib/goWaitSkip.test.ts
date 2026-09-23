@@ -400,3 +400,116 @@ describe("verdict — confidence", () => {
     expect(v.headline).toBe("Wait: limited lifts");
   });
 });
+
+describe("verdict — review round 2 fixes", () => {
+  it("a no_feed resort's snow column is never labelled Measured", () => {
+    // The season-status job stamps snow_report_updated_at daily and the
+    // refresh job may have filled snow_new_24h_in from the model.
+    const json = v2();
+    json.days[0].snow_in = 1;
+    const v = verdict(
+      resort({ snow_report_status: "no_feed", snow_new_24h_in: 5, snow_report_updated_at: iso(1) }),
+      weather({}, json),
+      null,
+      { now: NOW },
+    );
+    expect(v.newSnow).toEqual({ inches: 1, source: "Forecast", at: iso(1) });
+    expect(v.labels.some((l) => l.source === "Measured")).toBe(false);
+  });
+
+  it("a SNOTEL depth change from yesterday counts as Measured, dated not clocked", () => {
+    const v = verdict(
+      resort(),
+      weather(
+        {},
+        v2({
+          measured: measured({
+            sfav2_24h_in: null,
+            snotel: {
+              triplet: "766:VT:SNTL",
+              name: "Test",
+              elevation_ft: 3000,
+              distance_km: 2,
+              observed_date: "2027-01-12",
+              snow_depth_in: 40,
+              swe_in: 10,
+              temp_max_f: 25,
+              temp_min_f: 10,
+              temp_avg_f: 18,
+              precip_in: 0.4,
+              depth_change_in: 4,
+            },
+          }),
+        }),
+      ),
+      null,
+      { now: NOW },
+    );
+    expect(v.newSnow).toEqual({ inches: 4, source: "Measured", at: null });
+    expect(v.labels[0].text).toBe("4 in new snow (SNOTEL depth, Jan 12)");
+    expect(v.headline).toBe("Go: fresh snow");
+  });
+
+  it("an old SNOTEL depth change is not today's snow", () => {
+    const v = verdict(
+      resort(),
+      weather(
+        {},
+        v2({
+          measured: measured({
+            snotel: {
+              triplet: "766:VT:SNTL",
+              name: "Test",
+              elevation_ft: 3000,
+              distance_km: 2,
+              observed_date: "2027-01-09",
+              snow_depth_in: 40,
+              swe_in: 10,
+              temp_max_f: 25,
+              temp_min_f: 10,
+              temp_avg_f: 18,
+              precip_in: 0.4,
+              depth_change_in: 9,
+            },
+          }),
+        }),
+      ),
+      null,
+      { now: NOW },
+    );
+    expect(v.newSnow?.source).not.toBe("Measured");
+  });
+
+  it("a day-access blackout (9-3 removed) is a Wait with the note, not a Skip", () => {
+    // Stevens Pass Select: Sat 2027-01-23 removes 9am-3pm access only.
+    const SAT = new Date("2027-01-23T15:00:00Z");
+    const v = verdict(
+      resort({ slug: "stevens-pass", state: "WA", latitude: 47.74, longitude: -121.09 }),
+      weather({ fetched_at: iso(1, SAT) }),
+      { product: "Stevens Pass Select Pass" },
+      { now: SAT },
+    );
+    expect(v.blackout).toBe(true);
+    expect(v.verdict).toBe("wait");
+    expect(v.headline).toBe("Wait: no daytime access");
+    expect(v.reasons[0]).toMatch(/no 9 am to 3 pm access/);
+    expect(v.reasons[0]).toMatch(/Night skiing/);
+    expect(v.reasons[0]).not.toMatch(/\d{4}-\d{2}-\d{2}/);
+    expect(v.labels.some((l) => /^No 9-3 access:/.test(l.text) && l.source === "Reported")).toBe(true);
+  });
+
+  it("confidence is never high without a high-confidence surface class", () => {
+    // Open + measured snow + hourly rows would reach the old 3.5 points.
+    const v = verdict(resort(), weather({}, v2({ measured: measured({ sfav2_24h_in: 8 }) })), null, { now: NOW });
+    expect(v.verdict).toBe("go");
+    expect(v.surface?.confidence ?? "low").not.toBe("high");
+    expect(v.confidence).not.toBe("high");
+  });
+
+  it("gusts in the warning band stay a Wait by design (see module header)", () => {
+    const json = v2({ hourly: calmDay((h, lh) => (lh === 12 ? { ...h, gust_mph: 42 } : h)) });
+    const v = verdict(resort(), weather({}, json), null, { now: NOW });
+    expect(v.windHold?.level).toBe("warning");
+    expect(v.verdict).toBe("wait");
+  });
+});

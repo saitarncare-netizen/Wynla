@@ -16,14 +16,19 @@ export default function TodayChip() {
     let cancelled = false;
     (async () => {
       const sb = createSupabaseBrowserClient();
-      const { data: u } = await sb.auth.getUser();
-      if (!u.user || cancelled) return;
+      // getSession reads the local cookie/storage; getUser would be a
+      // round trip to Supabase Auth on every map load. MapPage already
+      // mounts this only for signed-in users, so a missing session just
+      // means "no chip".
+      const { data: s } = await sb.auth.getSession();
+      const userId = s.session?.user.id;
+      if (!userId || cancelled) return;
       // Head request: the count is all we need, RLS scopes it to the user.
-      const { count: n } = await sb
+      const { count: n, error } = await sb
         .from("favorites")
         .select("resort_id", { count: "exact", head: true })
-        .eq("user_id", u.user.id);
-      if (!cancelled) setCount(n ?? 0);
+        .eq("user_id", userId);
+      if (!cancelled) setCount(error ? 0 : (n ?? 0));
     })();
     return () => {
       cancelled = true;

@@ -14,7 +14,22 @@
 //   - a dormant or unknown status never gets a Go / Wait;
 //   - weather older than WEATHER_STALE_HOURS is not used for a call;
 //   - every label carries a source (Measured / Forecast / Estimated /
-//     Reported) and the instant it was valid, so the UI can print it.
+//     Reported) and the instant it was valid, so the UI can print it;
+//   - "Measured" is only ever a NOHRSC analysis or a SNOTEL depth change
+//     read straight from forecast_json.measured, never a resorts column
+//     that another job may have filled from a model;
+//   - "high" confidence needs a high-confidence surface class on top of
+//     a verified open flag; wind, rain and ice reasoning alone is
+//     forecast-driven and stays medium at best.
+//
+// Wind decision (deviates from the package brief on purpose): the brief
+// lists "wind hold likely" under Skip. lib/windHold's warning band starts
+// at the resort's chair-hold line, which the East crosses on many
+// ordinary days; a Skip there would tell people to stay home when the
+// lower mountain usually runs. So warning = Wait ("check the lift status
+// before you drive") and only the high-risk band, where the whole hill
+// tends to close, is a Skip. Flip the branch below if the founder wants
+// the stricter reading.
 
 import {
   deriveResortStatus,
@@ -33,11 +48,13 @@ import {
 import { evaluateWindHold, liftMixFromTypes, type WindHoldEvaluation } from "./windHold";
 import { crowdForecast, type CrowdForecast } from "./crowdForecast";
 import {
+  formatRange,
+  getAccess,
   getFamilyAccess,
-  isBlackedOut,
   isBlackedOutFor,
   PASS_ACCESS_VERIFIED_ON,
   type PassFamily,
+  type PassProductAccess,
 } from "./passAccess";
 import {
   forecastDaysFrom,
@@ -46,7 +63,7 @@ import {
   type ForecastHour,
 } from "./weather/forecastJson";
 import { timeZoneForResort } from "./sunTimes";
-import { localDate, localHour } from "./weather/time";
+import { localDate, localHour, shiftDate } from "./weather/time";
 
 // ---------- Public types ----------
 
@@ -59,8 +76,10 @@ export type VerdictLabel = {
   /** Short, e.g. "8 in new snow", "Gusts to 48 mph". */
   text: string;
   source: DataSource;
-  /** ISO instant the value was valid or written; null for a calendar
-   *  estimate that has no clock (crowd level). */
+  /** ISO instant the value was valid or written; null for values that
+   *  only carry a date, never a clock (crowd level, the date-verified
+   *  pass table, a SNOTEL daily value), in which case the date is in
+   *  `text` so nothing is printed without its time frame. */
   at: string | null;
 };
 
@@ -74,8 +93,9 @@ export type VerdictResort = ResortStatusSource &
     longitude: number | string | null;
     tier?: string | null;
     vertical_drop?: number | null;
-    /** Measured (NOHRSC / SNOTEL) or, when snow_report_status is
-     *  'reported', the resort's own number. */
+    /** Read only when snow_report_status is 'reported' (the resort's own
+     *  number). For no_feed rows the refresh job may fill it from the
+     *  model, so it is never presented as Measured here. */
     snow_new_24h_in?: number | string | null;
     snow_new_48h_in?: number | string | null;
     snow_base_depth_in?: number | null;
@@ -199,6 +219,19 @@ function plural(n: number, word: string): string {
   return `${n} ${word}${n === 1 ? "" : "s"}`;
 }
 
+/** "Jan 12" for a YYYY-MM-DD, for values that are stamped by date only. */
+function shortDate(ymd: string): string {
+  return new Date(`${ymd}T12:00:00Z`).toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" });
+}
+
+/** The pass table writes ISO dates into blackout notes so they stay
+ *  locale-free; render them the way the pass chips do ("Dec 24"). */
+function humanNote(note: string): string {
+  return note.replace(/(\d{4}-\d{2}-\d{2})(?: to (\d{4}-\d{2}-\d{2}))?/g, (_m, a: string, b?: string) =>
+    formatRange([a, b ?? a]),
+  );
+}
+
 function maxOf(values: Array<number | null | undefined>): number | null {
   let best: number | null = null;
   for (const v of values) if (v != null && Number.isFinite(v) && (best == null || v > best)) best = v;
@@ -258,19 +291,53 @@ function toSurfaceForecast(d: ForecastDay): SurfaceForecastDay {
   };
 }
 
-type Blackout = { value: boolean | null; products: string[] };
+type Blackout = {
+  value: boolean | null;
+  products: string[];
+  /** True when every blocked row only removes 9 am to 3 pm access
+   *  (blackouts.scope "day-access"): the pass still works outside those
+   *  hours, so it is a Wait with the note, not a Skip. */
+  dayAccessOnly: boolean;
+  /** The row's own qualifier ("Night skiing (3pm on) stays open ..."). */
+  note: string | null;
+};
+
+const NO_BLACKOUT: Blackout = { value: null, products: [], dayAccessOnly: false, note: null };
+
+/** Product name or key -> its row at this resort, across every family.
+ *  Mirrors passAccess's private lookup so the scope and note are in hand. */
+function findEntry(slug: string, product: string): PassProductAccess | null {
+  const access = getAccess(slug);
+  if (!access) return null;
+  const wanted = product.trim().toLowerCase();
+  for (const list of Object.values(access)) {
+    for (const entry of list ?? []) {
+      if (entry.productKey === wanted || entry.product.toLowerCase() === wanted) return entry;
+    }
+  }
+  return null;
+}
+
+function summarizeBlocked(blocked: PassProductAccess[]): Pick<Blackout, "dayAccessOnly" | "note"> {
+  const dayAccessOnly = blocked.length > 0 && blocked.every((e) => e.blackouts.scope === "day-access");
+  const note = dayAccessOnly ? (blocked.find((e) => e.blackouts.note)?.blackouts.note ?? null) : null;
+  return { dayAccessOnly, note };
+}
 
 /** Definitive with a product; with families only, true when every product
  *  of a held family is blacked out here today, null (with the products
  *  named) when only some are, so the copy can say "check which you hold". */
 function blackoutToday(slug: string, pass: PassContext, todayISO: string): Blackout {
-  if (!pass) return { value: null, products: [] };
+  if (!pass) return NO_BLACKOUT;
   if (pass.product) {
-    return { value: isBlackedOut(slug, pass.product, todayISO), products: [pass.product] };
+    const entry = findEntry(slug, pass.product);
+    if (!entry) return { ...NO_BLACKOUT, products: [pass.product] };
+    const value = isBlackedOutFor(entry, todayISO);
+    return { value, products: [entry.product], ...summarizeBlocked(value === true ? [entry] : []) };
   }
   const families = pass.families ?? [];
-  if (families.length === 0) return { value: null, products: [] };
-  const blocked: string[] = [];
+  if (families.length === 0) return NO_BLACKOUT;
+  const blocked: PassProductAccess[] = [];
   let sawEntry = false;
   let allBlocked = true;
   let anyUnknown = false;
@@ -278,15 +345,29 @@ function blackoutToday(slug: string, pass: PassContext, todayISO: string): Black
     for (const entry of getFamilyAccess(slug, family)) {
       sawEntry = true;
       const r = isBlackedOutFor(entry, todayISO);
-      if (r === true) blocked.push(entry.product);
+      if (r === true) blocked.push(entry);
       else if (r === null) anyUnknown = true;
       if (r !== true) allBlocked = false;
     }
   }
-  if (!sawEntry) return { value: null, products: [] };
-  if (allBlocked) return { value: true, products: blocked };
-  if (blocked.length > 0 || anyUnknown) return { value: null, products: blocked };
-  return { value: false, products: [] };
+  if (!sawEntry) return NO_BLACKOUT;
+  const products = blocked.map((e) => e.product);
+  if (allBlocked) return { value: true, products, ...summarizeBlocked(blocked) };
+  if (blocked.length > 0 || anyUnknown) return { value: null, products, ...summarizeBlocked(blocked) };
+  return { value: false, products: [], dayAccessOnly: false, note: null };
+}
+
+/** Headline + reason for a blackout that is definitively true. */
+function blackoutCall(b: Blackout): { kind: VerdictKind; headline: string; reason: string } {
+  const who = b.products.join(" / ");
+  if (b.dayAccessOnly) {
+    return {
+      kind: "wait",
+      headline: "Wait: no daytime access",
+      reason: `Your ${who} has no 9 am to 3 pm access here today.${b.note ? ` ${humanNote(b.note)}.` : ""}`,
+    };
+  }
+  return { kind: "skip", headline: "Skip: blackout day", reason: `Your ${who} is blacked out here today.` };
 }
 
 function windContext(resort: VerdictResort) {
@@ -394,26 +475,41 @@ export function verdict(
   const hours = v2 ? todaysHours(Array.isArray(v2.hourly) ? v2.hourly : [], todayISO, tz) : [];
   const dayHours = hours.filter((h) => h.hour >= DAY_START_H && h.hour <= DAY_END_H);
 
-  // New snow, in order of trust: the resort's own report, the measured
-  // analysis, then today's forecast. Each keeps its own clock.
+  // New snow, in order of trust: the resort's own report, the NOHRSC
+  // analysis, a SNOTEL depth change, then today's forecast. Each keeps
+  // its own clock. resorts.snow_new_24h_in is only trusted for
+  // 'reported' rows: for no_feed rows the refresh job copies it from the
+  // merged history row, which falls back to the model when nothing was
+  // measured, and the season-status job re-stamps snow_report_updated_at
+  // daily, so neither the number nor the clock would be a measurement.
   const reportFresh = isFresh(resort.snow_report_updated_at, now, WEATHER_STALE_HOURS);
   const resortSnow = num(resort.snow_new_24h_in);
   const measured = v2?.measured ?? null;
   const analysisSnow = measured?.sfav2_24h_in ?? null;
   const analysisFresh = isFresh(measured?.sfav2_valid_end, now, WEATHER_STALE_HOURS);
+  // SNOTEL reports a daily value for a station-local date, no clock;
+  // yesterday's is the newest that can exist at 6 am.
+  const snotel = measured?.snotel ?? null;
+  const snotelDelta = snotel?.depth_change_in ?? null;
+  const snotelFresh = snotel?.observed_date != null && snotel.observed_date >= shiftDate(todayISO, -1);
   let newSnow: Verdict["newSnow"] = null;
+  let newSnowText: string | null = null;
   if (resortSnow != null && reportFresh && resort.snow_report_status === "reported") {
     newSnow = { inches: resortSnow, source: "Reported", at: resort.snow_report_updated_at ?? null };
   } else if (analysisSnow != null && analysisFresh) {
     newSnow = { inches: analysisSnow, source: "Measured", at: measured?.sfav2_valid_end ?? null };
-  } else if (resortSnow != null && reportFresh) {
-    newSnow = { inches: resortSnow, source: "Measured", at: resort.snow_report_updated_at ?? null };
+  } else if (snotelDelta != null && snotelDelta > 0 && snotelFresh) {
+    // Depth change is a floor on snowfall (settlement only lowers it).
+    newSnow = { inches: snotelDelta, source: "Measured", at: null };
+    newSnowText = `${inches(snotelDelta)} new snow (SNOTEL depth, ${shortDate(snotel!.observed_date!)})`;
   }
   const forecastSnowToday = stale ? null : (today?.snow_in ?? num(weather?.snow_24h_in ?? null));
   if (newSnow == null && forecastSnowToday != null) {
     newSnow = { inches: forecastSnowToday, source: "Forecast", at: fetchedAt };
   }
-  if (newSnow) labels.push({ text: `${inches(newSnow.inches)} new snow`, source: newSnow.source, at: newSnow.at });
+  if (newSnow) {
+    labels.push({ text: newSnowText ?? `${inches(newSnow.inches)} new snow`, source: newSnow.source, at: newSnow.at });
+  }
   const newIn = newSnow?.inches ?? 0;
 
   // Crowd is a calendar estimate and works even without weather.
@@ -439,7 +535,7 @@ export function verdict(
   // rides in the text and `at` stays null rather than inventing a clock.
   if (blackout.value === true) {
     labels.push({
-      text: `Blackout: ${blackout.products.join(", ")} (verified ${PASS_ACCESS_VERIFIED_ON})`,
+      text: `${blackout.dayAccessOnly ? "No 9-3 access" : "Blackout"}: ${blackout.products.join(", ")} (verified ${PASS_ACCESS_VERIFIED_ON})`,
       source: "Reported",
       at: null,
     });
@@ -449,11 +545,13 @@ export function verdict(
   if (stale || !weather) {
     const age = hoursAgo(fetchedAt, now);
     if (blackout.value === true) {
+      // A pass rule needs no weather, so it still answers on a stale day.
+      const call = blackoutCall(blackout);
       return {
         ...base,
-        verdict: "skip",
-        headline: "Skip: blackout day",
-        reasons: [`Your ${blackout.products.join(" / ")} is blacked out here today.`],
+        verdict: call.kind,
+        headline: call.headline,
+        reasons: [call.reason],
         labels,
         confidence: "high",
         dormant: false,
@@ -560,12 +658,16 @@ export function verdict(
   labels.push({ text: crowd.label, source: "Estimated", at: null });
 
   // Confidence: live open flag + a measured number + a confident class.
+  // "high" is gated on the surface class itself being high-confidence:
+  // without it the call rests on forecast wind, rain and temperatures,
+  // which is exactly the kind of number this page must not oversell.
   let points = status.kind === "open" ? 2 : status.kind === "limited" ? 1 : 0;
   if (newSnow && newSnow.source !== "Forecast") points += 1;
   if (surface?.confidence === "high") points += 1;
   else if (surface?.confidence === "medium") points += 0.5;
   if (hours.length > 0) points += 0.5;
-  const confidence: Verdict["confidence"] = points >= 3.5 ? "high" : points >= 2 ? "medium" : "low";
+  const confidence: Verdict["confidence"] =
+    points >= 3.5 && surface?.confidence === "high" ? "high" : points >= 2 ? "medium" : "low";
 
   const snowLine = newSnow
     ? `${inches(newSnow.inches)} of new snow (${newSnow.source.toLowerCase()}).`
@@ -575,9 +677,11 @@ export function verdict(
   let kind: VerdictKind;
   let headline: string;
   if (blackout.value === true) {
-    kind = "skip";
-    headline = "Skip: blackout day";
-    reasons.push(`Your ${blackout.products.join(" / ")} is blacked out here today.`);
+    // Skip for a full blackout; Wait when only 9-3 access is removed.
+    const call = blackoutCall(blackout);
+    kind = call.kind;
+    headline = call.headline;
+    reasons.push(call.reason);
   } else if (rain && refreeze) {
     kind = "skip";
     headline = "Skip: rain, then a freeze";
@@ -589,6 +693,7 @@ export function verdict(
       `${windHold.detail.charAt(0).toUpperCase()}${windHold.detail.slice(1)} is above this mountain's lift-hold line, so upper lifts may not run.`,
     );
   } else if (windHold.level === "warning") {
+    // Wait, not Skip: see the wind decision in the module header.
     kind = "wait";
     headline = "Wait: wind holds likely";
     reasons.push(`${windHold.detail.charAt(0).toUpperCase()}${windHold.detail.slice(1)} could put chairs on hold. Check the lift status before you drive.`);

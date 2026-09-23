@@ -880,8 +880,13 @@ export default function InstallPrompt() {
           // Bottom pill: that is the thumb zone on a phone. The map keeps
           // its feedback / compare / location pills in the first ~60px
           // above the home indicator, so the nudge sits above that band;
-          // everywhere else it hugs the bottom edge.
-          style={{ bottom: `calc(env(safe-area-inset-bottom, 0px) + ${onMap ? 72 : 16}px)` }}
+          // everywhere else it hugs the bottom edge. While the phone tab
+          // bar is showing, app/globals.css defines --wn-tab-bar-h (bar
+          // plus the home-indicator inset) and the nudge rides above it;
+          // otherwise the var is unset and the inset alone applies.
+          style={{
+            bottom: `calc(var(--wn-tab-bar-h, env(safe-area-inset-bottom, 0px)) + ${onMap ? 72 : 16}px)`,
+          }}
         >
           <div className="pointer-events-auto flex w-full max-w-[480px] items-center gap-3 rounded-2xl bg-wn-navy px-3 py-2.5 text-white shadow-lg shadow-black/25 ring-1 ring-white/10">
             <Image src="/icon-192.png" alt="" width={36} height={36} className="h-9 w-9 rounded-lg" />

@@ -175,30 +175,59 @@ type TripRow = {
 
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 
-/** The next scheduled trip when trips.start_date exists (feature-detected
- *  off select("*"), the same way /trip/[id] does), else the newest trip. */
-export async function loadNextTrip(supabase: Client, todayISO: string): Promise<NextTrip | null> {
-  const { data, error } = await supabase
-    .from("trips")
-    .select("*")
-    .order("created_at", { ascending: false })
-    .limit(20)
-    .returns<TripRow[]>();
-  if (error || !data || data.length === 0) return null;
+/** PostgREST answers a filter on a column that does not exist yet with
+ *  42703 (or a schema-cache message naming it). Same test as /trip/[id]. */
+function isMissingStartDate(err: { code?: string; message?: string } | null): boolean {
+  if (!err) return false;
+  if (err.code === "42703") return true;
+  return /start_date/.test(err.message ?? "") && /column|schema cache/i.test(err.message ?? "");
+}
 
-  const hasStartDate = "start_date" in data[0];
+// Logged once per process, not once per page view.
+let warnedMissingStartDate = false;
+
+/** The next scheduled trip when trips.start_date exists, else the newest
+ *  trip. The scheduled query is asked of the database directly (earliest
+ *  start_date on or after `todayISO`), so a user with many trips still
+ *  sees the right one; the column is feature-detected off that query's
+ *  error until the 2026-09-23 DDL runs. Trips are user-scoped by RLS,
+ *  like /trips, so there is no user_id filter here. */
+export async function loadNextTrip(supabase: Client, todayISO: string): Promise<NextTrip | null> {
   let pick: TripRow | null = null;
   let upcoming = false;
-  if (hasStartDate) {
-    const scheduled = data
-      .filter((t) => typeof t.start_date === "string" && ISO_DATE.test(t.start_date) && t.start_date >= todayISO)
-      .sort((a, b) => (a.start_date as string).localeCompare(b.start_date as string));
-    if (scheduled.length > 0) {
-      pick = scheduled[0];
-      upcoming = true;
+  let hasStartDate = true;
+
+  const scheduled = await supabase
+    .from("trips")
+    .select("*")
+    .gte("start_date", todayISO)
+    .order("start_date", { ascending: true })
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .returns<TripRow[]>();
+  if (scheduled.error) {
+    if (!isMissingStartDate(scheduled.error)) return null;
+    hasStartDate = false;
+    if (!warnedMissingStartDate) {
+      warnedMissingStartDate = true;
+      console.warn("[today] trips.start_date is missing; showing the newest trip instead of the next one.");
     }
+  } else if (scheduled.data && scheduled.data.length > 0) {
+    pick = scheduled.data[0];
+    upcoming = true;
   }
-  if (!pick) pick = data[0];
+
+  if (!pick) {
+    const newest = await supabase
+      .from("trips")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .returns<TripRow[]>();
+    if (newest.error || !newest.data || newest.data.length === 0) return null;
+    pick = newest.data[0];
+    hasStartDate = hasStartDate && "start_date" in pick;
+  }
 
   const slugs = Array.from(new Set(pick.resort_slugs ?? []));
   const { data: names } = slugs.length
