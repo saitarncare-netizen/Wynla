@@ -298,6 +298,27 @@ function gate(info) {
   return { ok: true, licence, season, month };
 }
 
+// Geosearch returns everything geotagged within 3 km (a fungus, a town
+// hall) and a title search on a generic name ("Bear Creek", "Blue
+// Mountain") returns the wrong Bear Creek. Files reached through the
+// matched Wikidata item (P18, its category) are trusted; the other two
+// routes must mention the resort or something you would photograph at a
+// ski area. The vision pass still judges every survivor.
+const SKI_WORDS =
+  /\b(ski|skis|skiing|skier|skiers|snowboard\w*|chairlift|chair lift|gondola|t-bar|rope tow|lifts?|slopes?|piste|trails?|snow\w*|winter|resort|summit|mountain|mtn|peak|ridge|lodge|bowl|glades?)\b/i;
+
+function isRelevant(info, source, resort) {
+  if (source === "p18" || source === "category") return true;
+  const meta = info.extmetadata ?? {};
+  const text = [info.title, stripHtml(meta.ImageDescription?.value), stripHtml(meta.Categories?.value)].join(" ");
+  const core = nameVariants(resort.name)[1] ?? resort.name;
+  const nameHit = tokens(core)
+    .filter((t) => !GENERIC.has(t))
+    .some((t) => new RegExp(`\\b${t}\\b`, "i").test(text));
+  if (source === "geosearch") return nameHit || SKI_WORDS.test(text);
+  return SKI_WORDS.test(text);
+}
+
 function candidateRecord(info, gateResult, source, extra = {}) {
   const meta = info.extmetadata ?? {};
   const author = stripHtml(meta.Artist?.value) || stripHtml(meta.Credit?.value) || info.user || "Unknown";
@@ -374,6 +395,10 @@ async function harvestResort(resort) {
     const entry = pool.get(info.title) ?? { source: "search", priority: 0 };
     if (!g.ok) {
       rejected[g.reason] = (rejected[g.reason] ?? 0) + 1;
+      continue;
+    }
+    if (!isRelevant(info, entry.source, resort)) {
+      rejected["not-relevant"] = (rejected["not-relevant"] ?? 0) + 1;
       continue;
     }
     const rec = candidateRecord(info, g, entry.source, entry.distM != null ? { distanceM: entry.distM } : {});
