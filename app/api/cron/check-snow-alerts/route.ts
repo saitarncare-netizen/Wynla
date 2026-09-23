@@ -5,10 +5,13 @@
 // resorts rows. For every enabled snow_alerts row we decide, with the
 // shared rules in lib/alertRules.ts, whether a push fires:
 //
-//   closed          resort is not open / limited (off-season, closed,
-//                   or status unknown because only the Open-Meteo model
-//                   fallback ran) — modelled snow at a closed hill is
-//                   not a powder day
+//   unknown_status  the OnTheSnow parse failed and only the Open-Meteo
+//                   model fallback ran — the number is an estimate, so no
+//                   push. Counted apart from 'closed': in season a rising
+//                   count here means the parser broke, not that the hills
+//                   shut
+//   closed          resort is closed / off-season — modelled snow at a
+//                   closed hill is not a powder day
 //   stale           snow report older than 36 h — never alert on old data
 //   below_threshold reported new snow < the user's threshold
 //   already_today   an alert already went out today in the resort's own
@@ -16,7 +19,16 @@
 //   fire            send to every registered device of that user
 //
 // The notification names the resort, the number of inches, that the
-// number is resort-reported, and the resort-local time of the report.
+// number is resort-reported, and when we last checked the report, in the
+// resort's local time (snow_report_updated_at is our fetch time, not the
+// resort's own report time, so the copy says "checked", not "reported").
+//
+// Push-service responses: 404 / 410 mean the subscription is gone and the
+// row is deleted; 401 / 403 mean the VAPID key the browser subscribed
+// with is not the one we sign with (key rotation, preview vs production
+// mismatch). Those rows are NOT pruned — re-subscribing with the current
+// key fixes them (lib/pushClient.ts does that on the next enable) — but
+// they are counted as `vapidMismatch` in the JSON so the outage is seen.
 //
 // Env vars:
 //   CRON_SECRET                   matches the Vercel cron header
@@ -147,6 +159,7 @@ export async function GET(request: Request) {
   type Firing = { alert: AlertRow; resort: ResortRow; timeZone?: string };
   const firing: Firing[] = [];
   const skipped: Record<Exclude<AlertVerdict, "fire"> | "missing_resort", number> = {
+    unknown_status: 0,
     closed: 0,
     stale: 0,
     below_threshold: 0,
@@ -204,6 +217,7 @@ export async function GET(request: Request) {
   let noDevice = 0;
   const errors: Array<{ alert_id: number; endpoint: string; error: string }> = [];
   const deadEndpoints = new Set<string>();
+  const vapidMismatchEndpoints = new Set<string>();
 
   for (const { alert, resort, timeZone } of firing) {
     const subs = subsByUser.get(alert.user_id) ?? [];
@@ -212,13 +226,16 @@ export async function GET(request: Request) {
       continue;
     }
     const inches = resort.snow_new_24h_in ?? 0;
-    const reportedAt = resort.snow_report_updated_at
-      ? formatResortLocalTime(new Date(resort.snow_report_updated_at), timeZone)
-      : null;
+    // Only stamp a time when we know the resort's zone: printing the
+    // server's UTC clock as if it were local would be worse than no time.
+    const checkedAt =
+      resort.snow_report_updated_at && timeZone
+        ? formatResortLocalTime(new Date(resort.snow_report_updated_at), timeZone)
+        : null;
     const payload = {
       title: `${inches} in of new snow at ${resort.name}`,
       body:
-        `Resort-reported 24 h snowfall${reportedAt ? `, as of ${reportedAt}` : ""}. ` +
+        `Resort-reported 24 h snowfall${checkedAt ? `, checked at ${checkedAt}` : ""}. ` +
         `Your alert threshold is ${alert.threshold_in} in.`,
       url: `/resort/${resort.slug}`,
       label: "Snow alert",
@@ -238,6 +255,7 @@ export async function GET(request: Request) {
         continue;
       }
       if (result.dead) deadEndpoints.add(sub.endpoint);
+      if (result.vapidMismatch) vapidMismatchEndpoints.add(sub.endpoint);
       errors.push({
         alert_id: alert.id,
         endpoint: sub.endpoint,
@@ -275,6 +293,11 @@ export async function GET(request: Request) {
     noDevice,
     skipped,
     expiredPruned,
+    // Devices whose subscription was made with a different VAPID public
+    // key than the one this deploy signs with. Non-zero after a key
+    // rotation is expected until those users re-enable alerts; non-zero
+    // on a fresh deploy means the browser and server keys do not match.
+    vapidMismatch: vapidMismatchEndpoints.size,
     errors,
   });
 }

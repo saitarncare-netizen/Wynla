@@ -12,6 +12,7 @@ const vail: FavoriteResortSnapshot = {
   snowSource: "Reported",
   statusLabel: "Open",
   operating: true,
+  statusKnown: true,
   surfaceLabel: "Powder",
   reportFresh: true,
   primaryPass: "Epic Pass",
@@ -28,9 +29,27 @@ const closedHill: FavoriteResortSnapshot = {
   snowSource: "Estimated",
   statusLabel: "Off-season",
   operating: false,
+  statusKnown: true,
   surfaceLabel: null,
   reportFresh: true,
   primaryPass: "Independent",
+};
+
+const unknownHill: FavoriteResortSnapshot = {
+  name: "Mystery Peak",
+  slug: "mystery-peak",
+  state: "CO",
+  tempHigh: 20,
+  conditions: "Snow",
+  snowNew24h: 5,
+  snowNew7d: null,
+  snowSource: "Estimated",
+  statusLabel: "Status unknown",
+  operating: false,
+  statusKnown: false,
+  surfaceLabel: null,
+  reportFresh: true,
+  primaryPass: "Epic Pass",
 };
 
 const base = {
@@ -72,6 +91,26 @@ describe("buildDigestEmail", () => {
     expect(out.html).toContain(base.preferencesUrl);
     expect(out.text).toContain(`Unsubscribe: ${base.unsubscribeUrl}`);
     expect(out.text).toContain(`Change cadence or threshold: ${base.preferencesUrl}`);
+  });
+
+  it("never calls an unknown-status resort closed, and labels its estimate", () => {
+    // Mixed case: the open favorite unlocks the send, the unknown one must
+    // not read "Status unknown" on one line and "closed" on the next.
+    const out = buildDigestEmail({ ...base, userName: null, favoriteResortSnapshots: [vail, unknownHill] });
+    expect(out.html).toContain("Status unknown");
+    expect(out.html).not.toContain("No report while closed");
+    expect(out.html).toContain("Estimated 5 in new snow in 24 h (weather model, no resort report)");
+    expect(out.text).toContain("Estimated 5 in new snow in 24 h (weather model, no resort report)");
+    // Unknown status never drives the subject line: only operating resorts do.
+    expect(out.subject).toBe("9 in of new snow at Vail, your Wynla daily digest");
+
+    const none = buildDigestEmail({
+      ...base,
+      userName: null,
+      favoriteResortSnapshots: [vail, { ...unknownHill, snowNew24h: null }],
+    });
+    expect(none.html).toContain("No snow report available");
+    expect(none.html).not.toContain("No report while closed");
   });
 
   it("marks stale reports instead of showing an old number", () => {

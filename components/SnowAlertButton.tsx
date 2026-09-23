@@ -33,6 +33,7 @@ import {
   isPushSupported,
   needsIosInstall,
   subscribeThisDevice,
+  subscriptionMatchesCurrentKey,
   syncThisDevice,
 } from "@/lib/pushClient";
 import UpsellModal from "@/components/UpsellModal";
@@ -138,11 +139,17 @@ export default function SnowAlertButton({ resortId, resortName }: Props) {
       if (isPushSupported()) {
         const sub = await getThisDeviceSubscription();
         if (cancelled) return;
-        setThisDeviceRegistered(Boolean(sub));
+        // A subscription made with a previous VAPID key cannot receive
+        // anything we send now; report it as not registered so the
+        // "Alert this device too" action re-subscribes with the current key.
+        setThisDeviceRegistered(Boolean(sub && subscriptionMatchesCurrentKey(sub)));
         // Keep the server row bound to the current user and its
         // last_seen_at moving (the service worker has no
         // pushsubscriptionchange handler yet — see lib/pushClient.ts).
-        if (sub) void syncThisDevice();
+        // Throttled inside to once per browser session, and only when
+        // this user actually has an alert on, so plain browsing never
+        // triggers a write.
+        if (sub && row?.enabled) void syncThisDevice();
       }
     })();
     return () => {

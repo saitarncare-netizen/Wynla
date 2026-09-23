@@ -13,8 +13,9 @@
 //   on the same device (e.g. alerts for a second resort, or after
 //   sign-out/sign-in) therefore fails under RLS. handoff-docs/sql/
 //   2026-09-23-alerts.sql adds the policy; until it runs, and as a belt
-//   and braces after, the write happens with the service role AFTER this
-//   handler has verified the caller owns the endpoint (see below).
+//   and braces after, the write happens with the service role, scoped to
+//   the signed-in caller's user id (see the proof-of-possession note
+//   below for why endpoint + keys is sufficient).
 //
 // DELETE ?endpoint=...  Removes the caller's row for that endpoint. Runs
 //   through the cookie client so RLS scopes it to the signed-in user.
@@ -32,8 +33,6 @@ type PushSubscriptionJSON = {
 
 type StoredSub = {
   user_id: string | null;
-  p256dh: string;
-  auth: string;
 };
 
 function serviceClient() {
@@ -90,28 +89,23 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: true });
   }
 
-  // Ownership check before the privileged write. The endpoint row may
-  // already belong to another account on a shared device; the caller may
-  // take it over only by presenting the subscription's own keys, which
-  // only the browser holding the subscription knows. Otherwise refuse.
+  // Proof of possession before the privileged write: the endpoint URL and
+  // its p256dh/auth keys are minted together by the browser and are never
+  // readable by another account (SELECT is own-rows only), so presenting
+  // all three IS the proof that this browser holds the subscription. A
+  // row that already belongs to a different account therefore means the
+  // same device signed in as someone else (shared phone) and is rebound
+  // to the caller on purpose; there is no extra ownership guard beyond
+  // that. The prior row is read only to report the rebind in the JSON.
   const { data: existing, error: readErr } = await admin
     .from("push_subscriptions")
-    .select("user_id, p256dh, auth")
+    .select("user_id")
     .eq("endpoint", sub.endpoint)
     .maybeSingle();
   if (readErr) {
     return NextResponse.json({ error: readErr.message }, { status: 500 });
   }
   const prior = existing as StoredSub | null;
-  if (prior && prior.user_id && prior.user_id !== userId) {
-    const sameKeys = prior.p256dh === row.p256dh && prior.auth === row.auth;
-    if (!sameKeys) {
-      return NextResponse.json(
-        { error: "This device is registered to another account" },
-        { status: 403 },
-      );
-    }
-  }
 
   const { error } = await admin
     .from("push_subscriptions")

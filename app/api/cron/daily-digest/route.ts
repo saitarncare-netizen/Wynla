@@ -6,9 +6,10 @@
 //   1. Load the user's favorites, the resort rows and the weather_cache
 //      snapshot, plus the display name from profiles.
 //   2. Decide with lib/alertRules.decideDigest whether the mail is worth
-//      sending: nothing to show, every favorite off-season with no new
-//      snow, or the best favorite under the user's threshold → skip, and
-//      leave last_sent_at alone so the next run re-evaluates.
+//      sending: nothing to show, every favorite off-season, no favorite
+//      operating with at least one unreadable report (counted apart as
+//      unknown_status), or the best favorite under the user's threshold
+//      → skip, and leave last_sent_at alone so the next run re-evaluates.
 //   3. Build HTML + plain-text via lib/emailTemplates.
 //   4. POST to Resend with List-Unsubscribe / List-Unsubscribe-Post headers
 //      pointing at the signed one-click unsubscribe endpoint.
@@ -41,6 +42,7 @@ import {
   decideDigest,
   isReportFresh,
   isResortOperating,
+  isStatusKnown,
   snowSourceForStatus,
   statusLabel,
   surfaceLabelForCode,
@@ -126,6 +128,7 @@ function toSnapshot(r: ResortRow, w: WeatherRow | undefined, now: Date): Favorit
     snowSource: hasReport ? snowSourceForStatus(r.snow_report_status) : "Forecast",
     statusLabel: statusLabel(r.snow_report_status),
     operating,
+    statusKnown: isStatusKnown(r.snow_report_status),
     surfaceLabel: surfaceLabelForCode(r.current_surface_class),
     reportFresh: hasReport ? isReportFresh(r.snow_report_updated_at, now) : forecastSnow != null,
     primaryPass: passesLabel(r),
@@ -302,9 +305,13 @@ export async function GET(request: Request) {
   // 5. Send loop. Sequential is fine at our volumes (Resend allows ~10
   //    req/s). A send failure is logged per user and does not abort the run.
   let sent = 0;
+  // unknown_status is kept apart from off_season on purpose: both skip
+  // the mail, but a non-zero unknown_status in season means the snow
+  // parser is failing for someone's favorites, which off_season would hide.
   const skipped: Record<Exclude<DigestVerdict, "send">, number> = {
     empty: 0,
     off_season: 0,
+    unknown_status: 0,
     below_threshold: 0,
   };
   const errors: Array<{ user_id: string; error: string }> = [];
@@ -326,6 +333,7 @@ export async function GET(request: Request) {
     const { verdict } = decideDigest(
       snapshots.map((s) => ({
         operating: s.operating,
+        statusKnown: s.statusKnown,
         snowNew24hIn: s.reportFresh ? s.snowNew24h : null,
         snowNew7dIn: s.reportFresh ? s.snowNew7d : null,
       })),

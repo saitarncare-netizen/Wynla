@@ -13,14 +13,19 @@
 -- supabase-js upsert is INSERT ... ON CONFLICT DO UPDATE, and Postgres
 -- evaluates UPDATE policies on the conflict path, so the second enable on
 -- the same browser (endpoint already stored) was rejected under RLS.
--- Owner rows and not-yet-claimed (NULL user) rows may be updated by the
--- signed-in caller; the WITH CHECK keeps a row from being handed to a
--- different user through the anon client.
+--
+-- Scope: signed-in users only (TO authenticated), so the anon role cannot
+-- rewrite legacy NULL-user rows through the public REST endpoint. USING
+-- lets the caller take over their own rows and not-yet-claimed (NULL
+-- user) rows; WITH CHECK requires the row to end up owned by the caller,
+-- so a user can neither hand a row to someone else nor un-claim it back
+-- to NULL.
 DROP POLICY IF EXISTS "push_subs_update_own" ON public.push_subscriptions;
 CREATE POLICY "push_subs_update_own" ON public.push_subscriptions
   FOR UPDATE
+  TO authenticated
   USING (auth.uid() = user_id OR user_id IS NULL)
-  WITH CHECK (auth.uid() = user_id OR user_id IS NULL);
+  WITH CHECK (auth.uid() = user_id);
 
 -- The push cron fans out by user; the digest cron looks up rows by id for
 -- one-click unsubscribe. Both are tiny tables today, but the indexes cost

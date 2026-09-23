@@ -84,7 +84,11 @@ export async function POST(req: NextRequest) {
   const rlEmail = checkRateLimit(`early:email:${emailKey}`, { windowMs: 60 * 60_000, max: 3 });
   if (!rlEmail.ok) {
     return NextResponse.json(
-      { error: "That address was submitted a few times already. Check your inbox, or try again later." },
+      // No "check your inbox" here: earlier attempts may have returned
+      // emailed:false (Resend unconfigured or a failed send), and telling
+      // someone to look for a mail that never went out is the reason they
+      // are retrying in the first place.
+      { error: "That address was submitted a few times already. Your spot is saved. Try again in an hour." },
       { status: 429, headers: { "Retry-After": String(rlEmail.retryAfterSec) } },
     );
   }

@@ -34,6 +34,18 @@ export function isResortOperating(status: string | null | undefined): boolean {
   return status === "open" || status === "limited";
 }
 
+/** True when the parser actually read the resort's report. 'unknown' (or
+ *  null) is written by refresh-snow-conditions whenever the OnTheSnow
+ *  parse fails and only the Open-Meteo fallback ran — a data outage, not
+ *  a statement about the hill. Callers must keep the two apart so an
+ *  in-season parser break is visible in the run log instead of being
+ *  counted as "closed" for months. */
+export function isStatusKnown(status: string | null | undefined): boolean {
+  return (
+    status === "open" || status === "limited" || status === "closed" || status === "off-season"
+  );
+}
+
 /** True when the snow report was written within `maxAgeHours` of `now`.
  *  A missing timestamp is never fresh. */
 export function isReportFresh(
@@ -116,6 +128,7 @@ export type AlertCandidate = {
 
 export type AlertVerdict =
   | "fire"
+  | "unknown_status"
   | "closed"
   | "stale"
   | "below_threshold"
@@ -123,8 +136,13 @@ export type AlertVerdict =
 
 /** Why an alert does or does not fire this run. Order matters: a closed
  *  resort with modelled snow must read as 'closed', not 'below_threshold',
- *  so the run log explains the silence. */
+ *  so the run log explains the silence. 'unknown_status' is kept separate
+ *  from 'closed' because it means the report could not be parsed: the
+ *  push is still suppressed (the fallback number is a model estimate),
+ *  but a spike in that counter during the season is a parser outage to
+ *  fix, not a quiet hill. */
 export function evaluateAlert(c: AlertCandidate, now: Date): AlertVerdict {
+  if (!isStatusKnown(c.snowReportStatus)) return "unknown_status";
   if (!isResortOperating(c.snowReportStatus)) return "closed";
   if (!isReportFresh(c.snowReportUpdatedAt, now)) return "stale";
   if (c.snowNew24hIn == null || c.snowNew24hIn < c.thresholdIn) return "below_threshold";
@@ -145,12 +163,19 @@ export type DigestFrequency = "daily" | "weekly";
 export type DigestSnapshotInput = {
   /** Resort is open or running limited operations. */
   operating: boolean;
+  /** False when the parser could not read the report (status 'unknown'). */
+  statusKnown: boolean;
   /** Fresh, trusted figures only; pass null for stale or missing reports. */
   snowNew24hIn: number | null;
   snowNew7dIn: number | null;
 };
 
-export type DigestVerdict = "send" | "empty" | "off_season" | "below_threshold";
+export type DigestVerdict =
+  | "send"
+  | "empty"
+  | "off_season"
+  | "unknown_status"
+  | "below_threshold";
 
 /**
  * Decide whether a digest is worth sending.
@@ -158,6 +183,11 @@ export type DigestVerdict = "send" | "empty" | "off_season" | "below_threshold";
  *   off_season      — no favorite is operating: modelled snow at a closed
  *                     hill is not news, and a "no new snow" mail every
  *                     morning all summer is spam
+ *   unknown_status  — no favorite is operating AND at least one has no
+ *                     readable report. Same outcome as off_season (skip),
+ *                     counted apart so a parser outage in season shows
+ *                     up in the cron log instead of hiding under
+ *                     "off-season"
  *   below_threshold — the user asked to be mailed only for ≥ N in and the
  *                     best favorite is under it
  *   send            — otherwise
@@ -175,7 +205,10 @@ export function decideDigest(
   const pick = (s: DigestSnapshotInput) =>
     frequency === "weekly" ? (s.snowNew7dIn ?? s.snowNew24hIn ?? 0) : (s.snowNew24hIn ?? 0);
   const maxNewIn = operating.reduce((m, s) => Math.max(m, pick(s)), 0);
-  if (operating.length === 0) return { verdict: "off_season", maxNewIn: 0 };
+  if (operating.length === 0) {
+    const anyUnknown = snapshots.some((s) => !s.statusKnown);
+    return { verdict: anyUnknown ? "unknown_status" : "off_season", maxNewIn: 0 };
+  }
   const threshold = thresholdIn ?? 0;
   if (threshold > 0 && maxNewIn < threshold) return { verdict: "below_threshold", maxNewIn };
   return { verdict: "send", maxNewIn };

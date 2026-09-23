@@ -50,12 +50,24 @@ export type WebPushResult = {
   /** True when the push service says the subscription no longer exists
    *  (HTTP 404 / 410). The caller should delete the stored row. */
   dead?: boolean;
+  /** True when the push service rejected our VAPID signature (HTTP 401 /
+   *  403): the browser subscribed with a different public key than the
+   *  one we sign with. The row is still valid for the OLD key, so it
+   *  must not be pruned; the device has to re-subscribe with the current
+   *  key. */
+  vapidMismatch?: boolean;
 };
 
 /** 404 and 410 from a push service both mean "this subscription is gone
  *  for good" (uninstalled app, revoked permission, rotated endpoint). */
 export function isDeadSubscriptionStatus(status: number | undefined): boolean {
   return status === 404 || status === 410;
+}
+
+/** 401 / 403 from a push service means the VAPID JWT did not verify
+ *  against the key the subscription was created with. */
+export function isVapidMismatchStatus(status: number | undefined): boolean {
+  return status === 401 || status === 403;
 }
 
 export async function sendWebPush(
@@ -91,6 +103,7 @@ export async function sendWebPush(
       ok: false,
       status: err.statusCode,
       dead: isDeadSubscriptionStatus(err.statusCode),
+      vapidMismatch: isVapidMismatchStatus(err.statusCode),
       error: (err.body ?? err.message ?? String(e)).slice(0, 300),
     };
   }

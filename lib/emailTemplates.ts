@@ -24,7 +24,9 @@ const OFFWHITE = "#FAF7F2";
 const SKY = "#87CEEB";
 const GOLD = "#D4A84B";
 
-const SITE_BASE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://wynla.app";
+// Trailing slash trimmed so a NEXT_PUBLIC_SITE_URL of "https://wynla.app/"
+// cannot produce "https://wynla.app//resort/vail" links.
+const SITE_BASE = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://wynla.app").replace(/\/+$/, "");
 
 export type FavoriteResortSnapshot = {
   name: string;
@@ -44,6 +46,9 @@ export type FavoriteResortSnapshot = {
   statusLabel: string;
   /** True when the resort is open or running limited operations. */
   operating: boolean;
+  /** False when the resort's report could not be read (status unknown),
+   *  so the row must not claim the hill is closed. */
+  statusKnown: boolean;
   /** Today's snow surface class label from the classifier, if any. */
   surfaceLabel: string | null;
   /** Whether the snow report is recent enough to trust (see alertRules). */
@@ -80,11 +85,27 @@ function escapeHtml(s: string): string {
     .replace(/'/g, "&#39;");
 }
 
+function sourceWord(r: FavoriteResortSnapshot): string {
+  return r.snowSource === "Reported" ? "resort-reported" : r.snowSource.toLowerCase();
+}
+
 function snowLine(r: FavoriteResortSnapshot): string {
-  if (!r.operating) return "No report while closed";
+  if (!r.operating) {
+    // A row whose status line says "Status unknown" must not also say
+    // "closed": the report failed to parse, we do not know either way.
+    // Show the model estimate when there is one, clearly labelled, so the
+    // footer's "unless marked estimated" promise holds.
+    if (!r.statusKnown) {
+      if (r.reportFresh && r.snowNew24h != null && r.snowNew24h > 0) {
+        return `Estimated ${r.snowNew24h} in new snow in 24 h (weather model, no resort report)`;
+      }
+      return "No snow report available";
+    }
+    return "No report while closed";
+  }
   if (!r.reportFresh) return "Snow report not updated recently";
   if (r.snowNew24h == null) return "No snow report yet";
-  const source = r.snowSource === "Reported" ? "resort-reported" : r.snowSource.toLowerCase();
+  const source = sourceWord(r);
   if (r.snowNew24h <= 0) return `No new snow in 24 h (${source})`;
   return `${r.snowNew24h} in new snow in 24 h (${source})`;
 }
