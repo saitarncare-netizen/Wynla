@@ -26,7 +26,7 @@ type Props = {
 const MAX_OPTIONS = [2, 3, 4, 5, 6, 8, 10, 12];
 
 const selectClass =
-  "block min-h-11 w-full rounded-wn-sm border border-wn-line bg-white px-3 text-base text-wn-charcoal focus:border-wn-navy focus:outline-none focus:ring-2 focus:ring-wn-navy/25";
+  "block min-h-11 w-full rounded-wn-sm border border-wn-line bg-white px-3 text-base text-wn-charcoal focus:border-wn-navy focus:outline-none focus:ring-2 focus:ring-wn-focus";
 const labelClass = "mb-1 block text-eyebrow font-bold uppercase text-wn-muted";
 
 export default function GoForm({ state, cities, families, productsByFamily, unknownCity }: Props) {

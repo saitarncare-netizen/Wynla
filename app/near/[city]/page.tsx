@@ -136,6 +136,14 @@ export default async function NearCityPage({ params }: { params: Promise<{ city:
           >
             Saturday picks
           </Link>
+          {cta.isGo && (
+            <Link
+              href={`/?from=${city.code}`}
+              className="inline-flex min-h-11 items-center text-sm font-semibold text-white/85 underline-offset-4 hover:underline"
+            >
+              Open the map from {name}
+            </Link>
+          )}
         </div>
       </PageHeader>
 
@@ -251,7 +259,7 @@ function ResortRow({ row }: { row: NearRow }) {
             <span
               key={p}
               title={passLabel(p)}
-              className="rounded-wn-sm px-1.5 py-0.5 text-xs font-bold"
+              className="rounded-wn-sm px-1.5 py-0.5 text-eyebrow font-bold"
               style={{ backgroundColor: passColor(p), color: textOn(passColor(p)) }}
             >
               {passShort(p)}

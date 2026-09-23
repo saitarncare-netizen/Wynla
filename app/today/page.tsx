@@ -97,7 +97,11 @@ export default async function TodayPage() {
         {rows.length === 0 && !today.error ? (
           <EmptyState
             icon="mountain"
-            title="Save a mountain"
+            title={
+              <span role="heading" aria-level={2}>
+                Save a mountain
+              </span>
+            }
             body="Tap the heart on any resort. Every morning it shows up here with a Go, Wait or Skip and the reason."
             action={<Button href="/">Open the map</Button>}
           />

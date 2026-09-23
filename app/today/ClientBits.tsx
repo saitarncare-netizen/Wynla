@@ -79,7 +79,10 @@ export function RowThumb({
   return (
     <div
       className="relative h-14 w-14 shrink-0 overflow-hidden rounded-wn-sm"
-      style={{ background: `linear-gradient(135deg, ${color} 0%, var(--color-wn-navy) 100%)` }}
+      // The pass colour only tints the top-left corner; by the centre,
+      // where the white fallback initial sits, the tile is navy, so the
+      // initial never lands white-on-Ikon-yellow.
+      style={{ background: `linear-gradient(135deg, ${color} 0%, var(--color-wn-navy) 55%)` }}
       aria-hidden={showImage ? undefined : true}
     >
       {showImage ? (
