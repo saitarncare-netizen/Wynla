@@ -1,18 +1,23 @@
 // "Email me this every Thursday" — session-authed opt-in for the Saturday
 // picks email.
 //
+// The Thursday list is its own consent: profiles.pass_product set means
+// "send me the picks" (NULL = not on the list). It never touches the
+// weekly favorites digest's enabled flag, so opting in here does not
+// start the Monday recap and stopping here does not end it. The
+// digest_subscriptions row is still needed, because it holds the address
+// and the id the signed unsubscribe link is minted from; when the user
+// has none, one is created with enabled = false.
+//
 // POST body: { city: string, pass: string | null, product: string | null }
 //   1. Saves the city to profiles.preferred_origin (live column) and the
 //      pass choice to profiles.pass_product (added by
 //      handoff-docs/sql/2026-09-23-go.sql). When that column is missing
 //      the city still saves and the response says { ok: false, reason:
 //      "coming_soon" } so the UI can tell the user honestly.
-//   2. Enables digest_subscriptions for the user (the Thursday cron reads
-//      enabled = true). An existing row keeps its cadence and threshold;
-//      a new row is created weekly with no snow threshold.
+//   2. Ensures a digest_subscriptions row exists (never changes enabled).
 //
-// DELETE: clears pass_product so the Thursday email stops without
-// touching the daily digest preference.
+// DELETE: clears pass_product, which stops the Thursday email.
 
 import { NextRequest, NextResponse } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
@@ -74,27 +79,28 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: passWrite.error.message }, { status: 500 });
   }
 
-  // Enable the digest subscription without overwriting an existing
-  // cadence or threshold.
+  // The address + unsubscribe id live on digest_subscriptions. Create the
+  // row if the user has none, with the weekly digest OFF: that list is a
+  // separate opt-in on /account/digest. An existing row is left alone.
   const { data: existing, error: readErr } = await supabase
     .from("digest_subscriptions")
-    .select("id, enabled")
+    .select("id")
     .eq("user_id", u.user.id)
     .maybeSingle();
   if (readErr) {
     return NextResponse.json({ error: readErr.message }, { status: 500 });
   }
-  const subWrite = existing
-    ? await supabase.from("digest_subscriptions").update({ enabled: true }).eq("user_id", u.user.id)
-    : await supabase.from("digest_subscriptions").insert({
-        user_id: u.user.id,
-        email: u.user.email,
-        frequency: "weekly",
-        threshold_in: 0,
-        enabled: true,
-      });
-  if (subWrite.error) {
-    return NextResponse.json({ error: subWrite.error.message }, { status: 500 });
+  if (!existing) {
+    const { error: insErr } = await supabase.from("digest_subscriptions").insert({
+      user_id: u.user.id,
+      email: u.user.email,
+      frequency: "weekly",
+      threshold_in: 0,
+      enabled: false,
+    });
+    if (insErr) {
+      return NextResponse.json({ error: insErr.message }, { status: 500 });
+    }
   }
   return NextResponse.json({ ok: true, city: city.code, pass_product: passProduct });
 }

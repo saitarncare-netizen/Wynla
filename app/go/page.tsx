@@ -4,18 +4,17 @@
 // card (app/go/og) renders the same picks, and the Thursday email deep
 // links to the same view.
 //
-// Data: lib/saturday/load.ts (cached 10 minutes per origin + radius; the
-// crons that feed it run once a day) → lib/saturday/rank.ts (pure). The
-// auth read is per request and stays outside the cache.
+// Data: lib/saturday/cached.ts (lib/saturday/load.ts cached 10 minutes
+// per origin + radius, shared with the share card) → lib/saturday/rank.ts
+// (pure). The auth read is per request and stays outside the cache.
 
 import type { Metadata } from "next";
 import Link from "next/link";
-import { unstable_cache } from "next/cache";
-import { supabase } from "@/lib/supabase";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { isMissingSchemaError } from "@/lib/cronRun";
 import { PASS_FAMILIES, productsFor, type PassFamily } from "@/lib/passAccess";
 import { passLabel } from "@/lib/passColors";
+import { loadCachedSaturdayData } from "@/lib/saturday/cached";
 import {
   cityOptions,
   originLabel,
@@ -25,7 +24,7 @@ import {
   type GoOrigin,
 } from "@/lib/saturday/cities";
 import { formatTargetDate, upcomingWeekendDate } from "@/lib/saturday/dates";
-import { loadSaturdayData, type LoadedSaturdayData } from "@/lib/saturday/load";
+import { rankInputsFrom } from "@/lib/saturday/load";
 import { parsePassProduct, passChoiceLabel } from "@/lib/saturday/passProduct";
 import { rankForSaturday, type RankResult } from "@/lib/saturday/rank";
 import { goPath, goQuery, goUrl, parseGoParams, type GoState } from "@/lib/saturday/url";
@@ -37,31 +36,8 @@ import { CountdownCard, ExcludedList, PickCard, RunnerUpRow, WhyThese } from "./
 export const dynamic = "force-dynamic";
 
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://wynla.app").replace(/\/+$/, "");
-const GO_DATA_REVALIDATE_SECONDS = 600;
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
-
-// Cached per (origin, radius). A geo origin is rounded to ~1 km so the
-// cache key space stays bounded and a shared link with the same rounded
-// point hits the same entry.
-const getCachedData = unstable_cache(
-  async (kind: "city" | "geo", code: string, lat: number, lon: number, name: string, driveCache: boolean, max: number) => {
-    const origin: GoOrigin =
-      kind === "city"
-        ? { kind: "city", code, name, short: name, lat, lon, driveCache }
-        : { kind: "geo", code: "geo", name: "Here", short: "your location", lat, lon };
-    return loadSaturdayData(supabase, origin, max, new Date());
-  },
-  ["go-data"],
-  { revalidate: GO_DATA_REVALIDATE_SECONDS, tags: ["go-data"] },
-);
-
-function loadFor(origin: GoOrigin, max: number): Promise<LoadedSaturdayData> {
-  const round = (n: number) => Math.round(n * 100) / 100;
-  return origin.kind === "city"
-    ? getCachedData("city", origin.code, origin.lat, origin.lon, origin.name, origin.driveCache === true, max)
-    : getCachedData("geo", "geo", round(origin.lat), round(origin.lon), "Here", false, max);
-}
 
 function describe(state: GoState, origin: GoOrigin | null, targetDate: string): { title: string; description: string } {
   const pass = passChoiceLabel({ family: state.pass, product: state.product });
@@ -103,18 +79,16 @@ async function readViewer(): Promise<Viewer> {
     const { data } = await ssr.auth.getUser();
     const user = data.user;
     if (!user) return { signedIn: false, optedIn: false };
-    const [prof, sub] = await Promise.all([
-      ssr.from("profiles").select("pass_product").eq("id", user.id).maybeSingle(),
-      ssr.from("digest_subscriptions").select("enabled").eq("user_id", user.id).maybeSingle(),
-    ]);
-    // pass_product is added by handoff-docs/sql/2026-09-23-go.sql; before
-    // that the read fails with 42703 and nobody can be opted in.
+    // profiles.pass_product is the Thursday list (NULL = not opted in);
+    // it is added by handoff-docs/sql/2026-09-23-go.sql, and before that
+    // the read fails with 42703 and nobody can be opted in. The weekly
+    // digest's enabled flag is a separate list and is not consulted.
+    const prof = await ssr.from("profiles").select("pass_product").eq("id", user.id).maybeSingle();
     const passProduct =
       prof.error && isMissingSchemaError(prof.error)
         ? null
         : ((prof.data as { pass_product?: string | null } | null)?.pass_product ?? null);
-    const enabled = (sub.data as { enabled?: boolean } | null)?.enabled === true;
-    return { signedIn: true, optedIn: enabled && parsePassProduct(passProduct) !== null };
+    return { signedIn: true, optedIn: parsePassProduct(passProduct) !== null };
   } catch {
     return { signedIn: false, optedIn: false };
   }
@@ -140,11 +114,9 @@ export default async function GoPage({ searchParams }: { searchParams: SearchPar
   let loadError: string | null = null;
   if (origin) {
     try {
-      const data = await loadFor(origin, state.max);
+      const data = await loadCachedSaturdayData(origin, state.max);
       result = rankForSaturday({
-        resorts: data.resorts,
-        weatherById: new Map(data.weather),
-        driveById: new Map(data.drives),
+        ...rankInputsFrom(data),
         passFamily: state.pass,
         product: state.product,
         origin: { lat: origin.lat, lon: origin.lon, name: originLabel(origin) },
@@ -173,7 +145,7 @@ export default async function GoPage({ searchParams }: { searchParams: SearchPar
     <main className="min-h-dvh bg-wn-offwhite pb-[max(2rem,env(safe-area-inset-bottom))]">
       <section className="bg-wn-navy px-4 pb-8 pt-6 text-white sm:px-6 sm:pt-10">
         <div className="mx-auto max-w-3xl">
-          <Link href="/" className="text-xs font-semibold text-white/70 hover:text-white">
+          <Link href="/" className="inline-flex min-h-11 items-center text-xs font-semibold text-white/70 hover:text-white">
             ← Map
           </Link>
           <h1 className="mt-3 text-2xl font-extrabold leading-tight sm:text-4xl">Where to ride {dateLong}</h1>
@@ -265,10 +237,18 @@ export default async function GoPage({ searchParams }: { searchParams: SearchPar
             {result.mode === "off-season" && (
               <>
                 <section className="rounded-2xl border border-wn-charcoal/10 bg-white p-4 shadow-sm sm:p-5">
-                  <h2 className="text-base font-bold text-wn-navy">The season has not started within {state.max} h of {fromText}</h2>
+                  <h2 className="text-base font-bold text-wn-navy">
+                    {result.seasonPhase === "after"
+                      ? `The season is over within ${state.max} h of ${fromText}`
+                      : `The season has not started within ${state.max} h of ${fromText}`}
+                  </h2>
                   <p className="mt-1 text-sm text-wn-charcoal/75">
-                    No picks until lifts spin: a surface call on a closed mountain would be a guess. These are the first
-                    mountains {state.pass ? `on the ${passLabel(state.pass)}` : "within reach"} to open, by announced date.
+                    No picks until lifts spin: a surface call on a closed mountain would be a guess.{" "}
+                    {result.seasonPhase === "after"
+                      ? result.countdown.length > 0
+                        ? `The mountains ${state.pass ? `on the ${passLabel(state.pass)}` : "within reach"} that have already announced next season:`
+                        : "Next season's opening dates are not announced yet."
+                      : `These are the first mountains ${state.pass ? `on the ${passLabel(state.pass)}` : "within reach"} to open, by announced date.`}
                   </p>
                 </section>
                 {result.countdown.length > 0 ? (
@@ -302,7 +282,9 @@ export default async function GoPage({ searchParams }: { searchParams: SearchPar
               </details>
             )}
 
-            <WhyThese result={result} />
+            {(result.mode === "picks" || result.mode === "no-picks") && (
+              <WhyThese result={result} title={result.mode === "picks" ? "Why these three" : "How the picks are chosen"} />
+            )}
 
             <section className="rounded-2xl border border-wn-charcoal/10 bg-white p-4 text-xs leading-relaxed text-wn-charcoal/70 shadow-sm sm:p-5">
               <h2 className="text-sm font-bold text-wn-navy">About the confidence</h2>

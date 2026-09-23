@@ -6,11 +6,15 @@
 // on any day, for testing and for a manual re-send after an outage.
 //
 // Subscribers = profiles rows with preferred_origin + pass_product set
-// (handoff-docs/sql/2026-09-23-go.sql) whose digest_subscriptions row is
-// enabled. For each distinct (city, pass product) we load the same data
-// /go loads and run the same lib/saturday/rank.ts, so the email and the
-// page never disagree. One row per combo is written to
-// saturday_predictions when that table exists, so the picks can be
+// (handoff-docs/sql/2026-09-23-go.sql). pass_product IS the consent for
+// this list; the digest_subscriptions row only supplies the address and
+// the id the signed unsubscribe link is minted from, and its `enabled`
+// flag (the weekly favorites digest, a separate opt-in) is not consulted.
+// The unsubscribe link carries list=thursday so one click clears
+// pass_product and nothing else. For each distinct (city, pass product)
+// we load the same data /go loads and run the same lib/saturday/rank.ts,
+// so the email and the page never disagree. One row per combo is written
+// to saturday_predictions when that table exists, so the picks can be
 // graded later.
 //
 // Same-day dedupe: a second run on a Thursday (redeploy, manual trigger
@@ -30,7 +34,7 @@ import { digestSigningSecret, makeUnsubscribeToken, unsubscribeUrl as buildUnsub
 import { launchCityByCode, type CityOrigin } from "@/lib/origins";
 import { originTimeZone } from "@/lib/saturday/cities";
 import { isThursdayIn, todayIso, upcomingWeekendDate } from "@/lib/saturday/dates";
-import { loadSaturdayData, type LoadedSaturdayData } from "@/lib/saturday/load";
+import { loadSaturdayData, rankInputsFrom, type LoadedSaturdayData } from "@/lib/saturday/load";
 import { parsePassProduct, passChoiceLabel, type PassChoice } from "@/lib/saturday/passProduct";
 import { DEFAULT_MAX_DRIVE_HOURS, rankForSaturday, type RankResult } from "@/lib/saturday/rank";
 import { goUrl, DEFAULT_MAX_HOURS } from "@/lib/saturday/url";
@@ -48,7 +52,7 @@ type ProfileRow = {
   pass_product: string | null;
 };
 
-type SubRow = { id: number; user_id: string; email: string; enabled: boolean };
+type SubRow = { id: number; user_id: string; email: string };
 
 let warnedMissingColumn = false;
 let warnedMissingPredictions = false;
@@ -142,26 +146,29 @@ async function runThursdayPicks(request: Request, ctx: CronContext): Promise<Cro
   const profiles = (profData ?? []) as ProfileRow[];
   if (profiles.length === 0) return { ok: true, sent: 0, reason: "no opted-in profiles" };
 
-  // 2. Enabled digest rows carry the email and the unsubscribe id.
+  // 2. The digest row carries the email and the unsubscribe id. Its
+  //    enabled flag is the weekly digest's consent, not this list's, so
+  //    it is deliberately not filtered on.
   const { data: subData, error: subErr } = await supabase
     .from("digest_subscriptions")
-    .select("id, user_id, email, enabled")
-    .eq("enabled", true)
+    .select("id, user_id, email")
     .in(
       "user_id",
       profiles.map((p) => p.id),
     );
   if (subErr) return { ok: false, reason: `digest_subscriptions: ${subErr.message}` };
   const subByUser = new Map<string, SubRow>();
-  for (const s of (subData ?? []) as SubRow[]) subByUser.set(s.user_id, s);
+  for (const s of (subData ?? []) as SubRow[]) if (s.email) subByUser.set(s.user_id, s);
 
   // 3. Group recipients by (city, pass product) so each ranking runs once.
   type Group = { origin: CityOrigin; choice: PassChoice; passProduct: string; users: ProfileRow[] };
   const groups = new Map<string, Group>();
-  const skipped = { unsubscribed: 0, bad_city: 0, bad_pass: 0 };
+  const skipped = { no_address: 0, bad_city: 0, bad_pass: 0 };
   for (const p of profiles) {
     if (!subByUser.has(p.id)) {
-      skipped.unsubscribed++;
+      // Opted in before the API created the row, or the row was deleted:
+      // no address to send to and no id to sign an unsubscribe link.
+      skipped.no_address++;
       continue;
     }
     const origin = launchCityByCode(p.preferred_origin);
@@ -210,9 +217,7 @@ async function runThursdayPicks(request: Request, ctx: CronContext): Promise<Cro
     try {
       const data = await loadFor(g.origin);
       result = rankForSaturday({
-        resorts: data.resorts,
-        weatherById: new Map(data.weather),
-        driveById: new Map(data.drives),
+        ...rankInputsFrom(data),
         passFamily: g.choice.family,
         product: g.choice.product,
         origin: { lat: g.origin.lat, lon: g.origin.lon, name: g.origin.name },
@@ -245,7 +250,9 @@ async function runThursdayPicks(request: Request, ctx: CronContext): Promise<Cro
         break;
       }
       const sub = subByUser.get(u.id)!;
-      const unsubscribe = buildUnsubscribeUrl(SITE_BASE, makeUnsubscribeToken(sub.id, signingSecret));
+      // list=thursday: the link (and the List-Unsubscribe header) stops
+      // this email only, never the weekly digest.
+      const unsubscribe = buildUnsubscribeUrl(SITE_BASE, makeUnsubscribeToken(sub.id, signingSecret), "thursday");
       const { subject, html, text } = buildThursdayPicksEmail({
         userName: u.display_name,
         cityName: g.origin.name,

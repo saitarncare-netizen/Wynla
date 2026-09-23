@@ -10,11 +10,11 @@
 
 import { ImageResponse } from "next/og";
 import type { NextRequest } from "next/server";
-import { supabase } from "@/lib/supabase";
 import { OG_SIZE } from "@/lib/ogCard";
+import { loadCachedSaturdayData } from "@/lib/saturday/cached";
 import { originLabel, originTimeZone, resolveGoOrigin } from "@/lib/saturday/cities";
 import { formatMonthDay, formatTargetDate, upcomingWeekendDate } from "@/lib/saturday/dates";
-import { loadSaturdayData } from "@/lib/saturday/load";
+import { rankInputsFrom } from "@/lib/saturday/load";
 import { passChoiceLabel } from "@/lib/saturday/passProduct";
 import { rankForSaturday } from "@/lib/saturday/rank";
 import { parseGoParams } from "@/lib/saturday/url";
@@ -23,6 +23,17 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const GOLD = "#D4A84B";
+
+// A geo card is rendered only for points inside the contiguous US: the
+// launch footprint is East and Midwest, and an arbitrary ?lat=&lng= would
+// otherwise let anyone mint cache entries (and loader runs) for the whole
+// planet one link preview at a time.
+const US_LAT = [24.4, 49.4] as const;
+const US_LON = [-125, -66.9] as const;
+
+function insideFootprint(lat: number, lon: number): boolean {
+  return lat >= US_LAT[0] && lat <= US_LAT[1] && lon >= US_LON[0] && lon <= US_LON[1];
+}
 
 function card(kicker: string, title: string, subtitle: string, lines: string[]) {
   return new ImageResponse(
@@ -82,7 +93,7 @@ function card(kicker: string, title: string, subtitle: string, lines: string[]) 
 export async function GET(request: NextRequest) {
   const state = parseGoParams(request.nextUrl.searchParams);
   const origin = resolveGoOrigin(state.city, state.lat, state.lng);
-  if (!origin) {
+  if (!origin || (origin.kind === "geo" && !insideFootprint(origin.lat, origin.lon))) {
     return card("Saturday picks", "Where to ride this Saturday", "Pick your pass and your city", []);
   }
   const now = new Date();
@@ -90,11 +101,11 @@ export async function GET(request: NextRequest) {
   const passText = passChoiceLabel({ family: state.pass, product: state.product });
   const subtitle = `${passText} from ${originLabel(origin)} · within ${state.max} h`;
   try {
-    const data = await loadSaturdayData(supabase, origin, state.max, now);
+    // Same cached entry as the page: a link preview never costs more
+    // than the view it previews.
+    const data = await loadCachedSaturdayData(origin, state.max);
     const result = rankForSaturday({
-      resorts: data.resorts,
-      weatherById: new Map(data.weather),
-      driveById: new Map(data.drives),
+      ...rankInputsFrom(data),
       passFamily: state.pass,
       product: state.product,
       origin: { lat: origin.lat, lon: origin.lon, name: originLabel(origin) },
@@ -115,7 +126,12 @@ export async function GET(request: NextRequest) {
         const when = c.opensOn ? `${c.projected ? "projected " : ""}${c.approximate ? "~" : ""}${formatMonthDay(c.opensOn)}` : "date TBA";
         return `${c.resort.name} · opens ${when} · ${c.drive.label}`;
       });
-      return card("Season countdown", "The season has not started yet", subtitle, lines);
+      return card(
+        "Season countdown",
+        result.seasonPhase === "after" ? "The season is over for now" : "The season has not started yet",
+        subtitle,
+        lines,
+      );
     }
     if (result.mode === "no-picks") {
       return card("No fit this Saturday", formatTargetDate(targetDate), subtitle, [

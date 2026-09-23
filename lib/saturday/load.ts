@@ -24,11 +24,21 @@ import type { DriveInfo, RankResort, RankWeather } from "./rank";
 export const RANK_RESORT_COLUMNS =
   "id, slug, name, state, latitude, longitude, passes, tier, vertical_drop, season_open_text, season_close_text, typical_season_start, typical_season_end, operating_status, currently_open, snow_report_status, snow_report_updated_at, lifts_open_today, total_lifts, trails_open_today, total_trails, season_end_date, snow_base_depth_in, snow_new_24h_in, snow_new_48h_in, current_surface_class, current_surface_updated_at, wind_hold_mph_chair, wind_hold_mph_gondola, lift_types";
 
-/** Never classify more resorts than this per request; beyond it the
- *  drive radius is the wrong filter anyway. */
-const MAX_CANDIDATES = 160;
+/**
+ * Ceiling on resorts fetched per request. It sits above the active resort
+ * count (395 on 2026-09-23) so the drive radius is the only filter today;
+ * it exists so a future table growth cannot turn one page view into an
+ * unbounded fan-out. When it does bite, the ids actually fetched are
+ * returned (`rankedIds`) and the ranking says "beyond the N closest"
+ * rather than blaming those resorts for missing weather.
+ */
+export const MAX_CANDIDATES = 400;
 const HISTORY_DAYS = 7;
+/** PostgREST returns at most 1,000 rows; 100 ids × ≤ 8 history days fits. */
 const HISTORY_CHUNK = 100;
+/** Weather rows are one per resort, but v1 forecast_json is re-read whole
+ *  and a chunk keeps each response small and the URL short. */
+const WEATHER_CHUNK = 100;
 const DRIVE_PAGE = 1000;
 
 export type LoadedSaturdayData = {
@@ -38,6 +48,11 @@ export type LoadedSaturdayData = {
   /** Exact drive times from drive_time_cache, empty when the origin has none. */
   drives: Array<[number, DriveInfo]>;
   driveSource: "cache" | "estimate";
+  /** Resort ids inside the radius that were fetched (all of them unless
+   *  the cap applied). */
+  rankedIds: number[];
+  /** Set when the candidate cap cut the list; null when nothing was cut. */
+  rankedLimit: number | null;
   loadedAt: string;
 };
 
@@ -108,23 +123,25 @@ async function loadDrives(supabase: SupabaseClient, originName: string): Promise
 async function loadWeather(supabase: SupabaseClient, ids: number[]): Promise<Map<number, WeatherLightRow>> {
   const byId = new Map<number, WeatherLightRow>();
   if (ids.length === 0) return byId;
-  const { data, error } = await supabase
-    .from("weather_cache")
-    .select(
-      "resort_id, fetched_at, temp_high_f, temp_low_f, snow_24h_in, wind_mph_avg, v:forecast_json->v, days:forecast_json->days, measured:forecast_json->measured, updated_at:forecast_json->updated_at",
-    )
-    .in("resort_id", ids);
-  if (error) throw new Error(`weather_cache: ${error.message}`);
-  for (const row of (data ?? []) as WeatherLightRow[]) byId.set(row.resort_id, row);
+  for (const part of chunk(ids, WEATHER_CHUNK)) {
+    const { data, error } = await supabase
+      .from("weather_cache")
+      .select(
+        "resort_id, fetched_at, temp_high_f, temp_low_f, snow_24h_in, wind_mph_avg, v:forecast_json->v, days:forecast_json->days, measured:forecast_json->measured, updated_at:forecast_json->updated_at",
+      )
+      .in("resort_id", part);
+    if (error) throw new Error(`weather_cache: ${error.message}`);
+    for (const row of (data ?? []) as WeatherLightRow[]) byId.set(row.resort_id, row);
+  }
 
   // v1 rows: the JSON is a bare array, so `->days` came back null. Read
   // those whole (a v1 strip is ten small objects).
   const legacyIds = [...byId.values()].filter((r) => r.v !== 2 || !Array.isArray(r.days)).map((r) => r.resort_id);
-  if (legacyIds.length > 0) {
+  for (const part of chunk(legacyIds, WEATHER_CHUNK)) {
     const { data: full, error: fullErr } = await supabase
       .from("weather_cache")
       .select("resort_id, forecast_json")
-      .in("resort_id", legacyIds);
+      .in("resort_id", part);
     if (fullErr) throw new Error(`weather_cache (legacy): ${fullErr.message}`);
     for (const row of (full ?? []) as WeatherFullRow[]) {
       const light = byId.get(row.resort_id);
@@ -198,6 +215,7 @@ export async function loadSaturdayData(
     if (seconds <= maxSeconds) candidates.push({ id: r.id, seconds });
   }
   candidates.sort((a, b) => a.seconds - b.seconds);
+  const capped = candidates.length > MAX_CANDIDATES;
   const ids = candidates.slice(0, MAX_CANDIDATES).map((c) => c.id);
 
   const today = todayIso(now);
@@ -250,6 +268,20 @@ export async function loadSaturdayData(
     weather,
     drives,
     driveSource: drives.length > 0 ? "cache" : "estimate",
+    rankedIds: ids,
+    rankedLimit: capped ? MAX_CANDIDATES : null,
     loadedAt: now.toISOString(),
+  };
+}
+
+/** The rankForSaturday inputs a loaded payload provides, so the page, the
+ *  share card and the cron build the call the same way. */
+export function rankInputsFrom(data: LoadedSaturdayData) {
+  return {
+    resorts: data.resorts,
+    weatherById: new Map(data.weather),
+    driveById: new Map(data.drives),
+    rankedIds: data.rankedLimit ? new Set(data.rankedIds) : undefined,
+    rankedLimit: data.rankedLimit,
   };
 }

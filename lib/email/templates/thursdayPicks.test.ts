@@ -85,4 +85,35 @@ describe("buildThursdayPicksEmail", () => {
     expect(mail.subject).toBe("Sat, Jan 16 from NYC: nothing fits your pass yet");
     expect(mail.html).toContain("Ikon Base blackout on Jan 16");
   });
+
+  it("credits an Open-Meteo day to Open-Meteo and says the list is separate from the digest", () => {
+    const fixture = powderFixture as unknown as Record<string, RankWeather>;
+    const weather = new Map(
+      resorts.flatMap((r) =>
+        fixture[r.slug]
+          ? [[r.id, { ...fixture[r.slug], days: fixture[r.slug].days.map((d) => ({ ...d, source: "open-meteo" as const })) }] as [number, RankWeather]]
+          : [],
+      ),
+    );
+    const result = rankForSaturday({
+      resorts,
+      weatherById: weather,
+      passFamily: "ikon",
+      product: "ikon-pass",
+      origin: NYC,
+      targetDate: "2027-01-16",
+      maxDriveHours: 6,
+      now: NOW,
+    });
+    const mail = buildThursdayPicksEmail({
+      ...common,
+      unsubscribeUrl: "https://wynla.app/api/digest/unsubscribe?token=1.abc&list=thursday",
+      result,
+    });
+    expect(mail.html).toContain("10 in forecast (Open-Meteo forecast, refreshed 2 h ago)");
+    expect(mail.html).not.toContain("NWS forecast");
+    expect(mail.html).toContain("separate from the weekly snow digest");
+    expect(mail.text).toContain("Unsubscribe: https://wynla.app/api/digest/unsubscribe?token=1.abc&list=thursday");
+    expect(mail.text).not.toContain("!");
+  });
 });

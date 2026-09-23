@@ -24,7 +24,13 @@
 //   * The confidence tag is derived from the forecast horizon and the age
 //     of the data, never from how good the pick looks.
 //   * A blackout on the target date excludes the resort; an unknown
-//     blackout status is printed as unknown, never as "open".
+//     blackout status is printed as unknown, never as "open". With a
+//     family but no product chosen, every product of the family is
+//     checked: excluded only when all of them are blacked out, otherwise
+//     the line names which products are.
+//   * An approximate opening ("Late November", parsed to the 25th) is a
+//     countdown entry, never an opening-day pick: only an explicit date
+//     from the operator promotes a resort out of the dormant list.
 
 import {
   deriveResortStatus,
@@ -60,6 +66,7 @@ import {
   getFamilyAccess,
   isBlackedOutFor,
   productShort,
+  productsFor,
   type PassFamily,
   type PassProductAccess,
 } from "@/lib/passAccess";
@@ -133,6 +140,15 @@ export type RankInput = {
   /** IANA zone the target date was chosen in (America/New_York default). */
   timeZone?: string;
   now?: Date;
+  /**
+   * Resort ids the loader actually fetched weather for. When the loader
+   * had to cap the candidate list, resorts inside the radius but outside
+   * this set are excluded as "not ranked" instead of being blamed for
+   * having no weather on file. Omit when every candidate was loaded.
+   */
+  rankedIds?: ReadonlySet<number>;
+  /** The loader's cap, for the "ranked the N closest" wording. */
+  rankedLimit?: number | null;
 };
 
 // ---------------------------------------------------------------------------
@@ -140,6 +156,30 @@ export type RankInput = {
 // ---------------------------------------------------------------------------
 
 export type Confidence = "High" | "Medium" | "Low";
+
+/** Which forecast fed the expected-snow number: forecast_json v2 days
+ *  carry `source`; v1 strips (no field) are NWS. "mixed" = the day before
+ *  and the target day came from different feeds. */
+export type ForecastSource = "nws" | "open-meteo" | "mixed";
+
+/** Label for the number's provenance line: "NWS", "Open-Meteo", "NWS + Open-Meteo". */
+export function forecastSourceLabel(source: ForecastSource | null): string {
+  switch (source) {
+    case "open-meteo":
+      return "Open-Meteo";
+    case "mixed":
+      return "NWS + Open-Meteo";
+    default:
+      return "NWS";
+  }
+}
+
+function forecastSourceOf(target: ForecastDay | undefined, before: ForecastDay | undefined): ForecastSource | null {
+  if (!target) return null;
+  const t = target.source ?? "nws";
+  const b = before ? (before.source ?? "nws") : t;
+  return t === b ? t : "mixed";
+}
 
 export type PickSnow = {
   /** Forecast inches for the day before plus the target day (the storm a
@@ -149,6 +189,8 @@ export type PickSnow = {
   targetDayIn: number | null;
   dayBeforeIn: number | null;
   forecastUpdatedAt: string | null;
+  /** Provenance of expectedIn; null when there is no target-day forecast. */
+  forecastSource: ForecastSource | null;
   tempHighF: number | null;
   tempLowF: number | null;
   conditions: string | null;
@@ -212,9 +254,12 @@ export type RankedPick = {
   resort: { id: number; slug: string; name: string; state: string };
   drive: DriveInfo & { label: string };
   status: ResortStatus;
-  /** True when the target date is the announced opening day and the
-   *  resort is not running yet today. */
+  /** True when the resort is not running today but the operator's
+   *  explicit opening date falls on or before the target date. */
   openingDay: boolean;
+  /** The announced opening date when openingDay is set (it may be the
+   *  Friday before the target), else null. */
+  opensOn: string | null;
   snow: PickSnow;
   surface: PickSurface;
   windHold: WindHoldEvaluation;
@@ -230,10 +275,15 @@ export type ExcludedKind =
   | "closed"
   | "unknown"
   | "projected"
+  /** Opening date is a vague phrase ("Late November") that lands on or
+   *  before the target: still counting down, not confirmed open. */
+  | "unconfirmed"
   | "blackout"
   | "not-included"
   | "no-pass"
-  | "no-weather";
+  | "no-weather"
+  /** Inside the radius but beyond the loader's candidate cap. */
+  | "not-ranked";
 
 export type Excluded = {
   kind: ExcludedKind;
@@ -267,6 +317,13 @@ export type RankResult = {
   horizonDays: number;
   /** The calendar says summer for most US resorts (May – mid Oct). */
   globalOffSeason: boolean;
+  /**
+   * In mode "off-season": "before" when the mountains within reach are
+   * counting down to an opening, "after" when they have closed for the
+   * season and none has announced the next one yet (April–May), so the
+   * page can say "the season is over" instead of "has not started".
+   */
+  seasonPhase: "before" | "after" | null;
   picks: RankedPick[];
   runnersUp: RankedPick[];
   excluded: Excluded[];
@@ -276,6 +333,8 @@ export type RankResult = {
   candidateCount: number;
   /** Resorts within reach whose lifts are (or will be by the target) running. */
   runningCount: number;
+  /** Resorts within reach the loader did not fetch (candidate cap). */
+  unrankedCount: number;
   inputs: RankInputNote[];
   weights: typeof WEIGHTS;
 };
@@ -334,6 +393,9 @@ const FORECAST_FRESH_HOURS = 30;
 const STORED_SURFACE_FRESH_HOURS = 36;
 /** A resort report older than this no longer counts as today's number. */
 const REPORT_FRESH_HOURS = 36;
+/** Nearest announced opening further out than this reads as "the season
+ *  is over" (spring) rather than "has not started" (autumn). */
+const POST_SEASON_GAP_DAYS = 120;
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -371,26 +433,64 @@ function findProduct(entries: PassProductAccess[], productKey: string | null): P
   return entries.find((e) => e.productKey === wanted || e.product.toLowerCase() === wanted) ?? null;
 }
 
-/** Access line + blackout verdict for one resort on the target date. */
+type AccessVerdict = { access: PickAccess | null; exclude: { kind: ExcludedKind; reason: string } | null };
+
+/** Why a product's blackout status is unknown for a date, as card copy. */
+function unknownBlackoutClause(entry: PassProductAccess): string {
+  switch (entry.blackouts.status) {
+    case "unpublished":
+      return "blackouts not announced yet";
+    case "conditional":
+      return `peak-date blackout depends on the option you bought (${formatRanges(entry.blackouts.ranges)})`;
+    default:
+      return "blackout dates unknown, check the pass";
+  }
+}
+
+/**
+ * Access line + blackout verdict for one resort. `blackoutDate` is the
+ * target date to check, or null to print the day allowance only (used for
+ * the countdown, where a blackout verdict for a date months before the
+ * lifts run reads as over-precise).
+ */
 export function accessFor(
   r: RankResort,
   family: PassFamily | null,
   productKey: string | null,
-  targetDate: string,
-): { access: PickAccess | null; exclude: { kind: ExcludedKind; reason: string } | null } {
+  blackoutDate: string | null,
+): AccessVerdict {
   if (!family) return { access: null, exclude: null };
   const onFamily = (r.passes ?? []).includes(family);
   if (!onFamily) {
     return { access: null, exclude: { kind: "no-pass", reason: `Not on the ${passLabel(family)}` } };
   }
   const entries = getFamilyAccess(r.slug, family);
-  const entry = findProduct(entries, productKey);
-  if (!entry) {
+  if (entries.length === 0) {
     // The resort is on the family per resorts.passes[] but the verified
-    // dataset has no row for this product: say so instead of guessing.
+    // dataset has no row for it: say so instead of guessing.
     return {
       access: {
         line: `${passLabel(family)} resort · product details not verified yet`,
+        blackout: null,
+        daysShort: null,
+        reservationRequired: false,
+        verified: false,
+        note: null,
+      },
+      exclude: null,
+    };
+  }
+  if (!productKey) return familyAccess(family, entries, blackoutDate);
+
+  const entry = findProduct(entries, productKey);
+  if (!entry) {
+    // The family is verified here but this product has no row: the
+    // rider's product may simply not include the resort, or the row was
+    // never captured. Either way we cannot check blackouts, so say that.
+    const productName = productsFor(family).find((p) => p.productKey === productKey)?.product ?? productKey;
+    return {
+      access: {
+        line: `${passLabel(family)} resort · ${productName} not in the verified list for this resort, check the pass`,
         blackout: null,
         daysShort: null,
         reservationRequired: false,
@@ -406,37 +506,31 @@ export function accessFor(
       exclude: { kind: "not-included", reason: `Not included on the ${entry.product}` },
     };
   }
-  const blackout = isBlackedOutFor(entry, targetDate);
-  const when = formatMonthDay(targetDate);
-  if (blackout === true && entry.blackouts.scope === "full") {
-    return {
-      access: null,
-      exclude: { kind: "blackout", reason: `${productShort(entry)} blackout on ${when}` },
-    };
-  }
   // days.short is already lower-case copy ("5 days", "unlimited"); the
   // qualifier keeps its proper nouns ("shared across Killington and Pico").
   const bits: string[] = [
     `${productShort(entry)}: ${entry.days.short}${entry.days.qualifier ? ` (${entry.days.qualifier})` : ""}`,
   ];
+  let blackout: boolean | null = null;
   let note: string | null = null;
-  if (blackout === true) {
-    // Day-access scope: the pass does not work 9am-3pm but the rest of
-    // the day (night skiing) is open. Printed, never hidden.
-    note = `No 9am-3pm access on ${when}${entry.blackouts.note ? ` · ${entry.blackouts.note}` : ""}`;
-    bits.push(`no daytime access ${when}`);
-  } else if (blackout === false) {
-    bits.push(`no blackout ${when}`);
-  } else {
-    switch (entry.blackouts.status) {
-      case "unpublished":
-        bits.push("blackouts not announced yet");
-        break;
-      case "conditional":
-        bits.push(`peak-date blackout depends on the option you bought (${formatRanges(entry.blackouts.ranges)})`);
-        break;
-      default:
-        bits.push("blackout dates unknown, check the pass");
+  if (blackoutDate) {
+    blackout = isBlackedOutFor(entry, blackoutDate);
+    const when = formatMonthDay(blackoutDate);
+    if (blackout === true && entry.blackouts.scope === "full") {
+      return {
+        access: null,
+        exclude: { kind: "blackout", reason: `${productShort(entry)} blackout on ${when}` },
+      };
+    }
+    if (blackout === true) {
+      // Day-access scope: the pass does not work 9am-3pm but the rest of
+      // the day (night skiing) is open. Printed, never hidden.
+      note = `No 9am-3pm access on ${when}${entry.blackouts.note ? ` · ${entry.blackouts.note}` : ""}`;
+      bits.push(`no daytime access ${when}`);
+    } else if (blackout === false) {
+      bits.push(`no blackout ${when}`);
+    } else {
+      bits.push(unknownBlackoutClause(entry));
     }
   }
   if (entry.reservationRequired) bits.push("reservation required");
@@ -446,6 +540,68 @@ export function accessFor(
       blackout,
       daysShort: entry.days.short,
       reservationRequired: entry.reservationRequired,
+      verified: true,
+      note,
+    },
+    exclude: null,
+  };
+}
+
+/**
+ * Family chosen, no product: check every product of the family at this
+ * resort. Excluded only when all of them are blacked out for the date;
+ * otherwise the line names the products that are, so a rider on the
+ * cheaper product is warned and one on the full product is not blocked.
+ */
+function familyAccess(family: PassFamily, entries: PassProductAccess[], blackoutDate: string | null): AccessVerdict {
+  const usable = entries.filter((e) => e.days.kind !== "none");
+  if (usable.length === 0) {
+    return { access: null, exclude: { kind: "not-included", reason: `Not included on any ${passLabel(family)} product` } };
+  }
+  const bits: string[] = [`${passLabel(family)}: ${usable.map((e) => `${productShort(e)} ${e.days.short}`).join(", ")}`];
+  let blackout: boolean | null = null;
+  let note: string | null = null;
+  if (blackoutDate) {
+    const when = formatMonthDay(blackoutDate);
+    const verdicts = usable.map((e) => ({ e, v: isBlackedOutFor(e, blackoutDate) }));
+    const fullOut = verdicts.filter((x) => x.v === true && x.e.blackouts.scope === "full");
+    const dayOut = verdicts.filter((x) => x.v === true && x.e.blackouts.scope !== "full");
+    const open = verdicts.filter((x) => x.v === false);
+    if (fullOut.length === usable.length) {
+      return {
+        access: null,
+        exclude: {
+          kind: "blackout",
+          reason: `${passLabel(family)} blackout on ${when} on every product (${fullOut.map((x) => productShort(x.e)).join(", ")})`,
+        },
+      };
+    }
+    if (fullOut.length > 0 || dayOut.length > 0) {
+      const names = [...fullOut, ...dayOut].map((x) => productShort(x.e)).join(", ");
+      const openNames = open.map((x) => productShort(x.e)).join(", ");
+      bits.push(`${when} blackout depends on product: ${names} blacked out${openNames ? `, ${openNames} open` : ""}`);
+      if (dayOut.length > 0) note = `No 9am-3pm access on ${when} on ${dayOut.map((x) => productShort(x.e)).join(", ")}`;
+      blackout = null;
+    } else if (open.length === usable.length) {
+      bits.push(`no blackout ${when} on any product`);
+      blackout = false;
+    } else {
+      // At least one product's list is unpublished or option-dependent
+      // and none is known to be blacked out: unknown, never "open".
+      const unknown = verdicts.find((x) => x.v === null)!;
+      bits.push(`${productShort(unknown.e)}: ${unknownBlackoutClause(unknown.e)}`);
+      blackout = null;
+    }
+  }
+  const reserved = usable.filter((e) => e.reservationRequired);
+  if (reserved.length === usable.length) bits.push("reservation required");
+  else if (reserved.length > 0) bits.push(`reservation required on ${reserved.map(productShort).join(", ")}`);
+  return {
+    access: {
+      line: bits.join(" · "),
+      blackout,
+      daysShort: null,
+      reservationRequired: reserved.length === usable.length,
       verified: true,
       note,
     },
@@ -499,7 +655,7 @@ function surfaceFor(
 ): SurfaceEval {
   if (openingDay) {
     return {
-      surface: { dormant: true, reason: "Opening day: the surface call starts once the lifts have run" },
+      surface: { dormant: true, reason: "Opens that weekend: no surface call until the lifts have run" },
       dormantForConfidence: false,
     };
   }
@@ -663,7 +819,11 @@ function buildReason(pick: Omit<RankedPick, "reason" | "rank">, targetDate: stri
   if (surface) bits.push(surface);
   if (pick.windHold.level === "high-risk") bits.push(`${pick.windHold.detail} may close lifts`);
   else if (pick.windHold.level === "warning") bits.push(`${pick.windHold.detail}, hold possible`);
-  if (pick.openingDay) bits.push("opening day");
+  if (pick.openingDay) {
+    // "opening day" only when the lifts start on the target date itself;
+    // an opening the Friday before is named so the rider is not misled.
+    bits.push(pick.opensOn && pick.opensOn !== targetDate ? `opens ${formatMonthDay(pick.opensOn)}` : "opening day");
+  }
   bits.push(`${pick.drive.label} drive`);
   return bits.join(", ");
 }
@@ -688,6 +848,9 @@ export function rankForSaturday(input: RankInput): RankResult {
   let tooFarCount = 0;
   let candidateCount = 0;
   let runningCount = 0;
+  let unrankedCount = 0;
+  let countingDown = 0;
+  let closedForSeason = 0;
   let newestForecast: string | null = null;
   let newestMeasured: string | null = null;
   let reportedCount = 0;
@@ -707,21 +870,34 @@ export function rankForSaturday(input: RankInput): RankResult {
     else exactDrives++;
     const ref = resortRef(r);
 
-    const { access, exclude: passExclude } = accessFor(r, input.passFamily, input.product, targetDate);
+    const season = resolveSeasonInfo(r, now);
+    const status = deriveResortStatus(r, season, now);
+    const opensOn = season.nextOpenDate ? season.nextOpenDate.toISOString().slice(0, 10) : null;
+    const opensByTarget = status.kind === "opens" && opensOn != null && opensOn <= targetDate;
+    // Only an explicit date from the operator counts as an opening day.
+    // A projection ("(projected)") or a vague phrase ("Late November",
+    // parsed to the 25th) keeps the resort in the countdown.
+    const openingByTarget = opensByTarget && !season.openProjected && !season.approximate;
+    const runsByTarget = !status.dormant || openingByTarget;
+
+    // Blackouts are checked only for a resort that will be running on the
+    // target date; the countdown prints the day allowance alone.
+    const { access, exclude: passExclude } = accessFor(
+      r,
+      input.passFamily,
+      input.product,
+      runsByTarget ? targetDate : null,
+    );
     // A resort the pass does not cover at all is left out quietly; a
     // blackout on a covered resort is spelled out below because it is
     // the exclusion the rider most wants to see.
     const offPass = passExclude?.kind === "no-pass" || passExclude?.kind === "not-included";
 
-    const season = resolveSeasonInfo(r, now);
-    const status = deriveResortStatus(r, season, now);
-    const opensOn = season.nextOpenDate ? season.nextOpenDate.toISOString().slice(0, 10) : null;
-    const openingByTarget =
-      status.kind === "opens" && opensOn != null && opensOn <= targetDate && !season.openProjected;
-
-    if (status.dormant && !openingByTarget) {
+    if (!runsByTarget) {
       if (offPass) continue;
+      if (status.kind === "closed-season") closedForSeason++;
       if (season.nextOpenDate) {
+        countingDown++;
         countdown.push({
           resort: ref,
           drive,
@@ -733,18 +909,16 @@ export function rankForSaturday(input: RankInput): RankResult {
           access,
         });
       }
-      const projectedNotYet =
-        status.kind === "opens" && opensOn != null && opensOn <= targetDate && season.openProjected;
-      excluded.push({
-        kind: projectedNotYet ? "projected" : "closed",
-        resort: ref,
-        drive,
-        reason: projectedNotYet
-          ? `Projected to open ${formatMonthDay(opensOn!)}, not confirmed by the resort`
-          : status.detail
-            ? `${status.label} · ${status.detail}`
-            : status.label,
-      });
+      let kind: ExcludedKind = "closed";
+      let reason = status.detail ? `${status.label} · ${status.detail}` : status.label;
+      if (opensByTarget && season.openProjected) {
+        kind = "projected";
+        reason = `Projected to open ${formatMonthDay(opensOn!)}, not confirmed by the resort`;
+      } else if (opensByTarget && season.approximate) {
+        kind = "unconfirmed";
+        reason = `Opens ~${formatMonthDay(opensOn!)}, exact date not announced`;
+      }
+      excluded.push({ kind, resort: ref, drive, reason });
       continue;
     }
     if (status.kind === "unknown") {
@@ -759,6 +933,18 @@ export function rankForSaturday(input: RankInput): RankResult {
       continue;
     }
 
+    if (input.rankedIds && !input.rankedIds.has(r.id)) {
+      // The loader capped its candidate list: this resort is in reach
+      // but was never fetched, which is our limit, not a data gap.
+      unrankedCount++;
+      excluded.push({
+        kind: "not-ranked",
+        resort: ref,
+        drive,
+        reason: input.rankedLimit ? `Beyond the ${input.rankedLimit} closest mountains ranked` : "Not ranked this time",
+      });
+      continue;
+    }
     const w = input.weatherById.get(r.id);
     if (!w) {
       excluded.push({ kind: "no-weather", resort: ref, drive, reason: "No weather on file yet" });
@@ -791,6 +977,7 @@ export function rankForSaturday(input: RankInput): RankResult {
       targetDayIn,
       dayBeforeIn,
       forecastUpdatedAt: w.updatedAt,
+      forecastSource: forecastSourceOf(targetDay, dayBefore),
       tempHighF: targetDay?.temp_high_f ?? null,
       tempLowF: targetDay?.temp_low_f ?? null,
       conditions: targetDay?.conditions_short ?? null,
@@ -881,6 +1068,7 @@ export function rankForSaturday(input: RankInput): RankResult {
       drive,
       status,
       openingDay: openingByTarget,
+      opensOn: openingByTarget ? opensOn : null,
       snow,
       surface,
       windHold,
@@ -909,6 +1097,22 @@ export function rankForSaturday(input: RankInput): RankResult {
 
   const mode: RankResult["mode"] =
     ranked.length > 0 ? "picks" : runningCount > 0 ? "no-picks" : candidateCount > 0 ? "off-season" : "none";
+  // "after" when the closed-for-season rows are not outnumbered by
+  // announced openings, or when the nearest announced opening is far
+  // off: after the last lift stops in April a resort's explicit dates
+  // roll forward to next November (~200 days out), and the honest
+  // headline is "the season is over", not "has not started"; by
+  // September the nearest opening is ~60 days out and it flips back.
+  const soonestOpen = countdown.reduce<number | null>(
+    (best, c) => (c.daysUntilOpen != null && (best == null || c.daysUntilOpen < best) ? c.daysUntilOpen : best),
+    null,
+  );
+  const seasonPhase: RankResult["seasonPhase"] =
+    mode !== "off-season"
+      ? null
+      : (closedForSeason > 0 && closedForSeason >= countingDown) || (soonestOpen != null && soonestOpen > POST_SEASON_GAP_DAYS)
+        ? "after"
+        : "before";
 
   const inputs: RankInputNote[] = [];
   inputs.push({
@@ -938,6 +1142,12 @@ export function rankForSaturday(input: RankInput): RankResult {
   });
   inputs.push({ label: "Pass rules", value: `Verified ${PASS_ACCESS_VERIFIED_ON} from the pass operators' pages` });
   inputs.push({ label: "Crowds", value: "Estimated from resort size, distance to a metro, weekend and holiday calendar" });
+  if (unrankedCount > 0) {
+    inputs.push({
+      label: "Coverage",
+      value: `Ranked the ${input.rankedLimit ?? "closest"} mountains nearest ${input.origin.name}; ${unrankedCount} more within reach were not scored`,
+    });
+  }
 
   return {
     mode,
@@ -945,6 +1155,7 @@ export function rankForSaturday(input: RankInput): RankResult {
     todayDate,
     horizonDays,
     globalOffSeason,
+    seasonPhase,
     picks: ranked.slice(0, PICK_COUNT),
     runnersUp: ranked.slice(PICK_COUNT, PICK_COUNT + RUNNER_UP_COUNT),
     excluded,
@@ -952,6 +1163,7 @@ export function rankForSaturday(input: RankInput): RankResult {
     tooFarCount,
     candidateCount,
     runningCount,
+    unrankedCount,
     inputs,
     weights: WEIGHTS,
   };

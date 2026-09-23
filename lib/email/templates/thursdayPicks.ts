@@ -9,7 +9,7 @@
 // Every number names what it is and when it was measured or forecast:
 // "8 in forecast (NWS, refreshed 6 h ago)", never a bare "8 in".
 
-import type { RankResult, RankedPick, CountdownEntry, Confidence } from "@/lib/saturday/rank";
+import { forecastSourceLabel, type RankResult, type RankedPick, type CountdownEntry, type Confidence } from "@/lib/saturday/rank";
 import { formatAge, formatMonthDay, formatTargetDate, formatTargetDateShort } from "@/lib/saturday/dates";
 
 const NAVY = "#1E2952";
@@ -54,7 +54,9 @@ export function snowSentence(p: RankedPick, now: Date): string {
   if (s.expectedIn == null) return "No forecast for that day yet";
   const age = formatAge(s.forecastUpdatedAt, now);
   const head = s.expectedIn < 0.5 ? "No new snow forecast" : `${s.expectedIn} in forecast`;
-  return `${head} (NWS forecast${age ? `, refreshed ${age}` : ""})`;
+  // Source from the forecast row itself, so an Open-Meteo day is never
+  // credited to the NWS.
+  return `${head} (${forecastSourceLabel(s.forecastSource)} forecast${age ? `, refreshed ${age}` : ""})`;
 }
 
 /** "Measured 6 in in 72 h (NOAA, to Thu 7 AM)" or null. */
@@ -154,7 +156,10 @@ export function buildThursdayPicksEmail(input: ThursdayPicksEmailInput): Thursda
       .join("")}`;
     }
   } else if (result.mode === "off-season") {
-    intro = `The season has not started within ${cityName}'s reach yet. The first mountains on your pass to open:`;
+    intro =
+      result.seasonPhase === "after"
+        ? `The season is over within ${cityName}'s reach. Mountains on your pass that have already announced next season:`
+        : `The season has not started within ${cityName}'s reach yet. The first mountains on your pass to open:`;
     bodyRows = result.countdown.slice(0, 3).map((c) => countdownRow(c, siteBase)).join("");
   } else if (result.mode === "no-picks") {
     intro = `Mountains within reach of ${cityName} are running, but none fits your ${passLabel} on ${dateLong}:`;
@@ -209,10 +214,10 @@ export function buildThursdayPicksEmail(input: ThursdayPicksEmailInput): Thursda
           <tr>
             <td style="padding:16px 24px 24px 24px;border-top:1px solid #e6e2d8;">
               <p style="margin:0 0 6px 0;font-size:12px;color:${CHARCOAL};line-height:1.5;">
-                Confidence is about the forecast horizon and data age, not how good the pick looks. ${result.horizonDays} day${result.horizonDays === 1 ? "" : "s"} out, forecasts are often off by a few inches. Snow figures name their source: forecast (NWS), measured (NOAA analysis at the resort) or resort-reported. Surface calls are estimates from the weather, not resort reports. Crowds are estimates. Pass rules verified from the operators' pages; check blackout dates before you drive.
+                Confidence is about the forecast horizon and data age, not how good the pick looks. ${result.horizonDays} day${result.horizonDays === 1 ? "" : "s"} out, forecasts are often off by a few inches. Snow figures name their source: forecast (NWS or Open-Meteo, named per mountain), measured (NOAA analysis at the resort) or resort-reported. Surface calls are estimates from the weather, not resort reports. Crowds are estimates. Pass rules verified from the operators' pages; check blackout dates before you drive.
               </p>
               <p style="margin:0;font-size:12px;color:${CHARCOAL};line-height:1.5;">
-                You get this every Thursday because you asked for Saturday picks on Wynla.
+                You get this every Thursday because you asked for Saturday picks on Wynla. It is separate from the weekly snow digest for your favorites.
                 <a href="${preferencesUrl}" style="color:${CHARCOAL};text-decoration:underline;">Change city or pass</a>
                 &middot;
                 <a href="${unsubscribeUrl}" style="color:${CHARCOAL};text-decoration:underline;">Unsubscribe</a>
@@ -261,8 +266,9 @@ export function buildThursdayPicksEmail(input: ThursdayPicksEmailInput): Thursda
   textLines.push(`Open this Saturday on Wynla: ${goUrl}`);
   textLines.push("");
   textLines.push(
-    `Confidence reflects the forecast horizon (${result.horizonDays} days out) and data age, not how good the pick looks. Snow figures name their source: forecast (NWS), measured (NOAA analysis) or resort-reported. Surface calls and crowds are estimates.`,
+    `Confidence reflects the forecast horizon (${result.horizonDays} days out) and data age, not how good the pick looks. Snow figures name their source: forecast (NWS or Open-Meteo, named per mountain), measured (NOAA analysis) or resort-reported. Surface calls and crowds are estimates.`,
   );
+  textLines.push("This Thursday email is separate from the weekly snow digest for your favorites.");
   textLines.push(`Change city or pass: ${preferencesUrl}`);
   textLines.push(`Unsubscribe: ${unsubscribeUrl}`);
 

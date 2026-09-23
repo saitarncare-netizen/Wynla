@@ -8,7 +8,14 @@ import { ResortStatusPill } from "@/components/SeasonCountdown";
 import { CROWD_COLORS } from "@/lib/crowdForecast";
 import { windHoldChipClass } from "@/lib/windHold";
 import { formatAge, formatMonthDay } from "@/lib/saturday/dates";
-import type { Confidence, CountdownEntry, Excluded, RankedPick, RankResult } from "@/lib/saturday/rank";
+import {
+  forecastSourceLabel,
+  type Confidence,
+  type CountdownEntry,
+  type Excluded,
+  type RankedPick,
+  type RankResult,
+} from "@/lib/saturday/rank";
 
 const CONFIDENCE_CLASS: Record<Confidence, string> = {
   High: "bg-emerald-50 text-emerald-800 ring-1 ring-emerald-200",
@@ -41,9 +48,11 @@ function snowStat(pick: RankedPick, now: Date): { value: string; sub: string } {
   const s = pick.snow;
   if (s.expectedIn == null) return { value: "—", sub: "Forecast does not reach that day yet" };
   const age = formatAge(s.forecastUpdatedAt, now);
+  // The source comes from the forecast row itself (v2 days carry it;
+  // v1 strips are NWS), so an Open-Meteo day is never credited to the NWS.
   return {
     value: s.expectedIn < 0.5 ? "0 in" : `${s.expectedIn} in`,
-    sub: `Forecast · NWS${age ? `, ${age}` : ""}`,
+    sub: `Forecast · ${forecastSourceLabel(s.forecastSource)}${age ? `, ${age}` : ""}`,
   };
 }
 
@@ -163,18 +172,23 @@ export function PickCard({ pick, now, planHref }: { pick: RankedPick; now: Date;
   );
 }
 
+// Runner-up and excluded rows are whole-row links: the row is the tap
+// target (≥ 44 px), not the resort name inside it.
 export function RunnerUpRow({ pick }: { pick: RankedPick }) {
   return (
-    <li className="flex items-start gap-3 py-3">
-      <span className="mt-0.5 w-5 shrink-0 text-sm font-bold text-wn-charcoal/50">{pick.rank}</span>
-      <div className="min-w-0 flex-1">
-        <Link href={`/resort/${encodeURIComponent(pick.resort.slug)}`} className="font-semibold text-wn-navy hover:underline">
-          {pick.resort.name}
-        </Link>
-        <span className="text-xs text-wn-charcoal/60"> · {pick.resort.state}</span>
-        <p className="text-xs text-wn-charcoal/75">{pick.reason}</p>
-      </div>
-      <ConfidenceChip pick={pick} />
+    <li>
+      <Link
+        href={`/resort/${encodeURIComponent(pick.resort.slug)}`}
+        className="flex min-h-11 items-start gap-3 py-3 hover:bg-wn-offwhite"
+      >
+        <span className="mt-0.5 w-5 shrink-0 text-sm font-bold text-wn-charcoal/50">{pick.rank}</span>
+        <span className="min-w-0 flex-1">
+          <span className="font-semibold text-wn-navy">{pick.resort.name}</span>
+          <span className="text-xs text-wn-charcoal/60"> · {pick.resort.state}</span>
+          <span className="block text-xs text-wn-charcoal/75">{pick.reason}</span>
+        </span>
+        <ConfidenceChip pick={pick} />
+      </Link>
     </li>
   );
 }
@@ -221,26 +235,29 @@ export function ExcludedList({ items }: { items: Excluded[] }) {
   return (
     <ul className="divide-y divide-wn-charcoal/10 text-sm">
       {items.map((e) => (
-        <li key={e.resort.id} className="flex items-baseline justify-between gap-3 py-2">
-          <span className="min-w-0">
-            <Link href={`/resort/${encodeURIComponent(e.resort.slug)}`} className="font-semibold text-wn-navy hover:underline">
-              {e.resort.name}
-            </Link>
-            <span className="text-xs text-wn-charcoal/70"> · {e.reason}</span>
-          </span>
-          <span className="shrink-0 text-xs text-wn-charcoal/60">{e.drive.label}</span>
+        <li key={e.resort.id}>
+          <Link
+            href={`/resort/${encodeURIComponent(e.resort.slug)}`}
+            className="flex min-h-11 items-baseline justify-between gap-3 py-2 hover:bg-wn-offwhite"
+          >
+            <span className="min-w-0">
+              <span className="font-semibold text-wn-navy">{e.resort.name}</span>
+              <span className="text-xs text-wn-charcoal/70"> · {e.reason}</span>
+            </span>
+            <span className="shrink-0 text-xs text-wn-charcoal/60">{e.drive.label}</span>
+          </Link>
         </li>
       ))}
     </ul>
   );
 }
 
-export function WhyThese({ result }: { result: RankResult }) {
+export function WhyThese({ result, title = "Why these three" }: { result: RankResult; title?: string }) {
   const w = result.weights;
   return (
     <details className="rounded-2xl border border-wn-charcoal/10 bg-white p-4 shadow-sm sm:p-5">
       <summary className="min-h-11 cursor-pointer list-none text-base font-bold text-wn-navy marker:content-none">
-        Why these three
+        {title}
       </summary>
       <div className="mt-3 space-y-4 text-sm text-wn-charcoal/80">
         <div>
@@ -279,6 +296,7 @@ export function WhyThese({ result }: { result: RankResult }) {
         <p className="text-xs text-wn-charcoal/65">
           Candidates within reach: {result.candidateCount}. Beyond the drive cap: {result.tooFarCount}. Excluded with a
           reason: {result.excluded.length}.
+          {result.unrankedCount > 0 ? ` Within reach but not scored (candidate cap): ${result.unrankedCount}.` : ""}
         </p>
       </div>
     </details>

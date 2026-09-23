@@ -13,21 +13,29 @@
 -- it only adds run history and the same-day dedupe.
 
 -- ---------------------------------------------------------------------------
--- 1. profiles.pass_product — which pass product the Thursday email ranks for.
+-- 1. profiles.pass_product — which pass product the Thursday email ranks for,
+--    and the consent for that list: NOT NULL = on the Thursday list,
+--    NULL = not opted in. It is independent of digest_subscriptions.enabled
+--    (the weekly favorites digest); the digest row only supplies the
+--    address and the id the signed unsubscribe link is minted from, and
+--    /api/go/subscribe creates one with enabled = false when the user has
+--    none. The Thursday email's unsubscribe link (list=thursday) clears
+--    this column and nothing else.
 --    Values are "<family>" or "<family>:<productKey>" from lib/passAccess.ts,
 --    e.g. "ikon", "ikon:ikon-base-pass", "epic:northeast-value-pass".
 --    "any" means no pass (lift tickets). The API validates against the
 --    verified dataset before writing, so no CHECK constraint here: product
 --    keys change every season and a constraint would need a migration each
---    time. NULL = never opted in.
+--    time.
 -- ---------------------------------------------------------------------------
 alter table public.profiles
   add column if not exists pass_product text;
 
 comment on column public.profiles.pass_product is
-  'Pass family[:productKey] the Thursday picks email ranks for (lib/passAccess.ts keys, or "any"). NULL = not opted in. Set by /api/go/subscribe.';
+  'Thursday picks email: pass family[:productKey] to rank for (lib/passAccess.ts keys, or "any"). NOT NULL = on the list, NULL = not opted in. Set by /api/go/subscribe, cleared by DELETE or the list=thursday unsubscribe link. Independent of digest_subscriptions.enabled.';
 
 -- The existing owner-only RLS policies on profiles cover the new column.
+-- The service role (cron, unsubscribe route) bypasses RLS as usual.
 
 -- ---------------------------------------------------------------------------
 -- 2. saturday_predictions — what we told whom, so the picks can be scored
