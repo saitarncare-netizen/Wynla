@@ -284,6 +284,26 @@ describe("deriveResortStatus", () => {
     expect(s.dormant).toBe(false);
   });
 
+  it("trusts a verified closed flag from the new status jobs, but not the legacy scraper's default false", () => {
+    // pipeline package: currently_open=false is evidence only on rows it
+    // wrote ('reported' feed or 'no_feed' season derivation).
+    const season = parseSeasonDates("Late November", "Mid-April", jan);
+    expect(deriveResortStatus({ currently_open: false, snow_report_status: "no_feed" }, season, jan).kind).toBe("closed-season");
+    expect(deriveResortStatus({ currently_open: false, snow_report_status: "reported" }, season, jan).kind).toBe("closed-season");
+    expect(deriveResortStatus({ currently_open: false, snow_report_status: "unknown" }, season, jan).kind).toBe("likely-open");
+    // A coming opening still wins over the flag (the flag says "before opening").
+    const before = parseSeasonDates("Late November", "Mid-April", utc(2026, 10, 1));
+    expect(deriveResortStatus({ currently_open: false, snow_report_status: "no_feed" }, before, utc(2026, 10, 1)).kind).toBe("opens");
+    // Lift / trail counts only come from a real report.
+    const open = deriveResortStatus(
+      { currently_open: true, snow_report_status: "no_feed", lifts_open_today: 12, total_lifts: 20 },
+      season,
+      jan,
+    );
+    expect(open.kind).toBe("open");
+    expect(open.detail ?? "").not.toContain("lifts");
+  });
+
   it("reads a January scraper 'closed' as closed for the season", () => {
     const s = deriveResortStatus({ currently_open: false, snow_report_status: "closed" }, parseSeasonDates(null, null, jan), jan);
     expect(s.kind).toBe("closed-season");

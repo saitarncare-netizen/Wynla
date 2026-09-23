@@ -54,7 +54,7 @@ describe("isResortOperating / labels", () => {
   });
 
   it("resolves surface codes case-insensitively", () => {
-    expect(surfaceLabelForCode("ppc")).toBe("Packed Powder");
+    expect(surfaceLabelForCode("ppc")).toBe("Packed powder");
     expect(surfaceLabelForCode("XX")).toBeNull();
     expect(surfaceLabelForCode(null)).toBeNull();
   });

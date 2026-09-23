@@ -729,6 +729,9 @@ export function deriveResortStatus(
   const fresh = liveReportIsFresh(r, now);
   const report = fresh ? (r.snow_report_status ?? "").toLowerCase() : "";
   const reported = report === "reported" || report === "open" || report === "limited";
+  // Only rows the new jobs wrote carry an evidential false; the legacy
+  // scraper set currently_open=false on every parse failure ('unknown').
+  const verifiedClosed = (report === "reported" || report === "no_feed") && r.currently_open === false;
   if ((fresh && r.currently_open === true) || report === "open") {
     const lifts =
       reported && r.lifts_open_today != null && r.total_lifts != null && r.total_lifts > 0
@@ -773,7 +776,7 @@ export function deriveResortStatus(
   // over with no next opening parsed above) reads as closed, not "likely
   // open"; a season window that still lists a coming opening is handled
   // by the "opens" branch first.
-  if (report === "closed" || (fresh && r.currently_open === false)) {
+  if (report === "closed" || verifiedClosed) {
     return globalOff
       ? { kind: "off-season", label: "Off-season", detail: "Opening date not published yet", tone: "muted", dormant: true }
       : { kind: "closed-season", label: "Closed for the season", detail: null, tone: "red", dormant: true };

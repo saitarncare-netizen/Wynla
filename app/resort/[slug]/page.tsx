@@ -388,7 +388,7 @@ export default async function ResortPage({
 
   // forecast_json is v1 (bare array) or v2 ({ v: 2, days: [...] }) —
   // forecastDaysFrom() reads both while rows roll over.
-  const forecastDays = forecastDaysFrom(weather?.forecast_json);
+  const forecastDays: ForecastDay[] = forecastDaysFrom(weather?.forecast_json);
   const surfaceForecastDays: SurfaceForecastDay[] = forecastDays
     .slice(1, 4)
     .map((d) => ({
