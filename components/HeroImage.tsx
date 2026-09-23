@@ -17,22 +17,11 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { isDeniedHero, isStorageHeroUrl, tidyAttribution, type HeroSource } from "@/lib/heroSource";
+import type { HeroSource } from "@/lib/heroSource";
 
 type Props = {
-  /** Resolved by heroSourceFor(resort). Preferred. */
-  source?: HeroSource;
-  /**
-   * Legacy props, kept so components/Map/ResortPanel.tsx (owned by the
-   * sheet package) keeps compiling until it switches to `source`. The URL
-   * still has to pass the storage-host check and the denylist, so the
-   * legacy path cannot show a hotlinked or rejected photo; it never falls
-   * back to a terrain card (it has no slug), which is what `source` adds.
-   * Remove once ResortPanel passes `source`.
-   */
-  src?: string;
-  alt?: string;
-  attribution?: string | null;
+  /** Resolved by heroSourceFor(resort); every caller goes through it. */
+  source: HeroSource;
   /** Panel hero is shorter — slightly lighter scrim, credit top-left. */
   compact?: boolean;
   /**
@@ -44,15 +33,9 @@ type Props = {
   sizes?: string;
 };
 
-function fromLegacy(src: string | undefined, alt: string | undefined, attribution: string | null | undefined): HeroSource | null {
-  if (!src || !isStorageHeroUrl(src) || isDeniedHero(src)) return null;
-  return { kind: "photo", src, thumb: src, alt: alt ?? "", credit: tidyAttribution(attribution) };
-}
-
-export default function HeroImage({ source, src, alt, attribution, compact, sizes = "100vw" }: Props) {
+export default function HeroImage({ source: resolved, compact, sizes = "100vw" }: Props) {
   const [failed, setFailed] = useState(false);
-  const resolved: HeroSource | null = source ?? fromLegacy(src, alt, attribution);
-  if (!resolved || resolved.kind === "gradient" || !resolved.src || failed) return null;
+  if (resolved.kind === "gradient" || !resolved.src || failed) return null;
   const scrim = compact
     ? "linear-gradient(180deg, rgba(15,21,48,0.35) 0%, rgba(15,21,48,0.15) 40%, rgba(15,21,48,0.8) 100%)"
     : "linear-gradient(180deg, rgba(15,21,48,0.5) 0%, rgba(15,21,48,0.2) 38%, rgba(15,21,48,0.8) 100%)";

@@ -15,6 +15,7 @@ import type { ResortStatus } from "@/lib/seasonDates";
 import SurfaceIcon from "@/components/icons/SurfaceIcon";
 import Icon from "@/components/icons/Icon";
 import HeroImage from "@/components/HeroImage";
+import { heroSourceFor } from "@/lib/heroSource";
 import FavoriteToggle from "@/components/auth/FavoriteToggle";
 import CompareToggle from "@/components/CompareToggle";
 import { ResortStatusPill } from "@/components/SeasonCountdown";
@@ -52,12 +53,16 @@ const NOISE_BG =
   "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.85'/></svg>\")";
 
 /**
- * Photo (or pass-colour gradient) layer with the film-grain overlay.
- * When the photo carries an attribution (CC BY / CC BY-SA hero photos
- * require one) the credit is shown in the top-left corner; HeroImage's
- * own credit is suppressed by `compact`, and its bottom-right spot is
- * where the sheet puts the resort name. The credit fades with the photo
- * as the sheet collapses to its title bar.
+ * Photo, terrain card or pass-colour gradient layer with the film-grain
+ * overlay. What to show comes from lib/heroSource (the same vetting and
+ * denylist policy as the resort page), so a resort without a vetted photo
+ * gets its terrain card instead of a bare gradient. HeroImage in `compact`
+ * mode prints the credit itself as a small pill top-left that links to
+ * /credits (CC BY / BY-SA photos require a visible credit); the sheet puts
+ * the resort name bottom-left and its buttons top-right. The whole layer
+ * fades with the sheet as it collapses to its title bar, and once it is
+ * effectively invisible it goes inert so the hidden credit link cannot
+ * take a tap or keyboard focus.
  */
 export function HeroBackdrop({
   resort,
@@ -70,37 +75,22 @@ export function HeroBackdrop({
   sizes: string;
   opacity?: number;
 }) {
-  const credit = resort.hero_image_url ? resort.hero_image_attribution?.trim() : null;
+  // Decorative here: the sheet's heading already names the resort, so the
+  // image itself carries an empty alt; the credit pill stays readable.
+  const hero = { ...heroSourceFor(resort), alt: "" };
   return (
-    <>
+    <div
+      className="absolute inset-0 overflow-hidden"
+      style={{ background: heroGradient(passHex), opacity }}
+      inert={opacity <= 0.05 ? true : undefined}
+    >
+      <HeroImage key={hero.src ?? "none"} source={hero} compact sizes={sizes} />
       <div
         aria-hidden="true"
-        className="absolute inset-0 overflow-hidden"
-        style={{ background: heroGradient(passHex), opacity }}
-      >
-        {resort.hero_image_url && (
-          <HeroImage
-            src={resort.hero_image_url}
-            alt=""
-            compact
-            sizes={sizes}
-          />
-        )}
-        <div
-          className="pointer-events-none absolute inset-0 opacity-[0.06] mix-blend-overlay"
-          style={{ backgroundImage: NOISE_BG, backgroundSize: "160px 160px" }}
-        />
-      </div>
-      {credit && opacity > 0.05 && (
-        <p
-          className="pointer-events-none absolute left-3 top-2.5 z-[1] max-w-[40%] truncate text-[11px] leading-tight text-white drop-shadow"
-          style={{ opacity }}
-        >
-          <span className="sr-only">Photo: </span>
-          {credit}
-        </p>
-      )}
-    </>
+        className="pointer-events-none absolute inset-0 opacity-[0.06] mix-blend-overlay"
+        style={{ backgroundImage: NOISE_BG, backgroundSize: "160px 160px" }}
+      />
+    </div>
   );
 }
 

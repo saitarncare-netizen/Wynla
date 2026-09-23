@@ -186,6 +186,9 @@ export type Resort = {
   /** Photo credit (CC BY / BY-SA heroes need it shown); the sheet hero
    *  renders it. Optional so older payloads still type-check. */
   hero_image_attribution?: string | null;
+  /** false = rejected by the photo vetting; lib/heroSource then falls back
+   *  to the terrain card. Optional so older payloads still type-check. */
+  hero_image_verified_winter?: boolean | null;
   // Stage 26 — live snow + open conditions (cron-refreshed). Only the
   // 24h figure ships to the map (fresh-snow filter); 48h/7d and the
   // report timestamp are rendered on /resort/[slug].
