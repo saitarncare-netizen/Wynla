@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import type { User } from "@supabase/supabase-js";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+import { invalidateProStatus } from "@/lib/proClient";
 import Icon from "@/components/icons/Icon";
 
 // Header sign-in / user-menu button. Renders nothing until we know the auth
@@ -13,17 +14,24 @@ import Icon from "@/components/icons/Icon";
 // the moment the user signs in or out without a page reload.
 export default function AuthButton() {
   const router = useRouter();
+  const pathname = usePathname();
   const supabase = createSupabaseBrowserClient();
   const [user, setUser] = useState<User | null | undefined>(undefined);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [signingOut, setSigningOut] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     let cancelled = false;
     supabase.auth.getUser().then(({ data }) => {
       if (!cancelled) setUser(data.user);
     });
-    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (!cancelled) setUser(session?.user ?? null);
+    const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
+      if (cancelled) return;
+      setUser(session?.user ?? null);
+      // The Pro-status cache is per page load and would otherwise keep the
+      // previous account's answer across a client-side sign-in/out.
+      if (event === "SIGNED_IN" || event === "SIGNED_OUT") invalidateProStatus();
     });
     return () => {
       cancelled = true;
@@ -31,11 +39,58 @@ export default function AuthButton() {
     };
   }, [supabase]);
 
+  // Escape closes the menu and returns focus to the trigger, as a menu
+  // button is expected to.
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setMenuOpen(false);
+        triggerRef.current?.focus();
+      }
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [menuOpen]);
+
+  async function signOut() {
+    if (signingOut) return;
+    setSigningOut(true);
+    // Best effort: stop this device's snow-alert push subscription so the
+    // next person on a shared phone does not keep getting this account's
+    // alerts. The row belongs to the signed-in user, so this has to run
+    // BEFORE the session is gone.
+    try {
+      const reg = await navigator.serviceWorker?.getRegistration();
+      const push = await reg?.pushManager.getSubscription();
+      if (push) {
+        await fetch(`/api/push/subscribe?endpoint=${encodeURIComponent(push.endpoint)}`, {
+          method: "DELETE",
+        });
+        await push.unsubscribe();
+      }
+    } catch {
+      // No service worker, or push not granted: nothing to clean up.
+    }
+    // Local scope: only this browser's session is revoked. The SDK default
+    // (global) revoked every device's refresh token, so signing out on the
+    // phone silently killed the laptop on its next refresh. "Sign out of all
+    // devices" remains the job of /api/account/delete.
+    const { error } = await supabase.auth.signOut({ scope: "local" });
+    if (error) {
+      // The SDK keeps the local session when the server refuses (network
+      // blip, 5xx); a refresh shows the person they are still signed in
+      // instead of pretending otherwise. Logged so it is observable.
+      console.warn("[auth] sign-out failed:", error.code ?? error.message);
+    }
+    setMenuOpen(false);
+    setSigningOut(false);
+    router.refresh();
+  }
+
   if (user === undefined) {
-    // Avoid layout shift: reserve roughly the same width as the signed-out
-    // state while we resolve the session.
-    // Reserve the same footprint as the resolved Sign-in pill so we
-    // don't get a layout shift when the auth state lands.
+    // Reserve the same footprint as the resolved Sign-in pill so we don't
+    // get a layout shift when the auth state lands.
     return <div className="h-11 w-11 animate-pulse rounded-md bg-wn-charcoal/10 sm:w-24" aria-hidden="true" />;
   }
 
@@ -45,9 +100,11 @@ export default function AuthButton() {
     // small viewports). Desktop reveals the "Sign in" label.
     // whitespace-nowrap so the label never wraps to two lines when the
     // header gets cramped on edge-case widths (iPhone SE / split view).
+    // `next` brings people back to the page they were on after sign-in.
+    const loginHref = pathname && pathname !== "/" ? `/login?next=${encodeURIComponent(pathname)}` : "/login";
     return (
       <Link
-        href="/login"
+        href={loginHref}
         className="inline-flex h-11 items-center justify-center gap-1.5 whitespace-nowrap rounded-md border border-wn-charcoal/20 bg-white px-2 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 sm:px-3"
         title="Sign in"
         aria-label="Sign in"
@@ -63,9 +120,13 @@ export default function AuthButton() {
   return (
     <div className="relative">
       <button
+        ref={triggerRef}
         type="button"
         onClick={() => setMenuOpen((v) => !v)}
         aria-label="Account menu"
+        aria-haspopup="menu"
+        aria-expanded={menuOpen}
+        aria-controls="account-menu"
         className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-wn-navy text-sm font-bold text-white shadow-sm transition hover:bg-wn-navy/90 active:scale-95"
       >
         {initial}
@@ -79,10 +140,16 @@ export default function AuthButton() {
             onClick={() => setMenuOpen(false)}
             className="fixed inset-0 z-40 cursor-default"
           />
-          <div className="absolute right-0 top-9 z-50 w-48 overflow-hidden rounded-md border border-wn-charcoal/10 bg-white shadow-lg">
+          <div
+            id="account-menu"
+            role="menu"
+            aria-label="Account"
+            className="absolute right-0 top-9 z-50 w-48 overflow-hidden rounded-md border border-wn-charcoal/10 bg-white shadow-lg"
+          >
             <div className="px-3 py-2 text-[11px] text-wn-charcoal/60">{user.email}</div>
             <Link
               href="/favorites"
+              role="menuitem"
               onClick={() => setMenuOpen(false)}
               className="flex items-center gap-2 border-t border-wn-charcoal/10 px-3 py-2 text-sm font-medium text-wn-charcoal transition hover:bg-wn-offwhite hover:text-wn-navy"
             >
@@ -95,6 +162,7 @@ export default function AuthButton() {
                 inside this dropdown to keep the top-of-app uncluttered. */}
             <Link
               href="/?plan=1"
+              role="menuitem"
               onClick={() => setMenuOpen(false)}
               className="flex items-center gap-2 border-t border-wn-charcoal/10 px-3 py-2 text-sm font-medium text-wn-charcoal transition hover:bg-wn-offwhite hover:text-wn-navy"
             >
@@ -103,6 +171,7 @@ export default function AuthButton() {
             </Link>
             <Link
               href="/trips"
+              role="menuitem"
               onClick={() => setMenuOpen(false)}
               className="flex items-center gap-2 border-t border-wn-charcoal/10 px-3 py-2 text-sm font-medium text-wn-charcoal transition hover:bg-wn-offwhite hover:text-wn-navy"
             >
@@ -111,6 +180,7 @@ export default function AuthButton() {
             </Link>
             <Link
               href="/account"
+              role="menuitem"
               onClick={() => setMenuOpen(false)}
               className="flex items-center gap-2 border-t border-wn-charcoal/10 px-3 py-2 text-sm font-medium text-wn-charcoal transition hover:bg-wn-offwhite hover:text-wn-navy"
             >
@@ -119,14 +189,12 @@ export default function AuthButton() {
             </Link>
             <button
               type="button"
-              onClick={async () => {
-                await supabase.auth.signOut();
-                setMenuOpen(false);
-                router.refresh();
-              }}
-              className="block w-full border-t border-wn-charcoal/10 px-3 py-2 text-left text-sm font-medium text-wn-charcoal transition hover:bg-wn-offwhite hover:text-wn-navy"
+              role="menuitem"
+              onClick={signOut}
+              disabled={signingOut}
+              className="block w-full border-t border-wn-charcoal/10 px-3 py-2 text-left text-sm font-medium text-wn-charcoal transition hover:bg-wn-offwhite hover:text-wn-navy disabled:opacity-60"
             >
-              Sign out
+              {signingOut ? "Signing out…" : "Sign out"}
             </button>
           </div>
         </>
