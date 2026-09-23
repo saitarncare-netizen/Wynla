@@ -20,6 +20,7 @@ import { customHistoryState } from "./sheetHistory";
 import ResortPicker, { primeSearchKeyboard } from "./ResortPicker";
 import LocationButton from "./LocationButton";
 import FeedbackButton from "@/components/FeedbackButton";
+import BrandMark from "@/components/BrandMark";
 import FiltersDrawer, { AIRPORT_OPTIONS, liftLabel, type NearAirportResort } from "./FiltersDrawer";
 import MobileQuickFilters from "./MobileQuickFilters";
 import TripPlannerPanel from "./TripPlannerPanel";
@@ -1555,9 +1556,18 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
             sm+ keeps the text pills. Heights are fixed so the chrome
             budget in ResortSheetMath.MOBILE_CHROME is real. */}
         <div className="mt-2 flex h-11 items-center justify-between gap-1.5 px-2 sm:h-auto sm:gap-2 sm:px-6 sm:pt-1">
-          <div className="pointer-events-auto flex items-baseline gap-3">
-            <span className="rounded-lg bg-white/90 px-2 py-1 text-lg font-extrabold tracking-tight text-wn-navy shadow-sm backdrop-blur-sm sm:px-2 sm:text-xl md:bg-transparent md:px-0 md:py-0 md:shadow-none md:backdrop-blur-none">
-              Wynla
+          <div className="pointer-events-auto flex items-center gap-3">
+            {/* The designer's mark (components/BrandMark). Phones get the
+                44 px glyph so the 44 px row still fits Search / Plan /
+                Saturday / Filters / Sign in at 360 px; the solid md+ bar
+                has room for the lockup. Static (no link): this is home. */}
+            <span className="inline-flex items-center rounded-lg bg-white/90 px-2 py-1 shadow-sm backdrop-blur-sm md:bg-transparent md:px-0 md:py-0 md:shadow-none md:backdrop-blur-none">
+              <span className="flex md:hidden">
+                <BrandMark variant="mark" size="sm" href={null} />
+              </span>
+              <span className="hidden md:flex">
+                <BrandMark variant="lockup" size="sm" href={null} />
+              </span>
             </span>
             <span className="hidden text-xs text-wn-charcoal/50 sm:inline">
               Plan smart. Ride better.
@@ -1915,7 +1925,8 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
       {/* Phone bottom pill row: List · Compare · Location in ONE flex
           row anchored at --wn-bottom-stack (attribution band, install
           nudge or peek sheet), so the three can never overlap. The
-          Feedback pill (its own component, bottom-10 left-3) shares the
+          Feedback pill (its own component, left-3 on the same
+          --wn-bottom-stack anchor, hidden at half/full too) shares the
           line, so the row reserves its slot on the left (pl-[132px] =
           PHONE_ROW.edge + feedbackSlot) and packs right. With List on
           screen Location is an icon; with Compare up List is too

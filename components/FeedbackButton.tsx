@@ -109,14 +109,20 @@ export default function FeedbackButton() {
           (set by the map shell) so this pill, the location pill, the
           compare pill and the Alaska inset move together when the tab
           bar, an install nudge or the Mapbox attribution changes the
-          band they share. The 2.5rem fallback keeps the lowest 40px free
+          band they share. The 40px fallback keeps the lowest 40px free
           for the Mapbox wordmark, which its terms require visible.
+          On phones this pill is the left end of MapPage's bottom pill row:
+          the row reserves PHONE_ROW.feedbackSlot for it on the left
+          (components/Map/ResortSheetMath.ts), rides the same anchor and
+          safe-area inset, and hides with it while a resort sheet is at
+          half or full (data-sheet-snap on the map root). At peek both
+          float on the sheet's shoulder.
           On desktop the pill sits to the RIGHT of the 200px Alaska inset
           (left-4 + 200px + gap) instead of on top of it. */}
       <div
-        className="pointer-events-none absolute left-3 z-20 flex flex-col items-start gap-1 sm:left-4 md:left-[228px]"
+        className="pointer-events-none absolute left-3 z-20 flex flex-col items-start gap-1 sm:left-4 md:left-[228px] [[data-sheet-snap=full]_&]:hidden [[data-sheet-snap=half]_&]:hidden"
         style={{
-          bottom: "var(--wn-bottom-stack, 2.5rem)",
+          bottom: "var(--wn-bottom-stack, 40px)",
           paddingBottom: "env(safe-area-inset-bottom, 0px)",
         }}
       >

@@ -11,6 +11,7 @@ import {
   primaryPass,
   PASS_KEYS,
 } from "@/lib/passColors";
+import { textOn } from "@/lib/contrast";
 import {
   blackoutText,
   familyInfo,
@@ -1205,7 +1206,7 @@ function uvChipClass(uv: number): string {
 
 function PassBadge({ pass, href }: { pass: string; href?: string }) {
   const color = passColor(pass);
-  const fg = pass === "ikon" ? "#1E2952" : "#FFFFFF";
+  const fg = textOn(color);
   const className = "inline-block rounded-md px-2 py-0.5 text-[11px] font-semibold";
   if (href) {
     return (

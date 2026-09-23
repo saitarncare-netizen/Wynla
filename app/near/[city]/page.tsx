@@ -35,6 +35,7 @@ import {
 } from "@/lib/near";
 import { ESTIMATE_MARK, findOrigin, originLabel, type CityOrigin } from "@/lib/origins";
 import { passColor, passShort, passLabel } from "@/lib/passColors";
+import { textOn } from "@/lib/contrast";
 import { loadNearData, NEAR_DATA_REVALIDATE_SECONDS } from "./data";
 
 // Literal on purpose: Next reads the segment config statically and
@@ -254,14 +255,6 @@ export default async function NearCityPage({ params }: { params: Promise<{ city:
   );
 }
 
-/** Chip text colour per pass. Epic orange (#F37021) and Ikon yellow are
- *  light enough that white text falls below WCAG AA at chip size, so both
- *  take navy; the darker Indy / Mountain Collective / independent
- *  backgrounds keep white. */
-function passChipText(pass: string): string {
-  return pass === "ikon" || pass === "epic" ? "#1E2952" : "#FFFFFF";
-}
-
 function ResortRow({ row }: { row: NearRow }) {
   const drive = `${row.drive.estimated ? `${ESTIMATE_MARK} ` : ""}${formatDriveRounded(row.drive.seconds)}`;
   const ticketDate = formatStampDate(row.ticket?.updatedAt);
@@ -286,7 +279,7 @@ function ResortRow({ row }: { row: NearRow }) {
               key={p}
               title={passLabel(p)}
               className="rounded px-1.5 py-0.5 text-[11px] font-bold"
-              style={{ backgroundColor: passColor(p), color: passChipText(p) }}
+              style={{ backgroundColor: passColor(p), color: textOn(passColor(p)) }}
             >
               {passShort(p)}
             </span>

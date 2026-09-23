@@ -10,6 +10,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { passColor, passLabel } from "@/lib/passColors";
+import { textOn } from "@/lib/contrast";
 import {
   GUEST_FAVORITES_CHANGE_EVENT,
   getGuestFavoriteIds,
@@ -190,7 +191,7 @@ function GuestCard({ resort: r }: { resort: GuestResort }) {
               <span
                 key={p}
                 className="inline-block rounded px-1.5 py-0.5 text-[9px] font-semibold"
-                style={{ backgroundColor: passColor(p), color: p === "ikon" ? "#1E2952" : "white" }}
+                style={{ backgroundColor: passColor(p), color: textOn(passColor(p)) }}
               >
                 {passLabel(p)}
               </span>

@@ -8,6 +8,7 @@
 import Link from "next/link";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { passColor, passLabel } from "@/lib/passColors";
+import { textOn } from "@/lib/contrast";
 import { loadTodayRows, type TodayRow } from "@/app/today/data";
 import VerdictPill from "@/app/today/VerdictPill";
 import GuestFavorites from "./GuestFavorites";
@@ -133,7 +134,7 @@ function FavoriteCard({ row }: { row: TodayRow }) {
               className="inline-block rounded px-1.5 py-0.5 text-[9px] font-semibold"
               style={{
                 backgroundColor: passColor(p),
-                color: p === "ikon" ? "#1E2952" : "white",
+                color: textOn(passColor(p)),
               }}
             >
               {passLabel(p)}

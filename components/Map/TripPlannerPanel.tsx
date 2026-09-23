@@ -19,6 +19,7 @@ import {
 import { getPreferences } from "@/lib/preferences";
 import { getTemplate } from "@/lib/tripTemplates";
 import ResortPicker from "./ResortPicker";
+import { customHistoryState } from "./sheetHistory";
 import type { Resort } from "./MapPage";
 import type { TripRoutePoint } from "./MapView";
 
@@ -571,7 +572,10 @@ export default function TripPlannerPanel({
       const qs = params.toString();
       // History API, not router.replace: Next syncs useSearchParams with
       // it and it skips the server re-render of the force-dynamic homepage.
-      window.history.replaceState(null, "", qs ? `?${qs}` : window.location.pathname);
+      // customHistoryState keeps the resort sheet's entry keys (so a back
+      // press still closes the sheet) and drops Next's own keys (so the
+      // useSearchParams sync still runs): components/Map/sheetHistory.ts.
+      window.history.replaceState(customHistoryState(window.history.state), "", qs ? `?${qs}` : window.location.pathname);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -608,7 +612,10 @@ export default function TripPlannerPanel({
       const qs = params.toString();
       // History API, not router.replace: Next syncs useSearchParams with
       // it and it skips the server re-render of the force-dynamic homepage.
-      window.history.replaceState(null, "", qs ? `?${qs}` : window.location.pathname);
+      // customHistoryState keeps the resort sheet's entry keys (so a back
+      // press still closes the sheet) and drops Next's own keys (so the
+      // useSearchParams sync still runs): components/Map/sheetHistory.ts.
+      window.history.replaceState(customHistoryState(window.history.state), "", qs ? `?${qs}` : window.location.pathname);
       return;
     }
     templateApplied.current = true;
@@ -654,7 +661,8 @@ export default function TripPlannerPanel({
     const qs = params.toString();
     // History API, not router.replace: Next syncs useSearchParams with
     // it and it skips the server re-render of the force-dynamic homepage.
-    window.history.replaceState(null, "", qs ? `?${qs}` : window.location.pathname);
+    // Sheet-safe state object, as above.
+    window.history.replaceState(customHistoryState(window.history.state), "", qs ? `?${qs}` : window.location.pathname);
   }
 
   // Render-phase reset for pendingStop on panel close. Avoids the

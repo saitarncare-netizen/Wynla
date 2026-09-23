@@ -204,9 +204,10 @@ export function mobileChromeTotal(opts: { secondary: boolean; banner: boolean })
 //
 // List, Location and Compare share ONE flex row anchored at
 // --wn-bottom-stack (MapPage). The Feedback pill (components/
-// FeedbackButton.tsx, positioned on its own at bottom-10 left-3) sits on
-// the same line in the default state, so the row reserves its slot on the
-// left and packs the rest to the right. Widths are the rendered sizes of
+// FeedbackButton.tsx, positioned on its own at left-3 on the same
+// --wn-bottom-stack anchor, hidden at half/full) sits on the same line,
+// so the row reserves its slot on the left and packs the rest to the
+// right. Widths are the rendered sizes of
 // the current pills (text-sm / text-xs Inter, 44 px tall); the test in
 // tests/resortSheetMath.test.ts keeps the worst case inside a 360 px
 // phone, and the Compare label truncates (flex-shrink) before anything

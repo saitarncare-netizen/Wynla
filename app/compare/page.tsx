@@ -23,6 +23,7 @@ import { cookies } from "next/headers";
 import { supabase } from "@/lib/supabase";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { passColor, passLabel, primaryPass } from "@/lib/passColors";
+import { textOn } from "@/lib/contrast";
 import { verdict, type Verdict, type VerdictWeather } from "@/lib/goWaitSkip";
 import type { DailyWeather } from "@/lib/snowSurface";
 import { shiftDate } from "@/lib/weather/time";
@@ -694,7 +695,7 @@ function ResortHeading({ resort, compact = false }: { resort: CompareResort; com
               className="inline-block rounded px-1.5 py-0.5 text-[9px] font-semibold"
               style={{
                 backgroundColor: passColor(p),
-                color: p === "ikon" ? "#1E2952" : "#FFFFFF",
+                color: textOn(passColor(p)),
               }}
             >
               {passLabel(p)}

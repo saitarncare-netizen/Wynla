@@ -15,11 +15,14 @@ import BrandMark from "@/components/BrandMark";
 const LINKS: ReadonlyArray<{ href: string; label: string; strong?: boolean }> = [
   { href: "/early", label: "Founder list", strong: true },
   { href: "/go", label: "Saturday pick" },
+  // /near has no index page; the NYC page lists every other origin city.
+  { href: "/near/nyc", label: "Resorts near your city" },
   { href: "/guides", label: "Guides" },
   { href: "/lists", label: "Lists" },
   { href: "/trip-templates", label: "Trip ideas" },
   { href: "/deals", label: "Pass deals" },
   { href: "/data-sources", label: "Data sources" },
+  { href: "/credits", label: "Photo credits" },
   { href: "/privacy", label: "Privacy" },
   { href: "/terms", label: "Terms" },
   { href: "mailto:hello@wynla.app", label: "Contact" },

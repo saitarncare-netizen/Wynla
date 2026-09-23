@@ -3,14 +3,14 @@ import { activeNavItem, backLinkFor, isFlowRoute, isMapRoute, NAV_ITEMS, TAB_ITE
 
 describe("nav model", () => {
   it("lights up exactly one item per route", () => {
-    const routes = ["/", "/resort/vail", "/state/co", "/compare", "/today", "/go", "/guides", "/guides/ikon-vs-epic", "/lists/powder", "/trip-templates/x", "/deals", "/trips", "/trip/abc", "/account", "/account/pro", "/favorites"];
+    const routes = ["/", "/resort/vail", "/state/co", "/near/nyc", "/compare", "/today", "/go", "/guides", "/guides/ikon-vs-epic", "/lists/powder", "/trip-templates/x", "/deals", "/trips", "/trip/abc", "/account", "/account/pro", "/favorites"];
     for (const r of routes) {
       expect(NAV_ITEMS.filter((i) => i.match(r)).length, r).toBe(1);
     }
   });
 
   it("does not light anything on flow routes", () => {
-    for (const r of ["/login", "/auth/callback", "/get", "/privacy"]) {
+    for (const r of ["/login", "/auth/callback", "/get", "/privacy", "/credits", "/data-sources"]) {
       expect(activeNavItem(r), r).toBeUndefined();
     }
   });
@@ -36,6 +36,7 @@ describe("nav model", () => {
     expect(backLinkFor("/trip/share/abc")).toEqual({ href: "/", label: "Map" });
     expect(backLinkFor("/account/pro")).toEqual({ href: "/account", label: "Account" });
     expect(backLinkFor("/resort/vail")).toEqual({ href: "/", label: "Map" });
+    expect(backLinkFor("/near/nyc")).toEqual({ href: "/", label: "Map" });
     expect(backLinkFor("/privacy")).toEqual({ href: "/", label: "Map" });
   });
 });

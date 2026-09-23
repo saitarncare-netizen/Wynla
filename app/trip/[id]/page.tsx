@@ -6,6 +6,7 @@ import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { passColor, primaryPass, passLabel } from "@/lib/passColors";
+import { textOn } from "@/lib/contrast";
 import { haversineMeters, estimateDriveSeconds } from "@/lib/distance";
 import { formatDriveTime } from "@/lib/origins";
 import TripActions, { StartDateBadge } from "./TripActions";
@@ -473,8 +474,8 @@ export default async function TripPage({
                       {(r.passes ?? []).slice(0, 4).map((p) => (
                         <span
                           key={p}
-                          className="rounded px-1.5 py-0.5 text-[10px] font-semibold text-white"
-                          style={{ backgroundColor: passColor(p) }}
+                          className="rounded px-1.5 py-0.5 text-[10px] font-semibold"
+                          style={{ backgroundColor: passColor(p), color: textOn(passColor(p)) }}
                         >
                           {passLabel(p)}
                         </span>

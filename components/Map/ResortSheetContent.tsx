@@ -10,6 +10,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { passColor, passLabel } from "@/lib/passColors";
+import { textOn } from "@/lib/contrast";
 import { SURFACE_GLOSSARY, type SurfaceCode } from "@/lib/snowSurface";
 import type { ResortStatus } from "@/lib/seasonDates";
 import SurfaceIcon from "@/components/icons/SurfaceIcon";
@@ -259,7 +260,7 @@ export function PassChips({ resort }: { resort: Resort }) {
           below), which is why wrapped rows are 12 px apart. */}
       <div className="flex flex-wrap gap-x-1.5 gap-y-3">
         {resort.passes.map((p) => {
-          const fg = p === "ikon" ? "#1E2952" : "#FFFFFF";
+          const fg = textOn(passColor(p));
           if (!PASS_FAMILIES_WITH_RULES.has(p)) {
             return (
               <span

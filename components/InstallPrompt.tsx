@@ -31,6 +31,7 @@ import { useCallback, useEffect, useId, useRef, useState, useSyncExternalStore }
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useFocusTrap } from "@/lib/useFocusTrap";
+import { customHistoryState } from "@/components/Map/sheetHistory";
 
 // ---------------------------------------------------------------------
 // Types + platform detection
@@ -838,8 +839,11 @@ export default function InstallPrompt() {
     if (params.get("source") === "pwa" || params.get("source") === "shortcut") {
       params.delete("source");
       const qs = params.toString();
+      // customHistoryState: keep the resort sheet's entry keys, drop
+      // Next's own (with them present Next treats the call as internal
+      // and would not sync useSearchParams): components/Map/sheetHistory.ts.
       window.history.replaceState(
-        window.history.state,
+        customHistoryState(window.history.state),
         "",
         `${window.location.pathname}${qs ? `?${qs}` : ""}${window.location.hash}`,
       );

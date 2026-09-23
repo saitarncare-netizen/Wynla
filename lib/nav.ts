@@ -23,7 +23,9 @@ export const NAV_ITEMS: readonly NavItem[] = [
     href: "/",
     label: "Map",
     icon: "map",
-    match: (p) => p === "/" || startsWithSeg(p, "/resort") || startsWithSeg(p, "/state") || p === "/compare",
+    // /near/<city> is a drive-sorted resort directory, the same kind of
+    // place as /state/<code>, so it lights the Map item too.
+    match: (p) => p === "/" || startsWithSeg(p, "/resort") || startsWithSeg(p, "/state") || startsWithSeg(p, "/near") || p === "/compare",
     tab: true,
   },
   {
