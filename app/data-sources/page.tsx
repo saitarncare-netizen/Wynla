@@ -1,0 +1,205 @@
+// /data-sources — attribution and licensing credits for every dataset and
+// service Wynla builds on. Several of these licenses (Open-Meteo CC BY 4.0,
+// OpenStreetMap ODbL, Wikimedia Commons photo licenses) REQUIRE a visible
+// credit somewhere reachable from the product, and the pass operators'
+// trademark guidelines expect a non-affiliation statement. Linked from the
+// global footer in app/layout.tsx.
+
+import type { Metadata } from "next";
+import Link from "next/link";
+
+export const revalidate = 86400; // 24h — credits change with the stack, not daily
+
+export const metadata: Metadata = {
+  title: "Data sources and credits",
+  description:
+    "Where Wynla's snow, weather, map, resort and photo data comes from, with licenses and trademark notices.",
+  alternates: { canonical: "/data-sources" },
+  openGraph: {
+    title: "Data sources and credits · Wynla",
+    description:
+      "Where Wynla's snow, weather, map, resort and photo data comes from, with licenses and trademark notices.",
+    url: "/data-sources",
+    images: [{ url: "/og-home.png", width: 1200, height: 630, alt: "Wynla — US ski resort map" }],
+  },
+};
+
+type Source = {
+  name: string;
+  url: string;
+  usedFor: string;
+  license: string;
+};
+
+// Order matters: government / public-domain sources first, then open
+// licenses that require attribution, then commercial services.
+const SOURCES: Source[] = [
+  {
+    name: "NOAA National Weather Service (NWS)",
+    url: "https://www.weather.gov/",
+    usedFor: "Point forecasts and gridpoint weather for every resort in the US",
+    license: "US government work, public domain (17 U.S.C. § 105)",
+  },
+  {
+    name: "USDA NRCS SNOTEL network",
+    url: "https://www.nrcs.usda.gov/resources/data-and-reports/snow-and-water-interactive-map",
+    usedFor: "Automated snowpack and snow-water-equivalent station readings near resorts",
+    license: "US government work, public domain",
+  },
+  {
+    name: "NOAA NOHRSC National Snow Analyses",
+    url: "https://www.nohrsc.noaa.gov/nsa/",
+    usedFor: "Modeled snow depth and snowfall grids that fill gaps between stations",
+    license: "US government work, public domain",
+  },
+  {
+    name: "Open-Meteo",
+    url: "https://open-meteo.com/",
+    usedFor: "Hourly temperature, precipitation and wind used by the snow surface forecast",
+    license: "Weather data © Open-Meteo.com, CC BY 4.0",
+  },
+  {
+    name: "OpenStreetMap contributors",
+    url: "https://www.openstreetmap.org/copyright",
+    usedFor: "Nearby restaurants, lodging, ski shops and activities around each resort",
+    license: "© OpenStreetMap contributors, Open Database License (ODbL) 1.0",
+  },
+  {
+    name: "Wikimedia Commons",
+    url: "https://commons.wikimedia.org/",
+    usedFor: "Some resort hero photos",
+    license:
+      "Each photo carries its own license (CC BY, CC BY-SA or public domain); the photographer and license are credited on the resort page that shows the photo",
+  },
+  {
+    name: "Mapbox",
+    url: "https://www.mapbox.com/about/maps/",
+    usedFor: "The interactive map, map tiles and place search",
+    license: "© Mapbox, © OpenStreetMap; Mapbox terms of service",
+  },
+  {
+    name: "Google Maps",
+    url: "https://www.google.com/maps",
+    usedFor: "Directions links that open in Google Maps and star-rating flags for recommended places",
+    license: "Opens on Google's site under Google's terms; Wynla stores only a recommended yes/no flag, never Google's content",
+  },
+];
+
+export default function DataSourcesPage() {
+  return (
+    <main className="min-h-dvh bg-wn-offwhite px-4 py-10 sm:px-6 sm:py-16">
+      <div className="mx-auto max-w-3xl">
+        <Link
+          href="/"
+          className="text-xs font-semibold text-wn-charcoal/60 hover:text-wn-navy"
+        >
+          ← Map
+        </Link>
+
+        <header className="mt-6 mb-8 sm:mt-8 sm:mb-10">
+          <span className="inline-flex items-center rounded bg-wn-navy/10 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-wn-navy">
+            Credits
+          </span>
+          <h1 className="mt-3 text-3xl font-extrabold text-wn-navy sm:text-4xl">
+            Data sources and credits
+          </h1>
+          <p className="mt-4 text-sm text-wn-charcoal/75 sm:text-base">
+            Wynla combines public weather and snow data, open map data and a
+            few commercial services. This page lists each source, what we
+            use it for and the license it comes with. Resort names, trail
+            counts, vertical drop and pass membership are compiled by hand
+            from each resort&apos;s own published figures.
+          </p>
+        </header>
+
+        <section className="mb-8 rounded-xl border border-wn-charcoal/10 bg-white p-5 shadow-sm sm:p-6">
+          <h2 className="mb-4 text-base font-bold text-wn-navy sm:text-lg">
+            Sources
+          </h2>
+          <ul className="divide-y divide-wn-charcoal/10">
+            {SOURCES.map((s) => (
+              <li key={s.name} className="py-4 first:pt-0 last:pb-0">
+                <h3 className="text-sm font-bold text-wn-navy sm:text-base">
+                  <a
+                    href={s.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline-offset-2 hover:underline"
+                  >
+                    {s.name}
+                  </a>
+                </h3>
+                <dl className="mt-1 space-y-1 text-sm text-wn-charcoal/80">
+                  <div className="flex gap-2">
+                    <dt className="w-20 shrink-0 text-xs font-semibold uppercase tracking-wider text-wn-charcoal/50">
+                      Used for
+                    </dt>
+                    <dd>{s.usedFor}</dd>
+                  </div>
+                  <div className="flex gap-2">
+                    <dt className="w-20 shrink-0 text-xs font-semibold uppercase tracking-wider text-wn-charcoal/50">
+                      License
+                    </dt>
+                    <dd>{s.license}</dd>
+                  </div>
+                </dl>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section className="mb-8 rounded-xl border border-wn-charcoal/10 bg-white p-5 shadow-sm sm:p-6">
+          <h2 className="mb-3 text-base font-bold text-wn-navy sm:text-lg">
+            Trademarks and non-affiliation
+          </h2>
+          <div className="space-y-2 text-sm text-wn-charcoal/80 sm:text-base">
+            <p>
+              Epic Pass is a trademark of Vail Resorts, Inc. Ikon Pass is a
+              trademark of Alterra Mountain Company. Indy Pass is a trademark
+              of Indy Pass LLC. Mountain Collective is a trademark of The
+              Mountain Collective. Resort names are the trademarks of their
+              respective owners.
+            </p>
+            <p>
+              Wynla is an independent trip planner. It is not affiliated
+              with, endorsed by or sponsored by any pass operator, resort or
+              data provider listed on this page. Pass membership and pass
+              prices shown on Wynla are compiled from each operator&apos;s
+              public website and can change without notice; the operator&apos;s
+              own site is always the final word.
+            </p>
+          </div>
+        </section>
+
+        <section className="mb-8 rounded-xl border border-wn-charcoal/10 bg-white p-5 shadow-sm sm:p-6">
+          <h2 className="mb-3 text-base font-bold text-wn-navy sm:text-lg">
+            Corrections
+          </h2>
+          <p className="text-sm text-wn-charcoal/80 sm:text-base">
+            Spotted a wrong number, a missing credit or a photo that should
+            not be here? Email{" "}
+            <a
+              href="mailto:hello@wynla.app"
+              className="font-semibold text-wn-navy underline hover:no-underline"
+            >
+              hello@wynla.app
+            </a>{" "}
+            and we will fix it or take it down.
+          </p>
+        </section>
+
+        <p className="text-xs text-wn-charcoal/55">
+          See also our{" "}
+          <Link href="/privacy" className="font-semibold text-wn-navy underline hover:no-underline">
+            privacy policy
+          </Link>{" "}
+          and{" "}
+          <Link href="/terms" className="font-semibold text-wn-navy underline hover:no-underline">
+            terms of service
+          </Link>
+          .
+        </p>
+      </div>
+    </main>
+  );
+}

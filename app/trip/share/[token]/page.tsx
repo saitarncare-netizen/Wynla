@@ -2,6 +2,8 @@
 // token URL can see the trip name + origin + ordered stops. No login
 // required; no edit actions.
 
+import { cache } from "react";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@supabase/supabase-js";
@@ -11,6 +13,43 @@ import { formatDriveTime } from "@/lib/origins";
 import { haversineMeters, estimateDriveSeconds } from "@/lib/distance";
 
 export const dynamic = "force-dynamic";
+
+// Share links are meant for the people the owner sent them to, not for
+// search engines: NOINDEX, and the token URL is also disallowed in
+// app/robots.ts. The title still names the trip so the link previews
+// nicely in iMessage / Slack (audit finding content-seo-8).
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ token: string }>;
+}): Promise<Metadata> {
+  const { token } = await params;
+  const data = await getData(token);
+  const robots = { index: false, follow: false };
+  if (!data) return { title: "Shared trip", robots };
+  const { trip, bySlug } = data;
+  const stops = Array.from(new Set(trip.resort_slugs ?? []))
+    .map((s) => bySlug.get(s)?.name)
+    .filter((n): n is string => Boolean(n));
+  const dayWord = trip.total_days === 1 ? "day" : "days";
+  const description = [
+    `${trip.total_days} ${dayWord}`,
+    trip.origin_label ? `from ${trip.origin_label}` : null,
+    stops.length ? `stops: ${stops.join(", ")}` : null,
+  ]
+    .filter(Boolean)
+    .join(" · ");
+  return {
+    title: `${trip.name} — shared trip`,
+    description,
+    robots,
+    openGraph: {
+      title: `${trip.name} — shared trip · Wynla`,
+      description,
+      images: [{ url: "/og-home.png", width: 1200, height: 630, alt: "Wynla — US ski resort map" }],
+    },
+  };
+}
 
 type Trip = {
   id: number;
@@ -34,11 +73,16 @@ type ResortRow = {
   passes: string[];
 };
 
-async function getData(token: string) {
+// React cache() dedupes the lookup between generateMetadata and the page
+// within one request, so a share view still bumps view_count exactly once.
+const getData = cache(async function getData(token: string) {
   // Resolve the token then read the user-owned trips table with a SERVICE-ROLE
   // client so the anon client never touches trips directly (no id-enumeration
   // outside the token flow, regardless of RLS). Falls back to the anon client
-  // if the service key isn't configured, keeping the feature working.
+  // if the service key isn't configured, keeping the feature working — note
+  // that once handoff-docs/sql/2026-09-23-hygiene.sql makes trip_shares
+  // owner-only, that fallback returns 404 for every link, so the service
+  // key is effectively required in every environment.
   const svcKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const db =
@@ -75,7 +119,7 @@ async function getData(token: string) {
     .in("slug", slugs);
   const bySlug = new Map((resorts as ResortRow[] | null ?? []).map((r) => [r.slug, r]));
   return { trip: t, bySlug };
-}
+});
 
 export default async function SharedTripPage({
   params,

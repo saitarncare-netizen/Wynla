@@ -8,9 +8,20 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        // Auth-gated and personalized pages — no value to crawl, no value to
-        // surface in search results.
-        disallow: ["/login", "/auth/", "/favorites", "/account", "/trips"],
+        // Auth-gated, personalized, or token-addressed pages — no value to
+        // crawl, and for /trip/ (owner pages + share tokens) and /compare
+        // (any ?ids= permutation) indexing would only create duplicate or
+        // leaked URLs. /api/ is machine endpoints, never pages.
+        disallow: [
+          "/login",
+          "/auth/",
+          "/favorites",
+          "/account",
+          "/trips",
+          "/trip/",
+          "/compare",
+          "/api/",
+        ],
       },
     ],
     sitemap: `${SITE_URL}/sitemap.xml`,

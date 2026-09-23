@@ -146,6 +146,14 @@ export default function RootLayout({
               Founder list
             </Link>
             <span aria-hidden="true">·</span>
+            <Link href="/trip-templates" className="hover:text-wn-navy">
+              Trip ideas
+            </Link>
+            <span aria-hidden="true">·</span>
+            <Link href="/data-sources" className="hover:text-wn-navy">
+              Data sources
+            </Link>
+            <span aria-hidden="true">·</span>
             <Link href="/privacy" className="hover:text-wn-navy">
               Privacy
             </Link>
