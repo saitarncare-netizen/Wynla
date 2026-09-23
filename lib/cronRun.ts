@@ -25,6 +25,7 @@ export const CRON_JOBS = [
   "refresh-snow-conditions",
   "check-snow-alerts",
   "daily-digest",
+  "thursday-picks",
 ] as const;
 export type CronJob = (typeof CRON_JOBS)[number] | "health-alert";
 

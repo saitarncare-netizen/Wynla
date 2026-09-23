@@ -6,6 +6,9 @@
 //     routes pre-cached in drive_time_cache, keyed by `name`. Every
 //     other city has no cache rows, so drive times fall back to the
 //     Haversine estimate in lib/distance and are labelled "≈".
+//     LAUNCH_CITIES is the subset the Saturday picks page (/go) and the
+//     Thursday email launch with; it is derived from ORIGINS so the map,
+//     /go and profiles.preferred_origin share one list of city data.
 //   - "geo": the user's actual lat/lng from the Browser Geolocation API
 //     (or a ZIP centroid). No cached routes, so estimates apply at the
 //     filter/list level; ResortPanel upgrades to a Mapbox Matrix exact
@@ -24,6 +27,8 @@ export type CityOrigin = {
   state: string;  // two-letter code, for "Denver, CO" style labels
   lat: number;
   lon: number;
+  /** IANA zone of the city, for "this Saturday" and "8 AM local" copy. */
+  timeZone: string;
   /** True when drive_time_cache holds real road routes for this city.
    *  Everything else is estimated on the client (and labelled "≈"). */
   cached: boolean;
@@ -40,55 +45,95 @@ export type GeoOrigin = {
 
 export type Origin = CityOrigin | GeoOrigin;
 
+const EASTERN = "America/New_York";
+const CENTRAL = "America/Chicago";
+const MOUNTAIN = "America/Denver";
+const PACIFIC = "America/Los_Angeles";
+
 const city = (
   code: string,
   name: string,
   short: string,
   state: string,
+  timeZone: string,
   lat: number,
   lon: number,
   cached = false,
-): CityOrigin => ({ kind: "city", code, name, short, state, lat, lon, cached });
+): CityOrigin => ({ kind: "city", code, name, short, state, timeZone, lat, lon, cached });
 
 // Cached Northeast cities first (their `name` is the drive_time_cache
 // key, do not rename), then the rest of the country roughly east to
 // west. Coordinates are city-hall / downtown centroids. `name` is the
 // plain city name; the state suffix from originLabel() is what tells
 // the two Portlands apart, and `short` carries it for chips where the
-// full label would not fit.
+// full label would not fit. Time zones are the city's own IANA zone
+// (Phoenix has no DST, Boise is its own Mountain zone).
 export const ORIGINS: readonly CityOrigin[] = [
-  city("nyc",            "NYC",            "NYC",          "NY", 40.7128, -74.006,   true),
-  city("boston",         "Boston",         "Boston",       "MA", 42.3601, -71.0589,  true),
-  city("philadelphia",   "Philadelphia",   "Philly",       "PA", 39.9526, -75.1652,  true),
-  city("hartford",       "Hartford",       "Hartford",     "CT", 41.7637, -72.6851,  true),
-  city("washington-dc",  "Washington",     "DC",           "DC", 38.9072, -77.0369),
-  city("albany",         "Albany",         "Albany",       "NY", 42.6526, -73.7562),
-  city("burlington",     "Burlington",     "Burlington",   "VT", 44.4759, -73.2121),
-  city("portland-me",    "Portland",       "Portland ME",  "ME", 43.6591, -70.2568),
-  city("pittsburgh",     "Pittsburgh",     "Pittsburgh",   "PA", 40.4406, -79.9959),
-  city("buffalo",        "Buffalo",        "Buffalo",      "NY", 42.8864, -78.8784),
-  city("cleveland",      "Cleveland",      "Cleveland",    "OH", 41.4993, -81.6944),
-  city("detroit",        "Detroit",        "Detroit",      "MI", 42.3314, -83.0458),
-  city("chicago",        "Chicago",        "Chicago",      "IL", 41.8781, -87.6298),
-  city("milwaukee",      "Milwaukee",      "Milwaukee",    "WI", 43.0389, -87.9065),
-  city("minneapolis",    "Minneapolis",    "Minneapolis",  "MN", 44.9778, -93.265),
-  city("denver",         "Denver",         "Denver",       "CO", 39.7392, -104.9903),
-  city("salt-lake-city", "Salt Lake City", "SLC",          "UT", 40.7608, -111.891),
-  city("boise",          "Boise",          "Boise",        "ID", 43.615,  -116.2023),
-  city("reno",           "Reno",           "Reno",         "NV", 39.5296, -119.8138),
-  city("las-vegas",      "Las Vegas",      "Las Vegas",    "NV", 36.1699, -115.1398),
-  city("phoenix",        "Phoenix",        "Phoenix",      "AZ", 33.4484, -112.074),
-  city("albuquerque",    "Albuquerque",    "ABQ",          "NM", 35.0844, -106.6504),
-  city("spokane",        "Spokane",        "Spokane",      "WA", 47.6588, -117.426),
-  city("seattle",        "Seattle",        "Seattle",      "WA", 47.6062, -122.3321),
-  city("portland",       "Portland",       "Portland OR",  "OR", 45.5152, -122.6784),
-  city("sacramento",     "Sacramento",     "Sacramento",   "CA", 38.5816, -121.4944),
-  city("san-francisco",  "San Francisco",  "SF",           "CA", 37.7749, -122.4194),
-  city("los-angeles",    "Los Angeles",    "LA",           "CA", 34.0522, -118.2437),
-  city("san-diego",      "San Diego",      "San Diego",    "CA", 32.7157, -117.1611),
+  city("nyc",            "NYC",            "NYC",          "NY", EASTERN,           40.7128, -74.006,   true),
+  city("boston",         "Boston",         "Boston",       "MA", EASTERN,           42.3601, -71.0589,  true),
+  city("philadelphia",   "Philadelphia",   "Philly",       "PA", EASTERN,           39.9526, -75.1652,  true),
+  city("hartford",       "Hartford",       "Hartford",     "CT", EASTERN,           41.7637, -72.6851,  true),
+  city("washington-dc",  "Washington",     "DC",           "DC", EASTERN,           38.9072, -77.0369),
+  city("albany",         "Albany",         "Albany",       "NY", EASTERN,           42.6526, -73.7562),
+  city("burlington",     "Burlington",     "Burlington",   "VT", EASTERN,           44.4759, -73.2121),
+  city("portland-me",    "Portland",       "Portland ME",  "ME", EASTERN,           43.6591, -70.2568),
+  city("pittsburgh",     "Pittsburgh",     "Pittsburgh",   "PA", EASTERN,           40.4406, -79.9959),
+  city("buffalo",        "Buffalo",        "Buffalo",      "NY", EASTERN,           42.8864, -78.8784),
+  city("cleveland",      "Cleveland",      "Cleveland",    "OH", EASTERN,           41.4993, -81.6944),
+  city("detroit",        "Detroit",        "Detroit",      "MI", EASTERN,           42.3314, -83.0458),
+  city("chicago",        "Chicago",        "Chicago",      "IL", CENTRAL,           41.8781, -87.6298),
+  city("milwaukee",      "Milwaukee",      "Milwaukee",    "WI", CENTRAL,           43.0389, -87.9065),
+  city("minneapolis",    "Minneapolis",    "Minneapolis",  "MN", CENTRAL,           44.9778, -93.265),
+  city("denver",         "Denver",         "Denver",       "CO", MOUNTAIN,          39.7392, -104.9903),
+  city("salt-lake-city", "Salt Lake City", "SLC",          "UT", MOUNTAIN,          40.7608, -111.891),
+  city("boise",          "Boise",          "Boise",        "ID", "America/Boise",   43.615,  -116.2023),
+  city("reno",           "Reno",           "Reno",         "NV", PACIFIC,           39.5296, -119.8138),
+  city("las-vegas",      "Las Vegas",      "Las Vegas",    "NV", PACIFIC,           36.1699, -115.1398),
+  city("phoenix",        "Phoenix",        "Phoenix",      "AZ", "America/Phoenix", 33.4484, -112.074),
+  city("albuquerque",    "Albuquerque",    "ABQ",          "NM", MOUNTAIN,          35.0844, -106.6504),
+  city("spokane",        "Spokane",        "Spokane",      "WA", PACIFIC,           47.6588, -117.426),
+  city("seattle",        "Seattle",        "Seattle",      "WA", PACIFIC,           47.6062, -122.3321),
+  city("portland",       "Portland",       "Portland OR",  "OR", PACIFIC,           45.5152, -122.6784),
+  city("sacramento",     "Sacramento",     "Sacramento",   "CA", PACIFIC,           38.5816, -121.4944),
+  city("san-francisco",  "San Francisco",  "SF",           "CA", PACIFIC,           37.7749, -122.4194),
+  city("los-angeles",    "Los Angeles",    "LA",           "CA", PACIFIC,           34.0522, -118.2437),
+  city("san-diego",      "San Diego",      "San Diego",    "CA", PACIFIC,           32.7157, -117.1611),
 ] as const;
 
 export const DEFAULT_ORIGIN: CityOrigin = ORIGINS[0];
+
+/**
+ * Cities the Saturday picks page (/go) and the Thursday email launch
+ * with: the four cached map origins plus the East / Midwest metros whose
+ * riders drive to the same mountains, in launch order (East first).
+ * Derived from ORIGINS by code so there is exactly one list of city
+ * data; add a code here (and drive_time_cache rows, ideally) to launch
+ * /go in another city.
+ */
+const LAUNCH_CITY_CODES = [
+  "nyc",
+  "boston",
+  "philadelphia",
+  "hartford",
+  "washington-dc",
+  "chicago",
+  "minneapolis",
+  "detroit",
+] as const;
+
+export const LAUNCH_CITIES: readonly CityOrigin[] = LAUNCH_CITY_CODES.map((code) => {
+  const c = ORIGINS.find((o) => o.code === code);
+  if (!c) throw new Error(`LAUNCH_CITIES: "${code}" is not in ORIGINS`);
+  return c;
+});
+
+/** Any launch city by code, or null; unlike originByCode there is no
+ *  NYC fallback because /go must not silently answer for the wrong city. */
+export function launchCityByCode(code: string | null | undefined): CityOrigin | null {
+  if (!code) return null;
+  const wanted = code.trim().toLowerCase();
+  return LAUNCH_CITIES.find((o) => o.code === wanted) ?? null;
+}
 
 /** Full display label, "Denver, CO". NYC keeps its short form because
  *  "NYC, NY" reads oddly. */

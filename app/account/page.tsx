@@ -11,6 +11,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { launchCityByCode } from "@/lib/origins";
 import ProfileForm from "./ProfileForm";
 import DeleteAccount from "./DeleteAccount";
 import { InstallRow } from "@/components/InstallPrompt";
@@ -36,6 +37,9 @@ export default async function AccountPage() {
     .eq("id", user.id)
     .maybeSingle();
   const p = (profile as ProfileRow | null) ?? null;
+  // /go only answers for its launch cities; a saved Denver default opens
+  // the page without a city rather than with one it would reject.
+  const goCity = launchCityByCode(p?.preferred_origin);
 
   return (
     <main className="min-h-dvh bg-wn-offwhite px-4 py-10 sm:px-6 sm:py-16">
@@ -98,6 +102,15 @@ export default async function AccountPage() {
                 className="flex items-center justify-between py-3 text-sm text-wn-charcoal transition hover:text-wn-navy"
               >
                 <span className="font-medium">📬 Email digest</span>
+                <span className="text-wn-charcoal/50">→</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                href={goCity ? `/go?city=${goCity.code}` : "/go"}
+                className="flex items-center justify-between py-3 text-sm text-wn-charcoal transition hover:text-wn-navy"
+              >
+                <span className="font-medium">🏔️ Where to ride Saturday</span>
                 <span className="text-wn-charcoal/50">→</span>
               </Link>
             </li>
