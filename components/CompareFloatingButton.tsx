@@ -9,10 +9,13 @@ import { COMPARE_CHANGE_EVENT, getCompareIds } from "@/lib/compareList";
 // already shows that resort), so we wait for the second add to nudge
 // them to the comparison view.
 //
-// Bottom-center on every breakpoint, one step above the Feedback /
-// Location pill row on phones (that row sits at bottom-10, this at
-// bottom-22) so the three never overlap at 375px. Centered on desktop
-// too: bottom-left is the Alaska inset, bottom-right is the legend.
+// Bottom-centre on every breakpoint. On phones it sits one step above
+// the List / Location / Feedback pill row, which starts at
+// --wn-bottom-stack (published by components/Map/MapPage.tsx: the Mapbox
+// attribution band, the install nudge or the peek sheet), and hides while
+// a resort sheet is at half or full ([data-sheet-snap] on the map root).
+// Desktop: bottom-left is the Alaska inset, bottom-right is the legend,
+// so the centre is free.
 export default function CompareFloatingButton() {
   const router = useRouter();
   const [ids, setIds] = useState<number[]>([]);
@@ -38,13 +41,13 @@ export default function CompareFloatingButton() {
 
   return (
     <div
-      className="pointer-events-none fixed inset-x-0 bottom-22 z-30 flex justify-center px-4 md:bottom-10"
-      style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
+      className="pointer-events-none absolute inset-x-0 z-30 flex justify-center px-4 md:bottom-10 [[data-sheet-snap=full]_&]:hidden [[data-sheet-snap=half]_&]:hidden"
+      style={{ bottom: "calc(var(--wn-bottom-stack, 40px) + 56px)" }}
     >
       <button
         type="button"
         onClick={open}
-        className="pointer-events-auto inline-flex items-center gap-2 rounded-full bg-wn-navy px-5 py-3 text-sm font-semibold text-white shadow-xl transition hover:bg-wn-navy/90 active:scale-95"
+        className="pointer-events-auto inline-flex h-11 items-center gap-2 rounded-full bg-wn-navy px-5 text-sm font-semibold text-white shadow-xl transition hover:bg-wn-navy/90 active:scale-95"
         aria-label={`Compare ${ids.length} resorts`}
       >
         <span aria-hidden="true" className="text-base leading-none">

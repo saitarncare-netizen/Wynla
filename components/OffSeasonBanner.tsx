@@ -3,14 +3,10 @@
 import Link from "next/link";
 import { useState, useSyncExternalStore } from "react";
 
-// Inaugural Season banner — sits under the brand row on the homepage
-// between May 1 and Oct 31 (the US ski off-season window). The whole
-// pill is a tappable link to /early; a small × on the right dismisses
-// without navigating.
-//
-// Mobile gets a SHORT copy ("Free for the inaugural season → Lock
-// founder pricing") so the CTA stays visible inside a 320-390px viewport.
-// Desktop reveals the full sentence.
+// Inaugural Season banner — under the header rows on the homepage between
+// May 1 and Oct 31 (the US ski off-season window). Map shell 2026-09-23:
+// a 32 px full-width strip (not a floating pill), the whole strip links
+// to /early and a 44 px × on the right dismisses without navigating.
 //
 // Storage key bumped to _v3 because the tap-target redesign changes
 // what the banner does; anyone who dismissed _v2 should see this once.
@@ -83,23 +79,21 @@ export default function OffSeasonBanner() {
   };
   return (
     <div
-      className="flex justify-center px-3 pb-2 pt-1 sm:px-6"
+      className="flex h-8 items-stretch px-2 sm:px-6"
       onTouchStart={stopTouchBubble}
       onTouchMove={stopTouchBubble}
       onTouchEnd={stopTouchBubble}
     >
-      {/* Wrapper sits relative so the dismiss × can absolute-position
-          on top of the link without breaking its tap target. */}
-      <div className="relative inline-flex max-w-full items-center rounded-full bg-wn-navy/95 shadow-sm backdrop-blur-sm">
+      <div className="relative flex min-w-0 flex-1 items-stretch overflow-hidden rounded-lg bg-wn-navy/95 shadow-sm backdrop-blur-sm sm:mx-auto sm:max-w-2xl">
         <Link
           href="/early"
-          className="flex max-w-full items-center gap-2 rounded-full px-3 py-2 pr-9 text-[11px] font-medium text-white sm:py-1.5 sm:text-xs"
+          className="flex min-w-0 flex-1 items-center gap-2 pl-3 pr-11 text-[11px] font-medium text-white sm:text-xs"
           aria-label="Learn about the inaugural season and Founder pricing"
         >
           <span aria-hidden="true" className="shrink-0">⛷️</span>
-          {/* Mobile: short single-line copy that fits ~340px. */}
+          {/* Phones: short single-line copy that fits 320-390 px. */}
           <span className="truncate sm:hidden">
-            Free Founder Season{" "}
+            Free Founder Season ·{" "}
             <span className="font-semibold underline decoration-wn-gold/70 underline-offset-2">
               Lock founder pricing →
             </span>
@@ -112,13 +106,15 @@ export default function OffSeasonBanner() {
             </span>
           </span>
         </Link>
+        {/* 44 px wide hit area on a 32 px strip: the button spans the
+            strip and the visible × sits in the middle. */}
         <button
           type="button"
           onClick={handleDismiss}
           aria-label="Dismiss founder banner"
-          className="absolute right-1 top-1/2 inline-flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white/85 transition hover:bg-white/20 hover:text-white"
+          className="absolute inset-y-0 right-0 inline-flex w-11 items-center justify-center text-white/85 transition hover:bg-white/10 hover:text-white"
         >
-          <span aria-hidden="true" className="text-sm leading-none">×</span>
+          <span aria-hidden="true" className="text-base leading-none">×</span>
         </button>
       </div>
     </div>

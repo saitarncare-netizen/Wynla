@@ -103,6 +103,12 @@ type Props = {
    *  on the pin for ~60s. Lets users glance back at "where was I just
    *  looking?" without re-opening the panel. Null = no recent. */
   recentlyViewedId?: number | null;
+  /** Map shell 2026-09-23 — bottom padding (px) the phone resort sheet
+   *  asks for at its settled snap (peek / half; full holds the half
+   *  value). Null when no sheet is open or on desktop. The camera eases
+   *  to the new padding so the selected pin stays in the visible sliver
+   *  as the sheet grows or shrinks. */
+  resortSheetPadding?: number | null;
 };
 
 const SOURCE_ID = "wynla-resorts";
@@ -212,14 +218,15 @@ function isDesktopViewport(): boolean {
 }
 
 // Viewport area covered by the ResortPanel: a 380px right rail on
-// desktop, a half-height bottom sheet on phones (ResortPanel snaps to
-// 50vh by default). Applied as map padding while a resort is open so
-// camera moves center on the visible part of the map, and reset to zero
-// on close so the padding does not leak into every later camera move.
-function resortPanelPadding(): Padding {
+// desktop, the live bottom-sheet height on phones (MapPage passes it as
+// resortSheetPadding; 50vh is the fallback before the first measurement).
+// Applied as map padding while a resort is open so camera moves center
+// on the visible part of the map, and reset to zero on close so the
+// padding does not leak into every later camera move.
+function resortPanelPadding(sheetBottom: number | null | undefined): Padding {
   return isDesktopViewport()
     ? { right: 380, top: 0, bottom: 0, left: 0 }
-    : { right: 0, top: 0, bottom: Math.round(window.innerHeight * 0.5), left: 0 };
+    : { right: 0, top: 0, bottom: sheetBottom ?? Math.round(window.innerHeight * 0.52), left: 0 };
 }
 
 // Same idea for the trip planner panel (wider rail, taller sheet).
@@ -272,7 +279,12 @@ export default function MapView({
   onMapLoaded,
   onMapError,
   airportMarker,
+  resortSheetPadding = null,
 }: Props) {
+  const sheetPaddingRef = useRef(resortSheetPadding);
+  useEffect(() => {
+    sheetPaddingRef.current = resortSheetPadding;
+  }, [resortSheetPadding]);
   // Keep stable refs to the latest onMapLoaded / onMapError so the
   // once-registered listeners call the freshest callbacks without
   // re-binding.
@@ -984,7 +996,7 @@ export default function MapView({
     const lat = Number(resort.latitude);
     if (!Number.isFinite(lng) || !Number.isFinite(lat)) return;
 
-    const padding = resortPanelPadding();
+    const padding = resortPanelPadding(sheetPaddingRef.current);
     const container = map.getContainer();
     const width = container.clientWidth;
     const height = container.clientHeight;
@@ -999,6 +1011,36 @@ export default function MapView({
     if (alreadyVisible) return;
     map.easeTo({ center: [lng, lat], padding, duration: 600 });
   }, [selectedId, mapReady]);
+
+  // Phone sheet resized (peek ↔ half ↔ full) with a resort open: follow it
+  // with the padding so the pin is not left under the sheet or floating
+  // in the top third. Only settled snaps arrive here (MapPage filters the
+  // in-flight drag), so this is at most one ease per gesture. Reduced
+  // motion gets an instant jump instead of the ease.
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !mapReady) return;
+    if (selectedIdRef.current == null || resortSheetPadding == null) return;
+    if (isDesktopViewport()) return;
+    const target = Math.round(resortSheetPadding);
+    const apply = () => {
+      if (selectedIdRef.current == null) return;
+      // The open-pin ease above already used the 52 % fallback; a few px
+      // of difference is not worth a second camera move.
+      if (Math.abs(Math.round(map.getPadding().bottom ?? 0) - target) < 24) return;
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      map.easeTo({ padding: { top: 0, left: 0, right: 0, bottom: target }, duration: reduced ? 0 : 250 });
+    };
+    // Never interrupt the open-pin ease (600 ms) that is likely still
+    // running when the first settled height arrives; queue behind it.
+    if (map.isMoving()) {
+      map.once("moveend", apply);
+      return () => {
+        map.off("moveend", apply);
+      };
+    }
+    apply();
+  }, [resortSheetPadding, mapReady]);
 
   // Planner closed → drop the padding its fly-to / fit-route moves left
   // behind (same persistence issue as the resort panel above).
@@ -1289,7 +1331,7 @@ export default function MapView({
     const padding = plannerOpenRef.current
       ? plannerPanelPadding()
       : selectedIdRef.current != null
-        ? resortPanelPadding()
+        ? resortPanelPadding(sheetPaddingRef.current)
         : ZERO_PADDING;
     map.flyTo({
       center: [cameraTarget.lng, cameraTarget.lat],

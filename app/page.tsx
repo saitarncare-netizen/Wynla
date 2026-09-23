@@ -125,7 +125,8 @@ const getCachedWeather = unstable_cache(
     // forecast, lows, wind and 48h snow all live on /resort/[slug].
     const { data, error } = await supabase
       .from("weather_cache")
-      .select("resort_id, temp_high_f, conditions_short");
+      // fetched_at dates the map sheet's "Forecast · 3h ago" tiles.
+      .select("resort_id, temp_high_f, conditions_short, fetched_at");
     if (error) throw new Error(`weather_cache: ${error.message}`);
     return (data ?? []) as WeatherSnapshot[];
   },
