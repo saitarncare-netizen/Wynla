@@ -500,20 +500,54 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   function handleMapError() {
     setMapLoadState("failed");
   }
-  // If the map has not loaded after 15s, soften the pill's copy so the
-  // user knows the wait is the network, not a tap they missed. After 45s
-  // stop promising and tell them to reload; a load that never arrives is
-  // not going to.
+  // If the map has not loaded after 15s of the page being VISIBLE, soften
+  // the pill's copy so the user knows the wait is the network, not a tap
+  // they missed. After 45s stop promising and tell them to reload; a load
+  // that never arrives is not going to. Only visible time counts: a hidden
+  // tab gets no animation frames, and Mapbox requests tiles and fires
+  // `load` from its frame loop, so a page opened in a background tab (or
+  // a PWA parked behind an OAuth redirect) would otherwise come to the
+  // front already blaming the user's connection, or declaring the map
+  // dead, for a wait that never ran. The clocks pause while hidden and
+  // resume where they left off; MapView asks Mapbox for a frame as soon
+  // as the page is visible again.
   useEffect(() => {
     if (mapLoaded) return;
-    const slow = setTimeout(
-      () => setMapLoadState((s) => (s === "loading" ? "slow" : s)),
-      15_000,
-    );
-    const ceiling = setTimeout(() => setMapLoadState("failed"), 45_000);
+    let slowLeft = 15_000;
+    let failedLeft = 45_000;
+    let runningSince: number | null = null;
+    let slowTimer: ReturnType<typeof setTimeout> | null = null;
+    let failedTimer: ReturnType<typeof setTimeout> | null = null;
+    const pause = () => {
+      if (runningSince != null) {
+        const ran = Date.now() - runningSince;
+        slowLeft = Math.max(0, slowLeft - ran);
+        failedLeft = Math.max(0, failedLeft - ran);
+        runningSince = null;
+      }
+      if (slowTimer) clearTimeout(slowTimer);
+      if (failedTimer) clearTimeout(failedTimer);
+      slowTimer = null;
+      failedTimer = null;
+    };
+    const resume = () => {
+      if (runningSince != null) return;
+      runningSince = Date.now();
+      slowTimer = setTimeout(
+        () => setMapLoadState((s) => (s === "loading" ? "slow" : s)),
+        slowLeft,
+      );
+      failedTimer = setTimeout(() => setMapLoadState("failed"), failedLeft);
+    };
+    const onVisibility = () => {
+      if (document.visibilityState === "visible") resume();
+      else pause();
+    };
+    if (document.visibilityState === "visible") resume();
+    document.addEventListener("visibilitychange", onVisibility);
     return () => {
-      clearTimeout(slow);
-      clearTimeout(ceiling);
+      pause();
+      document.removeEventListener("visibilitychange", onVisibility);
     };
   }, [mapLoaded]);
   useEffect(() => {

@@ -5,7 +5,16 @@ import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { passColor, primaryPass, type Pass } from "@/lib/passColors";
 import { sizeTier, sizeTierRadius } from "@/lib/sizeTier";
-import { initialCameraFor, type CameraOrigin, type InitialCamera } from "@/lib/mapCamera";
+import {
+  US_CENTER,
+  US_ZOOM,
+  firstFramePadding,
+  initialCameraFor,
+  isValidCamera,
+  sanitizeInitialCamera,
+  type CameraOrigin,
+  type InitialCamera,
+} from "@/lib/mapCamera";
 import type { Resort } from "./MapPage";
 
 type DriveTime = {
@@ -233,6 +242,17 @@ function headerCoverPx(container: HTMLElement): number {
   return Number.isFinite(n) && n > 0 ? n : 140;
 }
 
+// False when the map came out of the constructor on a transform it cannot
+// draw from: a NaN center or zoom, or Mapbox's own default camera (the
+// null island, [0, 0]) which is what it silently keeps when a constructor
+// `bounds` fit is rejected. Nothing we frame is ever centered there.
+function hasUsableCamera(map: mapboxgl.Map): boolean {
+  const c = map.getCenter();
+  const z = map.getZoom();
+  if (!Number.isFinite(c.lng) || !Number.isFinite(c.lat) || !Number.isFinite(z)) return false;
+  return Math.abs(c.lng) > 1e-6 || Math.abs(c.lat) > 1e-6;
+}
+
 export default function MapView({
   resorts,
   originName,
@@ -329,34 +349,33 @@ export default function MapView({
     // view. Session-scoped so closing the tab clears it. Saved on
     // every map moveend below.
     const SAVED_VIEW_KEY = "wynla_map_view_v1";
-    let initial: InitialCamera = initialCameraFor(originRef.current, isDesktopViewport());
+    let initial: InitialCamera = sanitizeInitialCamera(
+      initialCameraFor(originRef.current, isDesktopViewport()),
+    );
     try {
       const raw = window.sessionStorage.getItem(SAVED_VIEW_KEY);
       if (raw) {
-        const parsed = JSON.parse(raw) as {
-          center?: [number, number];
-          zoom?: number;
-        };
-        if (
-          Array.isArray(parsed.center) &&
-          parsed.center.length === 2 &&
-          Number.isFinite(parsed.center[0]) &&
-          Number.isFinite(parsed.center[1]) &&
-          typeof parsed.zoom === "number" &&
-          Number.isFinite(parsed.zoom)
-        ) {
-          initial = { kind: "view", center: parsed.center, zoom: parsed.zoom };
-        }
+        const parsed = JSON.parse(raw) as { center?: unknown; zoom?: unknown };
+        // Only a camera Mapbox can actually use replaces the computed
+        // frame: finite center inside the projection, zoom in range. A
+        // corrupt entry must not take the whole map down with it.
+        const saved = { kind: "view", center: parsed.center, zoom: parsed.zoom };
+        if (isValidCamera(saved)) initial = saved;
       }
     } catch {
       // Malformed JSON / sessionStorage disabled — keep the computed frame.
     }
 
-    // Region padding for the first frame: clear the measured header stack
-    // (brand row + chips + recent strip + banner can pass 200px on phones)
-    // plus a little breathing room, never less than the 150px the layout
-    // was tuned for. The var is set by MapPage before this chunk mounts.
-    const headerPadPx = Math.max(150, headerCoverPx(mapContainer.current) + 12);
+    // Padding for the first-frame region fit (phones only; desktop gets a
+    // center + zoom): clear the measured header stack plus breathing room,
+    // clamped so Mapbox always keeps canvas to fit the region into. The
+    // var is set by MapPage before this chunk mounts; the container itself
+    // may still be mid-layout, which is why the clamp reads its size.
+    const container = mapContainer.current;
+    const fitPadding = firstFramePadding(
+      { width: container.clientWidth, height: container.clientHeight },
+      headerCoverPx(container),
+    );
 
     let map: mapboxgl.Map;
     try {
@@ -375,9 +394,7 @@ export default function MapView({
         ...(initial.kind === "bounds"
           ? {
               bounds: initial.bounds,
-              fitBoundsOptions: {
-                padding: { top: headerPadPx, bottom: 90, left: 20, right: 20 },
-              },
+              fitBoundsOptions: { padding: fitPadding },
             }
           : { center: initial.center, zoom: initial.zoom }),
         // Max pointer travel (px) between down and up for Mapbox to still
@@ -398,19 +415,33 @@ export default function MapView({
     }
     map.touchZoomRotate.disableRotation();
 
+    // Mapbox refuses a bounds fit it cannot honour (padding at or past the
+    // canvas size) with a console warning and keeps its default camera:
+    // [0, 0] zoom 0, the Gulf of Guinea, no US on screen and, on a tall
+    // canvas, nothing it wants to draw. The padding above is clamped so
+    // this should not happen; a degenerate camera is the one failure mode
+    // that leaves the map blank forever, so verify rather than trust it.
+    if (!hasUsableCamera(map)) {
+      console.warn("Mapbox first frame was unusable; falling back to the US view");
+      map.jumpTo({ center: US_CENTER, zoom: US_ZOOM, padding: ZERO_PADDING });
+    }
+
     // A rejected token surfaces as 401/403 on the style request before
     // `load` ever fires; treat that as fatal. Tile 404s and transient
-    // network errors are not (Mapbox retries and `load` still arrives),
-    // so they only reach the console.
+    // network errors are not (Mapbox retries and `load` still arrives).
+    // Registering any error listener stops Mapbox from logging errors
+    // itself, so everything else is re-logged here or a stuck map leaves
+    // no trail in the console.
     let hardFailed = false;
     map.on("error", (e) => {
-      if (hardFailed || map.loaded()) return;
       const status = (e.error as { status?: number } | undefined)?.status;
-      if (status === 401 || status === 403) {
+      if (!hardFailed && !map.loaded() && (status === 401 || status === 403)) {
         hardFailed = true;
         console.error("Mapbox rejected the access token", e.error);
         onMapErrorRef.current?.();
+        return;
       }
+      console.warn("Mapbox:", e.error ?? e);
     });
 
     // Persist camera on every moveend so we can restore on next mount.
@@ -819,18 +850,59 @@ export default function MapView({
     // Flip mapReady once the map's "load" event fires — that's the
     // signal that style + initial sources are fully loaded and it's
     // safe to add/remove sources & layers from any downstream effect.
-    // Idempotent: only set once. If load already fired before we
-    // register (rare, but possible under StrictMode double-mount), we
-    // catch up via map.loaded(). Also fires the parent's onMapLoaded
-    // callback so the branded loading overlay can fade out.
-    const onLoad = () => {
+    // Also fires the parent's onMapLoaded callback so the splash and
+    // the "Loading map" pill go away. Idempotent, and also driven by the
+    // first `idle` (which Mapbox only fires once the map is fully loaded
+    // and nothing is pending), so a `load` that fired before the listener
+    // existed still ends the loading state instead of leaving the pill up
+    // over a finished map.
+    let loadNotified = false;
+    const notifyLoaded = () => {
+      if (loadNotified) return;
+      loadNotified = true;
       setMapReady(true);
       onMapLoadedRef.current?.();
     };
-    if (map.loaded()) onLoad();
-    else map.once("load", onLoad);
+    if (map.loaded()) notifyLoaded();
+    else map.once("load", notifyLoaded);
+    map.once("idle", notifyLoaded);
+
+    // mapbox-gl 3.x only listens to window `resize`; it never notices the
+    // container itself changing size. This chunk is dynamically imported
+    // and mounts into a container that can still be settling (dvh on
+    // phones as the browser chrome shows and hides, the first layout after
+    // hydration), and a map sized to a stale or 0x0 container (Mapbox then
+    // assumes 400x300) draws a strip of tiles in one corner and leaves the
+    // rest blank until the window itself is resized. Track the container.
+    const syncSize = () => {
+      const el = map.getContainer();
+      const canvas = map.getCanvas();
+      if (el.clientWidth === 0 || el.clientHeight === 0) return; // hidden: nothing to size to
+      if (canvas.clientWidth !== el.clientWidth || canvas.clientHeight !== el.clientHeight) {
+        map.resize();
+      }
+    };
+    const resizeObserver =
+      typeof ResizeObserver !== "undefined" ? new ResizeObserver(syncSize) : null;
+    resizeObserver?.observe(container);
+
+    // A hidden tab gets no animation frames, and Mapbox requests tiles and
+    // fires `load` from its frame loop, so a page opened in a background
+    // tab (or a PWA coming back from an OAuth redirect) sits half-loaded
+    // until something asks for a frame. Ask for one the moment the page is
+    // visible again, with the size re-checked first.
+    const onVisible = () => {
+      if (document.visibilityState !== "visible") return;
+      syncSize();
+      map.triggerRepaint();
+    };
+    document.addEventListener("visibilitychange", onVisible);
+    window.addEventListener("pageshow", onVisible);
 
     return () => {
+      resizeObserver?.disconnect();
+      document.removeEventListener("visibilitychange", onVisible);
+      window.removeEventListener("pageshow", onVisible);
       map.remove();
       mapRef.current = null;
     };
