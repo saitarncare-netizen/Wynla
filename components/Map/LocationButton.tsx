@@ -5,6 +5,12 @@ import { useState } from "react";
 type Props = {
   isUsingGeo: boolean;
   onUseMyLocation: (lat: number, lng: number) => void;
+  /** "floating" (desktop): positions itself at the map's bottom-right.
+   *  "row" (phones): MapPage places it in the bottom pill row next to
+   *  List and Compare, so it only lays out its own button. */
+  placement?: "floating" | "row";
+  /** Icon-only 44 px button (the label stays as its accessible name). */
+  compact?: boolean;
 };
 
 type ErrorState =
@@ -25,10 +31,20 @@ function isIosSafari(): boolean {
 // always visible, mobile-discoverable, and handles the iOS permission
 // prompt directly. Sits at bottom-right of the map; on desktop it
 // stacks above the pass-color legend (which is hidden on mobile).
-// Bottom stack: bottom-10 on phones leaves the lowest 40px to Mapbox's
-// attribution control (a terms requirement); md:bottom-28 clears the
-// legend, which now sits at bottom-10 for the same reason.
-export default function LocationButton({ isUsingGeo, onUseMyLocation }: Props) {
+// Bottom stack: on phones the pill starts at --wn-bottom-stack, which
+// components/Map/MapPage.tsx sets to the Mapbox attribution band (40 px,
+// a terms requirement), the install nudge while it shows, or the peek
+// resort sheet; it hides while the sheet is at half or full
+// ([data-sheet-snap] on the map root). md:bottom-28 clears the legend,
+// which sits at bottom-10 for the same reason. On phones MapPage renders
+// the "row" placement inside its bottom pill row instead (one flex row
+// with List and Compare, so the three can never overlap).
+export default function LocationButton({
+  isUsingGeo,
+  onUseMyLocation,
+  placement = "floating",
+  compact = false,
+}: Props) {
   const [requesting, setRequesting] = useState(false);
   const [error, setError] = useState<ErrorState>(null);
   // When permission is denied iOS won't re-prompt — we open a help
@@ -72,8 +88,17 @@ export default function LocationButton({ isUsingGeo, onUseMyLocation }: Props) {
 
   return (
     <div
-      className="pointer-events-none absolute bottom-10 right-3 z-20 flex flex-col items-end gap-1 sm:right-4 md:bottom-28"
-      style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
+      className={
+        placement === "row"
+          ? // The error hint floats above the row so the row height never changes.
+            "pointer-events-none relative shrink-0"
+          : "pointer-events-none absolute right-3 z-20 flex flex-col items-end gap-1 sm:right-4 md:!bottom-28 [[data-sheet-snap=full]_&]:hidden [[data-sheet-snap=half]_&]:hidden"
+      }
+      style={
+        placement === "row"
+          ? undefined
+          : { bottom: "var(--wn-bottom-stack, 40px)", paddingBottom: "env(safe-area-inset-bottom, 0px)" }
+      }
     >
       <style>{`
         @keyframes wynla-locpulse {
@@ -89,21 +114,28 @@ export default function LocationButton({ isUsingGeo, onUseMyLocation }: Props) {
         aria-label={label}
         title={label}
         className={[
-          "pointer-events-auto inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-xs font-semibold shadow-lg backdrop-blur-sm transition active:scale-95 disabled:opacity-70",
+          // 44 px tall in both forms; compact is a 44 px circle.
+          "pointer-events-auto inline-flex h-11 items-center justify-center rounded-full text-xs font-semibold shadow-lg backdrop-blur-sm transition active:scale-95 disabled:opacity-70",
+          compact ? "w-11" : "gap-2 px-4",
           isUsingGeo
             ? "border border-wn-gold/60 bg-white/95 text-wn-navy"
             : "border border-wn-charcoal/15 bg-white/95 text-wn-charcoal hover:border-wn-navy hover:text-wn-navy",
           !isUsingGeo && !requesting ? "wynla-locpulse" : "",
         ].join(" ")}
       >
-        <span aria-hidden="true">📍</span>
-        <span>{label}</span>
+        <span aria-hidden="true" className={compact ? "text-base leading-none" : undefined}>📍</span>
+        {!compact && <span>{label}</span>}
       </button>
       {error && !helpOpen && (
         <button
           type="button"
           onClick={() => setHelpOpen(true)}
-          className="pointer-events-auto rounded-md border border-red-200 bg-white/95 px-2 py-1 text-[10px] font-semibold text-red-700 shadow hover:bg-red-50"
+          className={[
+            "pointer-events-auto inline-flex min-h-8 items-center rounded-md border border-red-200 bg-white/95 px-2 text-[11px] font-semibold text-red-700 shadow hover:bg-red-50",
+            // In the phone row the hint floats above the button, right-
+            // aligned, so the row height never changes.
+            placement === "row" ? "absolute bottom-full right-0 mb-1.5 whitespace-nowrap" : "",
+          ].join(" ")}
         >
           {error.kind === "denied" && "Permission blocked — how to fix"}
           {error.kind === "unavailable" && "Couldn't get location — tap to retry"}

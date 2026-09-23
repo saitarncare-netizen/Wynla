@@ -17,12 +17,16 @@ type Props = {
   // Larger pill for the slug-page hero; default fits next to the
   // FavoriteToggle inside the ResortPanel header.
   size?: "sm" | "lg";
+  // "action": icon over a label, 44 px tall, for the phone resort
+  // sheet's docked action bar (Plan trip · Directions · Save · Compare ·
+  // Share). "pill" is the hero / rail look.
+  variant?: "pill" | "action";
 };
 
 // Tiny pill that adds / removes the current resort from the compare
 // list (localStorage). Styled to match FavoriteToggle's "white pill on
 // hero" look so the two controls sit next to each other cleanly.
-export default function CompareToggle({ resortId, size = "sm" }: Props) {
+export default function CompareToggle({ resortId, size = "sm", variant = "pill" }: Props) {
   // SSR renders with `inList=false` so the markup matches what the
   // server emits; the useEffect below re-syncs to actual storage on
   // mount, which avoids a hydration mismatch warning.
@@ -82,6 +86,47 @@ export default function CompareToggle({ resortId, size = "sm" }: Props) {
       ? "Remove from compare"
       : "Add to compare";
 
+  const modal = (
+    <UpsellModal
+      open={showUpsell}
+      onClose={() => setShowUpsell(false)}
+      gate="compare"
+      detail={`You're comparing ${count} resorts on the free tier. Pro lets you compare up to ${COMPARE_MAX} side-by-side.`}
+    />
+  );
+
+  if (variant === "action") {
+    return (
+      <>
+        <button
+          type="button"
+          onClick={toggle}
+          disabled={disabled}
+          aria-pressed={inList}
+          aria-label={title}
+          title={title}
+          className={[
+            "inline-flex h-11 min-w-11 flex-col items-center justify-center gap-0.5 rounded-xl px-1.5 text-[10px] font-semibold transition hover:bg-wn-navy/5 active:scale-95",
+            "text-wn-navy",
+            disabled ? "cursor-not-allowed opacity-60" : "",
+          ].join(" ")}
+        >
+          <span
+            aria-hidden="true"
+            className={[
+              "inline-flex h-5 w-5 items-center justify-center rounded-full text-[13px] leading-none",
+              inList ? "bg-wn-navy text-white" : "",
+            ].join(" ")}
+          >
+            {inList ? "✓" : "⇄"}
+          </span>
+          {inList ? "Added" : "Compare"}
+        </button>
+        {modal}
+      </>
+    );
+  }
+
   return (
     <>
       <button
@@ -105,12 +150,7 @@ export default function CompareToggle({ resortId, size = "sm" }: Props) {
         </span>
         <span>{label}</span>
       </button>
-      <UpsellModal
-        open={showUpsell}
-        onClose={() => setShowUpsell(false)}
-        gate="compare"
-        detail={`You're comparing ${count} resorts on the free tier. Pro lets you compare up to ${COMPARE_MAX} side-by-side.`}
-      />
+      {modal}
     </>
   );
 }
