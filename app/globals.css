@@ -76,7 +76,7 @@
 
   /* Semantic status. Text colours pass 4.5:1 on white and off-white;
      each has a matching pale background for inline notices. Use these
-     instead of raw red-*/emerald-*/amber-* utilities (design-system-26). */
+     instead of raw red, emerald or amber utilities (design-system-26). */
   --color-wn-success: #1b7f4b;
   --color-wn-success-bg: #ecfdf3;
   --color-wn-danger: #b42318;
