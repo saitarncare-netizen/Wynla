@@ -13,6 +13,12 @@ import { haversineMeters, estimateDriveSeconds } from "@/lib/distance";
 import { formatDriveTime, ORIGINS } from "@/lib/origins";
 import { metersToMiles } from "@/lib/tripCost";
 import { passColor, primaryPass } from "@/lib/passColors";
+import Button from "@/components/ui/Button";
+import Card from "@/components/ui/Card";
+import Chip from "@/components/ui/Chip";
+import PageHeader from "@/components/ui/PageHeader";
+import Section from "@/components/ui/Section";
+import Icon from "@/components/icons/Icon";
 
 type ResortRow = {
   slug: string;
@@ -30,9 +36,10 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const tpl = getTemplate(slug);
-  if (!tpl) return { title: "Trip template — Wynla" };
+  // The layout's title template appends " · Wynla".
+  if (!tpl) return { title: "Trip template" };
   return {
-    title: `${tpl.title} — Wynla trip template`,
+    title: `${tpl.title} trip template`,
     description: tpl.description,
   };
 }
@@ -121,44 +128,28 @@ export default async function TripTemplatePage({
 
   return (
     <main className="min-h-dvh bg-wn-offwhite">
-      <header className="bg-wn-navy text-white">
-        <div className="mx-auto max-w-3xl px-4 py-6 sm:px-6 sm:py-8">
-          <Link
-            href="/trip-templates"
-            className="mb-3 inline-flex items-center gap-1 rounded-md bg-white/10 px-2.5 py-1 text-xs font-semibold text-white/90 backdrop-blur-sm transition hover:bg-white/20"
-          >
-            ← All templates
-          </Link>
-          <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/60">
-            Template · {totalDays}-day trip from {tpl.origin.name}
-          </p>
-          <h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl">
-            {tpl.title}
-          </h1>
-          <p className="mt-2 max-w-2xl text-sm text-white/75">
-            {tpl.description}
-          </p>
-          <p className="mt-2 inline-flex rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[11px] font-semibold backdrop-blur-sm">
-            Best for: {tpl.bestFor}
-          </p>
-        </div>
-      </header>
+      <PageHeader
+        tone="navy"
+        width="max-w-3xl"
+        eyebrow={`Template · ${totalDays}-day trip from ${tpl.origin.name}`}
+        title={tpl.title}
+        description={tpl.description}
+      >
+        <Chip tone="dark">Best for: {tpl.bestFor}</Chip>
+      </PageHeader>
 
-      <div className="mx-auto max-w-3xl px-4 py-6 sm:px-6 sm:py-8">
-        {/* Summary tiles */}
-        <section className="mb-6 grid grid-cols-3 gap-2 sm:gap-3">
-          <SummaryTile label="Ski days" value={String(totalDays)} />
-          <SummaryTile label="Stops" value={String(tpl.resortSlugs.length)} />
-          <SummaryTile
-            label="Total drive"
-            value={formatDriveTime(totalDriveSeconds)}
-          />
+      <div className="mx-auto max-w-3xl space-y-6 px-4 py-6 sm:px-6 sm:py-8">
+        {/* Summary tiles. The drive is a straight-line estimate with a
+            highway factor, so the row says "Estimated" once. */}
+        <section aria-label="Trip summary">
+          <div className="grid grid-cols-3 gap-2 sm:gap-3">
+            <SummaryTile label="Ski days" value={String(totalDays)} />
+            <SummaryTile label="Stops" value={String(tpl.resortSlugs.length)} />
+            <SummaryTile label="Total drive" value={formatDriveTime(totalDriveSeconds)} note="Estimated" />
+          </div>
         </section>
 
-        <section className="mb-6 rounded-xl border border-wn-charcoal/10 bg-white p-4 shadow-sm">
-          <h2 className="mb-3 text-[11px] font-bold uppercase tracking-[0.15em] text-wn-charcoal/55">
-            Itinerary
-          </h2>
+        <Section title="Itinerary" card>
           <ol className="flex flex-col gap-2">
             {tpl.resortSlugs.map((s, i) => {
               const r = bySlug.get(s);
@@ -167,30 +158,25 @@ export default async function TripTemplatePage({
               const primary = primaryPass(passes);
               const dot = passColor(primary);
               return (
-                <li
-                  key={`${s}-${i}`}
-                  className="flex items-center gap-3 rounded-lg border border-wn-charcoal/10 bg-wn-offwhite p-3"
-                >
+                <li key={`${s}-${i}`} className="flex items-center gap-3 rounded-wn-sm border border-wn-line bg-wn-offwhite p-3">
                   <span
-                    className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[11px] font-bold text-white"
+                    className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white"
                     style={{ backgroundColor: dot }}
+                    aria-hidden="true"
                   >
                     {i + 1}
                   </span>
                   <div className="min-w-0 flex-1">
                     <div className="truncate text-sm font-bold text-wn-navy">
                       {r ? (
-                        <Link
-                          href={`/resort/${r.slug}`}
-                          className="hover:underline"
-                        >
+                        <Link href={`/resort/${r.slug}`} className="hover:underline">
                           {r.name}
                         </Link>
                       ) : (
-                        <span className="text-wn-charcoal/55">{s}</span>
+                        <span className="text-wn-muted">{s}</span>
                       )}
                     </div>
-                    <div className="text-[11px] text-wn-charcoal/60">
+                    <div className="text-xs text-wn-muted">
                       {days} day{days === 1 ? "" : "s"}
                       {r?.state ? ` · ${r.state}` : ""}
                     </div>
@@ -199,23 +185,19 @@ export default async function TripTemplatePage({
               );
             })}
           </ol>
-          <p className="mt-3 text-[11px] text-wn-charcoal/55">
-            ≈ {totalMiles.toLocaleString()} mi round-trip from {tpl.origin.name}.
-            Drive times are estimates — actual routes via Mapbox once you save.
+          <p className="mt-3 text-xs text-wn-muted">
+            Estimated <span className="tabular-nums">{totalMiles.toLocaleString()}</span> mi round-trip from{" "}
+            {tpl.origin.name}, straight-line distance with a highway factor. Real routes come from Mapbox once you
+            save.
           </p>
-        </section>
+        </Section>
 
-        <section>
-          <Link
-            href={customizeHref}
-            className="flex w-full items-center justify-center gap-2 rounded-xl bg-wn-navy px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-wn-navy/90 active:scale-[0.99]"
-          >
-            ✨ Customize and save this template
-            <span aria-hidden="true">→</span>
-          </Link>
-          <p className="mt-2 text-center text-[11px] text-wn-charcoal/55">
-            Opens the trip planner so you can tweak stops, swap resorts, or
-            change your origin.
+        <section aria-label="Customize">
+          <Button href={customizeHref} block iconLeft={<Icon name="sparkle" />} iconRight={<Icon name="arrow-right" />}>
+            Customize and save this template
+          </Button>
+          <p className="mt-2 text-center text-xs text-wn-muted">
+            Opens the trip planner so you can tweak stops, swap resorts, or change your origin.
           </p>
         </section>
       </div>
@@ -223,15 +205,14 @@ export default async function TripTemplatePage({
   );
 }
 
-function SummaryTile({ label, value }: { label: string; value: string }) {
+function SummaryTile({ label, value, note }: { label: string; value: string; note?: string }) {
   return (
-    <div className="rounded-xl border border-wn-charcoal/10 bg-white px-3 py-3 text-center shadow-sm">
-      <div className="text-lg font-extrabold tracking-tight text-wn-navy sm:text-xl">
-        {value}
-      </div>
-      <div className="mt-0.5 text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
+    <Card padding="none" className="px-3 py-3 text-center">
+      <div className="text-lg font-extrabold tabular-nums tracking-tight text-wn-navy sm:text-xl">{value}</div>
+      <div className="mt-0.5 text-eyebrow font-semibold uppercase text-wn-muted">
         {label}
+        {note ? ` · ${note}` : ""}
       </div>
-    </div>
+    </Card>
   );
 }

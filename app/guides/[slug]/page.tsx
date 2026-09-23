@@ -6,8 +6,12 @@
 
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import Link from "next/link";
 import { getGuide, GUIDES } from "@/lib/guides";
+import Button from "@/components/ui/Button";
+import Card from "@/components/ui/Card";
+import PageHeader from "@/components/ui/PageHeader";
+import Section from "@/components/ui/Section";
+import Icon from "@/components/icons/Icon";
 
 // ISR — guide bodies live in lib/guides.tsx, refreshed on deploy.
 export const revalidate = 86400; // 24h
@@ -69,46 +73,17 @@ export default async function GuidePage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }}
       />
 
-      <header
-        className="relative w-full overflow-hidden"
-        style={{
-          background:
-            "linear-gradient(135deg, #1E2952 0%, #141A3A 60%, #0B1028 100%)",
-        }}
-      >
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 opacity-10"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle at 20% 30%, rgba(255,255,255,0.4) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(255,255,255,0.3) 0%, transparent 50%)",
-          }}
-        />
-
-        <div className="relative z-10 mx-auto flex max-w-3xl items-center justify-between px-4 py-4 sm:px-6">
-          <Link
-            href="/guides"
-            className="inline-flex items-center gap-1 rounded-md bg-white/95 px-3 py-1.5 text-xs font-semibold text-wn-navy shadow-sm backdrop-blur-sm transition hover:bg-white"
-          >
-            ← Guides
-          </Link>
-          <span className="text-xs text-white/65">
-            {guide.readingMinutes} min read
-          </span>
-        </div>
-
-        <div className="relative z-10 mx-auto max-w-3xl px-4 pb-12 pt-6 sm:px-6 sm:pb-14 sm:pt-10">
-          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-white/65">
-            Guide
-          </p>
-          <h1 className="text-3xl font-extrabold leading-[1.05] tracking-tight text-white sm:text-5xl">
-            {guide.title}
-          </h1>
-          <p className="mt-3 text-base text-white/85 sm:text-lg">
-            {guide.subtitle}
-          </p>
-        </div>
-      </header>
+      {/* The AppShell top bar carries "back to Guides" (phone) and the
+          Guides nav item (desktop), so the hero only needs the article
+          front matter. */}
+      <PageHeader
+        tone="navy"
+        width="max-w-3xl"
+        eyebrow="Guide"
+        title={guide.title}
+        description={guide.subtitle}
+        meta={`${guide.readingMinutes} min read`}
+      />
 
       {/* Article body — typography rules applied via direct Tailwind
           classes on the wrapper. Keeps headings, paragraphs, lists,
@@ -122,50 +97,39 @@ export default async function GuidePage({
           "[&_ul]:my-4 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:space-y-1.5",
           "[&_ul_li]:text-base [&_ul_li]:leading-relaxed [&_ul_li]:text-wn-charcoal",
           "[&_strong]:font-semibold [&_strong]:text-wn-navy",
+          "[&_a]:font-semibold [&_a]:text-wn-navy [&_a]:underline [&_a]:underline-offset-2",
         ].join(" ")}
       >
         {guide.body}
+      </article>
 
-        <hr className="my-10 border-wn-charcoal/15" />
+      {/* Outside the <article> so the prose selectors above do not
+          restyle the primitives. */}
+      <div className="mx-auto max-w-3xl space-y-10 px-4 pb-12 sm:px-6 sm:pb-16">
+        <hr className="border-wn-line" />
 
-        <div className="rounded-2xl border border-wn-charcoal/10 bg-white p-6 text-center shadow-sm">
-          <h3 className="text-lg font-bold text-wn-navy">Ready to plan?</h3>
-          <p className="mt-1 text-sm text-wn-charcoal/70">
-            Build a multi-stop trip across passes and regions on the map.
-          </p>
-          <Link
-            href="/?plan=1"
-            className="mt-4 inline-flex items-center gap-1 rounded-md bg-wn-navy px-4 py-2 text-sm font-semibold text-white transition hover:bg-wn-navy/90"
-          >
-            Plan a trip →
-          </Link>
-        </div>
+        <Card padding="lg" className="text-center">
+          <h2 className="text-lg font-bold text-wn-navy">Ready to plan?</h2>
+          <p className="mt-1 text-sm text-wn-muted">Build a multi-stop trip across passes and regions on the map.</p>
+          <Button href="/?plan=1" className="mt-4" iconRight={<Icon name="arrow-right" />}>
+            Plan a trip
+          </Button>
+        </Card>
 
         {related.length > 0 && (
-          <section className="mt-10">
-            <h2 className="!mb-4 !text-xl">More guides</h2>
+          <Section title="More guides">
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               {related.map((g) => (
-                <Link
-                  key={g.slug}
-                  href={`/guides/${g.slug}`}
-                  className="group rounded-lg border border-wn-charcoal/10 bg-white p-4 transition hover:border-wn-navy/40"
-                >
-                  <p className="text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
-                    {g.readingMinutes} min
-                  </p>
-                  <p className="mt-0.5 text-sm font-bold text-wn-navy group-hover:underline">
-                    {g.title}
-                  </p>
-                  <p className="mt-1 text-xs text-wn-charcoal/60">
-                    {g.subtitle}
-                  </p>
-                </Link>
+                <Card key={g.slug} href={`/guides/${g.slug}`}>
+                  <p className="text-eyebrow font-semibold uppercase text-wn-muted">{g.readingMinutes} min read</p>
+                  <p className="mt-0.5 text-sm font-bold text-wn-navy group-hover:underline">{g.title}</p>
+                  <p className="mt-1 text-xs text-wn-muted">{g.subtitle}</p>
+                </Card>
               ))}
             </div>
-          </section>
+          </Section>
         )}
-      </article>
+      </div>
     </main>
   );
 }

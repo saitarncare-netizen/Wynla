@@ -17,6 +17,12 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { passColor, passLabel, type Pass } from "@/lib/passColors";
+import Button from "@/components/ui/Button";
+import Card from "@/components/ui/Card";
+import Notice from "@/components/ui/Notice";
+import PageHeader from "@/components/ui/PageHeader";
+import Section from "@/components/ui/Section";
+import Icon, { type IconName } from "@/components/icons/Icon";
 
 // ISR so the "more than a month ago" staleness note and the next-increase
 // countdown are re-evaluated daily instead of frozen at build time.
@@ -191,113 +197,91 @@ export default function DealsPage() {
   const newestCheck = PASS_DEALS.map((d) => d.checkedOn).sort().at(-1);
 
   return (
-    <main className="min-h-dvh bg-wn-offwhite px-4 py-10 sm:px-6 sm:py-16">
-      <div className="mx-auto max-w-4xl">
-        <Link
-          href="/"
-          className="text-xs font-semibold text-wn-charcoal/60 hover:text-wn-navy"
-        >
-          ← Map
-        </Link>
+    <main className="min-h-dvh bg-wn-offwhite">
+      <PageHeader
+        width="max-w-4xl"
+        eyebrow="2026-27 pricing"
+        title="Pass deals for the 2026-27 season"
+        description={
+          <>
+            The four big multi-resort passes, with the adult prices each operator publishes on its own site, in one
+            place. We check these by hand{newestCheck ? ` (last check ${formatDate(newestCheck)})` : ""}, so always
+            confirm on the operator&apos;s page before you buy.
+          </>
+        }
+      />
 
-        <header className="mt-6 mb-10">
-          {/* Contrast fix: bg-wn-sky/95 + white = 2.41:1 (WCAG fail).
-              Navy + white = 14:1. */}
-          <span className="inline-flex items-center rounded bg-wn-navy px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-white">
-            2026-27 pricing
-          </span>
-          <h1 className="mt-3 text-3xl font-extrabold text-wn-navy sm:text-5xl">
-            Pass deals — 2026-27 season
-          </h1>
-          <p className="mt-3 text-sm text-wn-charcoal/75 sm:text-base">
-            The four big multi-resort passes, with the adult prices each
-            operator publishes on its own site, in one place. We check
-            these by hand
-            {newestCheck ? ` (last check ${formatDate(newestCheck)})` : ""}
-            , so always confirm on the operator&apos;s page before you buy.
-          </p>
-          {/* The price is only half the question: days, blackout dates and
-              reservation rules differ at every resort. Those live on each
-              resort page (Pass access section); the map links filter by
-              pass so a reader can find a resort to check. */}
-          <p className="mt-3 text-sm text-wn-charcoal/75 sm:text-base">
-            Days, blackout dates and reservation rules differ by resort. Open
-            any resort page and look for Pass access, or browse the map by
-            pass:{" "}
-            {PASS_DEALS.map((deal, i) => (
-              <span key={deal.pass}>
-                {i > 0 && " · "}
-                <Link
-                  href={`/?pass=${deal.pass}`}
-                  className="font-semibold text-wn-navy underline underline-offset-2"
-                >
-                  {passLabel(deal.pass)}
-                </Link>
-              </span>
-            ))}
-            .
-          </p>
-        </header>
+      <div className="mx-auto max-w-4xl space-y-12 px-4 pb-12 pt-6 sm:px-6 sm:pb-16">
+        {/* The price is only half the question: days, blackout dates and
+            reservation rules differ at every resort. Those live on each
+            resort page (Pass access section); the map links filter by
+            pass so a reader can find a resort to check. */}
+        <p className="max-w-2xl text-sm text-wn-muted sm:text-base">
+          Days, blackout dates and reservation rules differ by resort. Open any resort page and look for Pass access, or
+          browse the map by pass:{" "}
+          {PASS_DEALS.map((deal, i) => (
+            <span key={deal.pass}>
+              {i > 0 && " · "}
+              <Link href={`/?pass=${deal.pass}`} className="font-semibold text-wn-navy underline underline-offset-2">
+                {passLabel(deal.pass)}
+              </Link>
+            </span>
+          ))}
+          .
+        </p>
 
         {/* Pass cards. The h2 keeps the heading order h1 → h2 → h3 for
             screen readers; it is visually hidden because the cards speak
             for themselves. */}
-        <h2 className="sr-only">Passes</h2>
-        <div className="grid gap-5 sm:grid-cols-2">
-          {PASS_DEALS.map((deal) => (
-            <PassCard key={deal.pass} deal={deal} />
-          ))}
-        </div>
-
-        {/* How to choose */}
-        <section className="mt-14">
-          <h2 className="text-2xl font-extrabold text-wn-navy sm:text-3xl">
-            How to choose
+        <section aria-labelledby="passes-title">
+          <h2 id="passes-title" className="sr-only">
+            Passes
           </h2>
-          <p className="mt-1 text-sm text-wn-charcoal/65">
-            Match the pass to how you actually ski, not the one with the
-            biggest resort list.
-          </p>
-          <div className="mt-6 grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-5 sm:grid-cols-2">
+            {PASS_DEALS.map((deal) => (
+              <PassCard key={deal.pass} deal={deal} />
+            ))}
+          </div>
+        </section>
+
+        <Section
+          title="How to choose"
+          description="Match the pass to how you actually ski, not the one with the biggest resort list."
+        >
+          <div className="grid gap-4 sm:grid-cols-2">
             <Tip
-              emoji="🏔️"
-              title="Big Western trips → Ikon or Epic"
+              icon="mountain"
+              title="Big Western trips: Ikon or Epic"
               body="If you're flying west once or twice per season and want full unlimited days at name-brand mountains, Ikon or Epic pays back in 4-5 ski days. Pick by which resorts you actually want."
             />
             <Tip
-              emoji="🪨"
-              title="East Coast value → Indy Pass"
+              icon="pin"
+              title="East Coast value: Indy Pass"
               body="Indy stacks 300+ independent mountains for under $500. East Coast skiers who hit a different hill every weekend get more variety than Ikon Base for less than half the price. It sells out, so buy in spring."
             />
             <Tip
-              emoji="✈️"
-              title="1-2 destination trips → Mountain Collective + day passes"
+              icon="plane"
+              title="One or two destination trips: Mountain Collective plus day passes"
               body="Two days each at flagships like Alta, Snowbasin and Jackson Hole, with 50% off additional days. Pair it with single-day tickets when you commit to a third resort."
             />
             <Tip
-              emoji="🤔"
+              icon="compass"
               title="Not sure yet? Plan the trip first"
               body="Use the planner to map a real itinerary. Once you see which resorts make the cut, the right pass becomes obvious."
             />
           </div>
-          <div className="mt-8">
-            <Link
-              href="/?plan=1"
-              className="inline-flex items-center gap-2 rounded-lg bg-wn-navy px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-wn-navy/90"
-            >
-              🗺️ Plan a trip
-            </Link>
+          <div className="pt-2">
+            <Button href="/?plan=1" iconLeft={<Icon name="map" />}>
+              Plan a trip
+            </Button>
           </div>
-        </section>
+        </Section>
 
-        <p className="mt-12 text-[11px] text-wn-charcoal/50">
-          Prices are the adult &quot;from&quot; prices published by each
-          pass operator on the date shown on its card. Operators raise
-          prices through the fall, sometimes without notice. Wynla is not
-          affiliated with any pass operator and earns nothing from these
-          links; the operator&apos;s own site is always the final word.
-          Epic Pass, Ikon Pass, Indy Pass and Mountain Collective are
-          trademarks of their respective owners.
+        <p className="text-xs text-wn-muted">
+          Prices are the adult &quot;from&quot; prices published by each pass operator on the date shown on its card.
+          Operators raise prices through the fall, sometimes without notice. Wynla is not affiliated with any pass
+          operator and earns nothing from these links; the operator&apos;s own site is always the final word. Epic
+          Pass, Ikon Pass, Indy Pass and Mountain Collective are trademarks of their respective owners.
         </p>
       </div>
     </main>
@@ -311,136 +295,114 @@ function PassCard({ deal }: { deal: PassDeal }) {
   const isStale = daysSince(deal.checkedOn) > STALE_AFTER_DAYS;
 
   return (
-    <article className="overflow-hidden rounded-xl border border-wn-charcoal/10 bg-white shadow-sm transition hover:shadow-md">
-      {/* Color strip */}
-      <div className="h-2" style={{ backgroundColor: accent }} aria-hidden="true" />
-
-      <div className="p-5">
+    <Card accent={accent} padding="lg" className="h-full">
+      <article className="flex h-full flex-col">
         <div className="flex items-baseline justify-between gap-2">
-          <h3 className="text-lg font-extrabold tracking-tight text-wn-navy sm:text-xl">
-            {deal.label}
-          </h3>
+          <h3 className="text-lg font-extrabold tracking-tight text-wn-navy sm:text-xl">{deal.label}</h3>
           {isSoldOut ? (
-            <span className="inline-block rounded-md bg-red-600 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white">
+            <span className="inline-block rounded-wn-sm bg-wn-danger px-2 py-0.5 text-eyebrow font-bold uppercase text-white">
               Sold out
             </span>
           ) : (
             <span
-              className="inline-block rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white"
+              className="inline-block rounded-wn-sm px-2 py-0.5 text-eyebrow font-bold uppercase"
               style={{
                 backgroundColor: accent,
-                color: deal.pass === "ikon" ? "#1E2952" : "#FFFFFF",
+                // Ikon yellow needs navy text for contrast; the others are dark.
+                color: deal.pass === "ikon" ? "var(--color-wn-navy)" : "#FFFFFF",
               }}
             >
               {passLabel(deal.pass)}
             </span>
           )}
         </div>
-        <p className="mt-1 text-xs text-wn-charcoal/65 sm:text-sm">
-          {deal.tagline}
-        </p>
+        <p className="mt-1 text-sm text-wn-muted">{deal.tagline}</p>
 
         {isSoldOut ? (
           <>
-            <div className="mt-4 rounded-lg border border-red-200 bg-red-50 px-3 py-2.5">
-              <p className="text-sm font-semibold text-red-900">
-                🚫 {deal.soldOut?.reason}
-              </p>
-            </div>
-            <p className="mt-3 text-[11px] text-wn-charcoal/55">
-              Last published price {formatPrice(headlineTier.price, headlineTier.currency)}{" "}
-              ({headlineTier.name}). {deal.priceNote}
+            <Notice tone="danger" className="mt-4">
+              {deal.soldOut?.reason}
+            </Notice>
+            <p className="mt-3 text-xs text-wn-muted">
+              Last published price {formatPrice(headlineTier.price, headlineTier.currency)} ({headlineTier.name}).{" "}
+              {deal.priceNote}
             </p>
             {deal.soldOut?.waitlistUrl && (
-              <a
+              <Button
                 href={deal.soldOut.waitlistUrl}
+                variant="secondary"
+                block
+                className="mt-4"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-4 inline-flex w-full items-center justify-center gap-1.5 rounded-lg border border-wn-charcoal/20 bg-white px-4 py-2.5 text-sm font-semibold text-wn-charcoal/85 transition hover:border-wn-navy hover:text-wn-navy"
+                iconRight={<Icon name="external" />}
               >
-                Join the waitlist <span aria-hidden="true">→</span>
-              </a>
+                Join the waitlist
+              </Button>
             )}
           </>
         ) : (
           <>
             {/* Headline price */}
-            <div className="mt-4 flex items-baseline gap-2">
-              <span className="text-3xl font-extrabold tracking-tight text-wn-navy">
+            <div className="mt-4 flex flex-wrap items-baseline gap-x-2 gap-y-1">
+              <span className="text-2xl font-extrabold tabular-nums tracking-tight text-wn-navy sm:text-3xl">
                 {formatPrice(headlineTier.price, headlineTier.currency)}
               </span>
-              <span className="text-xs text-wn-charcoal/60">
-                · {headlineTier.name}
-              </span>
+              <span className="text-xs text-wn-muted">{headlineTier.name}</span>
             </div>
-            <p className="mt-0.5 text-[11px] font-semibold uppercase tracking-wider text-wn-charcoal/55">
+            <p className="mt-1 text-eyebrow font-semibold uppercase text-wn-muted">
               {deal.nextIncrease
                 ? isPriceEnded(deal.nextIncrease)
                   ? "Pricing has since stepped up"
                   : `Next increase ${formatDate(deal.nextIncrease)}`
                 : "Next increase date not announced"}
             </p>
-            <p className="mt-2 text-[11px] leading-relaxed text-wn-charcoal/60">
-              {deal.priceNote}
-            </p>
+            <p className="mt-2 text-xs leading-relaxed text-wn-muted">{deal.priceNote}</p>
 
             {/* Other tiers */}
             <ul className="mt-4 space-y-1.5 text-sm">
               {deal.tiers.slice(1).map((tier) => (
-                <li
-                  key={tier.name}
-                  className="flex items-baseline justify-between gap-3 border-t border-wn-charcoal/5 pt-1.5"
-                >
-                  <span className="text-wn-charcoal/80">{tier.name}</span>
-                  <span className="font-semibold text-wn-navy">
-                    {formatPrice(tier.price, tier.currency)}
-                  </span>
+                <li key={tier.name} className="flex items-baseline justify-between gap-3 border-t border-wn-line pt-1.5">
+                  <span className="text-wn-charcoal">{tier.name}</span>
+                  <span className="font-semibold tabular-nums text-wn-navy">{formatPrice(tier.price, tier.currency)}</span>
                 </li>
               ))}
             </ul>
 
-            <a
+            <Button
               href={deal.url}
+              block
+              className="mt-5"
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-5 inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-wn-navy px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-wn-navy/90"
+              iconRight={<Icon name="external" />}
             >
-              See current price <span aria-hidden="true">→</span>
-            </a>
+              See current price
+            </Button>
           </>
         )}
 
-        <p className="mt-3 text-[10px] text-wn-charcoal/45">
-          Prices as of {formatDate(deal.checkedOn)}
-          {isStale ? " — more than a month ago, so they may have changed" : ""}
+        <p className="mt-auto pt-3 text-xs text-wn-muted">
+          Reported by the operator, checked by hand on {formatDate(deal.checkedOn)}
+          {isStale ? ". That is more than a month ago, so prices may have changed" : ""}.
         </p>
-      </div>
-    </article>
+      </article>
+    </Card>
   );
 }
 
-function Tip({
-  emoji,
-  title,
-  body,
-}: {
-  emoji: string;
-  title: string;
-  body: string;
-}) {
+function Tip({ icon, title, body }: { icon: IconName; title: string; body: string }) {
   return (
-    <div className="rounded-lg border border-wn-charcoal/10 bg-white p-4">
+    <Card>
       <div className="flex items-start gap-3">
-        <span aria-hidden="true" className="text-2xl leading-none">
-          {emoji}
+        <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-wn-navy/5 text-wn-navy" aria-hidden="true">
+          <Icon name={icon} className="h-5 w-5" />
         </span>
         <div>
           <h3 className="text-sm font-bold text-wn-navy">{title}</h3>
-          <p className="mt-1 text-xs leading-relaxed text-wn-charcoal/75 sm:text-sm">
-            {body}
-          </p>
+          <p className="mt-1 text-sm leading-relaxed text-wn-charcoal">{body}</p>
         </div>
       </div>
-    </div>
+    </Card>
   );
 }
