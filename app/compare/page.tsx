@@ -6,17 +6,27 @@
 // localStorage; the page itself is pure-server so any link to it is
 // shareable / linkable / SEO-indexable.
 //
-// Layout pivots at md: mobile is metric-major (one row per metric,
-// resort values side-by-side as columns inside the row) so a phone
-// user scrolls a single vertical column. Desktop is resort-major
-// (each resort gets a column, each metric a row) — the canonical
-// "compare table" UX.
+// Layout pivots at md. Desktop is resort-major (each resort a column,
+// each metric a row), the canonical compare table. On a phone, one or
+// two resorts are metric-major (one card per metric, values side by
+// side); three to five become horizontally scrolling resort cards laid
+// out in ONE CSS grid so every row lines up across cards, instead of a
+// five-column grid squeezed into 375 px (audit fresh-eyes-power-33).
+//
+// Conditions rows (status, new snow, surface, drive) come from the same
+// verdict() the /today and /favorites pages use, so the three never
+// disagree about the same mountain.
 import Link from "next/link";
+import type { ReactNode } from "react";
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { supabase } from "@/lib/supabase";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { passColor, passLabel, primaryPass } from "@/lib/passColors";
+import { verdict, type Verdict, type VerdictWeather } from "@/lib/goWaitSkip";
+import type { DailyWeather } from "@/lib/snowSurface";
+import { shiftDate } from "@/lib/weather/time";
+import { TODAY_RESORT_COLS, type TodayResort } from "@/app/today/data";
 import {
   decodeStoredOrigin,
   findOrigin,
@@ -30,7 +40,7 @@ import { ORIGIN_COOKIE } from "@/lib/preferences";
 import { estimateDriveSeconds, haversineMeters } from "@/lib/distance";
 import { getDifficultyMix, type DifficultyMix } from "@/lib/difficulty";
 import { COMPARE_MAX } from "@/lib/compareList";
-import ClearCompareButton from "./CompareActions";
+import { ClearCompareButton, RemoveFromCompare, ShareCompareButton } from "./CompareActions";
 
 export const dynamic = "force-dynamic";
 
@@ -77,20 +87,10 @@ export async function generateMetadata({
   };
 }
 
-// Matches the columns we read from `resorts` below. We pull the
-// superset that the metric rows need — Supabase returns nulls for
-// any unset field, the rows below handle them gracefully with em-dashes.
-type CompareResort = {
-  id: number;
-  slug: string;
-  name: string;
-  state: string;
-  region: string | null;
-  latitude: number | string | null;
-  longitude: number | string | null;
-  passes: string[];
-  vertical_drop: number | null;
-  total_trails: number | null;
+// Matches the columns we read from `resorts` below: the verdict's set
+// (TODAY_RESORT_COLS) plus the stat rows. Supabase returns nulls for
+// any unset field; the rows below render those as em-dashes.
+type CompareResort = TodayResort & {
   total_acres: number | null;
   total_lifts: number | null;
   high_speed_lifts: number | null;
@@ -119,6 +119,129 @@ type DriveTimeRow = {
   origin_name: string;
   duration_seconds: number | null;
 };
+
+// Stat columns not already in TODAY_RESORT_COLS.
+const STAT_COLS = [
+  "total_acres",
+  "high_speed_lifts",
+  "base_elevation_ft",
+  "summit_elevation_ft",
+  "elevation_base",
+  "elevation_summit",
+  "annual_snowfall_in",
+  "snowmaking_pct",
+  "has_terrain_park",
+  "has_night_skiing",
+  "has_glades",
+  "has_halfpipe",
+  "difficulty_pct_beginner",
+  "difficulty_pct_intermediate",
+  "difficulty_pct_advanced",
+  "difficulty_pct_expert",
+  "trails_beginner",
+  "trails_intermediate",
+  "trails_advanced",
+  "trails_expert",
+];
+const COMPARE_COLS = Array.from(
+  new Set([...TODAY_RESORT_COLS.split(",").map((c) => c.trim()), ...STAT_COLS]),
+).join(", ");
+
+type WeatherRow = VerdictWeather & { resort_id: number };
+type HistoryRow = {
+  resort_id: number;
+  observed_date: string;
+  temp_high_f: number | null;
+  temp_low_f: number | null;
+  snow_24h_in: number | string | null;
+  rain_24h_in: number | string | null;
+  precip_24h_in: number | string | null;
+  wind_mph_avg: number | string | null;
+};
+
+const num = (v: number | string | null | undefined): number | null => {
+  if (v == null) return null;
+  const n = typeof v === "string" ? parseFloat(v) : v;
+  return Number.isFinite(n) ? n : null;
+};
+
+/** Today's verdict for each resort, from the same inputs /today reads:
+ *  the weather_cache row and the trailing week of weather_history. */
+async function loadVerdicts(resorts: CompareResort[], now: Date): Promise<Map<number, Verdict>> {
+  const ids = resorts.map((r) => r.id);
+  const since = shiftDate(now.toISOString().slice(0, 10), -8);
+  const [wxRes, histRes] = await Promise.all([
+    supabase
+      .from("weather_cache")
+      .select("resort_id, temp_high_f, temp_low_f, conditions_short, snow_24h_in, wind_mph_avg, wind_mph_gust, fetched_at, forecast_json")
+      .in("resort_id", ids)
+      .returns<WeatherRow[]>(),
+    supabase
+      .from("weather_history")
+      .select("resort_id, observed_date, temp_high_f, temp_low_f, snow_24h_in, rain_24h_in, precip_24h_in, wind_mph_avg")
+      .in("resort_id", ids)
+      .gte("observed_date", since)
+      .order("observed_date", { ascending: true })
+      .returns<HistoryRow[]>(),
+  ]);
+  if (wxRes.error) console.warn("[compare] weather_cache read failed", wxRes.error.message);
+  if (histRes.error) console.warn("[compare] weather_history read failed", histRes.error.message);
+  const weatherById = new Map<number, WeatherRow>();
+  for (const w of wxRes.data ?? []) weatherById.set(w.resort_id, w);
+  const historyById = new Map<number, DailyWeather[]>();
+  for (const h of histRes.data ?? []) {
+    const list = historyById.get(h.resort_id) ?? [];
+    list.push({
+      observed_date: h.observed_date,
+      temp_high_f: h.temp_high_f,
+      temp_low_f: h.temp_low_f,
+      snow_24h_in: num(h.snow_24h_in),
+      rain_24h_in: num(h.rain_24h_in),
+      precip_24h_in: num(h.precip_24h_in),
+      wind_mph_avg: num(h.wind_mph_avg),
+    });
+    historyById.set(h.resort_id, list);
+  }
+  const out = new Map<number, Verdict>();
+  for (const r of resorts) {
+    out.set(r.id, verdict(r, weatherById.get(r.id) ?? null, null, { now, history: historyById.get(r.id) ?? [] }));
+  }
+  return out;
+}
+
+/** "2 h ago" for a labelled value's timestamp; the page is dynamic so
+ *  the clock is the request's. */
+function ago(iso: string | null, now: Date): string {
+  if (!iso) return "";
+  const t = Date.parse(iso);
+  if (!Number.isFinite(t)) return "";
+  const mins = Math.max(0, Math.round((now.getTime() - t) / 60_000));
+  if (mins < 1) return "just now";
+  if (mins < 60) return `${mins} min ago`;
+  const hours = Math.round(mins / 60);
+  if (hours < 48) return `${hours} h ago`;
+  return `${Math.round(hours / 24)} days ago`;
+}
+
+function inchesText(n: number): string {
+  const r = Math.round(n * 10) / 10;
+  return `${Number.isInteger(r) ? r : r.toFixed(1)} in`;
+}
+
+/** Share link that pins the drive origin, so the recipient sees the
+ *  same drive column instead of their own cookie's. */
+function sharePath(ids: number[], origin: Origin): string {
+  const p = new URLSearchParams();
+  p.set("ids", ids.join(","));
+  if (origin.kind === "geo") {
+    p.set("from", "geo");
+    p.set("fromLat", origin.lat.toFixed(2));
+    p.set("fromLng", origin.lon.toFixed(2));
+  } else {
+    p.set("from", origin.code);
+  }
+  return `/compare?${p.toString()}`;
+}
 
 function parseIds(raw: string | string[] | undefined): number[] {
   if (!raw) return [];
@@ -222,11 +345,11 @@ export default async function ComparePage({
             Compare resorts
           </h1>
           <p className="mb-6 text-sm text-wn-charcoal/70">
-            Nothing to compare yet — open a resort from the map and tap
+            Nothing to compare yet. Open a resort from the map and tap
             <span className="mx-1 rounded bg-wn-navy/5 px-1.5 py-0.5 font-mono text-xs text-wn-navy">
               + Compare
             </span>
-            to start a side-by-side list.
+            on up to {COMPARE_MAX} resorts to see them side by side.
           </p>
           <Link
             href="/"
@@ -243,41 +366,7 @@ export default async function ComparePage({
   // Fetch all requested resorts in one round trip.
   const { data: rows } = await supabase
     .from("resorts")
-    .select(
-      [
-        "id",
-        "slug",
-        "name",
-        "state",
-        "region",
-        "latitude",
-        "longitude",
-        "passes",
-        "vertical_drop",
-        "total_trails",
-        "total_acres",
-        "total_lifts",
-        "high_speed_lifts",
-        "base_elevation_ft",
-        "summit_elevation_ft",
-        "elevation_base",
-        "elevation_summit",
-        "annual_snowfall_in",
-        "snowmaking_pct",
-        "has_terrain_park",
-        "has_night_skiing",
-        "has_glades",
-        "has_halfpipe",
-        "difficulty_pct_beginner",
-        "difficulty_pct_intermediate",
-        "difficulty_pct_advanced",
-        "difficulty_pct_expert",
-        "trails_beginner",
-        "trails_intermediate",
-        "trails_advanced",
-        "trails_expert",
-      ].join(", "),
-    )
+    .select(COMPARE_COLS)
     .in("id", ids)
     .eq("active", true)
     .returns<CompareResort[]>();
@@ -317,6 +406,12 @@ export default async function ComparePage({
   const driveLabel = `Drive from ${origin.kind === "geo" ? "your location" : origin.short}`;
   const anyEstimate = [...driveByResort.values()].some((c) => c.estimate);
 
+  const now = new Date();
+  const verdictById = resorts.length > 0 ? await loadVerdicts(resorts, now) : new Map<number, Verdict>();
+  const share = sharePath(resorts.map((r) => r.id), origin);
+  const shareTitle = `${resorts.map((r) => r.name).join(" vs ")} on Wynla`;
+  const rowsSpec = metricRows(driveLabel, driveByResort, verdictById, now);
+
   if (resorts.length === 0) {
     return (
       <main className="min-h-dvh bg-wn-offwhite px-4 py-12 sm:px-6">
@@ -344,15 +439,16 @@ export default async function ComparePage({
         <div className="mb-3 flex items-center justify-between gap-2">
           <Link
             href="/"
-            className="inline-flex h-9 items-center rounded-md border border-wn-charcoal/15 bg-white px-3 text-xs font-semibold text-wn-charcoal/70 transition hover:border-wn-navy hover:text-wn-navy"
+            className="inline-flex min-h-11 items-center rounded-md border border-wn-charcoal/15 bg-white px-3 text-xs font-semibold text-wn-charcoal/70 transition hover:border-wn-navy hover:text-wn-navy"
           >
             ← Map
           </Link>
-          {/* Clear-all action — destructive so we keep it visually muted
-              (matching back-to-map weight) and to the right of the back
-              affordance, the way iOS Mail puts Delete opposite Back.
-              Resolves Saitarn's "ไม่มีปุ่มกดเคลียร์คอมแพร์" complaint. */}
-          <ClearCompareButton />
+          {/* Share is the constructive action; Clear all is destructive,
+              so it stays muted and sits last, opposite Back. */}
+          <div className="flex items-center gap-2">
+            <ShareCompareButton path={share} title={shareTitle} />
+            <ClearCompareButton />
+          </div>
         </div>
 
         <header className="mb-6">
@@ -360,10 +456,10 @@ export default async function ComparePage({
             Comparing {resorts.length} resort{resorts.length === 1 ? "" : "s"}
           </h1>
           <p className="mt-1 text-sm text-wn-charcoal/70">
-            Side-by-side stats, amenities, and difficulty mix. Tap any column
-            header for the full resort page.
+            Today&rsquo;s conditions, then stats, amenities and difficulty mix.
+            Tap a resort name for its full page.
           </p>
-          <p className="mt-1 text-xs text-wn-charcoal/55">
+          <p className="mt-1 text-xs text-wn-charcoal/70">
             {driveLabel}
             {anyEstimate
               ? " · ≈ times are estimated from straight-line distance. Change the origin from the map's From picker."
@@ -373,20 +469,17 @@ export default async function ComparePage({
 
         {/* Desktop: resort-major table */}
         <div className="hidden md:block">
-          <DesktopCompareTable
-            resorts={resorts}
-            driveByResort={driveByResort}
-            driveLabel={driveLabel}
-          />
+          <DesktopCompareTable resorts={resorts} rows={rowsSpec} />
         </div>
 
-        {/* Mobile: metric-major stacked rows */}
+        {/* Phone: metric-major for one or two resorts, scrolling resort
+            cards for three or more. */}
         <div className="md:hidden">
-          <MobileCompareList
-            resorts={resorts}
-            driveByResort={driveByResort}
-            driveLabel={driveLabel}
-          />
+          {resorts.length <= 2 ? (
+            <MobileCompareList resorts={resorts} rows={rowsSpec} />
+          ) : (
+            <MobileCompareCards resorts={resorts} rows={rowsSpec} />
+          )}
         </div>
       </div>
     </main>
@@ -395,13 +488,15 @@ export default async function ComparePage({
 
 // ---------- Metric definitions ----------
 //
-// Each metric is a (label, render) pair so the desktop table and the
-// mobile stacked layout share the same source of truth — no risk of
-// the two views drifting on what counts as a "row".
+// Each row is a (label, render) pair so the desktop table and both
+// phone layouts share one source of truth; no view can drift on what
+// counts as a row. Conditions rows come first because they answer the
+// question people actually compare on in season.
 
-type MetricFn = (r: CompareResort) => string;
+type MetricFn = (r: CompareResort) => ReactNode;
+type MetricRowSpec = { label: string; render: MetricFn; group: "conditions" | "stats" };
 
-const METRICS: Array<{ label: string; render: MetricFn }> = [
+const STAT_METRICS: Array<{ label: string; render: MetricFn }> = [
   { label: "Passes", render: (r) => (r.passes && r.passes.length > 0 ? r.passes.map(passLabel).join(", ") : "—") },
   { label: "State", render: (r) => r.state || "—" },
   { label: "Region", render: (r) => r.region ?? "—" },
@@ -413,7 +508,7 @@ const METRICS: Array<{ label: string; render: MetricFn }> = [
     render: (r) => {
       if (r.total_lifts == null) return "—";
       if (r.high_speed_lifts != null && r.high_speed_lifts > 0) {
-        return `${r.total_lifts} (${r.high_speed_lifts} HS)`;
+        return `${r.total_lifts} (${r.high_speed_lifts} high-speed)`;
       }
       return String(r.total_lifts);
     },
@@ -432,7 +527,7 @@ const METRICS: Array<{ label: string; render: MetricFn }> = [
       return s != null ? `${s.toLocaleString()} ft` : "—";
     },
   },
-  { label: "Annual snowfall", render: (r) => (r.annual_snowfall_in != null ? `${r.annual_snowfall_in}"` : "—") },
+  { label: "Annual snowfall", render: (r) => (r.annual_snowfall_in != null ? `${r.annual_snowfall_in} in` : "—") },
   { label: "Snowmaking", render: (r) => (r.snowmaking_pct != null ? `${r.snowmaking_pct}%` : "—") },
   { label: "Terrain park", render: (r) => boolCell(r.has_terrain_park) },
   { label: "Night skiing", render: (r) => boolCell(r.has_night_skiing) },
@@ -440,10 +535,18 @@ const METRICS: Array<{ label: string; render: MetricFn }> = [
   { label: "Halfpipe", render: (r) => boolCell(r.has_halfpipe) },
 ];
 
-function boolCell(v: boolean | null): string {
-  if (v === true) return "✓";
-  if (v === false) return "✗"; // confirmed absent — distinct from "—" (unknown)
-  return "—";
+// A check for yes; a dash for no or unknown. A cross next to a check
+// read as a warning in the audit (fresh-eyes-power-46), and "no" and
+// "unknown" are rarely worth telling apart in a compare table.
+function boolCell(v: boolean | null): ReactNode {
+  if (v === true) {
+    return (
+      <span className="text-emerald-700" aria-label="Yes">
+        ✓
+      </span>
+    );
+  }
+  return <span aria-label={v === false ? "No" : "Unknown"}>—</span>;
 }
 
 // Compact form for the table cells ("2.5 h" rather than "2h 30m"), with
@@ -466,57 +569,191 @@ function difficultyText(mix: DifficultyMix | null): string {
   return `🟢 ${mix.beginner}% · 🔵 ${mix.intermediate}% · ⚫ ${mix.advanced}% · ◆ ${mix.expert}%`;
 }
 
+/** A value with its source and time underneath, so no number on the
+ *  page is printed without saying where it came from. */
+function Labelled({ value, source }: { value: ReactNode; source: string }) {
+  return (
+    <span className="block">
+      <span className="block">{value}</span>
+      <span className="block text-[10px] font-normal text-wn-charcoal/70">{source}</span>
+    </span>
+  );
+}
+
+const STATUS_TONE: Record<Verdict["status"]["tone"], string> = {
+  green: "text-emerald-700",
+  amber: "text-amber-700",
+  red: "text-red-700",
+  navy: "text-wn-navy",
+  muted: "text-wn-charcoal/60",
+};
+
+function metricRows(
+  driveLabel: string,
+  driveByResort: Map<number, DriveCell>,
+  verdictById: Map<number, Verdict>,
+  now: Date,
+): MetricRowSpec[] {
+  const conditions: MetricRowSpec[] = [
+    {
+      label: "Status",
+      group: "conditions",
+      render: (r) => {
+        const v = verdictById.get(r.id);
+        if (!v) return "—";
+        const st = v.status;
+        // Where the status came from, in priority order of
+        // lib/seasonDates.deriveResortStatus: the resort's own report,
+        // the verified operating flag, then published season dates.
+        const source =
+          r.snow_report_status === "reported" && r.snow_report_updated_at
+            ? `Reported ${ago(r.snow_report_updated_at, now)}`
+            : st.kind === "open" || st.kind === "limited"
+              ? "Reported operating status"
+              : st.kind === "likely-open"
+                ? "Estimated from season dates"
+                : st.kind === "unknown"
+                  ? "Check the resort"
+                  : "From published season dates";
+        return (
+          <Labelled
+            value={
+              <span className={`font-semibold ${STATUS_TONE[st.tone]}`}>
+                {st.label}
+                {st.detail ? ` · ${st.detail}` : ""}
+              </span>
+            }
+            source={source}
+          />
+        );
+      },
+    },
+    {
+      label: "New snow (24 h)",
+      group: "conditions",
+      render: (r) => {
+        const v = verdictById.get(r.id);
+        const ns = v?.newSnow;
+        if (!ns) return <Labelled value="—" source="No report yet" />;
+        const when = ns.at ? ago(ns.at, now) : "";
+        return <Labelled value={inchesText(ns.inches)} source={`${ns.source}${when ? ` ${when}` : ""}`} />;
+      },
+    },
+    {
+      label: "Surface today",
+      group: "conditions",
+      render: (r) => {
+        const v = verdictById.get(r.id);
+        if (!v || v.dormant) return <Labelled value="—" source="Lifts not running" />;
+        if (!v.surface) return <Labelled value="—" source="Not enough weather history" />;
+        const at = v.stale ? "" : ago(v.labels.find((l) => l.source === "Forecast")?.at ?? null, now);
+        return (
+          <Labelled
+            value={v.surface.label}
+            source={`Estimated, ${v.surface.confidence} confidence${at ? ` · ${at}` : ""}`}
+          />
+        );
+      },
+    },
+    {
+      label: driveLabel,
+      group: "conditions",
+      render: (r) => {
+        const cell = driveByResort.get(r.id);
+        return <Labelled value={formatDriveTime(cell)} source={cell?.estimate ? "Estimated from distance" : "Cached road route"} />;
+      },
+    },
+  ];
+  const stats: MetricRowSpec[] = [
+    { label: "Difficulty mix", group: "stats", render: (r) => difficultyText(getDifficultyMix(r)) },
+    ...STAT_METRICS.map((m) => ({ ...m, group: "stats" as const })),
+  ];
+  return [...conditions, ...stats];
+}
+
+// ---------- Resort header (shared by the desktop table and phone cards) ----------
+
+function ResortHeading({ resort, compact = false }: { resort: CompareResort; compact?: boolean }) {
+  return (
+    <div className="flex items-start justify-between gap-1">
+      <div className="min-w-0">
+        <Link
+          href={`/resort/${resort.slug}`}
+          className={`block font-extrabold tracking-tight text-wn-navy hover:underline ${compact ? "text-sm leading-snug" : "text-base"}`}
+        >
+          {resort.name}
+        </Link>
+        <div className="mt-0.5 text-[11px] text-wn-charcoal/65">
+          {resort.state}
+          {resort.region ? ` · ${resort.region}` : ""}
+        </div>
+        <div className="mt-2 flex flex-wrap gap-1">
+          {(resort.passes ?? []).map((p) => (
+            <span
+              key={p}
+              className="inline-block rounded px-1.5 py-0.5 text-[9px] font-semibold"
+              style={{
+                backgroundColor: passColor(p),
+                color: p === "ikon" ? "#1E2952" : "#FFFFFF",
+              }}
+            >
+              {passLabel(p)}
+            </span>
+          ))}
+        </div>
+      </div>
+      <RemoveFromCompare id={resort.id} name={resort.name} />
+    </div>
+  );
+}
+
+function stripStyle(resort: CompareResort) {
+  return { background: `linear-gradient(135deg, ${passColor(primaryPass(resort.passes))} 0%, #1E2952 100%)` };
+}
+
 // ---------- Desktop: resort-major table ----------
 
-function DesktopCompareTable({
-  resorts,
-  driveByResort,
-  driveLabel,
-}: {
-  resorts: CompareResort[];
-  driveByResort: Map<number, DriveCell>;
-  driveLabel: string;
-}) {
-  // Column widths: shrink the metric label column as more resorts pile up.
+function DesktopCompareTable({ resorts, rows }: { resorts: CompareResort[]; rows: MetricRowSpec[] }) {
   return (
     <div className="overflow-hidden rounded-xl border border-wn-charcoal/10 bg-white shadow-sm">
       <table className="w-full table-fixed border-collapse text-sm">
         <thead>
           <tr>
-            <th className="w-[180px] bg-wn-offwhite px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
+            <th className="w-[180px] bg-wn-offwhite px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wide text-wn-charcoal/70">
               Metric
             </th>
             {resorts.map((r) => (
-              <ResortHeaderCell key={r.id} resort={r} />
+              <th key={r.id} className="border-b border-wn-charcoal/10 bg-white px-4 pb-3 pt-0 text-left align-bottom">
+                {/* Pass-colour strip, the same anchor as the hero and pins. */}
+                <div className="-mx-4 mb-3 h-1.5" style={stripStyle(r)} aria-hidden="true" />
+                <ResortHeading resort={r} />
+              </th>
             ))}
           </tr>
         </thead>
         <tbody>
-          {/* Drive-time first (most actionable). */}
-          <MetricRow
-            label={driveLabel}
-            resorts={resorts}
-            render={(r) => formatDriveTime(driveByResort.get(r.id))}
-          />
-          {/* Difficulty row uses the shared helper. */}
-          <MetricRow
-            label="Difficulty mix"
-            resorts={resorts}
-            render={(r) => difficultyText(getDifficultyMix(r))}
-          />
-          {METRICS.map((m) => (
-            <MetricRow key={m.label} label={m.label} resorts={resorts} render={m.render} />
-          ))}
+          {rows.map((m, i) => {
+            const groupStart = i === 0 || rows[i - 1].group !== m.group;
+            return (
+              <tr key={m.label} className={groupStart && i > 0 ? "border-t-4 border-wn-offwhite" : "even:bg-wn-offwhite/50"}>
+                <td className="border-t border-wn-charcoal/5 px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wide text-wn-charcoal/70">
+                  {m.label}
+                </td>
+                {resorts.map((r) => (
+                  <td key={r.id} className="border-t border-wn-charcoal/5 px-4 py-2.5 align-top text-sm text-wn-charcoal">
+                    {m.render(r)}
+                  </td>
+                ))}
+              </tr>
+            );
+          })}
           <tr>
             <td className="border-t border-wn-charcoal/5 bg-wn-offwhite px-4 py-3" />
             {resorts.map((r) => (
-              <td
-                key={r.id}
-                className="border-t border-wn-charcoal/5 px-4 py-3 align-top"
-              >
+              <td key={r.id} className="border-t border-wn-charcoal/5 px-4 py-3 align-top">
                 <Link
                   href={`/resort/${r.slug}`}
-                  className="inline-flex items-center gap-1 rounded-md bg-wn-navy px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-wn-navy/90"
+                  className="inline-flex min-h-11 items-center gap-1 rounded-md bg-wn-navy px-3 text-xs font-semibold text-white transition hover:bg-wn-navy/90"
                 >
                   View full details
                   <span aria-hidden="true">→</span>
@@ -530,151 +767,35 @@ function DesktopCompareTable({
   );
 }
 
-function ResortHeaderCell({ resort }: { resort: CompareResort }) {
-  const primary = primaryPass(resort.passes);
-  const stripColor = passColor(primary);
+// ---------- Phone, one or two resorts: metric-major cards ----------
+
+function MobileCompareList({ resorts, rows }: { resorts: CompareResort[]; rows: MetricRowSpec[] }) {
+  const gridStyle = { gridTemplateColumns: `repeat(${resorts.length}, minmax(0, 1fr))` };
   return (
-    <th className="border-b border-wn-charcoal/10 bg-white px-4 pb-3 pt-0 text-left align-bottom">
-      {/* Pass-color gradient strip — visual anchor matching the
-          slug-page hero and the homepage pin colors. */}
-      <div
-        className="-mx-4 mb-3 h-1.5"
-        style={{
-          background: `linear-gradient(135deg, ${stripColor} 0%, #1E2952 100%)`,
-        }}
-        aria-hidden="true"
-      />
-      <Link
-        href={`/resort/${resort.slug}`}
-        className="block text-base font-extrabold tracking-tight text-wn-navy hover:underline"
-      >
-        {resort.name}
-      </Link>
-      <div className="mt-0.5 text-[11px] text-wn-charcoal/65">
-        {resort.state}
-        {resort.region ? ` · ${resort.region}` : ""}
-      </div>
-      <div className="mt-2 flex flex-wrap gap-1">
-        {(resort.passes ?? []).map((p) => (
-          <span
-            key={p}
-            className="inline-block rounded px-1.5 py-0.5 text-[9px] font-semibold"
-            style={{
-              backgroundColor: passColor(p),
-              color: p === "ikon" ? "#1E2952" : "#FFFFFF",
-            }}
-          >
-            {passLabel(p)}
-          </span>
+    <div className="space-y-3">
+      <div className="grid gap-2" style={gridStyle}>
+        {resorts.map((r) => (
+          <div key={r.id} className="overflow-hidden rounded-lg border border-wn-charcoal/10 bg-white shadow-sm">
+            <div className="h-1.5 w-full" style={stripStyle(r)} aria-hidden="true" />
+            <div className="px-3 py-2.5">
+              <ResortHeading resort={r} compact />
+            </div>
+          </div>
         ))}
       </div>
-    </th>
-  );
-}
 
-function MetricRow({
-  label,
-  resorts,
-  render,
-}: {
-  label: string;
-  resorts: CompareResort[];
-  render: MetricFn;
-}) {
-  return (
-    <tr className="even:bg-wn-offwhite/50">
-      <td className="border-t border-wn-charcoal/5 px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
-        {label}
-      </td>
-      {resorts.map((r) => (
-        <td
-          key={r.id}
-          className="border-t border-wn-charcoal/5 px-4 py-2.5 align-top text-sm text-wn-charcoal"
-        >
-          {render(r)}
-        </td>
-      ))}
-    </tr>
-  );
-}
-
-// ---------- Mobile: metric-major stacked layout ----------
-
-function MobileCompareList({
-  resorts,
-  driveByResort,
-  driveLabel,
-}: {
-  resorts: CompareResort[];
-  driveByResort: Map<number, DriveCell>;
-  driveLabel: string;
-}) {
-  // Use exactly N columns matching the resort count so the layout
-  // never leaves an asymmetric half-empty row — Saitarn's complaint
-  // 2026-05-23 was the old `grid-cols-2` putting resort #3 alone on
-  // the left of row 2 every time she compared three. With N columns
-  // every metric row reads as a symmetric strip regardless of count.
-  // For 4-5 resorts on a narrow phone the cells get tight (≤78px),
-  // but the metric values are short (✓ / — / "100%" / "1,600 ft")
-  // so they still fit cleanly; resort names truncate via `truncate`.
-  const gridStyle = {
-    gridTemplateColumns: `repeat(${resorts.length}, minmax(0, 1fr))`,
-  };
-  return (
-    <div className="space-y-4">
-      {/* Resort header strip — one card per resort, name + pass colors. */}
-      <div className="grid gap-2" style={gridStyle}>
-        {resorts.map((r) => {
-          const primary = primaryPass(r.passes);
-          const c = passColor(primary);
-          return (
-            <Link
-              key={r.id}
-              href={`/resort/${r.slug}`}
-              className="block overflow-hidden rounded-lg border border-wn-charcoal/10 bg-white shadow-sm"
-            >
-              <div
-                className="h-1.5 w-full"
-                style={{
-                  background: `linear-gradient(135deg, ${c} 0%, #1E2952 100%)`,
-                }}
-                aria-hidden="true"
-              />
-              <div className="px-3 py-2.5">
-                {/* Names bumped to text-base + font-extrabold + leading-snug
-                    per Saitarn 2026-05-23 feedback — previous text-sm /
-                    font-bold read as "small + faded" against the gradient
-                    strip. Tighter line-height keeps two-line names tidy. */}
-                <div className="break-words text-base font-extrabold leading-snug text-wn-navy">
-                  {r.name}
-                </div>
-                <div className="mt-0.5 truncate text-[10px] text-wn-charcoal/60">
-                  {r.state}
-                  {r.region ? ` · ${r.region}` : ""}
-                </div>
+      {rows.map((m) => (
+        <div key={m.label} className="rounded-lg border border-wn-charcoal/10 bg-white p-3">
+          <div className="mb-2 text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/70">{m.label}</div>
+          <div className="grid gap-2" style={gridStyle}>
+            {resorts.map((r) => (
+              <div key={r.id} className="min-w-0 border-l border-wn-charcoal/10 pl-2 first:border-l-0 first:pl-0">
+                <div className="truncate text-[10px] text-wn-charcoal/70">{r.name.split(" ")[0]}</div>
+                <div className="break-words text-sm font-semibold text-wn-charcoal">{m.render(r)}</div>
               </div>
-            </Link>
-          );
-        })}
-      </div>
-
-      <MobileMetricCard
-        label={driveLabel}
-        resorts={resorts}
-        render={(r) => formatDriveTime(driveByResort.get(r.id))}
-      />
-      <MobileMetricCard
-        label="Difficulty mix"
-        resorts={resorts}
-        render={(r) => difficultyText(getDifficultyMix(r))}
-      />
-      {METRICS.map((m) => (
-        <MobileMetricCard
-          key={m.label}
-          label={m.label}
-          resorts={resorts}
-          render={m.render}
-        />
+            ))}
+          </div>
+        </div>
       ))}
 
       <div className="grid gap-2 pt-2" style={gridStyle}>
@@ -682,7 +803,7 @@ function MobileCompareList({
           <Link
             key={r.id}
             href={`/resort/${r.slug}`}
-            className="inline-flex items-center justify-center gap-1 rounded-lg bg-wn-navy px-3 py-2 text-xs font-semibold text-white transition hover:bg-wn-navy/90"
+            className="inline-flex min-h-11 items-center justify-center gap-1 rounded-lg bg-wn-navy px-3 text-xs font-semibold text-white transition hover:bg-wn-navy/90"
           >
             {r.name.split(" ")[0]} →
           </Link>
@@ -692,35 +813,68 @@ function MobileCompareList({
   );
 }
 
-function MobileMetricCard({
-  label,
-  resorts,
-  render,
-}: {
-  label: string;
-  resorts: CompareResort[];
-  render: MetricFn;
-}) {
-  // Mirror the MobileCompareList header strip — N equal columns so
-  // every metric row stays in lockstep with the resort header cards.
+// ---------- Phone, three to five resorts: scrolling resort cards ----------
+//
+// One CSS grid holds every card: column j is resort j, row i is metric
+// i, so the rows stay aligned across cards no matter how long a value
+// wraps. The container scrolls sideways with snap points, showing one
+// card plus the edge of the next so the scroll is discoverable.
+
+function MobileCompareCards({ resorts, rows }: { resorts: CompareResort[]; rows: MetricRowSpec[] }) {
+  const gridStyle = {
+    gridTemplateColumns: `repeat(${resorts.length}, 17rem)`,
+  };
+  const lastRow = rows.length + 1;
   return (
-    <div className="rounded-lg border border-wn-charcoal/10 bg-white p-3">
-      <div className="mb-2 text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
-        {label}
-      </div>
-      <div
-        className="grid gap-2"
-        style={{
-          gridTemplateColumns: `repeat(${resorts.length}, minmax(0, 1fr))`,
-        }}
-      >
-        {resorts.map((r) => (
-          <div key={r.id} className="min-w-0 border-l border-wn-charcoal/10 pl-2 first:border-l-0 first:pl-0">
-            <div className="truncate text-[10px] text-wn-charcoal/45">{r.name.split(" ")[0]}</div>
-            <div className="break-words text-sm font-semibold text-wn-charcoal">{render(r)}</div>
+    <div className="-mx-4 overflow-x-auto px-4 pb-3" style={{ scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch" }}>
+      <div className="grid gap-x-2" style={gridStyle}>
+        {resorts.map((r, j) => (
+          <div
+            key={`h-${r.id}`}
+            className="overflow-hidden rounded-t-xl border border-b-0 border-wn-charcoal/10 bg-white"
+            style={{ gridColumn: j + 1, gridRow: 1, scrollSnapAlign: "start", scrollMarginLeft: "1rem" }}
+          >
+            <div className="h-1.5 w-full" style={stripStyle(r)} aria-hidden="true" />
+            <div className="px-3 py-2.5">
+              <ResortHeading resort={r} compact />
+            </div>
+          </div>
+        ))}
+        {rows.map((m, i) =>
+          resorts.map((r, j) => {
+            const groupStart = i > 0 && rows[i - 1].group !== m.group;
+            return (
+              <div
+                key={`${m.label}-${r.id}`}
+                className={[
+                  "border-x border-wn-charcoal/10 bg-white px-3 py-2",
+                  groupStart ? "border-t-4 border-t-wn-offwhite" : "border-t border-t-wn-charcoal/5",
+                ].join(" ")}
+                style={{ gridColumn: j + 1, gridRow: i + 2 }}
+              >
+                <div className="text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/70">{m.label}</div>
+                <div className="mt-0.5 break-words text-sm font-semibold text-wn-charcoal">{m.render(r)}</div>
+              </div>
+            );
+          }),
+        )}
+        {resorts.map((r, j) => (
+          <div
+            key={`f-${r.id}`}
+            className="rounded-b-xl border border-t-0 border-wn-charcoal/10 bg-white px-3 py-3"
+            style={{ gridColumn: j + 1, gridRow: lastRow + 1 }}
+          >
+            <Link
+              href={`/resort/${r.slug}`}
+              className="inline-flex min-h-11 w-full items-center justify-center gap-1 rounded-lg bg-wn-navy px-3 text-xs font-semibold text-white transition hover:bg-wn-navy/90"
+            >
+              View full details
+              <span aria-hidden="true">→</span>
+            </Link>
           </div>
         ))}
       </div>
+      <p className="mt-2 text-center text-[11px] text-wn-charcoal/70">Swipe sideways to see every resort.</p>
     </div>
   );
 }

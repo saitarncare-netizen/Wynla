@@ -1,12 +1,13 @@
-// Account index page. Auth-required. Stage 36.
+// Account index page. Auth-required.
 //
-// Renders three islands:
-//   1. ProfileForm     — edit display_name + preferred_origin
-//   2. Links to /account/digest, /account/pro, /favorites, /trips
-//   3. DeleteAccount   — permanent self-service account deletion
+// Renders four islands:
+//   1. ProfileForm     — edit display_name + preferred_origin (29 cities)
+//   2. Your stuff      — Today / Saturday / Favorites / Trips / Digest / Install
+//   3. SignOutButtons  — this browser, or every device
+//   4. DeleteAccount   — permanent self-service account deletion
 //
-// All writes go through /api/account/* — kept on the server so we never
-// hand the service-role key to the browser.
+// All writes go through /api/account/* or the user's own Supabase
+// session; the service-role key never reaches the browser.
 
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -14,6 +15,7 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { launchCityByCode } from "@/lib/origins";
 import ProfileForm from "./ProfileForm";
 import DeleteAccount from "./DeleteAccount";
+import SignOutButtons from "./SignOutButtons";
 import { InstallRow } from "@/components/InstallPrompt";
 
 export const dynamic = "force-dynamic";
@@ -22,6 +24,27 @@ type ProfileRow = {
   display_name: string | null;
   preferred_origin: string | null;
 };
+
+const ROW_CLASS =
+  "flex min-h-11 items-center justify-between py-3 text-sm text-wn-charcoal transition hover:text-wn-navy";
+
+function Row({ href, icon, label, hint }: { href: string; icon: string; label: string; hint?: string }) {
+  return (
+    <li>
+      <Link href={href} className={ROW_CLASS}>
+        <span className="min-w-0">
+          <span className="font-medium">
+            <span aria-hidden="true">{icon}</span> {label}
+          </span>
+          {hint && <span className="block text-[11px] text-wn-charcoal/70">{hint}</span>}
+        </span>
+        <span className="text-wn-charcoal/50" aria-hidden="true">
+          →
+        </span>
+      </Link>
+    </li>
+  );
+}
 
 export default async function AccountPage() {
   const supabase = await createSupabaseServerClient();
@@ -46,20 +69,15 @@ export default async function AccountPage() {
       <div className="mx-auto max-w-2xl space-y-8">
         <Link
           href="/"
-          className="text-xs font-semibold text-wn-charcoal/60 hover:text-wn-navy"
+          className="inline-flex min-h-11 items-center text-xs font-semibold text-wn-charcoal/60 hover:text-wn-navy"
         >
           ← Map
         </Link>
 
         <header>
-          <h1 className="text-2xl font-extrabold text-wn-navy sm:text-3xl">
-            Account
-          </h1>
+          <h1 className="text-2xl font-extrabold text-wn-navy sm:text-3xl">Account</h1>
           <p className="mt-1 text-sm text-wn-charcoal/70">
-            Signed in as{" "}
-            <span className="font-semibold text-wn-charcoal">
-              {user.email ?? "—"}
-            </span>
+            Signed in as <span className="font-semibold text-wn-charcoal">{user.email ?? "—"}</span>
           </p>
         </header>
 
@@ -74,87 +92,41 @@ export default async function AccountPage() {
 
         {/* Quick links */}
         <section className="rounded-xl border border-wn-charcoal/10 bg-white p-5 shadow-sm sm:p-6">
-          <h2 className="mb-3 text-base font-bold text-wn-navy">
-            Your stuff
-          </h2>
+          <h2 className="mb-3 text-base font-bold text-wn-navy">Your stuff</h2>
           <ul className="divide-y divide-wn-charcoal/10">
-            <li>
-              <Link
-                href="/today"
-                className="flex min-h-11 items-center justify-between py-3 text-sm text-wn-charcoal transition hover:text-wn-navy"
-              >
-                <span className="font-medium">☀️ My mountains today</span>
-                <span className="text-wn-charcoal/50">→</span>
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/favorites"
-                className="flex items-center justify-between py-3 text-sm text-wn-charcoal transition hover:text-wn-navy"
-              >
-                <span className="font-medium">❤️ Favorites</span>
-                <span className="text-wn-charcoal/50">→</span>
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/trips"
-                className="flex items-center justify-between py-3 text-sm text-wn-charcoal transition hover:text-wn-navy"
-              >
-                <span className="font-medium">🗺️ My trips</span>
-                <span className="text-wn-charcoal/50">→</span>
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/account/digest"
-                className="flex items-center justify-between py-3 text-sm text-wn-charcoal transition hover:text-wn-navy"
-              >
-                <span className="font-medium">📬 Email digest</span>
-                <span className="text-wn-charcoal/50">→</span>
-              </Link>
-            </li>
-            <li>
-              <Link
-                href={goCity ? `/go?city=${goCity.code}` : "/go"}
-                className="flex items-center justify-between py-3 text-sm text-wn-charcoal transition hover:text-wn-navy"
-              >
-                <span className="font-medium">🏔️ Where to ride Saturday</span>
-                <span className="text-wn-charcoal/50">→</span>
-              </Link>
-            </li>
+            <Row href="/today" icon="☀️" label="Today" hint="Go / Wait / Skip for your favorites" />
+            <Row
+              href={goCity ? `/go?city=${goCity.code}` : "/go"}
+              icon="🏔️"
+              label="Saturday"
+              hint={goCity ? `Where to ride this Saturday from ${goCity.short}` : "Where to ride this Saturday"}
+            />
+            <Row href="/favorites" icon="❤️" label="Favorites" />
+            <Row href="/trips" icon="🎿" label="My trips" />
+            <Row href="/account/digest" icon="📬" label="Email digest" hint="Daily or weekly snow email, plus the Thursday picks" />
             {/* Permanent install entry point for people who dismissed the
                 nudge. Renders nothing inside the installed app. */}
             <InstallRow />
             {/* Admin-only feedback inbox — only shown to the founder. */}
             {user.email === "saitarncare@gmail.com" && (
-              <li>
-                <Link
-                  href="/account/feedback"
-                  className="flex items-center justify-between py-3 text-sm text-wn-charcoal transition hover:text-wn-navy"
-                >
-                  <span className="font-medium">💬 Feedback inbox</span>
-                  <span className="text-wn-charcoal/50">→</span>
-                </Link>
-              </li>
+              <Row href="/account/feedback" icon="💬" label="Feedback inbox" />
             )}
-            {/* Inaugural Season 2026 — "Wynla Pro" account section is
-                hidden during the Founder Season. /account/pro route
-                still exists for the few users who had pre-launch Pro
-                subs (test mode) but doesn't get a discoverable link
-                from /account. Re-surface for Season 2. */}
           </ul>
+        </section>
+
+        {/* Sessions */}
+        <section className="rounded-xl border border-wn-charcoal/10 bg-white p-5 shadow-sm sm:p-6">
+          <h2 className="mb-3 text-base font-bold text-wn-navy">Sessions</h2>
+          <SignOutButtons />
         </section>
 
         {/* Danger zone — kept visually separate + low-contrast until hover so
             it's never the most prominent thing on the page. */}
         <section className="rounded-xl border border-red-200/70 bg-white p-5 shadow-sm sm:p-6">
-          <h2 className="mb-1 text-base font-bold text-red-900">
-            Delete account
-          </h2>
+          <h2 className="mb-1 text-base font-bold text-red-900">Delete account</h2>
           <p className="mb-4 text-xs text-wn-charcoal/65">
-            Permanently removes your favorites, trips, reviews, and digest
-            subscription. This can&rsquo;t be undone.
+            Permanently removes your favorites, trips, snow alerts, digest subscription and any
+            Stripe subscription. This can&rsquo;t be undone.
           </p>
           <DeleteAccount />
         </section>

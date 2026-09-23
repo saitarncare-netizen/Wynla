@@ -384,6 +384,11 @@ export default function TripPlannerPanel({
   // Party size for the cost estimate. Two is the most common ski-trip
   // shape (couple / pair of friends sharing a room and a car).
   const [partySize, setPartySize] = useState(2);
+  // Whether the whole party skis on the same passes as the signed-in
+  // user (a family on one Ikon plan) or only they do. Drives
+  // lib/tripCost passHolders; the card shows the switch only when a
+  // pass is known and the party is bigger than one.
+  const [everyoneHasPass, setEveryoneHasPass] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
 
@@ -767,8 +772,9 @@ export default function TripPlannerPanel({
       ticketPriceMin: minBySlug,
       ticketPriceMax: maxBySlug,
       partySize,
+      passHolders: everyoneHasPass ? partySize : 1,
     });
-  }, [stops, candidateBySlug, totalRoundTripMiles, userPasses, partySize]);
+  }, [stops, candidateBySlug, totalRoundTripMiles, userPasses, partySize, everyoneHasPass]);
 
   // Stage-4 optimize-order handler. Runs nearest-neighbor TSP locally
   // (no API call), updates the stops state, and sets an inline notice
@@ -1529,6 +1535,9 @@ export default function TripPlannerPanel({
                     breakdown={costBreakdown}
                     miles={totalRoundTripMiles}
                     onPartySizeChange={setPartySize}
+                    hasPass={userPasses.length > 0}
+                    everyoneHasPass={everyoneHasPass}
+                    onEveryoneHasPassChange={setEveryoneHasPass}
                   />
                 )}
 
@@ -1969,6 +1978,9 @@ export default function TripPlannerPanel({
               breakdown={costBreakdown}
               miles={totalRoundTripMiles}
               onPartySizeChange={setPartySize}
+              hasPass={userPasses.length > 0}
+              everyoneHasPass={everyoneHasPass}
+              onEveryoneHasPassChange={setEveryoneHasPass}
             />
           )}
 
@@ -2155,13 +2167,22 @@ function CostEstimateCard({
   breakdown,
   miles,
   onPartySizeChange,
+  hasPass,
+  everyoneHasPass,
+  onEveryoneHasPassChange,
 }: {
   breakdown: CostBreakdown;
   miles: number;
   onPartySizeChange: (next: number) => void;
+  /** The signed-in user has at least one pass saved in preferences. */
+  hasPass: boolean;
+  everyoneHasPass: boolean;
+  onEveryoneHasPassChange: (next: boolean) => void;
 }) {
-  const { partySize, nights, rooms, cars, totalDays } = breakdown;
+  const { partySize, nights, rooms, cars, totalDays, passHolders } = breakdown;
   const people = `${partySize} ${partySize === 1 ? "person" : "people"}`;
+  const payers = Math.max(0, partySize - passHolders);
+  const passToggleId = "trip-cost-everyone-pass";
   return (
     <div className="mt-3 rounded-lg border border-wn-charcoal/10 bg-white p-3">
       <div className="mb-1 flex items-center justify-between gap-2">
@@ -2205,17 +2226,40 @@ function CostEstimateCard({
       </div>
       {breakdown.passCoversAll && (
         <p className="mb-2 rounded-md bg-emerald-50 px-2 py-1 text-[11px] font-semibold text-emerald-800">
-          {partySize === 1
-            ? "✓ Your pass covers all stops — lift tickets $0"
-            : `✓ Your pass covers your lift tickets — the other ${partySize - 1 === 1 ? "person pays" : `${partySize - 1} pay`} walk-up`}
+          {payers === 0
+            ? partySize === 1
+              ? "✓ Your pass covers all stops. Lift tickets $0"
+              : "✓ Everyone's pass covers all stops. Lift tickets $0"
+            : `✓ Your pass covers your lift tickets. The other ${payers === 1 ? "person pays" : `${payers} pay`} walk-up`}
         </p>
+      )}
+      {/* Only meaningful when a pass is known and there is someone else
+          to apply it to; lib/tripCost clamps passHolders to the party. */}
+      {hasPass && partySize > 1 && (
+        <label
+          htmlFor={passToggleId}
+          className="mb-2 flex min-h-11 cursor-pointer items-center justify-between gap-3 rounded-md border border-wn-charcoal/10 bg-wn-offwhite px-2 text-[11px] font-medium text-wn-charcoal"
+        >
+          <span>Everyone has this pass</span>
+          <input
+            id={passToggleId}
+            type="checkbox"
+            role="switch"
+            checked={everyoneHasPass}
+            aria-checked={everyoneHasPass}
+            onChange={(e) => onEveryoneHasPassChange(e.target.checked)}
+            className="h-5 w-5 accent-wn-navy"
+          />
+        </label>
       )}
       <dl className="grid grid-cols-3 gap-2 text-center">
         <CostTile
           label={
-            breakdown.passCoversAll && partySize > 1
-              ? `Lift tickets (${partySize - 1} without a pass × ${totalDays} day${totalDays === 1 ? "" : "s"})`
-              : `Lift tickets (${partySize} × ${totalDays} day${totalDays === 1 ? "" : "s"})`
+            breakdown.passCoversAll && payers === 0
+              ? `Lift tickets (covered by pass, ${totalDays} day${totalDays === 1 ? "" : "s"})`
+              : breakdown.passCoversAll && payers < partySize
+                ? `Lift tickets (${payers} without a pass × ${totalDays} day${totalDays === 1 ? "" : "s"})`
+                : `Lift tickets (${partySize} × ${totalDays} day${totalDays === 1 ? "" : "s"})`
           }
           value={`$${breakdown.liftTickets.toLocaleString()}`}
         />
