@@ -11,7 +11,8 @@
 //   small   → 12 px circle (radius 6)
 //   medium  → 16 px circle (radius 8)  ← also default for unknown
 //   large   → 20 px circle (radius 10)
-// Touch target stays 44×44 px regardless via map clickTolerance.
+// Touch target is enlarged by MapView's padded click query (16 px each
+// side of the tap), not by the drawn circle or Mapbox's clickTolerance.
 
 export type SizeTier = "small" | "medium" | "large";
 

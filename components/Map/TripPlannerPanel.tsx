@@ -321,7 +321,9 @@ export default function TripPlannerPanel({
     const params = new URLSearchParams(searchParams.toString());
     params.delete("restore");
     const qs = params.toString();
-    router.replace(qs ? `?${qs}` : "?", { scroll: false });
+    // History API, not router.replace: Next syncs useSearchParams with
+    // it and it skips the server re-render of the force-dynamic homepage.
+    window.history.replaceState(null, "", qs ? `?${qs}` : window.location.pathname);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, restoreToken]);
 
@@ -341,7 +343,9 @@ export default function TripPlannerPanel({
       const params = new URLSearchParams(searchParams.toString());
       params.delete("template");
       const qs = params.toString();
-      router.replace(qs ? `?${qs}` : "?", { scroll: false });
+      // History API, not router.replace: Next syncs useSearchParams with
+      // it and it skips the server re-render of the force-dynamic homepage.
+      window.history.replaceState(null, "", qs ? `?${qs}` : window.location.pathname);
       return;
     }
     templateApplied.current = true;
@@ -375,7 +379,9 @@ export default function TripPlannerPanel({
     const params = new URLSearchParams(searchParams.toString());
     params.delete("template");
     const qs = params.toString();
-    router.replace(qs ? `?${qs}` : "?", { scroll: false });
+    // History API, not router.replace: Next syncs useSearchParams with
+    // it and it skips the server re-render of the force-dynamic homepage.
+    window.history.replaceState(null, "", qs ? `?${qs}` : window.location.pathname);
   }
 
   // Render-phase reset for pendingStop on panel close. Avoids the
