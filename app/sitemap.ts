@@ -6,7 +6,9 @@
 // SEO priority skew: featured resorts get priority 0.9 (these are the
 // pages we want indexed and surfaced); listed get 0.6. State landings,
 // guides, and lists sit at 0.7 — important to crawl but not the leaf
-// detail pages.
+// detail pages. /near/[city] launch cities sit at 0.8 (the highest-intent
+// query in the category, and the pages /go is reached from); the other
+// origins at 0.6.
 
 import type { MetadataRoute } from "next";
 import { supabase } from "@/lib/supabase";
@@ -14,6 +16,7 @@ import { STATE_CODES_WITH_RESORTS } from "@/lib/usStates";
 import { GUIDES } from "@/lib/guides";
 import { LISTS } from "@/lib/lists";
 import { TEMPLATES } from "@/lib/tripTemplates";
+import { nearAllCityCodes, nearPath, nearStaticCityCodes } from "@/lib/near";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://wynla.app";
 
@@ -64,6 +67,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
+  // /near/[city] rows change with the daily crons (status, snow), so
+  // they carry the content stamp, not "now" (see STATIC_CONTENT_UPDATED).
+  const launch = new Set(nearStaticCityCodes());
+  const nearRoutes: MetadataRoute.Sitemap = nearAllCityCodes().map((code) => ({
+    url: `${SITE_URL}${nearPath(code)}`,
+    lastModified: STATIC_CONTENT_UPDATED,
+    changeFrequency: "weekly",
+    priority: launch.has(code) ? 0.8 : 0.6,
+  }));
+
   const templateRoutes: MetadataRoute.Sitemap = TEMPLATES.map((t) => ({
     url: `${SITE_URL}/trip-templates/${t.slug}`,
     lastModified: STATIC_CONTENT_UPDATED,
@@ -71,6 +84,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }));
 
+  // /go is public and indexable but stays out of the sitemap on purpose:
+  // its canonical is the parameterised pick (city + pass + radius), and
+  // the bare URL is a form. The /near pages are the crawl path into it.
   // Only public, indexable routes belong here. /account, /trips,
   // /favorites, /login and owner /trip/[id] pages are disallowed in
   // app/robots.ts; /compare and /trip/share/[token] are crawlable but
@@ -130,6 +146,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "yearly",
       priority: 0.3,
     },
+    ...nearRoutes,
     ...stateRoutes,
     ...guideRoutes,
     ...listRoutes,
