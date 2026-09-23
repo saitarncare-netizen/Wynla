@@ -9,7 +9,9 @@
 // ---------------------------------------------------------------------------
 // NEXT_PUBLIC_OPERATOR_NAME     Legal operator name (sole-prop registration
 //                               in Thailand). Until set, the page shows
-//                               "[Operator name pending registration]".
+//                               the product name "Wynla" — never a
+//                               bracketed placeholder (that shipped to
+//                               production once; audit content-seo-3).
 // NEXT_PUBLIC_OPERATOR_ADDRESS  Operator business address. Defaults to
 //                               "Bangkok, Thailand".
 // NEXT_PUBLIC_CONTACT_EMAIL     Public contact mailbox. Defaults to
@@ -29,11 +31,10 @@ export const metadata: Metadata = {
   alternates: { canonical: "/privacy" },
 };
 
-const LAST_UPDATED = "May 23, 2026";
+const LAST_UPDATED = "September 23, 2026";
 
-const OPERATOR_NAME =
-  process.env.NEXT_PUBLIC_OPERATOR_NAME ??
-  "[Operator name pending registration]";
+// `||` rather than `??` so an empty string in Vercel env also falls back.
+const OPERATOR_NAME = process.env.NEXT_PUBLIC_OPERATOR_NAME || "Wynla";
 const OPERATOR_ADDRESS =
   process.env.NEXT_PUBLIC_OPERATOR_ADDRESS ?? "Bangkok, Thailand";
 const CONTACT_EMAIL =
@@ -108,8 +109,18 @@ export default function PrivacyPage() {
           <ul className="ml-5 list-disc space-y-2">
             <li>
               <span className="font-semibold text-wn-navy">Your email</span> —
-              when you sign in. We use Supabase magic links, so we never see
-              or store a password.
+              when you sign in with a magic link. Supabase sends the link
+              and holds the session; we never see or store a password.
+            </li>
+            <li>
+              <span className="font-semibold text-wn-navy">
+                Google sign-in profile
+              </span>{" "}
+              — if you choose &quot;Continue with Google&quot;, Google shares
+              your email address, name, profile picture and a Google account
+              identifier with us. We use the email to identify your account and
+              the name as a default display name. Google does not receive
+              your Wynla activity, and we never see your Google password.
             </li>
             <li>
               <span className="font-semibold text-wn-navy">
@@ -154,11 +165,11 @@ export default function PrivacyPage() {
               <span className="font-semibold text-wn-navy">
                 Anonymous analytics
               </span>{" "}
-              — Vercel Analytics and Speed Insights track page views and load
-              performance. No cookies, no fingerprinting, no cross-site
-              tracking. If Google Analytics is enabled for a campaign, it is
-              configured without advertising features and with IP
-              anonymization on.
+              — Vercel Analytics and Vercel Speed Insights record which
+              pages are viewed and how fast they load. They work without
+              cookies, hash the visitor identifier so it cannot be tied back
+              to you, and do not track you across other sites. We do not
+              run Google Analytics or any advertising pixel.
             </li>
             <li>
               <span className="font-semibold text-wn-navy">
@@ -224,6 +235,12 @@ export default function PrivacyPage() {
               authentication and database (hosted in the US).
             </li>
             <li>
+              <span className="font-semibold text-wn-navy">Google</span> —
+              optional sign-in provider. Used only when you pick
+              &quot;Continue with Google&quot;; Google&apos;s own privacy
+              policy covers what Google records about that sign-in.
+            </li>
+            <li>
               <span className="font-semibold text-wn-navy">Vercel</span> —
               web hosting, anonymous analytics, performance metrics.
             </li>
@@ -247,19 +264,14 @@ export default function PrivacyPage() {
             </li>
             <li>
               <span className="font-semibold text-wn-navy">
-                Google Analytics
+                Booking.com and Vrbo (affiliate partners), Airbnb,
+                lift-ticket vendors
               </span>{" "}
-              — optional. Used only if and when we enable it, configured
-              without advertising features and with IP anonymization. Until
-              enabled, no GA data is collected.
-            </li>
-            <li>
-              <span className="font-semibold text-wn-navy">
-                Booking.com, Airbnb, lift-ticket vendors
-              </span>{" "}
-              — when you click an external booking link from a resort page,
-              you leave Wynla. Those sites set their own cookies and may use
-              affiliate tracking that lets us know a referral converted.
+              — when you click a lodging or ticket link from a resort page,
+              you leave Wynla. The Booking.com and Vrbo links carry an
+              affiliate tag, so if you book, the partner tells us a referral
+              converted and pays Wynla a commission at no extra cost to you.
+              Those sites set their own cookies under their own policies.
               We don&apos;t pass them your email or account.
             </li>
           </ul>
@@ -280,7 +292,9 @@ export default function PrivacyPage() {
           </ul>
           <p className="mt-3">
             We do not use third-party advertising or cross-site tracking
-            cookies. Vercel Analytics works without cookies.
+            cookies. Vercel Analytics and Speed Insights work without
+            cookies. Affiliate partners (Booking.com, Vrbo) set their own
+            cookies only after you click through to their site.
           </p>
         </Section>
 

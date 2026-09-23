@@ -179,6 +179,23 @@ export function retrieveSubscription(
   });
 }
 
+// Cancel a subscription immediately (DELETE /v1/subscriptions/{id}).
+// Used by account deletion: once auth.users cascades pro_subscriptions
+// away, nothing maps the Stripe customer back to a Wynla user, so the
+// subscription must be ended BEFORE the row disappears or the person
+// keeps getting billed for an account that no longer exists.
+//
+// Stripe returns 404 `resource_missing` when the subscription was
+// already deleted on their side; callers treat that as success.
+// Docs: https://docs.stripe.com/api/subscriptions/cancel
+export function cancelSubscription(
+  subscriptionId: string,
+): Promise<StripeSubscription> {
+  return stripeFetch<StripeSubscription>(`/subscriptions/${subscriptionId}`, {
+    method: "DELETE",
+  });
+}
+
 // ---- Webhook signature verification (HMAC SHA-256).
 //
 // Stripe sends a header of the form:
