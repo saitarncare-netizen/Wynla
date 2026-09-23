@@ -37,11 +37,19 @@ type Props = {
       when they've clicked a different one since. */
   pendingSlug?: string | null;
   /** Resort name for the pendingSlug — used as the label inside the
-      "Confirm [Resort]" sticky footer that appears when a candidate
-      is selected but not yet confirmed. */
+      "Add [Resort]" sticky footer that appears when a candidate is
+      selected but not yet added. */
   pendingResortName?: string | null;
-  /** Fires when the user taps the sticky "Confirm [Resort]" footer.
-      Parent advances the wizard from `pick` to `confirm-days`. */
+  /** Day count for the pending stop, shown as a stepper in the sticky
+      footer so the pick and the length are one tap apart. When omitted
+      the footer is a plain confirm button. */
+  pendingDays?: number;
+  /** Upper bound for the stepper — days left in the trip budget. */
+  pendingDaysMax?: number;
+  /** +1 / −1 on the pending stop's day count. */
+  onPendingDaysChange?: (delta: number) => void;
+  /** Fires when the user taps the sticky "Add [Resort]" footer. The
+      parent commits the stop (and its day count) in one step. */
   onConfirmPending?: () => void;
   /** Current global pass filter. The picker's chip row IS this set —
       toggling a chip in the picker calls onPassFilterChange which
@@ -111,6 +119,9 @@ export default function ResortPicker({
   alreadyPicked,
   pendingSlug,
   pendingResortName,
+  pendingDays,
+  pendingDaysMax,
+  onPendingDaysChange,
   onConfirmPending,
   passFilter,
   onPassFilterChange,
@@ -263,10 +274,10 @@ export default function ResortPicker({
   }
 
   function handleRowClick(slug: string) {
+    // The parent decides what a tap means: header search closes the
+    // picker, the trip planner keeps it open and shows the add-stop
+    // footer. No snap change here so the list stays where it was.
     onSelect(slug);
-    // Stage 21.1 — both call sites (header-search MapPage + trip
-    // planner wizard) close the picker on row tap now, so we no
-    // longer auto-collapse here. The bottom sheet exits cleanly.
   }
 
   function handleTouchStart(e: React.TouchEvent) {
@@ -608,31 +619,77 @@ export default function ResortPicker({
         })}
       </ul>
 
-      {/* Stage 21.3 preview-confirm bar — appears the moment the user
-          taps a row. The map shows the dashed leg + pinned candidate
-          behind. User can keep tapping different rows above to swap
-          the candidate (pendingSlug updates, ring border moves), or
-          tap this footer to lock it in and move to the days step.
-          Only renders when both pendingSlug and onConfirmPending are
-          present, so the header-search picker (no preview-confirm
-          flow) is unaffected. */}
-      {pendingSlug && onConfirmPending && (
-        <div className="shrink-0 border-t border-wn-navy/15 bg-wn-navy/[0.04] px-3 py-2.5">
-          <button
-            type="button"
-            onClick={onConfirmPending}
-            className="flex w-full items-center justify-center gap-2 rounded-lg bg-wn-navy px-4 py-3 text-sm font-semibold text-white transition hover:bg-wn-navy/90 active:scale-[0.98]"
+      {/* Preview-then-add bar — appears the moment the user taps a
+          row. The map shows the dashed leg + pinned candidate behind.
+          The user can keep tapping different rows above to swap the
+          candidate (pendingSlug updates, ring border moves), dial the
+          day count right here, and tap once to add the stop. Only
+          renders when both pendingSlug and onConfirmPending are
+          present, so the header-search picker is unaffected. The
+          bottom padding keeps the button above the iPhone home
+          indicator (the sheet is pinned to the viewport bottom). */}
+      {pendingSlug && onConfirmPending && (() => {
+        const name = pendingResortName ?? pendingSlug;
+        const showStepper = pendingDays != null && onPendingDaysChange != null;
+        const dayLabel = pendingDays == null ? "" : ` · ${pendingDays} day${pendingDays === 1 ? "" : "s"}`;
+        return (
+          <div
+            className="shrink-0 border-t border-wn-navy/15 bg-wn-navy/[0.04] px-3 pt-2.5"
+            style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 0.625rem)" }}
           >
-            <span aria-hidden="true">✓</span>
-            <span className="truncate">
-              Confirm {pendingResortName ?? pendingSlug}
-            </span>
-          </button>
-          <p className="mt-1 text-center text-[10px] text-wn-charcoal/55">
-            Or tap a different resort above to swap.
-          </p>
-        </div>
-      )}
+            {showStepper && (
+              <div className="mb-2 flex items-center justify-between gap-2">
+                <span className="min-w-0 truncate text-sm font-bold text-wn-navy">{name}</span>
+                <div
+                  role="group"
+                  aria-label={`Days at ${name}`}
+                  className="flex shrink-0 items-center gap-1 rounded-md border border-wn-navy/30 bg-white px-1 py-0.5"
+                >
+                  <button
+                    type="button"
+                    onClick={() => onPendingDaysChange(-1)}
+                    disabled={pendingDays <= 1}
+                    className="inline-flex h-8 w-8 items-center justify-center rounded text-lg font-bold text-wn-navy hover:bg-wn-navy/10 disabled:opacity-30"
+                    aria-label="Fewer days"
+                  >
+                    −
+                  </button>
+                  <span className="min-w-[3.5rem] text-center text-[12px] font-bold text-wn-navy">
+                    {pendingDays} day{pendingDays === 1 ? "" : "s"}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => onPendingDaysChange(1)}
+                    disabled={pendingDaysMax != null && pendingDays >= pendingDaysMax}
+                    className="inline-flex h-8 w-8 items-center justify-center rounded text-lg font-bold text-wn-navy hover:bg-wn-navy/10 disabled:opacity-30"
+                    aria-label="More days"
+                    title={
+                      pendingDaysMax != null && pendingDays >= pendingDaysMax
+                        ? "That fills the rest of your trip"
+                        : "More days at this stop"
+                    }
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+            )}
+            <button
+              type="button"
+              onClick={onConfirmPending}
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-wn-navy px-4 py-3 text-sm font-semibold text-white transition hover:bg-wn-navy/90 active:scale-[0.98]"
+            >
+              <span aria-hidden="true">+</span>
+              <span className="truncate">
+                Add {name}{dayLabel}
+              </span>
+            </button>
+            <p className="mt-1 text-center text-[10px] text-wn-charcoal/55">
+              Or tap a different resort above to swap.
+            </p>
+          </div>
+        );
+      })()}
     </div>
   );
 }

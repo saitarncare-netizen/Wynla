@@ -1151,21 +1151,24 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
             {/* Stage 4 — "Plan a trip" + "My trips" moved into the
                 AuthButton dropdown for signed-in users (keeps the
                 header less crowded). Anonymous visitors still need a
-                discoverable entry to the planner, so we surface a
-                single "Plan a trip" CTA that bounces them through
-                /login (and back to /?plan=1) — preserves the funnel
-                without ever showing a useless "My trips" link to
-                someone who has none. */}
+                discoverable entry to the planner. It opens the planner
+                directly (?plan=1, keeping the current origin/filter
+                params) — the Stage-4 login bounce was dropped because
+                the planner already supports anonymous planning and
+                asks for sign-in only at Save, with the draft restored
+                after the magic-link round-trip. Do not reintroduce
+                the /login redirect here. */}
             {!isAuthed && (
-              <Link
-                href="/login?next=/?plan=1"
+              <button
+                type="button"
+                onClick={() => updateParam("plan", "1")}
                 className="inline-flex h-11 items-center justify-center gap-1.5 rounded-md bg-wn-navy px-2 text-xs font-semibold text-white shadow-sm transition hover:bg-wn-navy/90 active:scale-95 sm:px-3"
                 title="Plan a multi-day ski trip"
                 aria-label="Plan a trip"
               >
                 <span aria-hidden="true">🗺️</span>
                 <span className="hidden sm:inline">Plan a trip</span>
-              </Link>
+              </button>
             )}
             {/* Mobile-only Filters trigger. */}
             {(() => {
