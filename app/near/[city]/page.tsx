@@ -37,7 +37,9 @@ import { ESTIMATE_MARK, findOrigin, originLabel, type CityOrigin } from "@/lib/o
 import { passColor, passShort, passLabel } from "@/lib/passColors";
 import { loadNearData, NEAR_DATA_REVALIDATE_SECONDS } from "./data";
 
-export const revalidate = NEAR_DATA_REVALIDATE_SECONDS;
+// Literal on purpose: Next reads the segment config statically and
+// rejects an imported constant. Keep equal to NEAR_DATA_REVALIDATE_SECONDS.
+export const revalidate = 600;
 export const dynamicParams = true;
 
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://wynla.app").replace(/\/+$/, "");
