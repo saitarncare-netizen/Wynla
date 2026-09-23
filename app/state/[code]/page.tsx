@@ -18,29 +18,45 @@ import {
   isStateCodeWithResorts,
   US_STATES,
 } from "@/lib/usStates";
+import {
+  deriveResortStatus,
+  resolveSeasonInfo,
+  type ResortStatusSource,
+  type SeasonTextSource,
+} from "@/lib/seasonDates";
+import { centroidOf, formatDriveRounded, nearCityName, nearPath, nearestCities } from "@/lib/near";
+import { ESTIMATE_MARK } from "@/lib/origins";
 
 // ISR — state pages list resorts in a single state and rarely change.
 // Hourly revalidate is plenty.
 export const revalidate = 3600;
 
-type Resort = {
-  id: number;
-  slug: string;
-  name: string;
-  state: string;
-  region: string | null;
-  passes: string[];
-  vertical_drop: number | null;
-  total_trails: number | null;
-  total_acres: number | null;
-};
+// Status + season columns feed lib/seasonDates.deriveResortStatus, the
+// same derivation the resort page and the map panel use, so the opening
+// date on a card here can never disagree with the resort page. Coordinates
+// feed the "Nearest launch city" links (centroid of the state's resorts).
+type Resort = ResortStatusSource &
+  SeasonTextSource & {
+    id: number;
+    slug: string;
+    name: string;
+    state: string;
+    region: string | null;
+    latitude: number | string | null;
+    longitude: number | string | null;
+    passes: string[];
+    vertical_drop: number | null;
+    total_trails: number | null;
+    total_acres: number | null;
+  };
+
+const STATE_RESORT_COLS =
+  "id, slug, name, state, region, latitude, longitude, passes, vertical_drop, total_trails, total_acres, season_open_text, season_close_text, typical_season_start, typical_season_end, operating_status, currently_open, snow_report_status, snow_report_updated_at, lifts_open_today, total_lifts, trails_open_today, season_end_date";
 
 async function getResortsForState(code: string): Promise<Resort[] | null> {
   const { data, error } = await supabase
     .from("resorts")
-    .select(
-      "id, slug, name, state, region, passes, vertical_drop, total_trails, total_acres",
-    )
+    .select(STATE_RESORT_COLS)
     .eq("active", true)
     .eq("state", code)
     .order("vertical_drop", { ascending: false, nullsFirst: false });
@@ -102,6 +118,23 @@ export default async function StatePage({
   const verticalCount = resorts.filter((r) => r.vertical_drop != null).length;
   const avgVertical =
     verticalCount > 0 ? Math.round(totalVertical / verticalCount) : 0;
+
+  // Opening-date labels: one derivation per card, same inputs as the
+  // resort page. Only the "opens" / "open" / "off-season" family is shown
+  // here; the card is a directory entry, not a status board.
+  const now = new Date();
+  const statusBySlug = new Map(
+    resorts.map((r) => {
+      const season = resolveSeasonInfo(r, now);
+      return [r.slug, { status: deriveResortStatus(r, season, now), projected: season.openProjected }] as const;
+    }),
+  );
+
+  // Nearest launch city: the drive-time origin most of this state's
+  // visitors start from, measured to the centroid of its resorts. Always
+  // an estimate (≈), so it is labelled as one.
+  const centroid = centroidOf(resorts);
+  const nearby = centroid ? nearestCities(centroid.lat, centroid.lon, 3) : [];
 
   // JSON-LD ItemList — feeds Google rich-results / AI summarization with
   // an ordered list of the state's resorts. listOrder matches our visual
@@ -199,10 +232,43 @@ export default async function StatePage({
           </h2>
           <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
             {resorts.map((r) => (
-              <ResortCard key={r.id} resort={r} />
+              <ResortCard key={r.id} resort={r} opening={statusBySlug.get(r.slug) ?? null} />
             ))}
           </div>
         </section>
+
+        {/* Nearest launch city — the crawl path from a state directory to
+            the "near <City>" list and the Saturday answer behind it. */}
+        {nearby.length > 0 && (
+          <section aria-labelledby="nearest-city">
+            <h2 id="nearest-city" className="mb-2 text-sm font-bold uppercase tracking-wide text-wn-charcoal/60">
+              Nearest launch city
+            </h2>
+            <ul className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+              {nearby.map((c) => (
+                <li key={c.city.code} className="rounded-xl border border-wn-charcoal/10 bg-white p-3 shadow-sm">
+                  <Link
+                    href={nearPath(c.city.code)}
+                    className="flex min-h-11 flex-col justify-center text-sm font-bold text-wn-navy underline-offset-2 hover:underline"
+                  >
+                    Ski resorts near {nearCityName(c.city)} →
+                    <span className="mt-0.5 text-[11px] font-normal text-wn-charcoal/60">
+                      {ESTIMATE_MARK} {formatDriveRounded(c.seconds)} to the middle of {stateName}, estimated
+                    </span>
+                  </Link>
+                  {c.isLaunch && (
+                    <Link
+                      href={`/go?city=${c.city.code}`}
+                      className="mt-1 inline-flex min-h-11 items-center text-xs font-semibold text-wn-navy/80 underline-offset-2 hover:underline"
+                    >
+                      This Saturday&apos;s picks from {c.city.short} →
+                    </Link>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
 
         {/* Bottom CTA */}
         <section className="rounded-2xl border border-wn-charcoal/10 bg-white p-6 text-center shadow-sm">
@@ -259,9 +325,22 @@ function Stat({ label, value }: { label: string; value: string }) {
   );
 }
 
-function ResortCard({ resort }: { resort: Resort }) {
+function ResortCard({
+  resort,
+  opening,
+}: {
+  resort: Resort;
+  opening: { status: ReturnType<typeof deriveResortStatus>; projected: boolean } | null;
+}) {
   const primary = primaryPass(resort.passes);
   const accent = passColor(primary);
+  // "Opens Dec 4 · projected" when the date is a third-party projection
+  // (the 2026-09-23 backfill marks those), plain otherwise. Nothing is
+  // shown for "Check resort", which would only add noise to a directory.
+  const openingLabel =
+    opening && opening.status.kind !== "unknown"
+      ? `${opening.status.label}${opening.projected && opening.status.kind === "opens" ? " · projected" : ""}`
+      : null;
   return (
     <Link
       href={`/resort/${resort.slug}`}
@@ -280,6 +359,9 @@ function ResortCard({ resort }: { resort: Resort }) {
           {resort.state}
           {resort.region ? " · " + resort.region : ""}
         </p>
+        {openingLabel && (
+          <p className="mt-1 text-[11px] font-semibold text-wn-navy/80">{openingLabel}</p>
+        )}
 
         <dl className="mt-3 grid grid-cols-3 gap-1.5 text-[11px]">
           <div>
