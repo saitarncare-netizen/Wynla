@@ -123,6 +123,24 @@ export function claimGuestToast(): boolean {
 // ---------- Merge on sign-in ----------
 
 /**
+ * Whether an auth event should trigger the merge. Pure so the trigger
+ * rule is testable: the 6-digit code, the magic link and Google each
+ * deliver the session differently (a client-side SIGNED_IN on /login, or
+ * a full page load after /auth/callback that yields INITIAL_SESSION
+ * only), so both events count. No user or an empty device list means
+ * there is nothing to do and no network call is made.
+ */
+export function shouldMergeGuestFavorites(
+  event: string,
+  userId: string | null | undefined,
+  guestIds: readonly number[],
+): boolean {
+  if (event !== "SIGNED_IN" && event !== "INITIAL_SESSION") return false;
+  if (!userId) return false;
+  return guestIds.length > 0;
+}
+
+/**
  * Which guest ids to insert for an account that already has
  * `existingCount` favorites (with `existingIds` when known). Pure, so the
  * cap and the ordering are testable without a database: oldest guest

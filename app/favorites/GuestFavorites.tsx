@@ -6,7 +6,7 @@
 // the signed-in grid minus the Go / Wait / Skip verdict, which needs the
 // account's pass context. A banner says exactly what sign-in adds.
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { passColor, passLabel } from "@/lib/passColors";
@@ -34,6 +34,10 @@ export default function GuestFavorites() {
   const [ids, setIds] = useState<number[] | undefined>(undefined);
   const [resorts, setResorts] = useState<Map<number, GuestResort>>(new Map());
   const [error, setError] = useState<string | null>(null);
+  // Ids already sent to the database. Kept here rather than derived from
+  // `resorts` so an id the query does not return (resort deactivated or a
+  // stale entry) is asked for once, not on every render.
+  const requested = useRef<Set<number>>(new Set());
 
   useEffect(() => {
     const sync = () => setIds(getGuestFavoriteIds());
@@ -46,11 +50,14 @@ export default function GuestFavorites() {
     };
   }, []);
 
-  // Fetch only ids not already loaded; removals never need a round-trip.
+  // Fetch each id at most once; removals never need a round-trip. Ids the
+  // database no longer returns are dropped from the device list so the
+  // grid never shows a permanent skeleton for a resort that is gone.
   useEffect(() => {
     if (!ids || ids.length === 0) return;
-    const missing = ids.filter((id) => !resorts.has(id));
+    const missing = ids.filter((id) => !requested.current.has(id));
     if (missing.length === 0) return;
+    for (const id of missing) requested.current.add(id);
     let cancelled = false;
     const supabase = createSupabaseBrowserClient();
     supabase
@@ -62,19 +69,25 @@ export default function GuestFavorites() {
       .then(({ data, error: err }) => {
         if (cancelled) return;
         if (err) {
+          // Let a later mount retry these ids; a network blip is not a
+          // reason to forget a save.
+          for (const id of missing) requested.current.delete(id);
           setError(err.message);
           return;
         }
+        const rows = data ?? [];
         setResorts((prev) => {
           const next = new Map(prev);
-          for (const r of data ?? []) next.set(r.id, r);
+          for (const r of rows) next.set(r.id, r);
           return next;
         });
+        const found = new Set(rows.map((r) => r.id));
+        for (const id of missing) if (!found.has(id)) removeGuestFavorite(id);
       });
     return () => {
       cancelled = true;
     };
-  }, [ids, resorts]);
+  }, [ids]);
 
   const count = ids?.length ?? 0;
 

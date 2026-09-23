@@ -2255,9 +2255,11 @@ function CostEstimateCard({
       <dl className="grid grid-cols-3 gap-2 text-center">
         <CostTile
           label={
-            breakdown.passCoversAll && payers < partySize
-              ? `Lift tickets (${payers} without a pass × ${totalDays} day${totalDays === 1 ? "" : "s"})`
-              : `Lift tickets (${partySize} × ${totalDays} day${totalDays === 1 ? "" : "s"})`
+            breakdown.passCoversAll && payers === 0
+              ? `Lift tickets (covered by pass, ${totalDays} day${totalDays === 1 ? "" : "s"})`
+              : breakdown.passCoversAll && payers < partySize
+                ? `Lift tickets (${payers} without a pass × ${totalDays} day${totalDays === 1 ? "" : "s"})`
+                : `Lift tickets (${partySize} × ${totalDays} day${totalDays === 1 ? "" : "s"})`
           }
           value={`$${breakdown.liftTickets.toLocaleString()}`}
         />

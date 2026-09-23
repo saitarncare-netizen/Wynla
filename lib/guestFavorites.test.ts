@@ -10,6 +10,7 @@ import {
   mergeGuestFavorites,
   planGuestMerge,
   removeGuestFavorite,
+  shouldMergeGuestFavorites,
   type FavoritesClient,
 } from "./guestFavorites";
 
@@ -79,6 +80,25 @@ describe("guest favorites storage", () => {
   it("shows the device toast exactly once", () => {
     expect(claimGuestToast()).toBe(true);
     expect(claimGuestToast()).toBe(false);
+  });
+});
+
+describe("shouldMergeGuestFavorites", () => {
+  // The merge must fire on INITIAL_SESSION too: magic-link and Google
+  // sign-ins land through /auth/callback as a full page load, where a new
+  // subscription never sees SIGNED_IN.
+  it("fires on INITIAL_SESSION with a user and a device list", () => {
+    expect(shouldMergeGuestFavorites("INITIAL_SESSION", "u1", [3])).toBe(true);
+  });
+  it("fires on SIGNED_IN with a user and a device list", () => {
+    expect(shouldMergeGuestFavorites("SIGNED_IN", "u1", [3, 4])).toBe(true);
+  });
+  it("stays silent without a user, without a device list, or on other events", () => {
+    expect(shouldMergeGuestFavorites("INITIAL_SESSION", null, [3])).toBe(false);
+    expect(shouldMergeGuestFavorites("INITIAL_SESSION", undefined, [3])).toBe(false);
+    expect(shouldMergeGuestFavorites("SIGNED_IN", "u1", [])).toBe(false);
+    expect(shouldMergeGuestFavorites("TOKEN_REFRESHED", "u1", [3])).toBe(false);
+    expect(shouldMergeGuestFavorites("SIGNED_OUT", "u1", [3])).toBe(false);
   });
 });
 

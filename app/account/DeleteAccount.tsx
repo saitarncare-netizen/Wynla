@@ -61,11 +61,10 @@ export default function DeleteAccount() {
         <ul className="mt-1 list-disc space-y-0.5 pl-4">
           <li>your favorites and saved trips, including any trip share links</li>
           <li>snow alerts and push subscriptions</li>
-          <li>the Thursday email digest subscription</li>
+          <li>your snow digest and Thursday picks email subscriptions</li>
           <li>your profile, reviews and sign-in</li>
           <li>any Stripe subscription, which is cancelled first so nothing bills afterwards</li>
         </ul>
-        <p className="mt-1">Resorts saved on this device before sign-in stay in this browser.</p>
       </div>
       <label
         htmlFor="confirm-delete"

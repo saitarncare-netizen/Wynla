@@ -107,7 +107,7 @@ export default function TripStickyBar({
       >
         <div className="mx-auto flex max-w-3xl items-center gap-2">
           {tripFinished ? (
-            <span className="min-h-11 flex-1 content-center text-sm font-semibold text-wn-navy">
+            <span className="inline-flex min-h-11 flex-1 items-center text-sm font-semibold text-wn-navy">
               Trip complete. All {totalDays} days done.
             </span>
           ) : (
@@ -132,7 +132,13 @@ export default function TripStickyBar({
               {busy === "undo" ? "Undoing…" : "Undo"}
             </button>
           )}
-          <TripShareButton tripId={tripId} tripName={tripName} />
+          {/* TripShareButton ships 30-32 px controls for the page header;
+              in the thumb-zone bar every direct control gets the same
+              44 px minimum as the buttons beside it. The link panel is
+              left alone (it is a popover, not a tap target). */}
+          <div className="[&>div>div>button]:min-h-11 [&>div>div>button]:min-w-11">
+            <TripShareButton tripId={tripId} tripName={tripName} />
+          </div>
         </div>
         {error && (
           <p role="alert" className="mx-auto mt-1 max-w-3xl text-[11px] text-red-700">

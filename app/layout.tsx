@@ -6,6 +6,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import PwaRegistrar from "@/components/PwaRegistrar";
 import InstallPrompt from "@/components/InstallPrompt";
 import AppTabBar from "@/components/AppTabBar";
+import GuestFavoritesSync from "@/components/auth/GuestFavoritesSync";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -220,6 +221,9 @@ export default function RootLayout({
         <InstallPrompt />
         {/* Phone-only bottom tabs (Map / Today / Trips / Account). */}
         <AppTabBar />
+        {/* Merges hearts saved before sign-in into the account; renders
+            nothing and makes no request unless a device list exists. */}
+        <GuestFavoritesSync />
         <Analytics />
         <SpeedInsights />
       </body>

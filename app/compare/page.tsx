@@ -459,7 +459,7 @@ export default async function ComparePage({
             Today&rsquo;s conditions, then stats, amenities and difficulty mix.
             Tap a resort name for its full page.
           </p>
-          <p className="mt-1 text-xs text-wn-charcoal/55">
+          <p className="mt-1 text-xs text-wn-charcoal/70">
             {driveLabel}
             {anyEstimate
               ? " · ≈ times are estimated from straight-line distance. Change the origin from the map's From picker."
@@ -575,7 +575,7 @@ function Labelled({ value, source }: { value: ReactNode; source: string }) {
   return (
     <span className="block">
       <span className="block">{value}</span>
-      <span className="block text-[10px] font-normal text-wn-charcoal/55">{source}</span>
+      <span className="block text-[10px] font-normal text-wn-charcoal/70">{source}</span>
     </span>
   );
 }
@@ -719,7 +719,7 @@ function DesktopCompareTable({ resorts, rows }: { resorts: CompareResort[]; rows
       <table className="w-full table-fixed border-collapse text-sm">
         <thead>
           <tr>
-            <th className="w-[180px] bg-wn-offwhite px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
+            <th className="w-[180px] bg-wn-offwhite px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wide text-wn-charcoal/70">
               Metric
             </th>
             {resorts.map((r) => (
@@ -736,7 +736,7 @@ function DesktopCompareTable({ resorts, rows }: { resorts: CompareResort[]; rows
             const groupStart = i === 0 || rows[i - 1].group !== m.group;
             return (
               <tr key={m.label} className={groupStart && i > 0 ? "border-t-4 border-wn-offwhite" : "even:bg-wn-offwhite/50"}>
-                <td className="border-t border-wn-charcoal/5 px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
+                <td className="border-t border-wn-charcoal/5 px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wide text-wn-charcoal/70">
                   {m.label}
                 </td>
                 {resorts.map((r) => (
@@ -786,11 +786,11 @@ function MobileCompareList({ resorts, rows }: { resorts: CompareResort[]; rows: 
 
       {rows.map((m) => (
         <div key={m.label} className="rounded-lg border border-wn-charcoal/10 bg-white p-3">
-          <div className="mb-2 text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">{m.label}</div>
+          <div className="mb-2 text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/70">{m.label}</div>
           <div className="grid gap-2" style={gridStyle}>
             {resorts.map((r) => (
               <div key={r.id} className="min-w-0 border-l border-wn-charcoal/10 pl-2 first:border-l-0 first:pl-0">
-                <div className="truncate text-[10px] text-wn-charcoal/45">{r.name.split(" ")[0]}</div>
+                <div className="truncate text-[10px] text-wn-charcoal/70">{r.name.split(" ")[0]}</div>
                 <div className="break-words text-sm font-semibold text-wn-charcoal">{m.render(r)}</div>
               </div>
             ))}
@@ -852,7 +852,7 @@ function MobileCompareCards({ resorts, rows }: { resorts: CompareResort[]; rows:
                 ].join(" ")}
                 style={{ gridColumn: j + 1, gridRow: i + 2 }}
               >
-                <div className="text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">{m.label}</div>
+                <div className="text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/70">{m.label}</div>
                 <div className="mt-0.5 break-words text-sm font-semibold text-wn-charcoal">{m.render(r)}</div>
               </div>
             );
@@ -874,7 +874,7 @@ function MobileCompareCards({ resorts, rows }: { resorts: CompareResort[]; rows:
           </div>
         ))}
       </div>
-      <p className="mt-2 text-center text-[11px] text-wn-charcoal/55">Swipe sideways to see every resort.</p>
+      <p className="mt-2 text-center text-[11px] text-wn-charcoal/70">Swipe sideways to see every resort.</p>
     </div>
   );
 }

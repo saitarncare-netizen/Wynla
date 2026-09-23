@@ -53,9 +53,11 @@ export default async function TripsPage() {
     );
   }
 
-  // UTC date is fine for ordering; the badge on each card is what says
-  // "in N days", and it is not shown here.
-  const todayISO = new Date().toISOString().slice(0, 10);
+  // "Today" in the app's cron zone rather than UTC: after about 7 pm
+  // Eastern the UTC date is already tomorrow, which would file a trip
+  // starting today under past trips for the whole US evening. en-CA
+  // formats as ISO yyyy-mm-dd.
+  const todayISO = new Intl.DateTimeFormat("en-CA", { timeZone: "America/New_York" }).format(new Date());
   const all = sortTrips(data ?? [], todayISO);
   const active = all.filter((t) => !tripFinished(t));
   const completed = all.filter(tripFinished);

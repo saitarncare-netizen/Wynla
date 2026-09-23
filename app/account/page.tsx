@@ -36,7 +36,7 @@ function Row({ href, icon, label, hint }: { href: string; icon: string; label: s
           <span className="font-medium">
             <span aria-hidden="true">{icon}</span> {label}
           </span>
-          {hint && <span className="block text-[11px] text-wn-charcoal/55">{hint}</span>}
+          {hint && <span className="block text-[11px] text-wn-charcoal/70">{hint}</span>}
         </span>
         <span className="text-wn-charcoal/50" aria-hidden="true">
           →
@@ -103,7 +103,7 @@ export default async function AccountPage() {
             />
             <Row href="/favorites" icon="❤️" label="Favorites" />
             <Row href="/trips" icon="🎿" label="My trips" />
-            <Row href="/account/digest" icon="📬" label="Email digest" hint="Thursday snow email, on or off" />
+            <Row href="/account/digest" icon="📬" label="Email digest" hint="Daily or weekly snow email, plus the Thursday picks" />
             {/* Permanent install entry point for people who dismissed the
                 nudge. Renders nothing inside the installed app. */}
             <InstallRow />

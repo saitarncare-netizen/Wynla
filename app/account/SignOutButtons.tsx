@@ -55,9 +55,9 @@ export default function SignOutButtons() {
           armedClassName="inline-flex min-h-11 items-center rounded-md border border-wn-navy bg-wn-navy/5 px-4 text-sm font-semibold text-wn-navy"
         />
       </div>
-      <p className="text-[11px] text-wn-charcoal/55">
+      <p className="text-[11px] text-wn-charcoal/70">
         Sign out ends this browser&rsquo;s session. All devices also ends every phone, tablet and
-        laptop signed in as you; each one asks for a new code next time.
+        laptop signed in as you; each one has to sign in again next time.
       </p>
       {error && <p className="text-xs font-semibold text-red-700">{error}</p>}
     </div>

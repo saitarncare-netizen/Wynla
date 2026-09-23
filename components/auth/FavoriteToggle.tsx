@@ -20,8 +20,8 @@ type Props = {
 // Heart icon. Signed in: toggles a row in the `favorites` table with an
 // optimistic flip that reverts if the request fails. Signed out: toggles
 // the device list in lib/guestFavorites instead of bouncing to /login,
-// with a one-time toast saying where the save lives. AuthButton merges
-// the device list into the account on the next sign-in.
+// with a one-time toast saying where the save lives. GuestFavoritesSync
+// (root layout) merges the device list into the account on sign-in.
 export default function FavoriteToggle({ resortId, size = "sm" }: Props) {
   const supabase = createSupabaseBrowserClient();
   const [signedIn, setSignedIn] = useState<boolean | undefined>(undefined);

@@ -6,7 +6,6 @@ import Link from "next/link";
 import type { User } from "@supabase/supabase-js";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { invalidateProStatus } from "@/lib/proClient";
-import { mergeGuestFavorites } from "@/lib/guestFavorites";
 import Icon from "@/components/icons/Icon";
 
 // Header sign-in / user-menu button. Renders nothing until we know the auth
@@ -33,25 +32,15 @@ export default function AuthButton() {
       // The Pro-status cache is per page load and would otherwise keep the
       // previous account's answer across a client-side sign-in/out.
       if (event === "SIGNED_IN" || event === "SIGNED_OUT") invalidateProStatus();
-      // Hearts tapped before sign-in live on this device; fold them into
-      // the account now. The SDK may emit SIGNED_IN more than once per
-      // session (tab refocus), which is safe: the merge is a no-op when
-      // the device list is empty and the upsert ignores duplicates.
-      if (event === "SIGNED_IN" && session?.user) {
-        void mergeGuestFavorites(supabase, session.user.id).then((r) => {
-          if (cancelled) return;
-          if (r.error) console.warn("[auth] guest favorites merge failed:", r.error);
-          // Server-rendered pages (/favorites, /today) read the table;
-          // refresh so the merged hearts show without a reload.
-          else if (r.merged > 0) router.refresh();
-        });
-      }
+      // Guest favorites are merged by components/auth/GuestFavoritesSync
+      // (root layout), not here: this button only mounts on the map
+      // header, so it never sees the SIGNED_IN that /login emits.
     });
     return () => {
       cancelled = true;
       sub.subscription.unsubscribe();
     };
-  }, [supabase, router]);
+  }, [supabase]);
 
   // Escape closes the menu and returns focus to the trigger, as a menu
   // button is expected to.
