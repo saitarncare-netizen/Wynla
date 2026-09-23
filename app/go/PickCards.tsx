@@ -4,6 +4,8 @@
 
 import Link from "next/link";
 import SurfaceIcon from "@/components/icons/SurfaceIcon";
+import { RowThumb } from "@/app/today/ClientBits";
+import { heroSourceFor } from "@/lib/heroSource";
 import { ResortStatusPill } from "@/components/SeasonCountdown";
 import { CROWD_COLORS } from "@/lib/crowdForecast";
 import { windHoldChipClass } from "@/lib/windHold";
@@ -72,11 +74,20 @@ export function PickCard({ pick, now, planHref }: { pick: RankedPick; now: Date;
   const ground = onGroundStat(pick, now);
   const wind = windHoldChipClass(pick.windHold.level);
   const crowd = CROWD_COLORS[pick.crowd.level];
+  // The ranker carries only {slug, name, state}, so this resolves to the
+  // resort's terrain card (or nothing); a photo needs the hero columns.
+  const hero = heroSourceFor(pick.resort);
   return (
     <article className="rounded-2xl border border-wn-charcoal/10 bg-white p-4 shadow-sm sm:p-5">
       <header className="flex items-start gap-3">
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-wn-navy text-base font-extrabold text-wn-gold">
-          {pick.rank}
+        <div className="relative shrink-0">
+          <RowThumb src={hero.thumb} alt={hero.alt || pick.resort.name} initial={pick.resort.name.charAt(0)} color="#5BAFE6" />
+          <span
+            className="absolute -left-1.5 -top-1.5 flex h-6 w-6 items-center justify-center rounded-full bg-wn-navy text-xs font-extrabold text-wn-gold ring-2 ring-white"
+            aria-label={`Rank ${pick.rank}`}
+          >
+            {pick.rank}
+          </span>
         </div>
         <div className="min-w-0 flex-1">
           <h3 className="text-lg font-extrabold leading-tight text-wn-navy">{pick.resort.name}</h3>

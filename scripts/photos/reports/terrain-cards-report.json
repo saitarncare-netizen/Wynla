@@ -1,0 +1,3560 @@
+{
+  "cards": {
+    "afton-alps": {
+      "snowlineM": 293,
+      "cropX": 0,
+      "cropY": 254,
+      "metresPerPixel": 27.1,
+      "bytes1600": 89782,
+      "bytes800": 36476,
+      "uploaded": true
+    },
+    "killington": {
+      "snowlineM": 824,
+      "cropX": 0,
+      "cropY": 199,
+      "metresPerPixel": 27.7,
+      "bytes1600": 95144,
+      "bytes800": 37896,
+      "uploaded": true
+    },
+    "jackson-hole": {
+      "snowlineM": 2554,
+      "cropX": 0,
+      "cropY": 267,
+      "metresPerPixel": 27.7,
+      "bytes1600": 73432,
+      "bytes800": 28372,
+      "uploaded": true
+    },
+    "mammoth-mountain": {
+      "snowlineM": 2897,
+      "cropX": 0,
+      "cropY": 107,
+      "metresPerPixel": 30.3,
+      "bytes1600": 107876,
+      "bytes800": 44660,
+      "uploaded": true
+    },
+    "49-degrees-north": {
+      "snowlineM": 1478,
+      "cropX": 0,
+      "cropY": 216,
+      "metresPerPixel": 25.4,
+      "bytes1600": 116224,
+      "bytes800": 48662,
+      "uploaded": true
+    },
+    "alpine-valley-mi": {
+      "snowlineM": 316,
+      "cropX": 0,
+      "cropY": 81,
+      "metresPerPixel": 28.1,
+      "bytes1600": 91994,
+      "bytes800": 36870,
+      "uploaded": true
+    },
+    "alpine-meadows": {
+      "snowlineM": 2286,
+      "cropX": 0,
+      "cropY": 280,
+      "metresPerPixel": 29.6,
+      "bytes1600": 98504,
+      "bytes800": 39790,
+      "uploaded": true
+    },
+    "alpine-valley-oh": {
+      "snowlineM": 372,
+      "cropX": 0,
+      "cropY": 262,
+      "metresPerPixel": 28.6,
+      "bytes1600": 74374,
+      "bytes800": 29436,
+      "uploaded": true
+    },
+    "alpine-valley-wi": {
+      "snowlineM": 307,
+      "cropX": 0,
+      "cropY": 161,
+      "metresPerPixel": 28.1,
+      "bytes1600": 68754,
+      "bytes800": 26930,
+      "uploaded": true
+    },
+    "alta": {
+      "snowlineM": 2987,
+      "cropX": 0,
+      "cropY": 266,
+      "metresPerPixel": 29,
+      "bytes1600": 130914,
+      "bytes800": 55166,
+      "uploaded": true
+    },
+    "alyeska-resort": {
+      "snowlineM": 710,
+      "cropX": 0,
+      "cropY": 104,
+      "metresPerPixel": 18.6,
+      "bytes1600": 78016,
+      "bytes800": 31910,
+      "uploaded": true
+    },
+    "andes-tower-hills": {
+      "snowlineM": 428,
+      "cropX": 0,
+      "cropY": 94,
+      "metresPerPixel": 26.6,
+      "bytes1600": 75932,
+      "bytes800": 29162,
+      "uploaded": true
+    },
+    "angel-fire-resort": {
+      "snowlineM": 2962,
+      "cropX": 0,
+      "cropY": 289,
+      "metresPerPixel": 30.8,
+      "bytes1600": 92480,
+      "bytes800": 37556,
+      "uploaded": true
+    },
+    "antelope-butte": {
+      "snowlineM": 2830,
+      "cropX": 0,
+      "cropY": 237,
+      "metresPerPixel": 27.2,
+      "bytes1600": 83116,
+      "bytes800": 34826,
+      "uploaded": true
+    },
+    "anthony-lakes": {
+      "snowlineM": 2301,
+      "cropX": 0,
+      "cropY": 51,
+      "metresPerPixel": 27,
+      "bytes1600": 120960,
+      "bytes800": 50018,
+      "uploaded": true
+    },
+    "appalachian-ski-mountain": {
+      "snowlineM": 1164,
+      "cropX": 0,
+      "cropY": 253,
+      "metresPerPixel": 30.8,
+      "bytes1600": 163758,
+      "bytes800": 69222,
+      "uploaded": true
+    },
+    "arapahoe-basin": {
+      "snowlineM": 3620,
+      "cropX": 0,
+      "cropY": 285,
+      "metresPerPixel": 29.4,
+      "bytes1600": 95638,
+      "bytes800": 39566,
+      "uploaded": true
+    },
+    "arctic-valley": {
+      "snowlineM": 983,
+      "cropX": 0,
+      "cropY": 171,
+      "metresPerPixel": 18.4,
+      "bytes1600": 65432,
+      "bytes800": 26888,
+      "uploaded": true
+    },
+    "arizona-snowbowl": {
+      "snowlineM": 3155,
+      "cropX": 0,
+      "cropY": 248,
+      "metresPerPixel": 31.2,
+      "bytes1600": 78066,
+      "bytes800": 30972,
+      "uploaded": true
+    },
+    "ascutney-outdoors": {
+      "snowlineM": 364,
+      "cropX": 0,
+      "cropY": 69,
+      "metresPerPixel": 27.7,
+      "bytes1600": 101696,
+      "bytes800": 41970,
+      "uploaded": true
+    },
+    "aspen-highlands": {
+      "snowlineM": 3129,
+      "cropX": 0,
+      "cropY": 227,
+      "metresPerPixel": 29.6,
+      "bytes1600": 111058,
+      "bytes800": 44822,
+      "uploaded": true
+    },
+    "aspen-mountain": {
+      "snowlineM": 3120,
+      "cropX": 0,
+      "cropY": 220,
+      "metresPerPixel": 29.6,
+      "bytes1600": 112306,
+      "bytes800": 45016,
+      "uploaded": true
+    },
+    "attitash": {
+      "snowlineM": 469,
+      "cropX": 0,
+      "cropY": 57,
+      "metresPerPixel": 27.5,
+      "bytes1600": 81254,
+      "bytes800": 31908,
+      "uploaded": true
+    },
+    "badger-mountain-wa": {
+      "snowlineM": 998,
+      "cropX": 0,
+      "cropY": 72,
+      "metresPerPixel": 25.7,
+      "bytes1600": 109630,
+      "bytes800": 43632,
+      "uploaded": true
+    },
+    "badger-pass": {
+      "snowlineM": 2210,
+      "cropX": 0,
+      "cropY": 237,
+      "metresPerPixel": 30.3,
+      "bytes1600": 114994,
+      "bytes800": 46904,
+      "uploaded": true
+    },
+    "bear-creek-mountain-resort": {
+      "snowlineM": 258,
+      "cropX": 0,
+      "cropY": 181,
+      "metresPerPixel": 29.1,
+      "bytes1600": 78952,
+      "bytes800": 31152,
+      "uploaded": true
+    },
+    "bear-mountain": {
+      "snowlineM": 2328,
+      "cropX": 0,
+      "cropY": 60,
+      "metresPerPixel": 31.6,
+      "bytes1600": 119510,
+      "bytes800": 48612,
+      "uploaded": true
+    },
+    "bear-paw": {
+      "snowlineM": 1580,
+      "cropX": 0,
+      "cropY": 265,
+      "metresPerPixel": 25.5,
+      "bytes1600": 139156,
+      "bytes800": 57892,
+      "uploaded": true
+    },
+    "bear-valley-mountain": {
+      "snowlineM": 2346,
+      "cropX": 0,
+      "cropY": 289,
+      "metresPerPixel": 29.9,
+      "bytes1600": 111110,
+      "bytes800": 44794,
+      "uploaded": true
+    },
+    "beaver-creek": {
+      "snowlineM": 2978,
+      "cropX": 0,
+      "cropY": 174,
+      "metresPerPixel": 29.4,
+      "bytes1600": 107478,
+      "bytes800": 43752,
+      "uploaded": true
+    },
+    "beartooth-basin": {
+      "snowlineM": 3096,
+      "cropX": 0,
+      "cropY": 46,
+      "metresPerPixel": 27,
+      "bytes1600": 108616,
+      "bytes800": 44466,
+      "uploaded": true
+    },
+    "beaver-mountain": {
+      "snowlineM": 2544,
+      "cropX": 0,
+      "cropY": 292,
+      "metresPerPixel": 28.4,
+      "bytes1600": 101052,
+      "bytes800": 41412,
+      "uploaded": true
+    },
+    "beech-mountain-resort": {
+      "snowlineM": 1163,
+      "cropX": 0,
+      "cropY": 194,
+      "metresPerPixel": 30.8,
+      "bytes1600": 155342,
+      "bytes800": 64268,
+      "uploaded": true
+    },
+    "belleayre-mountain": {
+      "snowlineM": 831,
+      "cropX": 0,
+      "cropY": 123,
+      "metresPerPixel": 28.3,
+      "bytes1600": 94416,
+      "bytes800": 38414,
+      "uploaded": true
+    },
+    "berkshire-east": {
+      "snowlineM": 511,
+      "cropX": 0,
+      "cropY": 284,
+      "metresPerPixel": 28.1,
+      "bytes1600": 99562,
+      "bytes800": 40938,
+      "uploaded": true
+    },
+    "big-bear-pa": {
+      "snowlineM": 377,
+      "cropX": 0,
+      "cropY": 239,
+      "metresPerPixel": 28.6,
+      "bytes1600": 92060,
+      "bytes800": 37416,
+      "uploaded": true
+    },
+    "big-powderhorn-mountain": {
+      "snowlineM": 610,
+      "cropX": 0,
+      "cropY": 221,
+      "metresPerPixel": 26.3,
+      "bytes1600": 57582,
+      "bytes800": 22446,
+      "uploaded": true
+    },
+    "big-rock": {
+      "snowlineM": 168,
+      "cropX": 0,
+      "cropY": 62,
+      "metresPerPixel": 26.5,
+      "bytes1600": 69110,
+      "bytes800": 25928,
+      "uploaded": true
+    },
+    "big-boulder": {
+      "snowlineM": 602,
+      "cropX": 0,
+      "cropY": 285,
+      "metresPerPixel": 28.8,
+      "bytes1600": 71780,
+      "bytes800": 27612,
+      "uploaded": true
+    },
+    "big-sky": {
+      "snowlineM": 2738,
+      "cropX": 0,
+      "cropY": 258,
+      "metresPerPixel": 26.9,
+      "bytes1600": 108324,
+      "bytes800": 44282,
+      "uploaded": true
+    },
+    "big-squaw-mountain": {
+      "snowlineM": 461,
+      "cropX": 0,
+      "cropY": 278,
+      "metresPerPixel": 26.8,
+      "bytes1600": 68274,
+      "bytes800": 26454,
+      "uploaded": true
+    },
+    "bittersweet-ski-resort": {
+      "snowlineM": 231,
+      "cropX": 0,
+      "cropY": 177,
+      "metresPerPixel": 28.2,
+      "bytes1600": 67938,
+      "bytes800": 27320,
+      "uploaded": true
+    },
+    "black-mountain-nh": {
+      "snowlineM": 624,
+      "cropX": 0,
+      "cropY": 212,
+      "metresPerPixel": 27.4,
+      "bytes1600": 76706,
+      "bytes800": 30566,
+      "uploaded": true
+    },
+    "black-mountain-of-maine": {
+      "snowlineM": 484,
+      "cropX": 0,
+      "cropY": 114,
+      "metresPerPixel": 27.2,
+      "bytes1600": 72422,
+      "bytes800": 28728,
+      "uploaded": true
+    },
+    "blackjack-mountain": {
+      "snowlineM": 467,
+      "cropX": 0,
+      "cropY": 293,
+      "metresPerPixel": 26.3,
+      "bytes1600": 62658,
+      "bytes800": 24944,
+      "uploaded": true
+    },
+    "blacktail": {
+      "snowlineM": 1839,
+      "cropX": 0,
+      "cropY": 245,
+      "metresPerPixel": 25.6,
+      "bytes1600": 91544,
+      "bytes800": 37742,
+      "uploaded": true
+    },
+    "blue-hills-ski-area": {
+      "snowlineM": 138,
+      "cropX": 0,
+      "cropY": 107,
+      "metresPerPixel": 28.3,
+      "bytes1600": 80468,
+      "bytes800": 30502,
+      "uploaded": true
+    },
+    "blue-knob": {
+      "snowlineM": 796,
+      "cropX": 0,
+      "cropY": 157,
+      "metresPerPixel": 29.2,
+      "bytes1600": 97058,
+      "bytes800": 41320,
+      "uploaded": true
+    },
+    "blue-mountain-resort": {
+      "snowlineM": 274,
+      "cropX": 0,
+      "cropY": 136,
+      "metresPerPixel": 28.9,
+      "bytes1600": 97242,
+      "bytes800": 39720,
+      "uploaded": true
+    },
+    "bluewood": {
+      "snowlineM": 1557,
+      "cropX": 0,
+      "cropY": 46,
+      "metresPerPixel": 26.5,
+      "bytes1600": 135678,
+      "bytes800": 58030,
+      "uploaded": true
+    },
+    "bogus-basin": {
+      "snowlineM": 2093,
+      "cropX": 0,
+      "cropY": 77,
+      "metresPerPixel": 27.6,
+      "bytes1600": 158898,
+      "bytes800": 66680,
+      "uploaded": true
+    },
+    "bolton-valley": {
+      "snowlineM": 700,
+      "cropX": 0,
+      "cropY": 218,
+      "metresPerPixel": 27.3,
+      "bytes1600": 109450,
+      "bytes800": 45354,
+      "uploaded": true
+    },
+    "boreal-mountain-resort": {
+      "snowlineM": 2271,
+      "cropX": 0,
+      "cropY": 174,
+      "metresPerPixel": 29.6,
+      "bytes1600": 99926,
+      "bytes800": 41320,
+      "uploaded": true
+    },
+    "boston-mills": {
+      "snowlineM": 336,
+      "cropX": 0,
+      "cropY": 199,
+      "metresPerPixel": 28.7,
+      "bytes1600": 89456,
+      "bytes800": 34484,
+      "uploaded": true
+    },
+    "bottineau-winter-park": {
+      "snowlineM": 719,
+      "cropX": 0,
+      "cropY": 44,
+      "metresPerPixel": 25.1,
+      "bytes1600": 95610,
+      "bytes800": 37196,
+      "uploaded": true
+    },
+    "bousquet-mountain": {
+      "snowlineM": 463,
+      "cropX": 0,
+      "cropY": 69,
+      "metresPerPixel": 28.2,
+      "bytes1600": 76740,
+      "bytes800": 30466,
+      "uploaded": true
+    },
+    "boyne-mountain": {
+      "snowlineM": 285,
+      "cropX": 0,
+      "cropY": 199,
+      "metresPerPixel": 26.9,
+      "bytes1600": 86092,
+      "bytes800": 34402,
+      "uploaded": true
+    },
+    "brandywine": {
+      "snowlineM": 321,
+      "cropX": 0,
+      "cropY": 155,
+      "metresPerPixel": 28.7,
+      "bytes1600": 85380,
+      "bytes800": 32624,
+      "uploaded": true
+    },
+    "breckenridge": {
+      "snowlineM": 3444,
+      "cropX": 0,
+      "cropY": 124,
+      "metresPerPixel": 29.5,
+      "bytes1600": 96028,
+      "bytes800": 39634,
+      "uploaded": true
+    },
+    "bretton-woods": {
+      "snowlineM": 717,
+      "cropX": 0,
+      "cropY": 116,
+      "metresPerPixel": 27.4,
+      "bytes1600": 69662,
+      "bytes800": 27396,
+      "uploaded": true
+    },
+    "brian-head": {
+      "snowlineM": 3186,
+      "cropX": 0,
+      "cropY": 100,
+      "metresPerPixel": 30.2,
+      "bytes1600": 118384,
+      "bytes800": 47212,
+      "uploaded": true
+    },
+    "bridger-bowl": {
+      "snowlineM": 2263,
+      "cropX": 0,
+      "cropY": 79,
+      "metresPerPixel": 26.6,
+      "bytes1600": 128492,
+      "bytes800": 54272,
+      "uploaded": true
+    },
+    "brighton": {
+      "snowlineM": 2954,
+      "cropX": 0,
+      "cropY": 232,
+      "metresPerPixel": 29,
+      "bytes1600": 122710,
+      "bytes800": 50884,
+      "uploaded": true
+    },
+    "bristol-mountain": {
+      "snowlineM": 480,
+      "cropX": 0,
+      "cropY": 132,
+      "metresPerPixel": 28.1,
+      "bytes1600": 70796,
+      "bytes800": 27906,
+      "uploaded": true
+    },
+    "bromley-mountain": {
+      "snowlineM": 798,
+      "cropX": 0,
+      "cropY": 174,
+      "metresPerPixel": 27.8,
+      "bytes1600": 91146,
+      "bytes800": 36640,
+      "uploaded": true
+    },
+    "bruce-mound-winter-sports-area": {
+      "snowlineM": 356,
+      "cropX": 0,
+      "cropY": 117,
+      "metresPerPixel": 27.3,
+      "bytes1600": 55536,
+      "bytes800": 20918,
+      "uploaded": true
+    },
+    "brundage-mountain": {
+      "snowlineM": 2058,
+      "cropX": 0,
+      "cropY": 63,
+      "metresPerPixel": 27,
+      "bytes1600": 105550,
+      "bytes800": 43126,
+      "uploaded": true
+    },
+    "bryce-resort": {
+      "snowlineM": 546,
+      "cropX": 0,
+      "cropY": 290,
+      "metresPerPixel": 29.8,
+      "bytes1600": 115022,
+      "bytes800": 45752,
+      "uploaded": true
+    },
+    "buck-hill": {
+      "snowlineM": 329,
+      "cropX": 0,
+      "cropY": 211,
+      "metresPerPixel": 27.2,
+      "bytes1600": 87594,
+      "bytes800": 33362,
+      "uploaded": true
+    },
+    "buena-vista": {
+      "snowlineM": 430,
+      "cropX": 0,
+      "cropY": 174,
+      "metresPerPixel": 25.8,
+      "bytes1600": 78364,
+      "bytes800": 31250,
+      "uploaded": true
+    },
+    "buffalo-ski-club": {
+      "snowlineM": 435,
+      "cropX": 0,
+      "cropY": 69,
+      "metresPerPixel": 28.1,
+      "bytes1600": 77770,
+      "bytes800": 29896,
+      "uploaded": true
+    },
+    "burke-mountain": {
+      "snowlineM": 683,
+      "cropX": 0,
+      "cropY": 125,
+      "metresPerPixel": 27.2,
+      "bytes1600": 96842,
+      "bytes800": 38174,
+      "uploaded": true
+    },
+    "buttermilk": {
+      "snowlineM": 3014,
+      "cropX": 0,
+      "cropY": 138,
+      "metresPerPixel": 29.6,
+      "bytes1600": 111850,
+      "bytes800": 45112,
+      "uploaded": true
+    },
+    "caberfae-peaks": {
+      "snowlineM": 415,
+      "cropX": 0,
+      "cropY": 84,
+      "metresPerPixel": 27.4,
+      "bytes1600": 77310,
+      "bytes800": 30768,
+      "uploaded": true
+    },
+    "camden-snow-bowl": {
+      "snowlineM": 197,
+      "cropX": 0,
+      "cropY": 292,
+      "metresPerPixel": 27.4,
+      "bytes1600": 74212,
+      "bytes800": 29336,
+      "uploaded": true
+    },
+    "camelback-mountain-resort": {
+      "snowlineM": 552,
+      "cropX": 0,
+      "cropY": 276,
+      "metresPerPixel": 28.8,
+      "bytes1600": 80446,
+      "bytes800": 31472,
+      "uploaded": true
+    },
+    "campgaw-mountain": {
+      "snowlineM": 181,
+      "cropX": 0,
+      "cropY": 286,
+      "metresPerPixel": 28.8,
+      "bytes1600": 84326,
+      "bytes800": 32956,
+      "uploaded": true
+    },
+    "camp-10-area": {
+      "snowlineM": 487,
+      "cropX": 0,
+      "cropY": 181,
+      "metresPerPixel": 26.8,
+      "bytes1600": 99732,
+      "bytes800": 40454,
+      "uploaded": true
+    },
+    "campton-mountain": {
+      "snowlineM": 449,
+      "cropX": 0,
+      "cropY": 250,
+      "metresPerPixel": 27.6,
+      "bytes1600": 85516,
+      "bytes800": 34376,
+      "uploaded": true
+    },
+    "canaan-valley-resort": {
+      "snowlineM": 1175,
+      "cropX": 0,
+      "cropY": 187,
+      "metresPerPixel": 29.7,
+      "bytes1600": 95390,
+      "bytes800": 38446,
+      "uploaded": true
+    },
+    "cannon-mountain": {
+      "snowlineM": 908,
+      "cropX": 0,
+      "cropY": 273,
+      "metresPerPixel": 27.4,
+      "bytes1600": 82734,
+      "bytes800": 33090,
+      "uploaded": true
+    },
+    "cannonsburg": {
+      "snowlineM": 264,
+      "cropX": 0,
+      "cropY": 69,
+      "metresPerPixel": 27.9,
+      "bytes1600": 103300,
+      "bytes800": 41288,
+      "uploaded": true
+    },
+    "cascade-mountain": {
+      "snowlineM": 319,
+      "cropX": 0,
+      "cropY": 203,
+      "metresPerPixel": 27.7,
+      "bytes1600": 57344,
+      "bytes800": 21814,
+      "uploaded": true
+    },
+    "cataloochee-ski-area": {
+      "snowlineM": 1533,
+      "cropX": 0,
+      "cropY": 179,
+      "metresPerPixel": 31.1,
+      "bytes1600": 157146,
+      "bytes800": 66850,
+      "uploaded": true
+    },
+    "catamount-ski-area": {
+      "snowlineM": 297,
+      "cropX": 0,
+      "cropY": 264,
+      "metresPerPixel": 28.3,
+      "bytes1600": 87244,
+      "bytes800": 34814,
+      "uploaded": true
+    },
+    "chapman-hill": {
+      "snowlineM": 2316,
+      "cropX": 0,
+      "cropY": 110,
+      "metresPerPixel": 30.4,
+      "bytes1600": 122262,
+      "bytes800": 49162,
+      "uploaded": true
+    },
+    "cherry-peak": {
+      "snowlineM": 2328,
+      "cropX": 0,
+      "cropY": 216,
+      "metresPerPixel": 28.4,
+      "bytes1600": 93022,
+      "bytes800": 37736,
+      "uploaded": true
+    },
+    "chestnut-mountain": {
+      "snowlineM": 259,
+      "cropX": 0,
+      "cropY": 246,
+      "metresPerPixel": 28.2,
+      "bytes1600": 118308,
+      "bytes800": 49298,
+      "uploaded": true
+    },
+    "china-peak": {
+      "snowlineM": 2750,
+      "cropX": 0,
+      "cropY": 277,
+      "metresPerPixel": 30.4,
+      "bytes1600": 102792,
+      "bytes800": 42838,
+      "uploaded": true
+    },
+    "christie": {
+      "snowlineM": 452,
+      "cropX": 0,
+      "cropY": 93,
+      "metresPerPixel": 26.8,
+      "bytes1600": 65126,
+      "bytes800": 24626,
+      "uploaded": true
+    },
+    "christmas-mountain": {
+      "snowlineM": 303,
+      "cropX": 0,
+      "cropY": 179,
+      "metresPerPixel": 27.6,
+      "bytes1600": 77626,
+      "bytes800": 31112,
+      "uploaded": true
+    },
+    "cloudmont-ski-resort": {
+      "snowlineM": 526,
+      "cropX": 0,
+      "cropY": 235,
+      "metresPerPixel": 31.5,
+      "bytes1600": 110366,
+      "bytes800": 44156,
+      "uploaded": true
+    },
+    "cochrans-ski-area": {
+      "snowlineM": 307,
+      "cropX": 0,
+      "cropY": 121,
+      "metresPerPixel": 27.3,
+      "bytes1600": 96032,
+      "bytes800": 38044,
+      "uploaded": true
+    },
+    "cooper-spur-area": {
+      "snowlineM": 1452,
+      "cropX": 0,
+      "cropY": 238,
+      "metresPerPixel": 26.8,
+      "bytes1600": 109604,
+      "bytes800": 44024,
+      "uploaded": true
+    },
+    "copper-mountain": {
+      "snowlineM": 3408,
+      "cropX": 0,
+      "cropY": 47,
+      "metresPerPixel": 29.5,
+      "bytes1600": 91936,
+      "bytes800": 37324,
+      "uploaded": true
+    },
+    "cottonwood-butte": {
+      "snowlineM": 1586,
+      "cropX": 0,
+      "cropY": 141,
+      "metresPerPixel": 26.5,
+      "bytes1600": 90652,
+      "bytes800": 36222,
+      "uploaded": true
+    },
+    "cranor-ski-hill": {
+      "snowlineM": 2598,
+      "cropX": 0,
+      "cropY": 230,
+      "metresPerPixel": 29.9,
+      "bytes1600": 90060,
+      "bytes800": 35426,
+      "uploaded": true
+    },
+    "crested-butte": {
+      "snowlineM": 3282,
+      "cropX": 0,
+      "cropY": 264,
+      "metresPerPixel": 29.7,
+      "bytes1600": 105756,
+      "bytes800": 43906,
+      "uploaded": true
+    },
+    "crotched-mountain": {
+      "snowlineM": 289,
+      "cropX": 0,
+      "cropY": 72,
+      "metresPerPixel": 28,
+      "bytes1600": 79084,
+      "bytes800": 32316,
+      "uploaded": true
+    },
+    "crystal-mountain": {
+      "snowlineM": 1739,
+      "cropX": 0,
+      "cropY": 265,
+      "metresPerPixel": 26.1,
+      "bytes1600": 102256,
+      "bytes800": 42566,
+      "uploaded": true
+    },
+    "crystal-mountain-mi": {
+      "snowlineM": 288,
+      "cropX": 0,
+      "cropY": 65,
+      "metresPerPixel": 27.2,
+      "bytes1600": 84494,
+      "bytes800": 32996,
+      "uploaded": true
+    },
+    "crystal-ridge": {
+      "snowlineM": 244,
+      "cropX": 0,
+      "cropY": 118,
+      "metresPerPixel": 28,
+      "bytes1600": 57774,
+      "bytes800": 21564,
+      "uploaded": true
+    },
+    "cuchara": {
+      "snowlineM": 3231,
+      "cropX": 0,
+      "cropY": 114,
+      "metresPerPixel": 30.4,
+      "bytes1600": 117076,
+      "bytes800": 47172,
+      "uploaded": true
+    },
+    "dartmouth-skiway": {
+      "snowlineM": 474,
+      "cropX": 0,
+      "cropY": 262,
+      "metresPerPixel": 27.6,
+      "bytes1600": 81174,
+      "bytes800": 31850,
+      "uploaded": true
+    },
+    "deer-valley": {
+      "snowlineM": 2551,
+      "cropX": 0,
+      "cropY": 103,
+      "metresPerPixel": 29,
+      "bytes1600": 108082,
+      "bytes800": 44202,
+      "uploaded": true
+    },
+    "detroit-mountain": {
+      "snowlineM": 453,
+      "cropX": 0,
+      "cropY": 107,
+      "metresPerPixel": 26.1,
+      "bytes1600": 88290,
+      "bytes800": 34866,
+      "uploaded": true
+    },
+    "devils-head": {
+      "snowlineM": 337,
+      "cropX": 0,
+      "cropY": 237,
+      "metresPerPixel": 27.8,
+      "bytes1600": 70488,
+      "bytes800": 28238,
+      "uploaded": true
+    },
+    "diamond-peak": {
+      "snowlineM": 2323,
+      "cropX": 0,
+      "cropY": 213,
+      "metresPerPixel": 29.6,
+      "bytes1600": 77178,
+      "bytes800": 30458,
+      "uploaded": true
+    },
+    "discovery": {
+      "snowlineM": 2144,
+      "cropX": 0,
+      "cropY": 128,
+      "metresPerPixel": 26.4,
+      "bytes1600": 79684,
+      "bytes800": 31704,
+      "uploaded": true
+    },
+    "dodge-ridge": {
+      "snowlineM": 2375,
+      "cropX": 0,
+      "cropY": 104,
+      "metresPerPixel": 30,
+      "bytes1600": 97030,
+      "bytes800": 39638,
+      "uploaded": true
+    },
+    "donner-ski-ranch": {
+      "snowlineM": 2257,
+      "cropX": 0,
+      "cropY": 234,
+      "metresPerPixel": 29.6,
+      "bytes1600": 98540,
+      "bytes800": 40726,
+      "uploaded": true
+    },
+    "eagle-point": {
+      "snowlineM": 3002,
+      "cropX": 0,
+      "cropY": 93,
+      "metresPerPixel": 30,
+      "bytes1600": 114872,
+      "bytes800": 47290,
+      "uploaded": true
+    },
+    "dry-hill-area": {
+      "snowlineM": 449,
+      "cropX": 0,
+      "cropY": 160,
+      "metresPerPixel": 27.5,
+      "bytes1600": 70488,
+      "bytes800": 26908,
+      "uploaded": true
+    },
+    "eagle-rock-resort": {
+      "snowlineM": 441,
+      "cropX": 0,
+      "cropY": 163,
+      "metresPerPixel": 28.8,
+      "bytes1600": 87668,
+      "bytes800": 35524,
+      "uploaded": true
+    },
+    "eaglecrest-ski-area": {
+      "snowlineM": 579,
+      "cropX": 0,
+      "cropY": 216,
+      "metresPerPixel": 20,
+      "bytes1600": 60894,
+      "bytes800": 25428,
+      "uploaded": true
+    },
+    "eaton-mountain": {
+      "snowlineM": 309,
+      "cropX": 0,
+      "cropY": 270,
+      "metresPerPixel": 27.2,
+      "bytes1600": 61084,
+      "bytes800": 22030,
+      "uploaded": true
+    },
+    "echo-mountain": {
+      "snowlineM": 3264,
+      "cropX": 0,
+      "cropY": 181,
+      "metresPerPixel": 29.4,
+      "bytes1600": 96112,
+      "bytes800": 40182,
+      "uploaded": true
+    },
+    "echo-valley": {
+      "snowlineM": 924,
+      "cropX": 0,
+      "cropY": 83,
+      "metresPerPixel": 25.6,
+      "bytes1600": 102732,
+      "bytes800": 43008,
+      "uploaded": true
+    },
+    "eldora": {
+      "snowlineM": 3145,
+      "cropX": 0,
+      "cropY": 192,
+      "metresPerPixel": 29.3,
+      "bytes1600": 97462,
+      "bytes800": 40288,
+      "uploaded": true
+    },
+    "elk-mountain": {
+      "snowlineM": 670,
+      "cropX": 0,
+      "cropY": 236,
+      "metresPerPixel": 28.5,
+      "bytes1600": 90024,
+      "bytes800": 36392,
+      "uploaded": true
+    },
+    "elko-snobowl": {
+      "snowlineM": 2027,
+      "cropX": 0,
+      "cropY": 123,
+      "metresPerPixel": 28.9,
+      "bytes1600": 93356,
+      "bytes800": 36138,
+      "uploaded": true
+    },
+    "four-lakes": {
+      "snowlineM": 230,
+      "cropX": 0,
+      "cropY": 262,
+      "metresPerPixel": 28.5,
+      "bytes1600": 66208,
+      "bytes800": 27034,
+      "uploaded": true
+    },
+    "ferguson-ridge": {
+      "snowlineM": 1697,
+      "cropX": 0,
+      "cropY": 74,
+      "metresPerPixel": 26.9,
+      "bytes1600": 95222,
+      "bytes800": 39514,
+      "uploaded": true
+    },
+    "giants-ridge": {
+      "snowlineM": 525,
+      "cropX": 0,
+      "cropY": 105,
+      "metresPerPixel": 25.8,
+      "bytes1600": 94004,
+      "bytes800": 36288,
+      "uploaded": true
+    },
+    "frost-fire-park": {
+      "snowlineM": 377,
+      "cropX": 0,
+      "cropY": 113,
+      "metresPerPixel": 25.2,
+      "bytes1600": 34926,
+      "bytes800": 12588,
+      "uploaded": true
+    },
+    "gore-mountain": {
+      "snowlineM": 701,
+      "cropX": 0,
+      "cropY": 183,
+      "metresPerPixel": 27.6,
+      "bytes1600": 97358,
+      "bytes800": 39490,
+      "uploaded": true
+    },
+    "granby-ranch": {
+      "snowlineM": 2742,
+      "cropX": 0,
+      "cropY": 277,
+      "metresPerPixel": 29.3,
+      "bytes1600": 106334,
+      "bytes800": 42872,
+      "uploaded": true
+    },
+    "grand-targhee": {
+      "snowlineM": 2646,
+      "cropX": 0,
+      "cropY": 225,
+      "metresPerPixel": 27.6,
+      "bytes1600": 94044,
+      "bytes800": 38356,
+      "uploaded": true
+    },
+    "granite-gorge": {
+      "snowlineM": 420,
+      "cropX": 0,
+      "cropY": 250,
+      "metresPerPixel": 28,
+      "bytes1600": 87126,
+      "bytes800": 34836,
+      "uploaded": true
+    },
+    "granite-peak": {
+      "snowlineM": 485,
+      "cropX": 0,
+      "cropY": 245,
+      "metresPerPixel": 27.1,
+      "bytes1600": 45642,
+      "bytes800": 16982,
+      "uploaded": true
+    },
+    "great-bear-valley": {
+      "snowlineM": 444,
+      "cropX": 0,
+      "cropY": 49,
+      "metresPerPixel": 27.7,
+      "bytes1600": 79194,
+      "bytes800": 30964,
+      "uploaded": true
+    },
+    "great-divide": {
+      "snowlineM": 1987,
+      "cropX": 0,
+      "cropY": 116,
+      "metresPerPixel": 26.2,
+      "bytes1600": 90712,
+      "bytes800": 36862,
+      "uploaded": true
+    },
+    "greek-peak": {
+      "snowlineM": 495,
+      "cropX": 0,
+      "cropY": 94,
+      "metresPerPixel": 28.2,
+      "bytes1600": 74478,
+      "bytes800": 30080,
+      "uploaded": true
+    },
+    "gunstock-mountain-resort": {
+      "snowlineM": 478,
+      "cropX": 0,
+      "cropY": 187,
+      "metresPerPixel": 27.7,
+      "bytes1600": 68642,
+      "bytes800": 27846,
+      "uploaded": true
+    },
+    "hatley-pointe": {
+      "snowlineM": 1326,
+      "cropX": 0,
+      "cropY": 279,
+      "metresPerPixel": 30.9,
+      "bytes1600": 165846,
+      "bytes800": 69726,
+      "uploaded": true
+    },
+    "heavenly-mountain-resort": {
+      "snowlineM": 2487,
+      "cropX": 0,
+      "cropY": 130,
+      "metresPerPixel": 29.7,
+      "bytes1600": 76728,
+      "bytes800": 29832,
+      "uploaded": true
+    },
+    "hermon-mountain": {
+      "snowlineM": 54,
+      "cropX": 0,
+      "cropY": 211,
+      "metresPerPixel": 27.1,
+      "bytes1600": 68948,
+      "bytes800": 27084,
+      "uploaded": true
+    },
+    "hesperus-ski-area": {
+      "snowlineM": 2603,
+      "cropX": 0,
+      "cropY": 294,
+      "metresPerPixel": 30.4,
+      "bytes1600": 113890,
+      "bytes800": 47082,
+      "uploaded": true
+    },
+    "hidden-valley": {
+      "snowlineM": 805,
+      "cropX": 0,
+      "cropY": 244,
+      "metresPerPixel": 29.3,
+      "bytes1600": 99832,
+      "bytes800": 40600,
+      "uploaded": true
+    },
+    "hidden-valley-mo": {
+      "snowlineM": 213,
+      "cropX": 0,
+      "cropY": 123,
+      "metresPerPixel": 29.9,
+      "bytes1600": 153748,
+      "bytes800": 65930,
+      "uploaded": true
+    },
+    "hilltop-ski-area": {
+      "snowlineM": 626,
+      "cropX": 0,
+      "cropY": 292,
+      "metresPerPixel": 18.5,
+      "bytes1600": 49366,
+      "bytes800": 19562,
+      "uploaded": true
+    },
+    "hoedown-hill": {
+      "snowlineM": 1525,
+      "cropX": 0,
+      "cropY": 128,
+      "metresPerPixel": 29.1,
+      "bytes1600": 49372,
+      "bytes800": 17944,
+      "uploaded": true
+    },
+    "hogadon": {
+      "snowlineM": 2345,
+      "cropX": 0,
+      "cropY": 92,
+      "metresPerPixel": 28.1,
+      "bytes1600": 125362,
+      "bytes800": 51156,
+      "uploaded": true
+    },
+    "holiday-valley": {
+      "snowlineM": 608,
+      "cropX": 0,
+      "cropY": 205,
+      "metresPerPixel": 28.3,
+      "bytes1600": 88564,
+      "bytes800": 37418,
+      "uploaded": true
+    },
+    "holiday-mountain": {
+      "snowlineM": 456,
+      "cropX": 0,
+      "cropY": 46,
+      "metresPerPixel": 28.6,
+      "bytes1600": 78658,
+      "bytes800": 32226,
+      "uploaded": true
+    },
+    "homestead-resort": {
+      "snowlineM": 225,
+      "cropX": 0,
+      "cropY": 76,
+      "metresPerPixel": 27.1,
+      "bytes1600": 46766,
+      "bytes800": 18280,
+      "uploaded": true
+    },
+    "holimont": {
+      "snowlineM": 596,
+      "cropX": 0,
+      "cropY": 193,
+      "metresPerPixel": 28.3,
+      "bytes1600": 88120,
+      "bytes800": 35854,
+      "uploaded": true
+    },
+    "hoodoo": {
+      "snowlineM": 1581,
+      "cropX": 0,
+      "cropY": 271,
+      "metresPerPixel": 27.3,
+      "bytes1600": 100310,
+      "bytes800": 40056,
+      "uploaded": true
+    },
+    "homewood-mountain-resort": {
+      "snowlineM": 2151,
+      "cropX": 0,
+      "cropY": 79,
+      "metresPerPixel": 29.7,
+      "bytes1600": 66532,
+      "bytes800": 26400,
+      "uploaded": true
+    },
+    "howelsen-hill": {
+      "snowlineM": 2417,
+      "cropX": 0,
+      "cropY": 158,
+      "metresPerPixel": 29.1,
+      "bytes1600": 107014,
+      "bytes800": 43688,
+      "uploaded": true
+    },
+    "huff-hills": {
+      "snowlineM": 637,
+      "cropX": 0,
+      "cropY": 214,
+      "metresPerPixel": 26.3,
+      "bytes1600": 75498,
+      "bytes800": 29408,
+      "uploaded": true
+    },
+    "hunt-hollow-club": {
+      "snowlineM": 561,
+      "cropX": 0,
+      "cropY": 184,
+      "metresPerPixel": 28.1,
+      "bytes1600": 81062,
+      "bytes800": 32204,
+      "uploaded": true
+    },
+    "hunter-mountain": {
+      "snowlineM": 769,
+      "cropX": 0,
+      "cropY": 232,
+      "metresPerPixel": 28.3,
+      "bytes1600": 86896,
+      "bytes800": 34644,
+      "uploaded": true
+    },
+    "hurricane-ridge": {
+      "snowlineM": 1570,
+      "cropX": 0,
+      "cropY": 129,
+      "metresPerPixel": 25.6,
+      "bytes1600": 119718,
+      "bytes800": 50844,
+      "uploaded": true
+    },
+    "indianhead-mountain": {
+      "snowlineM": 457,
+      "cropX": 0,
+      "cropY": 246,
+      "metresPerPixel": 26.3,
+      "bytes1600": 55418,
+      "bytes800": 21638,
+      "uploaded": true
+    },
+    "jack-frost-mountain": {
+      "snowlineM": 677,
+      "cropX": 0,
+      "cropY": 46,
+      "metresPerPixel": 28.8,
+      "bytes1600": 76404,
+      "bytes800": 29438,
+      "uploaded": true
+    },
+    "hyland-hills": {
+      "snowlineM": 301,
+      "cropX": 0,
+      "cropY": 249,
+      "metresPerPixel": 27.1,
+      "bytes1600": 88226,
+      "bytes800": 33638,
+      "uploaded": true
+    },
+    "jay-peak": {
+      "snowlineM": 865,
+      "cropX": 0,
+      "cropY": 170,
+      "metresPerPixel": 27.1,
+      "bytes1600": 95918,
+      "bytes800": 37478,
+      "uploaded": true
+    },
+    "jiminy-peak": {
+      "snowlineM": 552,
+      "cropX": 0,
+      "cropY": 49,
+      "metresPerPixel": 28.2,
+      "bytes1600": 89212,
+      "bytes800": 36356,
+      "uploaded": true
+    },
+    "june-mountain": {
+      "snowlineM": 2692,
+      "cropX": 0,
+      "cropY": 111,
+      "metresPerPixel": 30.2,
+      "bytes1600": 85326,
+      "bytes800": 33546,
+      "uploaded": true
+    },
+    "kelly-canyon": {
+      "snowlineM": 1859,
+      "cropX": 0,
+      "cropY": 185,
+      "metresPerPixel": 27.6,
+      "bytes1600": 88248,
+      "bytes800": 34312,
+      "uploaded": true
+    },
+    "keystone": {
+      "snowlineM": 3386,
+      "cropX": 0,
+      "cropY": 172,
+      "metresPerPixel": 29.4,
+      "bytes1600": 89968,
+      "bytes800": 37162,
+      "uploaded": true
+    },
+    "king-pine": {
+      "snowlineM": 238,
+      "cropX": 0,
+      "cropY": 258,
+      "metresPerPixel": 27.6,
+      "bytes1600": 71982,
+      "bytes800": 28910,
+      "uploaded": true
+    },
+    "kirkwood-mountain-resort": {
+      "snowlineM": 2682,
+      "cropX": 0,
+      "cropY": 42,
+      "metresPerPixel": 29.8,
+      "bytes1600": 117786,
+      "bytes800": 48200,
+      "uploaded": true
+    },
+    "kissing-bridge": {
+      "snowlineM": 447,
+      "cropX": 0,
+      "cropY": 188,
+      "metresPerPixel": 28.1,
+      "bytes1600": 81248,
+      "bytes800": 31172,
+      "uploaded": true
+    },
+    "labrador-mountain": {
+      "snowlineM": 498,
+      "cropX": 0,
+      "cropY": 98,
+      "metresPerPixel": 28,
+      "bytes1600": 70374,
+      "bytes800": 28960,
+      "uploaded": true
+    },
+    "lake-city-ski-hill": {
+      "snowlineM": 3540,
+      "cropX": 0,
+      "cropY": 172,
+      "metresPerPixel": 30.1,
+      "bytes1600": 109384,
+      "bytes800": 43814,
+      "uploaded": true
+    },
+    "laurel-mountain": {
+      "snowlineM": 725,
+      "cropX": 0,
+      "cropY": 256,
+      "metresPerPixel": 29.2,
+      "bytes1600": 85874,
+      "bytes800": 34538,
+      "uploaded": true
+    },
+    "leavenworth-winter-sports-club": {
+      "snowlineM": 929,
+      "cropX": 0,
+      "cropY": 134,
+      "metresPerPixel": 25.8,
+      "bytes1600": 128384,
+      "bytes800": 54568,
+      "uploaded": true
+    },
+    "lee-canyon": {
+      "snowlineM": 2724,
+      "cropX": 0,
+      "cropY": 69,
+      "metresPerPixel": 30.8,
+      "bytes1600": 148348,
+      "bytes800": 61504,
+      "uploaded": true
+    },
+    "lees-ski-hill": {
+      "snowlineM": 3599,
+      "cropX": 0,
+      "cropY": 198,
+      "metresPerPixel": 30.1,
+      "bytes1600": 133830,
+      "bytes800": 54934,
+      "uploaded": true
+    },
+    "liberty-mountain": {
+      "snowlineM": 268,
+      "cropX": 0,
+      "cropY": 295,
+      "metresPerPixel": 29.4,
+      "bytes1600": 76504,
+      "bytes800": 29654,
+      "uploaded": true
+    },
+    "little-ski-hill": {
+      "snowlineM": 1643,
+      "cropX": 0,
+      "cropY": 242,
+      "metresPerPixel": 27.1,
+      "bytes1600": 81248,
+      "bytes800": 32420,
+      "uploaded": true
+    },
+    "little-switzerland": {
+      "snowlineM": 356,
+      "cropX": 0,
+      "cropY": 142,
+      "metresPerPixel": 27.8,
+      "bytes1600": 79008,
+      "bytes800": 30246,
+      "uploaded": true
+    },
+    "lookout-pass": {
+      "snowlineM": 1623,
+      "cropX": 0,
+      "cropY": 63,
+      "metresPerPixel": 25.8,
+      "bytes1600": 103910,
+      "bytes800": 43714,
+      "uploaded": true
+    },
+    "loon-mountain": {
+      "snowlineM": 761,
+      "cropX": 0,
+      "cropY": 250,
+      "metresPerPixel": 27.5,
+      "bytes1600": 87086,
+      "bytes800": 35362,
+      "uploaded": true
+    },
+    "lost-valley": {
+      "snowlineM": 118,
+      "cropX": 0,
+      "cropY": 99,
+      "metresPerPixel": 27.4,
+      "bytes1600": 81194,
+      "bytes800": 32794,
+      "uploaded": true
+    },
+    "lost-trail": {
+      "snowlineM": 2227,
+      "cropX": 0,
+      "cropY": 102,
+      "metresPerPixel": 26.7,
+      "bytes1600": 108260,
+      "bytes800": 45644,
+      "uploaded": true
+    },
+    "loveland": {
+      "snowlineM": 3638,
+      "cropX": 0,
+      "cropY": 142,
+      "metresPerPixel": 29.4,
+      "bytes1600": 95542,
+      "bytes800": 39646,
+      "uploaded": true
+    },
+    "loup-loup": {
+      "snowlineM": 1423,
+      "cropX": 0,
+      "cropY": 62,
+      "metresPerPixel": 25.4,
+      "bytes1600": 106360,
+      "bytes800": 42952,
+      "uploaded": true
+    },
+    "lutsen-mountains": {
+      "snowlineM": 427,
+      "cropX": 0,
+      "cropY": 212,
+      "metresPerPixel": 25.7,
+      "bytes1600": 60246,
+      "bytes800": 23326,
+      "uploaded": true
+    },
+    "lyndon-outing-club": {
+      "snowlineM": 461,
+      "cropX": 0,
+      "cropY": 274,
+      "metresPerPixel": 27.2,
+      "bytes1600": 92730,
+      "bytes800": 36826,
+      "uploaded": true
+    },
+    "mad-river-glen": {
+      "snowlineM": 798,
+      "cropX": 0,
+      "cropY": 79,
+      "metresPerPixel": 27.4,
+      "bytes1600": 93092,
+      "bytes800": 37282,
+      "uploaded": true
+    },
+    "mad-river-mountain": {
+      "snowlineM": 399,
+      "cropX": 0,
+      "cropY": 82,
+      "metresPerPixel": 29.1,
+      "bytes1600": 47176,
+      "bytes800": 15842,
+      "uploaded": true
+    },
+    "magic-mountain-id": {
+      "snowlineM": 2135,
+      "cropX": 0,
+      "cropY": 246,
+      "metresPerPixel": 28.3,
+      "bytes1600": 97918,
+      "bytes800": 41548,
+      "uploaded": true
+    },
+    "maple-ski-ridge": {
+      "snowlineM": 287,
+      "cropX": 0,
+      "cropY": 66,
+      "metresPerPixel": 28,
+      "bytes1600": 73384,
+      "bytes800": 28138,
+      "uploaded": true
+    },
+    "magic-mountain": {
+      "snowlineM": 640,
+      "cropX": 0,
+      "cropY": 58,
+      "metresPerPixel": 27.9,
+      "bytes1600": 96226,
+      "bytes800": 39088,
+      "uploaded": true
+    },
+    "marquette-mountain": {
+      "snowlineM": 329,
+      "cropX": 0,
+      "cropY": 206,
+      "metresPerPixel": 26.3,
+      "bytes1600": 57562,
+      "bytes800": 21226,
+      "uploaded": true
+    },
+    "massanutten-resort": {
+      "snowlineM": 454,
+      "cropX": 0,
+      "cropY": 284,
+      "metresPerPixel": 29.9,
+      "bytes1600": 91574,
+      "bytes800": 36410,
+      "uploaded": true
+    },
+    "maverick-mountain": {
+      "snowlineM": 2400,
+      "cropX": 0,
+      "cropY": 120,
+      "metresPerPixel": 26.8,
+      "bytes1600": 89916,
+      "bytes800": 37118,
+      "uploaded": true
+    },
+    "mccauley-mountain": {
+      "snowlineM": 561,
+      "cropX": 0,
+      "cropY": 170,
+      "metresPerPixel": 27.6,
+      "bytes1600": 101814,
+      "bytes800": 41522,
+      "uploaded": true
+    },
+    "mcintyre-ski-area": {
+      "snowlineM": 146,
+      "cropX": 0,
+      "cropY": 67,
+      "metresPerPixel": 28,
+      "bytes1600": 83032,
+      "bytes800": 32946,
+      "uploaded": true
+    },
+    "meadowlark": {
+      "snowlineM": 2725,
+      "cropX": 0,
+      "cropY": 258,
+      "metresPerPixel": 27.5,
+      "bytes1600": 137640,
+      "bytes800": 56498,
+      "uploaded": true
+    },
+    "middlebury-snow-bowl": {
+      "snowlineM": 670,
+      "cropX": 0,
+      "cropY": 277,
+      "metresPerPixel": 27.5,
+      "bytes1600": 93236,
+      "bytes800": 37572,
+      "uploaded": true
+    },
+    "mohawk-mountain-ski-area": {
+      "snowlineM": 535,
+      "cropX": 0,
+      "cropY": 40,
+      "metresPerPixel": 28.5,
+      "bytes1600": 97002,
+      "bytes800": 39124,
+      "uploaded": true
+    },
+    "mission-ridge": {
+      "snowlineM": 1570,
+      "cropX": 0,
+      "cropY": 262,
+      "metresPerPixel": 25.9,
+      "bytes1600": 121134,
+      "bytes800": 49594,
+      "uploaded": true
+    },
+    "monarch-mountain": {
+      "snowlineM": 3461,
+      "cropX": 0,
+      "cropY": 173,
+      "metresPerPixel": 29.9,
+      "bytes1600": 110214,
+      "bytes800": 45256,
+      "uploaded": true
+    },
+    "mont-ripley": {
+      "snowlineM": 292,
+      "cropX": 0,
+      "cropY": 183,
+      "metresPerPixel": 26,
+      "bytes1600": 54950,
+      "bytes800": 20768,
+      "uploaded": true
+    },
+    "montage-mountain": {
+      "snowlineM": 491,
+      "cropX": 0,
+      "cropY": 131,
+      "metresPerPixel": 28.7,
+      "bytes1600": 93106,
+      "bytes800": 37454,
+      "uploaded": true
+    },
+    "montana-snowbowl": {
+      "snowlineM": 1920,
+      "cropX": 0,
+      "cropY": 148,
+      "metresPerPixel": 26.1,
+      "bytes1600": 91152,
+      "bytes800": 37762,
+      "uploaded": true
+    },
+    "mount-ashwabay": {
+      "snowlineM": 282,
+      "cropX": 0,
+      "cropY": 116,
+      "metresPerPixel": 26.2,
+      "bytes1600": 48140,
+      "bytes800": 17768,
+      "uploaded": true
+    },
+    "mount-bohemia": {
+      "snowlineM": 326,
+      "cropX": 0,
+      "cropY": 102,
+      "metresPerPixel": 25.9,
+      "bytes1600": 56182,
+      "bytes800": 21402,
+      "uploaded": true
+    },
+    "mount-holly": {
+      "snowlineM": 321,
+      "cropX": 0,
+      "cropY": 217,
+      "metresPerPixel": 28.1,
+      "bytes1600": 82552,
+      "bytes800": 32414,
+      "uploaded": true
+    },
+    "mount-itasca": {
+      "snowlineM": 407,
+      "cropX": 0,
+      "cropY": 198,
+      "metresPerPixel": 25.9,
+      "bytes1600": 66750,
+      "bytes800": 26588,
+      "uploaded": true
+    },
+    "mount-jefferson-ski-area": {
+      "snowlineM": 130,
+      "cropX": 0,
+      "cropY": 54,
+      "metresPerPixel": 26.8,
+      "bytes1600": 53812,
+      "bytes800": 21410,
+      "uploaded": true
+    },
+    "mount-kato": {
+      "snowlineM": 302,
+      "cropX": 0,
+      "cropY": 139,
+      "metresPerPixel": 27.4,
+      "bytes1600": 89810,
+      "bytes800": 35872,
+      "uploaded": true
+    },
+    "mount-peter": {
+      "snowlineM": 309,
+      "cropX": 0,
+      "cropY": 53,
+      "metresPerPixel": 28.7,
+      "bytes1600": 112170,
+      "bytes800": 44186,
+      "uploaded": true
+    },
+    "mount-pisgah": {
+      "snowlineM": 553,
+      "cropX": 0,
+      "cropY": 68,
+      "metresPerPixel": 27.3,
+      "bytes1600": 79462,
+      "bytes800": 31262,
+      "uploaded": true
+    },
+    "mount-snow": {
+      "snowlineM": 838,
+      "cropX": 0,
+      "cropY": 222,
+      "metresPerPixel": 28,
+      "bytes1600": 89864,
+      "bytes800": 35974,
+      "uploaded": true
+    },
+    "mount-southington": {
+      "snowlineM": 157,
+      "cropX": 0,
+      "cropY": 265,
+      "metresPerPixel": 28.6,
+      "bytes1600": 86018,
+      "bytes800": 33716,
+      "uploaded": true
+    },
+    "mountain-creek": {
+      "snowlineM": 353,
+      "cropX": 0,
+      "cropY": 287,
+      "metresPerPixel": 28.8,
+      "bytes1600": 104590,
+      "bytes800": 41672,
+      "uploaded": true
+    },
+    "mount-sunapee": {
+      "snowlineM": 605,
+      "cropX": 0,
+      "cropY": 55,
+      "metresPerPixel": 27.8,
+      "bytes1600": 88140,
+      "bytes800": 34444,
+      "uploaded": true
+    },
+    "mountain-high": {
+      "snowlineM": 2256,
+      "cropX": 0,
+      "cropY": 44,
+      "metresPerPixel": 31.5,
+      "bytes1600": 160408,
+      "bytes800": 66204,
+      "uploaded": true
+    },
+    "mt-abram": {
+      "snowlineM": 448,
+      "cropX": 0,
+      "cropY": 178,
+      "metresPerPixel": 27.3,
+      "bytes1600": 71164,
+      "bytes800": 27602,
+      "uploaded": true
+    },
+    "mt-baker-ski-area": {
+      "snowlineM": 1480,
+      "cropX": 0,
+      "cropY": 75,
+      "metresPerPixel": 25.1,
+      "bytes1600": 115550,
+      "bytes800": 47124,
+      "uploaded": true
+    },
+    "mt-bachelor": {
+      "snowlineM": 2250,
+      "cropX": 0,
+      "cropY": 224,
+      "metresPerPixel": 27.5,
+      "bytes1600": 96764,
+      "bytes800": 37628,
+      "uploaded": true
+    },
+    "mt-baldy": {
+      "snowlineM": 2301,
+      "cropX": 0,
+      "cropY": 209,
+      "metresPerPixel": 31.6,
+      "bytes1600": 151596,
+      "bytes800": 63274,
+      "uploaded": true
+    },
+    "mt-brighton": {
+      "snowlineM": 370,
+      "cropX": 0,
+      "cropY": 134,
+      "metresPerPixel": 28.2,
+      "bytes1600": 81672,
+      "bytes800": 30792,
+      "uploaded": true
+    },
+    "mt-crescent": {
+      "snowlineM": 412,
+      "cropX": 0,
+      "cropY": 67,
+      "metresPerPixel": 28.7,
+      "bytes1600": 81556,
+      "bytes800": 31820,
+      "uploaded": true
+    },
+    "mt-holiday": {
+      "snowlineM": 278,
+      "cropX": 0,
+      "cropY": 186,
+      "metresPerPixel": 27.1,
+      "bytes1600": 84332,
+      "bytes800": 32602,
+      "uploaded": true
+    },
+    "mt-hood-meadows": {
+      "snowlineM": 1802,
+      "cropX": 0,
+      "cropY": 59,
+      "metresPerPixel": 26.9,
+      "bytes1600": 106802,
+      "bytes800": 43404,
+      "uploaded": true
+    },
+    "mt-eyak": {
+      "snowlineM": 249,
+      "cropX": 0,
+      "cropY": 259,
+      "metresPerPixel": 18.8,
+      "bytes1600": 81540,
+      "bytes800": 32748,
+      "uploaded": true
+    },
+    "mt-hood-skibowl": {
+      "snowlineM": 1320,
+      "cropX": 0,
+      "cropY": 185,
+      "metresPerPixel": 26.9,
+      "bytes1600": 105028,
+      "bytes800": 42908,
+      "uploaded": true
+    },
+    "mt-la-crosse": {
+      "snowlineM": 342,
+      "cropX": 0,
+      "cropY": 151,
+      "metresPerPixel": 27.6,
+      "bytes1600": 104232,
+      "bytes800": 43370,
+      "uploaded": true
+    },
+    "mt-lemmon-ski-valley": {
+      "snowlineM": 2074,
+      "cropX": 0,
+      "cropY": 143,
+      "metresPerPixel": 32.3,
+      "bytes1600": 151844,
+      "bytes800": 61880,
+      "uploaded": true
+    },
+    "mt-rose-ski-tahoe": {
+      "snowlineM": 2737,
+      "cropX": 0,
+      "cropY": 204,
+      "metresPerPixel": 29.6,
+      "bytes1600": 110110,
+      "bytes800": 45606,
+      "uploaded": true
+    },
+    "mt-shasta-ski-park": {
+      "snowlineM": 1923,
+      "cropX": 0,
+      "cropY": 270,
+      "metresPerPixel": 28.7,
+      "bytes1600": 90466,
+      "bytes800": 34870,
+      "uploaded": true
+    },
+    "mt-spokane": {
+      "snowlineM": 1180,
+      "cropX": 0,
+      "cropY": 83,
+      "metresPerPixel": 25.6,
+      "bytes1600": 120602,
+      "bytes800": 49532,
+      "uploaded": true
+    },
+    "mt-waterman": {
+      "snowlineM": 2285,
+      "cropX": 0,
+      "cropY": 179,
+      "metresPerPixel": 31.6,
+      "bytes1600": 161682,
+      "bytes800": 67774,
+      "uploaded": true
+    },
+    "mystic-mountain": {
+      "snowlineM": 643,
+      "cropX": 0,
+      "cropY": 42,
+      "metresPerPixel": 29.3,
+      "bytes1600": 101052,
+      "bytes800": 41580,
+      "uploaded": true
+    },
+    "nordic-mountain": {
+      "snowlineM": 332,
+      "cropX": 0,
+      "cropY": 70,
+      "metresPerPixel": 27.4,
+      "bytes1600": 62012,
+      "bytes800": 23004,
+      "uploaded": true
+    },
+    "nordic-valley": {
+      "snowlineM": 1904,
+      "cropX": 0,
+      "cropY": 68,
+      "metresPerPixel": 28.7,
+      "bytes1600": 89772,
+      "bytes800": 35572,
+      "uploaded": true
+    },
+    "northeast-slopes": {
+      "snowlineM": 559,
+      "cropX": 0,
+      "cropY": 131,
+      "metresPerPixel": 27.4,
+      "bytes1600": 92310,
+      "bytes800": 37370,
+      "uploaded": true
+    },
+    "nashoba-valley-ski-area": {
+      "snowlineM": 94,
+      "cropX": 0,
+      "cropY": 228,
+      "metresPerPixel": 28.1,
+      "bytes1600": 97378,
+      "bytes800": 38602,
+      "uploaded": true
+    },
+    "northstar-california": {
+      "snowlineM": 2277,
+      "cropX": 0,
+      "cropY": 136,
+      "metresPerPixel": 29.6,
+      "bytes1600": 85022,
+      "bytes800": 34086,
+      "uploaded": true
+    },
+    "norway-mountain": {
+      "snowlineM": 336,
+      "cropX": 0,
+      "cropY": 207,
+      "metresPerPixel": 26.6,
+      "bytes1600": 88928,
+      "bytes800": 35376,
+      "uploaded": true
+    },
+    "nubs-nob": {
+      "snowlineM": 342,
+      "cropX": 0,
+      "cropY": 228,
+      "metresPerPixel": 26.8,
+      "bytes1600": 95682,
+      "bytes800": 36276,
+      "uploaded": true
+    },
+    "oak-mountain": {
+      "snowlineM": 633,
+      "cropX": 0,
+      "cropY": 151,
+      "metresPerPixel": 27.8,
+      "bytes1600": 85502,
+      "bytes800": 33782,
+      "uploaded": true
+    },
+    "ober-mountain": {
+      "snowlineM": 896,
+      "cropX": 0,
+      "cropY": 189,
+      "metresPerPixel": 31,
+      "bytes1600": 187154,
+      "bytes800": 75272,
+      "uploaded": true
+    },
+    "oglebay-resort": {
+      "snowlineM": 369,
+      "cropX": 0,
+      "cropY": 89,
+      "metresPerPixel": 29.2,
+      "bytes1600": 146818,
+      "bytes800": 64454,
+      "uploaded": true
+    },
+    "okemo-mountain-resort": {
+      "snowlineM": 682,
+      "cropX": 0,
+      "cropY": 247,
+      "metresPerPixel": 27.8,
+      "bytes1600": 91258,
+      "bytes800": 36514,
+      "uploaded": true
+    },
+    "otis-ridge": {
+      "snowlineM": 478,
+      "cropX": 0,
+      "cropY": 180,
+      "metresPerPixel": 28.3,
+      "bytes1600": 85776,
+      "bytes800": 34622,
+      "uploaded": true
+    },
+    "otsego-resort": {
+      "snowlineM": 412,
+      "cropX": 0,
+      "cropY": 214,
+      "metresPerPixel": 27,
+      "bytes1600": 86362,
+      "bytes800": 34484,
+      "uploaded": true
+    },
+    "pajarito-mountain": {
+      "snowlineM": 2963,
+      "cropX": 0,
+      "cropY": 286,
+      "metresPerPixel": 31,
+      "bytes1600": 114910,
+      "bytes800": 46982,
+      "uploaded": true
+    },
+    "palisades-tahoe": {
+      "snowlineM": 2324,
+      "cropX": 0,
+      "cropY": 173,
+      "metresPerPixel": 29.6,
+      "bytes1600": 105252,
+      "bytes800": 43984,
+      "uploaded": true
+    },
+    "park-city": {
+      "snowlineM": 2580,
+      "cropX": 0,
+      "cropY": 280,
+      "metresPerPixel": 29,
+      "bytes1600": 109584,
+      "bytes800": 44848,
+      "uploaded": true
+    },
+    "paoli-peaks": {
+      "snowlineM": 226,
+      "cropX": 0,
+      "cropY": 282,
+      "metresPerPixel": 29.9,
+      "bytes1600": 108884,
+      "bytes800": 44868,
+      "uploaded": true
+    },
+    "pats-peak": {
+      "snowlineM": 328,
+      "cropX": 0,
+      "cropY": 166,
+      "metresPerPixel": 27.9,
+      "bytes1600": 86132,
+      "bytes800": 33498,
+      "uploaded": true
+    },
+    "paul-bunyan-hill": {
+      "snowlineM": 414,
+      "cropX": 0,
+      "cropY": 86,
+      "metresPerPixel": 26.9,
+      "bytes1600": 96032,
+      "bytes800": 38416,
+      "uploaded": true
+    },
+    "peek-n-peak": {
+      "snowlineM": 503,
+      "cropX": 0,
+      "cropY": 126,
+      "metresPerPixel": 28.4,
+      "bytes1600": 71764,
+      "bytes800": 29204,
+      "uploaded": true
+    },
+    "pebble-creek": {
+      "snowlineM": 2274,
+      "cropX": 0,
+      "cropY": 143,
+      "metresPerPixel": 28,
+      "bytes1600": 120768,
+      "bytes800": 49346,
+      "uploaded": true
+    },
+    "perfect-north": {
+      "snowlineM": 257,
+      "cropX": 0,
+      "cropY": 135,
+      "metresPerPixel": 29.6,
+      "bytes1600": 134512,
+      "bytes800": 53690,
+      "uploaded": true
+    },
+    "pico-mountain": {
+      "snowlineM": 910,
+      "cropX": 0,
+      "cropY": 220,
+      "metresPerPixel": 27.6,
+      "bytes1600": 100880,
+      "bytes800": 41630,
+      "uploaded": true
+    },
+    "pine-knob": {
+      "snowlineM": 322,
+      "cropX": 0,
+      "cropY": 277,
+      "metresPerPixel": 28.1,
+      "bytes1600": 73060,
+      "bytes800": 28134,
+      "uploaded": true
+    },
+    "pine-mountain": {
+      "snowlineM": 600,
+      "cropX": 0,
+      "cropY": 44,
+      "metresPerPixel": 26.6,
+      "bytes1600": 88644,
+      "bytes800": 34592,
+      "uploaded": true
+    },
+    "plattekill-mountain": {
+      "snowlineM": 899,
+      "cropX": 0,
+      "cropY": 53,
+      "metresPerPixel": 28.3,
+      "bytes1600": 87162,
+      "bytes800": 35776,
+      "uploaded": true
+    },
+    "pomerelle": {
+      "snowlineM": 2554,
+      "cropX": 0,
+      "cropY": 144,
+      "metresPerPixel": 28.3,
+      "bytes1600": 64560,
+      "bytes800": 26364,
+      "uploaded": true
+    },
+    "porcupine-mountains": {
+      "snowlineM": 435,
+      "cropX": 0,
+      "cropY": 192,
+      "metresPerPixel": 26.2,
+      "bytes1600": 64954,
+      "bytes800": 25270,
+      "uploaded": true
+    },
+    "powder-mountain": {
+      "snowlineM": 2353,
+      "cropX": 0,
+      "cropY": 288,
+      "metresPerPixel": 28.7,
+      "bytes1600": 108228,
+      "bytes800": 44082,
+      "uploaded": true
+    },
+    "powder-ridge": {
+      "snowlineM": 328,
+      "cropX": 0,
+      "cropY": 269,
+      "metresPerPixel": 26.8,
+      "bytes1600": 53152,
+      "bytes800": 20684,
+      "uploaded": true
+    },
+    "powder-ridge-mountain-park": {
+      "snowlineM": 113,
+      "cropX": 0,
+      "cropY": 248,
+      "metresPerPixel": 28.6,
+      "bytes1600": 98684,
+      "bytes800": 39768,
+      "uploaded": true
+    },
+    "powderhorn": {
+      "snowlineM": 3006,
+      "cropX": 0,
+      "cropY": 119,
+      "metresPerPixel": 29.7,
+      "bytes1600": 96444,
+      "bytes800": 37974,
+      "uploaded": true
+    },
+    "powderhouse-hill": {
+      "snowlineM": 117,
+      "cropX": 0,
+      "cropY": 254,
+      "metresPerPixel": 27.7,
+      "bytes1600": 81438,
+      "bytes800": 30814,
+      "uploaded": true
+    },
+    "purgatory": {
+      "snowlineM": 3166,
+      "cropX": 0,
+      "cropY": 110,
+      "metresPerPixel": 30.3,
+      "bytes1600": 116500,
+      "bytes800": 47246,
+      "uploaded": true
+    },
+    "quarry-road-trails": {
+      "snowlineM": 100,
+      "cropX": 0,
+      "cropY": 72,
+      "metresPerPixel": 27.2,
+      "bytes1600": 73026,
+      "bytes800": 28108,
+      "uploaded": true
+    },
+    "quechee-club": {
+      "snowlineM": 318,
+      "cropX": 0,
+      "cropY": 45,
+      "metresPerPixel": 27.7,
+      "bytes1600": 98224,
+      "bytes800": 39718,
+      "uploaded": true
+    },
+    "red-lodge": {
+      "snowlineM": 2504,
+      "cropX": 0,
+      "cropY": 138,
+      "metresPerPixel": 26.9,
+      "bytes1600": 89136,
+      "bytes800": 36514,
+      "uploaded": true
+    },
+    "ragged-mountain": {
+      "snowlineM": 334,
+      "cropX": 0,
+      "cropY": 71,
+      "metresPerPixel": 27.7,
+      "bytes1600": 96756,
+      "bytes800": 38446,
+      "uploaded": true
+    },
+    "red-river-ski-area": {
+      "snowlineM": 3067,
+      "cropX": 0,
+      "cropY": 174,
+      "metresPerPixel": 30.6,
+      "bytes1600": 119906,
+      "bytes800": 49872,
+      "uploaded": true
+    },
+    "rotarun": {
+      "snowlineM": 2320,
+      "cropX": 0,
+      "cropY": 79,
+      "metresPerPixel": 27.6,
+      "bytes1600": 106452,
+      "bytes800": 45024,
+      "uploaded": true
+    },
+    "roundtop-mountain-resort": {
+      "snowlineM": 326,
+      "cropX": 0,
+      "cropY": 285,
+      "metresPerPixel": 29.2,
+      "bytes1600": 104874,
+      "bytes800": 42412,
+      "uploaded": true
+    },
+    "royal-mountain": {
+      "snowlineM": 505,
+      "cropX": 0,
+      "cropY": 271,
+      "metresPerPixel": 27.9,
+      "bytes1600": 84982,
+      "bytes800": 33368,
+      "uploaded": true
+    },
+    "saddleback": {
+      "snowlineM": 684,
+      "cropX": 0,
+      "cropY": 121,
+      "metresPerPixel": 27.1,
+      "bytes1600": 55360,
+      "bytes800": 21680,
+      "uploaded": true
+    },
+    "sandia-peak": {
+      "snowlineM": 2904,
+      "cropX": 0,
+      "cropY": 161,
+      "metresPerPixel": 31.2,
+      "bytes1600": 136738,
+      "bytes800": 54460,
+      "uploaded": true
+    },
+    "sapphire-valley-resort": {
+      "snowlineM": 1211,
+      "cropX": 0,
+      "cropY": 283,
+      "metresPerPixel": 31.3,
+      "bytes1600": 149312,
+      "bytes800": 62704,
+      "uploaded": true
+    },
+    "saskadena-six-area": {
+      "snowlineM": 463,
+      "cropX": 0,
+      "cropY": 211,
+      "metresPerPixel": 27.6,
+      "bytes1600": 96406,
+      "bytes800": 39220,
+      "uploaded": true
+    },
+    "seven-oaks": {
+      "snowlineM": 310,
+      "cropX": 0,
+      "cropY": 68,
+      "metresPerPixel": 28.5,
+      "bytes1600": 68738,
+      "bytes800": 25584,
+      "uploaded": true
+    },
+    "schweitzer": {
+      "snowlineM": 1579,
+      "cropX": 0,
+      "cropY": 181,
+      "metresPerPixel": 25.4,
+      "bytes1600": 71082,
+      "bytes800": 28962,
+      "uploaded": true
+    },
+    "seven-springs": {
+      "snowlineM": 746,
+      "cropX": 0,
+      "cropY": 132,
+      "metresPerPixel": 29.3,
+      "bytes1600": 90700,
+      "bytes800": 36988,
+      "uploaded": true
+    },
+    "shanty-creek": {
+      "snowlineM": 339,
+      "cropX": 0,
+      "cropY": 138,
+      "metresPerPixel": 27.1,
+      "bytes1600": 72914,
+      "bytes800": 29518,
+      "uploaded": true
+    },
+    "shawnee-mountain": {
+      "snowlineM": 269,
+      "cropX": 0,
+      "cropY": 61,
+      "metresPerPixel": 28.8,
+      "bytes1600": 110540,
+      "bytes800": 44318,
+      "uploaded": true
+    },
+    "shawnee-peak": {
+      "snowlineM": 170,
+      "cropX": 0,
+      "cropY": 206,
+      "metresPerPixel": 27.5,
+      "bytes1600": 61460,
+      "bytes800": 23732,
+      "uploaded": true
+    },
+    "showdown": {
+      "snowlineM": 2286,
+      "cropX": 0,
+      "cropY": 88,
+      "metresPerPixel": 26.1,
+      "bytes1600": 91270,
+      "bytes800": 37050,
+      "uploaded": true
+    },
+    "sierra-at-tahoe": {
+      "snowlineM": 2388,
+      "cropX": 0,
+      "cropY": 126,
+      "metresPerPixel": 29.8,
+      "bytes1600": 96788,
+      "bytes800": 39126,
+      "uploaded": true
+    },
+    "silver-mountain": {
+      "snowlineM": 1585,
+      "cropX": 0,
+      "cropY": 72,
+      "metresPerPixel": 25.8,
+      "bytes1600": 120852,
+      "bytes800": 51680,
+      "uploaded": true
+    },
+    "silverton-mountain": {
+      "snowlineM": 3674,
+      "cropX": 0,
+      "cropY": 72,
+      "metresPerPixel": 30.2,
+      "bytes1600": 113240,
+      "bytes800": 46222,
+      "uploaded": true
+    },
+    "sipapu": {
+      "snowlineM": 3422,
+      "cropX": 0,
+      "cropY": 123,
+      "metresPerPixel": 30.9,
+      "bytes1600": 88144,
+      "bytes800": 35560,
+      "uploaded": true
+    },
+    "skaneateles-club": {
+      "snowlineM": 350,
+      "cropX": 0,
+      "cropY": 139,
+      "metresPerPixel": 28,
+      "bytes1600": 72626,
+      "bytes800": 28226,
+      "uploaded": true
+    },
+    "ski-apache": {
+      "snowlineM": 3208,
+      "cropX": 0,
+      "cropY": 133,
+      "metresPerPixel": 31.9,
+      "bytes1600": 147412,
+      "bytes800": 62296,
+      "uploaded": true
+    },
+    "ski-bradford": {
+      "snowlineM": 44,
+      "cropX": 0,
+      "cropY": 295,
+      "metresPerPixel": 28.1,
+      "bytes1600": 90208,
+      "bytes800": 36958,
+      "uploaded": true
+    },
+    "ski-brule": {
+      "snowlineM": 493,
+      "cropX": 0,
+      "cropY": 93,
+      "metresPerPixel": 26.5,
+      "bytes1600": 80622,
+      "bytes800": 32742,
+      "uploaded": true
+    },
+    "ski-butternut": {
+      "snowlineM": 399,
+      "cropX": 0,
+      "cropY": 191,
+      "metresPerPixel": 28.3,
+      "bytes1600": 71446,
+      "bytes800": 28584,
+      "uploaded": true
+    },
+    "ski-cooper": {
+      "snowlineM": 3458,
+      "cropX": 0,
+      "cropY": 50,
+      "metresPerPixel": 29.5,
+      "bytes1600": 89542,
+      "bytes800": 36106,
+      "uploaded": true
+    },
+    "ski-gull": {
+      "snowlineM": 386,
+      "cropX": 0,
+      "cropY": 123,
+      "metresPerPixel": 26.3,
+      "bytes1600": 52350,
+      "bytes800": 19184,
+      "uploaded": true
+    },
+    "ski-santa-fe": {
+      "snowlineM": 3418,
+      "cropX": 0,
+      "cropY": 125,
+      "metresPerPixel": 31,
+      "bytes1600": 144628,
+      "bytes800": 59752,
+      "uploaded": true
+    },
+    "ski-sawmill": {
+      "snowlineM": 544,
+      "cropX": 0,
+      "cropY": 52,
+      "metresPerPixel": 28.6,
+      "bytes1600": 91148,
+      "bytes800": 38222,
+      "uploaded": true
+    },
+    "ski-sundown": {
+      "snowlineM": 232,
+      "cropX": 0,
+      "cropY": 161,
+      "metresPerPixel": 28.5,
+      "bytes1600": 91624,
+      "bytes800": 35780,
+      "uploaded": true
+    },
+    "ski-ward": {
+      "snowlineM": 210,
+      "cropX": 0,
+      "cropY": 286,
+      "metresPerPixel": 28.3,
+      "bytes1600": 77090,
+      "bytes800": 30348,
+      "uploaded": true
+    },
+    "skiland": {
+      "snowlineM": 441,
+      "cropX": 0,
+      "cropY": 228,
+      "metresPerPixel": 16.2,
+      "bytes1600": 61872,
+      "bytes800": 25692,
+      "uploaded": true
+    },
+    "sleepy-hollow": {
+      "snowlineM": 288,
+      "cropX": 0,
+      "cropY": 264,
+      "metresPerPixel": 28.6,
+      "bytes1600": 72334,
+      "bytes800": 28384,
+      "uploaded": true
+    },
+    "smugglers-notch": {
+      "snowlineM": 712,
+      "cropX": 0,
+      "cropY": 131,
+      "metresPerPixel": 27.2,
+      "bytes1600": 91890,
+      "bytes800": 37374,
+      "uploaded": true
+    },
+    "snow-creek": {
+      "snowlineM": 301,
+      "cropX": 0,
+      "cropY": 96,
+      "metresPerPixel": 29.5,
+      "bytes1600": 98574,
+      "bytes800": 39662,
+      "uploaded": true
+    },
+    "snow-king": {
+      "snowlineM": 2144,
+      "cropX": 0,
+      "cropY": 249,
+      "metresPerPixel": 27.7,
+      "bytes1600": 77790,
+      "bytes800": 30868,
+      "uploaded": true
+    },
+    "snow-ridge": {
+      "snowlineM": 563,
+      "cropX": 0,
+      "cropY": 91,
+      "metresPerPixel": 27.7,
+      "bytes1600": 68730,
+      "bytes800": 25968,
+      "uploaded": true
+    },
+    "snow-snake": {
+      "snowlineM": 354,
+      "cropX": 0,
+      "cropY": 42,
+      "metresPerPixel": 27.5,
+      "bytes1600": 79686,
+      "bytes800": 30548,
+      "uploaded": true
+    },
+    "snow-summit": {
+      "snowlineM": 2315,
+      "cropX": 0,
+      "cropY": 43,
+      "metresPerPixel": 31.6,
+      "bytes1600": 116946,
+      "bytes800": 47362,
+      "uploaded": true
+    },
+    "snow-trails": {
+      "snowlineM": 404,
+      "cropX": 0,
+      "cropY": 173,
+      "metresPerPixel": 29,
+      "bytes1600": 95604,
+      "bytes800": 38344,
+      "uploaded": true
+    },
+    "snow-valley": {
+      "snowlineM": 2231,
+      "cropX": 0,
+      "cropY": 83,
+      "metresPerPixel": 31.6,
+      "bytes1600": 157680,
+      "bytes800": 65550,
+      "uploaded": true
+    },
+    "snowbasin": {
+      "snowlineM": 2400,
+      "cropX": 0,
+      "cropY": 151,
+      "metresPerPixel": 28.7,
+      "bytes1600": 111892,
+      "bytes800": 44860,
+      "uploaded": true
+    },
+    "snowbird": {
+      "snowlineM": 2859,
+      "cropX": 0,
+      "cropY": 294,
+      "metresPerPixel": 29,
+      "bytes1600": 123450,
+      "bytes800": 50218,
+      "uploaded": true
+    },
+    "snowhaven": {
+      "snowlineM": 1646,
+      "cropX": 0,
+      "cropY": 195,
+      "metresPerPixel": 26.5,
+      "bytes1600": 111808,
+      "bytes800": 45344,
+      "uploaded": true
+    },
+    "snowmass": {
+      "snowlineM": 3142,
+      "cropX": 0,
+      "cropY": 128,
+      "metresPerPixel": 29.6,
+      "bytes1600": 120896,
+      "bytes800": 49410,
+      "uploaded": true
+    },
+    "snowriver": {
+      "snowlineM": 631,
+      "cropX": 0,
+      "cropY": 285,
+      "metresPerPixel": 26.3,
+      "bytes1600": 56984,
+      "bytes800": 21558,
+      "uploaded": true
+    },
+    "snowshoe-mountain": {
+      "snowlineM": 1249,
+      "cropX": 0,
+      "cropY": 48,
+      "metresPerPixel": 29.9,
+      "bytes1600": 110678,
+      "bytes800": 46100,
+      "uploaded": true
+    },
+    "snowstar": {
+      "snowlineM": 225,
+      "cropX": 0,
+      "cropY": 202,
+      "metresPerPixel": 28.7,
+      "bytes1600": 112406,
+      "bytes800": 46028,
+      "uploaded": true
+    },
+    "snowy-range": {
+      "snowlineM": 3159,
+      "cropX": 0,
+      "cropY": 122,
+      "metresPerPixel": 28.7,
+      "bytes1600": 76296,
+      "bytes800": 30688,
+      "uploaded": true
+    },
+    "soda-springs": {
+      "snowlineM": 2184,
+      "cropX": 0,
+      "cropY": 218,
+      "metresPerPixel": 29.6,
+      "bytes1600": 96246,
+      "bytes800": 39448,
+      "uploaded": true
+    },
+    "soldier-hollow": {
+      "snowlineM": 2226,
+      "cropX": 0,
+      "cropY": 240,
+      "metresPerPixel": 29.1,
+      "bytes1600": 88240,
+      "bytes800": 35564,
+      "uploaded": true
+    },
+    "soldier-mountain": {
+      "snowlineM": 2235,
+      "cropX": 0,
+      "cropY": 196,
+      "metresPerPixel": 27.7,
+      "bytes1600": 109248,
+      "bytes800": 46038,
+      "uploaded": true
+    },
+    "solitude": {
+      "snowlineM": 2817,
+      "cropX": 0,
+      "cropY": 146,
+      "metresPerPixel": 29,
+      "bytes1600": 121148,
+      "bytes800": 49988,
+      "uploaded": true
+    },
+    "song-mountain": {
+      "snowlineM": 506,
+      "cropX": 0,
+      "cropY": 232,
+      "metresPerPixel": 28.1,
+      "bytes1600": 70312,
+      "bytes800": 29038,
+      "uploaded": true
+    },
+    "spirit-mountain": {
+      "snowlineM": 366,
+      "cropX": 0,
+      "cropY": 138,
+      "metresPerPixel": 26.2,
+      "bytes1600": 70684,
+      "bytes800": 26694,
+      "uploaded": true
+    },
+    "spout-springs": {
+      "snowlineM": 1585,
+      "cropX": 0,
+      "cropY": 89,
+      "metresPerPixel": 26.7,
+      "bytes1600": 109482,
+      "bytes800": 46418,
+      "uploaded": true
+    },
+    "spring-mountain": {
+      "snowlineM": 96,
+      "cropX": 0,
+      "cropY": 225,
+      "metresPerPixel": 29.2,
+      "bytes1600": 84218,
+      "bytes800": 34406,
+      "uploaded": true
+    },
+    "spruce-mountain-ski-area": {
+      "snowlineM": 196,
+      "cropX": 0,
+      "cropY": 160,
+      "metresPerPixel": 27.3,
+      "bytes1600": 81608,
+      "bytes800": 33176,
+      "uploaded": true
+    },
+    "steamboat": {
+      "snowlineM": 2662,
+      "cropX": 0,
+      "cropY": 257,
+      "metresPerPixel": 29.1,
+      "bytes1600": 115044,
+      "bytes800": 47168,
+      "uploaded": true
+    },
+    "stevens-pass": {
+      "snowlineM": 1510,
+      "cropX": 0,
+      "cropY": 75,
+      "metresPerPixel": 25.7,
+      "bytes1600": 90302,
+      "bytes800": 38320,
+      "uploaded": true
+    },
+    "stowe-mountain-resort": {
+      "snowlineM": 804,
+      "cropX": 0,
+      "cropY": 285,
+      "metresPerPixel": 27.2,
+      "bytes1600": 98262,
+      "bytes800": 40314,
+      "uploaded": true
+    },
+    "stratton-mountain": {
+      "snowlineM": 876,
+      "cropX": 0,
+      "cropY": 115,
+      "metresPerPixel": 27.9,
+      "bytes1600": 92976,
+      "bytes800": 37916,
+      "uploaded": true
+    },
+    "sugar-bowl-resort": {
+      "snowlineM": 2327,
+      "cropX": 0,
+      "cropY": 285,
+      "metresPerPixel": 29.6,
+      "bytes1600": 105436,
+      "bytes800": 43738,
+      "uploaded": true
+    },
+    "sugar-mountain-resort": {
+      "snowlineM": 1433,
+      "cropX": 0,
+      "cropY": 181,
+      "metresPerPixel": 30.9,
+      "bytes1600": 151504,
+      "bytes800": 64260,
+      "uploaded": true
+    },
+    "sugarbush": {
+      "snowlineM": 848,
+      "cropX": 0,
+      "cropY": 101,
+      "metresPerPixel": 27.4,
+      "bytes1600": 91558,
+      "bytes800": 36748,
+      "uploaded": true
+    },
+    "sugarloaf": {
+      "snowlineM": 862,
+      "cropX": 0,
+      "cropY": 278,
+      "metresPerPixel": 27,
+      "bytes1600": 70836,
+      "bytes800": 28110,
+      "uploaded": true
+    },
+    "summit-ski-area": {
+      "snowlineM": 1391,
+      "cropX": 0,
+      "cropY": 173,
+      "metresPerPixel": 26.9,
+      "bytes1600": 110100,
+      "bytes800": 45270,
+      "uploaded": true
+    },
+    "sun-valley": {
+      "snowlineM": 2271,
+      "cropX": 0,
+      "cropY": 187,
+      "metresPerPixel": 27.6,
+      "bytes1600": 105752,
+      "bytes800": 44624,
+      "uploaded": true
+    },
+    "sunburst": {
+      "snowlineM": 316,
+      "cropX": 0,
+      "cropY": 131,
+      "metresPerPixel": 27.7,
+      "bytes1600": 78368,
+      "bytes800": 30468,
+      "uploaded": true
+    },
+    "sundance": {
+      "snowlineM": 2288,
+      "cropX": 0,
+      "cropY": 245,
+      "metresPerPixel": 29.1,
+      "bytes1600": 118062,
+      "bytes800": 47786,
+      "uploaded": true
+    },
+    "sunday-river": {
+      "snowlineM": 600,
+      "cropX": 0,
+      "cropY": 262,
+      "metresPerPixel": 27.3,
+      "bytes1600": 78220,
+      "bytes800": 30692,
+      "uploaded": true
+    },
+    "sundown-mountain": {
+      "snowlineM": 268,
+      "cropX": 0,
+      "cropY": 84,
+      "metresPerPixel": 28.2,
+      "bytes1600": 126648,
+      "bytes800": 52614,
+      "uploaded": true
+    },
+    "sunlight-mountain": {
+      "snowlineM": 2710,
+      "cropX": 0,
+      "cropY": 89,
+      "metresPerPixel": 29.5,
+      "bytes1600": 113960,
+      "bytes800": 45632,
+      "uploaded": true
+    },
+    "sunrise-park-resort": {
+      "snowlineM": 3094,
+      "cropX": 0,
+      "cropY": 145,
+      "metresPerPixel": 31.7,
+      "bytes1600": 96828,
+      "bytes800": 40166,
+      "uploaded": true
+    },
+    "swain-resort": {
+      "snowlineM": 524,
+      "cropX": 0,
+      "cropY": 295,
+      "metresPerPixel": 28.2,
+      "bytes1600": 86354,
+      "bytes800": 34110,
+      "uploaded": true
+    },
+    "swiss-valley": {
+      "snowlineM": 331,
+      "cropX": 0,
+      "cropY": 74,
+      "metresPerPixel": 28.4,
+      "bytes1600": 66528,
+      "bytes800": 25442,
+      "uploaded": true
+    },
+    "tahoe-donner-downhill": {
+      "snowlineM": 2158,
+      "cropX": 0,
+      "cropY": 94,
+      "metresPerPixel": 29.6,
+      "bytes1600": 84324,
+      "bytes800": 34000,
+      "uploaded": true
+    },
+    "tamarack": {
+      "snowlineM": 1920,
+      "cropX": 0,
+      "cropY": 108,
+      "metresPerPixel": 27,
+      "bytes1600": 87474,
+      "bytes800": 35206,
+      "uploaded": true
+    },
+    "taos-ski-valley": {
+      "snowlineM": 3319,
+      "cropX": 0,
+      "cropY": 46,
+      "metresPerPixel": 30.7,
+      "bytes1600": 110330,
+      "bytes800": 45118,
+      "uploaded": true
+    },
+    "tenney-mountain": {
+      "snowlineM": 442,
+      "cropX": 0,
+      "cropY": 148,
+      "metresPerPixel": 27.6,
+      "bytes1600": 89670,
+      "bytes800": 36444,
+      "uploaded": true
+    },
+    "telluride": {
+      "snowlineM": 3334,
+      "cropX": 0,
+      "cropY": 257,
+      "metresPerPixel": 30.1,
+      "bytes1600": 110374,
+      "bytes800": 45510,
+      "uploaded": true
+    },
+    "terry-peak": {
+      "snowlineM": 1976,
+      "cropX": 0,
+      "cropY": 66,
+      "metresPerPixel": 27.3,
+      "bytes1600": 141716,
+      "bytes800": 59526,
+      "uploaded": true
+    },
+    "teton-pass": {
+      "snowlineM": 2132,
+      "cropX": 0,
+      "cropY": 271,
+      "metresPerPixel": 25.6,
+      "bytes1600": 111730,
+      "bytes800": 45944,
+      "uploaded": true
+    },
+    "the-omni-homestead-resort": {
+      "snowlineM": 771,
+      "cropX": 0,
+      "cropY": 287,
+      "metresPerPixel": 30.1,
+      "bytes1600": 135350,
+      "bytes800": 55582,
+      "uploaded": true
+    },
+    "the-highlands": {
+      "snowlineM": 318,
+      "cropX": 0,
+      "cropY": 55,
+      "metresPerPixel": 26.8,
+      "bytes1600": 91328,
+      "bytes800": 35778,
+      "uploaded": true
+    },
+    "the-rock-snowpark": {
+      "snowlineM": 233,
+      "cropX": 0,
+      "cropY": 64,
+      "metresPerPixel": 28,
+      "bytes1600": 54494,
+      "bytes800": 21020,
+      "uploaded": true
+    },
+    "the-summit-at-snoqualmie": {
+      "snowlineM": 1332,
+      "cropX": 0,
+      "cropY": 173,
+      "metresPerPixel": 25.9,
+      "bytes1600": 98666,
+      "bytes800": 41148,
+      "uploaded": true
+    },
+    "thunder-ridge-ski-area": {
+      "snowlineM": 278,
+      "cropX": 0,
+      "cropY": 45,
+      "metresPerPixel": 28.6,
+      "bytes1600": 104776,
+      "bytes800": 43806,
+      "uploaded": true
+    },
+    "thrill-hills": {
+      "snowlineM": 425,
+      "cropX": 0,
+      "cropY": 153,
+      "metresPerPixel": 26.3,
+      "bytes1600": 62726,
+      "bytes800": 23134,
+      "uploaded": true
+    },
+    "timber-ridge": {
+      "snowlineM": 240,
+      "cropX": 0,
+      "cropY": 232,
+      "metresPerPixel": 28.3,
+      "bytes1600": 47940,
+      "bytes800": 18444,
+      "uploaded": true
+    },
+    "timberline-lodge": {
+      "snowlineM": 1649,
+      "cropX": 0,
+      "cropY": 63,
+      "metresPerPixel": 26.9,
+      "bytes1600": 106112,
+      "bytes800": 43822,
+      "uploaded": true
+    },
+    "timberline-mountain": {
+      "snowlineM": 1045,
+      "cropX": 0,
+      "cropY": 122,
+      "metresPerPixel": 29.7,
+      "bytes1600": 86788,
+      "bytes800": 35194,
+      "uploaded": true
+    },
+    "titcomb-mountain": {
+      "snowlineM": 229,
+      "cropX": 0,
+      "cropY": 237,
+      "metresPerPixel": 27.2,
+      "bytes1600": 70398,
+      "bytes800": 27390,
+      "uploaded": true
+    },
+    "titus-mountain": {
+      "snowlineM": 434,
+      "cropX": 0,
+      "cropY": 255,
+      "metresPerPixel": 27.2,
+      "bytes1600": 76038,
+      "bytes800": 29090,
+      "uploaded": true
+    },
+    "treetops-resort": {
+      "snowlineM": 410,
+      "cropX": 0,
+      "cropY": 148,
+      "metresPerPixel": 27,
+      "bytes1600": 88100,
+      "bytes800": 35248,
+      "uploaded": true
+    },
+    "trollhaugen": {
+      "snowlineM": 330,
+      "cropX": 0,
+      "cropY": 250,
+      "metresPerPixel": 26.9,
+      "bytes1600": 74998,
+      "bytes800": 29158,
+      "uploaded": true
+    },
+    "turner-mountain": {
+      "snowlineM": 1584,
+      "cropX": 0,
+      "cropY": 74,
+      "metresPerPixel": 25.2,
+      "bytes1600": 84722,
+      "bytes800": 35566,
+      "uploaded": true
+    },
+    "tussey-mountain": {
+      "snowlineM": 508,
+      "cropX": 0,
+      "cropY": 97,
+      "metresPerPixel": 28.9,
+      "bytes1600": 87962,
+      "bytes800": 35628,
+      "uploaded": true
+    },
+    "tyrol-basin": {
+      "snowlineM": 347,
+      "cropX": 0,
+      "cropY": 131,
+      "metresPerPixel": 27.9,
+      "bytes1600": 123170,
+      "bytes800": 52222,
+      "uploaded": true
+    },
+    "vail": {
+      "snowlineM": 3076,
+      "cropX": 0,
+      "cropY": 293,
+      "metresPerPixel": 29.4,
+      "bytes1600": 98968,
+      "bytes800": 40076,
+      "uploaded": true
+    },
+    "victor-constant-ski-area": {
+      "snowlineM": 262,
+      "cropX": 0,
+      "cropY": 197,
+      "metresPerPixel": 28.7,
+      "bytes1600": 116686,
+      "bytes800": 47088,
+      "uploaded": true
+    },
+    "villa-olivia": {
+      "snowlineM": 245,
+      "cropX": 0,
+      "cropY": 225,
+      "metresPerPixel": 28.4,
+      "bytes1600": 67478,
+      "bytes800": 26866,
+      "uploaded": true
+    },
+    "wachusett-mountain": {
+      "snowlineM": 458,
+      "cropX": 0,
+      "cropY": 252,
+      "metresPerPixel": 28.2,
+      "bytes1600": 89788,
+      "bytes800": 36080,
+      "uploaded": true
+    },
+    "warner-canyon": {
+      "snowlineM": 1856,
+      "cropX": 0,
+      "cropY": 263,
+      "metresPerPixel": 28.3,
+      "bytes1600": 76018,
+      "bytes800": 30424,
+      "uploaded": true
+    },
+    "waterville-valley": {
+      "snowlineM": 913,
+      "cropX": 0,
+      "cropY": 80,
+      "metresPerPixel": 27.5,
+      "bytes1600": 88642,
+      "bytes800": 36666,
+      "uploaded": true
+    },
+    "welch-village": {
+      "snowlineM": 299,
+      "cropX": 0,
+      "cropY": 152,
+      "metresPerPixel": 27.2,
+      "bytes1600": 113058,
+      "bytes800": 46128,
+      "uploaded": true
+    },
+    "west-mountain": {
+      "snowlineM": 290,
+      "cropX": 0,
+      "cropY": 225,
+      "metresPerPixel": 27.8,
+      "bytes1600": 78488,
+      "bytes800": 30480,
+      "uploaded": true
+    },
+    "whaleback-mountain": {
+      "snowlineM": 337,
+      "cropX": 0,
+      "cropY": 78,
+      "metresPerPixel": 27.7,
+      "bytes1600": 81332,
+      "bytes800": 32804,
+      "uploaded": true
+    },
+    "white-pass": {
+      "snowlineM": 1679,
+      "cropX": 0,
+      "cropY": 217,
+      "metresPerPixel": 26.2,
+      "bytes1600": 100244,
+      "bytes800": 41896,
+      "uploaded": true
+    },
+    "white-pine": {
+      "snowlineM": 2243,
+      "cropX": 0,
+      "cropY": 272,
+      "metresPerPixel": 28,
+      "bytes1600": 69988,
+      "bytes800": 27686,
+      "uploaded": true
+    },
+    "whitecap-mountains": {
+      "snowlineM": 430,
+      "cropX": 0,
+      "cropY": 185,
+      "metresPerPixel": 26.3,
+      "bytes1600": 68320,
+      "bytes800": 25892,
+      "uploaded": true
+    },
+    "whiteface-mountain": {
+      "snowlineM": 643,
+      "cropX": 0,
+      "cropY": 189,
+      "metresPerPixel": 27.3,
+      "bytes1600": 81866,
+      "bytes800": 32590,
+      "uploaded": true
+    },
+    "whitefish": {
+      "snowlineM": 1719,
+      "cropX": 0,
+      "cropY": 162,
+      "metresPerPixel": 25.3,
+      "bytes1600": 84422,
+      "bytes800": 34106,
+      "uploaded": true
+    },
+    "whitetail-resort": {
+      "snowlineM": 406,
+      "cropX": 0,
+      "cropY": 238,
+      "metresPerPixel": 29.4,
+      "bytes1600": 90948,
+      "bytes800": 35066,
+      "uploaded": true
+    },
+    "wild-mountain": {
+      "snowlineM": 334,
+      "cropX": 0,
+      "cropY": 185,
+      "metresPerPixel": 26.8,
+      "bytes1600": 74910,
+      "bytes800": 28644,
+      "uploaded": true
+    },
+    "wildcat-mountain": {
+      "snowlineM": 1024,
+      "cropX": 0,
+      "cropY": 112,
+      "metresPerPixel": 27.4,
+      "bytes1600": 78150,
+      "bytes800": 31478,
+      "uploaded": true
+    },
+    "willamette-pass": {
+      "snowlineM": 1799,
+      "cropX": 0,
+      "cropY": 230,
+      "metresPerPixel": 27.7,
+      "bytes1600": 84110,
+      "bytes800": 33384,
+      "uploaded": true
+    },
+    "willard-mountain": {
+      "snowlineM": 355,
+      "cropX": 0,
+      "cropY": 187,
+      "metresPerPixel": 27.9,
+      "bytes1600": 103234,
+      "bytes800": 41172,
+      "uploaded": true
+    },
+    "wilmot-mountain": {
+      "snowlineM": 264,
+      "cropX": 0,
+      "cropY": 240,
+      "metresPerPixel": 28.2,
+      "bytes1600": 68008,
+      "bytes800": 25958,
+      "uploaded": true
+    },
+    "windham-mountain": {
+      "snowlineM": 701,
+      "cropX": 0,
+      "cropY": 276,
+      "metresPerPixel": 28.3,
+      "bytes1600": 86776,
+      "bytes800": 34014,
+      "uploaded": true
+    },
+    "winter-park": {
+      "snowlineM": 3315,
+      "cropX": 0,
+      "cropY": 132,
+      "metresPerPixel": 29.3,
+      "bytes1600": 94508,
+      "bytes800": 39030,
+      "uploaded": true
+    },
+    "wintergreen-resort": {
+      "snowlineM": 919,
+      "cropX": 0,
+      "cropY": 112,
+      "metresPerPixel": 30.2,
+      "bytes1600": 127504,
+      "bytes800": 52660,
+      "uploaded": true
+    },
+    "winterplace-ski-resort": {
+      "snowlineM": 1005,
+      "cropX": 0,
+      "cropY": 128,
+      "metresPerPixel": 30.3,
+      "bytes1600": 174452,
+      "bytes800": 72236,
+      "uploaded": true
+    },
+    "wisp-resort": {
+      "snowlineM": 843,
+      "cropX": 0,
+      "cropY": 59,
+      "metresPerPixel": 29.5,
+      "bytes1600": 92344,
+      "bytes800": 38180,
+      "uploaded": true
+    },
+    "wolf-creek": {
+      "snowlineM": 3384,
+      "cropX": 0,
+      "cropY": 178,
+      "metresPerPixel": 30.3,
+      "bytes1600": 115238,
+      "bytes800": 48132,
+      "uploaded": true
+    },
+    "woods-valley": {
+      "snowlineM": 333,
+      "cropX": 0,
+      "cropY": 279,
+      "metresPerPixel": 27.8,
+      "bytes1600": 81626,
+      "bytes800": 31934,
+      "uploaded": true
+    },
+    "woodward-park-city": {
+      "snowlineM": 2195,
+      "cropX": 0,
+      "cropY": 258,
+      "metresPerPixel": 29,
+      "bytes1600": 109270,
+      "bytes800": 44018,
+      "uploaded": true
+    },
+    "yellowstone-club": {
+      "snowlineM": 2594,
+      "cropX": 0,
+      "cropY": 60,
+      "metresPerPixel": 26.9,
+      "bytes1600": 106600,
+      "bytes800": 43454,
+      "uploaded": true
+    }
+  },
+  "updatedAt": "2026-09-23T15:05:51.130Z"
+}

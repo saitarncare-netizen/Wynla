@@ -9,12 +9,13 @@
 import type { createSupabaseServerClient } from "@/lib/supabase/server";
 import { verdict, type PassContext, type Verdict, type VerdictResort, type VerdictWeather } from "@/lib/goWaitSkip";
 import type { DailyWeather } from "@/lib/snowSurface";
+import { heroSourceFor, type HeroSource } from "@/lib/heroSource";
 import { shiftDate } from "@/lib/weather/time";
 
 type Client = Awaited<ReturnType<typeof createSupabaseServerClient>>;
 
 export const TODAY_RESORT_COLS =
-  "id, slug, name, state, region, latitude, longitude, passes, tier, vertical_drop, operating_status, season_open_text, season_close_text, typical_season_start, typical_season_end, season_end_date, currently_open, snow_report_status, snow_report_updated_at, lifts_open_today, total_lifts, trails_open_today, total_trails, snow_new_24h_in, snow_new_48h_in, snow_base_depth_in, hero_image_url, hero_image_alt, wind_hold_mph_chair, wind_hold_mph_gondola, lift_types";
+  "id, slug, name, state, region, latitude, longitude, passes, tier, vertical_drop, operating_status, season_open_text, season_close_text, typical_season_start, typical_season_end, season_end_date, currently_open, snow_report_status, snow_report_updated_at, lifts_open_today, total_lifts, trails_open_today, total_trails, snow_new_24h_in, snow_new_48h_in, snow_base_depth_in, hero_image_url, hero_image_alt, hero_image_source, hero_image_verified_winter, wind_hold_mph_chair, wind_hold_mph_gondola, lift_types";
 
 export type TodayResort = VerdictResort & {
   id: number;
@@ -24,6 +25,8 @@ export type TodayResort = VerdictResort & {
   passes: string[] | null;
   hero_image_url: string | null;
   hero_image_alt: string | null;
+  hero_image_source: string | null;
+  hero_image_verified_winter: boolean | null;
 };
 
 type FavoriteRow = {
@@ -49,6 +52,9 @@ export type TodayRow = {
   resort: TodayResort;
   weather: VerdictWeather | null;
   verdict: Verdict;
+  /** Thumbnail policy (photo / terrain card / gradient) resolved once,
+   *  server-side, so /today and /favorites show the same image. */
+  hero: HeroSource;
 };
 
 export type TodayData = {
@@ -129,6 +135,7 @@ export async function loadTodayRows(
         now: opts.now,
         history: historyById.get(resort.id) ?? [],
       }),
+      hero: heroSourceFor(resort),
     };
   });
 

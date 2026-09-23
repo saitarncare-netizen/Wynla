@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import HeroImage from "@/components/HeroImage";
+import { heroSourceFor } from "@/lib/heroSource";
 import {
   passColor,
   passLabel,
@@ -82,7 +83,7 @@ export const revalidate = 600;
 // blobs). Keeping this in sync with the local Resort type is enforced by
 // TS at the cast site. ~3-5KB per detail page hit saved.
 const RESORT_DETAIL_COLS =
-  "id, slug, name, state, region, city, address, latitude, longitude, passes, tier, operating_status, vertical_drop, total_trails, total_lifts, total_acres, difficulty_pct_beginner, difficulty_pct_intermediate, difficulty_pct_advanced, difficulty_pct_expert, trails_beginner, trails_intermediate, trails_advanced, trails_expert, has_terrain_park, terrain_park_count, has_glades, has_halfpipe, has_night_skiing, longest_run_miles, elevation_base, elevation_summit, typical_season_start, typical_season_end, weekday_hours, weekend_hours, website_url, trail_map_url, ticket_booking_url, hero_image_url, hero_image_source, hero_image_alt, hero_image_attribution, last_verified_at, high_speed_lifts, base_elevation_ft, summit_elevation_ft, annual_snowfall_in, season_open_text, season_close_text, snowmaking_pct, has_tubing, has_lessons, has_rentals, has_lodging_on_mountain, has_xc_skiing, has_backcountry_access, webcam_url, closest_airport_iata, closest_airport_distance_mi, snow_base_depth_in, snow_new_24h_in, snow_new_48h_in, snow_new_7d_in, trails_open_today, lifts_open_today, snow_report_status, snow_report_updated_at, allows_snowboards, wind_hold_mph_chair, wind_hold_mph_gondola, currently_open, season_end_date, lift_types, terrain_park_features, avalanche_zone_id";
+  "id, slug, name, state, region, city, address, latitude, longitude, passes, tier, operating_status, vertical_drop, total_trails, total_lifts, total_acres, difficulty_pct_beginner, difficulty_pct_intermediate, difficulty_pct_advanced, difficulty_pct_expert, trails_beginner, trails_intermediate, trails_advanced, trails_expert, has_terrain_park, terrain_park_count, has_glades, has_halfpipe, has_night_skiing, longest_run_miles, elevation_base, elevation_summit, typical_season_start, typical_season_end, weekday_hours, weekend_hours, website_url, trail_map_url, ticket_booking_url, hero_image_url, hero_image_source, hero_image_alt, hero_image_attribution, hero_image_verified_winter, last_verified_at, high_speed_lifts, base_elevation_ft, summit_elevation_ft, annual_snowfall_in, season_open_text, season_close_text, snowmaking_pct, has_tubing, has_lessons, has_rentals, has_lodging_on_mountain, has_xc_skiing, has_backcountry_access, webcam_url, closest_airport_iata, closest_airport_distance_mi, snow_base_depth_in, snow_new_24h_in, snow_new_48h_in, snow_new_7d_in, trails_open_today, lifts_open_today, snow_report_status, snow_report_updated_at, allows_snowboards, wind_hold_mph_chair, wind_hold_mph_gondola, currently_open, season_end_date, lift_types, terrain_park_features, avalanche_zone_id";
 
 type Resort = {
   id: number;
@@ -128,6 +129,7 @@ type Resort = {
   hero_image_source: string | null;
   hero_image_alt: string | null;
   hero_image_attribution: string | null;
+  hero_image_verified_winter: boolean | null;
   last_verified_at: string | null;
   // Stage 23 columns — preferred over the legacy elevation_base /
   // typical_season_* fields above when both exist.
@@ -474,6 +476,9 @@ export default async function ResortPage({
   const lat = Number(resort.latitude);
   const primary = primaryPass(resort.passes);
   const heroBg = passColor(primary);
+  // Photo / terrain card / gradient, one policy for every surface
+  // (lib/heroSource.ts): only storage-hosted, licence-clear photos show.
+  const hero = heroSourceFor(resort);
 
   // QuickStats / Listed-footer gating: show the listed-footer fallback only
   // when QuickStats would render nothing. Mirrors the QuickStats null-check.
@@ -525,10 +530,10 @@ export default async function ResortPage({
         }}
       />
 
-      {/* HERO — vetted winter photo (hero_image_url) when present, else a
-          designed navy gradient. hero_image_url is filled by the
-          scripts/hero-*.mjs sourcing + vision-vetting pipeline (every photo
-          is a hand-vetted winter ski scene; rest fall back to the gradient). */}
+      {/* HERO — vetted winter photo when the row has a storage-hosted one,
+          else the resort's terrain card (scripts/photos/2-terrain-cards.mjs),
+          else the designed navy gradient. Photos come from the
+          scripts/photos/* Commons harvest + vision-vetting pipeline. */}
       <header
         className="relative w-full overflow-hidden"
         style={{
@@ -539,13 +544,7 @@ export default async function ResortPage({
           paddingTop: "12px",
         }}
       >
-        {resort.hero_image_url && (
-          <HeroImage
-            src={resort.hero_image_url}
-            alt={resort.hero_image_alt ?? `${resort.name} in winter`}
-            attribution={resort.hero_image_attribution}
-          />
-        )}
+        {hero.kind !== "gradient" && <HeroImage source={hero} />}
         {/* Two-stop atmosphere overlay — soft highlight top-left, deeper
             shadow bottom-right. Plus a faint SVG-grain layer that gives
             the gradient a Stripe/Linear-style depth instead of a flat fill. */}
@@ -896,6 +895,22 @@ export default async function ResortPage({
             a value isn’t confirmed — better that than a wrong number. Always check
             the resort site for live trail status.
           </p>
+          {hero.kind === "photo" && (
+            <p className="mt-2">
+              Header photo: {hero.credit ?? "Wikimedia Commons"}, cropped and resized.{" "}
+              <Link href="/credits" className="font-medium text-wn-charcoal/80 underline hover:text-wn-navy">
+                Photo credits
+              </Link>
+            </p>
+          )}
+          {hero.kind === "card" && (
+            <p className="mt-2">
+              Header image: a terrain render from USGS 3DEP elevation data (public domain), not a photo.{" "}
+              <Link href="/credits" className="font-medium text-wn-charcoal/80 underline hover:text-wn-navy">
+                Photo credits
+              </Link>
+            </p>
+          )}
         </footer>
       </div>
     </main>

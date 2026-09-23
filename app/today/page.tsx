@@ -160,8 +160,8 @@ function TodayRowCard({ row }: { row: TodayRow }) {
         className="flex gap-3 rounded-xl border border-wn-charcoal/10 bg-white p-3 shadow-sm transition hover:border-wn-navy/30 active:bg-wn-offwhite"
       >
         <RowThumb
-          src={resort.hero_image_url}
-          alt={resort.hero_image_alt ?? resort.name}
+          src={row.hero.thumb}
+          alt={row.hero.alt || resort.name}
           initial={resort.name.charAt(0)}
           color={color}
         />
