@@ -15,6 +15,8 @@ import { useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { completeCurrentDay, undoLastCompletedDay, type TripProgress } from "@/lib/tripProgress";
+import Button from "@/components/ui/Button";
+import Icon from "@/components/icons/Icon";
 import TripShareButton from "./TripShareButton";
 
 type Props = {
@@ -101,7 +103,7 @@ export default function TripStickyBar({
         @media (max-width: 767px) { html[data-tab-bar="1"] .wn-trip-bar { padding-bottom: 0.5rem; } }
       `}</style>
       <div
-        className="wn-trip-bar fixed inset-x-0 z-40 border-t border-wn-charcoal/10 bg-white/95 px-4 pt-2 shadow-[0_-4px_16px_rgba(30,41,82,0.08)] backdrop-blur-sm"
+        className="wn-trip-bar fixed inset-x-0 z-40 border-t border-wn-line bg-white/95 px-4 pt-2 shadow-[0_-4px_16px_rgba(30,41,82,0.08)] backdrop-blur-sm"
         role="region"
         aria-label="Trip actions"
       >
@@ -111,37 +113,29 @@ export default function TripStickyBar({
               Trip complete. All {totalDays} days done.
             </span>
           ) : (
-            <button
-              type="button"
-              onClick={markDone}
-              disabled={busy != null}
-              className="inline-flex min-h-11 flex-1 items-center justify-center gap-1 rounded-lg bg-wn-navy px-3 text-sm font-semibold text-white transition hover:bg-wn-navy/90 disabled:opacity-60 motion-reduce:transition-none"
-            >
+            <Button onClick={markDone} disabled={busy != null} className="flex-1">
               {busy === "done" ? "Saving…" : `Mark day ${displayDay} done`}
-            </button>
+            </Button>
           )}
           {lastCompletedDay != null && (
-            <button
-              type="button"
+            <Button
+              variant="secondary"
               onClick={undo}
               disabled={busy != null}
               title={`Unmark day ${lastCompletedDay}`}
-              className="inline-flex min-h-11 items-center justify-center gap-1 rounded-lg border border-wn-charcoal/20 bg-white px-3 text-sm font-semibold text-wn-charcoal transition hover:border-wn-navy hover:text-wn-navy disabled:opacity-60 motion-reduce:transition-none"
+              iconLeft={<Icon name="arrow-left" />}
             >
-              <span aria-hidden="true">↩</span>
-              {busy === "undo" ? "Undoing…" : "Undo"}
-            </button>
+              {/* Label is screen-reader only below sm so the three 44 px
+                  buttons fit a 375 px row without overflowing. */}
+              <span className="max-sm:sr-only">{busy === "undo" ? "Undoing…" : "Undo"}</span>
+            </Button>
           )}
-          {/* TripShareButton ships 30-32 px controls for the page header;
-              in the thumb-zone bar every direct control gets the same
-              44 px minimum as the buttons beside it. The link panel is
-              left alone (it is a popover, not a tap target). */}
-          <div className="[&>div>div>button]:min-h-11 [&>div>div>button]:min-w-11">
-            <TripShareButton tripId={tripId} tripName={tripName} />
-          </div>
+          {/* TripShareButton's controls are Button md / 44 px, the same
+              as the buttons beside it. */}
+          <TripShareButton tripId={tripId} tripName={tripName} />
         </div>
         {error && (
-          <p role="alert" className="mx-auto mt-1 max-w-3xl text-[11px] text-red-700">
+          <p role="alert" className="mx-auto mt-1 max-w-3xl text-xs text-wn-danger">
             {error}
           </p>
         )}
