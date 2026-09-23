@@ -159,7 +159,7 @@ export function writeContactSheet(outDir) {
           <img src="${esc(c.file.replace(".tmp-photo-candidates/", ""))}" alt="${esc(c.title)}" loading="lazy" width="320">
           <figcaption>
             <b>#${i}</b> ${esc(c.source)} · ${c.width}×${c.height} · ${esc(c.exifSeason)}${c.exifDate ? ` (${esc(c.exifDate.slice(0, 10))})` : ""}<br>
-            ${esc(c.author)} · ${esc(c.licence)}<br>
+            ${c.author ? esc(c.author) : `<span class="pill warn">author unknown: add "author" to chosen.json</span>`} · ${esc(c.licence)}<br>
             <a href="${esc(c.sourcePage)}" target="_blank" rel="noopener">${esc(c.title.replace(/^File:/, "")).slice(0, 60)}</a>
           </figcaption>
         </figure>`,

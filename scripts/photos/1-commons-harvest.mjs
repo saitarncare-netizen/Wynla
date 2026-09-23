@@ -22,7 +22,9 @@
 // handoff-docs/PHOTOS_2026-09-23.md) reads the manifests and thumbs and
 // produces chosen.json; scripts/photos/3-publish.mjs takes it from there.
 //
-// Resume-safe: a slug with a manifest.json is skipped unless --force.
+// Resume-safe: a slug with a complete manifest.json is skipped unless
+// --force; a manifest marked incomplete (a thumb download failed) is
+// re-harvested on the next run.
 // Polite: one request per second per host, a contact User-Agent, and
 // AbortController timeouts on every fetch. Progress and a log land in
 // scripts/photos/reports/.
@@ -39,6 +41,9 @@ import {
   readJsonIfExists,
   haversineKm,
   parseArgs,
+  stripHtml,
+  commonsAuthor,
+  trimAtBoundary,
   REPORTS_DIR,
 } from "./_shared.mjs";
 import { writeCoverageReport, writeContactSheet } from "./report.mjs";
@@ -251,8 +256,6 @@ async function imageInfo(titles) {
 
 // ---------------------------------------------------------------- gate 1
 
-const stripHtml = (s) => String(s ?? "").replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
-
 const ALLOWED_LICENCE = /^(CC0|Public domain|PD|CC[ -]BY(-SA)?(\s|$|[ -]\d))/i;
 const FORBIDDEN_LICENCE = /\b(NC|ND|GFDL only|all rights reserved|fair use)\b/i;
 
@@ -321,12 +324,17 @@ function isRelevant(info, source, resort) {
 
 function candidateRecord(info, gateResult, source, extra = {}) {
   const meta = info.extmetadata ?? {};
-  const author = stripHtml(meta.Artist?.value) || stripHtml(meta.Credit?.value) || info.user || "Unknown";
+  // Attribution (when the author asked for a specific line) or the cleaned
+  // Artist field; never Credit ("Own work") or the uploader account. A
+  // null author is flagged so the vetting pass enters it by hand before a
+  // CC BY / BY-SA photo can be published (3-publish refuses it otherwise).
+  const author = commonsAuthor(meta);
   return {
     title: info.title,
     url: info.url,
     thumbUrl: info.thumburl ?? info.url,
-    author: author.slice(0, 120),
+    author,
+    authorUnknown: !author,
     licence: gateResult.licence,
     licenceUrl: stripHtml(meta.LicenseUrl?.value) || null,
     sourcePage: info.descriptionurl ?? `https://commons.wikimedia.org/wiki/${encodeURIComponent(info.title)}`,
@@ -334,7 +342,7 @@ function candidateRecord(info, gateResult, source, extra = {}) {
     exifSeason: gateResult.season,
     width: info.width,
     height: info.height,
-    description: stripHtml(meta.ImageDescription?.value).slice(0, 240) || null,
+    description: trimAtBoundary(stripHtml(meta.ImageDescription?.value), 240) || null,
     source,
     ...extra,
   };
@@ -414,6 +422,7 @@ async function harvestResort(resort) {
   passed.sort((a, b) => b.score - a.score);
 
   const candidates = [];
+  let downloadFailures = 0;
   for (const rec of passed.slice(0, MAX_CANDIDATES)) {
     const ext = /png/i.test(rec.thumbUrl.split("?")[0].split(".").pop() ?? "") ? "png" : "jpg";
     const file = join(dir, `cand-${candidates.length}.${ext}`);
@@ -422,6 +431,7 @@ async function harvestResort(resort) {
       rec.file = `.tmp-photo-candidates/${resort.slug}/cand-${candidates.length}.${ext}`;
       candidates.push(rec);
     } catch (e) {
+      downloadFailures++;
       logger.log(`  ${resort.slug}: thumb download failed for ${rec.title}: ${e.message}`);
     }
   }
@@ -443,6 +453,10 @@ async function harvestResort(resort) {
     // rejects all six can reach for the next ones without re-harvesting.
     overflow: passed.slice(MAX_CANDIDATES).map(({ title, sourcePage, licence, author, width, height, exifSeason, source }) => ({ title, sourcePage, licence, author, width, height, exifSeason, source })),
     candidates,
+    // A failed thumb download leaves the manifest short. Mark it so the
+    // next run re-harvests this slug instead of treating it as done.
+    incomplete: downloadFailures > 0,
+    downloadFailures,
     harvestedAt: new Date().toISOString(),
   };
   writeJson(join(dir, "manifest.json"), manifest);
@@ -469,10 +483,10 @@ let failed = 0;
 const summary = [];
 for (const resort of resorts) {
   const manifestPath = join(OUT_DIR, resort.slug, "manifest.json");
-  if (!args.force && existsSync(manifestPath)) {
+  const existing = !args.force && existsSync(manifestPath) ? readJsonIfExists(manifestPath) : null;
+  if (existing && !existing.incomplete) {
     skipped++;
-    const m = readJsonIfExists(manifestPath);
-    if (m) summary.push({ slug: m.slug, candidates: m.candidates?.length ?? 0 });
+    summary.push({ slug: existing.slug, candidates: existing.candidates?.length ?? 0 });
     continue;
   }
   logger.progress({ total: resorts.length, done, skipped, failed, current: resort.slug });

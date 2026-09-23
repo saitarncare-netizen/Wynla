@@ -12,8 +12,13 @@
 import { readFileSync, existsSync, mkdirSync, appendFileSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { execSync } from "node:child_process";
+import { createHash } from "node:crypto";
 
-export const USER_AGENT = "Wynla/1.0 (https://wynla.app; saitarncare@gmail.com) resort-photo-pipeline";
+// Wikimedia's bot policy wants a contact in the User-Agent. Use the public
+// project inbox (the same one /credits and /data-sources print), never a
+// personal address: this string goes to every host the pipeline calls and
+// is committed with the code.
+export const USER_AGENT = "Wynla/1.0 (https://wynla.app; hello@wynla.app) resort-photo-pipeline";
 
 export const REPORTS_DIR = resolve("scripts/photos/reports");
 
@@ -80,6 +85,14 @@ export async function politeWait(hostname, intervalMs = 1000) {
 /**
  * fetch with a hard timeout, per-host politeness, retry on 429/5xx and
  * network errors. Returns the Response or throws after `retries` attempts.
+ *
+ * The timeout covers the body as well as the headers: on success the
+ * abort timer is left running (unref'd, so it never holds the process
+ * open) and only fires if the caller is still reading the body when
+ * `timeoutMs` runs out. Aborting a response that has been fully read is
+ * a no-op. Clearing the timer at the headers would let a stalled body
+ * hang a sequential run forever. A body-read abort surfaces as an
+ * AbortError in the caller, which fails that item instead of retrying.
  */
 export async function politeFetch(url, { headers = {}, timeoutMs = 25000, retries = 4, intervalMs = 1000, method = "GET", body } = {}) {
   const host = new URL(url).hostname;
@@ -88,10 +101,13 @@ export async function politeFetch(url, { headers = {}, timeoutMs = 25000, retrie
     await politeWait(host, intervalMs);
     const ac = new AbortController();
     const timer = setTimeout(() => ac.abort(), timeoutMs);
+    timer.unref?.();
     try {
       const res = await fetch(url, { method, body, headers: { "User-Agent": USER_AGENT, ...headers }, signal: ac.signal });
-      clearTimeout(timer);
       if (res.status === 429 || res.status >= 500) {
+        clearTimeout(timer);
+        // Release the connection; the body of an error page is not needed.
+        await res.body?.cancel().catch(() => {});
         lastErr = new Error(`HTTP ${res.status} from ${host}`);
         const retryAfter = Number(res.headers.get("retry-after")) || 0;
         await sleep(Math.max(retryAfter * 1000, 2000 * (attempt + 1)));
@@ -150,7 +166,14 @@ export async function loadActiveResorts(env) {
 
 /**
  * Supabase Storage helpers (service-role key). Bucket creation is
- * idempotent; upload uses x-upsert so re-runs replace the object.
+ * idempotent; upload uses x-upsert so a re-run of the same bytes is a
+ * no-op overwrite.
+ *
+ * Object names must be content-addressed (see `contentHash`): objects are
+ * served with a 1-year cache, and the Vercel image optimizer and browsers
+ * keep whatever they fetched under a URL for that long. Re-using a name for
+ * new bytes would leave the old image on screen while the database and
+ * /credits already describe the new one.
  */
 export function storageHeaders(env) {
   if (!env.serviceKey) throw new Error("SUPABASE_SERVICE_ROLE_KEY missing; storage writes need it");
@@ -190,6 +213,117 @@ export async function uploadObject(env, bucket, path, buffer, contentType, { cac
   });
   if (!res.ok) throw new Error(`upload ${path} failed: ${res.status} ${redact(await res.text()).slice(0, 200)}`);
   return `${env.supabaseUrl}/storage/v1/object/public/${bucket}/${path}`;
+}
+
+/** First `len` hex chars of the SHA-256 of `buffer`, for content-addressed object names. */
+export function contentHash(buffer, len = 8) {
+  return createHash("sha256").update(buffer).digest("hex").slice(0, len);
+}
+
+/** Public URL of a Storage object. */
+export function publicObjectUrl(env, bucket, path) {
+  return `${env.supabaseUrl}/storage/v1/object/public/${bucket}/${path}`;
+}
+
+// ------------------------------------------------------------- attribution
+
+export const stripHtml = (s) => String(s ?? "").replace(/<[^>]+>/g, "").replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/\s+/g, " ").trim();
+
+/**
+ * Shorten free text to at most `max` characters without cutting a word in
+ * half: prefer the last sentence end in the second half of the window,
+ * else the last space, and mark a word-boundary cut with an ellipsis.
+ */
+export function trimAtBoundary(text, max) {
+  const s = String(text ?? "").trim();
+  if (s.length <= max) return s;
+  const cut = s.slice(0, max);
+  const sentence = Math.max(cut.lastIndexOf(". "), cut.lastIndexOf("! "), cut.lastIndexOf("? "));
+  if (sentence >= max * 0.5) return cut.slice(0, sentence + 1);
+  const space = cut.lastIndexOf(" ");
+  return `${(space > 0 ? cut.slice(0, space) : cut).replace(/[.,;:\s]+$/, "")}…`;
+}
+
+/**
+ * Turn one Commons author string into a printable credit, or null when it
+ * names nobody. Handles the patterns the 2026-06 batch printed verbatim:
+ * "Unknown authorUnknown author or not provided" (the {{unknown|author}}
+ * template rendered twice), "This Photo was taken by X. Feel free to use my
+ * photos, but please ..." (licence boilerplate pasted into Artist), and
+ * "Name (talk)" signatures.
+ */
+export function tidyAuthor(raw) {
+  let s = stripHtml(raw);
+  if (!s) return null;
+  if (/^unknown author/i.test(s) || /^(own work|unknown|anonymous|not provided|see below|author)\.?$/i.test(s)) return null;
+  const taken = s.match(/\b(?:photo|photograph|picture|image)\s+(?:was\s+)?(?:taken|made|shot|created)\s+by\s+([^.;]+)/i);
+  if (taken) s = taken[1].trim();
+  s = s.replace(/^(?:photo(?:graph)?|picture|image)\s*(?:by|:)\s*/i, "");
+  s = s.replace(/\s*\((?:talk|contribs?)\)/gi, "");
+  // Licence boilerplate some authors paste after their name.
+  s = s.split(/\s*(?:\.|,|;)?\s+(?:feel free|please|you may|if you use|licensed under|this (?:file|image|photo) is)\b/i)[0];
+  s = trimAtBoundary(s.trim(), 80).replace(/[.,;:\s]+$/, "");
+  if (!s || /^(own work|unknown)$/i.test(s)) return null;
+  return s;
+}
+
+/**
+ * The credit line Commons asks re-users to print. When the file sets
+ * AttributionRequired and gives an explicit Attribution text, that text is
+ * the one the author chose; otherwise the Artist field, cleaned. Never the
+ * Credit field (almost always the literal "Own work") and never the
+ * uploader account (for a Flickr import that is the bot or the importer,
+ * not the photographer): with neither, return null so the candidate is
+ * flagged author-unknown for manual entry.
+ */
+export function commonsAuthor(extmetadata) {
+  const meta = extmetadata ?? {};
+  const required = /^(true|1|yes)$/i.test(stripHtml(meta.AttributionRequired?.value));
+  if (required) {
+    const attribution = tidyAuthor(meta.Attribution?.value);
+    if (attribution) return attribution;
+  }
+  return tidyAuthor(meta.Artist?.value);
+}
+
+/** "Author / Licence" for hero_image_attribution, or the licence alone for an anonymous PD / CC0 file. */
+export function attributionString(author, licence) {
+  return author ? `${author} / ${licence}` : String(licence);
+}
+
+/** One line of SQL comment text: no newlines, so free text can never end the comment early. */
+export function sqlComment(text) {
+  return String(text ?? "").replace(/\s+/g, " ").slice(0, 200);
+}
+
+/**
+ * imageinfo + extmetadata + coordinates for Commons file titles, 20 per
+ * request (the API caps thumb URLs per call). Keyed by the normalised title.
+ */
+export async function commonsFileInfo(titles, { thumbWidth = 1280 } = {}) {
+  const out = new Map();
+  for (let i = 0; i < titles.length; i += 20) {
+    const batch = titles.slice(i, i + 20);
+    const params = new URLSearchParams({
+      action: "query",
+      format: "json",
+      formatversion: "2",
+      titles: batch.join("|"),
+      prop: "imageinfo|coordinates",
+      iiprop: "url|size|mime|extmetadata",
+      iiurlwidth: String(thumbWidth),
+      coprimary: "all",
+    });
+    const data = await fetchJson(`https://commons.wikimedia.org/w/api.php?${params}`);
+    const normal = new Map((data.query?.normalized ?? []).map((n) => [n.to, n.from]));
+    for (const page of data.query?.pages ?? []) {
+      const info = page.imageinfo?.[0];
+      const record = { title: page.title, missing: !!page.missing || !info, coordinates: page.coordinates ?? [], ...(info ?? {}) };
+      out.set(page.title, record);
+      if (normal.has(page.title)) out.set(normal.get(page.title), record);
+    }
+  }
+  return out;
 }
 
 /** Append-only log + JSON progress file under scripts/photos/reports/. */
