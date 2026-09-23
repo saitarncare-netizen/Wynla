@@ -1,7 +1,7 @@
 // Clear hero_image_* on rows whose current storage hero is on the denylist
 // (wrong resort or licence outside the allow-list), so production stops
 // showing them immediately instead of waiting for the heroSourceFor deploy.
-//   node scripts/photos/5-clear-denylisted.mjs [--apply]
+//   node scripts/photos/6-clear-denylisted.mjs [--apply]
 // Backs up the touched rows first; only clears a row whose hero_image_url
 // still ends with the denylisted object name.
 import fs from "node:fs";

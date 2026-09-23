@@ -2,8 +2,8 @@
 // 3-publish.mjs --confirm, through PostgREST with the service-role key, so the
 // founder does not have to paste SQL into the dashboard.
 //
-//   node scripts/photos/4-apply-publish.mjs scripts/photos/reports/publish-<date>.sql            (dry run)
-//   node scripts/photos/4-apply-publish.mjs scripts/photos/reports/publish-<date>.sql --apply    (write)
+//   node scripts/photos/5-apply-publish.mjs scripts/photos/reports/publish-<date>.sql            (dry run)
+//   node scripts/photos/5-apply-publish.mjs scripts/photos/reports/publish-<date>.sql --apply    (write)
 //
 // Safety: backs up every touched row's hero_image_* columns to
 // scripts/photos/reports/backups/heroes-<timestamp>.json before writing, and
@@ -22,7 +22,7 @@ const H = { apikey: KEY, Authorization: `Bearer ${KEY}`, "Content-Type": "applic
 
 const file = process.argv[2];
 const apply = process.argv.includes("--apply");
-if (!file) throw new Error("usage: 4-apply-publish.mjs <publish.sql> [--apply]");
+if (!file) throw new Error("usage: 5-apply-publish.mjs <publish.sql> [--apply]");
 const sql = fs.readFileSync(file, "utf8");
 
 // Parse: UPDATE resorts SET a = 'x', b = true, updated_at = now() WHERE slug = 's';
