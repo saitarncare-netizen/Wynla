@@ -66,6 +66,15 @@ Indy `#DC2626`, Mountain Collective `#1E3A8A`, independent `#6B7280`).
 Ikon yellow is close to the brand gold on purpose (Ikon's brand); do not
 use gold next to an Ikon badge for decoration.
 
+Text on a pass colour (badges, rank dots, pass-coloured heroes) takes its
+colour from `textOn(bg)` in `lib/contrast.ts`, never a hardcoded white:
+white is 1.7:1 on Ikon yellow and 2.9:1 on Epic orange, so those get navy
+(8.7:1 / 4.8:1); Indy, Mountain Collective and independent keep white.
+`PageHeader accent` runs the accent through `accentOnNavy()` so the white
+title and the 70 % white eyebrow stay above 4.5:1 for any list colour.
+`text-wn-subtle` (4.35:1 on off-white) is for icons and decoration only;
+placeholders, footnotes and error references use `text-wn-muted`.
+
 ### Type scale
 
 Six body steps with fixed line heights, plus display steps for hero
@@ -73,19 +82,40 @@ titles. `text-eyebrow` (11 px, 0.08em tracking) is the only size below
 12 px and is only for uppercase labels. `text-[9px]`, `text-[10px]`,
 `text-[11px]`, `text-[13px]` are not allowed.
 
+The four small steps are Tailwind's own utilities (same sizes). Every
+step above 18 px is a Wynla utility with a `wn-` prefix. Tailwind's
+`text-xl` .. `text-6xl` are deliberately left at Tailwind's defaults
+(20 / 24 / 30 / 36 / 48 / 60 px) so files that have not migrated yet do
+not change size under their owners; new and migrated code uses only the
+`text-wn-*` steps.
+
 | Utility | Size / line | Use |
 | --- | --- | --- |
 | `text-eyebrow` | 11 / 16 | Uppercase labels above titles, stat labels |
-| `text-xs` | 12 / 16 | Captions, timestamps, footnotes |
+| `text-xs` | 12 / 16 | Captions, timestamps, footnotes, tab bar labels |
 | `text-sm` | 14 / 20 | Body in cards, buttons, labels |
 | `text-base` | 16 / 24 | Article body, inputs on phones |
-| `text-lg` | 18 / 26 | Section titles (`Section`), card titles |
-| `text-xl` | 22 / 28 | Large card titles, login H1 |
-| `text-2xl` | 28 / 34 | Page H1 on phones |
-| `text-3xl` | 32 / 38 | Prices, hero numbers |
-| `text-4xl` | 40 / 44 | Page H1 from `sm` |
-| `text-5xl` | 48 / 52 | Directory H1 (`PageHeader size="lg"`) from `lg` |
-| `text-6xl` | 60 / 64 | Reserved for the resort hero |
+| `text-lg` | 18 / 28 | Section titles (`Section`), card titles |
+| `text-wn-xl` | 22 / 28 | Large card titles, login H1, stat values from `sm` |
+| `text-wn-2xl` | 28 / 34 | Page H1 on phones, article H2 |
+| `text-wn-3xl` | 32 / 38 | Prices, hero numbers |
+| `text-wn-4xl` | 40 / 44 | Page H1 from `sm` |
+| `text-wn-5xl` | 48 / 52 | Directory H1 (`PageHeader size="lg"`) from `lg` |
+
+Class mapping for files that migrate (the size changes are intended;
+check each at 375 px):
+
+| Legacy utility | Tailwind size | Replace with | New size |
+| --- | --- | --- | --- |
+| `text-xl` | 20 px | `text-wn-xl` | 22 px |
+| `text-2xl` | 24 px | `text-wn-2xl` | 28 px |
+| `text-3xl` | 30 px | `text-wn-3xl` | 32 px |
+| `text-4xl` | 36 px | `text-wn-4xl` | 40 px |
+| `text-5xl` | 48 px | `text-wn-5xl` | 48 px (line height 52) |
+| `text-6xl` | 60 px | `text-wn-5xl`, or keep `text-6xl` for the resort hero only | 48 px |
+
+Keep the breakpoint prefix: `sm:text-3xl` becomes `sm:text-wn-3xl`. A
+page H1 should become the `PageHeader` title instead of a mapped class.
 
 H1 = `PageHeader`: 28 px on phones, 40 px from `sm`, 48 px on `lg` for
 directories. H2 = `Section` title, 18 px bold navy. H3 = 16 px bold navy.
@@ -116,9 +146,14 @@ legal), `max-w-5xl` (directories), `max-w-6xl` (compare, shell).
 
 | Variable | Value | Use |
 | --- | --- | --- |
-| `--wn-header-h` | 3.5rem | AppShell bar height. Pages' `min-h-dvh` is reduced by it automatically; sticky things use `top: calc(var(--wn-header-h) + env(safe-area-inset-top))`. |
+| `--wn-shell-h` | 3.5rem | AppShell bar height. Pages' `min-h` is reduced by it automatically; sticky things use `top: calc(var(--wn-shell-h) + env(safe-area-inset-top))`. |
 | `--wn-bottom-stack` | safe-area inset, or the tab bar height while it shows | Floating pills / toasts: `bottom: calc(var(--wn-bottom-stack) + 12px)`. |
 | `--wn-tab-bar-h` | 3.5rem + inset | Set only while the phone tab bar is visible (`html[data-tab-bar="1"]`). |
+
+`--wn-header-h` is NOT a shell token: it belongs to the map. MapPage sets
+it on its own root after measuring its floating header, and MapView /
+ResortPanel depend on it being unset before that (fallbacks 140 px /
+64 px). Never define it on `:root` or read it outside `components/Map`.
 
 ### Focus
 
@@ -294,8 +329,13 @@ fine. Emoji inside an accessible name ("✨ Optimize order") are not.
 ## 7. Loading and empty states
 
 - Every data route has `loading.tsx` (resort, trips, trip, go, today,
-  guides, lists, state, favorites, compare). Match the page's skeleton to
-  its layout; nested routes inherit the parent's file.
+  guides, guides/[slug], lists, lists/[slug], state, favorites, compare).
+  Match the page's skeleton to its layout; a nested route inherits the
+  parent's file, so give it its own when the layouts differ (an article
+  under a card index).
+- `SkeletonPage` keeps `<main>` as the landmark (`aria-busy`) and puts
+  `role="status"` on a visually hidden label, so the page announces
+  "Loading" once without losing the main landmark.
 - Client-side waits inside a page use `Skeleton` pieces sized like the
   content they replace, never a spinner alone.
 - Empty results use `EmptyState` with one CTA. Copy pattern: what is
@@ -348,9 +388,12 @@ at 375 px.
     `var(--color-wn-gold-halo)`.
 14. Floating elements at the bottom of the screen → `bottom:
     calc(var(--wn-bottom-stack) + 12px)`.
-15. Add `loading.tsx` if the route fetches (already done for the ten
+15. Add `loading.tsx` if the route fetches (already done for the twelve
     routes in section 7).
-16. Run `npx tsc --noEmit`, `npm run lint`, `npm test`; check 375 px and
+16. `text-xl` .. `text-6xl` → `text-wn-*` per the class mapping in
+    section 2 (keep breakpoint prefixes). Text on a pass colour →
+    `color: textOn(bg)` from `lib/contrast.ts`.
+17. Run `npx tsc --noEmit`, `npm run lint`, `npm test`; check 375 px and
     the installed-app safe area.
 
 Package owners and their files at the time of writing: map + sheet
@@ -359,6 +402,33 @@ Package owners and their files at the time of writing: map + sheet
 compare (`app/trips`, `app/trip`, `app/favorites`, `app/account`,
 `app/compare`), go / today (`app/go`, `app/today`), pro / early upsell
 (`app/pro`, `components/Pro*`, `components/UpsellModal.tsx`).
+
+Files still on Tailwind's `text-xl` .. `text-6xl` (73 uses on
+2026-09-23; migrate with the section 2 mapping when the owner next
+touches the file):
+
+- map + sheet: `components/Map/FiltersDrawer.tsx`, `MapPage.tsx`,
+  `ResortPanel.tsx`, `ResortPicker.tsx`, `ResortReviews.tsx`,
+  `TripPlannerPanel.tsx`; `components/NearbyActivities.tsx`,
+  `NearbyRestaurants.tsx`, `OnboardingCard.tsx`, `PlanYourTrip.tsx`,
+  `PowderDayScore.tsx`, `SimilarResorts.tsx`, `SnowSurfaceForecast.tsx`,
+  `WhereToStay.tsx`, `auth/FavoriteToggle.tsx`
+- resort page: `app/resort/[slug]/page.tsx`
+- trips / trip / favorites / account / compare: `app/trips/page.tsx`,
+  `app/trip/[id]/page.tsx`, `app/trip/[id]/TripNameEditor.tsx`,
+  `app/trip/share/[token]/page.tsx`, `app/favorites/page.tsx`,
+  `app/account/page.tsx`, `app/account/digest/page.tsx`,
+  `app/account/feedback/page.tsx`, `app/account/pro/page.tsx`,
+  `app/compare/page.tsx`
+- go / today: `app/go/page.tsx`, `app/today/page.tsx`
+- pro / upsell: `app/pro/page.tsx`, `components/UpsellModal.tsx`
+
+White text on a pass colour also still appears in files other packages
+own: `app/trip/[id]/page.tsx` (pass badges), and `app/favorites/page.tsx`
+/ `app/compare/page.tsx` (their badges special-case Ikon only, so Epic
+orange is still white at 2.9:1). Switch those to `textOn()`. The resort
+hero (`app/resort/[slug]/page.tsx`) starts its gradient at the raw pass
+colour under a white title; use `accentOnNavy()` there.
 
 ## 10. Before / after (this package's files)
 
@@ -373,4 +443,4 @@ not-found, error, global-error, trip-templates, layout, AppTabBar):
 | `text-wn-charcoal/NN` uses | 101 | 0 |
 | Hardcoded navy / deep-navy hex | 20 | 5 (`layout.tsx` themeColor and `global-error.tsx` inline styles, which cannot read CSS) |
 | Emoji used as chrome | 18 | 0 |
-| Route-level `loading.tsx` | 0 | 10 |
+| Route-level `loading.tsx` | 0 | 12 |

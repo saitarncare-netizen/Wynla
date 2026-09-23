@@ -12,6 +12,7 @@ import { getTemplate, TEMPLATES } from "@/lib/tripTemplates";
 import { haversineMeters, estimateDriveSeconds } from "@/lib/distance";
 import { formatDriveTime, ORIGINS } from "@/lib/origins";
 import { metersToMiles } from "@/lib/tripCost";
+import { textOn } from "@/lib/contrast";
 import { passColor, primaryPass } from "@/lib/passColors";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
@@ -160,8 +161,10 @@ export default async function TripTemplatePage({
               return (
                 <li key={`${s}-${i}`} className="flex items-center gap-3 rounded-wn-sm border border-wn-line bg-wn-offwhite p-3">
                   <span
-                    className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white"
-                    style={{ backgroundColor: dot }}
+                    className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold"
+                    // Navy digits on Ikon yellow / Epic orange (white was
+                    // 1.7:1 and 2.9:1), white on the darker pass colours.
+                    style={{ backgroundColor: dot, color: textOn(dot) }}
                     aria-hidden="true"
                   >
                     {i + 1}
@@ -208,7 +211,7 @@ export default async function TripTemplatePage({
 function SummaryTile({ label, value, note }: { label: string; value: string; note?: string }) {
   return (
     <Card padding="none" className="px-3 py-3 text-center">
-      <div className="text-lg font-extrabold tabular-nums tracking-tight text-wn-navy sm:text-xl">{value}</div>
+      <div className="text-lg font-extrabold tabular-nums tracking-tight text-wn-navy sm:text-wn-xl">{value}</div>
       <div className="mt-0.5 text-eyebrow font-semibold uppercase text-wn-muted">
         {label}
         {note ? ` · ${note}` : ""}

@@ -16,6 +16,7 @@
 
 import Link from "next/link";
 import type { Metadata } from "next";
+import { textOn } from "@/lib/contrast";
 import { passColor, passLabel, type Pass } from "@/lib/passColors";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
@@ -298,7 +299,7 @@ function PassCard({ deal }: { deal: PassDeal }) {
     <Card accent={accent} padding="lg" className="h-full">
       <article className="flex h-full flex-col">
         <div className="flex items-baseline justify-between gap-2">
-          <h3 className="text-lg font-extrabold tracking-tight text-wn-navy sm:text-xl">{deal.label}</h3>
+          <h3 className="text-lg font-extrabold tracking-tight text-wn-navy sm:text-wn-xl">{deal.label}</h3>
           {isSoldOut ? (
             <span className="inline-block rounded-wn-sm bg-wn-danger px-2 py-0.5 text-eyebrow font-bold uppercase text-white">
               Sold out
@@ -308,8 +309,10 @@ function PassCard({ deal }: { deal: PassDeal }) {
               className="inline-block rounded-wn-sm px-2 py-0.5 text-eyebrow font-bold uppercase"
               style={{
                 backgroundColor: accent,
-                // Ikon yellow needs navy text for contrast; the others are dark.
-                color: deal.pass === "ikon" ? "var(--color-wn-navy)" : "#FFFFFF",
+                // Navy or white by measured contrast: white on Epic orange
+                // was 2.9:1 and on Ikon yellow 1.7:1; navy is 4.8:1 and
+                // 8.7:1 there. Indy red, MC navy and grey keep white.
+                color: textOn(accent),
               }}
             >
               {passLabel(deal.pass)}
@@ -345,7 +348,7 @@ function PassCard({ deal }: { deal: PassDeal }) {
           <>
             {/* Headline price */}
             <div className="mt-4 flex flex-wrap items-baseline gap-x-2 gap-y-1">
-              <span className="text-2xl font-extrabold tabular-nums tracking-tight text-wn-navy sm:text-3xl">
+              <span className="text-wn-2xl font-extrabold tabular-nums tracking-tight text-wn-navy sm:text-wn-3xl">
                 {formatPrice(headlineTier.price, headlineTier.currency)}
               </span>
               <span className="text-xs text-wn-muted">{headlineTier.name}</span>

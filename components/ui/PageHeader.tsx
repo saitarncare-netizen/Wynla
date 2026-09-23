@@ -14,6 +14,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import Icon from "@/components/icons/Icon";
+import { accentOnNavy } from "@/lib/contrast";
 import { cx } from "./cx";
 
 export type PageHeaderProps = {
@@ -24,7 +25,11 @@ export type PageHeaderProps = {
   meta?: ReactNode;
   tone?: "plain" | "navy";
   size?: "md" | "lg";
-  /** Overrides the gradient start (list accent, pass colour). */
+  /**
+   * Tints the gradient start (list accent, pass colour). Hex accents are
+   * mixed toward navy until the white title and description clear 4.5:1
+   * on them (lib/contrast.ts accentOnNavy), so any colour is safe here.
+   */
   accent?: string;
   back?: { href: string; label: string };
   /** Right-aligned actions (buttons, toggles). */
@@ -56,7 +61,7 @@ export default function PageHeader({
       className={cx("relative w-full overflow-hidden", navy && "on-dark text-white", className)}
       style={
         navy
-          ? { background: `linear-gradient(135deg, ${accent ?? "var(--color-wn-navy)"} 0%, var(--color-wn-navy) 55%, var(--color-wn-navy-deep) 100%)` }
+          ? { background: `linear-gradient(135deg, ${accent ? accentOnNavy(accent) : "var(--color-wn-navy)"} 0%, var(--color-wn-navy) 55%, var(--color-wn-navy-deep) 100%)` }
           : undefined
       }
     >
@@ -92,7 +97,7 @@ export default function PageHeader({
               className={cx(
                 "font-extrabold tracking-tight text-balance",
                 navy ? "text-white" : "text-wn-navy",
-                size === "lg" ? "text-2xl sm:text-4xl lg:text-5xl" : "text-2xl sm:text-4xl",
+                size === "lg" ? "text-wn-2xl sm:text-wn-4xl lg:text-wn-5xl" : "text-wn-2xl sm:text-wn-4xl",
               )}
             >
               {title}

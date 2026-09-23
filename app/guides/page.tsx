@@ -53,7 +53,7 @@ export default function GuidesIndexPage() {
           {GUIDES.map((g) => (
             <Card key={g.slug} href={`/guides/${g.slug}`} accent="var(--color-wn-navy)">
               <p className="text-eyebrow font-semibold uppercase text-wn-muted">{g.readingMinutes} min read</p>
-              <h2 className="mt-1 text-lg font-bold leading-tight text-wn-navy sm:text-xl">{g.title}</h2>
+              <h2 className="mt-1 text-lg font-bold leading-tight text-wn-navy sm:text-wn-xl">{g.title}</h2>
               <p className="mt-1 text-sm text-wn-muted">{g.subtitle}</p>
               <p className="mt-3 text-sm text-wn-charcoal">{g.description}</p>
               <p className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-wn-navy">

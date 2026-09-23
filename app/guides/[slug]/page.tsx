@@ -92,7 +92,7 @@ export default async function GuidePage({
         className={[
           "mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-14",
           "[&_p]:my-4 [&_p]:text-base [&_p]:leading-relaxed [&_p]:text-wn-charcoal",
-          "[&_h2]:mt-10 [&_h2]:mb-3 [&_h2]:text-2xl [&_h2]:font-extrabold [&_h2]:tracking-tight [&_h2]:text-wn-navy",
+          "[&_h2]:mt-10 [&_h2]:mb-3 [&_h2]:text-wn-2xl [&_h2]:font-extrabold [&_h2]:tracking-tight [&_h2]:text-wn-navy",
           "[&_h3]:mt-6 [&_h3]:mb-2 [&_h3]:text-lg [&_h3]:font-bold [&_h3]:text-wn-navy",
           "[&_ul]:my-4 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:space-y-1.5",
           "[&_ul_li]:text-base [&_ul_li]:leading-relaxed [&_ul_li]:text-wn-charcoal",

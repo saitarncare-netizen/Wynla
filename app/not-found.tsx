@@ -18,7 +18,7 @@ export default function NotFound() {
         <EmptyState
           tone="bare"
           icon="compass"
-          title={<h1 className="text-2xl font-extrabold text-wn-navy sm:text-3xl">We couldn&apos;t find that page.</h1>}
+          title={<h1 className="text-wn-2xl font-extrabold text-wn-navy sm:text-wn-3xl">We couldn&apos;t find that page.</h1>}
           body="The link might be old, mistyped, or the resort may have a different slug now. Try the map — every US resort lives there."
           action={
             <>

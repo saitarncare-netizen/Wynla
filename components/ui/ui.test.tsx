@@ -141,6 +141,9 @@ describe("Skeleton", () => {
       </SkeletonPage>,
     );
     expect(screen.getByRole("status").textContent).toBe("Loading trips");
+    // The main landmark survives while loading (the status role sits on
+    // the hidden label, not on <main>).
+    expect(screen.getByRole("main").getAttribute("aria-busy")).toBe("true");
     expect(document.querySelectorAll('[aria-hidden="true"]').length).toBe(1);
   });
 });

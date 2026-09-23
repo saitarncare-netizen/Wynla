@@ -6,7 +6,8 @@
 // Replaces the 10-11 px charcoal/40 footer (audit design-system-36) with
 // 12 px muted text, the brand mark, and links to every content hub so
 // the state / list / guide pages are reachable from anywhere
-// (content-seo-13).
+// (content-seo-13). Link rows are 44 px on phones (the guide's tap
+// minimum) and 32 px in the desktop wrap.
 
 import Link from "next/link";
 import BrandMark from "@/components/BrandMark";
@@ -29,17 +30,17 @@ export default function Footer() {
   return (
     <footer className="mt-auto border-t border-wn-line bg-white/60 text-xs text-wn-muted">
       <div className="mx-auto flex max-w-6xl flex-col items-center gap-3 px-4 py-6 sm:px-6">
-        <BrandMark variant="mark" size="sm" />
+        <BrandMark variant="mark" size="sm" className="min-h-11 min-w-11 justify-center" />
         <nav aria-label="Footer">
           <ul className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
             {LINKS.map((l) => (
               <li key={l.href}>
                 {l.href.startsWith("mailto:") ? (
-                  <a href={l.href} className="inline-flex min-h-8 items-center hover:text-wn-navy">
+                  <a href={l.href} className="inline-flex min-h-11 items-center hover:text-wn-navy md:min-h-8">
                     {l.label}
                   </a>
                 ) : (
-                  <Link href={l.href} className={l.strong ? "inline-flex min-h-8 items-center font-semibold text-wn-navy hover:underline" : "inline-flex min-h-8 items-center hover:text-wn-navy"}>
+                  <Link href={l.href} className={l.strong ? "inline-flex min-h-11 items-center font-semibold text-wn-navy hover:underline md:min-h-8" : "inline-flex min-h-11 items-center hover:text-wn-navy md:min-h-8"}>
                     {l.label}
                   </Link>
                 )}

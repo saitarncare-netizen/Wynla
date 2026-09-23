@@ -17,8 +17,14 @@
      AppShell.tsx). Content that must clear the bar (sticky section
      headers, scroll-margin for in-page anchors) reads this instead of
      hardcoding 56px. The bar itself adds env(safe-area-inset-top) on
-     top of this value inside the installed app. */
-  --wn-header-h: 3.5rem;
+     top of this value inside the installed app.
+
+     Not --wn-header-h: that name is already the map's. MapPage publishes
+     --wn-header-h on its own root only after it has measured its
+     floating header, and MapView / ResortPanel rely on the variable
+     being UNSET before that (their var() fallbacks are 140px / 64px), so
+     it must never be defined on :root. */
+  --wn-shell-h: 3.5rem;
 
   /* Everything a floating element has to stay above at the bottom of a
      phone screen: the home-indicator inset, plus the AppTabBar while it
@@ -82,33 +88,29 @@
 
   /* Type scale: six body steps plus display sizes for hero titles.
      12 / 14 / 16 / 18 / 22 / 28, each with a fixed line height so
-     vertical rhythm does not drift between pages. 11px exists only as
-     `text-eyebrow` for uppercase tracking labels; anything smaller is
-     not allowed (design-system-2: 268 uses of 9-11px text). */
+     vertical rhythm does not drift between pages. The first four are
+     Tailwind's own text-xs / sm / base / lg (same sizes, same line
+     heights), so they are not redefined here. The steps that differ
+     from Tailwind's are namespaced (text-wn-xl ...) so text-xl..6xl in
+     the map, sheet, resort and trips files other packages own keep
+     their current size until those files migrate; nothing shifts under
+     them at merge. 11px exists only as `text-eyebrow` for uppercase
+     tracking labels; anything smaller is not allowed (design-system-2:
+     268 uses of 9-11px text). */
   --text-eyebrow: 0.6875rem;
   --text-eyebrow--line-height: 1rem;
   --text-eyebrow--letter-spacing: 0.08em;
-  --text-xs: 0.75rem;
-  --text-xs--line-height: 1rem;
-  --text-sm: 0.875rem;
-  --text-sm--line-height: 1.25rem;
-  --text-base: 1rem;
-  --text-base--line-height: 1.5rem;
-  --text-lg: 1.125rem;
-  --text-lg--line-height: 1.625rem;
-  --text-xl: 1.375rem;
-  --text-xl--line-height: 1.75rem;
-  --text-2xl: 1.75rem;
-  --text-2xl--line-height: 2.125rem;
+  --text-wn-xl: 1.375rem;
+  --text-wn-xl--line-height: 1.75rem;
+  --text-wn-2xl: 1.75rem;
+  --text-wn-2xl--line-height: 2.125rem;
   /* Display steps (page titles on hero headers). */
-  --text-3xl: 2rem;
-  --text-3xl--line-height: 2.375rem;
-  --text-4xl: 2.5rem;
-  --text-4xl--line-height: 2.75rem;
-  --text-5xl: 3rem;
-  --text-5xl--line-height: 3.25rem;
-  --text-6xl: 3.75rem;
-  --text-6xl--line-height: 4rem;
+  --text-wn-3xl: 2rem;
+  --text-wn-3xl--line-height: 2.375rem;
+  --text-wn-4xl: 2.5rem;
+  --text-wn-4xl--line-height: 2.75rem;
+  --text-wn-5xl: 3rem;
+  --text-wn-5xl--line-height: 3.25rem;
 
   /* Radii. Namespaced (rounded-wn-sm/md/lg) so the Tailwind defaults
      other packages still rely on do not shift under them; the guide
@@ -130,12 +132,14 @@
    specificity at zero so a component that opts into its own ring still
    wins; the offset puts the ring on the page background, which is why
    it stays visible around a navy button too. Mouse clicks do not
-   trigger :focus-visible, so no ring flashes on tap. */
-:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+   trigger :focus-visible, so no ring flashes on tap. tabindex="-1"
+   containers (the #main-content skip-link target, sheet roots) receive
+   focus programmatically and are not controls, so they get no ring. */
+:where(a, button, input, select, textarea, summary, [tabindex]:not([tabindex="-1"])):focus-visible {
   outline: 2px solid var(--color-wn-focus);
   outline-offset: 2px;
 }
-.on-dark :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+.on-dark :where(a, button, input, select, textarea, summary, [tabindex]:not([tabindex="-1"])):focus-visible {
   outline-color: var(--color-wn-focus-on-dark);
 }
 
@@ -179,12 +183,12 @@ body.route-map > footer {
    inset + header tall and short pages (/login, /get) rubber-band by a
    few pixels in the installed app. */
 body:not(.route-map):not(:has([data-route="map"])) > #main-content > main {
-  min-height: calc(100dvh - env(safe-area-inset-top, 0px) - var(--wn-header-h));
+  min-height: calc(100dvh - env(safe-area-inset-top, 0px) - var(--wn-shell-h));
 }
 /* In-page anchors (guide headings, /data-sources sections) scroll to
    just under the sticky top bar instead of behind it. */
 body:not(.route-map) [id] {
-  scroll-margin-top: calc(var(--wn-header-h) + env(safe-area-inset-top, 0px) + 0.5rem);
+  scroll-margin-top: calc(var(--wn-shell-h) + env(safe-area-inset-top, 0px) + 0.5rem);
 }
 
 /* Phone tab bar (components/AppTabBar.tsx). While <html data-tab-bar="1">

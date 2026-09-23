@@ -1,5 +1,5 @@
-// Skeleton for /guides and /guides/[slug] (nested routes inherit this
-// file): navy hero + a two-column card grid.
+// Skeleton for the /guides index: navy hero + a two-column card grid.
+// Articles (/guides/[slug]) have their own prose-column skeleton.
 
 import { SkeletonCard, SkeletonHero, SkeletonPage } from "@/components/ui/Skeleton";
 

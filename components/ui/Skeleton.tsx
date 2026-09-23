@@ -10,8 +10,8 @@
 //
 // The pulse is the Tailwind animate-pulse keyframe; app/globals.css
 // disables it under prefers-reduced-motion. `aria-hidden` on each piece
-// and role="status" + a visually hidden label on the page-level wrapper
-// (see SkeletonPage) so screen readers get "Loading" once, not a wall of
+// and a visually hidden role="status" label inside the page-level
+// wrapper (see SkeletonPage) so screen readers get "Loading" once, not a wall of
 // empty boxes.
 
 import type { ReactNode } from "react";
@@ -82,11 +82,20 @@ export function SkeletonStats({ count = 3 }: { count?: number }) {
   );
 }
 
-/** Page-level wrapper: announces one "Loading" to assistive tech. */
+/**
+ * Page-level wrapper: announces one "Loading" to assistive tech.
+ *
+ * <main> stays a plain main landmark (putting role="status" on it would
+ * replace the landmark and turn the whole skeleton into a live region);
+ * the status role lives on the visually hidden label only, so screen
+ * readers can still jump to main and hear "Loading" exactly once.
+ */
 export function SkeletonPage({ label = "Loading", className, children }: { label?: string; className?: string; children: ReactNode }) {
   return (
-    <main role="status" aria-live="polite" className={cx("min-h-dvh bg-wn-offwhite", className)}>
-      <span className="sr-only">{label}</span>
+    <main aria-busy="true" className={cx("min-h-dvh bg-wn-offwhite", className)}>
+      <p role="status" aria-live="polite" className="sr-only">
+        {label}
+      </p>
       {children}
     </main>
   );

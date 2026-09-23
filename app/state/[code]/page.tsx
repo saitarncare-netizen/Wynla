@@ -198,7 +198,7 @@ function Stat({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-wn-md border border-wn-line bg-white px-3 py-3 sm:px-4">
       <div className="text-eyebrow font-semibold uppercase text-wn-muted">{label}</div>
-      <div className="mt-0.5 text-lg font-bold tabular-nums text-wn-navy sm:text-xl">{value}</div>
+      <div className="mt-0.5 text-lg font-bold tabular-nums text-wn-navy sm:text-wn-xl">{value}</div>
     </div>
   );
 }

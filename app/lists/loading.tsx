@@ -1,4 +1,5 @@
-// Skeleton for /lists and /lists/[slug]: navy hero + three-column grid.
+// Skeleton for the /lists index: navy hero + three-column grid. A list
+// page (/lists/[slug]) has its own intro + ranked-grid skeleton.
 
 import { SkeletonCard, SkeletonHero, SkeletonPage } from "@/components/ui/Skeleton";
 

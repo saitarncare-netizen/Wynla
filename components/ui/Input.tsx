@@ -1,7 +1,9 @@
 // Input — text-style input with the one border, radius and focus ring.
 // Always 16 px on phones (iOS zooms below that; app/globals.css also
-// forces it) and 14 px from sm up. `invalid` flips the border to the
-// danger colour and sets aria-invalid; Field wires the describedby ids.
+// forces it) and 14 px from sm up. Placeholders are text-wn-muted, the
+// AA text colour (wn-subtle is 4.35:1 on off-white, icons and decoration
+// only). `invalid` flips the border to the danger colour and sets
+// aria-invalid; Field wires the describedby ids.
 //
 //   font  "text" (default) or "code" for one-time codes: centred, mono,
 //         22 px, wide tracking. A prop rather than className because two
@@ -15,12 +17,12 @@ type Font = "text" | "code";
 
 const FONT: Record<Font, string> = {
   text: "text-base sm:text-sm",
-  code: "text-center font-mono text-xl tracking-[0.4em]",
+  code: "text-center font-mono text-wn-xl tracking-[0.4em]",
 };
 
 export const inputClasses = (invalid?: boolean, className?: string, font: Font = "text") =>
   cx(
-    "block w-full rounded-wn-sm border bg-white px-3 text-wn-charcoal placeholder:text-wn-subtle",
+    "block w-full rounded-wn-sm border bg-white px-3 text-wn-charcoal placeholder:text-wn-muted",
     FONT[font],
     "focus:border-wn-navy focus:outline-none focus:ring-2 focus:ring-wn-navy/25",
     "disabled:cursor-not-allowed disabled:bg-wn-offwhite disabled:opacity-70",

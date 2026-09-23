@@ -26,13 +26,13 @@ export default function ErrorPage({
         <EmptyState
           tone="bare"
           icon="alert"
-          title={<h1 className="text-2xl font-extrabold text-wn-navy sm:text-3xl">Something went sideways.</h1>}
+          title={<h1 className="text-wn-2xl font-extrabold text-wn-navy sm:text-wn-3xl">Something went sideways.</h1>}
           body={
             <>
               We hit a bump loading this page. It&apos;s usually a flaky network or a temporary glitch — give it a
               moment and try again.
               {error.digest && (
-                <span className="mt-2 block font-mono text-xs text-wn-subtle">ref: {error.digest}</span>
+                <span className="mt-2 block font-mono text-xs text-wn-muted">ref: {error.digest}</span>
               )}
             </>
           }

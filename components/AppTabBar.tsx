@@ -67,8 +67,10 @@ export default function AppTabBar() {
               <Link
                 href={tab.href}
                 aria-current={active ? "page" : undefined}
+                // 12 px labels: text-eyebrow (11 px, tracked) is reserved
+                // for uppercase labels, and these are sentence-case words.
                 className={[
-                  "flex h-full min-h-11 flex-col items-center justify-center gap-0.5 text-eyebrow font-semibold transition-colors",
+                  "flex h-full min-h-11 flex-col items-center justify-center gap-0.5 text-xs font-semibold transition-colors",
                   active ? "text-wn-navy" : "text-wn-muted hover:text-wn-navy",
                 ].join(" ")}
               >

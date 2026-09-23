@@ -286,7 +286,7 @@ function LoginForm() {
       <div className="w-full max-w-sm">
         <Card padding="lg">
           <p className="text-eyebrow font-semibold uppercase text-wn-muted">No password needed</p>
-          <h1 className="mt-1 text-xl font-extrabold text-wn-navy">Sign in to Wynla</h1>
+          <h1 className="mt-1 text-wn-xl font-extrabold text-wn-navy">Sign in to Wynla</h1>
 
           {step === "code" ? (
             <form
