@@ -1,0 +1,110 @@
+[
+ {
+  "slug": "49-degrees-north",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/49-degrees-north.jpg",
+  "hero_image_source": "supabase",
+  "hero_image_attribution": "Patrick Reynolds / CC BY-SA 4.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "49 Degrees North Mountain Resort — WA ski resort in winter",
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "keystone",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/keystone.jpg",
+  "hero_image_source": "supabase",
+  "hero_image_attribution": "Davepark / CC BY-SA 3.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Keystone Resort — CO ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "silver-mountain",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/silver-mountain.jpg",
+  "hero_image_source": "supabase",
+  "hero_image_attribution": "This Photo was taken by Wolfgang Moroder.  \n\nFeel free to use my photos, but ple / CC BY-SA 3.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Silver Mountain — ID ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "mt-baldy",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/mt-baldy.jpg",
+  "hero_image_source": "supabase",
+  "hero_image_attribution": "Brent Sisson / CC BY-SA 4.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Mt. Baldy Ski Resort — CA ski resort in winter",
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "blue-mountain-resort",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/blue-mountain-resort.jpg",
+  "hero_image_source": "supabase",
+  "hero_image_attribution": "Chensiyuan at English Wikipedia / CC BY-SA 3.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Blue Mountain Resort — PA ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "appalachian-ski-mountain",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/appalachian-ski-mountain.jpg",
+  "hero_image_source": "supabase",
+  "hero_image_attribution": "NHRHS2010 / CC BY-SA 3.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Appalachian Ski Mountain — NC ski resort in winter",
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "mt-eyak",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/mt-eyak.jpg",
+  "hero_image_source": "supabase",
+  "hero_image_attribution": "Troy Tirrell / Attribution",
+  "hero_image_credit": null,
+  "hero_image_alt": "Mt Eyak — AK ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "big-boulder",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/big-boulder.jpg",
+  "hero_image_source": "supabase",
+  "hero_image_attribution": "Mikeh0303 at en.wikipedia / CC BY 2.5",
+  "hero_image_credit": null,
+  "hero_image_alt": "Big Boulder — PA ski resort in winter",
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "timber-ridge",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/timber-ridge.jpg",
+  "hero_image_source": "supabase",
+  "hero_image_attribution": "Unknown authorUnknown author / FAL",
+  "hero_image_credit": null,
+  "hero_image_alt": "Timber Ridge Ski Area — MI ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "great-divide",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/great-divide.jpg",
+  "hero_image_source": "supabase",
+  "hero_image_attribution": "5of7 / CC BY-SA 2.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Great Divide — MT ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "homestead-resort",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/homestead-resort.jpg",
+  "hero_image_source": "supabase",
+  "hero_image_attribution": "The Ninjaneer / CC0",
+  "hero_image_credit": null,
+  "hero_image_alt": "The Homestead — MI ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "labrador-mountain",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/labrador-mountain.jpg",
+  "hero_image_source": "supabase",
+  "hero_image_attribution": "DunDooey / CC BY-SA 4.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Labrador Mountain — NY ski resort in winter",
+  "hero_image_verified_winter": null
+ }
+]
