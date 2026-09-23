@@ -112,6 +112,39 @@ describe("parseBlackouts", () => {
     );
   });
 
+  it("treats a bare 'None' on Indy Base rows as last season's list until Indy publishes", () => {
+    // CHANGES.md: every Indy Base blackout in the handoff is the 25/26
+    // reference, so "None" is not a 2026-27 fact. Indy+ never has blackouts.
+    const indy = (productKey: string) => ({ family: "indy", productKey });
+    const base = parseBlackouts("None", parseDays("2"), indy("indy-base-pass"));
+    expect(base.status).toBe("unpublished");
+    expect(base.lastSeason).toBe("no blackout dates");
+    expect(parseBlackouts("None", parseDays("2"), indy("indy-base-add-on-pass")).status).toBe("unpublished");
+    expect(parseBlackouts("None", parseDays("2"), indy("indy-plus-pass")).status).toBe("none");
+    expect(parseBlackouts("None", parseDays("2"), indy("indy-plus-add-on-pass")).status).toBe("none");
+    // A written-out list on an Indy Base row is last season's too.
+    const listed = parseBlackouts("Xmas; MLK", parseDays("2"), indy("indy-base-pass"));
+    expect(listed.status).toBe("unpublished");
+    expect(listed.lastSeason).toBe("Christmas week, MLK weekend");
+    // Other families are untouched by the Indy rule.
+    expect(parseBlackouts("None", parseDays("2"), { family: "ikon", productKey: "ikon-base-pass" }).status).toBe("none");
+  });
+
+  it("scopes the Stevens Pass Select list to daytime access and keeps the night exception", () => {
+    const b = parseBlackouts(
+      "No 9am-3pm day access on Nov 27-29 2026; Dec 5-6 2026. Night skiing (3pm on) unrestricted except Dec 24 2026",
+      parseDays("unlimited off-peak (day access 9am-3pm)"),
+    );
+    expect(b.status).toBe("dates");
+    expect(b.scope).toBe("day-access");
+    expect(b.ranges).toEqual([
+      ["2026-11-27", "2026-11-29"],
+      ["2026-12-05", "2026-12-06"],
+    ]);
+    expect(b.note).toBe("Night skiing (3pm on) stays open except 2026-12-24");
+    expect(parseBlackouts("Dec 26-30 2026", parseDays("5")).scope).toBe("full");
+  });
+
   it("does not apply blackouts to products with no access", () => {
     expect(parseBlackouts("n/a", parseDays("not included")).status).toBe("not_applicable");
     expect(parseBlackouts("None", parseDays("discount only (Allied)")).status).toBe("not_applicable");
@@ -176,6 +209,8 @@ describe("parseDays", () => {
       qualifier: "shared across Killington and Pico",
     });
     expect(parseDays("weekday access (Mon-Fri) excluding peak dates")).toMatchObject({ kind: "weekdays" });
+    // The text does not say which day is excluded; the blackout sentence does.
+    expect(parseDays("6 days/week")).toMatchObject({ kind: "other", short: "6 days a week", qualifier: null });
   });
 });
 
@@ -298,6 +333,11 @@ describe("isBlackedOut", () => {
     // Indy Base at a resort whose Indy page shows a blackout badge: the
     // 2026-27 list is not out yet, so we must not answer.
     expect(isBlackedOut("beaver-mountain", "Indy Base Pass", "2026-12-27")).toBeNull();
+    // Indy Base at a resort whose handoff row says "None": that is last
+    // season's list, so still no answer. Indy+ has none anywhere.
+    expect(isBlackedOut("arctic-valley", "Indy Base Pass", "2026-12-27")).toBeNull();
+    expect(isBlackedOut("arctic-valley", "Indy Base Add-On Pass", "2026-12-27")).toBeNull();
+    expect(isBlackedOut("arctic-valley", "Indy+ Pass", "2026-12-27")).toBe(false);
     // Epic Day Pass: depends on whether the no-peak option was bought.
     expect(isBlackedOut("vail", "Epic Day Pass", "2026-12-27")).toBeNull();
     // Ikon Base gives no access at Alta.
@@ -321,6 +361,8 @@ describe("isBlackedOut", () => {
         weekdays: [0, 6],
         rangesSource: "explicit",
         lastSeason: null,
+        scope: "full",
+        note: null,
       },
       reservationRequired: false,
       isBonusMountain: false,
@@ -361,6 +403,17 @@ describe("formatting", () => {
     expect(day && blackoutText(day.blackouts)).toMatch(/^Peak dates blacked out only if you buy the no-peak version: Nov 27-28, 2026/);
     const midweek = getFamilyAccess("alpine-valley-oh", "epic").find((e) => e.productKey === "northeast-midweek-pass");
     expect(midweek && blackoutText(midweek.blackouts)).toBe("Not valid on weekends");
+    const indyNone = getFamilyAccess("arctic-valley", "indy").find((e) => e.productKey === "indy-base-pass");
+    expect(indyNone && blackoutText(indyNone.blackouts)).toBe(
+      "2026-27 blackout dates not announced yet · last season: no blackout dates",
+    );
+    const stevens = getFamilyAccess("stevens-pass", "epic").find((e) => e.productKey === "stevens-pass-select-pass");
+    expect(stevens && blackoutText(stevens.blackouts)).toMatch(
+      /^No daytime \(9am-3pm\) access on: Nov 27-29, 2026; Dec 5-6, 2026; .*Mar 13-14, 2027\. Night skiing \(3pm on\) stays open except Dec 24, 2026$/,
+    );
+    const tahoeValue = getFamilyAccess("northstar-california", "epic").find((e) => e.productKey === "tahoe-value-pass");
+    expect(tahoeValue && daysText(tahoeValue.days)).toBe("6 days a week");
+    expect(tahoeValue && blackoutText(tahoeValue.blackouts)).toMatch(/^Epic peak dates: .* and all Saturdays$/);
   });
 
   it("writes days with their qualifier", () => {
@@ -377,6 +430,9 @@ describe("formatting", () => {
       "Ikon: 2 days (full pass only), blackouts Dec 26-30, Jan 16-17, Feb 13-14 · Ikon Base & Session: not included",
     );
     expect(summaryLine("jackson-hole", "ikon")).toMatch(/^Ikon: 7 days \(reservation required\)/);
+    expect(summaryLine("arctic-valley", "indy")).toBe(
+      "Indy Base: 2 days, blackouts TBA · Indy+: 2 days · Base Add-On: 2 days, blackouts TBA · +1 more",
+    );
     expect(summaryLine("vail", "epic")).toMatch(/^Epic: unlimited · Epic Local: 10 days \(shared\), blackouts Nov 27-28, Dec 26-31, Jan 16, Feb 13-14 · Epic Day: 1-7 days, peak dates optional · \+\d more$/);
     expect(summaryLine("vail", "indy")).toBeNull();
   });

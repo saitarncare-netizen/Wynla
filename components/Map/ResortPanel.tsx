@@ -86,8 +86,11 @@ export default function ResortPanel({
   // loaded with a dynamic import on first use instead of riding in the
   // map bundle; results are cached per resort + family for the session.
   // `line` is undefined while loading, null when the family has no
-  // verified rows for this resort.
-  type PassDetail = { id: number; family: string; line: string | null | undefined };
+  // verified rows for this resort. `openedBy` records whether a hover or
+  // a tap opened it: a mouse click lands on a chip that hover already
+  // opened, so a click must only CLOSE a detail that a tap opened, or the
+  // first click on desktop would open and immediately hide the line.
+  type PassDetail = { id: number; family: string; line: string | null | undefined; openedBy: "hover" | "tap" };
   const [passDetail, setPassDetail] = useState<PassDetail | null>(null);
   const passSummaryCache = useRef(new Map<string, string | null>());
   const loadPassSummary = useCallback(
@@ -103,23 +106,40 @@ export default function ResortPanel({
     [resort.slug],
   );
   const openPassDetail = useCallback(
-    (family: string) => {
+    (family: string, openedBy: "hover" | "tap") => {
       const id = resort.id;
-      setPassDetail({ id, family, line: passSummaryCache.current.get(`${resort.slug}|${family}`) });
+      setPassDetail({ id, family, line: passSummaryCache.current.get(`${resort.slug}|${family}`), openedBy });
       void loadPassSummary(family).then((line) => {
-        setPassDetail((cur) => (cur && cur.id === id && cur.family === family ? { id, family, line } : cur));
+        setPassDetail((cur) => (cur && cur.id === id && cur.family === family ? { ...cur, line } : cur));
       });
     },
     [resort.id, resort.slug, loadPassSummary],
   );
-  const togglePassDetail = (family: string) => {
-    if (passDetail && passDetail.id === resort.id && passDetail.family === family) {
+  // Hover only counts for a real mouse: a finger's pointerenter is the
+  // start of a tap and the click handler owns that. There is no onFocus
+  // hook on purpose (Android Chrome focuses a button before click, which
+  // used to open and then toggle the line closed in one tap); keyboard
+  // users open it with Enter or Space, which fire click.
+  const hoverPassDetail = (family: string, pointerType: string) => {
+    if (pointerType !== "mouse") return;
+    if (passDetail && passDetail.id === resort.id && passDetail.family === family) return;
+    openPassDetail(family, "hover");
+  };
+  // Tap (touch, mouse click or Enter/Space): opens, or promotes a
+  // hover-opened line to "tap" so a click never hides what hover showed;
+  // a second tap on the same chip closes it.
+  const tapPassDetail = (family: string) => {
+    const same = passDetail !== null && passDetail.id === resort.id && passDetail.family === family;
+    if (same && passDetail.openedBy === "tap") {
       setPassDetail(null);
+    } else if (same) {
+      setPassDetail({ ...passDetail, openedBy: "tap" });
     } else {
-      openPassDetail(family);
+      openPassDetail(family, "tap");
     }
   };
   const activePassDetail = passDetail && passDetail.id === resort.id ? passDetail : null;
+  const passDetailId = `pass-detail-${resort.id}`;
 
   // Record this resort in the localStorage "recently viewed" list so
   // the homepage strip can show it next time. We push the minimum
@@ -350,9 +370,10 @@ export default function ResortPanel({
             scroll inside the panel instead of leaking to the Mapbox canvas. */}
         <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3" style={{ touchAction: "pan-y" }}>
           {/* Pass badges row. Each multi-resort pass badge is a button:
-              tap (touch) or hover (pointer) shows the per-product summary
-              line under the row; the independent badge stays inert. The
-              chip itself keeps its size, only the line below appears. */}
+              tap (touch or click, Enter/Space from the keyboard) or mouse
+              hover shows the per-product summary line under the row; the
+              independent badge stays inert. The chip itself keeps its
+              size, only the line below appears. */}
           {resort.passes?.length > 0 && (
             <div className="mb-3">
               <div className="flex flex-wrap gap-1.5">
@@ -374,11 +395,10 @@ export default function ResortPanel({
                     <button
                       key={p}
                       type="button"
-                      onClick={() => togglePassDetail(p)}
-                      onMouseEnter={() => openPassDetail(p)}
-                      onFocus={() => openPassDetail(p)}
+                      onClick={() => tapPassDetail(p)}
+                      onPointerEnter={(e) => hoverPassDetail(p, e.pointerType)}
                       aria-expanded={open}
-                      aria-controls={`pass-detail-${resort.id}`}
+                      aria-controls={activePassDetail ? passDetailId : undefined}
                       title={`${passLabel(p)}: days and blackout dates here`}
                       className={`inline-block rounded-md px-2 py-0.5 text-[11px] font-semibold transition ${
                         open ? "ring-2 ring-wn-navy/40 ring-offset-1" : "hover:brightness-110"
@@ -392,7 +412,7 @@ export default function ResortPanel({
               </div>
               {activePassDetail && (
                 <p
-                  id={`pass-detail-${resort.id}`}
+                  id={passDetailId}
                   className="mt-1.5 text-[11px] leading-snug text-wn-charcoal/80"
                   aria-live="polite"
                 >

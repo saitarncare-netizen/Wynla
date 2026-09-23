@@ -20,8 +20,9 @@
 //     count + short label) while keeping the raw text;
 //   * parses blackout text into ISO date ranges for the 2026-27 season
 //     where the text is unambiguous, keeps the raw text in every case, and
-//     labels the unpublished ones (Indy 2026-27) as such instead of
-//     pretending they are "none";
+//     labels the unpublished ones (every Indy Base row until Indy posts the
+//     2026-27 list, see INDY_BLACKOUTS_PUBLISHED) as such instead of
+//     pretending last season's "None" is this season's fact;
 //   * sorts deterministically (slug, family order, product order) so the
 //     diff of a regeneration is readable.
 
@@ -38,6 +39,18 @@ const OUTPUT = resolve(HERE, "../lib/data/passAccess.json");
 // the first calendar year, Jan-Jun to the second. Bump when regenerating
 // for a new season.
 const SEASON = { label: "2026-27", firstYear: 2026, secondYear: 2027 };
+
+// Indy publishes each resort's blackout list in the fall. Until it does, the
+// handoff JSON carries LAST season's list for every Indy Base row (CHANGES.md:
+// "every blackout in resort_pass_access.json for Indy Base is the corrected
+// 25/26 reference"), so a bare "None" on an Indy Base row is a 2025-26 fact,
+// not a 2026-27 promise. While this flag is false those rows are emitted as
+// "unpublished" with the last-season hint, so isBlackedOut returns null and
+// every sentence says "not announced yet". Flip it to true in the weekly
+// checklist once the 2026-27 list is live and the handoff JSON carries it.
+const INDY_BLACKOUTS_PUBLISHED = false;
+// Indy products whose blackouts vary per resort; Indy+ never has any.
+const INDY_BLACKOUT_PRODUCTS = new Set(["indy-base-pass", "indy-base-add-on-pass"]);
 
 // Vail Resorts' published 2026-27 peak dates (epicpass.com peak-restricted
 // dates page, read 2026-09-23). Used only when a row says a bare "peak
@@ -130,7 +143,9 @@ const FAMILIES = {
   },
   indy: {
     officialUrl: "https://www.indyskipass.com/our-resorts",
-    note: "Indy publishes each resort's 2026-27 blackout dates in fall 2026. Rows marked no blackout dates reflect the resort's Indy page on the verified date. Indy+ passes have no blackouts anywhere.",
+    note: INDY_BLACKOUTS_PUBLISHED
+      ? "Indy Base blackout dates are per resort and are the 2026-27 list Indy published. Indy+ passes have no blackouts anywhere."
+      : "Indy publishes each resort's 2026-27 blackout dates in fall 2026; until then Indy Base rows show what last season's list covered. Indy+ passes have no blackouts anywhere.",
   },
 };
 
@@ -208,8 +223,10 @@ export function parseDays(raw, ctx = {}) {
       qualifier: /excluding peak/.test(lower) ? "Monday to Friday, not on peak dates" : "Monday to Friday, including peak dates",
     };
   }
+  // "6 days/week" does not say which day is excluded; the blackout sentence
+  // names it from the parsed weekday rule, so the label stays neutral.
   if (lower === "6 days/week") {
-    return { ...base, kind: "unlimited", short: "unlimited except Saturdays", qualifier: null };
+    return { ...base, kind: "other", short: "6 days a week", qualifier: null };
   }
   // "2/3/4" (Session pass, as purchased) and "1-7" / "up to 4-7 (…)".
   const slash = text.match(/^(\d+)\/(\d+)\/(\d+)$/);
@@ -365,10 +382,14 @@ const INDY_REF = [
   [/additional/i, "extra resort-specific dates"],
 ];
 
-function lastSeasonReference(text) {
+/** Turn "25/26 ref: Xmas; MLK" into plain words. With `allowBare`, text
+ *  without the prefix is read as the codes themselves (an Indy Base row
+ *  that lists last season's codes directly). */
+function lastSeasonReference(text, allowBare = false) {
   const m = text.match(/25\/26 ref:\s*(.*)$/);
-  if (!m) return null;
-  const parts = m[1].split(";").map((s) => s.trim()).filter(Boolean);
+  if (!m && !allowBare) return null;
+  const body = m ? m[1] : text;
+  const parts = body.split(";").map((s) => s.trim()).filter(Boolean);
   const out = [];
   for (const part of parts) {
     const hit = INDY_REF.find(([re]) => re.test(part));
@@ -377,10 +398,12 @@ function lastSeasonReference(text) {
   return out.length ? out.join(", ") : null;
 }
 
-export function parseBlackouts(raw, days) {
+/** Classify the blackout text of one row. `ctx.family` / `ctx.productKey`
+ *  let the Indy rule above apply only to the products it is about. */
+export function parseBlackouts(raw, days, ctx = {}) {
   const text = raw.trim();
   const lower = text.toLowerCase();
-  const base = { text, ranges: [], weekdays: [], rangesSource: null, lastSeason: null };
+  const base = { text, ranges: [], weekdays: [], rangesSource: null, lastSeason: null, scope: "full", note: null };
 
   if (days.kind === "none" || days.kind === "discount") {
     return { ...base, status: "not_applicable" };
@@ -388,8 +411,18 @@ export function parseBlackouts(raw, days) {
   if (/^26\/27 dates tba/.test(lower) || /^tbd/.test(lower)) {
     return { ...base, status: "unpublished", lastSeason: lastSeasonReference(text) };
   }
+  const indyPending =
+    !INDY_BLACKOUTS_PUBLISHED && ctx.family === "indy" && INDY_BLACKOUT_PRODUCTS.has(ctx.productKey);
   if (lower === "n/a" || lower.startsWith("n/a (") || lower.startsWith("none")) {
+    if (indyPending) {
+      return { ...base, status: "unpublished", lastSeason: "no blackout dates" };
+    }
     return { ...base, status: "none" };
+  }
+  if (indyPending) {
+    // Any other Indy Base text is last season's list written out; keep it
+    // as the hint, never as this season's dates.
+    return { ...base, status: "unpublished", lastSeason: lastSeasonReference(text, true) ?? text };
   }
   if (/^peak dates if 'no peak' option chosen$/.test(lower)) {
     return { ...base, status: "conditional", ranges: parseDateRanges(EPIC_PEAK_DATES_TEXT), rangesSource: "epic-peak-list" };
@@ -404,7 +437,30 @@ export function parseBlackouts(raw, days) {
   if (!ranges.length && !weekdays.length) {
     return { ...base, status: "unknown" };
   }
-  return { ...base, status: weekdays.length && !ranges.length ? "weekdays" : "dates", ranges, weekdays, rangesSource };
+  // Stevens Pass Select: the listed dates only remove 9am-3pm day access;
+  // night skiing stays open on all but one of them. Scope + note keep the
+  // sentence from claiming a full-day blackout.
+  let scope = "full";
+  let note = null;
+  if (/^no 9am-3pm day access/.test(lower)) {
+    scope = "day-access";
+    const night = text.match(/night skiing \(3pm on\) unrestricted(?: except (.+))?$/i);
+    if (night) {
+      const except = night[1] ? parseDateRanges(night[1]) : [];
+      note = except.length
+        ? `Night skiing (3pm on) stays open except ${except.map(([a, b]) => (a === b ? a : `${a} to ${b}`)).join(", ")}`
+        : "Night skiing (3pm on) stays open";
+    }
+  }
+  return {
+    ...base,
+    status: weekdays.length && !ranges.length ? "weekdays" : "dates",
+    ranges,
+    weekdays,
+    rangesSource,
+    scope,
+    note,
+  };
 }
 
 // ---------------------------------------------------------------------------
@@ -432,7 +488,7 @@ export function buildPassAccess(rows, verifiedOn) {
       groupLabel,
       productSharedLabel: PRODUCT_SHARED_LABELS[productKey] ?? null,
     });
-    const blackouts = parseBlackouts(r.blackout_dates, days);
+    const blackouts = parseBlackouts(r.blackout_dates, days, { family: r.pass_family, productKey });
     const entry = {
       product,
       productKey,

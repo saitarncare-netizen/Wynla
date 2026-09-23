@@ -24,10 +24,13 @@ CREATE TABLE IF NOT EXISTS public.resort_pass_access (
   pass_family      text   NOT NULL CHECK (pass_family IN ('epic', 'ikon', 'indy', 'mountain_collective')),
   product          text   NOT NULL,                 -- "Ikon Base Pass"
   product_key      text   NOT NULL,                 -- "ikon-base-pass"
-  qualifier        text,                            -- "All / 32 / 22 Resorts tiers"
+  -- Part of the unique key, so it cannot be NULL: Postgres treats NULLs as
+  -- distinct in a unique constraint and an upsert would insert duplicates
+  -- for every row without a qualifier. The loader writes '' for none.
+  qualifier        text   NOT NULL DEFAULT '',      -- "All / 32 / 22 Resorts tiers"
   -- Parsed days: {text, kind, short, count?, min?, max?, qualifier?}
   days             jsonb  NOT NULL,
-  -- Parsed blackouts: {status, text, ranges: [[start,end]], weekdays: [], rangesSource, lastSeason}
+  -- Parsed blackouts: {status, text, ranges: [[start,end]], weekdays: [], rangesSource, lastSeason, scope, note}
   blackouts        jsonb  NOT NULL,
   -- Flat copies of the two facts the map filter will want to index.
   days_kind        text   NOT NULL,                 -- unlimited | limited | range | none | discount | weekdays | other
@@ -71,7 +74,9 @@ CREATE TRIGGER resort_pass_access_touch
   FOR EACH ROW EXECUTE FUNCTION public.resort_pass_access_touch();
 
 -- Load path (later): a small script maps lib/data/passAccess.json to rows,
--- resolving resort_id from resorts.slug, and upserts on the UNIQUE key.
+-- resolving resort_id from resorts.slug, writing '' when qualifier is null,
+-- and upserts on the UNIQUE key (ON CONFLICT (resort_id, season,
+-- pass_family, product_key, qualifier) DO UPDATE).
 -- Verify after loading:
 --   SELECT pass_family, count(DISTINCT slug) AS resorts, count(*) AS rows
 --   FROM public.resort_pass_access WHERE season = '2026-27'

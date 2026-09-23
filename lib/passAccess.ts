@@ -77,6 +77,13 @@ export interface Blackouts {
   rangesSource: "explicit" | "epic-peak-list" | null;
   /** For unpublished lists: what last season's list covered, in plain words. */
   lastSeason: string | null;
+  /** "full" = the pass does not work at all on those days; "day-access" =
+   *  only 9am-3pm access is removed (Stevens Pass Select) and `note` says
+   *  what stays open. A date filter must label the second kind, not hide it. */
+  scope: "full" | "day-access";
+  /** Sentence that qualifies the ranges (night skiing exception), with ISO
+   *  dates the formatter rewrites. */
+  note: string | null;
 }
 
 export interface PassProductAccess {
@@ -176,7 +183,9 @@ function isValidIso(dateISO: string): boolean {
  *  true / false when the published rules answer it; null when they do not
  *  (unknown product, unpublished list, option-dependent product, no
  *  access, or an invalid date). Callers must render null as "not announced
- *  yet" or "check the pass", never as "open". */
+ *  yet" or "check the pass", never as "open". A true on a row whose
+ *  `blackouts.scope` is "day-access" means no 9am-3pm access; read `note`
+ *  before calling the whole day closed. */
 export function isBlackedOut(slug: string, product: string, dateISO: string): boolean | null {
   const entry = findProduct(slug, product);
   if (!entry || !isValidIso(dateISO)) return null;
@@ -267,10 +276,16 @@ export function blackoutText(b: Blackouts, withYear = true): string {
     case "not_applicable":
       return "";
     case "dates": {
-      const head = b.rangesSource === "epic-peak-list" ? "Epic peak dates" : "Blackout dates";
+      const head =
+        b.scope === "day-access"
+          ? "No daytime (9am-3pm) access on"
+          : b.rangesSource === "epic-peak-list"
+            ? "Epic peak dates"
+            : "Blackout dates";
       const dates = formatRanges(b.ranges, withYear, "; ");
       const wk = b.weekdays.length ? ` and all ${weekdayPhrase(b.weekdays)}` : "";
-      return `${head}: ${dates}${wk}`;
+      const note = b.note ? `. ${formatNote(b.note, withYear)}` : "";
+      return `${head}: ${dates}${wk}${note}`;
     }
     case "weekdays":
       return `Not valid on ${weekdayPhrase(b.weekdays)}`;
@@ -283,6 +298,14 @@ export function blackoutText(b: Blackouts, withYear = true): string {
     case "unknown":
       return `Blackout dates: ${b.text}`;
   }
+}
+
+/** The generator writes ISO dates into `note` so it stays locale-free;
+ *  print them the way the ranges are printed. */
+function formatNote(note: string, withYear: boolean): string {
+  return note.replace(/(\d{4}-\d{2}-\d{2})(?: to (\d{4}-\d{2}-\d{2}))?/g, (_m, a: string, b?: string) =>
+    formatRange([a, b ?? a], withYear),
+  );
 }
 
 /** Short product labels for chips and the one-line summary. */
@@ -340,8 +363,12 @@ function summaryBit(e: PassProductAccess): string {
   const b = e.blackouts;
   switch (b.status) {
     case "dates": {
-      s += `, blackouts ${formatRanges(b.ranges)}`;
+      s +=
+        b.scope === "day-access"
+          ? `, no 9am-3pm access ${formatRanges(b.ranges)}`
+          : `, blackouts ${formatRanges(b.ranges)}`;
       if (b.weekdays.length) s += ` + ${weekdayPhrase(b.weekdays)}`;
+      if (b.note) s += ` (${formatNote(b.note, false).replace(/^Night/, "night")})`;
       break;
     }
     case "weekdays":
