@@ -49,11 +49,11 @@ export default function NearbyRestaurants({ rows, variant = "full" }: Props) {
   return (
     <div className={isCompact ? "mt-4" : "mt-8"}>
       <header className={isCompact ? "mb-1" : "mb-3"}>
-        <h2 className={isCompact ? "text-base font-extrabold text-wn-navy" : "text-xl font-extrabold text-wn-navy"}>
-          🍴 Eat nearby
+        <h2 className={isCompact ? "text-base font-extrabold text-wn-navy" : "text-lg font-extrabold text-wn-navy"}>
+          <span aria-hidden="true">🍴</span> Eat nearby
         </h2>
         {!isCompact && (
-          <p className="text-xs text-wn-charcoal/60">
+          <p className="text-xs text-wn-muted">
             Restaurants within ~25 km of the resort, sourced from
             OpenStreetMap.
           </p>

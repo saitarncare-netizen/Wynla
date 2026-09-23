@@ -17,6 +17,13 @@ import {
   mapsDirectionsUrl,
   prettifyDescription,
 } from "@/lib/nearbyCategories";
+import Icon from "@/components/icons/Icon";
+import { HIT_AREA_44 } from "@/lib/hitArea";
+
+// Shared look for the two small card actions: 36 px tall, grown to a
+// 44 px tap box by HIT_AREA_44 (the li padding keeps it inside the
+// horizontal scroller, which would otherwise clip it).
+const ACTION = `${HIT_AREA_44} inline-flex min-h-9 items-center gap-1 rounded-wn-sm px-2 text-xs font-semibold transition`;
 
 type Props = {
   /** Emoji + label for the section header. */
@@ -49,7 +56,7 @@ export default function NearbyGroup({ emoji, label, blurb, rows, variant = "full
           {label}
         </h3>
         {blurb && !isCompact && (
-          <span className="text-[11px] text-wn-charcoal/55">— {blurb}</span>
+          <span className="text-xs text-wn-muted">— {blurb}</span>
         )}
       </header>
       <ul
@@ -71,14 +78,14 @@ export default function NearbyGroup({ emoji, label, blurb, rows, variant = "full
           // time; an address comes back as "" and the line is hidden.
           const description = prettifyDescription(r.description);
           const base = isCompact
-            ? "flex w-[180px] shrink-0 snap-start flex-col rounded-lg border bg-white p-2"
-            : "flex w-[220px] shrink-0 snap-start flex-col rounded-lg border bg-white p-3 shadow-sm";
-          const cardClass = `${base} ${rec ? "border-amber-300 bg-amber-50/60 ring-1 ring-amber-200" : "border-wn-charcoal/10"}`;
+            ? "flex w-[180px] shrink-0 snap-start flex-col rounded-wn-sm border bg-white p-2"
+            : "flex w-[220px] shrink-0 snap-start flex-col rounded-wn-sm border bg-white p-3 shadow-wn-sm";
+          const cardClass = `${base} ${rec ? "border-amber-300 bg-amber-50/60 ring-1 ring-amber-200" : "border-wn-line"}`;
           return (
             <li key={r.id} className={cardClass}>
               {rec && (
-                <div className="mb-1 inline-flex w-fit items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-amber-800">
-                  <span aria-hidden="true">⭐</span> Recommended
+                <div className="mb-1 inline-flex w-fit items-center gap-1 rounded-full bg-wn-warning-bg px-2 py-0.5 text-eyebrow font-bold uppercase text-wn-warning">
+                  <Icon name="star" className="h-3 w-3" /> Recommended
                 </div>
               )}
               {/* Body — tap to open the place (+ its Google reviews) in Maps. */}
@@ -89,37 +96,37 @@ export default function NearbyGroup({ emoji, label, blurb, rows, variant = "full
                 className="group block flex-1"
                 title={`${r.name} — open in Google Maps (ratings + reviews)`}
               >
-                <div className={isCompact ? "truncate text-[13px] font-semibold text-wn-navy group-hover:underline" : "truncate text-sm font-bold text-wn-navy group-hover:underline"}>
+                <div className={isCompact ? "truncate text-sm font-semibold text-wn-navy group-hover:underline" : "truncate text-sm font-bold text-wn-navy group-hover:underline"}>
                   {r.name}
                 </div>
                 {description && (
-                  <div className="mt-0.5 truncate text-[11px] text-wn-charcoal/55">
+                  <div className="mt-0.5 truncate text-xs text-wn-muted">
                     {description}
                   </div>
                 )}
                 {meta && (
-                  <div className="mt-1 text-[11px] font-medium text-wn-charcoal/65">
+                  <div className="mt-1 text-xs font-medium text-wn-muted">
                     {meta}
                   </div>
                 )}
               </a>
               {/* Action row — always-present Directions + optional Website. */}
-              <div className="mt-2 flex items-center gap-1.5">
+              <div className="mt-2 flex flex-wrap items-center gap-1.5">
                 <a
                   href={dirUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 rounded-md bg-wn-navy px-2.5 py-2 text-[11px] font-semibold text-white transition hover:bg-wn-navy/90"
+                  className={`${ACTION} bg-wn-navy text-white hover:bg-wn-navy/90`}
                   title={`Directions to ${r.name}`}
                 >
-                  <span aria-hidden="true">📍</span> Directions
+                  <Icon name="pin" className="h-3.5 w-3.5" /> Directions
                 </a>
                 {r.website_url && (
                   <a
                     href={r.website_url}
                     target="_blank"
                     rel="noopener noreferrer nofollow"
-                    className="inline-flex items-center gap-1 rounded-md border border-wn-charcoal/15 px-2.5 py-2 text-[11px] font-semibold text-wn-navy transition hover:border-wn-navy"
+                    className={`${ACTION} border border-wn-line text-wn-navy hover:border-wn-navy`}
                     title={`${r.name} website`}
                   >
                     Website

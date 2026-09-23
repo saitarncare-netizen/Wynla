@@ -11,7 +11,11 @@ import {
   primaryPass,
   PASS_KEYS,
 } from "@/lib/passColors";
-import { textOn } from "@/lib/contrast";
+import { accentOnNavy, textOn } from "@/lib/contrast";
+import Icon, { type IconName } from "@/components/icons/Icon";
+import Button from "@/components/ui/Button";
+import Chip from "@/components/ui/Chip";
+import UiSection from "@/components/ui/Section";
 import {
   blackoutText,
   familyInfo,
@@ -796,7 +800,9 @@ export default async function ResortPage({
       <header
         className="relative w-full overflow-hidden"
         style={{
-          background: `linear-gradient(135deg, ${heroBg} 0%, #1E2952 60%, #0F1530 100%)`,
+          // accentOnNavy mixes the pass colour toward navy until the white
+          // title clears 4.5:1 (raw Ikon yellow / Epic orange did not).
+          background: `linear-gradient(135deg, ${accentOnNavy(heroBg)} 0%, var(--color-wn-navy) 60%, var(--color-wn-navy-deep) 100%)`,
           // 12px breathing room under the iOS status bar. The safe-area
           // inset itself is applied once for every non-map route by the
           // #main-content rule in globals.css.
@@ -825,21 +831,11 @@ export default async function ResortPage({
           }}
         />
 
-        {/* Top bar — back link + compare + favorite */}
-        <div className="relative z-10 mx-auto flex max-w-5xl items-center justify-between px-4 py-4 sm:px-6">
-          {/* Carry the slug back as ?recent=<slug> so the map page can
-              promote it into the recentlyViewedId slot and paint the
-              gold ring on the pin the user just visited — without that
-              hand-off, the cross-route navigation drops the state PR
-              #36 set when the user closed the in-map panel. Resolves
-              Saitarn 2026-05-23 "พอออกมายังไม่เห็นมีไฮไลท์เลย" — the
-              highlight now survives the /resort/[slug] round-trip. */}
-          <Link
-            href={`/?recent=${encodeURIComponent(resort.slug)}`}
-            className="inline-flex items-center gap-1 rounded-md bg-white/95 px-3 py-1.5 text-xs font-semibold text-wn-navy shadow-sm backdrop-blur-sm transition hover:bg-white"
-          >
-            ← Map
-          </Link>
+        {/* Top bar — plan + compare + favorite. The "← Map" pill that
+            used to sit on the left is gone: the AppShell bar above the
+            hero owns back navigation on every non-map route (design
+            guide section 6). */}
+        <div className="relative z-10 mx-auto flex max-w-5xl items-center justify-end px-4 py-4 sm:px-6">
           <div className="flex items-center gap-2">
             {/* Opens the planner with this resort as day 1, so the page
                 is a doorway into a trip rather than a dead end (audit
@@ -849,9 +845,9 @@ export default async function ResortPage({
               href={`/?plan=1&route=${encodeURIComponent(resort.slug)}&days=1`}
               aria-label={`Plan a trip to ${resort.name}`}
               title="Plan a trip here"
-              className="inline-flex h-11 items-center justify-center gap-1 rounded-full bg-white/95 px-3 text-xs font-semibold text-wn-charcoal shadow-md backdrop-blur-sm transition hover:text-wn-navy active:scale-95 motion-reduce:transition-none sm:px-3.5"
+              className="inline-flex h-11 items-center justify-center gap-1 rounded-full bg-white/95 px-3 text-xs font-semibold text-wn-charcoal shadow-wn-md backdrop-blur-sm transition hover:text-wn-navy active:scale-95 motion-reduce:transition-none sm:px-3.5"
             >
-              <span aria-hidden="true" className="text-sm leading-none">🗺️</span>
+              <Icon name="map" className="h-4 w-4" />
               <span className="hidden sm:inline">Plan a trip</span>
             </Link>
             <CompareToggle resortId={resort.id} size="lg" />
@@ -869,7 +865,7 @@ export default async function ResortPage({
               <PassBadge key={p} pass={p} href={isPassFamily(p) ? "#pass-access" : undefined} />
             ))}
           </div>
-          <h1 className="text-4xl font-extrabold leading-[0.95] tracking-tight text-white sm:text-7xl md:text-[7.5rem] md:tracking-[-0.025em]">
+          <h1 className="text-wn-4xl font-extrabold leading-[0.95] tracking-tight text-white sm:text-7xl md:text-[7.5rem] md:tracking-[-0.025em]">
             {resort.name}
           </h1>
           {/* Season countdown — sits just under the hero title while the
@@ -888,21 +884,22 @@ export default async function ResortPage({
             {resort.city ? " · " + resort.city : ""}
           </p>
           {resort.operating_status === "closed" && (
-            <p className="mt-3 inline-block rounded bg-red-600/95 px-2 py-0.5 text-xs font-semibold text-white">
+            <p className="mt-3 inline-block rounded-wn-sm bg-wn-danger px-2 py-0.5 text-xs font-semibold text-white">
               Permanently closed
             </p>
           )}
           {resort.operating_status === "seasonal" && (
-            <p className="mt-3 inline-block rounded bg-amber-500/95 px-2 py-0.5 text-xs font-semibold text-white">
+            <p className="mt-3 inline-block rounded-wn-sm bg-wn-warning px-2 py-0.5 text-xs font-semibold text-white">
               Seasonal / limited operations
             </p>
           )}
           {resort.allows_snowboards === false && (
             <p
-              className="mt-3 inline-block rounded bg-white/95 px-2 py-0.5 text-xs font-semibold text-wn-navy"
+              className="mt-3 inline-flex items-center gap-1 rounded-wn-sm bg-white/95 px-2 py-0.5 text-xs font-semibold text-wn-navy"
               title="This resort does not permit snowboarding"
             >
-              🎿 Skis only
+              <Icon name="skier" className="h-3.5 w-3.5" />
+              Skis only
             </p>
           )}
         </div>
@@ -1046,7 +1043,7 @@ export default async function ResortPage({
               href={googleMapsUrl(resort.name, resort.state)}
               label="Open in Google Maps"
               sub="Navigation, photos, reviews"
-              emoji="📍"
+              icon="pin"
               external
             />
             {resort.trail_map_url && (
@@ -1054,7 +1051,7 @@ export default async function ResortPage({
                 href={resort.trail_map_url}
                 label="Trail map"
                 sub="Lifts, runs, terrain"
-                emoji="🗺️"
+                icon="map"
                 external
               />
             )}
@@ -1063,7 +1060,7 @@ export default async function ResortPage({
                 href={resort.webcam_url}
                 label="Live webcam"
                 sub="Current conditions"
-                emoji="📷"
+                icon="camera"
                 external
               />
             )}
@@ -1072,7 +1069,7 @@ export default async function ResortPage({
                 href={resort.website_url}
                 label="Resort website"
                 sub="Hours, tickets, news"
-                emoji="🌐"
+                icon="globe"
                 external
               />
             )}
@@ -1088,7 +1085,7 @@ export default async function ResortPage({
           resort.typical_season_start ||
           resort.typical_season_end) && (
         <Section title="About">
-          <div className="grid grid-cols-1 gap-x-8 gap-y-3 rounded-lg border border-wn-charcoal/10 bg-white p-4 text-sm sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-x-8 gap-y-3 rounded-wn-md border border-wn-line bg-white p-4 text-sm sm:grid-cols-2">
             {resort.address && (
               <DataRow label="Address" value={resort.address} />
             )}
@@ -1129,7 +1126,7 @@ export default async function ResortPage({
 
         {/* Listed footer — shown only when no stats are available */}
         {!hasAnyStats && (
-          <div className="rounded-lg border border-wn-charcoal/10 bg-white p-4 text-sm text-wn-charcoal/70">
+          <div className="rounded-wn-md border border-wn-line bg-white p-4 text-sm text-wn-muted">
             <p className="font-medium text-wn-charcoal">More details coming soon.</p>
             <p className="mt-1">
               We have basic info for this resort. Detailed stats, hours, and gallery
@@ -1148,7 +1145,7 @@ export default async function ResortPage({
         />
 
         {/* Trust footer */}
-        <footer className="mt-8 rounded-lg border border-wn-charcoal/10 bg-white/70 p-4 text-xs text-wn-charcoal/60">
+        <footer className="mt-8 rounded-wn-md border border-wn-line bg-white/70 p-4 text-xs text-wn-muted">
           <div className="flex flex-wrap items-baseline justify-between gap-2">
             <span>
               {resort.last_verified_at
@@ -1157,7 +1154,7 @@ export default async function ResortPage({
             </span>
             <a
               href={`mailto:hello@wynla.app?subject=Incorrect%20info%20for%20${encodeURIComponent(resort.name)}&body=${encodeURIComponent(`Resort: ${resort.name}\nURL: https://wynla.app/resort/${resort.slug}\n\nWhat's wrong:\n`)}`}
-              className="font-medium text-wn-charcoal/80 underline hover:text-wn-navy"
+              className="inline-flex min-h-11 items-center font-medium text-wn-charcoal underline hover:text-wn-navy sm:min-h-0"
             >
               Report incorrect info →
             </a>
@@ -1170,7 +1167,7 @@ export default async function ResortPage({
           {hero.kind === "photo" && (
             <p className="mt-2">
               Header photo: {hero.credit ?? "Wikimedia Commons"}, resized and may be cropped.{" "}
-              <Link href="/credits" className="font-medium text-wn-charcoal/80 underline hover:text-wn-navy">
+              <Link href="/credits" className="font-medium text-wn-charcoal underline hover:text-wn-navy">
                 Photo credits
               </Link>
             </p>
@@ -1178,7 +1175,7 @@ export default async function ResortPage({
           {hero.kind === "card" && (
             <p className="mt-2">
               Header image: a terrain render from USGS 3DEP elevation data (public domain), not a photo.{" "}
-              <Link href="/credits" className="font-medium text-wn-charcoal/80 underline hover:text-wn-navy">
+              <Link href="/credits" className="font-medium text-wn-charcoal underline hover:text-wn-navy">
                 Photo credits
               </Link>
             </p>
@@ -1196,23 +1193,25 @@ export default async function ResortPage({
  *  neutral grey + 6+ as accent amber. */
 function uvChipClass(uv: number): string {
   if (uv >= 8) {
-    return "inline-flex items-center gap-1 rounded bg-red-100 px-1.5 py-0.5 text-[10px] font-bold text-red-800";
+    return "inline-flex items-center gap-1 rounded-wn-sm bg-wn-danger-bg px-1.5 py-0.5 text-xs font-bold text-wn-danger";
   }
   if (uv >= 6) {
-    return "inline-flex items-center gap-1 rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-bold text-amber-800";
+    return "inline-flex items-center gap-1 rounded-wn-sm bg-wn-warning-bg px-1.5 py-0.5 text-xs font-bold text-wn-warning";
   }
-  return "inline-flex items-center gap-1 text-wn-charcoal/65";
+  return "inline-flex items-center gap-1 text-wn-muted";
 }
 
 function PassBadge({ pass, href }: { pass: string; href?: string }) {
   const color = passColor(pass);
   const fg = textOn(color);
-  const className = "inline-block rounded-md px-2 py-0.5 text-[11px] font-semibold";
+  const className = "inline-block rounded-wn-sm px-2 py-0.5 text-eyebrow font-semibold";
   if (href) {
+    // The badge is ~20 px tall; the transparent ::before grows the tap
+    // box to 44 px on phones without moving the row (lib/hitArea.ts).
     return (
       <a
         href={href}
-        className={`${className} transition hover:brightness-110`}
+        className={`${className} relative transition before:absolute before:-inset-x-0.5 before:-inset-y-3 before:content-[''] hover:brightness-110`}
         style={{ backgroundColor: color, color: fg }}
         title={`${passLabel(pass)} rules at this resort`}
       >
@@ -1244,7 +1243,7 @@ function PassAccessSection({ slug, passes }: { slug: string; passes: string[] })
       ))}
       {/* Nominative use only: the names identify which passes work here.
           Said once for the whole section, not per card. */}
-      <p className="text-[11px] leading-relaxed text-wn-charcoal/55">
+      <p className="text-xs leading-relaxed text-wn-muted">
         Epic Pass, Ikon Pass, Indy Pass and Mountain Collective are the names of
         their operators&apos; products, used here only to say which passes work at
         this resort. Wynla is not affiliated with any pass operator. Rules can
@@ -1263,8 +1262,8 @@ function PassFamilyCard({ family, rows }: { family: PassFamily; rows: PassProduc
   const sources = Array.from(new Set(rows.flatMap((r) => r.sourceUrls))).slice(0, 3);
   const bonus = rows.some((r) => r.isBonusMountain);
   return (
-    <article className="overflow-hidden rounded-xl border border-wn-navy/10 bg-white shadow-sm">
-      <header className="flex flex-wrap items-center justify-between gap-2 border-b border-wn-navy/10 px-4 py-3">
+    <article className="overflow-hidden rounded-wn-md border border-wn-line bg-white shadow-wn-sm">
+      <header className="flex flex-wrap items-center justify-between gap-2 border-b border-wn-line px-4 py-1.5">
         <div className="flex items-center gap-2">
           <PassBadge pass={family} />
           <h3 className="text-sm font-bold text-wn-navy">{passLabel(family)}</h3>
@@ -1273,33 +1272,34 @@ function PassFamilyCard({ family, rows }: { family: PassFamily; rows: PassProduc
           href={info.officialUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-xs font-semibold text-wn-navy/70 underline-offset-2 hover:text-wn-navy hover:underline"
+          className="inline-flex min-h-11 items-center gap-1 text-xs font-semibold text-wn-muted underline-offset-2 hover:text-wn-navy hover:underline"
         >
-          Official site ↗
+          Official site
+          <Icon name="external" className="h-3.5 w-3.5" />
         </a>
       </header>
 
       {bonus && (
-        <p className="border-b border-wn-navy/10 bg-wn-gold/15 px-4 py-2 text-xs font-semibold text-wn-navy">
+        <p className="border-b border-wn-line bg-wn-gold/15 px-4 py-2 text-xs font-semibold text-wn-navy">
           Bonus mountain: 2 days on the full Ikon Pass only. Not on Ikon Base or Ikon Session.
         </p>
       )}
 
       {rows.length === 0 ? (
-        <p className="px-4 py-3 text-sm text-wn-charcoal/70">
+        <p className="px-4 py-3 text-sm text-wn-muted">
           This resort is on the {passLabel(family)}, but its per-product days and
           blackout dates have not been verified yet. Check the official page
           before you go.
         </p>
       ) : (
-        <ul className="divide-y divide-wn-navy/10">
+        <ul className="divide-y divide-wn-line">
           {rows.map((row) => (
             <PassProductRow key={`${row.productKey}|${row.qualifier ?? ""}`} row={row} />
           ))}
         </ul>
       )}
 
-      <footer className="space-y-1 border-t border-wn-navy/10 bg-wn-offwhite px-4 py-2 text-[11px] leading-relaxed text-wn-charcoal/60">
+      <footer className="space-y-1 border-t border-wn-line bg-wn-offwhite px-4 py-2 text-xs leading-relaxed text-wn-muted">
         <p>{info.note}</p>
         <p>
           Verified {formatVerifiedOn(verifiedOn)}
@@ -1341,23 +1341,23 @@ function PassProductRow({ row }: { row: PassProductAccess }) {
         <p className="min-w-0 text-sm font-semibold text-wn-navy">
           {row.product}
           {row.qualifier && (
-            <span className="font-normal text-wn-charcoal/60"> · {row.qualifier}</span>
+            <span className="font-normal text-wn-muted"> · {row.qualifier}</span>
           )}
         </p>
         <p
-          className={`shrink-0 text-sm font-bold ${noAccess ? "text-wn-charcoal/50" : "text-wn-navy"}`}
+          className={`shrink-0 text-sm font-bold ${noAccess ? "text-wn-muted" : "text-wn-navy"}`}
           aria-label={`Days on this pass: ${days}`}
         >
           {days}
         </p>
       </div>
       {row.days.qualifier && (
-        <p className="mt-0.5 text-xs text-wn-charcoal/65">{row.days.qualifier}</p>
+        <p className="mt-0.5 text-xs text-wn-muted">{row.days.qualifier}</p>
       )}
       {blackout && (
         <p
           className={`mt-1 text-xs ${
-            row.blackouts.status === "none" ? "text-wn-charcoal/60" : "text-wn-charcoal/80"
+            row.blackouts.status === "none" ? "text-wn-muted" : "text-wn-charcoal"
           }`}
         >
           {blackout}
@@ -1367,19 +1367,19 @@ function PassProductRow({ row }: { row: PassProductAccess }) {
         <div className="mt-1.5 flex flex-wrap gap-1.5">
           {row.reservationRequired && (
             <span
-              className="inline-flex items-center rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-bold text-amber-800"
+              className="inline-flex items-center rounded-wn-sm bg-wn-warning-bg px-1.5 py-0.5 text-xs font-bold text-wn-warning"
               title="Book a lift reservation through the pass operator before you go"
             >
               Reservation required
             </span>
           )}
           {row.isBonusMountain && !noAccess && (
-            <span className="inline-flex items-center rounded bg-wn-gold/25 px-1.5 py-0.5 text-[10px] font-bold text-wn-navy">
+            <span className="inline-flex items-center rounded-wn-sm bg-wn-gold/25 px-1.5 py-0.5 text-xs font-bold text-wn-navy">
               Bonus mountain
             </span>
           )}
           {row.newFor2026_27 && (
-            <span className="inline-flex items-center rounded bg-wn-sky/20 px-1.5 py-0.5 text-[10px] font-bold text-wn-navy">
+            <span className="inline-flex items-center rounded-wn-sm bg-wn-sky/20 px-1.5 py-0.5 text-xs font-bold text-wn-navy">
               New for {PASS_ACCESS_SEASON}
             </span>
           )}
@@ -1401,16 +1401,19 @@ function Section({
   subtitle?: string;
   children: React.ReactNode;
 }) {
+  // Thin adapter over the design-system Section (one H2 style). The body
+  // is wrapped so the primitive's space-y rhythm never adds to the
+  // margins the blocks inside already carry. Anchor targets clear the
+  // sticky AppShell bar.
   return (
-    <section id={id} className={id ? "scroll-mt-4" : undefined}>
-      <div className="mb-3">
-        <h2 className="text-lg font-bold text-wn-navy sm:text-xl">{title}</h2>
-        {subtitle && (
-          <p className="text-xs text-wn-charcoal/60">{subtitle}</p>
-        )}
-      </div>
-      {children}
-    </section>
+    <UiSection
+      id={id}
+      title={title}
+      description={subtitle}
+      className={id ? "scroll-mt-[calc(var(--wn-shell-h)+1rem)]" : undefined}
+    >
+      <div>{children}</div>
+    </UiSection>
   );
 }
 
@@ -1453,22 +1456,22 @@ function AtAGlance({
   });
 
   return (
-    <section aria-label="At a glance" className="rounded-xl border border-wn-charcoal/10 bg-white p-3 shadow-sm sm:p-4">
+    <section aria-label="At a glance" className="rounded-wn-md border border-wn-line bg-white p-3 shadow-wn-sm sm:p-4">
       <div className="mb-3 flex flex-wrap items-center gap-2">
         <ResortStatusPill status={status} size="md" />
       </div>
       <dl className="grid grid-cols-2 gap-2 sm:grid-cols-4">
         {tiles.map((t) => (
-          <div key={t.key} className="rounded-lg bg-wn-offwhite px-3 py-2">
-            {/* 11 px at 75 % charcoal: about 5.9:1 on the off-white tile,
-                AA for the label and the source line that says which
+          <div key={t.key} className="rounded-wn-sm bg-wn-offwhite px-3 py-2">
+            {/* Eyebrow label + muted source line: wn-muted is 6.4:1 on
+                the off-white tile, AA for the line that says which
                 numbers are measured and which are forecast. */}
-            <dt className="text-[11px] font-semibold uppercase tracking-wide text-wn-charcoal/75">{t.label}</dt>
-            <dd className={`mt-0.5 truncate text-base font-extrabold tracking-tight ${t.accent ? "text-wn-sky" : "text-wn-navy"}`}>
+            <dt className="text-eyebrow font-semibold uppercase text-wn-muted">{t.label}</dt>
+            <dd className={`mt-0.5 truncate text-base font-extrabold tracking-tight ${t.accent ? "text-wn-info" : "text-wn-navy"}`}>
               {t.value}
             </dd>
-            {t.detail && <dd className="text-[11px] font-medium leading-snug text-wn-charcoal/80">{t.detail}</dd>}
-            <dd className="text-[11px] leading-snug text-wn-charcoal/75">{t.source}</dd>
+            {t.detail && <dd className="text-xs font-medium leading-snug text-wn-charcoal">{t.detail}</dd>}
+            <dd className="text-xs leading-snug text-wn-muted">{t.source}</dd>
           </div>
         ))}
       </dl>
@@ -1492,25 +1495,27 @@ function ClosestAirportCard({ resort, lat, lng }: { resort: Resort; lat: number;
       ? formatDriveTime(estimateDriveSeconds(haversineMeters(lat, lng, airport.lat, airport.lng)))
       : null;
   return (
-    <div className="rounded-lg border border-wn-charcoal/10 bg-white px-4 py-3">
+    <div className="rounded-wn-md border border-wn-line bg-white px-4 py-3">
       <div className="flex flex-wrap items-center gap-3">
-        <span className="inline-flex h-10 w-10 items-center justify-center rounded-md bg-wn-navy/5 text-xl" aria-hidden="true">
-          ✈️
+        <span className="inline-flex h-10 w-10 items-center justify-center rounded-wn-sm bg-wn-navy/5 text-wn-navy" aria-hidden="true">
+          <Icon name="plane" className="h-5 w-5" />
         </span>
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-baseline gap-x-2">
             <span className="text-lg font-extrabold tracking-tight text-wn-navy">
               {airport ? airport.name : "Nearest commercial airport"}
             </span>
-            <span className="font-mono text-sm font-semibold text-wn-charcoal/60">{iata}</span>
+            <span className="font-mono text-sm font-semibold text-wn-muted">{iata}</span>
           </div>
-          <div className="text-xs text-wn-charcoal/65">
+          <div className="text-xs text-wn-muted">
             {airport ? `${airport.city}, ${airport.state}` : "Airport details not on file"}
             {miles != null && ` · ${isEstimate ? "≈ " : ""}${miles} mi straight-line`}
             {driveText && ` · ~${driveText} drive (estimate)`}
           </div>
         </div>
-        <a
+        <Button
+          variant="secondary"
+          size="sm"
           href={skyscannerUrl({
             name: resort.name,
             state: resort.state,
@@ -1520,10 +1525,11 @@ function ClosestAirportCard({ resort, lat, lng }: { resort: Resort; lat: number;
           })}
           target="_blank"
           rel="noopener noreferrer sponsored"
-          className="inline-flex items-center gap-1 rounded-md border border-wn-charcoal/15 px-3 py-1.5 text-xs font-semibold text-wn-navy transition hover:border-wn-navy"
+          iconRight={<Icon name="arrow-right" />}
+          className="max-sm:min-h-11"
         >
-          Flights to {iata} →
-        </a>
+          Flights to {iata}
+        </Button>
       </div>
     </div>
   );
@@ -1633,9 +1639,9 @@ function QuickStats({
           {stats.map((s) => (
             <div
               key={s.label}
-              className="rounded-lg border border-wn-charcoal/10 bg-white px-3 py-2.5"
+              className="rounded-wn-sm border border-wn-line bg-white px-3 py-2.5"
             >
-              <div className="text-[11px] font-semibold uppercase tracking-wide text-wn-charcoal/50">
+              <div className="text-eyebrow font-semibold uppercase text-wn-muted">
                 {s.label}
               </div>
               <div className="mt-0.5 text-base font-semibold text-wn-navy">
@@ -1647,21 +1653,21 @@ function QuickStats({
       )}
 
       {mix ? (
-        <div className="mt-4 rounded-lg border border-wn-charcoal/10 bg-white p-4">
-          <div className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-wn-charcoal/50">
+        <div className="mt-4 rounded-wn-md border border-wn-line bg-white p-4">
+          <div className="mb-2 text-eyebrow font-semibold uppercase text-wn-muted">
             Difficulty mix
           </div>
           <DifficultyBar mix={mix} size="full" showSourceHint />
         </div>
       ) : (
-        <p className="mt-3 text-xs italic text-wn-charcoal/55">
+        <p className="mt-3 text-xs italic text-wn-muted">
           Difficulty mix not yet verified.
         </p>
       )}
 
       {crowd && (
         <div
-          className={`mt-3 flex w-fit items-center gap-2 rounded-full border border-wn-charcoal/10 px-3 py-1.5 text-xs font-semibold ${CROWD_COLORS[crowd.level].bg} ${CROWD_COLORS[crowd.level].text}`}
+          className={`mt-3 flex w-fit items-center gap-2 rounded-full border border-wn-line px-3 py-1.5 text-xs font-semibold ${CROWD_COLORS[crowd.level].bg} ${CROWD_COLORS[crowd.level].text}`}
           title="Estimated from resort size, proximity to a major city, weekend/holiday timing, and fresh snow"
         >
           <span className={`block h-2 w-2 rounded-full ${CROWD_COLORS[crowd.level].dot}`} aria-hidden="true" />
@@ -1673,7 +1679,7 @@ function QuickStats({
       )}
 
       {hasPark && (
-        <div className="mt-3 inline-flex items-center gap-2 rounded-full border border-wn-charcoal/15 bg-white px-3 py-1.5 text-xs font-medium text-wn-charcoal">
+        <div className="mt-3 inline-flex items-center gap-2 rounded-full border border-wn-line bg-white px-3 py-1.5 text-xs font-medium text-wn-charcoal">
           <span
             className="block h-2.5 w-5 rounded-full bg-orange-500"
             aria-hidden="true"
@@ -1681,7 +1687,7 @@ function QuickStats({
           <span>
             Terrain park
             {resort.terrain_park_count != null && resort.terrain_park_count > 0 && (
-              <span className="ml-1 font-normal text-wn-charcoal/60">
+              <span className="ml-1 font-normal text-wn-muted">
                 · {resort.terrain_park_count}
               </span>
             )}
@@ -1690,15 +1696,11 @@ function QuickStats({
       )}
 
       {features.length > 0 && (
-        <div className="mt-3 flex flex-wrap gap-1.5 text-xs">
+        <div className="mt-3 flex flex-wrap gap-2">
           {features.map((f) => (
-            <span
-              key={f.label}
-              className="inline-flex items-center gap-1.5 rounded-full border border-wn-charcoal/15 bg-white px-2.5 py-1 font-semibold text-wn-charcoal"
-            >
-              <span aria-hidden="true">{f.emoji}</span>
-              <span>{f.label}</span>
-            </span>
+            <Chip key={f.label} iconLeft={<span aria-hidden="true">{f.emoji}</span>}>
+              {f.label}
+            </Chip>
           ))}
         </div>
       )}
@@ -1711,34 +1713,35 @@ function ActionLink({
   label,
   sub,
   external,
-  emoji,
+  icon,
 }: {
   href: string;
   label: string;
   sub?: string;
   external?: boolean;
-  emoji?: string;
+  icon?: IconName;
 }) {
   return (
     <a
       href={href}
       {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-      className="group flex items-center justify-between gap-3 rounded-lg border border-wn-charcoal/10 bg-white px-4 py-3 transition hover:border-wn-navy hover:shadow-sm"
+      className="group flex items-center justify-between gap-3 rounded-wn-md border border-wn-line bg-white px-4 py-3 transition hover:border-wn-navy hover:shadow-wn-sm"
     >
       <div className="flex items-center gap-3 min-w-0">
-        {emoji && (
-          <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-wn-navy/5 text-lg" aria-hidden="true">
-            {emoji}
+        {icon && (
+          <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-wn-sm bg-wn-navy/5 text-wn-navy" aria-hidden="true">
+            <Icon name={icon} className="h-5 w-5" />
           </span>
         )}
         <div className="min-w-0">
           <div className="text-sm font-semibold text-wn-navy">{label}</div>
-          {sub && <div className="text-xs text-wn-charcoal/60">{sub}</div>}
+          {sub && <div className="text-xs text-wn-muted">{sub}</div>}
         </div>
       </div>
-      <span className="text-wn-navy/40 transition group-hover:translate-x-0.5 group-hover:text-wn-navy">
-        →
-      </span>
+      <Icon
+        name="arrow-right"
+        className="h-4 w-4 shrink-0 text-wn-subtle transition group-hover:translate-x-0.5 group-hover:text-wn-navy"
+      />
     </a>
   );
 }
@@ -1746,7 +1749,7 @@ function ActionLink({
 function DataRow({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <div className="text-[11px] font-semibold uppercase tracking-wide text-wn-charcoal/50">
+      <div className="text-eyebrow font-semibold uppercase text-wn-muted">
         {label}
       </div>
       <div className="text-sm text-wn-charcoal">{value}</div>
@@ -1793,7 +1796,7 @@ function FullWeatherCard({
 
   if (!weather || (weather.temp_high_f == null && weather.conditions_short == null)) {
     return (
-      <div className="rounded-lg border border-dashed border-wn-charcoal/15 bg-white p-4 text-sm text-wn-charcoal/65">
+      <div className="rounded-wn-md border border-dashed border-wn-line bg-white p-4 text-sm text-wn-muted">
         Live weather hasn&apos;t synced for this resort yet.
       </div>
     );
@@ -1813,11 +1816,11 @@ function FullWeatherCard({
   // evidence, null unknown) and only prints lifts / trails counts when a
   // licensed report (snow_report_status = 'reported') supplied them.
   const statusTone: Record<ResortStatus["tone"], string> = {
-    green: "text-emerald-800",
-    amber: "text-amber-800",
-    red: "text-red-800",
+    green: "text-wn-success",
+    amber: "text-wn-warning",
+    red: "text-wn-danger",
     navy: "text-wn-navy",
-    muted: "text-wn-charcoal/65",
+    muted: "text-wn-muted",
   };
   // Only a licensed resort report has a "Snow report" time worth dating;
   // for 'no_feed' rows snow_report_updated_at is just the last season-
@@ -1825,14 +1828,14 @@ function FullWeatherCard({
   const reported = resort.snow_report_status === "reported";
 
   return (
-    <div className="rounded-lg border border-wn-charcoal/10 bg-white p-4">
+    <div className="rounded-wn-md border border-wn-line bg-white p-4">
       <div className={`mb-3 text-xs font-semibold ${statusTone[status.tone]}`}>
         {status.label}
         {status.detail && (
-          <span className="ml-1 font-normal text-wn-charcoal/60">· {status.detail}</span>
+          <span className="ml-1 font-normal text-wn-muted">· {status.detail}</span>
         )}
         {status.dormant && (
-          <span className="ml-1 font-normal text-wn-charcoal/60">· surface forecast paused until lifts run</span>
+          <span className="ml-1 font-normal text-wn-muted">· surface forecast paused until lifts run</span>
         )}
       </div>
 
@@ -1904,7 +1907,7 @@ function FullWeatherCard({
         const todayUv = forecastDaysFrom(weather.forecast_json)[0]?.uv_index_max ?? null;
         if (!sun && todayUv == null) return null;
         return (
-          <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] font-medium text-wn-charcoal/70">
+          <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-medium text-wn-muted">
             {sun && (
               <>
                 <span>
@@ -1921,7 +1924,7 @@ function FullWeatherCard({
                   </span>
                 </span>
                 <span aria-hidden="true">·</span>
-                <span className="text-wn-charcoal/55">
+                <span className="text-wn-muted">
                   {sun.daylightHours}h daylight
                 </span>
               </>
@@ -1944,7 +1947,7 @@ function FullWeatherCard({
           visitor. The snow-report stamp only shows for a licensed resort
           report; a 'no_feed' row has no report worth dating. */}
       {weather.fetched_at && (
-        <p className="mt-3 text-[10px] text-wn-charcoal/45">
+        <p className="mt-3 text-xs text-wn-muted">
           Weather synced {formatStampInZone(new Date(weather.fetched_at), tz)}
           {reported && resort.snow_report_updated_at && (
             <>
@@ -1978,21 +1981,21 @@ function WeatherStat({
     <div
       className={
         divider
-          ? "border-l border-r border-wn-charcoal/10 px-1 sm:px-3"
+          ? "border-l border-r border-wn-line px-1 sm:px-3"
           : "px-1 sm:px-3"
       }
     >
-      <div className="text-3xl leading-none sm:text-4xl" aria-hidden="true">
+      <div className="text-wn-3xl leading-none sm:text-wn-4xl" aria-hidden="true">
         {icon}
       </div>
       <div
         className={`mt-1.5 text-base font-extrabold tracking-tight sm:text-lg ${
-          accent ? "text-wn-sky" : "text-wn-navy"
+          accent ? "text-wn-info" : "text-wn-navy"
         }`}
       >
         {value}
       </div>
-      <div className="mt-0.5 text-[10px] uppercase tracking-wide text-wn-charcoal/55 truncate">
+      <div className="mt-0.5 truncate text-eyebrow uppercase text-wn-muted">
         {label}
       </div>
       {warning && (
@@ -2054,47 +2057,47 @@ function TenDayForecast({
             <div
               key={`${d.date}-${i}`}
               className={[
-                "snap-start shrink-0 rounded-lg border p-3 text-center",
+                "snap-start shrink-0 rounded-wn-sm border p-3 text-center",
                 // Stage 33 — trend cards: keep a dashed border to flag
                 // them as less-trusted, but drop the muted background.
                 // The faded-text variant was unreadable on mobile.
                 isTrend
-                  ? "w-[88px] border-dashed border-wn-charcoal/30 bg-white"
-                  : "w-[88px] border-wn-charcoal/10 bg-white",
+                  ? "w-[88px] border-dashed border-wn-subtle/50 bg-white"
+                  : "w-[88px] border-wn-line bg-white",
               ].join(" ")}
             >
-              <div className="text-[10px] font-bold uppercase tracking-wide text-wn-navy">
+              <div className="text-eyebrow font-bold uppercase text-wn-navy">
                 {d.weekday ||
                   new Date(d.date).toLocaleDateString(undefined, {
                     weekday: "short",
                   })}
               </div>
-              <div className="text-[9px] font-medium text-wn-charcoal/60">
+              <div className="text-xs font-medium text-wn-muted">
                 {new Date(d.date + "T12:00:00").toLocaleDateString(undefined, {
                   month: "short",
                   day: "numeric",
                 })}
               </div>
-              <div className="my-1 text-2xl" aria-hidden="true">
+              <div className="my-1 text-wn-2xl" aria-hidden="true">
                 {emoji(d.conditions_short)}
               </div>
               <div className="text-sm font-bold text-wn-navy">
                 {d.temp_high_f != null ? `${d.temp_high_f}°` : "—"}
                 {d.temp_low_f != null && (
-                  <span className="ml-1 text-xs font-semibold text-wn-charcoal/70">
+                  <span className="ml-1 text-xs font-semibold text-wn-muted">
                     / {d.temp_low_f}°
                   </span>
                 )}
               </div>
               {d.snow_in != null && d.snow_in > 0 && (
-                <div className="mt-1 inline-block rounded bg-wn-sky/15 px-1.5 py-0.5 text-[10px] font-bold text-wn-navy">
+                <div className="mt-1 inline-block rounded-wn-sm bg-wn-sky/15 px-1.5 py-0.5 text-xs font-bold text-wn-navy">
                   ❄️ {d.snow_in}&quot;
                 </div>
               )}
               {d.precip_chance != null &&
                 d.precip_chance > 30 &&
                 (d.snow_in == null || d.snow_in === 0) && (
-                  <div className="mt-1 text-[10px] font-semibold text-wn-charcoal/70">
+                  <div className="mt-1 text-xs font-semibold text-wn-muted">
                     {d.precip_chance}% precip
                   </div>
                 )}
@@ -2109,7 +2112,7 @@ function TenDayForecast({
                 const cls = windHoldChipClass(evaluation.level);
                 return (
                   <>
-                    <div className="mt-1 text-[10px] font-medium text-wn-charcoal/65">
+                    <div className="mt-1 text-xs font-medium text-wn-muted">
                       💨 {d.wind_short}
                       {d.wind_dir_short ? ` ${d.wind_dir_short}` : ""}
                     </div>
@@ -2123,7 +2126,7 @@ function TenDayForecast({
                 );
               })()}
               {isTrend && (
-                <div className="mt-1 text-[9px] font-bold uppercase tracking-wide text-wn-charcoal/55">
+                <div className="mt-1 text-eyebrow font-bold uppercase text-wn-muted">
                   trend
                 </div>
               )}
@@ -2159,15 +2162,11 @@ function FullAmenities({ resort }: { resort: Resort }) {
   if (active.length === 0) return null;
   return (
     <Section title="Amenities">
-      <div className="flex flex-wrap gap-1.5">
+      <div className="flex flex-wrap gap-2">
         {active.map((i) => (
-          <span
-            key={i.key}
-            className="inline-flex items-center gap-1.5 rounded-full border border-wn-charcoal/15 bg-white px-3 py-1.5 text-sm font-semibold text-wn-charcoal"
-          >
-            <span aria-hidden="true">{i.emoji}</span>
-            <span>{i.label}</span>
-          </span>
+          <Chip key={i.key} iconLeft={<span aria-hidden="true">{i.emoji}</span>}>
+            {i.label}
+          </Chip>
         ))}
       </div>
     </Section>
