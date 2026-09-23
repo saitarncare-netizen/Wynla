@@ -11,6 +11,7 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import ConfirmButton from "@/components/ConfirmButton";
+import Button from "@/components/ui/Button";
 
 export default function SignOutButtons() {
   const router = useRouter();
@@ -37,29 +38,24 @@ export default function SignOutButtons() {
   return (
     <div className="space-y-2">
       <div className="flex flex-wrap items-center gap-2">
-        <button
-          type="button"
-          onClick={() => signOut("local")}
-          disabled={busy != null}
-          className="inline-flex min-h-11 items-center rounded-md border border-wn-charcoal/20 bg-white px-4 text-sm font-semibold text-wn-charcoal transition hover:border-wn-navy hover:text-wn-navy disabled:opacity-60"
-        >
+        <Button variant="secondary" onClick={() => signOut("local")} disabled={busy != null}>
           {busy === "local" ? "Signing out…" : "Sign out"}
-        </button>
+        </Button>
         <ConfirmButton
           onConfirm={() => signOut("global")}
           busy={busy != null}
           busyLabel={busy === "global" ? "Signing out everywhere…" : "…"}
           label="Sign out of all devices"
           confirmLabel="Tap again to sign out everywhere"
-          className="inline-flex min-h-11 items-center rounded-md border border-wn-charcoal/20 bg-white px-4 text-sm font-semibold text-wn-charcoal/80 transition hover:border-wn-navy hover:text-wn-navy disabled:opacity-60"
-          armedClassName="inline-flex min-h-11 items-center rounded-md border border-wn-navy bg-wn-navy/5 px-4 text-sm font-semibold text-wn-navy"
+          variant="secondary"
+          armedVariant="primary"
         />
       </div>
-      <p className="text-[11px] text-wn-charcoal/70">
+      <p className="text-xs text-wn-muted">
         Sign out ends this browser&rsquo;s session. All devices also ends every phone, tablet and
         laptop signed in as you; each one has to sign in again next time.
       </p>
-      {error && <p className="text-xs font-semibold text-red-700">{error}</p>}
+      {error && <p role="alert" className="text-xs font-semibold text-wn-danger">{error}</p>}
     </div>
   );
 }

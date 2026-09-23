@@ -10,6 +10,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Button from "@/components/ui/Button";
+import Input from "@/components/ui/Input";
 
 export default function DeleteAccount() {
   const router = useRouter();
@@ -45,7 +47,7 @@ export default function DeleteAccount() {
       <button
         type="button"
         onClick={() => setArmed(true)}
-        className="inline-flex min-h-11 items-center rounded-md border border-red-300 px-4 text-sm font-semibold text-red-800 transition hover:border-red-400 hover:bg-red-50"
+        className="inline-flex min-h-11 items-center rounded-wn-sm border border-wn-danger/40 px-4 text-sm font-semibold text-wn-danger transition hover:border-wn-danger hover:bg-wn-danger-bg"
       >
         Delete my account…
       </button>
@@ -56,7 +58,7 @@ export default function DeleteAccount() {
     <div className="space-y-3">
       {/* Spell out what goes, so the confirmation is informed. Mirrors
           the cascade list in /api/account/delete (audit account-social-35). */}
-      <div className="rounded-md border border-red-200 bg-red-50 p-3 text-xs text-red-900">
+      <div className="rounded-wn-sm border border-wn-danger/30 bg-wn-danger-bg p-3 text-xs text-wn-danger">
         <p className="font-semibold">Deleting your account removes, permanently:</p>
         <ul className="mt-1 list-disc space-y-0.5 pl-4">
           <li>your favorites and saved trips, including any trip share links</li>
@@ -68,31 +70,29 @@ export default function DeleteAccount() {
       </div>
       <label
         htmlFor="confirm-delete"
-        className="block text-xs font-semibold text-red-900"
+        className="block text-xs font-semibold text-wn-danger"
       >
         Type <span className="font-mono font-bold">DELETE</span> to confirm
       </label>
-      <input
+      <Input
         id="confirm-delete"
         type="text"
         autoComplete="off"
         autoCapitalize="characters"
         value={confirm}
         onChange={(e) => setConfirm(e.target.value)}
-        className="w-full rounded-md border border-red-300 bg-white px-3 py-2 text-sm text-wn-charcoal focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500"
         disabled={status === "deleting"}
       />
       <div className="flex flex-wrap items-center gap-2">
-        <button
-          type="button"
+        <Button
+          variant="danger"
           onClick={deleteAccount}
           disabled={confirm !== "DELETE" || status === "deleting"}
-          className="inline-flex min-h-11 items-center rounded-md bg-red-700 px-4 text-sm font-semibold text-white transition hover:bg-red-800 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {status === "deleting" ? "Deleting…" : "Permanently delete"}
-        </button>
-        <button
-          type="button"
+        </Button>
+        <Button
+          variant="secondary"
           onClick={() => {
             setArmed(false);
             setConfirm("");
@@ -100,13 +100,12 @@ export default function DeleteAccount() {
             setErrorMsg(null);
           }}
           disabled={status === "deleting"}
-          className="inline-flex min-h-11 items-center rounded-md border border-wn-charcoal/20 px-4 text-sm font-semibold text-wn-charcoal/75 transition hover:bg-wn-charcoal/5 disabled:opacity-50"
         >
           Cancel
-        </button>
+        </Button>
       </div>
       {status === "error" && (
-        <p className="text-xs font-semibold text-red-700">
+        <p role="alert" className="text-xs font-semibold text-wn-danger">
           {errorMsg ?? "Error"}
         </p>
       )}

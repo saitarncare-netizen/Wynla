@@ -5,6 +5,8 @@
 // and POSTs / DELETEs to /api/digest/subscribe.
 
 import { useEffect, useRef, useState, useTransition } from "react";
+import Button from "@/components/ui/Button";
+import Notice from "@/components/ui/Notice";
 
 type Props = {
   initialEnabled: boolean;
@@ -103,22 +105,22 @@ export default function DigestPreferencesForm({
   return (
     <div className="space-y-6">
       {enabled ? (
-        <div className="rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-semibold text-emerald-900">
+        <Notice tone="success">
           Digest is on. Last sent: {formatLastSent(lastSentAt)}.
           {highlightUnsubscribe && (
-            <span className="mt-1 block font-normal text-emerald-900/80">
+            <span className="mt-1 block font-normal">
               To stop the emails, use the Unsubscribe button below.
             </span>
           )}
-        </div>
+        </Notice>
       ) : (
-        <div className="rounded-lg border border-wn-charcoal/15 bg-wn-charcoal/[0.03] px-3 py-2 text-xs font-semibold text-wn-charcoal/70">
+        <div className="rounded-wn-sm border border-wn-line bg-wn-offwhite px-3 py-2 text-xs font-semibold text-wn-muted">
           Digest is off. Save below to start receiving it.
         </div>
       )}
 
       <fieldset>
-        <legend className="mb-2 text-xs font-bold uppercase tracking-wide text-wn-charcoal/60">
+        <legend className="mb-2 text-eyebrow font-bold uppercase text-wn-muted">
           How often
         </legend>
         <div className="flex gap-2">
@@ -126,15 +128,15 @@ export default function DigestPreferencesForm({
             type="button"
             onClick={() => setFrequency("daily")}
             className={[
-              "flex-1 rounded-lg border-2 px-3 py-2.5 text-sm font-semibold transition",
+              "flex-1 rounded-wn-sm border-2 px-3 py-2.5 text-sm font-semibold transition",
               frequency === "daily"
                 ? "border-wn-navy bg-wn-navy/5 text-wn-navy"
-                : "border-wn-charcoal/15 bg-white text-wn-charcoal/75 hover:border-wn-charcoal/30",
+                : "border-wn-line bg-white text-wn-charcoal hover:border-wn-subtle",
             ].join(" ")}
             aria-pressed={frequency === "daily"}
           >
             <div>Daily</div>
-            <div className="mt-0.5 text-[10px] font-normal text-wn-charcoal/55">
+            <div className="mt-0.5 text-xs font-normal text-wn-muted">
               every morning around 8 AM Eastern
             </div>
           </button>
@@ -142,15 +144,15 @@ export default function DigestPreferencesForm({
             type="button"
             onClick={() => setFrequency("weekly")}
             className={[
-              "flex-1 rounded-lg border-2 px-3 py-2.5 text-sm font-semibold transition",
+              "flex-1 rounded-wn-sm border-2 px-3 py-2.5 text-sm font-semibold transition",
               frequency === "weekly"
                 ? "border-wn-navy bg-wn-navy/5 text-wn-navy"
-                : "border-wn-charcoal/15 bg-white text-wn-charcoal/75 hover:border-wn-charcoal/30",
+                : "border-wn-line bg-white text-wn-charcoal hover:border-wn-subtle",
             ].join(" ")}
             aria-pressed={frequency === "weekly"}
           >
             <div>Weekly</div>
-            <div className="mt-0.5 text-[10px] font-normal text-wn-charcoal/55">
+            <div className="mt-0.5 text-xs font-normal text-wn-muted">
               Monday mornings only
             </div>
           </button>
@@ -158,7 +160,7 @@ export default function DigestPreferencesForm({
       </fieldset>
 
       <fieldset>
-        <legend className="mb-2 text-xs font-bold uppercase tracking-wide text-wn-charcoal/60">
+        <legend className="mb-2 text-eyebrow font-bold uppercase text-wn-muted">
           Skip emails unless new snow is at least{" "}
           <span className="text-wn-navy">{threshold} in</span>
         </legend>
@@ -169,29 +171,24 @@ export default function DigestPreferencesForm({
           step={1}
           value={threshold}
           onChange={(e) => setThreshold(parseInt(e.target.value, 10))}
-          className="w-full accent-wn-navy"
+          className="min-h-11 w-full accent-wn-navy"
           aria-label={`Minimum new snow threshold: ${threshold} inches`}
         />
-        <div className="mt-1 flex justify-between text-[10px] text-wn-charcoal/45">
+        <div className="mt-1 flex justify-between text-xs text-wn-muted">
           <span>0 in (always)</span>
           <span>12 in (powder days)</span>
           <span>24 in</span>
         </div>
-        <p className="mt-2 text-[11px] text-wn-charcoal/55">{thresholdSummary}</p>
-        <p className="mt-1 text-[11px] text-wn-charcoal/55">
+        <p className="mt-2 text-xs text-wn-muted">{thresholdSummary}</p>
+        <p className="mt-1 text-xs text-wn-muted">
           Off-season, when none of your favorites is open, no digest is sent at any setting.
         </p>
       </fieldset>
 
-      <div className="flex flex-wrap items-center gap-2 border-t border-wn-charcoal/10 pt-4">
-        <button
-          type="button"
-          onClick={save}
-          disabled={status === "saving"}
-          className="rounded-md bg-wn-navy px-4 py-2 text-sm font-semibold text-white transition hover:bg-wn-navy/90 disabled:opacity-50"
-        >
+      <div className="flex flex-wrap items-center gap-2 border-t border-wn-line pt-4">
+        <Button onClick={save} disabled={status === "saving"}>
           {status === "saving" ? "Saving…" : enabled ? "Update preferences" : "Turn on digest"}
-        </button>
+        </Button>
         {enabled && (
           <button
             ref={unsubscribeRef}
@@ -199,22 +196,23 @@ export default function DigestPreferencesForm({
             onClick={unsubscribe}
             disabled={status === "saving"}
             className={[
-              "rounded-md border px-4 py-2 text-sm font-semibold transition disabled:opacity-50",
+              // Not <Button>: it needs a ref for the focus-on-arrival above.
+              "inline-flex min-h-11 items-center rounded-wn-sm border px-4 text-sm font-semibold transition disabled:opacity-50",
               highlightUnsubscribe
                 ? "border-wn-navy text-wn-navy ring-2 ring-wn-navy/25 hover:bg-wn-navy/5"
-                : "border-wn-charcoal/20 text-wn-charcoal/70 hover:bg-wn-charcoal/5",
+                : "border-wn-line bg-white text-wn-muted hover:border-wn-navy hover:text-wn-navy",
             ].join(" ")}
           >
             Unsubscribe
           </button>
         )}
         {status === "saved" && (
-          <span role="status" className="text-xs font-semibold text-emerald-700">
+          <span role="status" className="text-xs font-semibold text-wn-success">
             Saved
           </span>
         )}
         {status === "error" && (
-          <span role="alert" className="text-xs font-semibold text-red-700">
+          <span role="alert" className="text-xs font-semibold text-wn-danger">
             {errorMsg ?? "Error"}
           </span>
         )}

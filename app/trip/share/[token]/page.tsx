@@ -11,6 +11,9 @@ import { supabase } from "@/lib/supabase";
 import { passColor, primaryPass } from "@/lib/passColors";
 import { formatDriveTime } from "@/lib/origins";
 import { haversineMeters, estimateDriveSeconds } from "@/lib/distance";
+import PageHeader from "@/components/ui/PageHeader";
+import Card from "@/components/ui/Card";
+import Icon from "@/components/icons/Icon";
 
 export const dynamic = "force-dynamic";
 
@@ -211,55 +214,44 @@ export default async function SharedTripPage({
 
   return (
     <main className="min-h-dvh bg-wn-offwhite">
-      <header
-        className="relative w-full overflow-hidden"
-        style={{
-          background: `linear-gradient(135deg, ${heroAccent} 0%, #1E2952 60%, #0F1530 100%)`,
-        }}
-      >
-        <div className="relative z-10 mx-auto max-w-3xl px-4 py-6 sm:px-6 sm:py-8">
-          <Link
-            href="/"
-            className="mb-4 inline-flex items-center gap-1 rounded-md bg-white/95 px-2.5 py-1 text-xs font-semibold text-wn-navy shadow-sm backdrop-blur-sm transition hover:bg-white"
-          >
-            ← Wynla
-          </Link>
-          <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/70">
+      {/* No back link here: the AppShell bar already links to the map. */}
+      <PageHeader
+        tone="navy"
+        accent={heroAccent}
+        width="max-w-3xl"
+        eyebrow={
+          <>
             🛣️ Shared trip · {trip.total_days} day{trip.total_days === 1 ? "" : "s"}
             {trip.origin_label ? " · from " + trip.origin_label : ""}
+          </>
+        }
+        title={tripName}
+        meta={`Shared ${new Date(trip.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}`}
+      >
+        {startLabel && (
+          <p className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-semibold text-white/95 backdrop-blur-sm">
+            <Icon name="calendar" className="h-3.5 w-3.5" />
+            <span>{endLabel ? `${startLabel} – ${endLabel}` : startLabel}</span>
           </p>
-          <h1 className="text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl">
-            {tripName}
-          </h1>
-          {startLabel && (
-            <p className="mt-3 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[11px] font-semibold text-white/95 backdrop-blur-sm">
-              📅 <span>{endLabel ? `${startLabel} – ${endLabel}` : startLabel}</span>
-            </p>
-          )}
-          <p className="mt-3 text-xs text-white/75">
-            Shared {new Date(trip.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
-          </p>
-        </div>
-      </header>
+        )}
+      </PageHeader>
 
       <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-10">
-        <h2 className="mb-3 text-[11px] font-bold uppercase tracking-[0.15em] text-wn-charcoal/55">
-          Day-by-day
-        </h2>
+        <h2 className="mb-3 text-eyebrow font-bold uppercase text-wn-muted">Day-by-day</h2>
         <ol className="flex flex-col gap-2">
           {days.map((d) => (
             <li
               key={d.day}
-              className="flex items-center gap-3 rounded-lg border border-wn-charcoal/10 bg-white p-3"
+              className="flex items-center gap-3 rounded-wn-sm border border-wn-line bg-white p-3"
             >
-              <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-wn-navy text-[11px] font-bold text-white">
+              <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-wn-navy text-xs font-bold text-white tabular-nums">
                 {d.day}
               </span>
               <div className="min-w-0 flex-1">
                 <div className="text-sm font-bold text-wn-navy">
                   {d.resort?.name ?? d.slug}
                 </div>
-                <div className="text-[11px] text-wn-charcoal/55">
+                <div className="text-xs text-wn-muted">
                   {startDate
                     ? dateForDay(startDate, d.day - 1).toLocaleDateString("en-US", dateFormat)
                     : `Day ${d.day}`}
@@ -269,7 +261,7 @@ export default async function SharedTripPage({
               {d.resort && (
                 <Link
                   href={`/resort/${d.slug}`}
-                  className="text-[11px] font-semibold text-wn-charcoal/60 underline-offset-2 hover:text-wn-navy hover:underline"
+                  className="inline-flex min-h-11 items-center px-2 text-xs font-semibold text-wn-muted underline-offset-2 hover:text-wn-navy hover:underline"
                 >
                   View
                 </Link>
@@ -278,10 +270,8 @@ export default async function SharedTripPage({
           ))}
         </ol>
 
-        <div className="mt-6 rounded-lg border border-wn-charcoal/10 bg-white p-4">
-          <h3 className="mb-2 text-[11px] font-bold uppercase tracking-[0.15em] text-wn-charcoal/55">
-            Drive summary
-          </h3>
+        <Card className="mt-6">
+          <h3 className="mb-2 text-eyebrow font-bold uppercase text-wn-muted">Drive summary</h3>
           <ul className="space-y-1 text-sm text-wn-charcoal">
             {legStops.map((r, i) => (
               <li key={`${r.slug}-${i}`} className="flex justify-between gap-3">
@@ -300,12 +290,12 @@ export default async function SharedTripPage({
               </li>
             )}
           </ul>
-          <p className="mt-2 text-[10px] text-wn-charcoal/50">
+          <p className="mt-2 text-xs text-wn-muted">
             Drive times are straight-line estimates, not live traffic.
           </p>
-        </div>
+        </Card>
 
-        <p className="mt-6 text-center text-[11px] text-wn-charcoal/50">
+        <p className="mt-6 text-center text-xs text-wn-muted">
           This is a read-only view of someone&apos;s trip plan.{" "}
           <Link href="/" className="font-semibold text-wn-navy underline">
             Plan your own at Wynla

@@ -21,6 +21,7 @@ import {
   type DayPlans,
 } from "@/lib/dayPlans";
 import { mapsPlaceUrl } from "@/lib/nearbyCategories";
+import Icon from "@/components/icons/Icon";
 
 export type NearbyOption = DayPlace & { is_recommended: boolean };
 
@@ -152,14 +153,14 @@ export default function DayPlan({ tripId, day, initialPlans, nearby, completed }
   const hasContent = places.length > 0 || note.trim() !== "";
 
   return (
-    <div className={`mt-3 border-t border-dashed border-wn-charcoal/10 pt-3 ${completed ? "opacity-80" : ""}`}>
+    <div className={`mt-3 border-t border-dashed border-wn-line pt-3 ${completed ? "opacity-80" : ""}`}>
       {/* Attached places — always visible when present (the itinerary). */}
       {places.length > 0 && (
         <ul className="mb-2 flex flex-wrap gap-1.5">
           {places.map((p) => (
             <li
               key={`${p.kind}:${p.id}`}
-              className="group inline-flex items-center gap-1 rounded-full border border-wn-navy/15 bg-wn-navy/5 py-1 pl-2.5 pr-1 text-[11px] font-semibold text-wn-navy"
+              className="group inline-flex items-center gap-1 rounded-full border border-wn-navy/15 bg-wn-navy/5 py-1 pl-2.5 pr-1 text-xs font-semibold text-wn-navy"
             >
               <a
                 href={mapsPlaceUrl(p.name, p.latitude, p.longitude)}
@@ -175,9 +176,9 @@ export default function DayPlan({ tripId, day, initialPlans, nearby, completed }
                 type="button"
                 onClick={() => removePlace(p)}
                 aria-label={`Remove ${p.name} from this day`}
-                className="inline-flex h-5 w-5 items-center justify-center rounded-full text-wn-navy/40 transition hover:bg-wn-navy/10 hover:text-wn-navy"
+                className="relative inline-flex h-6 w-6 items-center justify-center rounded-full text-wn-muted transition before:absolute before:-inset-2.5 before:content-[''] hover:bg-wn-navy/10 hover:text-wn-navy"
               >
-                ×
+                <Icon name="close" className="h-3.5 w-3.5" />
               </button>
             </li>
           ))}
@@ -192,7 +193,7 @@ export default function DayPlan({ tripId, day, initialPlans, nearby, completed }
         maxLength={2000}
         placeholder="Notes for this day — where to eat, what time to leave…"
         style={{ fontSize: "16px" }}
-        className="w-full resize-none rounded-lg border border-transparent bg-wn-offwhite/70 px-3 py-2 text-[13px] text-wn-charcoal placeholder:text-wn-charcoal/40 transition focus:border-wn-navy/30 focus:bg-white focus:outline-none focus:ring-2 focus:ring-wn-navy/10"
+        className="w-full resize-none rounded-wn-sm border border-transparent bg-wn-offwhite/70 px-3 py-2 text-sm text-wn-charcoal placeholder:text-wn-muted transition focus:border-wn-navy/30 focus:bg-white focus:outline-none focus:ring-2 focus:ring-wn-navy/25"
       />
 
       <div className="mt-1.5 flex items-center justify-between">
@@ -202,7 +203,7 @@ export default function DayPlan({ tripId, day, initialPlans, nearby, completed }
             type="button"
             onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
-            className="inline-flex items-center gap-1 rounded-md px-1.5 py-1 text-[11px] font-bold text-wn-navy/80 transition hover:bg-wn-navy/5 hover:text-wn-navy"
+            className="inline-flex min-h-11 items-center gap-1 rounded-wn-sm px-1.5 py-1 text-xs font-bold text-wn-navy transition hover:bg-wn-navy/5 sm:min-h-0"
           >
             <span aria-hidden="true">{open ? "−" : "+"}</span>
             {open ? "Hide places" : hasContent ? "Add more places" : "Add restaurants & activities"}
@@ -212,8 +213,8 @@ export default function DayPlan({ tripId, day, initialPlans, nearby, completed }
         )}
         <span
           aria-live="polite"
-          className={`text-[10px] font-medium ${
-            saveState === "error" ? "text-red-600" : "text-wn-charcoal/40"
+          className={`text-xs font-medium ${
+            saveState === "error" ? "text-wn-danger" : "text-wn-muted"
           }`}
         >
           {saveState === "saving" ? "Saving…" : saveState === "error" ? "Couldn't save — retry your last change" : ""}
@@ -222,24 +223,24 @@ export default function DayPlan({ tripId, day, initialPlans, nearby, completed }
 
       {/* One-tap add list — compact rows, recommended first. */}
       {open && addable.length > 0 && (
-        <ul className="mt-2 max-h-56 space-y-1 overflow-y-auto rounded-lg border border-wn-charcoal/10 bg-white p-1.5">
+        <ul className="mt-2 max-h-56 space-y-1 overflow-y-auto rounded-wn-sm border border-wn-line bg-white p-1.5">
           {addable.map((n) => (
             <li key={`${n.kind}:${n.id}`}>
               <button
                 type="button"
                 onClick={() => addPlace(n)}
-                className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left transition hover:bg-wn-navy/5"
+                className="flex min-h-11 w-full items-center gap-2 rounded-wn-sm px-2 py-1.5 text-left transition hover:bg-wn-navy/5"
               >
                 <span aria-hidden="true" className="text-sm">
                   {n.kind === "restaurant" ? "🍽️" : "🎯"}
                 </span>
                 <span className="min-w-0 flex-1">
-                  <span className="block truncate text-[12px] font-semibold text-wn-charcoal">
+                  <span className="block truncate text-xs font-semibold text-wn-charcoal">
                     {n.is_recommended && <span aria-hidden="true">⭐ </span>}
                     {n.name}
                   </span>
                   {n.category && (
-                    <span className="block truncate text-[10px] capitalize text-wn-charcoal/50">
+                    <span className="block truncate text-xs capitalize text-wn-muted">
                       {n.category}
                     </span>
                   )}
@@ -256,7 +257,7 @@ export default function DayPlan({ tripId, day, initialPlans, nearby, completed }
         </ul>
       )}
       {open && addable.length === 0 && (
-        <p className="mt-2 rounded-lg border border-wn-charcoal/10 bg-wn-offwhite px-3 py-2 text-[11px] text-wn-charcoal/55">
+        <p className="mt-2 rounded-wn-sm border border-wn-line bg-wn-offwhite px-3 py-2 text-xs text-wn-muted">
           Everything nearby is already on this day.
         </p>
       )}

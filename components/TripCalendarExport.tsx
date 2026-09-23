@@ -23,6 +23,8 @@ import {
   tripIcsFilename,
   type TripIcsDay,
 } from "@/lib/icsExport";
+import Button from "@/components/ui/Button";
+import Icon from "@/components/icons/Icon";
 
 type Props = {
   tripName: string;
@@ -143,21 +145,22 @@ export default function TripCalendarExport({
 
   const label =
     outcome === "downloaded"
-      ? "✓ Downloaded"
+      ? "Downloaded"
       : outcome === "shared"
-        ? "✓ Shared — open it in Calendar"
+        ? "Shared — open it in Calendar"
         : outcome === "opened"
-          ? "✓ Opened — tap Add all"
+          ? "Opened — tap Add all"
           : outcome === "failed"
             ? "Couldn't open — allow pop-ups"
-            : "📅 Add to calendar";
+            : "Add to calendar";
+  const icon = outcome === "idle" ? "calendar" : outcome === "failed" ? "alert" : "check";
 
   return (
     <div className="flex flex-col items-end gap-0.5">
-      <button
-        type="button"
+      <Button
+        variant="secondary"
         onClick={handleExport}
-        className="rounded-lg border border-wn-charcoal/20 bg-white px-3 py-1.5 text-xs font-semibold text-wn-charcoal transition hover:border-wn-navy hover:text-wn-navy"
+        iconLeft={<Icon name={icon} />}
         aria-label="Add this trip to your calendar"
         title={
           anchoredToToday
@@ -166,9 +169,9 @@ export default function TripCalendarExport({
         }
       >
         {label}
-      </button>
+      </Button>
       {anchoredToToday && (
-        <span className="text-[10px] text-white/70">Dates start today — no trip date set</span>
+        <span className="text-xs text-white/70">Dates start today — no trip date set</span>
       )}
     </div>
   );

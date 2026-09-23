@@ -16,6 +16,8 @@ import { isMissingSchemaError } from "@/lib/cronRun";
 import { launchCityByCode } from "@/lib/origins";
 import { parsePassProduct, passChoiceLabel } from "@/lib/saturday/passProduct";
 import DigestPreferencesForm from "./DigestPreferencesForm";
+import Card from "@/components/ui/Card";
+import PageHeader from "@/components/ui/PageHeader";
 
 export const dynamic = "force-dynamic";
 
@@ -61,26 +63,20 @@ export default async function AccountDigestPage({
   const thursdayHref = thursdayCity ? `/go?city=${encodeURIComponent(thursdayCity.code)}` : "/go";
 
   return (
-    <main className="min-h-dvh bg-wn-offwhite px-4 py-10 sm:px-6 sm:py-16">
-      <div className="mx-auto max-w-2xl">
-        <Link
-          href="/"
-          className="text-xs font-semibold text-wn-charcoal/60 hover:text-wn-navy"
-        >
-          ← Map
-        </Link>
-
-        <header className="mb-6 mt-6">
-          <h1 className="text-2xl font-extrabold text-wn-navy sm:text-3xl">
-            Email digest
-          </h1>
-          <p className="mt-1 text-sm text-wn-charcoal/70">
+    <main className="min-h-dvh bg-wn-offwhite">
+      {/* Back to Account comes from the AppShell bar (lib/nav backLinkFor). */}
+      <PageHeader
+        title="Email digest"
+        width="max-w-2xl"
+        description={
+          <>
             A snow and conditions summary for your favorited resorts, sent to{" "}
             <span className="font-semibold">{user.email ?? "your account email"}</span>.
-          </p>
-        </header>
-
-        <section className="rounded-xl border border-wn-charcoal/10 bg-white p-5 shadow-sm sm:p-6">
+          </>
+        }
+      />
+      <div className="mx-auto max-w-2xl px-4 pb-10 pt-6 sm:px-6 sm:pb-16">
+        <Card padding="lg">
           <DigestPreferencesForm
             initialEnabled={sub?.enabled ?? false}
             initialFrequency={sub?.frequency ?? "daily"}
@@ -88,26 +84,30 @@ export default async function AccountDigestPage({
             lastSentAt={sub?.last_sent_at ?? null}
             highlightUnsubscribe={wantsUnsubscribe && (sub?.enabled ?? false)}
           />
-        </section>
+        </Card>
 
-        <p className="mt-4 text-xs text-wn-charcoal/55">
+        <p className="mt-4 text-xs text-wn-muted">
           You can unsubscribe any time. Your favorites and snow alerts stay as they are.
         </p>
 
-        <section className="mt-6 rounded-xl border border-wn-charcoal/10 bg-white p-5 shadow-sm sm:p-6">
+        <Card padding="lg" className="mt-6">
+          <section>
           <h2 className="text-base font-bold text-wn-navy">Thursday picks email</h2>
-          <p className="mt-1 text-sm text-wn-charcoal/70">
+          <p className="mt-1 text-sm text-wn-muted">
             {thursdayChoice
               ? `On: the three best mountains for ${passChoiceLabel(thursdayChoice)} from ${thursdayCity?.name ?? "your city"}, every Thursday. Separate from the digest above, with its own unsubscribe link.`
               : "Off. A separate weekly email with the three best mountains for your pass and city this Saturday."}
           </p>
+          {/* Not <Button>: its label never wraps, and this one is longer
+              than a 375 px card. Same look as Button secondary. */}
           <Link
             href={thursdayHref}
-            className="mt-3 inline-flex min-h-11 items-center rounded-lg border border-wn-charcoal/20 bg-white px-4 text-sm font-semibold text-wn-navy hover:border-wn-navy"
+            className="mt-3 inline-flex min-h-11 items-center rounded-wn-sm border border-wn-line bg-white px-4 py-2 text-sm font-semibold text-wn-navy transition-colors hover:border-wn-navy hover:bg-wn-offwhite"
           >
             {thursdayChoice ? "Change or stop it on the Saturday page" : "Set it up on the Saturday page"}
           </Link>
-        </section>
+          </section>
+        </Card>
       </div>
     </main>
   );

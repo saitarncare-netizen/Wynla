@@ -17,6 +17,7 @@ import { useRouter } from "next/navigation";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { parseDayPlans, withDayPlan } from "@/lib/dayPlans";
 import { useFocusTrap } from "@/lib/useFocusTrap";
+import Input from "@/components/ui/Input";
 
 type SlimResort = { slug: string; name: string; state: string };
 
@@ -188,7 +189,7 @@ export default function DayResortSwap({ tripId, day, currentName }: Props) {
         aria-expanded={open}
         aria-haspopup="dialog"
         aria-controls={open ? popoverId : undefined}
-        className="inline-flex min-h-[44px] touch-manipulation items-center gap-1 rounded-md px-2 text-xs font-bold text-wn-charcoal/65 transition hover:bg-wn-navy/5 hover:text-wn-navy"
+        className="inline-flex min-h-11 touch-manipulation items-center gap-1 rounded-wn-sm px-2 text-xs font-bold text-wn-muted transition hover:bg-wn-navy/5 hover:text-wn-navy"
       >
         <span aria-hidden="true">⇄</span>
         <span>Change</span>
@@ -201,9 +202,9 @@ export default function DayResortSwap({ tripId, day, currentName }: Props) {
           ref={popoverRef}
           role="dialog"
           aria-label={`Change the resort for day ${day}`}
-          className="absolute right-0 z-20 mt-1 w-72 max-w-[calc(100vw-2rem)] rounded-xl border border-wn-charcoal/15 bg-white p-2 shadow-xl"
+          className="absolute right-0 z-20 mt-1 w-72 max-w-[calc(100vw-2rem)] rounded-wn-md border border-wn-line bg-white p-2 font-normal normal-case tracking-normal shadow-wn-md"
         >
-          <input
+          <Input
             ref={inputRef}
             type="search"
             enterKeyHint="search"
@@ -214,18 +215,17 @@ export default function DayResortSwap({ tripId, day, currentName }: Props) {
             aria-label={`Search a new resort for day ${day}`}
             aria-controls={listId}
             aria-describedby={error ? errorId : undefined}
-            aria-invalid={error ? true : undefined}
-            style={{ fontSize: "16px" }}
-            className="mb-1.5 min-h-[44px] w-full rounded-md border border-wn-charcoal/20 px-2.5 py-1.5 text-[13px] focus:border-wn-navy focus:outline-none focus:ring-2 focus:ring-wn-navy/15"
+            invalid={Boolean(error)}
+            className="mb-1.5"
           />
           {error && (
-            <p id={errorId} role="alert" className="mb-1 px-1 text-[11px] text-red-700">
+            <p id={errorId} role="alert" className="mb-1 px-1 text-xs text-wn-danger">
               {error}
             </p>
           )}
           <ul id={listId} className="max-h-60 overflow-y-auto" aria-busy={busy || (open && options === null)}>
             {options === null && !error && (
-              <li className="px-2 py-2 text-[12px] text-wn-charcoal/65" role="status">Loading…</li>
+              <li className="px-2 py-2 text-xs text-wn-muted" role="status">Loading…</li>
             )}
             {filtered.map((r) => (
               <li key={r.slug}>
@@ -233,15 +233,15 @@ export default function DayResortSwap({ tripId, day, currentName }: Props) {
                   type="button"
                   disabled={busy}
                   onClick={() => pick(r.slug)}
-                  className="flex min-h-[44px] w-full touch-manipulation items-baseline justify-between gap-2 rounded-md px-2 py-1.5 text-left transition hover:bg-wn-navy/5 disabled:opacity-50"
+                  className="flex min-h-11 w-full touch-manipulation items-baseline justify-between gap-2 rounded-wn-sm px-2 py-1.5 text-left transition hover:bg-wn-navy/5 disabled:opacity-50"
                 >
-                  <span className="truncate text-[13px] font-semibold text-wn-charcoal">{r.name}</span>
-                  <span className="shrink-0 text-[11px] text-wn-charcoal/65">{r.state}</span>
+                  <span className="truncate text-sm font-semibold text-wn-charcoal">{r.name}</span>
+                  <span className="shrink-0 text-xs text-wn-muted">{r.state}</span>
                 </button>
               </li>
             ))}
             {options !== null && filtered.length === 0 && (
-              <li className="px-2 py-2 text-[12px] text-wn-charcoal/65" role="status">No match.</li>
+              <li className="px-2 py-2 text-xs text-wn-muted" role="status">No match.</li>
             )}
           </ul>
         </div>

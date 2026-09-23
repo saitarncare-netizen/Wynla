@@ -24,6 +24,9 @@ import { supabase } from "@/lib/supabase";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { passColor, passLabel, primaryPass } from "@/lib/passColors";
 import { textOn } from "@/lib/contrast";
+import Button from "@/components/ui/Button";
+import PageHeader from "@/components/ui/PageHeader";
+import Icon from "@/components/icons/Icon";
 import { verdict, type Verdict, type VerdictWeather } from "@/lib/goWaitSkip";
 import type { DailyWeather } from "@/lib/snowSurface";
 import { shiftDate } from "@/lib/weather/time";
@@ -334,31 +337,24 @@ export default async function ComparePage({
 
   if (ids.length === 0) {
     return (
-      <main className="min-h-dvh bg-wn-offwhite px-4 py-12 sm:px-6">
-        <div className="mx-auto max-w-2xl">
-          <Link
-            href="/"
-            className="mb-4 inline-block text-xs font-semibold text-wn-charcoal/60 hover:text-wn-navy"
-          >
-            ← Map
-          </Link>
-          <h1 className="mb-2 text-2xl font-extrabold text-wn-navy sm:text-3xl">
-            Compare resorts
-          </h1>
-          <p className="mb-6 text-sm text-wn-charcoal/70">
-            Nothing to compare yet. Open a resort from the map and tap
-            <span className="mx-1 rounded bg-wn-navy/5 px-1.5 py-0.5 font-mono text-xs text-wn-navy">
-              + Compare
-            </span>
-            on up to {COMPARE_MAX} resorts to see them side by side.
-          </p>
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 rounded-lg bg-wn-navy px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-wn-navy/90"
-          >
+      <main className="min-h-dvh bg-wn-offwhite">
+        <PageHeader
+          title="Compare resorts"
+          width="max-w-2xl"
+          description={
+            <>
+              Nothing to compare yet. Open a resort from the map and tap
+              <span className="mx-1 rounded-wn-sm bg-wn-navy/5 px-1.5 py-0.5 font-mono text-xs text-wn-navy">
+                + Compare
+              </span>
+              on up to {COMPARE_MAX} resorts to see them side by side.
+            </>
+          }
+        />
+        <div className="mx-auto max-w-2xl px-4 pb-12 pt-4 sm:px-6">
+          <Button href="/" iconRight={<Icon name="arrow-right" />}>
             Browse the map
-            <span aria-hidden="true">→</span>
-          </Link>
+          </Button>
         </div>
       </main>
     );
@@ -415,58 +411,45 @@ export default async function ComparePage({
 
   if (resorts.length === 0) {
     return (
-      <main className="min-h-dvh bg-wn-offwhite px-4 py-12 sm:px-6">
-        <div className="mx-auto max-w-2xl">
-          <Link
-            href="/"
-            className="mb-4 inline-block text-xs font-semibold text-wn-charcoal/60 hover:text-wn-navy"
-          >
-            ← Map
-          </Link>
-          <h1 className="mb-2 text-2xl font-extrabold text-wn-navy">Compare resorts</h1>
-          <p className="text-sm text-wn-charcoal/70">
-            Those resorts couldn&rsquo;t be found. They may have been removed.
-          </p>
-        </div>
+      <main className="min-h-dvh bg-wn-offwhite pb-12">
+        <PageHeader
+          title="Compare resorts"
+          width="max-w-2xl"
+          description={<>Those resorts couldn&rsquo;t be found. They may have been removed.</>}
+        />
       </main>
     );
   }
 
-  // iOS safe-area padding for the "← Map" link comes from the #main-content
-  // rule in globals.css (shared by every non-map route).
+  // Back navigation lives in the AppShell bar (no "← Map" here).
   return (
     <main className="min-h-dvh bg-wn-offwhite">
-      <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-10">
-        <div className="mb-3 flex items-center justify-between gap-2">
-          <Link
-            href="/"
-            className="inline-flex min-h-11 items-center rounded-md border border-wn-charcoal/15 bg-white px-3 text-xs font-semibold text-wn-charcoal/70 transition hover:border-wn-navy hover:text-wn-navy"
-          >
-            ← Map
-          </Link>
-          {/* Share is the constructive action; Clear all is destructive,
-              so it stays muted and sits last, opposite Back. */}
-          <div className="flex items-center gap-2">
-            <ShareCompareButton path={share} title={shareTitle} />
-            <ClearCompareButton />
-          </div>
-        </div>
-
-        <header className="mb-6">
-          <h1 className="text-2xl font-extrabold text-wn-navy sm:text-3xl">
-            Comparing {resorts.length} resort{resorts.length === 1 ? "" : "s"}
-          </h1>
-          <p className="mt-1 text-sm text-wn-charcoal/70">
-            Today&rsquo;s conditions, then stats, amenities and difficulty mix.
-            Tap a resort name for its full page.
-          </p>
-          <p className="mt-1 text-xs text-wn-charcoal/70">
+      <PageHeader
+        title={`Comparing ${resorts.length} resort${resorts.length === 1 ? "" : "s"}`}
+        width="max-w-6xl"
+        description={
+          <>
+            Today&rsquo;s conditions, then stats, amenities and difficulty mix. Tap a resort name for its full page.
+          </>
+        }
+        meta={
+          <>
             {driveLabel}
             {anyEstimate
               ? " · ≈ times are estimated from straight-line distance. Change the origin from the map's From picker."
               : " · cached road routes. Change the origin from the map's From picker."}
-          </p>
-        </header>
+          </>
+        }
+        actions={
+          // Share is the constructive action; Clear all is destructive,
+          // so it stays muted and sits last.
+          <>
+            <ShareCompareButton path={share} title={shareTitle} />
+            <ClearCompareButton />
+          </>
+        }
+      />
+      <div className="mx-auto max-w-6xl px-4 pb-6 pt-4 sm:px-6 sm:pb-10">
 
         {/* Desktop: resort-major table */}
         <div className="hidden md:block">
@@ -542,7 +525,7 @@ const STAT_METRICS: Array<{ label: string; render: MetricFn }> = [
 function boolCell(v: boolean | null): ReactNode {
   if (v === true) {
     return (
-      <span className="text-emerald-700" aria-label="Yes">
+      <span className="text-wn-success" aria-label="Yes">
         ✓
       </span>
     );
@@ -576,17 +559,17 @@ function Labelled({ value, source }: { value: ReactNode; source: string }) {
   return (
     <span className="block">
       <span className="block">{value}</span>
-      <span className="block text-[10px] font-normal text-wn-charcoal/70">{source}</span>
+      <span className="block text-xs font-normal text-wn-muted">{source}</span>
     </span>
   );
 }
 
 const STATUS_TONE: Record<Verdict["status"]["tone"], string> = {
-  green: "text-emerald-700",
-  amber: "text-amber-700",
-  red: "text-red-700",
+  green: "text-wn-success",
+  amber: "text-wn-warning",
+  red: "text-wn-danger",
   navy: "text-wn-navy",
-  muted: "text-wn-charcoal/60",
+  muted: "text-wn-muted",
 };
 
 function metricRows(
@@ -684,7 +667,7 @@ function ResortHeading({ resort, compact = false }: { resort: CompareResort; com
         >
           {resort.name}
         </Link>
-        <div className="mt-0.5 text-[11px] text-wn-charcoal/65">
+        <div className="mt-0.5 text-xs text-wn-muted">
           {resort.state}
           {resort.region ? ` · ${resort.region}` : ""}
         </div>
@@ -692,7 +675,7 @@ function ResortHeading({ resort, compact = false }: { resort: CompareResort; com
           {(resort.passes ?? []).map((p) => (
             <span
               key={p}
-              className="inline-block rounded px-1.5 py-0.5 text-[9px] font-semibold"
+              className="inline-block rounded-wn-sm px-1.5 py-0.5 text-eyebrow font-semibold"
               style={{
                 backgroundColor: passColor(p),
                 color: textOn(passColor(p)),
@@ -709,22 +692,22 @@ function ResortHeading({ resort, compact = false }: { resort: CompareResort; com
 }
 
 function stripStyle(resort: CompareResort) {
-  return { background: `linear-gradient(135deg, ${passColor(primaryPass(resort.passes))} 0%, #1E2952 100%)` };
+  return { background: `linear-gradient(135deg, ${passColor(primaryPass(resort.passes))} 0%, var(--color-wn-navy) 100%)` };
 }
 
 // ---------- Desktop: resort-major table ----------
 
 function DesktopCompareTable({ resorts, rows }: { resorts: CompareResort[]; rows: MetricRowSpec[] }) {
   return (
-    <div className="overflow-hidden rounded-xl border border-wn-charcoal/10 bg-white shadow-sm">
+    <div className="overflow-hidden rounded-wn-md border border-wn-line bg-white shadow-wn-sm">
       <table className="w-full table-fixed border-collapse text-sm">
         <thead>
           <tr>
-            <th className="w-[180px] bg-wn-offwhite px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wide text-wn-charcoal/70">
+            <th className="w-[180px] bg-wn-offwhite px-4 py-3 text-left text-eyebrow font-semibold uppercase text-wn-muted">
               Metric
             </th>
             {resorts.map((r) => (
-              <th key={r.id} className="border-b border-wn-charcoal/10 bg-white px-4 pb-3 pt-0 text-left align-bottom">
+              <th key={r.id} className="border-b border-wn-line bg-white px-4 pb-3 pt-0 text-left align-bottom">
                 {/* Pass-colour strip, the same anchor as the hero and pins. */}
                 <div className="-mx-4 mb-3 h-1.5" style={stripStyle(r)} aria-hidden="true" />
                 <ResortHeading resort={r} />
@@ -737,11 +720,11 @@ function DesktopCompareTable({ resorts, rows }: { resorts: CompareResort[]; rows
             const groupStart = i === 0 || rows[i - 1].group !== m.group;
             return (
               <tr key={m.label} className={groupStart && i > 0 ? "border-t-4 border-wn-offwhite" : "even:bg-wn-offwhite/50"}>
-                <td className="border-t border-wn-charcoal/5 px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wide text-wn-charcoal/70">
+                <td className="border-t border-wn-line/60 px-4 py-2.5 text-eyebrow font-semibold uppercase text-wn-muted">
                   {m.label}
                 </td>
                 {resorts.map((r) => (
-                  <td key={r.id} className="border-t border-wn-charcoal/5 px-4 py-2.5 align-top text-sm text-wn-charcoal">
+                  <td key={r.id} className="border-t border-wn-line/60 px-4 py-2.5 align-top text-sm text-wn-charcoal">
                     {m.render(r)}
                   </td>
                 ))}
@@ -749,16 +732,12 @@ function DesktopCompareTable({ resorts, rows }: { resorts: CompareResort[]; rows
             );
           })}
           <tr>
-            <td className="border-t border-wn-charcoal/5 bg-wn-offwhite px-4 py-3" />
+            <td className="border-t border-wn-line/60 bg-wn-offwhite px-4 py-3" />
             {resorts.map((r) => (
-              <td key={r.id} className="border-t border-wn-charcoal/5 px-4 py-3 align-top">
-                <Link
-                  href={`/resort/${r.slug}`}
-                  className="inline-flex min-h-11 items-center gap-1 rounded-md bg-wn-navy px-3 text-xs font-semibold text-white transition hover:bg-wn-navy/90"
-                >
+              <td key={r.id} className="border-t border-wn-line/60 px-4 py-3 align-top">
+                <Button href={`/resort/${r.slug}`} iconRight={<Icon name="arrow-right" />}>
                   View full details
-                  <span aria-hidden="true">→</span>
-                </Link>
+                </Button>
               </td>
             ))}
           </tr>
@@ -776,7 +755,7 @@ function MobileCompareList({ resorts, rows }: { resorts: CompareResort[]; rows: 
     <div className="space-y-3">
       <div className="grid gap-2" style={gridStyle}>
         {resorts.map((r) => (
-          <div key={r.id} className="overflow-hidden rounded-lg border border-wn-charcoal/10 bg-white shadow-sm">
+          <div key={r.id} className="overflow-hidden rounded-wn-sm border border-wn-line bg-white shadow-wn-sm">
             <div className="h-1.5 w-full" style={stripStyle(r)} aria-hidden="true" />
             <div className="px-3 py-2.5">
               <ResortHeading resort={r} compact />
@@ -786,12 +765,12 @@ function MobileCompareList({ resorts, rows }: { resorts: CompareResort[]; rows: 
       </div>
 
       {rows.map((m) => (
-        <div key={m.label} className="rounded-lg border border-wn-charcoal/10 bg-white p-3">
-          <div className="mb-2 text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/70">{m.label}</div>
+        <div key={m.label} className="rounded-wn-sm border border-wn-line bg-white p-3">
+          <div className="mb-2 text-eyebrow font-semibold uppercase text-wn-muted">{m.label}</div>
           <div className="grid gap-2" style={gridStyle}>
             {resorts.map((r) => (
-              <div key={r.id} className="min-w-0 border-l border-wn-charcoal/10 pl-2 first:border-l-0 first:pl-0">
-                <div className="truncate text-[10px] text-wn-charcoal/70">{r.name.split(" ")[0]}</div>
+              <div key={r.id} className="min-w-0 border-l border-wn-line pl-2 first:border-l-0 first:pl-0">
+                <div className="truncate text-xs text-wn-muted">{r.name.split(" ")[0]}</div>
                 <div className="break-words text-sm font-semibold text-wn-charcoal">{m.render(r)}</div>
               </div>
             ))}
@@ -801,13 +780,9 @@ function MobileCompareList({ resorts, rows }: { resorts: CompareResort[]; rows: 
 
       <div className="grid gap-2 pt-2" style={gridStyle}>
         {resorts.map((r) => (
-          <Link
-            key={r.id}
-            href={`/resort/${r.slug}`}
-            className="inline-flex min-h-11 items-center justify-center gap-1 rounded-lg bg-wn-navy px-3 text-xs font-semibold text-white transition hover:bg-wn-navy/90"
-          >
-            {r.name.split(" ")[0]} →
-          </Link>
+          <Button key={r.id} href={`/resort/${r.slug}`} iconRight={<Icon name="arrow-right" />}>
+            {r.name.split(" ")[0]}
+          </Button>
         ))}
       </div>
     </div>
@@ -832,7 +807,7 @@ function MobileCompareCards({ resorts, rows }: { resorts: CompareResort[]; rows:
         {resorts.map((r, j) => (
           <div
             key={`h-${r.id}`}
-            className="overflow-hidden rounded-t-xl border border-b-0 border-wn-charcoal/10 bg-white"
+            className="overflow-hidden rounded-t-wn-md border border-b-0 border-wn-line bg-white"
             style={{ gridColumn: j + 1, gridRow: 1, scrollSnapAlign: "start", scrollMarginLeft: "1rem" }}
           >
             <div className="h-1.5 w-full" style={stripStyle(r)} aria-hidden="true" />
@@ -848,12 +823,12 @@ function MobileCompareCards({ resorts, rows }: { resorts: CompareResort[]; rows:
               <div
                 key={`${m.label}-${r.id}`}
                 className={[
-                  "border-x border-wn-charcoal/10 bg-white px-3 py-2",
-                  groupStart ? "border-t-4 border-t-wn-offwhite" : "border-t border-t-wn-charcoal/5",
+                  "border-x border-wn-line bg-white px-3 py-2",
+                  groupStart ? "border-t-4 border-t-wn-offwhite" : "border-t border-t-wn-line/60",
                 ].join(" ")}
                 style={{ gridColumn: j + 1, gridRow: i + 2 }}
               >
-                <div className="text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/70">{m.label}</div>
+                <div className="text-eyebrow font-semibold uppercase text-wn-muted">{m.label}</div>
                 <div className="mt-0.5 break-words text-sm font-semibold text-wn-charcoal">{m.render(r)}</div>
               </div>
             );
@@ -862,20 +837,16 @@ function MobileCompareCards({ resorts, rows }: { resorts: CompareResort[]; rows:
         {resorts.map((r, j) => (
           <div
             key={`f-${r.id}`}
-            className="rounded-b-xl border border-t-0 border-wn-charcoal/10 bg-white px-3 py-3"
+            className="rounded-b-wn-md border border-t-0 border-wn-line bg-white px-3 py-3"
             style={{ gridColumn: j + 1, gridRow: lastRow + 1 }}
           >
-            <Link
-              href={`/resort/${r.slug}`}
-              className="inline-flex min-h-11 w-full items-center justify-center gap-1 rounded-lg bg-wn-navy px-3 text-xs font-semibold text-white transition hover:bg-wn-navy/90"
-            >
+            <Button href={`/resort/${r.slug}`} block iconRight={<Icon name="arrow-right" />}>
               View full details
-              <span aria-hidden="true">→</span>
-            </Link>
+            </Button>
           </div>
         ))}
       </div>
-      <p className="mt-2 text-center text-[11px] text-wn-charcoal/70">Swipe sideways to see every resort.</p>
+      <p className="mt-2 text-center text-xs text-wn-muted">Swipe sideways to see every resort.</p>
     </div>
   );
 }

@@ -6,7 +6,10 @@ import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { passColor, primaryPass, passLabel } from "@/lib/passColors";
-import { textOn } from "@/lib/contrast";
+import { accentOnNavy, textOn } from "@/lib/contrast";
+import Card from "@/components/ui/Card";
+import Notice from "@/components/ui/Notice";
+import Icon from "@/components/icons/Icon";
 import { haversineMeters, estimateDriveSeconds } from "@/lib/distance";
 import { formatDriveTime } from "@/lib/origins";
 import TripActions, { StartDateBadge } from "./TripActions";
@@ -77,9 +80,7 @@ export default async function TripPage({
   if (tripErr) {
     return (
       <main className="flex min-h-dvh items-center justify-center p-8">
-        <p className="rounded-md border border-red-200 bg-red-50 px-4 py-2 text-sm text-red-800">
-          Failed to load trip: {tripErr.message}
-        </p>
+        <Notice tone="danger">Failed to load trip: {tripErr.message}</Notice>
       </main>
     );
   }
@@ -287,9 +288,12 @@ export default async function TripPage({
           terse plain-bg header so the trip page finally feels like
           something the user planned, not a CRUD record. */}
       <header
-        className="relative w-full overflow-hidden"
+        className="on-dark relative w-full overflow-hidden"
         style={{
-          background: `linear-gradient(135deg, ${heroAccent} 0%, #1E2952 60%, #0F1530 100%)`,
+          // accentOnNavy keeps the white title and eyebrow above 4.5:1
+          // where the gradient starts (raw Ikon yellow / Epic orange
+          // put white text at 1.7:1 / 2.9:1 there).
+          background: `linear-gradient(135deg, ${accentOnNavy(heroAccent)} 0%, var(--color-wn-navy) 60%, var(--color-wn-navy-deep) 100%)`,
         }}
       >
         <div
@@ -312,11 +316,13 @@ export default async function TripPage({
 
         <div className="relative z-10 mx-auto max-w-3xl px-4 py-6 sm:px-6 sm:py-8">
           <div className="mb-4 flex items-start justify-between gap-2">
+            {/* Same look as PageHeader's `back` link on a navy header. */}
             <Link
               href="/trips"
-              className="inline-flex items-center gap-1 rounded-md bg-white/95 px-2.5 py-1 text-xs font-semibold text-wn-navy shadow-sm backdrop-blur-sm transition hover:bg-white"
+              className="inline-flex min-h-11 items-center gap-1 text-sm font-semibold text-white/80 hover:text-white"
             >
-              ← All trips
+              <Icon name="arrow-left" className="h-4 w-4" />
+              All trips
             </Link>
             <div className="flex items-start gap-2">
               <TripCalendarExport
@@ -339,7 +345,7 @@ export default async function TripPage({
             </div>
           </div>
 
-          <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/70">
+          <p className="mb-2 text-eyebrow font-semibold uppercase text-white/70">
             🛣️ {expandedSlugs.length} day{expandedSlugs.length === 1 ? "" : "s"}
             {dedupedWaypointSlugs.length > 0 &&
               ` · ${dedupedWaypointSlugs.length} stop${dedupedWaypointSlugs.length === 1 ? "" : "s"}`}
@@ -355,20 +361,24 @@ export default async function TripPage({
           {/* Trip-status badge + planned dates */}
           <div className="mt-3 flex flex-wrap items-center gap-2">
           {startDate && (
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[11px] font-semibold text-white/95 backdrop-blur-sm">
-              📅 <StartDateBadge isoDate={startDate} />
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-semibold text-white/95 backdrop-blur-sm">
+              <Icon name="calendar" className="h-3.5 w-3.5" /> <StartDateBadge isoDate={startDate} />
             </div>
           )}
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[11px] font-semibold text-white/95 backdrop-blur-sm">
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-semibold text-white/95 backdrop-blur-sm">
             {tripFinished ? (
-              <>🎉 <span>Trip complete</span></>
+              <>
+                <Icon name="check" className="h-3.5 w-3.5" /> <span>Trip complete</span>
+              </>
             ) : isActive ? (
               <>
                 <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400" aria-hidden="true" />
                 <span>Day {currentDay} of {expandedSlugs.length} · {progressPct}% done</span>
               </>
             ) : (
-              <>🎿 <span>Not started yet</span></>
+              <>
+                <Icon name="skier" className="h-3.5 w-3.5" /> <span>Not started yet</span>
+              </>
             )}
           </div>
           </div>
@@ -424,20 +434,24 @@ export default async function TripPage({
                   durationSeconds={leg.driveSeconds}
                 />
                 <div
-                  className={`rounded-xl border bg-white p-4 transition ${
+                  className={`rounded-wn-md border bg-white p-4 transition ${
                     isCurrent
                       ? "border-wn-navy ring-2 ring-wn-navy/20"
                       : completed
-                        ? "border-wn-charcoal/10 opacity-70"
-                        : "border-wn-charcoal/10"
+                        ? "border-wn-line opacity-70"
+                        : "border-wn-line"
                   }`}
                 >
-                  <div className="mb-1 flex items-center justify-between text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
+                  <div className="mb-1 flex items-center justify-between text-eyebrow font-semibold uppercase text-wn-muted">
                     <span>
                       Day {dayNum}
-                      {completed && <span className="ml-2 text-emerald-700">✓ done</span>}
+                      {completed && (
+                        <span className="ml-2 inline-flex items-center gap-0.5 text-wn-success">
+                          <Icon name="check" className="h-3 w-3" /> done
+                        </span>
+                      )}
                       {isCurrent && <span className="ml-2 text-wn-navy">today</span>}
-                      {isFuture && <span className="ml-2 text-wn-charcoal/45">upcoming</span>}
+                      {isFuture && <span className="ml-2 text-wn-muted">upcoming</span>}
                     </span>
                     {/* "ปักหมุดทีหลัง" — swap this day's mountain from the
                         trip page. Not offered once the day is done. */}
@@ -463,10 +477,10 @@ export default async function TripPage({
                         {r.name}
                       </Link>
                     ) : (
-                      <span className="text-base font-bold text-wn-charcoal/55">{slug}</span>
+                      <span className="text-base font-bold text-wn-muted">{slug}</span>
                     )}
                     {r && (
-                      <span className="text-[11px] text-wn-charcoal/55">{r.state}</span>
+                      <span className="text-xs text-wn-muted">{r.state}</span>
                     )}
                   </div>
                   {r && (r.passes ?? []).length > 0 && (
@@ -474,7 +488,7 @@ export default async function TripPage({
                       {(r.passes ?? []).slice(0, 4).map((p) => (
                         <span
                           key={p}
-                          className="rounded px-1.5 py-0.5 text-[10px] font-semibold"
+                          className="rounded-wn-sm px-1.5 py-0.5 text-eyebrow font-semibold"
                           style={{ backgroundColor: passColor(p), color: textOn(passColor(p)) }}
                         >
                           {passLabel(p)}
@@ -483,7 +497,7 @@ export default async function TripPage({
                     </div>
                   )}
                   {r && (r.vertical_drop || r.total_trails) && (
-                    <p className="mt-1 text-[11px] text-wn-charcoal/55">
+                    <p className="mt-1 text-xs text-wn-muted">
                       {r.vertical_drop != null && `${r.vertical_drop.toLocaleString()} ft vert`}
                       {r.vertical_drop && r.total_trails ? " · " : ""}
                       {r.total_trails != null && `${r.total_trails} trails`}
@@ -517,9 +531,7 @@ export default async function TripPage({
             The previous layout put Start-trip right under the title
             and users were tapping it expecting "view details". */}
         <section className="mt-8">
-          <h2 className="mb-2 text-[11px] font-bold uppercase tracking-[0.15em] text-wn-charcoal/55">
-            Trip controls
-          </h2>
+          <h2 className="mb-2 text-eyebrow font-bold uppercase text-wn-muted">Trip controls</h2>
           <TripActions
             tripId={trip.id}
             isActive={isActive}
@@ -550,14 +562,12 @@ export default async function TripPage({
 
 function SummaryTile({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-xl border border-wn-charcoal/10 bg-white px-3 py-3 text-center shadow-sm">
-      <div className="text-lg font-extrabold tracking-tight text-wn-navy sm:text-xl">
+    <Card padding="none" className="px-3 py-3 text-center">
+      <div className="text-lg font-extrabold tracking-tight text-wn-navy tabular-nums sm:text-wn-xl">
         {value}
       </div>
-      <div className="mt-0.5 text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
-        {label}
-      </div>
-    </div>
+      <div className="mt-0.5 text-eyebrow font-semibold uppercase text-wn-muted">{label}</div>
+    </Card>
   );
 }
 
@@ -566,12 +576,12 @@ function SummaryTile({ label, value }: { label: string; value: string }) {
 // the trip starts and ends.
 function OriginCard({ label, kind }: { label: string; kind: "start" | "end" }) {
   return (
-    <div className="flex items-center gap-3 rounded-xl border border-wn-charcoal/15 bg-wn-offwhite px-4 py-3 shadow-sm">
-      <span className="text-2xl leading-none" aria-hidden="true">
+    <div className="flex items-center gap-3 rounded-wn-md border border-wn-line bg-wn-offwhite px-4 py-3 shadow-wn-sm">
+      <span className="text-wn-2xl leading-none" aria-hidden="true">
         🏠
       </span>
       <div className="min-w-0 flex-1">
-        <div className="text-[10px] font-semibold uppercase tracking-[0.15em] text-wn-charcoal/55">
+        <div className="text-eyebrow font-semibold uppercase text-wn-muted">
           {kind === "start" ? "Trip start" : "Trip end"}
         </div>
         <div className="truncate text-base font-bold text-wn-navy">{label}</div>
@@ -599,17 +609,17 @@ function TimelineLeg({
       <span
         aria-hidden="true"
         className={`absolute bottom-0 left-4 top-0 border-l-2 border-dashed sm:left-6 ${
-          isStay ? "border-wn-charcoal/20" : "border-wn-navy/35"
+          isStay ? "border-wn-line" : "border-wn-navy/35"
         }`}
       />
       <div
-        className={`relative ml-4 inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-semibold backdrop-blur-sm sm:ml-6 ${
+        className={`relative ml-4 inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-semibold backdrop-blur-sm sm:ml-6 ${
           isStay
-            ? "border-wn-charcoal/15 bg-wn-offwhite text-wn-charcoal/70"
+            ? "border-wn-line bg-wn-offwhite text-wn-muted"
             : "border-wn-navy/25 bg-white text-wn-navy"
         }`}
       >
-        <span aria-hidden="true">{isStay ? "🏔️" : "🚗"}</span>
+        <Icon name={isStay ? "mountain" : "car"} className="h-3.5 w-3.5" />
         <span>
           {isStay ? "stay put" : `≈ ${formatDriveTime(durationSeconds)} drive`}
         </span>

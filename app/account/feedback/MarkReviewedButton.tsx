@@ -6,6 +6,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Button from "@/components/ui/Button";
 
 export default function MarkReviewedButton({ id }: { id: number }) {
   const router = useRouter();
@@ -38,15 +39,11 @@ export default function MarkReviewedButton({ id }: { id: number }) {
 
   return (
     <div className="flex flex-col items-start gap-1">
-      <button
-        type="button"
-        onClick={mark}
-        disabled={busy}
-        className="rounded-full bg-wn-navy px-2 py-0.5 text-[11px] font-semibold text-white transition hover:bg-wn-navy/90 disabled:opacity-50"
-      >
+      {/* sm (36 px): a dense row in the desktop-only admin table. */}
+      <Button size="sm" onClick={mark} disabled={busy}>
         {busy ? "…" : "Mark reviewed"}
-      </button>
-      {err && <span className="text-[10px] text-red-700">{err}</span>}
+      </Button>
+      {err && <span className="text-xs text-wn-danger">{err}</span>}
     </div>
   );
 }

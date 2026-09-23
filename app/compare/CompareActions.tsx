@@ -15,6 +15,8 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useSyncExternalStore } from "react";
 import { clearCompare, removeFromCompare } from "@/lib/compareList";
+import Button from "@/components/ui/Button";
+import Icon from "@/components/icons/Icon";
 
 const noopSubscribe = () => () => {};
 function useCanNativeShare(): boolean {
@@ -32,15 +34,14 @@ export function ClearCompareButton() {
     router.replace("/compare");
   }
   return (
-    <button
-      type="button"
+    <Button
+      variant="ghost"
       onClick={onClick}
-      className="inline-flex min-h-11 items-center gap-1 rounded-md border border-wn-charcoal/15 bg-white px-3 text-xs font-semibold text-wn-charcoal/70 transition hover:border-red-400 hover:text-red-700"
       aria-label="Clear the compare list"
+      iconLeft={<Icon name="close" />}
     >
-      <span aria-hidden="true">✕</span>
       Clear all
-    </button>
+    </Button>
   );
 }
 
@@ -66,9 +67,9 @@ export function RemoveFromCompare({ id, name }: { id: number; name: string }) {
       onClick={onClick}
       aria-label={`Remove ${name} from the comparison`}
       title="Remove"
-      className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-base text-wn-charcoal/50 transition hover:bg-red-50 hover:text-red-700"
+      className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-wn-muted transition hover:bg-wn-danger-bg hover:text-wn-danger"
     >
-      <span aria-hidden="true">✕</span>
+      <Icon name="close" className="h-4 w-4" />
     </button>
   );
 }
@@ -122,14 +123,13 @@ export function ShareCompareButton({ path, title }: { path: string; title: strin
             : "Copy link";
 
   return (
-    <button
-      type="button"
+    <Button
+      variant="secondary"
       onClick={onClick}
-      className="inline-flex min-h-11 items-center gap-1 rounded-md border border-wn-charcoal/15 bg-white px-3 text-xs font-semibold text-wn-charcoal/70 transition hover:border-wn-navy hover:text-wn-navy"
       aria-live="polite"
+      iconLeft={<Icon name={status === "copied" || status === "shared" ? "check" : "share"} />}
     >
-      <span aria-hidden="true">🔗</span>
       {label}
-    </button>
+    </Button>
   );
 }
