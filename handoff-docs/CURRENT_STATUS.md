@@ -1,6 +1,6 @@
 # Wynla: current status
 
-Last updated: 2026-09-23 (Season 1 round 3, package `a11y-cleanup`).
+Last updated: 2026-09-23 (Season 1 round 3, integrated on `feat/season-1-round3`).
 Read this first in every session, then `SESSION_PROTOCOL.md`.
 
 Live site: <https://wynla.app>. Repo: `github.com/saitarncare-netizen/Wynla`
@@ -12,7 +12,8 @@ Live site: <https://wynla.app>. Repo: `github.com/saitarncare-netizen/Wynla`
 |---|---|
 | `main` | What wynla.app serves. Last merged PR: #49 (Season 1 core). |
 | `feat/season-1-round2-clean` | Season 1 rounds 1 and 2 on top of #49 (HEAD `3633b1f`). The base for every round-3 package. Not yet merged to `main`. |
-| `wf/<package>-r3` | Round-3 package branches, one worktree each under `C:/Users/saita/ridewise-worktrees/`. Merged by the integrator into the round-2 branch, then to `main`. |
+| `feat/season-1-round3` | The six round-3 packages merged on top of the round-2 branch, plus the cross-package integration commits. Typecheck, lint (0 errors), tests and `next build` green. Not yet merged to `main`. |
+| `wf/<package>-r3` | Round-3 package branches, one worktree each under `C:/Users/saita/ridewise-worktrees/`. All six are merged into `feat/season-1-round3`. |
 
 Older `feat/*` and `wf/*` branches are history; see `git branch --merged main`
 before deleting any.
@@ -54,38 +55,41 @@ Rounds 1 and 2 of the Season 1 rebuild, each documented in
 Design tokens: wn-navy `#1E2952`, wn-sky `#5BAFE6`, wn-gold `#F5C443`,
 wn-offwhite `#FAFAF7`, wn-charcoal `#2A2A2A` (`app/globals.css`).
 
-## Round 3 (in flight, 2026-09-23)
+## Round 3 (integrated on `feat/season-1-round3`, 2026-09-23)
 
-Packages branched from the round-2 branch, one worktree each. This package
-(`a11y-cleanup`, branch `wf/a11y-cleanup-r3`) shipped:
+Six packages branched from the round-2 branch and merged in this order.
+No new SQL migrations and no new env vars.
 
-- `lib/useFocusTrap.ts`: one hook for every modal, sheet, drawer and
-  popover (initial focus, Tab wrap, Escape, focus return, `inert`
-  background with an `aria-hidden` fallback, ref-counted body scroll
-  lock, top-of-stack handling for stacked layers). Applied to
-  FiltersDrawer, ResortPicker, the surface-types modal, DayResortSwap and
-  the feedback form. 14 unit tests in `lib/useFocusTrap.test.ts`.
-- FilterBar desktop pills: real menu / dialog roles, arrow-key navigation,
-  Escape, focus return, accessible names that keep the visible label.
-- FiltersDrawer: checkbox and radio semantics with arrow keys, one named
-  close control, headings outside buttons, 44 px targets, contrast on
-  small copy, thresholds moved out of hover-only tooltips.
-- ResortPicker: dead pass-chip UI removed, live match count, named rows.
-- MapView: a polite live region with the filtered count and the keyboard
-  route to a resort.
-- 41 one-off scripts moved to `scripts/archive/` with a README; dead
-  files removed (`components/OnboardingCard.tsx`, `lib/mapboxStatic.ts`,
-  `lib/dataVerification.ts`).
+| Package | Branch | What it shipped | Doc |
+|---|---|---|---|
+| Design system | `wf/design-r3` | Tokens (`text-wn-*` type scale, `rounded-wn-*`, `shadow-wn-*`, semantic colours, global focus ring), `components/ui/*` primitives, 44-glyph `Icon`, AppShell top bar on every non-map route, Footer, BrandMark, `lib/nav.ts`, `lib/contrast.ts` (`textOn`), loading skeletons | `DESIGN_GUIDE.md` |
+| Map shell / resort sheet | `wf/sheet-r3` | Google-Maps-style phone sheet (peek / half / full) with safe history, one-row phone header, one bottom pill row on `--wn-bottom-stack`, shared glance tiles (`lib/glanceTiles.ts`), 44 px hit areas (`lib/hitArea.ts`) | `MAP_SHELL_2026-09-23.md` |
+| Photos | `wf/photos-r3` | `lib/heroSource.ts` policy (vetted storage photo, else terrain card, else gradient) on the resort page, map sheet, `/today` and `/go`; denylist; `/credits`; 59 vetted Commons heroes applied and 12 wrong ones cleared in production | `PHOTOS_2026-09-23.md` |
+| Planner UX | `wf/planner-ux-r3` | Guest favourites merged on sign-in (`GuestFavoritesSync` in the root layout), compare cleanup and share, account sessions, trips order, sticky trip bar, resort-page "Plan a trip" | commit messages |
+| Content / SEO | `wf/content-r3` | `/near/[city]` for 29 origins, sitemap, state-page nearest-city links, resort JSON-LD (SkiResort, FAQ, breadcrumb), lists "Next step" | `SEO_2026-09-23.md` |
+| A11y + cleanup | `wf/a11y-cleanup-r3` | One `useFocusTrap` for every overlay, FilterBar / FiltersDrawer / ResortPicker semantics, FeedbackButton form, 41 scripts to `scripts/archive/`, 3 dead files removed, docs rewritten | this file, `SESSION_PROTOCOL.md` |
 
-Other round-3 packages (map shell, resort panel, planner UX, photos,
-onboarding) are documented by their own branches; the integrator merges
-them and updates this file.
+Integration decisions worth knowing:
+
+- The map sheet hero goes through `heroSourceFor`; `HeroImage` takes
+  `source` only (the legacy `src` props are gone). Its compact credit
+  pill links to `/credits`.
+- FeedbackButton sits on `--wn-bottom-stack` at the left end of the phone
+  bottom row and hides at half / full sheet.
+- The map header shows the designer's mark (lockup on the md+ bar).
+- Pass badges everywhere use `textOn()`: navy on Ikon yellow and Epic
+  orange, white on the darker passes.
+- Every map-URL `replaceState` passes `customHistoryState(history.state)`
+  so the sheet's back-to-close entry survives filter and planner writes.
+- Text sizes outside the files the design package owned are still on
+  Tailwind's `text-xl..6xl`; migrate with the mapping in
+  `DESIGN_GUIDE.md` section 2 when a file is touched for other reasons.
 
 ## Founder checklist (things only Saitarn can do)
 
 1. Run `handoff-docs/sql/2026-09-23-ALL-season-1.sql`, then
    `2026-09-23-ALL-round-2.sql`, once each, in the Supabase SQL editor.
-   Both are idempotent.
+   Both are idempotent. Round 3 adds no migration.
 2. After the deploy that contains the auth package is live: switch the
    Supabase email templates (`AUTH_SETUP_2026-09-23.md`, step 1). Not
    before.
@@ -102,6 +106,12 @@ them and updates this file.
 6. Decide on licensed snow-report data (SnoCountry quote) before the
    season; the pipeline works without it but shows fewer "Reported"
    numbers.
+7. Review and run `scripts/photos/legacy/legacy-heroes.sql` (cleaned
+   credits for 92 legacy heroes; every statement is guarded by the current
+   URL, and the 12 denylisted rows were already cleared on 2026-09-23).
+8. After the round-3 deploy: check `/resort/killington` and `/near/nyc`
+   in Google's Rich Results Test and resubmit the sitemap in Search
+   Console; walk the iPhone script in `MAP_SHELL_2026-09-23.md`.
 
 ## Do not
 
@@ -120,5 +130,5 @@ them and updates this file.
 
 - Active resorts: 395 (after the 2026-09-23 backfill).
 - Pass access data: 235 resorts, 960 product rows, verified 2026-09-23.
-- Unit tests: 43 files (one skipped), 750 tests under `lib/**` and `tests/` (2026-09-23), run by `npm test` and
+- Unit tests: 53 files (one skipped), 894 tests under `lib/**`, `components/**` and `tests/` (round 3, 2026-09-23), run by `npm test` and
   by CI on every push to `main`, `feat/**` and `fix/**`.
