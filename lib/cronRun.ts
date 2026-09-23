@@ -26,6 +26,9 @@ export const CRON_JOBS = [
   "check-snow-alerts",
   "daily-digest",
   "thursday-picks",
+  // Manual / backfill scorer for the prediction ledger; the daily
+  // refresh-weather run scores on its own (not scheduled in vercel.json).
+  "score-predictions",
 ] as const;
 export type CronJob = (typeof CRON_JOBS)[number] | "health-alert";
 
