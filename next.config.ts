@@ -3,8 +3,16 @@ import type { NextConfig } from "next";
 // Every third-party origin the browser legitimately talks to. Keep this
 // list in sync with the code that introduces a new origin, or the CSP
 // report will light up the moment it ships.
-const SUPABASE_HOST = "https://yhmzkeeaiknsotydaucs.supabase.co";
-const SUPABASE_WS = "wss://yhmzkeeaiknsotydaucs.supabase.co";
+//
+// The Supabase origin comes from the same env var the app uses, so a
+// preview deploy pointed at a staging project is covered too (this file
+// is evaluated at build time, where Vercel injects the env). The literal
+// is only a fallback for a build with no env at all.
+const SUPABASE_HOST = (
+  process.env.NEXT_PUBLIC_SUPABASE_URL ?? "https://yhmzkeeaiknsotydaucs.supabase.co"
+).replace(/\/$/, "");
+const SUPABASE_WS = SUPABASE_HOST.replace(/^https:/, "wss:");
+const SUPABASE_HOSTNAME = new URL(SUPABASE_HOST).hostname;
 
 // Content-Security-Policy, shipped REPORT-ONLY first. Nothing is blocked;
 // the browser only logs violations to the devtools console, so a missed
@@ -67,7 +75,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "yhmzkeeaiknsotydaucs.supabase.co",
+        hostname: SUPABASE_HOSTNAME,
         pathname: "/storage/v1/object/public/resort-heroes/**",
       },
     ],

@@ -33,24 +33,16 @@ type Source = {
 
 // Order matters: government / public-domain sources first, then open
 // licenses that require attribution, then commercial services.
+//
+// Only sources the code actually reads belong here (grep app/, lib/,
+// components/ and scripts/ for the hostname before adding one). Planned
+// integrations such as SNOTEL or NOHRSC get their entry when they ship.
 const SOURCES: Source[] = [
   {
     name: "NOAA National Weather Service (NWS)",
     url: "https://www.weather.gov/",
     usedFor: "Point forecasts and gridpoint weather for every resort in the US",
     license: "US government work, public domain (17 U.S.C. § 105)",
-  },
-  {
-    name: "USDA NRCS SNOTEL network",
-    url: "https://www.nrcs.usda.gov/resources/data-and-reports/snow-and-water-interactive-map",
-    usedFor: "Automated snowpack and snow-water-equivalent station readings near resorts",
-    license: "US government work, public domain",
-  },
-  {
-    name: "NOAA NOHRSC National Snow Analyses",
-    url: "https://www.nohrsc.noaa.gov/nsa/",
-    usedFor: "Modeled snow depth and snowfall grids that fill gaps between stations",
-    license: "US government work, public domain",
   },
   {
     name: "Open-Meteo",
@@ -74,8 +66,14 @@ const SOURCES: Source[] = [
   {
     name: "Mapbox",
     url: "https://www.mapbox.com/about/maps/",
-    usedFor: "The interactive map, map tiles and place search",
+    usedFor: "The interactive map, map tiles and static map images",
     license: "© Mapbox, © OpenStreetMap; Mapbox terms of service",
+  },
+  {
+    name: "Zippopotam.us",
+    url: "https://www.zippopotam.us/",
+    usedFor: "Turning a typed US ZIP code into a map location for the nearby-resorts filter",
+    license: "Free public API; only the ZIP code you type is sent",
   },
   {
     name: "Google Maps",

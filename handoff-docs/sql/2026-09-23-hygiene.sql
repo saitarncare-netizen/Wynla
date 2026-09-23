@@ -1,7 +1,8 @@
 -- 2026-09-23 — hygiene package (audit finding security-3: trip share links)
 --
 -- Run in the Supabase SQL editor as the postgres role. Idempotent: safe to
--- run more than once.
+-- run more than once. Two transactions: part 1 (RLS policies) commits on
+-- its own so the FK/index work in part 2 can never roll it back.
 --
 -- WHY: trip_shares held a public SELECT policy so the share page could
 -- resolve a token with the anon key. app/trip/share/[token]/page.tsx now
@@ -69,11 +70,44 @@ create policy "trip_shares_delete_owner"
   to authenticated
   using (created_by = auth.uid());
 
--- Make sure deleting a trip removes its share rows (the audit could not
--- confirm the FK cascade from the dashboard). Recreating the constraint
--- is idempotent because we drop it first by its canonical name.
-alter table public.trip_shares
-  drop constraint if exists trip_shares_trip_id_fkey;
+commit;
+
+-- ---------------------------------------------------------------------
+-- Part 2: FK cascade + token index. Deliberately a SEPARATE transaction
+-- so that if anything here fails (e.g. a constraint name we did not
+-- anticipate) the RLS fix above has already committed and the public
+-- SELECT policy is gone regardless.
+-- ---------------------------------------------------------------------
+begin;
+
+-- Orphans: share rows whose trip was deleted while no cascade existed.
+-- ADD CONSTRAINT validates existing rows, so these must go first or the
+-- constraint fails. They are dead links anyway (share page 404s on them).
+delete from public.trip_shares s
+where not exists (select 1 from public.trips t where t.id = s.trip_id);
+
+-- Drop the existing FK on trip_id by looking it up rather than assuming
+-- the name: a dashboard-created constraint may be called anything, and
+-- dropping only "trip_shares_trip_id_fkey" would leave two FKs behind.
+do $$
+declare
+  c text;
+begin
+  for c in
+    select con.conname
+    from pg_constraint con
+    where con.conrelid = 'public.trip_shares'::regclass
+      and con.contype = 'f'
+      and con.conkey = array[(
+        select att.attnum from pg_attribute att
+        where att.attrelid = 'public.trip_shares'::regclass
+          and att.attname = 'trip_id'
+      )]
+  loop
+    execute format('alter table public.trip_shares drop constraint %I', c);
+  end loop;
+end $$;
+
 alter table public.trip_shares
   add constraint trip_shares_trip_id_fkey
   foreign key (trip_id) references public.trips (id) on delete cascade;
@@ -85,6 +119,10 @@ create unique index if not exists trip_shares_share_token_key
 
 commit;
 
--- Verify (expect exactly three rows, none with roles {public} or {anon}):
---   select policyname, roles, cmd from pg_policies
---   where tablename = 'trip_shares' order by policyname;
+-- Verify:
+--   1. Expect exactly three rows, none with roles {public} or {anon}:
+--      select policyname, roles, cmd from pg_policies
+--      where tablename = 'trip_shares' order by policyname;
+--   2. Expect exactly one FK, with confdeltype = 'c' (cascade):
+--      select conname, confdeltype from pg_constraint
+--      where conrelid = 'public.trip_shares'::regclass and contype = 'f';

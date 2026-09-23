@@ -15,9 +15,11 @@ import { haversineMeters, estimateDriveSeconds } from "@/lib/distance";
 export const dynamic = "force-dynamic";
 
 // Share links are meant for the people the owner sent them to, not for
-// search engines: NOINDEX, and the token URL is also disallowed in
-// app/robots.ts. The title still names the trip so the link previews
-// nicely in iMessage / Slack (audit finding content-seo-8).
+// search engines: NOINDEX. app/robots.ts explicitly ALLOWS /trip/share/
+// so crawlers can fetch the page and read that tag (a disallowed URL can
+// still be indexed title-less from an inbound link). The title still
+// names the trip so the link previews nicely in iMessage / Slack (audit
+// finding content-seo-8).
 export async function generateMetadata({
   params,
 }: {
@@ -74,7 +76,7 @@ type ResortRow = {
 };
 
 // React cache() dedupes the lookup between generateMetadata and the page
-// within one request, so a share view still bumps view_count exactly once.
+// within one request, so the view_count bump below runs once per view.
 const getData = cache(async function getData(token: string) {
   // Resolve the token then read the user-owned trips table with a SERVICE-ROLE
   // client so the anon client never touches trips directly (no id-enumeration
@@ -96,11 +98,15 @@ const getData = cache(async function getData(token: string) {
     .eq("share_token", token)
     .maybeSingle();
   if (!share) return null;
-  // Bump view count (best-effort; fire-and-forget).
-  void db
+  // Bump view count. Awaited on purpose: a supabase-js query builder only
+  // sends its request when awaited/then-ed, so a bare `void db.from(...)`
+  // never hit the network and the counter stayed at 0. Errors are ignored
+  // because the counter is informational and must never block the page.
+  await db
     .from("trip_shares")
     .update({ view_count: ((share as { view_count: number }).view_count ?? 0) + 1 })
-    .eq("share_token", token);
+    .eq("share_token", token)
+    .then(() => undefined, () => undefined);
 
   const tripId = (share as { trip_id: string }).trip_id;
   const { data: trip } = await db

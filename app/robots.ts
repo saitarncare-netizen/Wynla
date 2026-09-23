@@ -7,11 +7,16 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: "*",
-        allow: "/",
-        // Auth-gated, personalized, or token-addressed pages — no value to
-        // crawl, and for /trip/ (owner pages + share tokens) and /compare
-        // (any ?ids= permutation) indexing would only create duplicate or
-        // leaked URLs. /api/ is machine endpoints, never pages.
+        // /compare and /trip/share/[token] are deliberately NOT disallowed:
+        // both carry robots noindex metadata, and a crawler can only read
+        // that tag on a URL it is allowed to fetch. Disallowing them too
+        // would let a linked URL surface as "Indexed, though blocked by
+        // robots.txt" with no title (audit finding content-seo-25; the review
+        // of the 2026-09-23 hygiene package chose noindex over disallow).
+        allow: ["/", "/trip/share/"],
+        // Auth-gated or personalized pages — no value to crawl. /trip/
+        // (owner pages) redirects to /login when signed out. /api/ is
+        // machine endpoints, never pages.
         disallow: [
           "/login",
           "/auth/",
@@ -19,7 +24,6 @@ export default function robots(): MetadataRoute.Robots {
           "/account",
           "/trips",
           "/trip/",
-          "/compare",
           "/api/",
         ],
       },

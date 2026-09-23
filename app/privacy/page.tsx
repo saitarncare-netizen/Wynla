@@ -117,8 +117,8 @@ export default function PrivacyPage() {
                 Google sign-in profile
               </span>{" "}
               — if you choose &quot;Continue with Google&quot;, Google shares
-              your email address, name and profile picture with us and
-              nothing else. We use the email to identify your account and
+              your email address, name, profile picture and a Google account
+              identifier with us. We use the email to identify your account and
               the name as a default display name. Google does not receive
               your Wynla activity, and we never see your Google password.
             </li>

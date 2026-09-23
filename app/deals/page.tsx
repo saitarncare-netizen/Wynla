@@ -126,7 +126,9 @@ const PASS_DEALS: PassDeal[] = [
     soldOut: {
       reason:
         "The 2026-27 Indy Pass is sold out. Join the waitlist to hear first if more passes are released before winter.",
-      waitlistUrl: "https://estore.indyskipass.com/waitlist",
+      // The homepage's own "sign up now" link (checked 2026-09-23). The
+      // shorter /waitlist path is a bare Shopify collection with no form.
+      waitlistUrl: "https://estore.indyskipass.com/products/waitlist-signup",
     },
   },
   {
