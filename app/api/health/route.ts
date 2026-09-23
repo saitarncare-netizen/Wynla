@@ -10,6 +10,7 @@
 
 import { NextResponse } from "next/server";
 import { computeHealth, getServiceClient, notifyIfUnhealthy } from "@/lib/cronRun";
+import { ledgerSummary, type LedgerSummary } from "@/lib/predictionLog";
 import { checkRateLimit, clientIp } from "@/lib/rateLimit";
 
 export const runtime = "nodejs";
@@ -31,8 +32,17 @@ export async function GET(request: Request) {
   try {
     const health = await computeHealth(supabase);
     const alert = notify ? await notifyIfUnhealthy(supabase, health) : null;
+    // Prediction-ledger counts are informational: they never change the
+    // verdict, and a missing table reads as available:false, not stale.
+    // The 7-day hit rate is withheld (null) below MIN_RATE_SAMPLE rows.
+    let ledger: LedgerSummary | null = null;
+    try {
+      ledger = await ledgerSummary(supabase);
+    } catch {
+      ledger = null;
+    }
     return NextResponse.json(
-      { ok: health.verdict === "fresh", ...health, alert },
+      { ok: health.verdict === "fresh", ...health, ledger, alert },
       {
         status: health.verdict === "fresh" ? 200 : 503,
         headers: { "Cache-Control": "no-store" },

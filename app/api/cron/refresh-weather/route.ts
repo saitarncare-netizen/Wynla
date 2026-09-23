@@ -28,13 +28,18 @@
 // snowpack evidence (lib/snowSurface hasSnowpackEvidence — the rain-on-
 // old-base and spring-corn rules need them, and the resort page passes
 // the same context so the stored class agrees with the page's own call).
-// Then the pipeline health check runs and emails the founder if the data
-// is stale (deduped to once per 12 h through cron_runs).
+// Then the prediction ledger freezes today's, tomorrow's and Saturday's
+// call for every resort that got a forecast and scores yesterday's rows
+// against weather_history (lib/predictionLog.ts; feature-detected,
+// non-fatal, skipped when the budget is nearly spent). Then the pipeline
+// health check runs and emails the founder if the data is stale (deduped
+// to once per 12 h through cron_runs).
 //
 // Query params (all optional): ?limit=N (max resorts), ?resort=ID (one
 // resort), ?force=1 (ignore the 45-minute freshness floor).
 
 import { computeHealth, notifyIfUnhealthy, runCron, type CronContext } from "@/lib/cronRun";
+import { buildPredictionRows, scoreDay, writePredictions, type PredictionRow } from "@/lib/predictionLog";
 import { isGlobalOffSeasonNow } from "@/lib/seasonDates";
 import { classifyToday, type DailyWeather, type SurfaceCode } from "@/lib/snowSurface";
 import { errorText } from "@/lib/weather/http";
@@ -52,7 +57,7 @@ import {
   type WriteStats,
 } from "@/lib/weather/refreshResort";
 import { StationDirectory } from "@/lib/weather/stations";
-import { localHour } from "@/lib/weather/time";
+import { localDate, localHour, shiftDate } from "@/lib/weather/time";
 
 export const runtime = "nodejs";
 export const maxDuration = 300;
@@ -68,6 +73,10 @@ const MIN_AGE_MIN = 45;
 const RESORT_BUDGET_MS = 90_000;
 const DISPATCH_FLOOR_MS = 95_000;
 const FAIL_SHARE_LIMIT = 0.3;
+// The ledger step is a few hundred rows of upserts plus three reads; it
+// is skipped outright below this much remaining budget so it can never
+// push the run past the deadline.
+const LEDGER_FLOOR_MS = 25_000;
 
 /** Refresh columns plus what the surface classifier needs: the verified
  *  open flag and the resort-reported base depth (snowpack evidence). */
@@ -205,14 +214,33 @@ async function refreshAll(ctx: CronContext, request: Request) {
   const stamp = now.toISOString();
   const toClassify: Array<{ id: number; code: SurfaceCode | null }> = [];
   const toClear: number[] = [];
+  const predictions: PredictionRow[][] = [];
   const offSeason = isGlobalOffSeasonNow(now);
   for (const o of okOutcomes) {
     const r = resortsById.get(o.resort_id)!;
+    const fj = o.cacheRow.forecast_json;
+    const tz = fj.sources.nws?.time_zone ?? fj.sources.open_meteo?.time_zone ?? null;
+    const day = fj.days[0];
+    const localToday = day?.date ?? localDate(now, tz);
     if (r.currently_open === false || (r.currently_open === null && offSeason)) {
       toClear.push(r.id);
+      // Dormant: the numbers are still frozen (a forecast is a forecast)
+      // but no surface class is claimed, so nothing scores as a hit.
+      predictions.push(
+        buildPredictionRows({
+          resortId: r.id,
+          localToday,
+          days: fj.days,
+          window: [],
+          todayResult: null,
+          dormant: true,
+          ctx: {},
+          now,
+          forecastUpdatedAt: fj.updated_at,
+        }),
+      );
       continue;
     }
-    const day = o.cacheRow.forecast_json.days[0];
     const hist: DailyWeather[] = (recentHistory.get(r.id) ?? [])
       .filter((h) => !o.historyRow || h.observed_date !== o.historyRow.observed_date)
       .map((h) => ({
@@ -252,12 +280,26 @@ async function refreshAll(ctx: CronContext, request: Request) {
     // snowpack evidence the rain-on-old-base and spring-corn rules need
     // (lib/snowSurface hasSnowpackEvidence); without them the stored
     // class disagreed with the resort page's own call (surface package).
-    const result = classifyToday(window.slice(-8), {
+    const surfaceCtx = {
       baseDepthIn: r.snow_base_depth_in ?? null,
       hasSnowpack: r.currently_open === true ? true : null,
       inSeason: !offSeason,
-    });
+    };
+    const result = classifyToday(window.slice(-8), surfaceCtx);
     toClassify.push({ id: r.id, code: result?.code ?? null });
+    predictions.push(
+      buildPredictionRows({
+        resortId: r.id,
+        localToday,
+        days: fj.days,
+        window: window.slice(-8),
+        todayResult: result,
+        dormant: false,
+        ctx: surfaceCtx,
+        now,
+        forecastUpdatedAt: fj.updated_at,
+      }),
+    );
   }
   const BATCH = 20;
   for (let off = 0; off < toClassify.length; off += BATCH) {
@@ -283,6 +325,49 @@ async function refreshAll(ctx: CronContext, request: Request) {
       .in("id", slice);
     if (error) surface.errors++;
     else surface.cleared += slice.length;
+  }
+
+  // Prediction ledger: freeze what was just forecast, then score
+  // yesterday (and the day before, for observations that landed late).
+  // Never fatal: the run's own verdict is about the weather writes.
+  type LedgerDay = { date: string; scored: number; closed_unobserved: number; pending: number; hits: number; compared: number };
+  const ledger: { skipped: string | null; available: boolean | null; logged: number; write_errors: number; scored: LedgerDay[] } = {
+    skipped: null,
+    available: null,
+    logged: 0,
+    write_errors: 0,
+    scored: [],
+  };
+  if (ctx.msLeft() < LEDGER_FLOOR_MS) {
+    ledger.skipped = "out_of_time";
+  } else {
+    try {
+      const wrote = await writePredictions(supabase, predictions.flat());
+      ledger.available = wrote.available;
+      ledger.logged = wrote.written;
+      ledger.write_errors = wrote.errors.length;
+      if (wrote.errors.length) console.warn(`[refresh-weather] ledger write: ${wrote.errors[0]}`);
+      // for_date is resort-local; at 11:00 UTC every US zone's "yesterday"
+      // is UTC yesterday, so one date covers the country. Day-2 catches
+      // rows whose observation had not landed on the first pass.
+      const todayUtc = now.toISOString().slice(0, 10);
+      for (const back of [1, 2]) {
+        if (!wrote.available || ctx.msLeft() < LEDGER_FLOOR_MS) break;
+        const s = await scoreDay(supabase, shiftDate(todayUtc, -back), now);
+        ledger.scored.push({
+          date: s.date,
+          scored: s.scored,
+          closed_unobserved: s.closed_unobserved,
+          pending: s.pending,
+          hits: s.surface_hits,
+          compared: s.surface_compared,
+        });
+        if (s.errors.length) console.warn(`[refresh-weather] ledger score ${s.date}: ${s.errors[0]}`);
+      }
+    } catch (e) {
+      ledger.skipped = `error: ${errorText(e)}`;
+      console.warn(`[refresh-weather] ledger step failed: ${errorText(e)}`);
+    }
   }
 
   // Health + founder alert (deduped to once per 12 h).
@@ -319,6 +404,7 @@ async function refreshAll(ctx: CronContext, request: Request) {
     },
     writes: writeStats,
     surface,
+    ledger,
     health_verdict: health?.verdict ?? null,
     alert,
     warning_sample: warningSample,
