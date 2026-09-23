@@ -1,23 +1,142 @@
 @import "tailwindcss";
 
+/* ------------------------------------------------------------------
+   Design tokens (handoff-docs/DESIGN_GUIDE.md is the human-readable
+   version; keep the two in sync).
+
+   Layout vars live on :root so plain CSS (and inline styles) can read
+   them; the colour / type / radius / shadow tokens live in @theme so
+   Tailwind generates utilities for them (text-wn-muted, rounded-wn-md,
+   shadow-wn-sm, text-eyebrow, ...).
+   ------------------------------------------------------------------ */
 :root {
   --background: #fafaf7;
   --foreground: #2a2a2a;
+
+  /* Height of the AppShell top bar on non-map routes (components/
+     AppShell.tsx). Content that must clear the bar (sticky section
+     headers, scroll-margin for in-page anchors) reads this instead of
+     hardcoding 56px. The bar itself adds env(safe-area-inset-top) on
+     top of this value inside the installed app. */
+  --wn-header-h: 3.5rem;
+
+  /* Everything a floating element has to stay above at the bottom of a
+     phone screen: the home-indicator inset, plus the AppTabBar while it
+     is showing (the tab-bar media query below overrides this). Use
+     `bottom: calc(var(--wn-bottom-stack) + 12px)` for pills, toasts and
+     sticky action bars so they never hide under the tab bar. */
+  --wn-bottom-stack: env(safe-area-inset-bottom, 0px);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 
-  /* Wynla brand colors */
+  /* Wynla brand colours (designer palette, locked). */
   --color-wn-navy: #1e2952;
   --color-wn-sky: #5bafe6;
   --color-wn-gold: #f5c443;
   --color-wn-offwhite: #fafaf7;
   --color-wn-charcoal: #2a2a2a;
 
+  /* Derived neutrals. Solid hex rather than charcoal/NN alpha so the
+     contrast is the same on white, off-white and tinted cards
+     (audit design-system-1 / a11y-1: charcoal/55 measured 3.4:1).
+       muted   #5c5c5b = charcoal 76%  -> 6.4:1 on off-white, 6.7:1 on white (AA text)
+       subtle  #767675 = charcoal 62%  -> 4.2:1 on off-white (AA large / icons, not body copy)
+       line    #e5e5e5 = charcoal 12%  -> borders and dividers only
+     Everything that used to be text-wn-charcoal/45..70 maps to muted;
+     text-wn-charcoal/35..40 (decorative) maps to subtle. */
+  --color-wn-muted: #5c5c5b;
+  --color-wn-subtle: #767675;
+  --color-wn-line: #e5e5e5;
+
+  /* The deep end of every navy hero gradient (was #0B1028 / #0F1530 /
+     #141A3A across pages, audit design-system-23). */
+  --color-wn-navy-deep: #0f1530;
+
+  /* ONE gold. #f5c443 is the brand gold for UI (CTA fills, badges on
+     navy). The halo is the same hue mixed with 18% navy for use on the
+     light map style, where the pure gold has no edge against the tiles
+     (it replaces the ad-hoc #D4A84B in the map layers, OG card and
+     email templates; those files are listed in DESIGN_GUIDE.md and
+     migrate at their owners' pace). Never use either as text on white. */
+  --color-wn-gold-halo: #cea846;
+
+  /* Focus ring. Navy on light surfaces (14:1); use gold on navy
+     (8.6:1). Applied globally via :focus-visible below. */
+  --color-wn-focus: #1e2952;
+  --color-wn-focus-on-dark: #f5c443;
+
+  /* Semantic status. Text colours pass 4.5:1 on white and off-white;
+     each has a matching pale background for inline notices. Use these
+     instead of raw red-*/emerald-*/amber-* utilities (design-system-26). */
+  --color-wn-success: #1b7f4b;
+  --color-wn-success-bg: #ecfdf3;
+  --color-wn-danger: #b42318;
+  --color-wn-danger-bg: #fef3f2;
+  --color-wn-warning: #b54708;
+  --color-wn-warning-bg: #fffaeb;
+  --color-wn-info: #0f6abf;
+  --color-wn-info-bg: #eff6ff;
+
+  /* Type scale: six body steps plus display sizes for hero titles.
+     12 / 14 / 16 / 18 / 22 / 28, each with a fixed line height so
+     vertical rhythm does not drift between pages. 11px exists only as
+     `text-eyebrow` for uppercase tracking labels; anything smaller is
+     not allowed (design-system-2: 268 uses of 9-11px text). */
+  --text-eyebrow: 0.6875rem;
+  --text-eyebrow--line-height: 1rem;
+  --text-eyebrow--letter-spacing: 0.08em;
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1rem;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.25rem;
+  --text-base: 1rem;
+  --text-base--line-height: 1.5rem;
+  --text-lg: 1.125rem;
+  --text-lg--line-height: 1.625rem;
+  --text-xl: 1.375rem;
+  --text-xl--line-height: 1.75rem;
+  --text-2xl: 1.75rem;
+  --text-2xl--line-height: 2.125rem;
+  /* Display steps (page titles on hero headers). */
+  --text-3xl: 2rem;
+  --text-3xl--line-height: 2.375rem;
+  --text-4xl: 2.5rem;
+  --text-4xl--line-height: 2.75rem;
+  --text-5xl: 3rem;
+  --text-5xl--line-height: 3.25rem;
+  --text-6xl: 3.75rem;
+  --text-6xl--line-height: 4rem;
+
+  /* Radii. Namespaced (rounded-wn-sm/md/lg) so the Tailwind defaults
+     other packages still rely on do not shift under them; the guide
+     maps every legacy rounded-* to one of these three. */
+  --radius-wn-sm: 0.5rem;
+  --radius-wn-md: 0.75rem;
+  --radius-wn-lg: 1rem;
+
+  /* Shadows. sm = resting card, md = hover / floating. */
+  --shadow-wn-sm: 0 1px 2px rgba(30, 41, 82, 0.06), 0 1px 3px rgba(30, 41, 82, 0.08);
+  --shadow-wn-md: 0 4px 12px rgba(30, 41, 82, 0.1), 0 2px 4px rgba(30, 41, 82, 0.06);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+}
+
+/* Keyboard focus: one ring everywhere (design-system-11 / a11y-8 found
+   zero focus-visible rules and rings at 1.3-1.5:1). :where() keeps the
+   specificity at zero so a component that opts into its own ring still
+   wins; the offset puts the ring on the page background, which is why
+   it stays visible around a navy button too. Mouse clicks do not
+   trigger :focus-visible, so no ring flashes on tap. */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-wn-focus);
+  outline-offset: 2px;
+}
+.on-dark :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline-color: var(--color-wn-focus-on-dark);
 }
 
 /* PWA polish — kill iOS Safari's overscroll bounce on the body so the
@@ -47,23 +166,25 @@ body.route-map > footer {
 }
 
 /* Installed-app safe area. The iOS status bar is translucent over our
-   content (apple-mobile-web-app-status-bar-style: black-translucent),
-   so every non-map route pads its top by the inset once, here, instead
-   of each page hand-rolling it (compare / resort used to, /trips,
-   /favorites, /account, /login did not — their "← Map" link sat under
-   the clock). The map route opts out because MapPage pads its own
-   floating header: `.route-map` is toggled in a client effect, so the
-   `:has([data-route="map"])` clause covers the server-rendered first
-   paint before that effect runs. env() is 0 outside iOS/notched Android,
-   so this is a no-op on desktop. */
-body:not(.route-map):not(:has([data-route="map"])) > #main-content {
-  padding-top: env(safe-area-inset-top, 0px);
-}
-/* Every page's <main> is min-h-dvh; without this the padded wrapper is
-   viewport + inset tall and short pages (/login, /get) rubber-band by a
+   content (apple-mobile-web-app-status-bar-style: black-translucent).
+   On every non-map route the AppShell top bar (components/AppShell.tsx)
+   sits first in <body> and pads its own top by the inset, so page
+   content never hand-rolls it. The map route opts out because MapPage
+   pads its own floating header: `.route-map` is toggled in a client
+   effect, so the `:has([data-route="map"])` clause covers the
+   server-rendered first paint before that effect runs. env() is 0
+   outside iOS/notched Android, so this is a no-op on desktop.
+
+   Every page's <main> is min-h-dvh; without this the page is viewport +
+   inset + header tall and short pages (/login, /get) rubber-band by a
    few pixels in the installed app. */
 body:not(.route-map):not(:has([data-route="map"])) > #main-content > main {
-  min-height: calc(100dvh - env(safe-area-inset-top, 0px));
+  min-height: calc(100dvh - env(safe-area-inset-top, 0px) - var(--wn-header-h));
+}
+/* In-page anchors (guide headings, /data-sources sections) scroll to
+   just under the sticky top bar instead of behind it. */
+body:not(.route-map) [id] {
+  scroll-margin-top: calc(var(--wn-header-h) + env(safe-area-inset-top, 0px) + 0.5rem);
 }
 
 /* Phone tab bar (components/AppTabBar.tsx). While <html data-tab-bar="1">
@@ -77,6 +198,8 @@ body:not(.route-map):not(:has([data-route="map"])) > #main-content > main {
 @media (max-width: 767px) {
   html[data-tab-bar="1"] {
     --wn-tab-bar-h: calc(3.5rem + env(safe-area-inset-bottom, 0px));
+    /* The tab bar already includes the home-indicator inset. */
+    --wn-bottom-stack: var(--wn-tab-bar-h);
   }
   html[data-tab-bar="1"] body:not(.route-map):not(:has([data-route="map"])) {
     padding-bottom: var(--wn-tab-bar-h);
