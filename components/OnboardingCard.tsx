@@ -2,10 +2,12 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { originByCode } from "@/lib/origins";
 import {
   getPreferences,
   setOnboarded,
   setPreferences,
+  setStoredOrigin,
   type Preferences,
   type SkillLevel,
 } from "@/lib/preferences";
@@ -50,21 +52,28 @@ const PASS_OPTIONS: ReadonlyArray<{ value: string; label: string }> = [
   { value: "mountain_collective", label: "Mountain Collective" },
 ];
 
-// We pre-fill more origin buttons than the drive-time cache currently
-// supports (only NYC/Boston/Philly/Hartford have cached routes). For
-// the others we still save the preference; the map URL will fall back
-// to NYC for now and we can backfill the cache later. This keeps the
-// UI honest about the user's real intent without blocking onboarding.
+// A short list of metros, all drawn from lib/origins so every code the
+// wizard writes is one the map resolves (the old hand-typed "slc" /
+// "sf" codes silently fell back to NYC). Cities without cached road
+// routes still work: the map estimates their drive times and labels
+// them "≈".
+const ORIGIN_CODES = [
+  "nyc",
+  "boston",
+  "philadelphia",
+  "hartford",
+  "denver",
+  "salt-lake-city",
+  "san-francisco",
+  "seattle",
+  "chicago",
+] as const;
+
 const ORIGIN_OPTIONS: ReadonlyArray<OriginChoice> = [
-  { kind: "city", code: "nyc", label: "NYC" },
-  { kind: "city", code: "boston", label: "Boston" },
-  { kind: "city", code: "philadelphia", label: "Philly" },
-  { kind: "city", code: "hartford", label: "Hartford" },
-  { kind: "city", code: "denver", label: "Denver" },
-  { kind: "city", code: "slc", label: "SLC" },
-  { kind: "city", code: "sf", label: "San Francisco" },
-  { kind: "city", code: "seattle", label: "Seattle" },
-  { kind: "city", code: "chicago", label: "Chicago" },
+  ...ORIGIN_CODES.map((code): OriginChoice => {
+    const o = originByCode(code);
+    return { kind: "city", code: o.code, label: o.short };
+  }),
   { kind: "geo", label: "Use my location" },
   { kind: "skip", label: "Set later" },
 ];
@@ -110,6 +119,10 @@ export default function OnboardingCard({ onFinished }: Props) {
   function applyAndClose(finalPrefs: Preferences, extraParams?: Record<string, string>) {
     setPreferences(finalPrefs);
     setOnboarded();
+    // The map reads the stored origin (not wynla_prefs) on later visits
+    // and after Clear all, so the wizard's pick has to land there too or
+    // it only lasts as long as the ?from= in this visit's URL.
+    if (finalPrefs.origin) setStoredOrigin(finalPrefs.origin);
 
     // Apply URL params based on preferences.
     const params = new URLSearchParams(searchParams.toString());
@@ -182,6 +195,9 @@ export default function OnboardingCard({ onFinished }: Props) {
         };
         setPreferences(next);
         setOnboarded();
+        // Persisted at reduced precision (see encodeStoredOrigin) so the
+        // next visit starts "from here" without a new permission prompt.
+        setStoredOrigin({ kind: "geo", lat: pos.coords.latitude, lon: pos.coords.longitude });
         const params = new URLSearchParams(searchParams.toString());
         if (next.passes.length > 0) params.set("pass", next.passes.join(","));
         params.set("from", "geo");

@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import PwaRegistrar from "@/components/PwaRegistrar";
 import InstallPrompt from "@/components/InstallPrompt";
+import AppTabBar from "@/components/AppTabBar";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -134,6 +135,10 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      // Phone tab bar visibility flag for app/globals.css. Shipped as
+      // "1" so the first paint already reserves the bar's height;
+      // components/AppTabBar.tsx flips it on routes without the bar.
+      data-tab-bar="1"
     >
       <head>
         <link rel="preconnect" href="https://api.mapbox.com" />
@@ -169,6 +174,10 @@ export default function RootLayout({
           <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
             <Link href="/early" className="font-semibold text-wn-navy hover:text-wn-navy/80">
               Founder list
+            </Link>
+            <span aria-hidden="true">·</span>
+            <Link href="/go" className="hover:text-wn-navy">
+              Where to ride Saturday
             </Link>
             <span aria-hidden="true">·</span>
             <Link href="/trip-templates" className="hover:text-wn-navy">
@@ -209,6 +218,8 @@ export default function RootLayout({
         </footer>
         <PwaRegistrar />
         <InstallPrompt />
+        {/* Phone-only bottom tabs (Map / Today / Trips / Account). */}
+        <AppTabBar />
         <Analytics />
         <SpeedInsights />
       </body>

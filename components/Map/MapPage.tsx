@@ -11,19 +11,20 @@ import {
 import { useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
 import type { TripRoutePoint } from "./MapView";
-import FilterBar from "./FilterBar";
+import FilterBar, { type ActiveFilterChip } from "./FilterBar";
 // FilterDrawer removed in Stage 14 — Size + Night now inline pills.
 import ResortPanel from "./ResortPanel";
-import ResortPicker from "./ResortPicker";
+import ResortPicker, { primeSearchKeyboard } from "./ResortPicker";
 import LocationButton from "./LocationButton";
 import FeedbackButton from "@/components/FeedbackButton";
-import FiltersDrawer, { AIRPORT_OPTIONS } from "./FiltersDrawer";
+import FiltersDrawer, { AIRPORT_OPTIONS, liftLabel, type NearAirportResort } from "./FiltersDrawer";
 import MobileQuickFilters from "./MobileQuickFilters";
 import TripPlannerPanel from "./TripPlannerPanel";
 import AuthButton from "@/components/auth/AuthButton";
 import ProBadge from "@/components/ProBadge";
 import CompareFloatingButton from "@/components/CompareFloatingButton";
 import ActiveTripChip from "@/components/Map/ActiveTripChip";
+import TodayChip from "./TodayChip";
 import RecentlyViewedStrip, {
   OPEN_RESORT_EVENT,
   type OpenResortDetail,
@@ -41,10 +42,19 @@ import ProBenefitsCard from "@/components/ProBenefitsCard";
 // resorts having plenty of green terrain in absolute acreage. Bad
 // for both users and resorts.
 import Link from "next/link";
-import { resolveOrigin } from "@/lib/origins";
+import {
+  driveFilterLabel,
+  findOrigin,
+  hasCachedDriveTimes,
+  launchCityByCode,
+  resolveOriginWithFallback,
+  type StoredOrigin,
+} from "@/lib/origins";
+import { getStoredOrigin, setStoredOrigin } from "@/lib/preferences";
+import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { haversineMeters, estimateDriveSeconds, estimateDriveMeters } from "@/lib/distance";
 import { PASS_COLORS, PASS_LABELS, PASS_KEYS } from "@/lib/passColors";
-import { sizeTier, matchesSizeFilter, type SizeTier } from "@/lib/sizeTier";
+import { sizeTier, matchesSizeFilter, SIZE_TIER_LABELS, type SizeTier } from "@/lib/sizeTier";
 import { liftCounts, type LiftTypes } from "@/lib/liftTypes";
 
 // mapbox-gl is ~500 KB gzipped. Loaded statically it sat on the critical
@@ -80,6 +90,8 @@ export type Resort = {
   name: string;
   state: string;
   region: string | null;
+  /** Nearest town, when known (about 60% of rows). Search-only. */
+  city: string | null;
   latitude: number | string;
   longitude: number | string;
   passes: string[];
@@ -202,6 +214,59 @@ type Props = {
 
 function isSizeTier(v: string | null): v is SizeTier {
   return v === "small" || v === "medium" || v === "large";
+}
+
+// "Within reach of this airport" threshold for the Fly to jump: two
+// hours by the lib/distance estimate, which is how far a rental-car
+// day from the terminal realistically goes.
+const AIRPORT_REACH_SECONDS = 2 * 3600;
+
+// Runs once per page load. Reads the origin the user picked last time
+// (localStorage) and, for signed-in users with nothing stored locally,
+// the account's "Default starting city". Failures are logged once and
+// leave the origin on NYC.
+function useStoredOrigin(
+  isAuthed: boolean,
+): [StoredOrigin | null, (s: StoredOrigin) => void] {
+  const [stored, setStored] = useState<StoredOrigin | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    const local = getStoredOrigin();
+    if (local) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- one-shot hydration of a browser-only value (localStorage) into React state on mount.
+      setStored(local);
+      return;
+    }
+    if (!isAuthed) return;
+    (async () => {
+      try {
+        const supabase = createSupabaseBrowserClient();
+        const { data: u } = await supabase.auth.getUser();
+        if (!u.user?.id) return;
+        const { data, error } = await supabase
+          .from("profiles")
+          .select("preferred_origin")
+          .eq("id", u.user.id)
+          .maybeSingle<{ preferred_origin: string | null }>();
+        if (error) {
+          console.warn("[origin] profiles.preferred_origin read failed", error.message);
+          return;
+        }
+        const code = data?.preferred_origin;
+        if (cancelled || !code || !findOrigin(code)) return;
+        const fromProfile: StoredOrigin = { kind: "city", code };
+        // Mirror to this device so the next visit skips the round-trip.
+        setStoredOrigin(fromProfile);
+        setStored(fromProfile);
+      } catch (e) {
+        console.warn("[origin] profile lookup failed", e instanceof Error ? e.message : e);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [isAuthed]);
+  return [stored, setStored];
 }
 
 export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Props) {
@@ -590,7 +655,11 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   );
   const sizeParam = searchParams.get("size");
   const sizeFilter: SizeTier | null = isSizeTier(sizeParam) ? sizeParam : null;
-  const fromCode = searchParams.get("from") ?? "nyc";
+  // No "nyc" default here any more: when the URL carries no ?from= the
+  // origin comes from the user's stored choice (localStorage, mirrored
+  // from profiles.preferred_origin when signed in) and only then NYC.
+  // See resolveOriginWithFallback in lib/origins.
+  const fromCode = searchParams.get("from");
   const fromLat = searchParams.get("fromLat");
   const fromLng = searchParams.get("fromLng");
   const withinHours = Number(searchParams.get("within")) || 0;
@@ -690,29 +759,46 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
     if (!Number.isFinite(n) || n <= 0) return 0;
     return Math.min(100, Math.max(0, Math.round(n)));
   })();
-  // Stage 8 — airport filter. URL form: ?airport=DEN. Empty / missing
-  // = no airport filter. Matched against resort.closest_airport_iata
-  // with a 120-mile shuttle-range distance cap; resorts with NULL
-  // airport data are excluded when this filter is active.
+  // "Fly to" airport jump. URL form: ?airport=DEN. This is NOT a filter:
+  // it flies the camera to the airport, drops a plane marker and tells
+  // the user how many resorts sit within about two hours of it. It is
+  // therefore excluded from every active-filter count and from the
+  // match pipeline (audit map-core-7 / fresh-eyes-newbie-11, which
+  // found it counted as a filter while matching nothing).
   const airportParam = searchParams.get("airport");
   const airportFilter: string | null = airportParam
     ? airportParam.toUpperCase()
     : null;
-  // AIRPORT_MAX_DISTANCE_MI = 120 was the shuttle-range cap when airport
-  // was still a filter (pre-Round-8). Kept as documentation only — the
-  // const is no longer referenced by any code path. If we ever re-enable
-  // "near airport X" filtering, this is the historical value to revive.
-  // const AIRPORT_MAX_DISTANCE_MI = 120;
 
   // Resolve the picked airport's coordinates from AIRPORT_OPTIONS so
   // MapView can drop a ✈️ marker and ResortPanel can compute drive
-  // time from the airport. Null when no airport filter is active.
+  // time from the airport. Null when no airport is picked.
   const activeAirport = useMemo(() => {
     if (!airportFilter) return null;
     const a = AIRPORT_OPTIONS.find((opt) => opt.iata === airportFilter);
     if (!a) return null;
     return { lat: a.lat, lng: a.lng, label: a.label, iata: a.iata };
   }, [airportFilter]);
+
+  // Resorts within roughly two hours' drive of the picked airport, by
+  // the same Haversine estimate the rest of the app labels "≈", nearest
+  // first. Listed in the Fly to section so the jump answers "what can I
+  // reach from here" without hiding the rest of the map.
+  const nearAirportResorts = useMemo((): NearAirportResort[] => {
+    if (!activeAirport) return [];
+    const out: NearAirportResort[] = [];
+    for (const r of resorts) {
+      const lat = Number(r.latitude);
+      const lon = Number(r.longitude);
+      if (!Number.isFinite(lat) || !Number.isFinite(lon)) continue;
+      const meters = haversineMeters(activeAirport.lat, activeAirport.lng, lat, lon);
+      const seconds = estimateDriveSeconds(meters);
+      if (seconds <= AIRPORT_REACH_SECONDS) {
+        out.push({ id: r.id, name: r.name, state: r.state, seconds });
+      }
+    }
+    return out.sort((a, b) => a.seconds - b.seconds);
+  }, [activeAirport, resorts]);
 
   // Round 8 (Saitarn 2026-05-23, Option A): picking an airport flies
   // the camera to it so the user lands on the right region of the map
@@ -749,18 +835,32 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   // featured URL param kept for backward compatibility (no UI control).
   const featuredOnly = searchParams.get("featured") === "1";
 
+  const [storedOrigin, setStoredOriginState] = useStoredOrigin(isAuthed);
   const origin = useMemo(
-    () => resolveOrigin(fromCode, fromLat, fromLng),
-    [fromCode, fromLat, fromLng],
+    () => resolveOriginWithFallback(fromCode, fromLat, fromLng, storedOrigin),
+    [fromCode, fromLat, fromLng, storedOrigin],
   );
+  // True when every drive time on screen is a Haversine estimate: geo
+  // origins and cities outside the cached Northeast four. The drawer
+  // and FilterBar show this so a "≈ 4h 10m" is never read as measured.
+  // Entry to the Saturday picks page. The map's origin rides along as
+  // ?city= only when it is one of /go's launch cities (lib/origins
+  // LAUNCH_CITIES); for any other origin /go asks for a city itself
+  // rather than answering for the wrong one.
+  const goHref =
+    origin.kind === "city" && launchCityByCode(origin.code) ? `/go?city=${origin.code}` : "/go";
+  const cachedRows = origin.kind === "city" ? driveTimes[origin.name] : undefined;
+  const originIsEstimate =
+    !hasCachedDriveTimes(origin) || !cachedRows || cachedRows.length === 0;
 
-  // For city origins we use the precomputed drive_time_cache rows. For a
-  // geo origin we synthesize Haversine ESTIMATES on the fly so filters
-  // ("Day trip ≤ 3h") and map UI keep working everywhere. ResortPanel
-  // upgrades the estimate to a Mapbox Matrix exact value on click.
+  // For cached city origins we use the precomputed drive_time_cache
+  // rows. For a geo origin, or a city with no cache rows yet, we
+  // synthesize Haversine ESTIMATES on the fly so filters ("Day trip
+  // ≤ 3h") and map UI keep working everywhere. ResortPanel upgrades the
+  // estimate to a Mapbox Matrix exact value on click.
   const driveTimeByResort = useMemo(() => {
     const map = new Map<number, Map<string, DriveTime>>();
-    if (origin.kind === "geo") {
+    if (originIsEstimate) {
       for (const r of resorts) {
         const lat = Number(r.latitude);
         const lon = Number(r.longitude);
@@ -791,26 +891,16 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
       }
     }
     return map;
-  }, [driveTimes, origin, resorts]);
+  }, [driveTimes, origin, resorts, originIsEstimate]);
 
-  // Round 8 (Saitarn 2026-05-23, Option A): airport is no longer a
-  // FILTER — it's just a "fly to this airport" affordance + a plane
-  // marker on the map. PR #36 tried to blend airport + drive-time
-  // into one filter and the result was a "20h drive cap" that still
-  // showed the same 12 resorts the 120mi shuttle-cap had carved out,
-  // because the cap stack was unclear. Saitarn proposed (and we
-  // agreed): drop the airport-as-filter entirely, keep drive-time
-  // anchored to the user's origin city, and surface
-  // "X min drive from {airport}" per-resort instead.
-  //
-  // matchesAirport now always returns true — the predicate is kept
-  // (rather than ripped out) so the call sites in the filter
-  // pipeline don't have to change shape, but the function is
-  // effectively a no-op. AIRPORT_MAX_DISTANCE_MI is now only used
-  // by ResortPanel + /resort/[slug] to label "Closest airport"
-  // confidence.
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const matchesAirport = (_r: Resort): boolean => true;
+  // Round 8 (Saitarn 2026-05-23, Option A): airport is not a filter.
+  // PR #36 tried to blend airport + drive-time into one filter and the
+  // result was a "20h drive cap" that still showed the same 12 resorts
+  // the 120mi shuttle-cap had carved out. Drive time stays anchored to
+  // the user's origin; the airport is a camera jump plus a per-resort
+  // "X min drive from {airport}" line in ResortPanel. The no-op
+  // matchesAirport predicate that used to sit in the pipeline is gone
+  // so the filter memos no longer re-run when the airport changes.
 
   // Resorts that pass every filter EXCEPT size — used to compute the
   // "X with unknown size hidden" caption when the size chip is active.
@@ -868,13 +958,8 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         const dt = driveTimeByResort.get(r.id)?.get(origin.name);
         if (!dt || dt.duration_seconds > withinHours * 3600) return false;
       }
-      // matchesAirport is a no-op post-Round-8 but kept in the chain
-      // to avoid disturbing the memoization deps + pipeline shape.
-      if (!matchesAirport(r)) return false;
       return true;
     });
-    // matchesAirport closes over airportFilter; depending on
-    // airportFilter is enough for memoization correctness.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     resorts,
@@ -900,7 +985,6 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
     withinHours,
     origin,
     driveTimeByResort,
-    airportFilter,
   ]);
 
   const filtered = useMemo(() => {
@@ -972,7 +1056,6 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         if (!dt || dt.duration_seconds > withinHours * 3600) return false;
       }
       if (!matchesSizeFilter(r.vertical_drop, sizeFilter)) return false;
-      if (!matchesAirport(r)) return false;
       return true;
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -1000,7 +1083,6 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
     origin,
     driveTimeByResort,
     sizeFilter,
-    airportFilter,
   ]);
 
   // Open Now count — drives whether the chip surfaces in the
@@ -1066,9 +1148,32 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
     writeQuery(params);
   }
 
+  // Persist an origin choice: localStorage + cookie always, and the
+  // account's "Default starting city" when signed in. Only city codes
+  // go to the profile (the column's domain is ORIGINS codes); a geo
+  // origin leaves the account default untouched. The POST is
+  // fire-and-forget: a failure only means the choice does not follow
+  // the user to another device.
+  function persistOrigin(stored: StoredOrigin) {
+    setStoredOrigin(stored);
+    // Keep the in-memory fallback current so a later Clear all (which
+    // drops ?from=) lands on this choice, not the one read at mount.
+    setStoredOriginState(stored);
+    if (!isAuthed || stored.kind !== "city") return;
+    fetch("/api/account/profile", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ preferred_origin: stored.code }),
+    }).catch((e: unknown) => {
+      console.warn("[origin] profile sync failed", e instanceof Error ? e.message : e);
+    });
+  }
+
   // Switch the From-origin to a city. Drops any stale geo lat/lng params.
   function handleFromCity(code: string) {
+    if (!findOrigin(code)) return;
     updateParams({ from: code, fromLat: null, fromLng: null });
+    persistOrigin({ kind: "city", code });
   }
 
   // Switch the From-origin to the user's actual location.
@@ -1078,11 +1183,109 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
       fromLat: lat.toFixed(5),
       fromLng: lng.toFixed(5),
     });
+    persistOrigin({ kind: "geo", lat, lon: lng });
   }
 
+  // Clears every filter. The origin is not a filter, so it survives:
+  // resolveOriginWithFallback re-reads the stored choice once ?from= is
+  // gone, which keeps "Drive time from Denver" after a Clear all. The
+  // Fly to airport is a camera jump, not a filter either, so it stays
+  // in the URL and the plane marker does not vanish on Clear all.
   function clearAll() {
-    writeQuery(new URLSearchParams());
+    const next = new URLSearchParams();
+    if (airportFilter) next.set("airport", airportFilter);
+    writeQuery(next);
   }
+
+  // One list of every active filter, each with its own clear action.
+  // It is the single source of truth for the ☰ badge, the search
+  // picker's Filters badge and the desktop chip strip, so the number a
+  // user sees always matches the chips they can remove (audit
+  // map-core-17: the strip used to omit every drawer-only filter while
+  // the badge counted them). Origin and the Fly to airport are not
+  // filters and are deliberately absent.
+  const activeChips: ActiveFilterChip[] = [];
+  for (const p of passFilter) {
+    activeChips.push({
+      key: `pass-${p}`,
+      label: `Pass: ${PASS_LABELS[p as keyof typeof PASS_LABELS] ?? p}`,
+      onRemove: () => {
+        const next = passFilter.filter((x) => x !== p);
+        updateParam("pass", next.length === 0 ? null : next.join(","));
+      },
+    });
+  }
+  if (withinHours > 0) {
+    activeChips.push({
+      key: "drive",
+      // Same formatter as the desktop From button, so the chip carries
+      // the "≈" whenever the origin's times are estimates.
+      label: driveFilterLabel(withinHours, origin, originIsEstimate),
+      onRemove: () => updateParam("within", null),
+    });
+  }
+  if (days > 1) {
+    activeChips.push({
+      key: "trip",
+      label: `${days >= 4 ? "Big trip" : "Weekend"} · ${days} days`,
+      onRemove: () => updateParam("days", null),
+    });
+  }
+  if (sizeFilter) {
+    activeChips.push({
+      key: "size",
+      label: `Size: ${SIZE_TIER_LABELS[sizeFilter]}`,
+      onRemove: () => updateParam("size", null),
+    });
+  }
+  const booleanChips: Array<[key: string, active: boolean, label: string]> = [
+    ["night", nightOnly, "🌙 Night skiing"],
+    ["freshsnow", freshSnowOnly, "❄️ Fresh snow"],
+    ["open", openNowOnly, "🟢 Open now"],
+    ["lessons", lessonsOnly, "🎓 Lessons"],
+    ["rentals", rentalsOnly, "🎿 Rentals"],
+    ["lodging", lodgingOnly, "🏨 Lodging on mountain"],
+    ["tubing", tubingOnly, "🛷 Tubing"],
+    ["xc", xcOnly, "🥾 XC / Nordic"],
+    ["backcountry", backcountryOnly, "🏔️ Backcountry access"],
+    ["terrainpark", terrainparkOnly, "🛹 Terrain park"],
+    ["webcam", webcamOnly, "📷 Webcam"],
+    ["family", familyOnly, "👨‍👩‍👧 Family mountain"],
+    ["expert", expertOnly, "◆ Expert mountain"],
+    ["adaptive", adaptiveOnly, "♿ Adaptive program"],
+  ];
+  for (const [key, active, label] of booleanChips) {
+    if (!active) continue;
+    activeChips.push({ key, label, onRemove: () => updateParam(key, null) });
+  }
+  if (liftReq) {
+    activeChips.push({
+      key: "lift",
+      label: `Lift: ${liftLabel(liftReq) ?? liftReq}`,
+      onRemove: () => updateParam("lift", null),
+    });
+  }
+  if (surfaceFilter.length > 0) {
+    activeChips.push({
+      key: "surface",
+      label: `Snow today: ${surfaceFilter.join(" / ")}`,
+      onRemove: () => updateParam("surface", null),
+    });
+  }
+  if (snowmakeMin > 0) {
+    activeChips.push({
+      key: "snowmake",
+      label: `Snowmaking ≥ ${snowmakeMin}%`,
+      onRemove: () => updateParam("snowmake", null),
+    });
+  }
+  const activeFilterCount = activeChips.length;
+
+  // Ids of resorts that pass the current filters. The header search
+  // looks through the full catalog and uses this to flag rows the
+  // filters would hide (audit map-core-15: searching for a resort that
+  // was filtered out used to return "No resorts match").
+  const filteredIds = useMemo(() => new Set(filtered.map((r) => r.id)), [filtered]);
 
   // Resolve the currently-selected resort once per render (not in click
   // handler) so the panel always reflects the latest data — e.g. drive-time
@@ -1106,6 +1309,17 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
       document.body.classList.remove("route-map");
     };
   }, []);
+
+  // Tell the phone tab bar (components/AppTabBar.tsx) when a sheet or
+  // drawer has the bottom of the screen, so it steps aside instead of
+  // sitting under the resort panel / planner / filters / search.
+  useEffect(() => {
+    const open = selectedId != null || plannerOpen || filtersOpen || searchOpen;
+    document.documentElement.dataset.sheetOpen = open ? "1" : "0";
+    return () => {
+      delete document.documentElement.dataset.sheetOpen;
+    };
+  }, [selectedId, plannerOpen, filtersOpen, searchOpen]);
 
   // Hydrate the gold-ring timer + clean up the ?recent=<slug> param.
   // If we mounted with recentlyViewedId already set from the URL
@@ -1242,7 +1456,13 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
                 origin so results are sorted by drive time. */}
             <button
               type="button"
-              onClick={() => setSearchOpen(true)}
+              onClick={() => {
+                // Must run inside the tap: iOS only opens the keyboard
+                // for a synchronous focus, and the search input mounts
+                // on the next render (see primeSearchKeyboard).
+                primeSearchKeyboard();
+                setSearchOpen(true);
+              }}
               className="inline-flex h-11 items-center justify-center gap-1.5 rounded-md border border-wn-charcoal/20 bg-white px-2 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 sm:px-3"
               title="Search resorts"
               aria-label="Search resorts"
@@ -1272,33 +1492,23 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
                 <span className="hidden sm:inline">Plan a trip</span>
               </button>
             )}
+            {/* "Where to ride Saturday" (/go). Desktop-only here so the
+                icon-only phone row does not wrap; phones get the pill in
+                the chip rows below. Short label until lg, where the full
+                phrase (footer / account / /get wording) fits. */}
+            <Link
+              href={goHref}
+              className="hidden h-11 items-center justify-center gap-1.5 rounded-md border border-wn-charcoal/20 bg-white px-3 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 md:inline-flex"
+              title="Where to ride Saturday"
+              aria-label="Where to ride Saturday"
+            >
+              <span aria-hidden="true">🏔️</span>
+              <span>
+                <span className="hidden lg:inline">Where to ride </span>Saturday
+              </span>
+            </Link>
             {/* Mobile-only Filters trigger. */}
             {(() => {
-              const activeFilterCount =
-                passFilter.length +
-                (withinHours > 0 ? 1 : 0) +
-                (sizeFilter ? 1 : 0) +
-                (nightOnly ? 1 : 0) +
-                (airportFilter ? 1 : 0) +
-                (origin.kind === "geo" ? 1 : 0) +
-                // Stage 4 — new filters add to the badge count so users
-                // can see at a glance how many filters are stacked.
-                (freshSnowOnly ? 1 : 0) +
-                (openNowOnly ? 1 : 0) +
-                (liftReq ? 1 : 0) +
-                (lessonsOnly ? 1 : 0) +
-                (rentalsOnly ? 1 : 0) +
-                (lodgingOnly ? 1 : 0) +
-                (tubingOnly ? 1 : 0) +
-                (xcOnly ? 1 : 0) +
-                (backcountryOnly ? 1 : 0) +
-                (terrainparkOnly ? 1 : 0) +
-                (webcamOnly ? 1 : 0) +
-                (familyOnly ? 1 : 0) +
-                (expertOnly ? 1 : 0) +
-                (adaptiveOnly ? 1 : 0) +
-                (surfaceFilter.length > 0 ? 1 : 0) +
-                (snowmakeMin > 0 ? 1 : 0);
               return (
                 <button
                   type="button"
@@ -1399,6 +1609,37 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
                 <ActiveTripChip />
               </div>
             )}
+            {/* "Today" chip: the Go / Wait / Skip screen for signed-in
+                users with favorites (the chip checks the count itself).
+                Hidden with the resort sheet or filter drawer up so it
+                never floats over them. */}
+            {isAuthed && selectedId == null && !filtersOpen && (
+              <div className="[&_a]:pointer-events-auto">
+                <TodayChip />
+              </div>
+            )}
+            {/* "Where to ride Saturday" entry for phones (md+ has the
+                header link). Same pill as ActiveTripChip / TodayChip so
+                the rows read as one set, and hidden with a sheet or
+                drawer up for the same reason. Not auth-gated: /go is
+                public and this is its main entry from the map. */}
+            {selectedId == null && !filtersOpen && (
+              <div className="flex justify-center px-3 pt-2 md:hidden [&_a]:pointer-events-auto">
+                <Link
+                  href={goHref}
+                  className="inline-flex min-h-11 items-center gap-2 rounded-full border border-wn-navy/20 bg-white/95 py-1.5 pl-3 pr-2.5 text-xs font-bold text-wn-navy shadow-lg backdrop-blur-sm transition hover:border-wn-navy hover:shadow-xl active:scale-95"
+                >
+                  <span aria-hidden="true">🏔️</span>
+                  <span>Where to ride Saturday</span>
+                  <span
+                    aria-hidden="true"
+                    className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-wn-navy text-[11px] text-white"
+                  >
+                    →
+                  </span>
+                </Link>
+              </div>
+            )}
             {/* RecentlyViewedStrip already marks its scroll strip
                 pointer-events-auto. */}
             <RecentlyViewedStrip />
@@ -1427,21 +1668,21 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
           <FilterBar
             passFilter={passFilter}
             origin={origin}
+            originIsEstimate={originIsEstimate}
             withinHours={withinHours}
-            days={days}
             sizeFilter={sizeFilter}
             nightOnly={nightOnly}
             passCounts={passCounts}
             hiddenByNullSize={hiddenByNullSize}
             filteredCount={filtered.length}
             totalCount={resorts.length}
+            activeChips={activeChips}
             onPassChange={(passes) =>
               updateParam("pass", passes.length === 0 ? null : passes.join(","))
             }
             onFromCity={handleFromCity}
             onFromGeo={handleFromGeo}
             onWithinChange={(w) => updateParam("within", w)}
-            onDaysChange={(d) => updateParam("days", d > 1 ? String(d) : null)}
             onSizeChange={(s) => updateParam("size", s)}
             onNightChange={(v) => updateParam("night", v ? "1" : null)}
             onClearAll={clearAll}
@@ -1603,36 +1844,11 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         // header search: refine candidates by pass/conditions/etc
         // without leaving the planner.
         onOpenFilters={() => setFiltersOpenRaw(true)}
-        activeFilterCount={
-          passFilter.length +
-          (sizeFilter ? 1 : 0) +
-          (nightOnly ? 1 : 0) +
-          (withinHours > 0 ? 1 : 0) +
-          (airportFilter ? 1 : 0) +
-          (freshSnowOnly ? 1 : 0) +
-          // Stage 4 — comprehensive filter expansion counted here too.
-          (openNowOnly ? 1 : 0) +
-          (liftReq ? 1 : 0) +
-          (lessonsOnly ? 1 : 0) +
-          (rentalsOnly ? 1 : 0) +
-          (lodgingOnly ? 1 : 0) +
-          (tubingOnly ? 1 : 0) +
-          (xcOnly ? 1 : 0) +
-          (backcountryOnly ? 1 : 0) +
-          (terrainparkOnly ? 1 : 0) +
-          (webcamOnly ? 1 : 0) +
-          (familyOnly ? 1 : 0) +
-          (expertOnly ? 1 : 0) +
-          (adaptiveOnly ? 1 : 0) +
-          (surfaceFilter.length > 0 ? 1 : 0) +
-          (snowmakeMin > 0 ? 1 : 0)
-        }
+        activeFilterCount={activeFilterCount}
       />
 
       {/* Header search modal — re-uses the planner's ResortPicker.
-          Selecting a resort flies the camera + opens its panel. We pass
-          the active filter set (not all 451) so a user who's narrowed
-          down by Pass / Size / Night / Drive sees only those resorts. */}
+          Selecting a resort flies the camera + opens its panel. */}
       <ResortPicker
         open={searchOpen}
         title="Find a resort"
@@ -1645,34 +1861,15 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         // mutually-exclusive `setFiltersOpen` wrapper that kills
         // search; we want both open with filter stacked above.
         onOpenFilters={() => setFiltersOpenRaw(true)}
-        // Stage 33 — count of "other" filters set (size, night,
-        // drive, airport). Pass chips + fresh snow live inline in
-        // the picker so they're not counted; this badge represents
-        // only the filters that require opening the drawer to see.
-        activeFilterCount={
-          (sizeFilter ? 1 : 0) +
-          (nightOnly ? 1 : 0) +
-          (withinHours > 0 ? 1 : 0) +
-          (airportFilter ? 1 : 0) +
-          // Stage 4 — new filters surface in the search-picker badge.
-          (openNowOnly ? 1 : 0) +
-          (liftReq ? 1 : 0) +
-          (lessonsOnly ? 1 : 0) +
-          (rentalsOnly ? 1 : 0) +
-          (lodgingOnly ? 1 : 0) +
-          (tubingOnly ? 1 : 0) +
-          (xcOnly ? 1 : 0) +
-          (backcountryOnly ? 1 : 0) +
-          (terrainparkOnly ? 1 : 0) +
-          (webcamOnly ? 1 : 0) +
-          (familyOnly ? 1 : 0) +
-          (expertOnly ? 1 : 0) +
-          (adaptiveOnly ? 1 : 0) +
-          (surfaceFilter.length > 0 ? 1 : 0) +
-          (snowmakeMin > 0 ? 1 : 0)
-        }
+        // Badge on the picker's Filters pill: the same count as the ☰
+        // button so the two never disagree.
+        activeFilterCount={activeFilterCount}
         fromPoint={{ lat: origin.lat, lng: origin.lon, label: origin.kind === "geo" ? "your location" : origin.name }}
-        allResorts={filtered}
+        // Full catalog, not the filtered pool: a user typing a name
+        // expects to find it even when a filter hides it. Rows outside
+        // filteredIds get a "hidden by filters" tag instead.
+        allResorts={resorts}
+        visibleIds={filteredIds}
         alreadyPicked={[]}
         onSelect={(slug) => {
           const r = resorts.find((c) => c.slug === slug);
@@ -1721,10 +1918,24 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
           updateParam("pass", passes.length === 0 ? null : passes.join(","))
         }
         withinHours={withinHours}
-        fromLabel={origin.kind === "geo" ? "here" : origin.short}
+        origin={origin}
+        originIsEstimate={originIsEstimate}
+        onFromCity={handleFromCity}
+        onFromGeo={handleFromGeo}
         sizeFilter={sizeFilter}
         nightOnly={nightOnly}
         airportFilter={airportFilter}
+        nearAirportResorts={nearAirportResorts}
+        onJumpToResort={(id) => {
+          const r = resorts.find((c) => c.id === id);
+          if (!r) return;
+          openResort(r.id);
+          setCameraTarget({
+            lat: Number(r.latitude),
+            lng: Number(r.longitude),
+            token: `flyto-${Date.now()}`,
+          });
+        }}
         filteredCount={filtered.length}
         totalCount={resorts.length}
         freshSnowOnly={freshSnowOnly}
@@ -1781,10 +1992,9 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         onNightChange={(v) => updateParam("night", v ? "1" : null)}
         onAirportChange={(iata) => {
           updateParam("airport", iata);
-          // Stage 33 — fly the map camera to the picked airport so
-          // the user immediately sees its surrounding resorts. Skips
-          // when iata is null (filter cleared) — leave the map where
-          // it was.
+          // Fly the map camera to the picked airport so the user
+          // immediately sees its surrounding resorts. Skips when iata
+          // is null (jump cleared): leave the map where it was.
           if (iata) {
             const a = AIRPORT_OPTIONS.find((opt) => opt.iata === iata);
             if (a) {

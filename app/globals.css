@@ -66,6 +66,26 @@ body:not(.route-map):not(:has([data-route="map"])) > #main-content > main {
   min-height: calc(100dvh - env(safe-area-inset-top, 0px));
 }
 
+/* Phone tab bar (components/AppTabBar.tsx). While <html data-tab-bar="1">
+   every scrolling route pads its bottom by the bar's height so the last
+   card and the legal footer are never hidden under it, and the map
+   route shrinks its fullscreen container instead so the absolute
+   bottom controls (location pill, feedback pill, Mapbox attribution)
+   ride up with it. The map's bottom sheets are position: fixed and the
+   bar hides while they are open, so they still reach the real bottom.
+   Desktop (md+) never shows the bar, hence the media query. */
+@media (max-width: 767px) {
+  html[data-tab-bar="1"] {
+    --wn-tab-bar-h: calc(3.5rem + env(safe-area-inset-bottom, 0px));
+  }
+  html[data-tab-bar="1"] body:not(.route-map):not(:has([data-route="map"])) {
+    padding-bottom: var(--wn-tab-bar-h);
+  }
+  html[data-tab-bar="1"] body [data-route="map"] {
+    height: calc(100dvh - var(--wn-tab-bar-h));
+  }
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
