@@ -129,7 +129,9 @@ export type NwsDay = {
   precip_chance: number | null;
   sky_cover_max: number | null;
   conditions_short: string | null;
-  /** Fraction of the day (0-1) the accumulation layers actually covered. */
+  /** Fraction of the day (0-1) covered by at least one of the snowfall,
+   *  QPF or temperature layers. Deciding on snowfall alone threw away
+   *  forecaster-edited temps and PoP whenever that one layer was thin. */
   coverage: number;
 };
 
@@ -146,7 +148,8 @@ type Bucket = {
   pop: number[];
   sky: number[];
   weather: WeatherEntry[];
-  coveredMs: number;
+  /** Start-of-hour timestamps seen in the coverage-defining layers. */
+  hours: Set<number>;
 };
 
 function newBucket(): Bucket {
@@ -163,7 +166,7 @@ function newBucket(): Bucket {
     pop: [],
     sky: [],
     weather: [],
-    coveredMs: 0,
+    hours: new Set(),
   };
 }
 
@@ -176,7 +179,7 @@ function newBucket(): Bucket {
 function eachHour(
   layer: Layer | undefined,
   timeZone: string | null,
-  visit: (date: string, value: number, hourFractionOfSlice: number, sliceHours: number) => void,
+  visit: (date: string, value: number, hourFractionOfSlice: number, hourStartMs: number) => void,
 ): void {
   for (const v of layer?.values ?? []) {
     if (!isNum(v.value)) continue;
@@ -184,8 +187,8 @@ function eachHour(
     if (!span) continue;
     const sliceHours = Math.max(1, Math.round((span.end - span.start) / 3_600_000));
     for (let h = 0; h < sliceHours; h++) {
-      const t = new Date(span.start + h * 3_600_000);
-      visit(localDate(t, timeZone), v.value, 1 / sliceHours, sliceHours);
+      const t = span.start + h * 3_600_000;
+      visit(localDate(new Date(t), timeZone), v.value, 1 / sliceHours, t);
     }
   }
 }
@@ -208,15 +211,22 @@ export function parseGridDays(
     return b;
   };
 
-  // Accumulations: spread each slice over its hours.
-  eachHour(p.snowfallAmount, timeZone, (d, v, frac) => {
+  // Accumulations: spread each slice over its hours. Snowfall, QPF and
+  // temperature together define how much of the day the grid covers.
+  eachHour(p.snowfallAmount, timeZone, (d, v, frac, t) => {
     bucket(d).snowMm.push(v * frac);
-    bucket(d).coveredMs += 3_600_000;
+    bucket(d).hours.add(t);
   });
   eachHour(p.iceAccumulation, timeZone, (d, v, frac) => bucket(d).iceMm.push(v * frac));
-  eachHour(p.quantitativePrecipitation, timeZone, (d, v, frac) => bucket(d).qpfMm.push(v * frac));
+  eachHour(p.quantitativePrecipitation, timeZone, (d, v, frac, t) => {
+    bucket(d).qpfMm.push(v * frac);
+    bucket(d).hours.add(t);
+  });
   // Instantaneous: each hour gets the slice value.
-  eachHour(p.temperature, timeZone, (d, v) => bucket(d).tempC.push(v));
+  eachHour(p.temperature, timeZone, (d, v, _frac, t) => {
+    bucket(d).tempC.push(v);
+    bucket(d).hours.add(t);
+  });
   eachHour(p.maxTemperature, timeZone, (d, v) => bucket(d).maxTempC.push(v));
   eachHour(p.minTemperature, timeZone, (d, v) => bucket(d).minTempC.push(v));
   eachHour(p.windSpeed, timeZone, (d, v) => bucket(d).windKmh.push(v));
@@ -258,7 +268,7 @@ export function parseGridDays(
         precip_chance: roundOrNull(maxOrNull(b.pop)),
         sky_cover_max: roundOrNull(maxOrNull(b.sky)),
         conditions_short: describeConditions(b.weather, maxOrNull(b.sky)),
-        coverage: Math.min(1, b.coveredMs / 86_400_000),
+        coverage: Math.min(1, b.hours.size / 24),
       };
     });
 }

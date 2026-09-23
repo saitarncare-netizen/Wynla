@@ -8,19 +8,20 @@
 // answered. Anything else degrades field by field and records what went
 // wrong in forecast_json.sources / the run's warnings. A failed resort
 // never overwrites its previous good row — the writer only touches
-// fetch_error / fetched_at for it (see writeOutcomes).
+// fetch_source / fetch_error for it, and fetched_at keeps pointing at the
+// last GOOD forecast so the page's "synced" time and /api/health stay
+// honest (see writeOutcomes + lastAttemptAt).
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { fetchSnotelDaily } from "./awdb";
 import {
-  isForecastJsonV2,
   type ForecastJsonV2,
   type ForecastSources,
   type MeasuredSnow,
   type SnotelObservation,
   type StationObservation,
 } from "./forecastJson";
-import { errorText } from "./http";
+import { errorText, isAbortError, runWithDeadline } from "./http";
 import {
   assembleForecastJson,
   buildHistoryRow,
@@ -36,7 +37,7 @@ import {
   type HistoryRow,
   type OpenMeteoParsed,
 } from "./merge";
-import { fetchSnodasPoint, isConus, type Sfav2Sampler } from "./nohrsc";
+import { fetchSnodasPoint, isConus, Sfav2Sampler, type Sfav2Latest } from "./nohrsc";
 import {
   fetchGrid,
   fetchObservations,
@@ -84,18 +85,62 @@ export type ResortRow = {
   snow_report_status: string | null;
 };
 
+/**
+ * The slice of weather_cache a refresh needs. The full forecast_json (48 h
+ * hourly at two elevations, obs, 16 days) is 10-15 MB across 425 rows;
+ * a run only needs the station mapping, the measured layer and the time
+ * zone, so those are selected as JSON sub-paths (PostgREST `alias:col->key`,
+ * verified against the live database 2026-09-23).
+ */
 export type CacheRow = {
   resort_id: number;
   nws_grid_office: string | null;
   nws_grid_x: number | null;
   nws_grid_y: number | null;
   fetched_at: string | null;
-  forecast_json: unknown;
+  fetch_source: string | null;
+  fetch_error: string | null;
+  /** Null until a forecast has ever been written for the resort. */
+  forecast_for_date: string | null;
+  /** forecast_json->stations (null for legacy v1 rows and empty rows). */
+  stations: ForecastJsonV2["stations"] | null;
+  /** forecast_json->measured */
+  measured: MeasuredSnow | null;
+  /** forecast_json->sources->nws->>time_zone */
+  time_zone: string | null;
 };
 
 export const RESORT_COLUMNS =
   "id, slug, name, state, latitude, longitude, base_elevation_ft, elevation_base, summit_elevation_ft, elevation_summit, vertical_drop, snow_report_status";
-export const CACHE_COLUMNS = "resort_id, nws_grid_office, nws_grid_x, nws_grid_y, fetched_at, forecast_json";
+export const CACHE_COLUMNS =
+  "resort_id, nws_grid_office, nws_grid_x, nws_grid_y, fetched_at, fetch_source, fetch_error, forecast_for_date, " +
+  "stations:forecast_json->stations, measured:forecast_json->measured, time_zone:forecast_json->sources->nws->>time_zone";
+
+/** fetch_error prefix written when every forecast source failed. It keeps
+ *  the failure time without touching fetched_at (the last good forecast). */
+const FAILED_AT_RE = /^failed@(\S+): /;
+
+export function failureMarker(now: Date, error: string): string {
+  return `failed@${now.toISOString()}: ${error}`.slice(0, 240);
+}
+
+/** Epoch ms of the last refresh ATTEMPT (success or failure); 0 when never
+ *  tried. This is the 45-minute lock, so a broken resort is retried at the
+ *  in-season cadence rather than on every invocation. */
+export function lastAttemptAt(cache: CacheRow | undefined | null): number {
+  if (!cache) return 0;
+  const fetched = cache.fetched_at ? Date.parse(cache.fetched_at) : NaN;
+  const m = cache.fetch_source === "failed" ? cache.fetch_error?.match(FAILED_AT_RE) : null;
+  const failed = m ? Date.parse(m[1]) : NaN;
+  return Math.max(Number.isFinite(fetched) ? fetched : 0, Number.isFinite(failed) ? failed : 0);
+}
+
+function validStations(v: unknown): ForecastJsonV2["stations"] | null {
+  if (typeof v !== "object" || v === null) return null;
+  const s = v as Partial<ForecastJsonV2["stations"]>;
+  if (!Array.isArray(s.nws) || !Array.isArray(s.snotel)) return null;
+  return { nws: s.nws, snotel: s.snotel, mapped_at: typeof s.mapped_at === "string" ? s.mapped_at : null };
+}
 
 // ---------- outcome shapes ----------
 
@@ -139,21 +184,39 @@ export type RefreshOutcome =
     }
   | { ok: false; resort_id: number; error: string };
 
+/** Samplers for the latest 24 h / 48 h / 72 h analyses, shared by a run. */
+export type Sfav2Samplers = { h24: Sfav2Sampler | null; h48: Sfav2Sampler | null; h72: Sfav2Sampler | null };
+
+export function makeSfav2Samplers(latest: Sfav2Latest | null): Sfav2Samplers {
+  return {
+    h24: latest?.h24 ? new Sfav2Sampler(latest.h24) : null,
+    h48: latest?.h48 ? new Sfav2Sampler(latest.h48) : null,
+    h72: latest?.h72 ? new Sfav2Sampler(latest.h72) : null,
+  };
+}
+
 export type RefreshContext = {
   now: Date;
   directory: StationDirectory;
-  /** Latest 24 h snowfall-analysis file, shared by the whole run (null = unavailable). */
-  sfav2: Sfav2Sampler | null;
+  /** Latest snowfall-analysis files, shared by the whole run (null = unavailable). */
+  sfav2: Sfav2Samplers;
   /** Whether this call may run the once-a-day measured layer. */
   allowMeasured: boolean;
 };
 
 // ---------- helpers ----------
 
+function coordinate(v: number | string | null): number {
+  // Number(null) is 0, which would silently place a resort with no
+  // coordinates at 0°,0° in the Gulf of Guinea.
+  if (v === null || v === "") return NaN;
+  return Number(v);
+}
+
 function resortPoint(r: ResortRow): ResortPoint | null {
-  const lat = Number(r.latitude);
-  const lon = Number(r.longitude);
-  if (!Number.isFinite(lat) || !Number.isFinite(lon)) return null;
+  const lat = coordinate(r.latitude);
+  const lon = coordinate(r.longitude);
+  if (!Number.isFinite(lat) || !Number.isFinite(lon) || (lat === 0 && lon === 0)) return null;
   const base = r.base_elevation_ft ?? r.elevation_base ?? null;
   let summit = r.summit_elevation_ft ?? r.elevation_summit ?? null;
   if (!isNum(summit) && isNum(base) && isNum(r.vertical_drop) && r.vertical_drop > 0) {
@@ -259,12 +322,13 @@ export async function refreshResort(
   const point = resortPoint(resort);
   if (!point) return { ok: false, resort_id: resort.id, error: "bad coordinates" };
   const warnings: string[] = [];
-  const prev = cached && isForecastJsonV2(cached.forecast_json) ? cached.forecast_json : null;
+  const prevStations = validStations(cached?.stations);
+  const prevMeasured = cached?.measured ?? null;
 
   // 1. NWS gridpoint (cached in weather_cache columns; /points otherwise).
   let nwsPoint: NwsPoint | null = null;
   let nwsError: string | null = null;
-  const cachedTz = prev?.sources.nws?.time_zone ?? null;
+  const cachedTz = cached?.time_zone ?? null;
   if (cached?.nws_grid_office && isNum(cached.nws_grid_x) && isNum(cached.nws_grid_y)) {
     nwsPoint = {
       office: cached.nws_grid_office,
@@ -323,7 +387,7 @@ export async function refreshResort(
   }
 
   // 3. Station mapping (cached, refreshed every 30 days) + latest observations.
-  let stations = prev?.stations ?? { nws: [], snotel: [], mapped_at: null };
+  let stations = prevStations ?? { nws: [], snotel: [], mapped_at: null };
   if (mappingIsStale(stations.mapped_at, ctx.now)) {
     try {
       const [nws, snotel] = await Promise.all([
@@ -340,17 +404,24 @@ export async function refreshResort(
   if (stations.nws.length > 0 && obs.length === 0) stations = { ...stations, mapped_at: null };
 
   // 4. Measured layer (once per local day, or when a newer analysis exists).
-  let measured: MeasuredSnow | null = prev?.measured ?? null;
+  let measured: MeasuredSnow | null = prevMeasured;
   let historyRow: HistoryRow | null = null;
-  const sfav2File = ctx.sfav2?.file.name ?? null;
+  const sfav2File = ctx.sfav2.h24?.file.name ?? null;
   if (ctx.allowMeasured && measuredIsDue(measured, yesterday, sfav2File)) {
-    const primary = stations.nws[0] ?? null;
-    const [sfav2Res, snodasRes, snotelRes, stationDayRes] = await Promise.allSettled([
-      ctx.sfav2 ? ctx.sfav2.sample(point.lat, point.lon) : Promise.resolve(null),
+    // History temps come from the LOWEST live station (the mapping is
+    // ranked highest first, so that is the last entry): the surface
+    // classifier wants base-area highs and lows, not the summit's. The
+    // highest station still feeds the live "now" observation.
+    const historyStation = stations.nws.length ? stations.nws[stations.nws.length - 1] : null;
+    const sample = (s: Sfav2Sampler | null) => (s ? s.sample(point.lat, point.lon) : Promise.resolve(null));
+    const [sfav2Res, sfav2Res48, sfav2Res72, snodasRes, snotelRes, stationDayRes] = await Promise.allSettled([
+      sample(ctx.sfav2.h24),
+      sample(ctx.sfav2.h48),
+      sample(ctx.sfav2.h72),
       isConus(point.lat, point.lon) ? fetchSnodasPoint(point.lat, point.lon) : Promise.resolve(null),
       stations.snotel[0] ? readSnotel(stations.snotel[0], yesterday, ctx.now) : Promise.resolve(null),
-      primary
-        ? fetchObservations(primary.id, {
+      historyStation
+        ? fetchObservations(historyStation.id, {
             start: new Date(ctx.now.getTime() - 40 * 3_600_000),
             end: ctx.now,
             limit: 500,
@@ -362,7 +433,9 @@ export async function refreshResort(
       warnings.push(`${label}: ${errorText(r.reason)}`);
       return null;
     };
-    const sfav2In = settled(sfav2Res, "nohrsc sfav2");
+    const sfav2In = settled(sfav2Res, "nohrsc sfav2 24h");
+    const sfav2In48 = settled(sfav2Res48, "nohrsc sfav2 48h");
+    const sfav2In72 = settled(sfav2Res72, "nohrsc sfav2 72h");
     const snodas = settled(snodasRes, "snodas");
     const snotel = settled(snotelRes, "snotel");
     const stationDay = settled(stationDayRes, "station history");
@@ -372,8 +445,10 @@ export async function refreshResort(
       resortId: resort.id,
       date: yesterday,
       sfav2In,
+      sfav2ValidEnd: ctx.sfav2.h24?.file.validEnd ?? null,
       snotel,
       stationDay,
+      station: historyStation ? { id: historyStation.id, elevation_ft: historyStation.elevation_ft } : null,
       omDay,
       omHours,
     });
@@ -381,7 +456,9 @@ export async function refreshResort(
     measured = {
       for_date: yesterday,
       sfav2_24h_in: sfav2In,
-      sfav2_valid_end: ctx.sfav2?.file.validEnd ?? null,
+      sfav2_48h_in: sfav2In48,
+      sfav2_72h_in: sfav2In72,
+      sfav2_valid_end: ctx.sfav2.h24?.file.validEnd ?? null,
       sfav2_file: sfav2File,
       snodas_depth_in: snodas?.depth_in ?? null,
       snodas_swe_in: snodas?.swe_in ?? null,
@@ -480,15 +557,22 @@ export type WriteStats = {
 
 /**
  * Persist a batch of outcomes. Successful rows are upserted whole;
- * failed resorts get only fetch_error/fetched_at updated so PostgREST's
- * column-union upsert can't null out yesterday's forecast (the audit's
- * finding api-crons-email-6).
+ * failed resorts get only fetch_source/fetch_error written (one row at a
+ * time, so PostgREST's column-union upsert can't null out yesterday's
+ * forecast — the audit's finding api-crons-email-6). fetched_at is left
+ * alone on failure: it is the time of the last GOOD forecast, which is
+ * what the resort page shows as "synced" and what /api/health measures.
  */
 export async function writeOutcomes(
   supabase: SupabaseClient,
   outcomes: RefreshOutcome[],
-  opts: { resortsById: Map<number, ResortRow>; recentHistory: Map<number, Array<{ observed_date: string; snow_24h_in: number | null }>> },
+  opts: {
+    resortsById: Map<number, ResortRow>;
+    recentHistory: Map<number, Array<{ observed_date: string; snow_24h_in: number | null }>>;
+    now?: Date;
+  },
 ): Promise<WriteStats> {
+  const now = opts.now ?? new Date();
   const stats: WriteStats = {
     cacheUpserted: 0,
     cacheFailedMarked: 0,
@@ -507,10 +591,15 @@ export async function writeOutcomes(
     else stats.cacheUpserted += good.length;
   }
   for (const o of bad) {
+    // Single-row upsert of three columns: updates only those columns on an
+    // existing row, and creates a marker row for a resort that has never
+    // succeeded so the 45-minute lock applies to it too.
     const { error } = await supabase
       .from("weather_cache")
-      .update({ fetched_at: new Date().toISOString(), fetch_source: "failed", fetch_error: o.error.slice(0, 240) })
-      .eq("resort_id", o.resort_id);
+      .upsert(
+        { resort_id: o.resort_id, fetch_source: "failed", fetch_error: failureMarker(now, o.error) },
+        { onConflict: "resort_id" },
+      );
     if (error) stats.dbErrors.push(`weather_cache(failed ${o.resort_id}): ${error.message}`);
     else stats.cacheFailedMarked++;
   }
@@ -526,6 +615,8 @@ export async function writeOutcomes(
 
   // Measured snowfall → resorts.snow_new_* for resorts WITHOUT a licensed
   // report (status 'reported' rows belong to the snow-report provider).
+  // 48 h prefers the NOHRSC 48 h analysis (one measured window) over a sum
+  // of two daily rows; 7 d has no analysis product and stays a sum.
   const snowWrites: ResortSnowWrite[] = [];
   for (const o of good) {
     if (!o.historyRow) continue;
@@ -537,10 +628,11 @@ export async function writeOutcomes(
     const series = [o.historyRow, ...prior]
       .sort((a, b) => (a.observed_date < b.observed_date ? 1 : -1))
       .map((h) => h.snow_24h_in);
+    const measured48 = o.cacheRow.forecast_json.measured?.sfav2_48h_in ?? null;
     snowWrites.push({
       id: o.resort_id,
       snow_new_24h_in: isNum(o.historyRow.snow_24h_in) ? Math.round(o.historyRow.snow_24h_in) : null,
-      snow_new_48h_in: roundInt(sumRecentSnow(series, 2)),
+      snow_new_48h_in: roundInt(isNum(measured48) ? measured48 : sumRecentSnow(series, 2)),
       snow_new_7d_in: roundInt(sumRecentSnow(series, 7)),
     });
   }
@@ -561,4 +653,39 @@ export async function writeOutcomes(
 
 function roundInt(v: number | null): number | null {
   return isNum(v) ? Math.round(v) : null;
+}
+
+// ---------- budgeted refresh ----------
+
+/**
+ * refreshResort() under a hard budget. Every fetch in its chain inherits
+ * the deadline signal (see lib/weather/http.ts), so when the budget runs
+ * out the sockets are cancelled and the resort is reported as failed with
+ * "deadline" — instead of the whole function being killed by Vercel with
+ * the batch's results, the cron_runs row and the log line all lost.
+ */
+export async function refreshResortWithin(
+  resort: ResortRow,
+  cached: CacheRow | undefined,
+  ctx: RefreshContext,
+  budgetMs: number,
+): Promise<RefreshOutcome> {
+  const ac = new AbortController();
+  const seconds = Math.max(0, Math.round(budgetMs / 1000));
+  const deadlineOutcome: RefreshOutcome = {
+    ok: false,
+    resort_id: resort.id,
+    error: `deadline: not finished within ${seconds} s`,
+  };
+  const onAbort = new Promise<RefreshOutcome>((resolve) => {
+    ac.signal.addEventListener("abort", () => resolve(deadlineOutcome), { once: true });
+  });
+  const timer = setTimeout(() => ac.abort(), Math.max(0, budgetMs));
+  try {
+    return await Promise.race([runWithDeadline(ac.signal, () => refreshResort(resort, cached, ctx)), onAbort]);
+  } catch (e) {
+    return isAbortError(e) ? deadlineOutcome : { ok: false, resort_id: resort.id, error: errorText(e, 240) };
+  } finally {
+    clearTimeout(timer);
+  }
 }

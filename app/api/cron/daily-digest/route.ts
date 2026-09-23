@@ -20,11 +20,12 @@
 //   RESEND_API_KEY               (the only outbound dependency)
 //   NEXT_PUBLIC_SITE_URL         (for resort and unsubscribe links)
 //
-// Without RESEND_API_KEY we 503 cleanly so a fresh deploy doesn't crash the
-// cron run before the user has wired up the API key.
+// Runs under lib/cronRun.ts like every other cron: auth, a cron_runs row,
+// one JSON log line, HTTP 500 when not ok. A missing RESEND_API_KEY is a
+// failed run (nothing can be sent), and a run is ok when at most
+// FAIL_SHARE_LIMIT of the due sends failed.
 
-import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { runCron, type CronContext, type CronSummary } from "@/lib/cronRun";
 import { buildDigestEmail, type FavoriteResortSnapshot } from "@/lib/emailTemplates";
 
 export const runtime = "nodejs";
@@ -32,6 +33,7 @@ export const maxDuration = 300;
 
 const RESEND_FROM = process.env.RESEND_FROM_EMAIL ?? "Wynla <digest@wynla.app>";
 const SITE_BASE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://wynla.app";
+const FAIL_SHARE_LIMIT = 0.3;
 
 type DigestSub = {
   id: number;
@@ -50,7 +52,7 @@ type ResortRow = {
   state: string;
   pass: string;
   snow_new_24h_in: number | null;
-  snow_report_status: string | null;
+  currently_open: boolean | null;
 };
 
 type WeatherRow = {
@@ -59,6 +61,17 @@ type WeatherRow = {
   conditions_short: string | null;
   snow_24h_in: number | null;
 };
+
+const RESORT_SELECT = "id, slug, name, state, pass, snow_new_24h_in, currently_open";
+
+/** The status word shown next to the resort in the email. snow_report_status
+ *  is only 'no_feed' | 'reported' now, so the verified open flag is the
+ *  human-readable signal; unknown shows nothing. */
+function statusLabel(r: ResortRow): string | null {
+  if (r.currently_open === true) return "Open";
+  if (r.currently_open === false) return "Closed";
+  return null;
+}
 
 function isDue(sub: DigestSub, nowUtc: Date): boolean {
   if (!sub.enabled) return false;
@@ -82,6 +95,8 @@ async function sendViaResend(
   html: string,
   text: string,
 ): Promise<{ ok: boolean; error?: string; id?: string }> {
+  const ac = new AbortController();
+  const timer = setTimeout(() => ac.abort(), 15_000);
   try {
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
@@ -96,6 +111,7 @@ async function sendViaResend(
         html,
         text,
       }),
+      signal: ac.signal,
     });
     if (!res.ok) {
       const body = await res.text().catch(() => "");
@@ -105,41 +121,17 @@ async function sendViaResend(
     return { ok: true, id: j.id };
   } catch (e) {
     return { ok: false, error: String((e as Error)?.message ?? e).slice(0, 200) };
+  } finally {
+    clearTimeout(timer);
   }
 }
 
-export async function GET(request: Request) {
-  // Same auth pattern as refresh-weather: Vercel cron sends Authorization: Bearer ${CRON_SECRET}.
-  const auth = request.headers.get("authorization");
-  const cronSecret = process.env.CRON_SECRET;
-  // Fail closed: a missing secret must NOT make this service-role endpoint
-  // publicly invokable (it can blast digest emails to all subscribers).
-  if (!cronSecret) {
-    return NextResponse.json(
-      { ok: false, reason: "cron_secret_not_configured" },
-      { status: 503 },
-    );
-  }
-  if (auth !== `Bearer ${cronSecret}`) {
-    return NextResponse.json({ ok: false, reason: "unauthorized" }, { status: 401 });
-  }
-
-  const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!SUPABASE_URL || !SERVICE_KEY) {
-    return NextResponse.json({ ok: false, reason: "missing supabase env" }, { status: 503 });
-  }
+async function runDigest(ctx: CronContext): Promise<CronSummary> {
+  const { supabase, startedAt: now } = ctx;
   const RESEND_API_KEY = process.env.RESEND_API_KEY;
   if (!RESEND_API_KEY) {
-    return NextResponse.json(
-      { ok: false, reason: "missing RESEND_API_KEY — set it in Vercel env to enable digest sends" },
-      { status: 503 },
-    );
+    return { ok: false, reason: "missing RESEND_API_KEY — set it in Vercel env to enable digest sends" };
   }
-
-  const supabase = createClient(SUPABASE_URL, SERVICE_KEY, {
-    auth: { persistSession: false },
-  });
 
   // 1. Eligible digest subscriptions (we filter cadence locally so we can
   //    log skipped rows for observability).
@@ -147,15 +139,12 @@ export async function GET(request: Request) {
     .from("digest_subscriptions")
     .select("id, user_id, email, frequency, threshold_in, last_sent_at, enabled")
     .eq("enabled", true);
-  if (subsErr) {
-    return NextResponse.json({ ok: false, reason: subsErr.message }, { status: 500 });
-  }
+  if (subsErr) return { ok: false, reason: `digest_subscriptions: ${subsErr.message}` };
   const subs = (subsData ?? []) as DigestSub[];
 
-  const now = new Date();
   const dueSubs = subs.filter((s) => isDue(s, now));
   if (dueSubs.length === 0) {
-    return NextResponse.json({ ok: true, sent: 0, skipped: subs.length, reason: "nothing due" });
+    return { ok: true, sent: 0, skipped: subs.length, reason: "nothing due" };
   }
 
   // 2. Bulk-fetch favorites for all due users in one query (service-role
@@ -165,9 +154,7 @@ export async function GET(request: Request) {
     .from("favorites")
     .select("user_id, resort_id")
     .in("user_id", userIds);
-  if (favErr) {
-    return NextResponse.json({ ok: false, reason: favErr.message }, { status: 500 });
-  }
+  if (favErr) return { ok: false, reason: `favorites: ${favErr.message}` };
   const favsByUser = new Map<string, number[]>();
   for (const row of (favData ?? []) as Array<{ user_id: string; resort_id: number }>) {
     const arr = favsByUser.get(row.user_id) ?? [];
@@ -185,10 +172,7 @@ export async function GET(request: Request) {
   const resortMap = new Map<number, ResortRow>();
   const weatherMap = new Map<number, WeatherRow>();
   if (allResortIds.length > 0) {
-    const { data: resortsData } = await supabase
-      .from("resorts")
-      .select("id, slug, name, state, pass, snow_new_24h_in, snow_report_status")
-      .in("id", allResortIds);
+    const { data: resortsData } = await supabase.from("resorts").select(RESORT_SELECT).in("id", allResortIds);
     for (const r of (resortsData ?? []) as ResortRow[]) resortMap.set(r.id, r);
 
     const { data: weatherData } = await supabase
@@ -206,7 +190,7 @@ export async function GET(request: Request) {
   if (anyUserHasZeroFavs) {
     const { data: topData } = await supabase
       .from("resorts")
-      .select("id, slug, name, state, pass, snow_new_24h_in, snow_report_status")
+      .select(RESORT_SELECT)
       .gt("snow_new_24h_in", 0)
       .order("snow_new_24h_in", { ascending: false })
       .limit(5);
@@ -244,7 +228,7 @@ export async function GET(request: Request) {
           tempHigh: w?.temp_high_f ?? null,
           conditions: w?.conditions_short ?? null,
           snowNew24h: r.snow_new_24h_in ?? w?.snow_24h_in ?? null,
-          snowReportStatus: r.snow_report_status ?? null,
+          snowReportStatus: statusLabel(r),
           primaryPass: r.pass,
         });
       }
@@ -259,7 +243,7 @@ export async function GET(request: Request) {
           tempHigh: w?.temp_high_f ?? null,
           conditions: w?.conditions_short ?? null,
           snowNew24h: r.snow_new_24h_in ?? null,
-          snowReportStatus: r.snow_report_status ?? null,
+          snowReportStatus: statusLabel(r),
           primaryPass: r.pass,
         });
       }
@@ -293,12 +277,21 @@ export async function GET(request: Request) {
     sent++;
   }
 
-  return NextResponse.json({
-    ok: true,
+  const attempted = sent + errors.length;
+  const failShare = attempted ? errors.length / attempted : 0;
+  const ok = failShare <= FAIL_SHARE_LIMIT;
+  return {
+    ok,
+    reason: ok ? undefined : "too_many_send_failures",
     sent,
     skippedEmpty,
-    errors,
+    fail_share: Math.round(failShare * 100) / 100,
+    errors: errors.slice(0, 20),
     eligible: dueSubs.length,
     totalEnabled: subs.length,
-  });
+  };
+}
+
+export async function GET(request: Request) {
+  return runCron(request, "daily-digest", maxDuration, runDigest);
 }

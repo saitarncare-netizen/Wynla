@@ -9,20 +9,23 @@
 //
 // Per resort the work is: NWS gridpoint grid → Open-Meteo at base and
 // summit → 1-3 station observations → (once per local day) NOHRSC
-// snowfall analysis, SNODAS, SNOTEL and the station's daily summary for
-// weather_history. See lib/weather/refreshResort.ts.
+// snowfall analyses (24/48/72 h), SNODAS, SNOTEL and the station's daily
+// summary for weather_history. See lib/weather/refreshResort.ts.
 //
-// Budget handling: maxDuration is 300 s (the Hobby ceiling). Workers stop
-// picking up resorts when less than DISPATCH_FLOOR_MS remain and every
-// completed batch is written immediately, so a slow upstream day loses
-// only the tail, which the next invocation picks up first because it is
-// then the stalest. Resorts refreshed within MIN_AGE_MIN are skipped, so
-// an overlapping Vercel + GitHub invocation is cheap.
+// Budget handling: maxDuration is 300 s (the Hobby ceiling); runCron's
+// deadline is 45 s before that. Workers stop picking up resorts when less
+// than DISPATCH_FLOOR_MS remain, every resort runs under its own budget
+// (RESORT_BUDGET_MS or whatever is left, whichever is smaller) with its
+// upstream calls cancelled at the deadline, and every completed batch is
+// written immediately. A slow upstream day therefore loses only the tail,
+// which the next invocation picks up first because it is then the
+// stalest. Resorts attempted within MIN_AGE_MIN are skipped, so an
+// overlapping Vercel + GitHub invocation is cheap.
 //
 // After the writes, the Snow Surface Forecast classifier runs on
 // observed history (weather_history, through yesterday) plus today's
 // forecast, then the pipeline health check runs and emails the founder
-// if the data is stale (deduped to once per 12 h).
+// if the data is stale (deduped to once per 12 h through cron_runs).
 //
 // Query params (all optional): ?limit=N (max resorts), ?resort=ID (one
 // resort), ?force=1 (ignore the 45-minute freshness floor).
@@ -30,12 +33,13 @@
 import { computeHealth, notifyIfUnhealthy, runCron, type CronContext } from "@/lib/cronRun";
 import { isGlobalOffSeasonNow } from "@/lib/seasonDates";
 import { classifyToday, type DailyWeather, type SurfaceCode } from "@/lib/snowSurface";
-import { isForecastJsonV2 } from "@/lib/weather/forecastJson";
 import { errorText } from "@/lib/weather/http";
-import { findLatestSfav2, Sfav2Sampler } from "@/lib/weather/nohrsc";
+import { findLatestSfav2Set } from "@/lib/weather/nohrsc";
 import {
   CACHE_COLUMNS,
-  refreshResort,
+  lastAttemptAt,
+  makeSfav2Samplers,
+  refreshResortWithin,
   RESORT_COLUMNS,
   writeOutcomes,
   type CacheRow,
@@ -52,7 +56,13 @@ export const maxDuration = 300;
 const CONCURRENCY = 12;
 const FLUSH_EVERY = 25;
 const MIN_AGE_MIN = 45;
-const DISPATCH_FLOOR_MS = 25_000;
+// Worst case for one resort: first-time station mapping (up to 6 paged
+// state listings + 6 liveness probes) on top of the forecast and measured
+// calls, each fetch 20-25 s with one retry. 90 s covers the measured
+// p95 with margin; the dispatch floor must be at least that so a resort
+// started at the floor can still finish before the deadline.
+const RESORT_BUDGET_MS = 90_000;
+const DISPATCH_FLOOR_MS = 95_000;
 const FAIL_SHARE_LIMIT = 0.3;
 
 type ResortWithStatus = ResortRow & { currently_open: boolean | null };
@@ -67,14 +77,13 @@ type HistoryLite = {
   wind_mph_avg: number | null;
 };
 
-/** Stalest first; among equally stale rows, resorts in their local
- *  morning (05-10) go first because that is when their snow reports and
- *  the 12Z analysis land. */
+/** Stalest GOOD forecast first; among equally stale rows, resorts in their
+ *  local morning (05-10) go first because that is when their snow reports
+ *  and the 12Z analysis land. */
 function priority(cache: CacheRow | undefined, now: Date): number {
   const fetched = cache?.fetched_at ? Date.parse(cache.fetched_at) : 0;
   const ageMin = (now.getTime() - fetched) / 60_000;
-  const tz = isForecastJsonV2(cache?.forecast_json) ? cache!.forecast_json.sources.nws?.time_zone ?? null : null;
-  const h = localHour(now, tz);
+  const h = localHour(now, cache?.time_zone ?? null);
   const morningBonus = h >= 5 && h <= 10 ? 90 : 0;
   return ageMin + morningBonus;
 }
@@ -95,28 +104,23 @@ async function refreshAll(ctx: CronContext, request: Request) {
   if (resortsErr || !resortsData) return { ok: false, reason: `resorts: ${resortsErr?.message ?? "none"}` };
   if (cacheErr) return { ok: false, reason: `weather_cache: ${cacheErr.message}` };
   const resorts = resortsData as unknown as ResortWithStatus[];
-  const cacheBy = new Map((cacheData as CacheRow[]).map((c) => [c.resort_id, c]));
+  const cacheBy = new Map((cacheData as unknown as CacheRow[]).map((c) => [c.resort_id, c]));
   const resortsById = new Map(resorts.map((r) => [r.id, r]));
 
-  // Freshness floor + ordering.
+  // Freshness floor (last attempt, success or failure) + ordering.
   const cutoff = now.getTime() - MIN_AGE_MIN * 60_000;
   const queue = resorts
-    .filter((r) => {
-      if (force || onlyId) return true;
-      const c = cacheBy.get(r.id);
-      return !c?.fetched_at || Date.parse(c.fetched_at) < cutoff || c.forecast_json === null;
-    })
+    .filter((r) => force || onlyId || lastAttemptAt(cacheBy.get(r.id)) < cutoff)
     .sort((a, b) => priority(cacheBy.get(b.id), now) - priority(cacheBy.get(a.id), now))
     .slice(0, Number.isFinite(limit) ? limit : undefined);
   const skippedFresh = resorts.length - queue.length;
 
-  // Shared per-run resources: station directories and the latest 24 h
-  // snowfall analysis (one header read, one strip per latitude row).
+  // Shared per-run resources: station directories and the latest
+  // snowfall analyses (one header read per file, one strip per latitude row).
   const directory = new StationDirectory();
-  let sfav2: Sfav2Sampler | null = null;
+  let sfav2 = makeSfav2Samplers(null);
   try {
-    const file = await findLatestSfav2(now);
-    sfav2 = file ? new Sfav2Sampler(file) : null;
+    sfav2 = makeSfav2Samplers(await findLatestSfav2Set(now));
   } catch (e) {
     console.warn(`[refresh-weather] sfav2 listing failed: ${errorText(e)}`);
   }
@@ -136,7 +140,8 @@ async function refreshAll(ctx: CronContext, request: Request) {
     recentHistory.set(h.resort_id, arr);
   }
 
-  // Worker pool with a hard dispatch floor and incremental flushes.
+  // Worker pool with a hard dispatch floor, per-resort budgets and
+  // incremental flushes.
   const refreshCtx = { now, directory, sfav2, allowMeasured: true };
   const done: RefreshOutcome[] = [];
   let pending: RefreshOutcome[] = [];
@@ -154,7 +159,7 @@ async function refreshAll(ctx: CronContext, request: Request) {
     const batch = pending;
     pending = [];
     flushing = flushing.then(async () => {
-      mergeStats(await writeOutcomes(supabase, batch, { resortsById, recentHistory }));
+      mergeStats(await writeOutcomes(supabase, batch, { resortsById, recentHistory, now }));
     });
   };
   let next = 0;
@@ -166,12 +171,8 @@ async function refreshAll(ctx: CronContext, request: Request) {
         return;
       }
       const resort = queue[next++];
-      let outcome: RefreshOutcome;
-      try {
-        outcome = await refreshResort(resort, cacheBy.get(resort.id), refreshCtx);
-      } catch (e) {
-        outcome = { ok: false, resort_id: resort.id, error: errorText(e, 240) };
-      }
+      const budget = Math.min(RESORT_BUDGET_MS, ctx.msLeft() - 5_000);
+      const outcome = await refreshResortWithin(resort, cacheBy.get(resort.id), refreshCtx, budget);
       done.push(outcome);
       pending.push(outcome);
       if (pending.length >= FLUSH_EVERY) flush();
@@ -182,7 +183,8 @@ async function refreshAll(ctx: CronContext, request: Request) {
   await flushing;
 
   const okOutcomes = done.filter((o): o is Extract<RefreshOutcome, { ok: true }> => o.ok);
-  const failed = done.filter((o) => !o.ok);
+  const failed = done.filter((o): o is Extract<RefreshOutcome, { ok: false }> => !o.ok);
+  const timedOut = failed.filter((f) => f.error.startsWith("deadline")).length;
   const failShare = done.length ? failed.length / done.length : 0;
 
   // Snow Surface Forecast — observed history (through yesterday) plus a
@@ -278,7 +280,7 @@ async function refreshAll(ctx: CronContext, request: Request) {
   const warningSample = okOutcomes
     .flatMap((o) => o.warnings.map((w) => `${o.resort_id}: ${w}`))
     .slice(0, 8);
-  const failureSample = failed.slice(0, 8).map((f) => `${f.resort_id}: ${(f as { error: string }).error}`);
+  const failureSample = failed.slice(0, 8).map((f) => `${f.resort_id}: ${f.error}`);
   const ok = failShare <= FAIL_SHARE_LIMIT && writeStats.dbErrors.length === 0 && (done.length > 0 || queue.length === 0);
   return {
     ok,
@@ -287,11 +289,16 @@ async function refreshAll(ctx: CronContext, request: Request) {
     processed: done.length,
     refreshed: okOutcomes.length,
     failed: failed.length,
+    timed_out: timedOut,
     fail_share: Math.round(failShare * 100) / 100,
     skipped_fresh: skippedFresh,
     remaining: queue.length - done.length,
     out_of_time: outOfTime,
-    sfav2_file: sfav2?.file.name ?? null,
+    sfav2_files: {
+      h24: sfav2.h24?.file.name ?? null,
+      h48: sfav2.h48?.file.name ?? null,
+      h72: sfav2.h72?.file.name ?? null,
+    },
     writes: writeStats,
     surface,
     health_verdict: health?.verdict ?? null,

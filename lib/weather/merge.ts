@@ -102,6 +102,7 @@ export function mergeDays(input: MergeInput): ForecastDay[] {
         gust_mph: nws.gust_mph_max ?? om?.gust_mph_max ?? null,
         freezing_level_ft: isNum(fl) ? Math.round(fl) : null,
         source: "nws",
+        nws_coverage: round(nws.coverage, 2),
       });
     } else if (om) {
       out.push({
@@ -244,8 +245,13 @@ export type HistoryInputs = {
   resortId: number;
   date: string; // yesterday, resort-local
   sfav2In: number | null;
+  /** End of the analysis window (ISO UTC) — recorded in the source label
+   *  because the 24 h window ends at 00Z/12Z, not at local midnight. */
+  sfav2ValidEnd?: string | null;
   snotel: SnotelObservation | null;
   stationDay: DailyObsSummary | null;
+  /** The station behind `stationDay` (id + elevation go into the label). */
+  station?: { id: string; elevation_ft: number | null } | null;
   /** Open-Meteo base daily row for `date` (past_days=1 gives it). */
   omDay: OpenMeteoDay | null;
   /** Open-Meteo base hours on `date`, for a modelled wind average. */
@@ -280,14 +286,23 @@ export function buildHistoryRow(
   };
 
   const snotelIsForDate = i.snotel?.observed_date === i.date ? i.snotel : null;
+  // Labels carry the site and its elevation so a reader of the row can
+  // tell a summit reading from a base one.
+  const snotelLabel = snotelIsForDate
+    ? `snotel:${snotelIsForDate.triplet}${elevationSuffix(snotelIsForDate.elevation_ft)}`
+    : "snotel";
+  const stationLabel = i.station ? `station:${i.station.id}${elevationSuffix(i.station.elevation_ft)}` : "station";
+  const analysisLabel = i.sfav2ValidEnd
+    ? `nohrsc-analysis:24h-to-${i.sfav2ValidEnd.replace(/:\d\d(?:\.\d+)?Z$/, "Z")}`
+    : "nohrsc-analysis";
   const temp_high_f = label<number>("temp_high_f", [
-    ["snotel", snotelIsForDate?.temp_max_f],
-    ["station", i.stationDay?.temp_high_f],
+    [snotelLabel, snotelIsForDate?.temp_max_f],
+    [stationLabel, i.stationDay?.temp_high_f],
     ["open-meteo", i.omDay?.temp_high_f],
   ]);
   const temp_low_f = label<number>("temp_low_f", [
-    ["snotel", snotelIsForDate?.temp_min_f],
-    ["station", i.stationDay?.temp_low_f],
+    [snotelLabel, snotelIsForDate?.temp_min_f],
+    [stationLabel, i.stationDay?.temp_low_f],
     ["open-meteo", i.omDay?.temp_low_f],
   ]);
   // Depth change is a floor on snowfall (settlement only lowers it), so
@@ -297,23 +312,23 @@ export function buildHistoryRow(
       ? round(snotelIsForDate!.depth_change_in!, 1)
       : null;
   const snow_24h_in = label<number>("snow_24h_in", [
-    ["nohrsc-analysis", i.sfav2In],
-    ["snotel-depth-change", snotelDelta],
+    [analysisLabel, i.sfav2In],
+    [`snotel-depth-change:${snotelIsForDate?.triplet ?? "?"}`, snotelDelta],
     ["open-meteo", i.omDay?.snow_in],
   ]);
   const rain_24h_in = label<number>("rain_24h_in", [["open-meteo", i.omDay?.rain_in]]);
   const precip_24h_in = label<number>("precip_24h_in", [
-    ["snotel", snotelIsForDate?.precip_in],
-    ["station", i.stationDay && i.stationDay.sample_count >= 12 ? i.stationDay.precip_in : null],
+    [snotelLabel, snotelIsForDate?.precip_in],
+    [stationLabel, i.stationDay && i.stationDay.sample_count >= 12 ? i.stationDay.precip_in : null],
     ["open-meteo", i.omDay?.precip_in],
   ]);
   const omWind = meanOrNull(i.omHours.map((h) => h.wind_mph));
   const wind_mph_avg = label<number>("wind_mph_avg", [
-    ["station", i.stationDay?.wind_mph_avg],
+    [stationLabel, i.stationDay?.wind_mph_avg],
     ["open-meteo", isNum(omWind) ? Math.round(omWind) : null],
   ]);
   const wind_dir_short = pick<string>([
-    ["station", i.stationDay?.wind_dir_short],
+    [stationLabel, i.stationDay?.wind_dir_short],
     ["open-meteo", compass(i.omDay?.wind_dir_deg)],
   ]);
   const conditions_short = pick<string>([["open-meteo", i.omDay?.conditions_short]]);
@@ -336,6 +351,10 @@ export function buildHistoryRow(
     },
     sources: src,
   };
+}
+
+function elevationSuffix(ft: number | null | undefined): string {
+  return isNum(ft) ? `@${Math.round(ft)}ft` : "";
 }
 
 // ---------- assembling the v2 document ----------

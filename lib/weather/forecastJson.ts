@@ -33,6 +33,9 @@ export type ForecastDay = {
   freezing_level_ft?: number | null;
   /** Which source produced the headline numbers for this day. */
   source?: "nws" | "open-meteo";
+  /** Fraction (0-1) of the day the NWS grid covered; set on NWS days so a
+   *  partially covered day is visible instead of silently blended. */
+  nws_coverage?: number | null;
 };
 
 export type ForecastHour = {
@@ -101,6 +104,9 @@ export type MeasuredSnow = {
   for_date: string | null;
   /** NOHRSC National Snowfall Analysis, 24 h ending at `sfav2_valid_end`, inches. */
   sfav2_24h_in: number | null;
+  /** Same analysis, 48 h and 72 h windows ending at the same time (measured storm totals). */
+  sfav2_48h_in: number | null;
+  sfav2_72h_in: number | null;
   sfav2_valid_end: string | null; // ISO-8601 UTC
   sfav2_file: string | null;
   /** SNODAS snow depth / SWE at the resort point (natural snow, no snowmaking). */
@@ -110,7 +116,9 @@ export type MeasuredSnow = {
   /** Raw pixel values as returned by NOAA's map service, kept for auditing units. */
   snodas_raw: { depth: number | null; swe: number | null } | null;
   snotel: SnotelObservation | null;
-  /** Which source fed each weather_history column. */
+  /** Which source fed each weather_history column, e.g.
+   *  `station:HDP@11000ft`, `snotel:766:UT:SNTL@9177ft`,
+   *  `nohrsc-analysis:24h-to-2026-09-23T12:00Z`, `open-meteo`. */
   history_sources: Record<string, string> | null;
 };
 

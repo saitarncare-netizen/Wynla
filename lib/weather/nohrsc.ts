@@ -157,21 +157,38 @@ export function parseSfav2Listing(html: string, yyyymm: string, hours: 24 | 48 |
   return out.sort((a, b) => (a.validEnd < b.validEnd ? -1 : 1));
 }
 
-/** Newest available 24 h analysis file (checks this month, then last). */
-export async function findLatestSfav2(now: Date = new Date()): Promise<Sfav2File | null> {
+export type Sfav2Hours = 24 | 48 | 72;
+
+/** Newest 24 h / 48 h / 72 h analysis files. NOHRSC issues all three at
+ *  00Z and 12Z (verified on the live listing 2026-09-23: 90 files each
+ *  for September), so one directory read serves every window. */
+export type Sfav2Latest = { h24: Sfav2File | null; h48: Sfav2File | null; h72: Sfav2File | null };
+
+export async function findLatestSfav2Set(now: Date = new Date()): Promise<Sfav2Latest> {
   const months = [now, new Date(now.getTime() - 20 * 86_400_000)].map(
     (d) => `${d.getUTCFullYear()}${String(d.getUTCMonth() + 1).padStart(2, "0")}`,
   );
+  const out: Sfav2Latest = { h24: null, h48: null, h72: null };
   for (const yyyymm of Array.from(new Set(months))) {
     try {
       const html = await fetchText(`${SFAV2_BASE}/${yyyymm}/`, { timeoutMs: 20_000 });
-      const files = parseSfav2Listing(html, yyyymm, 24);
-      if (files.length) return files[files.length - 1];
+      for (const [key, hours] of [["h24", 24], ["h48", 48], ["h72", 72]] as const) {
+        if (out[key]) continue;
+        const files = parseSfav2Listing(html, yyyymm, hours);
+        if (files.length) out[key] = files[files.length - 1];
+      }
+      if (out.h24 && out.h48 && out.h72) break;
     } catch {
       /* try the previous month */
     }
   }
-  return null;
+  return out;
+}
+
+/** Newest available analysis file for one window (checks this month, then last). */
+export async function findLatestSfav2(now: Date = new Date(), hours: Sfav2Hours = 24): Promise<Sfav2File | null> {
+  const set = await findLatestSfav2Set(now);
+  return hours === 24 ? set.h24 : hours === 48 ? set.h48 : set.h72;
 }
 
 export type TiffGeometry = {
@@ -186,14 +203,79 @@ export type TiffGeometry = {
   stripByteCounts: number[];
 };
 
-/** Parse the IFD of a striped single-band little-endian GeoTIFF header.
- *  Only the tags the sampler needs. Throws on unsupported layouts. */
-export function parseTiffHeader(bytes: Uint8Array): TiffGeometry {
-  const dv = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
-  if (!(bytes[0] === 0x49 && bytes[1] === 0x49)) throw new Error("sfav2: not little-endian TIFF");
-  if (dv.getUint16(2, true) !== 42) throw new Error("sfav2: bad TIFF magic");
-  const ifd = dv.getUint32(4, true);
-  const n = dv.getUint16(ifd, true);
+/**
+ * Thrown by the header parser when it needs bytes that have not been
+ * fetched yet. The sampler answers it with one more range read and
+ * parses again. Needed because the 24 h file keeps its IFD at byte 8
+ * while the 48 h / 72 h files (same producer, different GDAL options)
+ * put the IFD and every out-of-line array at the END of the file
+ * (verified 2026-09-23: IFD at 213,372 of 220,816 bytes).
+ */
+export class NeedBytesError extends Error {
+  readonly offset: number;
+  readonly length: number;
+  constructor(offset: number, length: number) {
+    super(`sfav2: header needs bytes ${offset}..${offset + length - 1}`);
+    this.name = "NeedBytesError";
+    this.offset = offset;
+    this.length = length;
+  }
+}
+
+/** A file seen through a handful of fetched byte ranges. Reads outside
+ *  the fetched ranges throw NeedBytesError instead of a DataView error. */
+export class SparseBytes {
+  private chunks: Array<{ at: number; dv: DataView; bytes: Uint8Array }> = [];
+
+  add(at: number, bytes: Uint8Array): void {
+    this.chunks.push({ at, bytes, dv: new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength) });
+  }
+
+  private locate(offset: number, length: number): { dv: DataView; rel: number; bytes: Uint8Array } {
+    for (const c of this.chunks) {
+      if (offset >= c.at && offset + length <= c.at + c.bytes.byteLength) {
+        return { dv: c.dv, rel: offset - c.at, bytes: c.bytes };
+      }
+    }
+    throw new NeedBytesError(offset, length);
+  }
+
+  u8(o: number): number {
+    const { bytes, rel } = this.locate(o, 1);
+    return bytes[rel];
+  }
+  u16(o: number): number {
+    const { dv, rel } = this.locate(o, 2);
+    return dv.getUint16(rel, true);
+  }
+  u32(o: number): number {
+    const { dv, rel } = this.locate(o, 4);
+    return dv.getUint32(rel, true);
+  }
+  f32(o: number): number {
+    const { dv, rel } = this.locate(o, 4);
+    return dv.getFloat32(rel, true);
+  }
+  f64(o: number): number {
+    const { dv, rel } = this.locate(o, 8);
+    return dv.getFloat64(rel, true);
+  }
+}
+
+/** Parse the IFD of a striped single-band little-endian GeoTIFF.
+ *  Only the tags the sampler needs. Throws on unsupported layouts, and
+ *  NeedBytesError when the IFD or an array lies outside the given bytes. */
+export function parseTiffHeader(input: Uint8Array | SparseBytes): TiffGeometry {
+  let src: SparseBytes;
+  if (input instanceof SparseBytes) src = input;
+  else {
+    src = new SparseBytes();
+    src.add(0, input);
+  }
+  if (!(src.u8(0) === 0x49 && src.u8(1) === 0x49)) throw new Error("sfav2: not little-endian TIFF");
+  if (src.u16(2) !== 42) throw new Error("sfav2: bad TIFF magic");
+  const ifd = src.u32(4);
+  const n = src.u16(ifd);
   const typeSize: Record<number, number> = { 1: 1, 2: 1, 3: 2, 4: 4, 5: 8, 11: 4, 12: 8 };
   let width = 0;
   let height = 0;
@@ -208,25 +290,24 @@ export function parseTiffHeader(bytes: Uint8Array): TiffGeometry {
 
   const readArray = (type: number, count: number, valueOff: number): number[] => {
     const size = typeSize[type] ?? 1;
-    const at = size * count <= 4 ? valueOff : dv.getUint32(valueOff, true);
+    const at = size * count <= 4 ? valueOff : src.u32(valueOff);
     const out: number[] = [];
     for (let i = 0; i < count; i++) {
       const o = at + i * size;
-      if (o + size > bytes.byteLength) throw new Error("sfav2: header slice too small");
-      if (type === 3) out.push(dv.getUint16(o, true));
-      else if (type === 4) out.push(dv.getUint32(o, true));
-      else if (type === 12) out.push(dv.getFloat64(o, true));
-      else if (type === 11) out.push(dv.getFloat32(o, true));
-      else out.push(bytes[o]);
+      if (type === 3) out.push(src.u16(o));
+      else if (type === 4) out.push(src.u32(o));
+      else if (type === 12) out.push(src.f64(o));
+      else if (type === 11) out.push(src.f32(o));
+      else out.push(src.u8(o));
     }
     return out;
   };
 
   for (let i = 0; i < n; i++) {
     const o = ifd + 2 + i * 12;
-    const tag = dv.getUint16(o, true);
-    const type = dv.getUint16(o + 2, true);
-    const count = dv.getUint32(o + 4, true);
+    const tag = src.u16(o);
+    const type = src.u16(o + 2);
+    const count = src.u32(o + 4);
     const valueOff = o + 8;
     switch (tag) {
       case 256:
@@ -380,6 +461,8 @@ export function valueFromStrip(geo: TiffGeometry, strip: Uint8Array, col: number
  * strip per distinct row (rows are shared by resorts on the same
  * latitude band, so the cache pays off across a run).
  */
+const HEADER_BLOCK = 16_384;
+
 export class Sfav2Sampler {
   readonly file: Sfav2File;
   private geo: TiffGeometry | null = null;
@@ -394,10 +477,25 @@ export class Sfav2Sampler {
     if (this.geo) return this.geo;
     if (!this.headerPromise) {
       this.headerPromise = (async () => {
-        // 16 KB comfortably covers the IFD + both 850-entry strip tables.
-        const bytes = await fetchRange(this.file.url, 0, 16_383, { timeoutMs: 25_000 });
-        this.geo = parseTiffHeader(bytes);
-        return this.geo;
+        // 16 KB covers the IFD + both 850-entry strip tables when they sit
+        // at the front (24 h file). When the parser asks for bytes further
+        // in (48 h / 72 h files keep the IFD at the end), fetch that 16 KB
+        // block and parse again; the tables follow the IFD, so one extra
+        // read is the norm and four is a hard cap.
+        const src = new SparseBytes();
+        src.add(0, await fetchRange(this.file.url, 0, HEADER_BLOCK - 1, { timeoutMs: 25_000 }));
+        for (let reads = 1; reads <= 4; reads++) {
+          try {
+            this.geo = parseTiffHeader(src);
+            return this.geo;
+          } catch (e) {
+            if (!(e instanceof NeedBytesError) || reads === 4) throw e;
+            const from = Math.floor(e.offset / HEADER_BLOCK) * HEADER_BLOCK;
+            const to = Math.max(from + HEADER_BLOCK, e.offset + e.length) - 1;
+            src.add(from, await fetchRange(this.file.url, from, to, { timeoutMs: 25_000 }));
+          }
+        }
+        throw new Error("sfav2: header spread over too many ranges");
       })();
     }
     return this.headerPromise;

@@ -1102,36 +1102,30 @@ function FullWeatherCard({
     );
   }
 
-  // Combine new-snow from weather_cache (live NWS-derived) and the
-  // Stage 26 cron column. Prefer the cron column when set since it
-  // pulls from OnTheSnow's resort-reported numbers; fall back to NWS.
+  // New snow: resorts.snow_new_24h_in is MEASURED (NOHRSC analysis /
+  // SNOTEL, or a licensed resort report when one exists) while
+  // weather_cache holds today's FORECAST. Prefer measured, else forecast.
   const snowNew24 =
     resort.snow_new_24h_in ?? (weather.snow_24h_in != null ? Number(weather.snow_24h_in) : null);
   const base = resort.snow_base_depth_in;
 
-  // Status line — open/closed/limited/off-season, with trails+lifts
-  // open ratios inline when applicable. Hide for "unknown" (Open-Meteo
-  // fallback couldn't infer status reliably).
-  let status = resort.snow_report_status;
-  // Stage 33 — unify "closed" + "off-season" + "unknown" during the
-  // global May-Oct window. The OnTheSnow scraper marks some resorts
-  // (Timberline Lodge etc) as "closed" with stale spring data while
-  // others fall through to "off-season". Both mean the same thing to
-  // a user in May; show one consistent label instead of two.
-  if (isGlobalOffSeasonNow() && status && status !== "open" && status !== "limited") {
-    status = "off-season";
-  }
+  // Status line from the verified open flag. snow_report_status is only
+  // 'no_feed' | 'reported' now (a licensed report feed fills the trails
+  // and lifts counts), so resorts.currently_open carries open / closed
+  // and null means unknown — then nothing is shown rather than a guess.
+  // A known-closed resort during the May-Oct window reads as off-season.
+  const reported = resort.snow_report_status === "reported";
+  type StatusKey = "open" | "closed" | "off-season";
+  let status: StatusKey | null = null;
+  if (resort.currently_open === true) status = "open";
+  else if (resort.currently_open === false) status = isGlobalOffSeasonNow() ? "off-season" : "closed";
   const trailsOpen = resort.trails_open_today;
   const totalTrails = resort.total_trails;
   const liftsOpen = resort.lifts_open_today;
   const totalLifts = resort.total_lifts;
-  const statusMeta: Record<
-    string,
-    { emoji: string; label: string; color: string }
-  > = {
+  const statusMeta: Record<StatusKey, { emoji: string; label: string; color: string }> = {
     open: { emoji: "🟢", label: "Open today", color: "text-emerald-800" },
-    closed: { emoji: "🔴", label: "Closed for the season", color: "text-red-800" },
-    limited: { emoji: "🟡", label: "Limited operations", color: "text-amber-800" },
+    closed: { emoji: "🔴", label: "Closed", color: "text-red-800" },
     "off-season": { emoji: "🌸", label: "Off-season — opens in Nov", color: "text-wn-charcoal/65" },
   };
   const sm = status ? statusMeta[status] : null;
@@ -1149,7 +1143,7 @@ function FullWeatherCard({
       {sm && (
         <div className={`mb-3 text-xs font-semibold ${sm.color}`}>
           <span aria-hidden="true">{sm.emoji}</span> {sm.label}
-          {(trailsStr || liftsStr) && status === "open" && (
+          {(trailsStr || liftsStr) && reported && status === "open" && (
             <span className="ml-1 font-normal text-wn-charcoal/60">
               · {[trailsStr, liftsStr].filter(Boolean).join(" · ")}
             </span>
@@ -1269,7 +1263,7 @@ function FullWeatherCard({
             hour: "numeric",
             minute: "2-digit",
           })}
-          {resort.snow_report_updated_at && status && status !== "unknown" && (
+          {reported && resort.snow_report_updated_at && (
             <>
               {" · Snow report "}
               {new Date(resort.snow_report_updated_at).toLocaleString(

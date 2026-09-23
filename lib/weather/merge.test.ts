@@ -86,6 +86,12 @@ function input(over: Partial<MergeInput> = {}): MergeInput {
 }
 
 describe("mergeDays", () => {
+  it("records the NWS coverage on NWS-headlined days", () => {
+    const out = mergeDays(input({ nwsDays: [nwsDay(TODAY, { coverage: 0.75 })] }));
+    expect(out[0].source).toBe("nws");
+    expect(out[0].nws_coverage).toBe(0.75);
+  });
+
   it("uses NWS as the headline for days it covers and Open-Meteo for the tail", () => {
     const nws = [nwsDay("2026-12-10"), nwsDay("2026-12-11"), nwsDay("2026-12-12", { coverage: 0.25 })];
     const base = om([
@@ -234,10 +240,34 @@ describe("buildHistoryRow", () => {
       },
     })!;
     expect(out.row.temp_high_f).toBe(24);
-    expect(out.sources.temp_high_f).toBe("snotel");
+    expect(out.sources.temp_high_f).toBe("snotel:1308:UT:SNTL@8750ft");
     expect(out.row.snow_24h_in).toBe(3);
-    expect(out.sources.snow_24h_in).toBe("snotel-depth-change");
+    expect(out.sources.snow_24h_in).toBe("snotel-depth-change:1308:UT:SNTL");
     expect(out.row.precip_24h_in).toBe(0.5);
+  });
+
+  it("labels station values with the station id and elevation, and the analysis with its window end", () => {
+    const out = buildHistoryRow({
+      ...base,
+      sfav2In: 4.2,
+      sfav2ValidEnd: "2026-12-10T12:00:00.000Z",
+      station: { id: "ALTU1", elevation_ft: 8750 },
+      stationDay: {
+        date: "2026-12-09",
+        temp_high_f: 28,
+        temp_low_f: 9,
+        wind_mph_avg: 14,
+        wind_dir_short: "NW",
+        precip_in: 0.4,
+        sample_count: 24,
+      },
+    })!;
+    expect(out.sources.snow_24h_in).toBe("nohrsc-analysis:24h-to-2026-12-10T12:00Z");
+    expect(out.sources.temp_high_f).toBe("station:ALTU1@8750ft");
+    expect(out.sources.wind_mph_avg).toBe("station:ALTU1@8750ft");
+    expect(out.sources.precip_24h_in).toBe("station:ALTU1@8750ft");
+    expect(out.row.temp_high_f).toBe(28);
+    expect(out.row.wind_dir_short).toBe("NW");
   });
 
   it("ignores a SNOTEL row for a different date and returns null with no evidence", () => {

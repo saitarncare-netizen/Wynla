@@ -7,9 +7,51 @@
 //     info and will 403 anonymous clients),
 //   - transient upstream failures (5xx / network / timeout) get exactly
 //     one retry with a short backoff, which is what api.weather.gov's
-//     own guidance recommends ("retry after ~5 s").
+//     own guidance recommends ("retry after ~5 s"),
+//   - a caller can put a whole chain of calls under one deadline
+//     (runWithDeadline) so a resort that is still fetching when the cron
+//     budget runs out is cancelled instead of being killed by Vercel
+//     with its results unwritten,
+//   - error messages never carry an API key: SnoCountry and the
+//     commercial Open-Meteo host put the key in the query string, and
+//     these messages end up in weather_cache.fetch_error, cron_runs and
+//     the Vercel log.
+
+import { AsyncLocalStorage } from "node:async_hooks";
 
 export const DEFAULT_TIMEOUT_MS = 20_000;
+
+/** Query parameters that carry credentials; their values are masked in
+ *  every error message and log line built from a URL. */
+const SECRET_PARAM_RE = /([?&](?:apikey|api_key|key|token|secret)=)[^&#]+/gi;
+
+/** URL with credential-carrying query values masked (for logs and errors). */
+export function redactUrl(url: string): string {
+  return url.replace(SECRET_PARAM_RE, "$1***");
+}
+
+// ---------- deadline propagation ----------
+
+const deadlineStore = new AsyncLocalStorage<AbortSignal>();
+
+/**
+ * Run `fn` with `signal` attached to every fetchWithTimeout call made
+ * inside it (however deep). When the signal aborts, in-flight requests
+ * are cancelled, no retry is attempted and the callers see an
+ * AbortError — the cron's worker treats that as "deadline".
+ */
+export function runWithDeadline<T>(signal: AbortSignal, fn: () => Promise<T>): Promise<T> {
+  return deadlineStore.run(signal, fn);
+}
+
+/** The deadline signal of the enclosing runWithDeadline, if any. */
+export function currentDeadline(): AbortSignal | undefined {
+  return deadlineStore.getStore();
+}
+
+export function isAbortError(e: unknown): boolean {
+  return e instanceof Error && e.name === "AbortError";
+}
 
 /** User-Agent sent to every government API. Override the contact via
  *  NWS_CONTACT_EMAIL; the site URL alone already satisfies NWS' rule. */
@@ -22,7 +64,9 @@ export class HttpError extends Error {
   readonly status: number;
   readonly url: string;
   constructor(status: number, url: string, body?: string) {
-    super(`HTTP ${status} for ${url}${body ? `: ${body.slice(0, 120)}` : ""}`);
+    // The message is what gets logged and stored; the raw URL stays on
+    // the instance for callers that need to retry it.
+    super(`HTTP ${status} for ${redactUrl(url).slice(0, 200)}${body ? `: ${body.slice(0, 120)}` : ""}`);
     this.name = "HttpError";
     this.status = status;
     this.url = url;
@@ -36,9 +80,10 @@ export type FetchOptions = {
   retry?: boolean;
 };
 
-function isRetryable(e: unknown): boolean {
+function isRetryable(e: unknown, deadline: AbortSignal | undefined): boolean {
+  if (deadline?.aborted) return false; // the whole chain is being cancelled
   if (e instanceof HttpError) return e.status >= 500 || e.status === 429;
-  // AbortError (timeout), ECONNRESET, DNS hiccups and friends.
+  // AbortError (per-request timeout), ECONNRESET, DNS hiccups and friends.
   return true;
 }
 
@@ -53,10 +98,16 @@ export async function fetchWithTimeout(
   opts: FetchOptions = {},
 ): Promise<Response> {
   const attempts = opts.retry === false ? 1 : 2;
+  const deadline = currentDeadline();
   let lastErr: unknown;
   for (let attempt = 0; attempt < attempts; attempt++) {
+    if (deadline?.aborted) throw abortError();
     const ac = new AbortController();
     const timer = setTimeout(() => ac.abort(), opts.timeoutMs ?? DEFAULT_TIMEOUT_MS);
+    // Link the enclosing deadline to this request's controller so an
+    // abort upstream cancels the socket, not just the awaiting promise.
+    const onDeadline = () => ac.abort();
+    deadline?.addEventListener("abort", onDeadline, { once: true });
     try {
       const res = await fetch(url, {
         headers: { "User-Agent": userAgent(), ...(opts.headers ?? {}) },
@@ -71,16 +122,23 @@ export async function fetchWithTimeout(
       return res;
     } catch (e) {
       lastErr = e;
-      if (attempt + 1 < attempts && isRetryable(e)) {
+      if (attempt + 1 < attempts && isRetryable(e, deadline)) {
         await sleep(1_500);
         continue;
       }
       throw e;
     } finally {
       clearTimeout(timer);
+      deadline?.removeEventListener("abort", onDeadline);
     }
   }
   throw lastErr;
+}
+
+function abortError(): Error {
+  const e = new Error("deadline reached");
+  e.name = "AbortError";
+  return e;
 }
 
 export async function fetchJson<T>(url: string, opts: FetchOptions = {}): Promise<T> {
@@ -112,8 +170,8 @@ export async function fetchRange(
   return buf;
 }
 
-/** Short, log-safe error string. */
+/** Short, log-safe error string (whitespace collapsed, secrets masked). */
 export function errorText(e: unknown, max = 160): string {
   const msg = e instanceof Error ? e.message : String(e);
-  return msg.replace(/\s+/g, " ").slice(0, max);
+  return redactUrl(msg).replace(/\s+/g, " ").slice(0, max);
 }

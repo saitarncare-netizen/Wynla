@@ -6,7 +6,9 @@
 
 -- 1. Run history for every cron (written by lib/cronRun.ts, read by
 --    /api/health). Also holds the 'health-alert' rows used to send the
---    founder at most one alert email per 12 hours.
+--    founder at most one alert email per 12 hours — founder alert emails
+--    are only sent once this table exists (no table, no durable dedupe,
+--    no mail; /api/health still answers 503 when the data is stale).
 create table if not exists public.cron_runs (
   id           bigserial primary key,
   job          text        not null,

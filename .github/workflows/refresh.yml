@@ -53,8 +53,13 @@ jobs:
             echo "enabled=true" >> "$GITHUB_OUTPUT"
           fi
 
+      # The refresh steps answer HTTP 500 when a job reports ok:false (for
+      # example more than 30 % of resorts failed). That must not skip the
+      # alert and health steps below — they matter most on a bad run — so
+      # the refresh steps never fail the job and the health step always runs.
       - name: Season status and snow report
         if: steps.gate.outputs.enabled == 'true'
+        continue-on-error: true
         run: |
           curl --silent --show-error --fail-with-body --max-time 180 \
             -H "Authorization: Bearer $CRON_SECRET" \
@@ -62,6 +67,7 @@ jobs:
 
       - name: Weather, observations and measured snow (stalest resorts first)
         if: steps.gate.outputs.enabled == 'true'
+        continue-on-error: true
         run: |
           curl --silent --show-error --fail-with-body --max-time 330 \
             -H "Authorization: Bearer $CRON_SECRET" \
@@ -69,13 +75,14 @@ jobs:
 
       - name: Snow alerts
         if: steps.gate.outputs.enabled == 'true'
+        continue-on-error: true
         run: |
           curl --silent --show-error --fail-with-body --max-time 330 \
             -H "Authorization: Bearer $CRON_SECRET" \
             "$SITE_URL/api/cron/check-snow-alerts" | head -c 4000; echo
 
       - name: Health check (emails the founder when stale)
-        if: steps.gate.outputs.enabled == 'true'
+        if: always() && steps.gate.outputs.enabled == 'true'
         run: |
           # 503 means stale/dead; the email is already sent by the route, so
           # do not fail the workflow on it.

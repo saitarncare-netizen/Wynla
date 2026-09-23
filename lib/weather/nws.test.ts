@@ -62,6 +62,32 @@ describe("parseGridDays", () => {
   it("reads the grid cell elevation in feet", () => {
     expect(gridElevationFt(grid as NwsGridResponse)).toBe(2093);
   });
+
+  it("counts coverage from the union of the snowfall, QPF and temperature layers", () => {
+    // Snowfall covers 6 h, temperature covers a different 12 h of the
+    // same local day: the day is 18/24 covered, not 6/24. A day with only
+    // a temperature curve (no accumulation layer at all) still counts.
+    const g: NwsGridResponse = {
+      properties: {
+        snowfallAmount: { uom: "wmoUnit:mm", values: [{ validTime: "2026-12-10T05:00:00+00:00/PT6H", value: 0 }] },
+        temperature: {
+          uom: "wmoUnit:degC",
+          values: [
+            { validTime: "2026-12-10T11:00:00+00:00/PT12H", value: -3 },
+            { validTime: "2026-12-11T05:00:00+00:00/PT24H", value: -8 },
+          ],
+        },
+      },
+    };
+    const out = parseGridDays(g, TZ, new Date("2026-12-10T04:00:00Z"));
+    const d10 = out.find((d) => d.date === "2026-12-10")!;
+    const d11 = out.find((d) => d.date === "2026-12-11")!;
+    expect(d10.coverage).toBeCloseTo(18 / 24, 5);
+    expect(d10.snow_in).toBe(0);
+    expect(d11.coverage).toBe(1);
+    expect(d11.snow_in).toBeNull();
+    expect(d11.temp_high_f).toBe(18);
+  });
 });
 
 describe("describeConditions", () => {

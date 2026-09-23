@@ -23,9 +23,9 @@ export type PowderInputs = {
   /** Average wind mph for "now". Above 35 mph = strong penalty (wind-scoured
    *  snow + chair holds). Optional. */
   wind_mph_avg: number | null;
-  /** "open" / "limited" / "closed" / null. Closed resorts cap at score 30
-   *  regardless of snow — no powder is good if you can't ski. */
-  snow_report_status: string | null;
+  /** resorts.currently_open: false caps the score at 30 regardless of
+   *  snow — no powder is good if you can't ski. null (unknown) does not. */
+  currently_open: boolean | null;
 };
 
 export type PowderScore = {
@@ -103,10 +103,9 @@ export function computePowderScore(inputs: PowderInputs): PowderScore | null {
 
   let raw = recent + forecast + base - penalty;
 
-  // Closed resorts cap at 30 — no powder is good if the mountain isn't
-  // running. "Limited" doesn't cap (some big mountains have plenty of
-  // terrain even when not 100% open).
-  if (inputs.snow_report_status === "closed") {
+  // Known-closed resorts cap at 30 — no powder is good if the mountain
+  // isn't running. Unknown status (null) is not treated as closed.
+  if (inputs.currently_open === false) {
     raw = Math.min(raw, 30);
   }
 
@@ -132,7 +131,7 @@ export function computePowderScore(inputs: PowderInputs): PowderScore | null {
   if (penalty > 5 && inputs.wind_mph_avg) {
     reasons.push(`${Math.round(inputs.wind_mph_avg)}mph winds (chair holds risk)`);
   }
-  if (inputs.snow_report_status === "closed") {
+  if (inputs.currently_open === false) {
     reasons.push("Currently closed");
   }
   if (reasons.length === 0) {

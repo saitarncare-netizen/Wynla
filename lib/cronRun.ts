@@ -13,7 +13,8 @@
 //   - computeHealth() answers "is the data fresh?" from the tables
 //     themselves (not from the crons' self-reports), with a verdict of
 //     fresh / stale / dead and explicit thresholds.
-//   - notifyIfUnhealthy() emails the founder at most once per 12 h.
+//   - notifyIfUnhealthy() emails the founder at most once per 12 h,
+//     deduped through cron_runs (and only when that table exists).
 
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
@@ -192,6 +193,9 @@ export type PipelineHealth = {
   problems: string[];
 };
 
+/** Longer than any route's maxDuration (300 s) plus queueing slack. */
+const UNFINISHED_RUN_MS = 15 * 60_000;
+
 function envNumber(name: string, fallback: number): number {
   const v = Number(process.env[name]);
   return Number.isFinite(v) && v > 0 ? v : fallback;
@@ -302,6 +306,15 @@ export async function computeHealth(supabase: SupabaseClient, now: Date = new Da
     if (verdict === "fresh") verdict = "stale";
     problems.push("last refresh-weather run reported failure");
   }
+  // A start row with no finish row older than the route's budget means
+  // Vercel killed the function (or it crashed outside the try): the
+  // summary was never written, which must not read as "no news".
+  for (const r of last) {
+    if (r.finished_at === null && now.getTime() - Date.parse(r.started_at) > UNFINISHED_RUN_MS) {
+      if (verdict === "fresh") verdict = "stale";
+      problems.push(`${r.job} run started ${r.started_at} never finished (killed or crashed)`);
+    }
+  }
 
   return {
     verdict,
@@ -330,51 +343,49 @@ export async function computeHealth(supabase: SupabaseClient, now: Date = new Da
 // ---------- founder alert (deduped 12 h) ----------
 
 const ALERT_DEDUPE_HOURS = 12;
-/** weather_cache sentinel row used for dedupe when cron_runs is missing.
- *  resort_id 0 never matches a real resort, so readers ignore it. */
-const SENTINEL_RESORT_ID = 0;
 
-async function lastAlertAt(supabase: SupabaseClient): Promise<string | null> {
-  if (cronRunsAvailable !== false) {
-    const { data, error } = await supabase
-      .from("cron_runs")
-      .select("started_at")
-      .eq("job", "health-alert")
-      .order("started_at", { ascending: false })
-      .limit(1);
-    if (!error) return (data?.[0] as { started_at?: string } | undefined)?.started_at ?? null;
+/**
+ * Dedupe state lives ONLY in cron_runs (job = 'health-alert'). An earlier
+ * design fell back to a sentinel weather_cache row when the table was
+ * missing; that row carried fetched_at = now, so the first alert made
+ * /api/health report "fresh" for a day and silenced every later alert
+ * while the data was actually dead. Without a durable record we do not
+ * send at all: a 30-minute workflow would otherwise email the founder
+ * 48 times a day. /api/health still answers 503, which any uptime
+ * monitor turns into an alarm, and the run log says why no mail went.
+ */
+async function lastAlertAt(supabase: SupabaseClient): Promise<{ at: string | null; available: boolean }> {
+  if (cronRunsAvailable === false) return { at: null, available: false };
+  const { data, error } = await supabase
+    .from("cron_runs")
+    .select("started_at")
+    .eq("job", "health-alert")
+    .order("started_at", { ascending: false })
+    .limit(1);
+  if (error) {
     if (isMissingSchemaError(error)) noteCronRunsMissing("alert dedupe");
+    else console.warn(`[cronRun] alert dedupe query failed: ${error.message}`);
+    return { at: null, available: false };
   }
-  const { data } = await supabase
-    .from("weather_cache")
-    .select("fetched_at")
-    .eq("resort_id", SENTINEL_RESORT_ID)
-    .maybeSingle();
-  return (data as { fetched_at?: string } | null)?.fetched_at ?? null;
+  cronRunsAvailable = true;
+  return { at: (data?.[0] as { started_at?: string } | undefined)?.started_at ?? null, available: true };
 }
 
-async function markAlertSent(supabase: SupabaseClient, now: Date, health: PipelineHealth): Promise<void> {
-  if (cronRunsAvailable !== false) {
-    const { error } = await supabase.from("cron_runs").insert({
-      job: "health-alert",
-      started_at: now.toISOString(),
-      finished_at: now.toISOString(),
-      ok: true,
-      duration_ms: 0,
-      summary: { verdict: health.verdict, problems: health.problems },
-    });
-    if (!error) return;
+async function markAlertSent(supabase: SupabaseClient, now: Date, health: PipelineHealth): Promise<boolean> {
+  const { error } = await supabase.from("cron_runs").insert({
+    job: "health-alert",
+    started_at: now.toISOString(),
+    finished_at: now.toISOString(),
+    ok: true,
+    duration_ms: 0,
+    summary: { verdict: health.verdict, problems: health.problems },
+  });
+  if (error) {
     if (isMissingSchemaError(error)) noteCronRunsMissing("alert mark");
+    else console.warn(`[cronRun] alert mark failed: ${error.message}`);
+    return false;
   }
-  await supabase.from("weather_cache").upsert(
-    {
-      resort_id: SENTINEL_RESORT_ID,
-      fetched_at: now.toISOString(),
-      fetch_source: "health-alert-sentinel",
-      fetch_error: `${health.verdict}: ${health.problems.join("; ")}`.slice(0, 240),
-    },
-    { onConflict: "resort_id" },
-  );
+  return true;
 }
 
 export type AlertResult = { sent: boolean; reason: string };
@@ -388,8 +399,11 @@ export async function notifyIfUnhealthy(
   if (health.verdict === "fresh") return { sent: false, reason: "healthy" };
   if (!process.env.RESEND_API_KEY) return { sent: false, reason: "RESEND_API_KEY not set" };
   const last = await lastAlertAt(supabase);
-  if (last && now.getTime() - Date.parse(last) < ALERT_DEDUPE_HOURS * 3_600_000) {
-    return { sent: false, reason: `alert already sent at ${last}` };
+  if (!last.available) {
+    return { sent: false, reason: "cron_runs table missing; run handoff-docs/sql/2026-09-23-pipeline.sql to enable alerts" };
+  }
+  if (last.at && now.getTime() - Date.parse(last.at) < ALERT_DEDUPE_HOURS * 3_600_000) {
+    return { sent: false, reason: `alert already sent at ${last.at}` };
   }
   const site = process.env.NEXT_PUBLIC_SITE_URL ?? "https://wynla.app";
   const text = [
@@ -410,6 +424,6 @@ export async function notifyIfUnhealthy(
     text,
   });
   if (!res.ok) return { sent: false, reason: `send failed: ${res.error ?? "unknown"}` };
-  await markAlertSent(supabase, now, health);
-  return { sent: true, reason: "sent" };
+  const recorded = await markAlertSent(supabase, now, health);
+  return { sent: true, reason: recorded ? "sent" : "sent, but the dedupe row could not be written" };
 }

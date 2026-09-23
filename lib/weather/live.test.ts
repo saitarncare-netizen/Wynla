@@ -10,8 +10,8 @@
 
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { findLatestSfav2, Sfav2Sampler } from "./nohrsc";
-import { refreshResort, RESORT_COLUMNS, type ResortRow } from "./refreshResort";
+import { findLatestSfav2Set } from "./nohrsc";
+import { makeSfav2Samplers, refreshResort, RESORT_COLUMNS, type ResortRow } from "./refreshResort";
 import { StationDirectory } from "./stations";
 
 const LIVE = process.env.PIPELINE_LIVE === "1";
@@ -44,8 +44,8 @@ describe.skipIf(!LIVE)("live refreshResort (network)", () => {
       const resorts = (await res.json()) as ResortRow[];
       expect(resorts.length).toBeGreaterThan(0);
       const now = new Date();
-      const file = await findLatestSfav2(now);
-      const ctx = { now, directory: new StationDirectory(), sfav2: file ? new Sfav2Sampler(file) : null, allowMeasured: true };
+      const sfav2 = makeSfav2Samplers(await findLatestSfav2Set(now));
+      const ctx = { now, directory: new StationDirectory(), sfav2, allowMeasured: true };
       for (const r of resorts) {
         const out = await refreshResort(r, undefined, ctx);
         const summary = out.ok
