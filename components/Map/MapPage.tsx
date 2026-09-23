@@ -6,10 +6,11 @@ import {
   useRef,
   useState,
   useEffect,
+  useSyncExternalStore,
 } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import MapView, { type TripRoutePoint } from "./MapView";
-import AlaskaInset from "./AlaskaInset";
+import { useSearchParams } from "next/navigation";
+import dynamic from "next/dynamic";
+import type { TripRoutePoint } from "./MapView";
 import FilterBar from "./FilterBar";
 // FilterDrawer removed in Stage 14 — Size + Night now inline pills.
 import ResortPanel from "./ResortPanel";
@@ -44,6 +45,33 @@ import { resolveOrigin } from "@/lib/origins";
 import { haversineMeters, estimateDriveSeconds, estimateDriveMeters } from "@/lib/distance";
 import { PASS_COLORS, PASS_LABELS, PASS_KEYS } from "@/lib/passColors";
 import { sizeTier, matchesSizeFilter, type SizeTier } from "@/lib/sizeTier";
+
+// mapbox-gl is ~500 KB gzipped. Loaded statically it sat on the critical
+// path of the whole homepage, so the header, search and filter buttons
+// could not hydrate until it had downloaded and parsed. Loading MapView
+// (and the Alaska inset, which boots a second map) on the client only
+// lets the shell become interactive first; the branded splash and the
+// "Loading map" pill below cover the gap until Mapbox fires `load`.
+const MapView = dynamic(() => import("./MapView"), { ssr: false });
+const AlaskaInset = dynamic(() => import("./AlaskaInset"), { ssr: false });
+
+// True at md+ widths. Starts false on both server and first client render
+// so hydration stays consistent, then tracks the media query. Used to skip
+// mounting the Alaska inset on phones, where its wrapper is display:none
+// but the Mapbox instance behind it used to boot (and bill) anyway.
+const DESKTOP_QUERY = "(min-width: 768px)";
+function subscribeDesktop(onChange: () => void) {
+  const mq = window.matchMedia(DESKTOP_QUERY);
+  mq.addEventListener("change", onChange);
+  return () => mq.removeEventListener("change", onChange);
+}
+function useIsDesktop(): boolean {
+  return useSyncExternalStore(
+    subscribeDesktop,
+    () => window.matchMedia(DESKTOP_QUERY).matches,
+    () => false,
+  );
+}
 
 export type Resort = {
   id: number;
@@ -92,34 +120,26 @@ export type Resort = {
   snowmaking_pct: number | null;
   hero_image_url: string | null;
   hero_image_alt: string | null;
-  hero_image_attribution: string | null;
-  // Stage 26 — live snow + open conditions (cron-refreshed)
+  // Stage 26 — live snow + open conditions (cron-refreshed). Only the
+  // 24h figure ships to the map (fresh-snow filter); 48h/7d and the
+  // report timestamp are rendered on /resort/[slug].
   snow_base_depth_in: number | null;
   snow_new_24h_in: number | null;
-  snow_new_48h_in: number | null;
-  snow_new_7d_in: number | null;
   trails_open_today: number | null;
   lifts_open_today: number | null;
   snow_report_status: string | null;
-  snow_report_updated_at: string | null;
-  // Stage 27 — lift ticket pricing
+  // Stage 27 — lift ticket pricing (trip-cost estimator). Currency,
+  // booking URL and updated-at stay on the resort page.
   ticket_price_adult_min: number | null;
   ticket_price_adult_max: number | null;
-  ticket_price_currency: string | null;
-  ticket_booking_url: string | null;
-  ticket_price_updated_at: string | null;
   has_tubing: boolean | null;
   has_lessons: boolean | null;
   has_rentals: boolean | null;
   has_lodging_on_mountain: boolean | null;
   has_xc_skiing: boolean | null;
   has_backcountry_access: boolean | null;
-  trail_map_url: string | null;
   webcam_url: string | null;
   closest_airport_iata: string | null;
-  closest_airport_distance_mi: number | null;
-  // Phase 0 (one-app build, 2026-05-21) — Tier 1 verified data.
-  allows_snowboards: boolean | null;
   // Stage 4 (filter expansion, 2026-05-22) — schema updated to match
   // the Phase 2 mass-research keys actually populated in production.
   // Previous keys (chair_fixed / chair_detach / tbar / poma / rope /
@@ -138,13 +158,10 @@ export type Resort = {
     magic_carpet?: number;
   } | null;
   currently_open: boolean | null;
-  season_end_date: string | null;
-  terrain_park_features: number | null;
   // Inaugural Season 2026 — Snow Surface Forecast. Written by the
   // refresh-weather cron after each daily run; off-season resorts get
   // NULL. Filterable via ?surface=PP,PPC,MG on the URL.
   current_surface_class: string | null;
-  current_surface_updated_at: string | null;
   // Stage 4 — Best-for expansion. ?adaptive=1 narrows to resorts with
   // a certified adaptive ski school. Source data filled by a separate
   // research agent (boolean true / false / null).
@@ -162,36 +179,27 @@ export type DriveTime = {
   is_estimate?: boolean;
 };
 
-export type ForecastDay = {
-  date: string;
-  weekday: string;
-  temp_high_f: number | null;
-  temp_low_f: number | null;
-  conditions_short: string | null;
-  snow_in: number | null;
-  precip_chance: number | null;
-  wind_short: string | null;
-  wind_dir_short: string | null;
-};
+// Wire shape of drive_time_cache as app/page.tsx ships it: one tuple per
+// row, grouped by origin_name, so the ~1,750 rows do not repeat four
+// property names each in the RSC payload. Expanded into DriveTime objects
+// in driveTimeByResort below.
+export type DriveTimeRows = Record<
+  string,
+  Array<[resortId: number, durationSeconds: number, distanceMeters: number | null]>
+>;
 
+// The map panel's 3-stat card shows only today's conditions and the high.
+// Lows, wind, 48h snow and the 10-day forecast are rendered on
+// /resort/[slug], which fetches its own weather row.
 export type WeatherSnapshot = {
   resort_id: number;
   temp_high_f: number | null;
-  temp_low_f: number | null;
   conditions_short: string | null;
-  snow_24h_in: number | string | null;
-  snow_48h_in: number | string | null;
-  wind_mph_avg: number | null;
-  wind_dir_short: string | null;
-  fetched_at: string | null;
-  // Optional: not fetched on the homepage map payload (only /resort/[slug]
-  // needs the 10-day array). Kept on the type for the rare consumer.
-  forecast_json?: ForecastDay[] | null;
 };
 
 type Props = {
   resorts: Resort[];
-  driveTimes: DriveTime[];
+  driveTimes: DriveTimeRows;
   weather: WeatherSnapshot[];
   isAuthed: boolean;
 };
@@ -205,9 +213,30 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
     () => new Map(weather.map((w) => [w.resort_id, w])),
     [weather],
   );
-  const router = useRouter();
   const searchParams = useSearchParams();
+  const isDesktop = useIsDesktop();
   const [selectedId, setSelectedId] = useState<number | null>(null);
+  // Flips true once Mapbox fires `load`. Drives the small "Loading map"
+  // pill, which is independent of the splash timers: the splash may hide
+  // after its 3s ceiling (or never show for returning visitors) while
+  // tiles are still on the wire, and a blank beige canvas with no cue
+  // reads as "the site is broken".
+  const [mapLoaded, setMapLoaded] = useState(false);
+  // "slow": no `load` after 15s, the wait is almost always the network.
+  // "failed": MapView reported a hard failure (missing token, rejected
+  // token, no WebGL) or 45s passed with nothing, so the copy must not
+  // blame the user's connection.
+  const [mapLoadState, setMapLoadState] = useState<"loading" | "slow" | "failed">(
+    "loading",
+  );
+  // Header height as a CSS variable on the page root. The desktop
+  // ResortPanel starts below it (so Sign in / Deals / Guides / Lists stay
+  // reachable with a resort open) and MapView reads it to know how much
+  // of the top of the viewport is covered when deciding whether a
+  // selected pin is already visible. Measured with a ResizeObserver
+  // because the banner + recent-strip rows come and go.
+  const headerRef = useRef<HTMLElement>(null);
+  const [headerHeight, setHeaderHeight] = useState(0);
   // Sticky highlight for the LAST resort the user opened. When the
   // ResortPanel closes (Esc / × / outside-tap), selectedId drops to
   // null and the bold blue ring around the pin would normally vanish
@@ -465,12 +494,43 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
     };
   }, [splashVisible]);
   function handleMapLoaded() {
-    // Only act if the splash is still on-screen. Once it's hidden,
+    setMapLoaded(true);
+    // Only touch the splash if it is still on-screen. Once it's hidden,
     // subsequent Mapbox style-reloads (theme switches, etc.) won't
     // re-trigger the splash because splashVisible is already false.
     if (!splashVisible) return;
     hideSplashRespectingMin();
   }
+  function handleMapError() {
+    setMapLoadState("failed");
+  }
+  // If the map has not loaded after 15s, soften the pill's copy so the
+  // user knows the wait is the network, not a tap they missed. After 45s
+  // stop promising and tell them to reload; a load that never arrives is
+  // not going to.
+  useEffect(() => {
+    if (mapLoaded) return;
+    const slow = setTimeout(
+      () => setMapLoadState((s) => (s === "loading" ? "slow" : s)),
+      15_000,
+    );
+    const ceiling = setTimeout(() => setMapLoadState("failed"), 45_000);
+    return () => {
+      clearTimeout(slow);
+      clearTimeout(ceiling);
+    };
+  }, [mapLoaded]);
+  useEffect(() => {
+    const el = headerRef.current;
+    if (!el) return;
+    // Border-box height: contentRect would drop the safe-area padding
+    // and the desktop bottom border.
+    const ro = new ResizeObserver(() => {
+      setHeaderHeight(Math.round(el.getBoundingClientRect().height));
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
   // Stage 19.5: when the trip planner's picker is active, it
   // registers a handler here. Map pin clicks route through it
   // (treating the click as "pick this resort for the current stop")
@@ -686,9 +746,18 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         map.set(r.id, new Map([[origin.name, dt]]));
       }
     } else {
-      for (const dt of driveTimes) {
-        if (!map.has(dt.resort_id)) map.set(dt.resort_id, new Map());
-        map.get(dt.resort_id)!.set(dt.origin_name, dt);
+      // Only the active origin's rows are ever read (filters, pins and
+      // the panel all key on origin.name), so expand just those instead
+      // of building objects for all four cities on every origin change.
+      const rows = driveTimes[origin.name] ?? [];
+      for (const [resortId, durationSeconds, distanceMeters] of rows) {
+        const dt: DriveTime = {
+          resort_id: resortId,
+          origin_name: origin.name,
+          duration_seconds: durationSeconds,
+          distance_meters: distanceMeters,
+        };
+        map.set(resortId, new Map([[origin.name, dt]]));
       }
     }
     return map;
@@ -959,30 +1028,40 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
     return counts;
   }, [resorts, featuredOnly]);
 
-  // Stage 21.4 — dropped `startTransition()` around router.replace.
-  // The transition wrapper marked URL writes as low-priority, which on
-  // a phone meant filter taps felt laggy (the user saw the chip toggle
-  // ~150-300ms after tapping). Replace runs synchronously now so the
-  // checkbox visual + map re-filter happen in the same paint.
+  // Filter state lives in the URL, but writing it must not cost a server
+  // round-trip. router.replace on this force-dynamic route re-ran the
+  // whole page on the server (three Supabase reads + auth) and streamed
+  // the full resort payload back on every chip tap; the startTransition
+  // removal (Stage 21.4) and useDeferredValue above only hid that. The
+  // History API is the fix: Next syncs useSearchParams/usePathname with
+  // native replaceState, so every searchParams reader here and in the
+  // planner still updates, share links stay correct, and a tap is now a
+  // purely local re-render. router.push stays for real navigations.
+  function writeQuery(params: URLSearchParams) {
+    const qs = params.toString();
+    window.history.replaceState(
+      null,
+      "",
+      qs ? `?${qs}` : window.location.pathname,
+    );
+  }
   function updateParam(key: string, value: string | null) {
     const params = new URLSearchParams(searchParams.toString());
     if (value === null || value === "") params.delete(key);
     else params.set(key, value);
-    const qs = params.toString();
-    router.replace(qs ? `?${qs}` : "?", { scroll: false });
+    writeQuery(params);
   }
 
   // Atomic multi-param update — used when "From here" needs to set
-  // ?from=geo&fromLat=…&fromLng=… in one router.replace so the resolver
-  // never sees a half-applied state.
+  // ?from=geo&fromLat=…&fromLng=… in one write so the resolver never
+  // sees a half-applied state.
   function updateParams(updates: Record<string, string | null>) {
     const params = new URLSearchParams(searchParams.toString());
     for (const [key, value] of Object.entries(updates)) {
       if (value === null || value === "") params.delete(key);
       else params.set(key, value);
     }
-    const qs = params.toString();
-    router.replace(qs ? `?${qs}` : "?", { scroll: false });
+    writeQuery(params);
   }
 
   // Switch the From-origin to a city. Drops any stale geo lat/lng params.
@@ -1000,7 +1079,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   }
 
   function clearAll() {
-    router.replace("?", { scroll: false });
+    writeQuery(new URLSearchParams());
   }
 
   // Resolve the currently-selected resort once per render (not in click
@@ -1061,13 +1140,12 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
     // Strip the param so a refresh / share doesn't re-trigger the
     // highlight + flyto on a stale page reload.
     params.delete("recent");
-    const qs = params.toString();
-    router.replace(qs ? `?${qs}` : "?", { scroll: false });
+    writeQuery(params);
     // recentlyViewedId is a mount-time lazy-init read from the same
     // URL param — once consumed it shouldn't refire. We deliberately
     // omit it from deps.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [resorts, router]);
+  }, [resorts]);
 
   // ESC key closes the panel — keyboard parity with the X button.
   useEffect(() => {
@@ -1109,10 +1187,26 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   }, []);
 
   return (
-    <div className="relative h-dvh w-full overflow-hidden" data-route="map">
+    <div
+      className="relative h-dvh w-full overflow-hidden bg-wn-offwhite"
+      data-route="map"
+      // Left unset until the first measurement so consumers' var()
+      // fallbacks (ResortPanel: 64px, MapView: 140px) apply instead of 0.
+      style={
+        {
+          "--wn-header-h": headerHeight > 0 ? `${headerHeight}px` : undefined,
+        } as React.CSSProperties
+      }
+    >
       <h1 className="sr-only">Wynla — interactive map of every US ski resort</h1>
+      {/* On phones the header is a transparent stack of floating rows.
+          The wrapper itself is pointer-events-none so the gaps between
+          rows and pills pan/zoom the map; only the pills, chip strips and
+          banners opt back in. On md+ the header is a solid bar and takes
+          pointer events as a whole. */}
       <header
-        className="absolute inset-x-0 top-0 z-10 md:border-b md:border-wn-charcoal/10 md:bg-white/95 md:backdrop-blur-sm"
+        ref={headerRef}
+        className="pointer-events-none absolute inset-x-0 top-0 z-10 md:pointer-events-auto md:border-b md:border-wn-charcoal/10 md:bg-white/95 md:backdrop-blur-sm"
         // User feedback (post-Round-5 install): the +8px bump felt like
         // the header was floating too far below the iOS status bar.
         // Reverted to bare env(safe-area-inset-top) so the button row
@@ -1123,7 +1217,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}
       >
         <div className="flex items-center justify-between gap-1.5 px-2 pt-3 sm:gap-2 sm:px-6">
-          <div className="flex items-baseline gap-3">
+          <div className="pointer-events-auto flex items-baseline gap-3">
             {/* Brand pill — gets its own bg on mobile (header is transparent
                 there for a Google-Maps-style float), inherits the solid
                 header bg on desktop. Slightly smaller on mobile so the
@@ -1136,7 +1230,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
               Plan smart. Ride better.
             </span>
           </div>
-          <div className="flex items-center gap-1 sm:gap-2">
+          <div className="pointer-events-auto flex items-center gap-1 sm:gap-2">
             {/* Stage 21.3 — mobile header buttons are all same-size
                 icon-only square pills. Plan-a-trip is navy (primary
                 action), others are white pills. Desktop keeps text
@@ -1270,6 +1364,9 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         {/* Mobile-only quick pass-filter chips. Doubles as the pass
             legend (chip color = pin color) which used to be desktop-only
             in the bottom-right legend card. Hidden on md+. */}
+        {/* MobileQuickFilters opts its chip strip back into pointer
+            events itself, sized to the chips, so the empty space right
+            of the last chip still pans the map. */}
         <MobileQuickFilters
           passFilter={passFilter}
           passCounts={passCounts}
@@ -1291,10 +1388,21 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
           <>
             {/* Trip-mode discoverability — active trip jumps out at the
                 user instead of hiding inside /trips. Auth-gated so anon
-                users never pay the query. */}
-            {isAuthed && <ActiveTripChip />}
+                users never pay the query. The chip and the banner are
+                centered pills in full-width rows; only the pill itself
+                (its link / dismiss button) takes pointer events so the
+                empty sides of the row still reach the map. */}
+            {isAuthed && (
+              <div className="[&_a]:pointer-events-auto">
+                <ActiveTripChip />
+              </div>
+            )}
+            {/* RecentlyViewedStrip already marks its scroll strip
+                pointer-events-auto. */}
             <RecentlyViewedStrip />
-            <OffSeasonBanner />
+            <div className="[&_a]:pointer-events-auto [&_button]:pointer-events-auto">
+              <OffSeasonBanner />
+            </div>
           </>
         )}
         {/* Stage 35 — Pro benefits / status card. Free users see a
@@ -1305,7 +1413,15 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         <ProBenefitsCard hidden={searchOpen || plannerOpen} />
         {/* Inline filter pills row — desktop only. Mobile uses the
             single ☰ Filters button above + FiltersDrawer below. */}
-        <div className="hidden md:block">
+        {/* With a resort open the 380px panel (z-40) sits above the
+            header (z-10), so the row is padded away from it and the
+            pills' popovers never open underneath the panel. */}
+        <div
+          className={[
+            "pointer-events-auto hidden md:block",
+            selectedId != null ? "md:pr-[396px]" : "",
+          ].join(" ")}
+        >
           <FilterBar
             passFilter={passFilter}
             origin={origin}
@@ -1335,10 +1451,13 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
       <MapView
         resorts={filteredForMap}
         originName={origin.name}
+        origin={origin}
         driveTimeByResort={driveTimeByResort}
         selectedId={selectedId}
         recentlyViewedId={recentlyViewedId}
+        plannerOpen={plannerOpen}
         onMapLoaded={handleMapLoaded}
+        onMapError={handleMapError}
         // Stage 33 — freeze map interaction whenever a full-bleed
         // overlay is on screen. Without this, vertical scrolls inside
         // the filter drawer / search picker leak through to Mapbox's
@@ -1370,7 +1489,44 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         airportMarker={activeAirport}
       />
 
-      <AlaskaInset resorts={filteredForMap} />
+      {/* The inset is display:none below md, so mounting it there only
+          booted (and billed) a second Mapbox map nobody could see. */}
+      {isDesktop && <AlaskaInset resorts={filteredForMap} />}
+
+      {/* "Loading map" pill — sits under the splash (z-60) so it is what
+          the user sees the moment the splash fades, or from 0s for
+          returning visitors who skip the splash. Unmounts on Mapbox
+          `load`. Centered over the canvas because that is exactly where
+          the blank space is. */}
+      {!mapLoaded && (
+        <div
+          className="pointer-events-none absolute inset-0 z-30 flex items-center justify-center px-4"
+          role="status"
+          aria-live="polite"
+        >
+          <div className="flex flex-col items-center gap-2 rounded-full border border-wn-charcoal/10 bg-white/95 px-4 py-2.5 shadow-lg backdrop-blur-sm">
+            <span className="text-xs font-semibold text-wn-navy">
+              {mapLoadState === "failed"
+                ? "The map could not load. Reload the page to try again."
+                : mapLoadState === "slow"
+                  ? "Still loading the map. Check your connection."
+                  : "Loading map"}
+            </span>
+            {mapLoadState !== "failed" && (
+              <span className="inline-flex h-1 w-24 overflow-hidden rounded-full bg-wn-navy/10">
+                <span className="h-full w-full origin-left animate-[wynla-map-loading_1.4s_ease-in-out_infinite] bg-wn-sky" />
+              </span>
+            )}
+          </div>
+          <style>{`
+            @keyframes wynla-map-loading {
+              0%   { transform: translateX(-100%); }
+              50%  { transform: translateX(0%); }
+              100% { transform: translateX(100%); }
+            }
+          `}</style>
+        </div>
+      )}
 
       {/* Empty state — only when filters return zero. The Alaska inset
           handles its own emptiness; this banner is for the main map. */}
@@ -1715,7 +1871,16 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
       {/* Pass color legend — desktop only. On mobile, the same info
           is already conveyed by the active-filter chips and the pin
           dot colors, so we save the screen real estate. */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 hidden justify-center px-4 pb-4 md:flex sm:justify-end sm:pr-6">
+      {/* bottom-10 (not bottom-4) leaves the bottom 40px to Mapbox's
+          attribution control, which its terms require to stay visible.
+          With a resort open the 380px panel covers the right edge, so
+          the legend slides left of it instead of disappearing under it. */}
+      <div
+        className={[
+          "pointer-events-none absolute inset-x-0 bottom-0 z-10 hidden justify-end px-4 pb-10 md:flex",
+          selectedResort ? "pr-[396px]" : "pr-6",
+        ].join(" ")}
+      >
         <div className="pointer-events-auto rounded-lg border border-wn-charcoal/10 bg-white/95 px-3 py-2 shadow-sm backdrop-blur-sm">
           <div className="mb-1 text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/60">
             Pass

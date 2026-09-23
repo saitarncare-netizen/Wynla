@@ -9,9 +9,10 @@ import { COMPARE_CHANGE_EVENT, getCompareIds } from "@/lib/compareList";
 // already shows that resort), so we wait for the second add to nudge
 // them to the comparison view.
 //
-// Positioned bottom-center on mobile, bottom-left on desktop to stay
-// out of the way of the existing LocationButton (bottom-right) and
-// the pass legend (bottom-right desktop).
+// Bottom-center on every breakpoint, one step above the Feedback /
+// Location pill row on phones (that row sits at bottom-10, this at
+// bottom-22) so the three never overlap at 375px. Centered on desktop
+// too: bottom-left is the Alaska inset, bottom-right is the legend.
 export default function CompareFloatingButton() {
   const router = useRouter();
   const [ids, setIds] = useState<number[]>([]);
@@ -37,7 +38,7 @@ export default function CompareFloatingButton() {
 
   return (
     <div
-      className="pointer-events-none fixed inset-x-0 bottom-3 z-30 flex justify-center px-4 sm:bottom-4 md:inset-x-auto md:left-4 md:justify-start"
+      className="pointer-events-none fixed inset-x-0 bottom-22 z-30 flex justify-center px-4 md:bottom-10"
       style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
     >
       <button

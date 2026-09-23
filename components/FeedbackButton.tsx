@@ -106,9 +106,14 @@ export default function FeedbackButton() {
     <>
       {/* Floating button — bottom-left mirror of LocationButton.
           pointer-events-none on the wrapper, pointer-events-auto on the
-          inner button so the rest of the area stays click-through. */}
+          inner button so the rest of the area stays click-through.
+          Bottom stack (shared with LocationButton / CompareFloatingButton
+          / AlaskaInset): bottom-10 keeps the lowest 40px free for the
+          Mapbox wordmark + attribution, which its terms require visible.
+          On desktop the pill sits to the RIGHT of the 200px Alaska inset
+          (left-4 + 200px + gap) instead of on top of it. */}
       <div
-        className="pointer-events-none absolute bottom-3 left-3 z-20 flex flex-col items-start gap-1 sm:bottom-4 sm:left-4 md:bottom-24"
+        className="pointer-events-none absolute bottom-10 left-3 z-20 flex flex-col items-start gap-1 sm:left-4 md:left-[228px]"
         style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
       >
         <button

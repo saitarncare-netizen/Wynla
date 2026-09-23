@@ -216,8 +216,11 @@ export default function ResortPanel({
           // mobile bottom sheet — slides up from bottom on open
           "inset-x-0 bottom-0 rounded-t-2xl",
           "animate-[slideUp_220ms_cubic-bezier(0.16,1,0.3,1)]",
-          // desktop right side panel — slides in from right
-          "md:inset-x-auto md:right-0 md:top-0 md:bottom-0 md:w-[380px] md:max-h-none md:rounded-none",
+          // desktop right side panel — slides in from right. Starts below
+          // the header (MapPage publishes its measured height as
+          // --wn-header-h) so Sign in / Deals / Guides / Lists stay
+          // reachable while a resort is open.
+          "md:inset-x-auto md:right-0 md:top-[var(--wn-header-h,64px)] md:bottom-0 md:w-[380px] md:max-h-none md:rounded-none",
           "md:animate-[slideLeft_220ms_cubic-bezier(0.16,1,0.3,1)]",
         ].join(" ")}
         style={{

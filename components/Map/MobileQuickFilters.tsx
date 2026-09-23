@@ -38,6 +38,11 @@ export default function MobileQuickFilters({
     e.nativeEvent.stopImmediatePropagation();
   };
 
+  // The scroller itself is pointer-events-none (inherited from the
+  // transparent mobile header) and only the chip strip, sized to its
+  // content, opts back in: a touch on the empty space right of the last
+  // chip pans the map, while a touch on a chip still scrolls the strip
+  // because scrolling walks up to the nearest scrollable ancestor.
   return (
     <div
       className="md:hidden -mx-3 px-3 pb-1 pt-2 overflow-x-auto"
@@ -48,7 +53,7 @@ export default function MobileQuickFilters({
       onTouchMove={stopTouchBubble}
       onTouchEnd={stopTouchBubble}
     >
-      <div className="flex items-center gap-1.5">
+      <div className="pointer-events-auto flex w-max items-center gap-1.5">
         {PASS_KEYS.map((p) => {
           const active = passFilter.includes(p);
           const count = passCounts[p] ?? 0;

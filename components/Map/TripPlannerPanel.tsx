@@ -331,7 +331,7 @@ function todayIsoDate(): string {
 
 // MapPage's convention for the ?days param: absent means 1. Mirrored
 // here because the post-mount URL cleanup has to strip ?restore/?route
-// and set days in ONE router.replace — two replaces built from the same
+// and set days in ONE history.replaceState — two replaces built from the same
 // stale searchParams would drop one of the edits.
 function daysParamValue(days: number): string | null {
   return days > 1 ? String(days) : null;
@@ -501,7 +501,7 @@ export default function TripPlannerPanel({
   //   2. sessionStorage — same tab came back from a refresh, a resort
   //      page, or tab eviction. Skipped when the URL carries an explicit
   //      ?route= (a share link or template must win over stale state).
-  // Afterwards the URL is cleaned in ONE router.replace: ?restore goes
+  // Afterwards the URL is cleaned in ONE history.replaceState: ?restore goes
   // so a refresh does not re-hydrate, ?route goes so the next mount
   // (back from /resort/[slug], refresh) hydrates the user's edits from
   // sessionStorage instead of re-applying the original seed, and ?days
@@ -564,7 +564,9 @@ export default function TripPlannerPanel({
     }
     if (changed) {
       const qs = params.toString();
-      router.replace(qs ? `?${qs}` : "?", { scroll: false });
+      // History API, not router.replace: Next syncs useSearchParams with
+      // it and it skips the server re-render of the force-dynamic homepage.
+      window.history.replaceState(null, "", qs ? `?${qs}` : window.location.pathname);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -599,7 +601,9 @@ export default function TripPlannerPanel({
       const params = new URLSearchParams(searchParams.toString());
       params.delete("template");
       const qs = params.toString();
-      router.replace(qs ? `?${qs}` : "?", { scroll: false });
+      // History API, not router.replace: Next syncs useSearchParams with
+      // it and it skips the server re-render of the force-dynamic homepage.
+      window.history.replaceState(null, "", qs ? `?${qs}` : window.location.pathname);
       return;
     }
     templateApplied.current = true;
@@ -643,7 +647,9 @@ export default function TripPlannerPanel({
     const params = new URLSearchParams(searchParams.toString());
     params.delete("template");
     const qs = params.toString();
-    router.replace(qs ? `?${qs}` : "?", { scroll: false });
+    // History API, not router.replace: Next syncs useSearchParams with
+    // it and it skips the server re-render of the force-dynamic homepage.
+    window.history.replaceState(null, "", qs ? `?${qs}` : window.location.pathname);
   }
 
   // Render-phase reset for pendingStop on panel close. Avoids the
