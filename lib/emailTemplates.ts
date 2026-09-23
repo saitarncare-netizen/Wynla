@@ -1,8 +1,13 @@
-// Stage 32 — pure HTML email templates for digest emails.
+// Pure HTML + plain-text templates for the digest email.
 //
-// All styles are inline. Most email clients (Gmail web, Outlook, Apple Mail
-// on iOS) strip <style> tags or ignore class-based selectors, so every visual
-// rule has to live on the element itself.
+// All styles are inline: most clients (Gmail web, Outlook, Apple Mail on
+// iOS) strip <style> tags or ignore class selectors, so every visual rule
+// lives on the element itself.
+//
+// Every number is labelled with what it is and where it came from
+// ("Reported" = the resort's own snow report, "Estimated" = weather
+// model, "Forecast" = NWS forecast), because a bare 6" means nothing
+// to a reader deciding whether to drive.
 //
 // Wynla brand palette:
 //   navy     #1E2952  primary text / headings
@@ -11,30 +16,58 @@
 //   sky      #87CEEB  accent (snow / cold)
 //   gold     #D4A84B  CTA / link highlight
 
+import type { SnowSource } from "@/lib/alertRules";
+
 const NAVY = "#1E2952";
 const CHARCOAL = "#4A4D5A";
 const OFFWHITE = "#FAF7F2";
 const SKY = "#87CEEB";
 const GOLD = "#D4A84B";
 
-const SITE_BASE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://wynla.app";
+// Trailing slash trimmed so a NEXT_PUBLIC_SITE_URL of "https://wynla.app/"
+// cannot produce "https://wynla.app//resort/vail" links.
+const SITE_BASE = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://wynla.app").replace(/\/+$/, "");
 
 export type FavoriteResortSnapshot = {
   name: string;
   slug: string;
   state: string;
+  /** NWS forecast high for today, °F. */
   tempHigh: number | null;
+  /** NWS short forecast, e.g. "Snow showers". */
   conditions: string | null;
+  /** New snow in the last 24 h, inches. */
   snowNew24h: number | null;
-  snowReportStatus: string | null;
+  /** New snow in the last 7 days, inches (resort-reported only). */
+  snowNew7d: number | null;
+  /** Where snowNew24h came from. */
+  snowSource: SnowSource;
+  /** Friendly operating status, e.g. "Open", "Off-season". */
+  statusLabel: string;
+  /** True when the resort is open or running limited operations. */
+  operating: boolean;
+  /** False when the resort's report could not be read (status unknown),
+   *  so the row must not claim the hill is closed. */
+  statusKnown: boolean;
+  /** Today's snow surface class label from the classifier, if any. */
+  surfaceLabel: string | null;
+  /** Whether the snow report is recent enough to trust (see alertRules). */
+  reportFresh: boolean;
   primaryPass: string;
 };
 
 export type DigestEmailInput = {
+  /** Display name from profiles, or null for a neutral greeting. */
   userName: string | null;
   favoriteResortSnapshots: FavoriteResortSnapshot[];
+  /** True when the list is a platform-wide pick, not the user's favorites. */
+  isRecap: boolean;
   unsubscribeUrl: string;
+  /** Link to the preferences page (threshold, cadence). */
+  preferencesUrl: string;
+  /** YYYY-MM-DD, for the header and the fallback subject. */
   date: string;
+  frequency: "daily" | "weekly";
 };
 
 export type DigestEmailOutput = {
@@ -52,17 +85,50 @@ function escapeHtml(s: string): string {
     .replace(/'/g, "&#39;");
 }
 
+function sourceWord(r: FavoriteResortSnapshot): string {
+  return r.snowSource === "Reported" ? "resort-reported" : r.snowSource.toLowerCase();
+}
+
+function snowLine(r: FavoriteResortSnapshot): string {
+  if (!r.operating) {
+    // A row whose status line says "Status unknown" must not also say
+    // "closed": the report failed to parse, we do not know either way.
+    // Show the model estimate when there is one, clearly labelled, so the
+    // footer's "unless marked estimated" promise holds.
+    if (!r.statusKnown) {
+      if (r.reportFresh && r.snowNew24h != null && r.snowNew24h > 0) {
+        return `Estimated ${r.snowNew24h} in new snow in 24 h (weather model, no resort report)`;
+      }
+      return "No snow report available";
+    }
+    return "No report while closed";
+  }
+  if (!r.reportFresh) return "Snow report not updated recently";
+  if (r.snowNew24h == null) return "No snow report yet";
+  const source = sourceWord(r);
+  if (r.snowNew24h <= 0) return `No new snow in 24 h (${source})`;
+  return `${r.snowNew24h} in new snow in 24 h (${source})`;
+}
+
+function weekLine(r: FavoriteResortSnapshot): string | null {
+  if (!r.operating || r.snowNew7d == null || r.snowNew7d <= 0) return null;
+  return `${r.snowNew7d} in in the last 7 days`;
+}
+
+function hasPowder(r: FavoriteResortSnapshot): boolean {
+  return r.operating && r.reportFresh && (r.snowNew24h ?? 0) > 0;
+}
+
 function renderResortRow(r: FavoriteResortSnapshot): string {
   const name = escapeHtml(r.name);
   const url = `${SITE_BASE}/resort/${encodeURIComponent(r.slug)}`;
-  const temp = r.tempHigh != null ? `${r.tempHigh}°F` : "—";
-  const cond = r.conditions ? escapeHtml(r.conditions) : "—";
-  const snow = r.snowNew24h != null && r.snowNew24h > 0
-    ? `${r.snowNew24h}" new snow in 24h`
-    : "No new snow";
-  const status = r.snowReportStatus ? escapeHtml(r.snowReportStatus) : "";
-  const pass = escapeHtml(r.primaryPass);
-  const state = escapeHtml(r.state);
+  const temp = r.tempHigh != null ? `High ${r.tempHigh}°F` : "High —";
+  const cond = r.conditions ? escapeHtml(r.conditions) : "Forecast unavailable";
+  const snow = escapeHtml(snowLine(r));
+  const week = weekLine(r);
+  const powder = hasPowder(r);
+  const meta = [escapeHtml(r.state), escapeHtml(r.primaryPass), escapeHtml(r.statusLabel)];
+  if (r.surfaceLabel) meta.push(`Surface: ${escapeHtml(r.surfaceLabel)}`);
 
   return `
     <tr>
@@ -71,9 +137,10 @@ function renderResortRow(r: FavoriteResortSnapshot): string {
           <tr>
             <td>
               <div style="font-size:16px;font-weight:600;color:${NAVY};margin:0 0 4px 0;">${name}</div>
-              <div style="font-size:12px;color:${CHARCOAL};margin:0 0 8px 0;">${state} &middot; ${pass}${status ? ` &middot; ${status}` : ""}</div>
+              <div style="font-size:12px;color:${CHARCOAL};margin:0 0 8px 0;">${meta.join(" &middot; ")}</div>
               <div style="font-size:14px;color:${CHARCOAL};margin:0 0 4px 0;">${temp} &middot; ${cond}</div>
-              <div style="font-size:14px;color:${snow.startsWith("No") ? CHARCOAL : NAVY};font-weight:${snow.startsWith("No") ? "400" : "600"};">${snow}</div>
+              <div style="font-size:14px;color:${powder ? NAVY : CHARCOAL};font-weight:${powder ? "600" : "400"};">${snow}</div>
+              ${week ? `<div style="font-size:12px;color:${CHARCOAL};margin-top:2px;">${escapeHtml(week)}</div>` : ""}
             </td>
             <td align="right" valign="middle" style="padding-left:12px;">
               <a href="${url}" style="display:inline-block;padding:8px 14px;background:${NAVY};color:${OFFWHITE};text-decoration:none;border-radius:6px;font-size:13px;font-weight:500;">View &rarr;</a>
@@ -86,24 +153,42 @@ function renderResortRow(r: FavoriteResortSnapshot): string {
 }
 
 export function buildDigestEmail(input: DigestEmailInput): DigestEmailOutput {
-  const { userName, favoriteResortSnapshots, unsubscribeUrl, date } = input;
+  const {
+    userName,
+    favoriteResortSnapshots,
+    isRecap,
+    unsubscribeUrl,
+    preferencesUrl,
+    date,
+    frequency,
+  } = input;
 
-  const greeting = userName ? `Hey ${escapeHtml(userName)},` : "Hey there,";
-  const totalSnow = favoriteResortSnapshots.reduce(
-    (sum, r) => sum + (r.snowNew24h ?? 0),
-    0,
-  );
+  const name = (userName ?? "").trim();
+  const greeting = name ? `Hi ${escapeHtml(name)},` : "Hi there,";
   const powderResort = favoriteResortSnapshots
-    .filter((r) => (r.snowNew24h ?? 0) > 0)
+    .filter(hasPowder)
     .sort((a, b) => (b.snowNew24h ?? 0) - (a.snowNew24h ?? 0))[0];
 
+  const cadence = frequency === "weekly" ? "weekly" : "daily";
   const subject = powderResort
-    ? `${powderResort.snowNew24h}" at ${powderResort.name} — your Wynla digest`
-    : `Your Wynla snow digest — ${date}`;
+    ? `${powderResort.snowNew24h} in of new snow at ${powderResort.name}, your Wynla ${cadence} digest`
+    : `Your Wynla ${cadence} snow digest for ${date}`;
 
-  const rowsHtml = favoriteResortSnapshots.length > 0
-    ? favoriteResortSnapshots.map(renderResortRow).join("")
-    : `<tr><td style="padding:24px 0;color:${CHARCOAL};font-size:14px;text-align:center;">No favorites yet. Add some on Wynla to see them here.</td></tr>`;
+  const intro = powderResort
+    ? `Fresh snow at <strong style="color:${NAVY};">${escapeHtml(powderResort.name)}</strong>: ${powderResort.snowNew24h} in reported in the last 24 h. ${isRecap ? "Top resorts for new snow right now:" : "Here is your watchlist:"}`
+    : isRecap
+      ? "You have no favorites yet, so here are the resorts reporting the most new snow right now:"
+      : "Here is the latest from your favorites:";
+  const introText = powderResort
+    ? `Fresh snow at ${powderResort.name}: ${powderResort.snowNew24h} in reported in the last 24 h.`
+    : isRecap
+      ? "You have no favorites yet, so here are the resorts reporting the most new snow right now:"
+      : "Here is the latest from your favorites:";
+
+  const rowsHtml =
+    favoriteResortSnapshots.length > 0
+      ? favoriteResortSnapshots.map(renderResortRow).join("")
+      : `<tr><td style="padding:24px 0;color:${CHARCOAL};font-size:14px;text-align:center;">No favorites yet. Add some on Wynla to see them here.</td></tr>`;
 
   const html = `<!DOCTYPE html>
 <html lang="en">
@@ -120,17 +205,13 @@ export function buildDigestEmail(input: DigestEmailInput): DigestEmailOutput {
           <tr>
             <td style="padding:24px 24px 8px 24px;border-bottom:3px solid ${SKY};">
               <div style="font-size:22px;font-weight:700;color:${NAVY};letter-spacing:-0.01em;">Wynla</div>
-              <div style="font-size:13px;color:${CHARCOAL};margin-top:2px;">${escapeHtml(date)}</div>
+              <div style="font-size:13px;color:${CHARCOAL};margin-top:2px;">${escapeHtml(cadence[0]!.toUpperCase() + cadence.slice(1))} digest &middot; ${escapeHtml(date)}</div>
             </td>
           </tr>
           <tr>
             <td style="padding:20px 24px 8px 24px;">
               <p style="margin:0 0 12px 0;font-size:15px;color:${CHARCOAL};line-height:1.5;">${greeting}</p>
-              <p style="margin:0 0 16px 0;font-size:15px;color:${CHARCOAL};line-height:1.5;">
-                ${powderResort
-                  ? `Fresh snow at <strong style="color:${NAVY};">${escapeHtml(powderResort.name)}</strong> — ${powderResort.snowNew24h}" in the last 24h. Here's your watchlist:`
-                  : `Here's the latest from your favorites${totalSnow > 0 ? ` (${totalSnow.toFixed(1)}" combined new snow)` : ""}:`}
-              </p>
+              <p style="margin:0 0 16px 0;font-size:15px;color:${CHARCOAL};line-height:1.5;">${intro}</p>
             </td>
           </tr>
           <tr>
@@ -147,8 +228,13 @@ export function buildDigestEmail(input: DigestEmailInput): DigestEmailOutput {
           </tr>
           <tr>
             <td style="padding:16px 24px 24px 24px;border-top:1px solid #e6e2d8;">
+              <p style="margin:0 0 6px 0;font-size:12px;color:${CHARCOAL};line-height:1.5;">
+                Snow figures are the resort&rsquo;s own report unless marked estimated or forecast. Temperatures are the NWS forecast high for today.
+              </p>
               <p style="margin:0;font-size:12px;color:${CHARCOAL};line-height:1.5;">
-                You're getting this because you subscribed to digest emails on Wynla.
+                You get this because you turned on digest emails on Wynla.
+                <a href="${preferencesUrl}" style="color:${CHARCOAL};text-decoration:underline;">Change cadence or threshold</a>
+                &middot;
                 <a href="${unsubscribeUrl}" style="color:${CHARCOAL};text-decoration:underline;">Unsubscribe</a>
               </p>
             </td>
@@ -161,21 +247,28 @@ export function buildDigestEmail(input: DigestEmailInput): DigestEmailOutput {
 </html>`;
 
   const textLines = [
-    greeting,
+    name ? `Hi ${name},` : "Hi there,",
     "",
-    powderResort
-      ? `Fresh snow at ${powderResort.name} — ${powderResort.snowNew24h}" in the last 24h.`
-      : "Here's the latest from your favorites:",
+    introText,
     "",
     ...favoriteResortSnapshots.map((r) => {
-      const t = r.tempHigh != null ? `${r.tempHigh}F` : "—";
-      const s = r.snowNew24h != null && r.snowNew24h > 0
-        ? `${r.snowNew24h}" new snow`
-        : "No new snow";
-      return `- ${r.name} (${r.state}): ${t}, ${r.conditions ?? "—"}, ${s}\n  ${SITE_BASE}/resort/${r.slug}`;
+      const t = r.tempHigh != null ? `high ${r.tempHigh}F` : "high —";
+      const parts = [
+        `${r.name} (${r.state}, ${r.primaryPass}) — ${r.statusLabel}`,
+        `  ${snowLine(r)}`,
+      ];
+      const week = weekLine(r);
+      if (week) parts.push(`  ${week}`);
+      parts.push(`  Forecast: ${t}, ${r.conditions ?? "unavailable"}`);
+      if (r.surfaceLabel) parts.push(`  Surface: ${r.surfaceLabel}`);
+      parts.push(`  ${SITE_BASE}/resort/${r.slug}`);
+      return parts.join("\n");
     }),
     "",
+    "Snow figures are the resort's own report unless marked estimated or forecast. Temperatures are the NWS forecast high for today.",
+    "",
     `Open Wynla: ${SITE_BASE}`,
+    `Change cadence or threshold: ${preferencesUrl}`,
     `Unsubscribe: ${unsubscribeUrl}`,
   ];
 

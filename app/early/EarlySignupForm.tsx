@@ -48,6 +48,8 @@ type Status =
   | {
       kind: "success";
       alreadyOnList: boolean;
+      /** Server confirmed the welcome email went out (see /api/early). */
+      emailed: boolean;
       referralCode: string | null;
       referralCount: number;
     }
@@ -81,6 +83,7 @@ export default function EarlySignupForm({
         count?: number | null;
         referralCode?: string | null;
         referralCount?: number;
+        emailed?: boolean;
         error?: string;
       } = await res.json().catch(() => ({}));
       if (!res.ok || !data.ok) {
@@ -95,6 +98,7 @@ export default function EarlySignupForm({
       setStatus({
         kind: "success",
         alreadyOnList: Boolean(data.alreadyOnList),
+        emailed: Boolean(data.emailed),
         referralCode: data.referralCode ?? null,
         referralCount: data.referralCount ?? 0,
       });
@@ -132,8 +136,10 @@ export default function EarlySignupForm({
           </div>
           <p className="mt-1 text-sm">
             {status.alreadyOnList
-              ? "Your email is already on the Founder list. We'll send your welcome the morning Wynla opens for the inaugural season (November 2026)."
-              : "Check your inbox for the welcome message. You're now a Founder Member — your founder rate is locked forever when Wynla moves to paid plans for Season 2."}
+              ? "Your email is already on the Founder list. We'll write to you the morning Wynla opens for the inaugural season (November 2026)."
+              : status.emailed
+                ? "A welcome email is on its way. You're now a Founder Member: your founder rate is locked when Wynla moves to paid plans for Season 2."
+                : "You're now a Founder Member: your founder rate is locked when Wynla moves to paid plans for Season 2. The welcome email could not be sent just now; your spot is saved either way."}
           </p>
           {count != null && (
             <p className="mt-3 text-xs text-emerald-900/70">
@@ -146,11 +152,11 @@ export default function EarlySignupForm({
         {shareUrl && (
           <div className="rounded-xl border border-wn-gold/40 bg-wn-gold/10 p-5">
             <div className="text-sm font-bold text-wn-navy">
-              Move up the list — invite friends
+              Invite friends
             </div>
             <p className="mt-1 text-xs leading-relaxed text-wn-charcoal/75">
-              Every friend who joins with your link is one more reason
-              you&apos;re first in line when Wynla opens. Share it anywhere.
+              Anyone who joins with your link gets the same Founder rate, and
+              we count them next to your name. Share it anywhere.
             </p>
             <div className="mt-3 flex flex-col gap-2 sm:flex-row">
               <input
@@ -165,13 +171,13 @@ export default function EarlySignupForm({
                 onClick={copy}
                 className="inline-flex h-10 items-center justify-center rounded-md bg-wn-navy px-4 text-xs font-bold text-white transition hover:bg-wn-navy/90 active:scale-[0.98]"
               >
-                {copied ? "Copied!" : "Copy link"}
+                {copied ? "Copied" : "Copy link"}
               </button>
             </div>
             {status.referralCount > 0 && (
               <p className="mt-3 text-xs font-semibold text-wn-navy">
-                🎉 {status.referralCount.toLocaleString()} friend
-                {status.referralCount === 1 ? "" : "s"} joined through you.
+                {status.referralCount.toLocaleString()} friend
+                {status.referralCount === 1 ? "" : "s"} joined through your link so far.
               </p>
             )}
           </div>
@@ -210,7 +216,7 @@ export default function EarlySignupForm({
       )}
       {ref && (
         <p className="text-[11px] font-medium text-wn-navy/70">
-          ✓ You were invited by a Founder — you&apos;ll both move up the list.
+          You were invited by a Founder. You get the same Founder rate.
         </p>
       )}
       <p className="text-[11px] text-wn-charcoal/55">

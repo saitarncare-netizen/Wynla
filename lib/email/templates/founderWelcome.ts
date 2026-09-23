@@ -6,6 +6,10 @@
 export type FounderWelcomeInput = {
   /** Optional first name. Falls back to "there" if absent. */
   firstName?: string | null;
+  /** This member's own invite link (/early?ref=<code>). Friends who join
+   *  through it get the same Founder rate; there is no queue position or
+   *  extra reward, and the copy below promises none. */
+  referralUrl?: string | null;
 };
 
 export type EmailTemplate = {
@@ -28,6 +32,10 @@ export function founderWelcomeEmail(
 ): EmailTemplate {
   const first = (input.firstName ?? "").trim();
   const greeting = first ? `Hi ${escapeHtml(first)}` : "Hi there";
+  const referralUrl = (input.referralUrl ?? "").trim();
+  const referralHtml = referralUrl
+    ? `<p style="margin:0 0 14px 0;">Know someone who would want the Founder rate too? Send them your invite link: <a href="${escapeHtml(referralUrl)}" style="color:#1E2952;">${escapeHtml(referralUrl)}</a></p>`
+    : "";
 
   const subject = "Welcome to Wynla — Founder Member";
 
@@ -56,6 +64,7 @@ export function founderWelcomeEmail(
                 <p style="margin:0 0 14px 0;">When the season ends and Wynla moves to paid plans (Season 2, around November 2027), you keep a <strong>Founder Member rate that no one will ever see again</strong>. That price is for you and the rest of this list &mdash; it never goes on the public pricing page.</p>
                 <p style="margin:0 0 14px 0;">We&rsquo;ll send invites a few weeks before the season opens, with a heads-up email once or twice before then if something genuinely interesting ships.</p>
                 <p style="margin:0 0 14px 0;">Until then, we read every feedback note. If a feature would make your season better, or a resort on the map needs better data, just reply to this message.</p>
+                ${referralHtml}
                 <p style="margin:24px 0 0 0;">&mdash; Saitarn<br/><span style="color:#6B6B6B; font-size:13px;">Wynla, Founder</span></p>
               </td>
             </tr>
@@ -83,6 +92,9 @@ export function founderWelcomeEmail(
     "We'll send invites a few weeks before the season opens, with a heads-up email once or twice before then if something genuinely interesting ships.",
     "",
     "Until then, we read every feedback note. If a feature would make your season better, or a resort on the map needs better data, just reply to this message.",
+    ...(referralUrl
+      ? ["", `Know someone who would want the Founder rate too? Send them your invite link: ${referralUrl}`]
+      : []),
     "",
     "— Saitarn, Wynla Founder",
     "",
