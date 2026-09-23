@@ -4,6 +4,7 @@ import {
   evaluateAlert,
   formatResortLocalTime,
   isReportFresh,
+  isReportedStatus,
   isResortOperating,
   isSameLocalDay,
   isStatusKnown,
@@ -19,30 +20,37 @@ function hoursAgo(h: number): string {
 }
 
 describe("isResortOperating / labels", () => {
-  it("treats only open and limited as operating", () => {
-    expect(isResortOperating("open")).toBe(true);
-    expect(isResortOperating("limited")).toBe(true);
-    for (const s of ["closed", "off-season", "unknown", null, undefined]) {
-      expect(isResortOperating(s)).toBe(false);
-    }
+  it("treats only a verified open flag as operating", () => {
+    expect(isResortOperating(true)).toBe(true);
+    expect(isResortOperating(false)).toBe(false);
+    expect(isResortOperating(null)).toBe(false);
+    expect(isResortOperating(undefined)).toBe(false);
   });
 
-  it("knows the difference between a parsed status and a parser failure", () => {
-    for (const s of ["open", "limited", "closed", "off-season"]) expect(isStatusKnown(s)).toBe(true);
-    for (const s of ["unknown", "", null, undefined]) expect(isStatusKnown(s)).toBe(false);
+  it("knows the difference between a verified flag and no evidence", () => {
+    expect(isStatusKnown(true)).toBe(true);
+    expect(isStatusKnown(false)).toBe(true);
+    expect(isStatusKnown(null)).toBe(false);
+    expect(isStatusKnown(undefined)).toBe(false);
   });
 
-  it("labels the Open-Meteo fallback as estimated and parsed reports as reported", () => {
-    expect(snowSourceForStatus("unknown")).toBe("Estimated");
-    expect(snowSourceForStatus(null)).toBe("Estimated");
-    expect(snowSourceForStatus("open")).toBe("Reported");
-    expect(snowSourceForStatus("closed")).toBe("Reported");
+  it("labels licensed reports as reported and everything else as measured", () => {
+    expect(isReportedStatus("reported")).toBe(true);
+    expect(isReportedStatus("no_feed")).toBe(false);
+    expect(isReportedStatus(null)).toBe(false);
+    expect(snowSourceForStatus("reported")).toBe("Reported");
+    expect(snowSourceForStatus("no_feed")).toBe("Measured");
+    expect(snowSourceForStatus(null)).toBe("Measured");
+    // Legacy scraper vocabulary is not a licensed report either.
+    expect(snowSourceForStatus("open")).toBe("Measured");
   });
 
-  it("maps status codes to friendly copy without leaking raw values", () => {
-    expect(statusLabel("off-season")).toBe("Off-season");
-    expect(statusLabel("unknown")).toBe("Status unknown");
+  it("maps the open flag to friendly copy without leaking raw values", () => {
+    expect(statusLabel(true)).toBe("Open");
+    expect(statusLabel(false)).toBe("Closed");
+    expect(statusLabel(false, true)).toBe("Off-season");
     expect(statusLabel(null)).toBe("Status unknown");
+    expect(statusLabel(undefined)).toBe("Status unknown");
   });
 
   it("resolves surface codes case-insensitively", () => {
@@ -53,7 +61,7 @@ describe("isResortOperating / labels", () => {
 });
 
 describe("isReportFresh", () => {
-  it("accepts reports inside 36 h and rejects older, missing or future ones", () => {
+  it("accepts numbers inside 36 h and rejects older, missing or future ones", () => {
     expect(isReportFresh(hoursAgo(1), NOW)).toBe(true);
     expect(isReportFresh(hoursAgo(35), NOW)).toBe(true);
     expect(isReportFresh(hoursAgo(37), NOW)).toBe(false);
@@ -87,30 +95,29 @@ describe("evaluateAlert", () => {
     thresholdIn: 6,
     lastAlertedAt: null,
     snowNew24hIn: 8,
-    snowReportStatus: "open",
-    snowReportUpdatedAt: hoursAgo(1),
+    currentlyOpen: true as boolean | null,
+    snowUpdatedAt: hoursAgo(1),
     timeZone: "America/Denver",
   };
 
-  it("fires for a fresh report at an open resort above threshold", () => {
+  it("fires for a fresh number at a verified-open resort above threshold", () => {
     expect(evaluateAlert(base, NOW)).toBe("fire");
   });
 
   it("never fires for closed resorts even with big numbers", () => {
-    expect(evaluateAlert({ ...base, snowReportStatus: "off-season", snowNew24hIn: 30 }, NOW)).toBe("closed");
-    expect(evaluateAlert({ ...base, snowReportStatus: "closed" }, NOW)).toBe("closed");
+    expect(evaluateAlert({ ...base, currentlyOpen: false, snowNew24hIn: 30 }, NOW)).toBe("closed");
   });
 
-  it("counts a parser failure apart from a closed hill, and still does not fire", () => {
-    // 'unknown' means only the Open-Meteo estimate ran; the push stays
-    // suppressed but the run log must not file it under 'closed'.
-    expect(evaluateAlert({ ...base, snowReportStatus: "unknown", snowNew24hIn: 30 }, NOW)).toBe("unknown_status");
-    expect(evaluateAlert({ ...base, snowReportStatus: null }, NOW)).toBe("unknown_status");
+  it("counts an unknown open state apart from a closed hill, and still does not fire", () => {
+    // null means no season evidence and no feed: the measured number may
+    // be real, but a push about a hill that may be shut is not a powder
+    // day. The run log must not file it under 'closed'.
+    expect(evaluateAlert({ ...base, currentlyOpen: null, snowNew24hIn: 30 }, NOW)).toBe("unknown_status");
   });
 
   it("never fires from stale data", () => {
-    expect(evaluateAlert({ ...base, snowReportUpdatedAt: hoursAgo(40) }, NOW)).toBe("stale");
-    expect(evaluateAlert({ ...base, snowReportUpdatedAt: null }, NOW)).toBe("stale");
+    expect(evaluateAlert({ ...base, snowUpdatedAt: hoursAgo(40) }, NOW)).toBe("stale");
+    expect(evaluateAlert({ ...base, snowUpdatedAt: null }, NOW)).toBe("stale");
   });
 
   it("respects the threshold inclusively", () => {
@@ -155,7 +162,7 @@ describe("decideDigest", () => {
     expect(decideDigest([closed(0), closed(12)], 0, "daily").verdict).toBe("off_season");
   });
 
-  it("reports a parser outage separately when nothing is operating and a status is unknown", () => {
+  it("reports missing season evidence separately when nothing is operating and a status is unknown", () => {
     expect(decideDigest([unknown(12)], 0, "daily").verdict).toBe("unknown_status");
     expect(decideDigest([closed(0), unknown(3)], 0, "daily").verdict).toBe("unknown_status");
     // One open favorite still unlocks the send; unknown rows just do not count.

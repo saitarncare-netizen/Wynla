@@ -204,7 +204,7 @@ export default function ResortPicker({
           // Stage 33 — surface live snow data on the row so the user
           // can spot powder destinations without opening each resort.
           snowNew24h: r.snow_new_24h_in,
-          snowReportStatus: r.snow_report_status,
+          currentlyOpen: r.currently_open,
         };
       });
   }, [allResorts, fromPoint, alreadyPicked]);
@@ -581,20 +581,17 @@ export default function ResortPicker({
                       November. */}
                   {!isGlobalOffSeasonNow() &&
                   ((r.snowNew24h != null && r.snowNew24h > 0) ||
-                    r.snowReportStatus === "open" ||
-                    r.snowReportStatus === "limited" ||
-                    r.snowReportStatus === "closed") ? (
+                    r.currentlyOpen === true ||
+                    r.currentlyOpen === false) ? (
                     <div className="mt-0.5 flex items-center gap-1.5 text-[10px] text-wn-charcoal/65">
                       {r.snowNew24h != null && r.snowNew24h > 0 ? (
                         <span className="font-semibold text-wn-sky">
                           ❄️ {r.snowNew24h}&quot; new
                         </span>
-                      ) : r.snowReportStatus === "open" ? (
+                      ) : r.currentlyOpen === true ? (
                         <span className="text-emerald-700">🟢 Open today</span>
-                      ) : r.snowReportStatus === "closed" ? (
+                      ) : r.currentlyOpen === false ? (
                         <span className="text-red-700">🔴 Closed</span>
-                      ) : r.snowReportStatus === "limited" ? (
-                        <span className="text-amber-700">🟡 Limited</span>
                       ) : null}
                     </div>
                   ) : null}

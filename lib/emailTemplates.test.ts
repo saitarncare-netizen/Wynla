@@ -26,7 +26,7 @@ const closedHill: FavoriteResortSnapshot = {
   conditions: null,
   snowNew24h: 4,
   snowNew7d: null,
-  snowSource: "Estimated",
+  snowSource: "Measured",
   statusLabel: "Off-season",
   operating: false,
   statusKnown: true,
@@ -43,7 +43,7 @@ const unknownHill: FavoriteResortSnapshot = {
   conditions: "Snow",
   snowNew24h: 5,
   snowNew7d: null,
-  snowSource: "Estimated",
+  snowSource: "Measured",
   statusLabel: "Status unknown",
   operating: false,
   statusKnown: false,
@@ -78,7 +78,7 @@ describe("buildDigestEmail", () => {
     const out = buildDigestEmail({ ...base, userName: null, favoriteResortSnapshots: [closedHill] });
     expect(out.html).toContain("Hi there,");
     expect(out.subject).toBe("Your Wynla daily snow digest for 2026-12-15");
-    // Closed resorts never present modelled snow as a number.
+    // Closed resorts never present measured snow as a number.
     expect(out.html).toContain("No report while closed");
     expect(out.html).not.toContain("4 in new snow");
   });
@@ -93,14 +93,14 @@ describe("buildDigestEmail", () => {
     expect(out.text).toContain(`Change cadence or threshold: ${base.preferencesUrl}`);
   });
 
-  it("never calls an unknown-status resort closed, and labels its estimate", () => {
+  it("never calls an unknown-status resort closed, and labels its measured number", () => {
     // Mixed case: the open favorite unlocks the send, the unknown one must
     // not read "Status unknown" on one line and "closed" on the next.
     const out = buildDigestEmail({ ...base, userName: null, favoriteResortSnapshots: [vail, unknownHill] });
     expect(out.html).toContain("Status unknown");
     expect(out.html).not.toContain("No report while closed");
-    expect(out.html).toContain("Estimated 5 in new snow in 24 h (weather model, no resort report)");
-    expect(out.text).toContain("Estimated 5 in new snow in 24 h (weather model, no resort report)");
+    expect(out.html).toContain("5 in new snow in 24 h (measured, open status unconfirmed)");
+    expect(out.text).toContain("5 in new snow in 24 h (measured, open status unconfirmed)");
     // Unknown status never drives the subject line: only operating resorts do.
     expect(out.subject).toBe("9 in of new snow at Vail, your Wynla daily digest");
 

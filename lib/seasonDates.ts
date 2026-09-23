@@ -718,17 +718,24 @@ export function deriveResortStatus(
   if (r.operating_status === "closed") {
     return { kind: "closed-permanent", label: "Permanently closed", detail: null, tone: "red", dormant: true };
   }
-  // A scraped "open" only counts while the scrape is recent; a stale
-  // report would otherwise keep a resort "Open today" all summer.
+  // A live "open" only counts while the status write is recent; a stale
+  // flag would otherwise keep a resort "Open today" all summer.
+  // resorts.currently_open is the verified flag (true / false with
+  // evidence, null unknown — pipeline package); snow_report_status is
+  // 'reported' when a licensed feed read the resort's own report, which
+  // is the only time lifts_open_today / trails_open_today mean today.
+  // The legacy scraper words ('open' / 'limited' / 'closed') are still
+  // honoured for rows the new jobs have not rewritten yet.
   const fresh = liveReportIsFresh(r, now);
   const report = fresh ? (r.snow_report_status ?? "").toLowerCase() : "";
+  const reported = report === "reported" || report === "open" || report === "limited";
   if ((fresh && r.currently_open === true) || report === "open") {
     const lifts =
-      r.lifts_open_today != null && r.total_lifts != null && r.total_lifts > 0
+      reported && r.lifts_open_today != null && r.total_lifts != null && r.total_lifts > 0
         ? `${r.lifts_open_today}/${r.total_lifts} lifts`
         : null;
     const trails =
-      r.trails_open_today != null && r.total_trails != null && r.total_trails > 0
+      reported && r.trails_open_today != null && r.total_trails != null && r.total_trails > 0
         ? `${r.trails_open_today}/${r.total_trails} trails`
         : null;
     // resorts.season_end_date is LAST season's date until the scraper
@@ -762,7 +769,11 @@ export function deriveResortStatus(
     };
   }
   const globalOff = isGlobalOffSeasonNow(now);
-  if (report === "closed") {
+  // A verified closed flag (feed says closed, or the declared season is
+  // over with no next opening parsed above) reads as closed, not "likely
+  // open"; a season window that still lists a coming opening is handled
+  // by the "opens" branch first.
+  if (report === "closed" || (fresh && r.currently_open === false)) {
     return globalOff
       ? { kind: "off-season", label: "Off-season", detail: "Opening date not published yet", tone: "muted", dormant: true }
       : { kind: "closed-season", label: "Closed for the season", detail: null, tone: "red", dormant: true };

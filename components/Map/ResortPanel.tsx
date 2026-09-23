@@ -524,7 +524,7 @@ function pickSlot3(resort: {
   snow_new_24h_in: number | null;
   trails_open_today: number | null;
   total_trails: number | null;
-  snow_report_status: string | null;
+  currently_open: boolean | null;
   vertical_drop: number | null;
 }): { emoji: string; label: string; value: string } {
   if (resort.snow_new_24h_in != null && resort.snow_new_24h_in > 0) {
@@ -534,8 +534,11 @@ function pickSlot3(resort: {
       value: `${resort.snow_new_24h_in}"`,
     };
   }
+  // trails_open_today is only written by a licensed snow-report feed, and
+  // currently_open is the verified open flag (snow_report_status is now
+  // just 'no_feed' | 'reported').
   if (
-    resort.snow_report_status === "open" &&
+    resort.currently_open === true &&
     resort.trails_open_today != null &&
     resort.total_trails != null &&
     resort.total_trails > 0

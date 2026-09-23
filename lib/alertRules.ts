@@ -3,50 +3,63 @@
 // database, and so both crons agree on what "operating", "fresh" and
 // "worth mailing" mean.
 //
-// Vocabulary (matches the data-accuracy plan): a snow number is
-//   Reported  — the resort's own snow report (OnTheSnow parse), which is
-//               what snow_new_24h_in holds when snow_report_status is
-//               open / limited / closed / off-season;
-//   Estimated — the Open-Meteo model fallback, which is what the column
-//               holds when the parser could not read a report
-//               (snow_report_status = 'unknown');
+// Data contract (pipeline package, 2026-09-23 — see
+// handoff-docs/DATA_PIPELINE_2026-09-23.md):
+//   resorts.currently_open      true / false only with evidence (a licensed
+//                               resort report, operator-declared season
+//                               dates, operating_status = 'closed'), null
+//                               when we do not know. Never false by default.
+//   resorts.snow_report_status  'reported' when a licensed feed read the
+//                               resort's own report (then snow_new_24h_in
+//                               is the resort's number and
+//                               snow_report_updated_at is the resort's own
+//                               report time); 'no_feed' otherwise (then
+//                               snow_new_24h_in is MEASURED — the NOAA
+//                               snowfall analysis / SNOTEL written by
+//                               refresh-weather — and snow_report_updated_at
+//                               is only the time the season status was
+//                               last evaluated).
+//
+// Vocabulary for copy: a snow number is
+//   Reported  — the resort's own snow report (licensed feed);
+//   Measured  — NOAA snowfall analysis / SNOTEL at the resort point;
 //   Forecast  — NWS weather_cache.snow_24h_in, a forecast not an observation.
 
 import { SURFACE_GLOSSARY, type SurfaceCode } from "@/lib/snowSurface";
 
-export type SnowReportStatus =
-  | "open"
-  | "closed"
-  | "limited"
-  | "off-season"
-  | "unknown";
+export type SnowReportStatus = "reported" | "no_feed";
 
-export type SnowSource = "Reported" | "Estimated" | "Forecast";
+export type SnowSource = "Reported" | "Measured" | "Forecast";
 
-/** A report older than this is treated as stale: no push, and the digest
- *  says so instead of presenting it as today's number. The snow cron runs
- *  daily, so 36 h tolerates one missed run without going silent for two. */
+/** A snow number older than this is treated as stale: no push, and the
+ *  digest says so instead of presenting it as today's number. The refresh
+ *  jobs run daily, so 36 h tolerates one missed run without going silent
+ *  for two. */
 export const REPORT_STALE_HOURS = 36;
 
-/** Resorts we consider open for business. 'limited' means some lifts are
- *  turning, which is still a day someone might drive for. */
-export function isResortOperating(status: string | null | undefined): boolean {
-  return status === "open" || status === "limited";
+/** True when a licensed feed read the resort's own report, i.e. the snow
+ *  columns are the resort's numbers rather than the measured analysis. */
+export function isReportedStatus(status: string | null | undefined): boolean {
+  return status === "reported";
 }
 
-/** True when the parser actually read the resort's report. 'unknown' (or
- *  null) is written by refresh-snow-conditions whenever the OnTheSnow
- *  parse fails and only the Open-Meteo fallback ran — a data outage, not
- *  a statement about the hill. Callers must keep the two apart so an
- *  in-season parser break is visible in the run log instead of being
- *  counted as "closed" for months. */
-export function isStatusKnown(status: string | null | undefined): boolean {
-  return (
-    status === "open" || status === "limited" || status === "closed" || status === "off-season"
-  );
+/** Resorts we consider open for business: only a verified open flag.
+ *  null (unknown) is NOT operating — see isStatusKnown. */
+export function isResortOperating(currentlyOpen: boolean | null | undefined): boolean {
+  return currentlyOpen === true;
 }
 
-/** True when the snow report was written within `maxAgeHours` of `now`.
+/** True when we actually know whether the hill runs. null means no
+ *  evidence either way (no feed, no declared season dates yet). Callers
+ *  keep "unknown" apart from "closed": a push is suppressed in both cases
+ *  (never claim a powder day at a hill that may be shut), but a large
+ *  unknown count in season means resorts are missing season evidence,
+ *  which is fixable data, not a quiet hill. */
+export function isStatusKnown(currentlyOpen: boolean | null | undefined): boolean {
+  return typeof currentlyOpen === "boolean";
+}
+
+/** True when the snow number was written within `maxAgeHours` of `now`.
  *  A missing timestamp is never fresh. */
 export function isReportFresh(
   updatedAt: string | Date | null | undefined,
@@ -62,23 +75,16 @@ export function isReportFresh(
 
 /** Which kind of number resorts.snow_new_24h_in currently holds. */
 export function snowSourceForStatus(status: string | null | undefined): SnowSource {
-  return status === "unknown" || status == null ? "Estimated" : "Reported";
+  return isReportedStatus(status) ? "Reported" : "Measured";
 }
 
-/** Friendly status copy for emails and notifications. */
-export function statusLabel(status: string | null | undefined): string {
-  switch (status) {
-    case "open":
-      return "Open";
-    case "limited":
-      return "Limited operations";
-    case "closed":
-      return "Closed";
-    case "off-season":
-      return "Off-season";
-    default:
-      return "Status unknown";
-  }
+/** Friendly status copy for emails and notifications. `offSeason` is the
+ *  global May-Oct calendar (lib/seasonDates.isGlobalOffSeasonNow), which
+ *  turns a known-closed hill into "Off-season" instead of "Closed". */
+export function statusLabel(currentlyOpen: boolean | null | undefined, offSeason = false): string {
+  if (currentlyOpen === true) return "Open";
+  if (currentlyOpen === false) return offSeason ? "Off-season" : "Closed";
+  return "Status unknown";
 }
 
 /** SANY surface class code → label, or null when we have no classification. */
@@ -120,8 +126,12 @@ export type AlertCandidate = {
   thresholdIn: number;
   lastAlertedAt: string | null;
   snowNew24hIn: number | null;
-  snowReportStatus: string | null;
-  snowReportUpdatedAt: string | null;
+  /** resorts.currently_open — true / false with evidence, null unknown. */
+  currentlyOpen: boolean | null;
+  /** When the snow number was last written: the resort's report time for
+   *  'reported' rows, the weather refresh (weather_cache.fetched_at) for
+   *  measured rows. */
+  snowUpdatedAt: string | null;
   /** IANA zone of the resort, for the once-per-local-day dedupe. */
   timeZone?: string;
 };
@@ -135,16 +145,17 @@ export type AlertVerdict =
   | "already_today";
 
 /** Why an alert does or does not fire this run. Order matters: a closed
- *  resort with modelled snow must read as 'closed', not 'below_threshold',
- *  so the run log explains the silence. 'unknown_status' is kept separate
- *  from 'closed' because it means the report could not be parsed: the
- *  push is still suppressed (the fallback number is a model estimate),
- *  but a spike in that counter during the season is a parser outage to
- *  fix, not a quiet hill. */
+ *  resort with measured snow must read as 'closed', not 'below_threshold',
+ *  so the run log explains the silence. 'unknown_status' (currently_open
+ *  null) is kept separate from 'closed': the push is still suppressed —
+ *  snow falls on shut mountains too and a false "powder day" costs more
+ *  trust than a missed one — but a spike in that counter during the season
+ *  means resorts are missing season evidence (declared dates or a feed),
+ *  which is fixable data, not a quiet hill. */
 export function evaluateAlert(c: AlertCandidate, now: Date): AlertVerdict {
-  if (!isStatusKnown(c.snowReportStatus)) return "unknown_status";
-  if (!isResortOperating(c.snowReportStatus)) return "closed";
-  if (!isReportFresh(c.snowReportUpdatedAt, now)) return "stale";
+  if (!isStatusKnown(c.currentlyOpen)) return "unknown_status";
+  if (!isResortOperating(c.currentlyOpen)) return "closed";
+  if (!isReportFresh(c.snowUpdatedAt, now)) return "stale";
   if (c.snowNew24hIn == null || c.snowNew24hIn < c.thresholdIn) return "below_threshold";
   if (c.lastAlertedAt) {
     const last = new Date(c.lastAlertedAt);
@@ -161,11 +172,11 @@ export function evaluateAlert(c: AlertCandidate, now: Date): AlertVerdict {
 export type DigestFrequency = "daily" | "weekly";
 
 export type DigestSnapshotInput = {
-  /** Resort is open or running limited operations. */
+  /** Resort is verified open (currently_open === true). */
   operating: boolean;
-  /** False when the parser could not read the report (status 'unknown'). */
+  /** False when we do not know whether the hill runs (currently_open null). */
   statusKnown: boolean;
-  /** Fresh, trusted figures only; pass null for stale or missing reports. */
+  /** Fresh, trusted figures only; pass null for stale or missing numbers. */
   snowNew24hIn: number | null;
   snowNew7dIn: number | null;
 };
@@ -180,18 +191,18 @@ export type DigestVerdict =
 /**
  * Decide whether a digest is worth sending.
  *   empty           — nothing to show at all
- *   off_season      — no favorite is operating: modelled snow at a closed
+ *   off_season      — no favorite is operating: measured snow at a closed
  *                     hill is not news, and a "no new snow" mail every
  *                     morning all summer is spam
- *   unknown_status  — no favorite is operating AND at least one has no
- *                     readable report. Same outcome as off_season (skip),
- *                     counted apart so a parser outage in season shows
- *                     up in the cron log instead of hiding under
- *                     "off-season"
+ *   unknown_status  — no favorite is operating AND at least one has an
+ *                     unknown open state. Same outcome as off_season
+ *                     (skip), counted apart so missing season evidence in
+ *                     season shows up in the cron log instead of hiding
+ *                     under "off-season"
  *   below_threshold — the user asked to be mailed only for ≥ N in and the
  *                     best favorite is under it
  *   send            — otherwise
- * Only operating resorts count toward the threshold: modelled snow at a
+ * Only operating resorts count toward the threshold: measured snow at a
  * closed hill is not a reason to open an email. Weekly digests compare
  * the 7-day total, since "did anything fall this week" is the question.
  */

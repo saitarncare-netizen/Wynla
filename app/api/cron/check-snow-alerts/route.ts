@@ -1,34 +1,45 @@
 // Snow-alert push cron.
 //
 // Vercel cron hits this at 12:30 UTC, after refresh-snow-conditions
-// (11:30) and refresh-weather (12:00) have written fresh values onto the
-// resorts rows. For every enabled snow_alerts row we decide, with the
-// shared rules in lib/alertRules.ts, whether a push fires:
+// (10:00, season status → resorts.currently_open, licensed reports when a
+// feed exists) and refresh-weather (11:00, measured snow → resorts.
+// snow_new_24h_in) have written fresh values onto the resorts rows. For
+// every enabled snow_alerts row we decide, with the shared rules in
+// lib/alertRules.ts, whether a push fires:
 //
-//   unknown_status  the OnTheSnow parse failed and only the Open-Meteo
-//                   model fallback ran — the number is an estimate, so no
-//                   push. Counted apart from 'closed': in season a rising
-//                   count here means the parser broke, not that the hills
-//                   shut
-//   closed          resort is closed / off-season — modelled snow at a
-//                   closed hill is not a powder day
-//   stale           snow report older than 36 h — never alert on old data
-//   below_threshold reported new snow < the user's threshold
+//   unknown_status  currently_open is null — no declared season dates and
+//                   no feed, so we cannot say the lifts run. No push (snow
+//                   falls on shut mountains too). Counted apart from
+//                   'closed': a rising count here in season means resorts
+//                   are missing season evidence, not that the hills shut
+//   closed          currently_open is false — measured snow at a closed
+//                   hill is not a powder day
+//   stale           the snow number is older than 36 h — never alert on
+//                   old data. 'reported' rows date from the resort's own
+//                   report time; measured rows from the weather refresh
+//                   (weather_cache.fetched_at) that wrote the number
+//   below_threshold new snow < the user's threshold
 //   already_today   an alert already went out today in the resort's own
 //                   time zone (one push per resort per day, per user)
 //   fire            send to every registered device of that user
 //
-// The notification names the resort, the number of inches, that the
-// number is resort-reported, and when we last checked the report, in the
-// resort's local time (snow_report_updated_at is our fetch time, not the
-// resort's own report time, so the copy says "checked", not "reported").
+// The notification names the resort, the number of inches, whether the
+// number is resort-reported or measured (NOAA snowfall analysis), and
+// when it dates from, in the resort's local time.
 //
 // Push-service responses: 404 / 410 mean the subscription is gone and the
-// row is deleted; 401 / 403 mean the VAPID key the browser subscribed
-// with is not the one we sign with (key rotation, preview vs production
-// mismatch). Those rows are NOT pruned — re-subscribing with the current
-// key fixes them (lib/pushClient.ts does that on the next enable) — but
-// they are counted as `vapidMismatch` in the JSON so the outage is seen.
+// row is deleted (pruned, not counted as a failure); 401 / 403 mean the
+// VAPID key the browser subscribed with is not the one we sign with (key
+// rotation, preview vs production mismatch). Those rows are NOT pruned —
+// re-subscribing with the current key fixes them (lib/pushClient.ts does
+// that on the next enable) — but they are counted as `vapidMismatch` in
+// the JSON so the outage is seen.
+//
+// Runs under lib/cronRun.ts like every other cron: auth, a cron_runs row,
+// one JSON log line, and HTTP 500 when the run is not ok. Missing VAPID
+// keys are reported as a failed run (the job cannot do its work) rather
+// than a silent ok. A run is ok when at most FAIL_SHARE_LIMIT of the push
+// deliveries failed.
 //
 // Env vars:
 //   CRON_SECRET                   matches the Vercel cron header
@@ -38,22 +49,21 @@
 //                                 the same key when subscribing)
 //   VAPID_PRIVATE_KEY             base64url 32-byte private scalar
 //   VAPID_SUBJECT                 "mailto:you@example.com"
-//
-// Without the VAPID env vars we 503 so a fresh deploy fails loudly in the
-// cron log instead of silently doing nothing.
 
-import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { runCron, type CronContext, type CronSummary } from "@/lib/cronRun";
 import { sendWebPush, type VapidKeys } from "@/lib/webPush";
 import {
   evaluateAlert,
   formatResortLocalTime,
+  isReportedStatus,
   type AlertVerdict,
 } from "@/lib/alertRules";
 import { timeZoneForState } from "@/lib/sunTimes";
 
 export const runtime = "nodejs";
 export const maxDuration = 300;
+
+const FAIL_SHARE_LIMIT = 0.3;
 
 type AlertRow = {
   id: number;
@@ -72,7 +82,10 @@ type ResortRow = {
   snow_new_24h_in: number | null;
   snow_report_status: string | null;
   snow_report_updated_at: string | null;
+  currently_open: boolean | null;
 };
+
+type WeatherStamp = { resort_id: number; fetched_at: string | null };
 
 type SubRow = {
   user_id: string | null;
@@ -81,52 +94,22 @@ type SubRow = {
   auth: string;
 };
 
-export async function GET(request: Request) {
-  const auth = request.headers.get("authorization");
-  const cronSecret = process.env.CRON_SECRET;
-  // Fail closed: a missing secret must NOT make this service-role endpoint
-  // publicly invokable (it fans out push notifications to all subscribers).
-  if (!cronSecret) {
-    return NextResponse.json(
-      { ok: false, reason: "cron_secret_not_configured" },
-      { status: 503 },
-    );
-  }
-  if (auth !== `Bearer ${cronSecret}`) {
-    return NextResponse.json({ ok: false, reason: "unauthorized" }, { status: 401 });
-  }
-
-  const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!SUPABASE_URL || !SERVICE_KEY) {
-    return NextResponse.json({ ok: false, reason: "missing supabase env" }, { status: 503 });
-  }
+async function runAlerts(ctx: CronContext): Promise<CronSummary> {
+  const { supabase, startedAt: now } = ctx;
 
   // NEXT_PUBLIC_VAPID_PUBLIC_KEY is the canonical name; VAPID_PUBLIC_KEY
   // is accepted so an older env layout keeps working through the rename.
-  const VAPID_PUBLIC =
-    process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY ?? process.env.VAPID_PUBLIC_KEY;
+  const VAPID_PUBLIC = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY ?? process.env.VAPID_PUBLIC_KEY;
   const VAPID_PRIVATE = process.env.VAPID_PRIVATE_KEY;
   const VAPID_SUBJECT = process.env.VAPID_SUBJECT;
   if (!VAPID_PUBLIC || !VAPID_PRIVATE || !VAPID_SUBJECT) {
-    return NextResponse.json(
-      {
-        ok: false,
-        reason:
-          "missing NEXT_PUBLIC_VAPID_PUBLIC_KEY / VAPID_PRIVATE_KEY / VAPID_SUBJECT — generate with `npx web-push generate-vapid-keys`",
-      },
-      { status: 503 },
-    );
+    return {
+      ok: false,
+      reason:
+        "missing NEXT_PUBLIC_VAPID_PUBLIC_KEY / VAPID_PRIVATE_KEY / VAPID_SUBJECT — generate with `npx web-push generate-vapid-keys`",
+    };
   }
-  const vapidKeys: VapidKeys = {
-    publicKey: VAPID_PUBLIC,
-    privateKey: VAPID_PRIVATE,
-    subject: VAPID_SUBJECT,
-  };
-
-  const supabase = createClient(SUPABASE_URL, SERVICE_KEY, {
-    auth: { persistSession: false },
-  });
+  const vapidKeys: VapidKeys = { publicKey: VAPID_PUBLIC, privateKey: VAPID_PRIVATE, subject: VAPID_SUBJECT };
 
   // 1. Every enabled alert. Filtering happens locally so each skip reason
   //    is counted in the run log.
@@ -134,28 +117,32 @@ export async function GET(request: Request) {
     .from("snow_alerts")
     .select("id, user_id, resort_id, threshold_in, enabled, last_alerted_at")
     .eq("enabled", true);
-  if (alertsErr) {
-    return NextResponse.json({ ok: false, reason: alertsErr.message }, { status: 500 });
-  }
+  if (alertsErr) return { ok: false, reason: `snow_alerts: ${alertsErr.message}` };
   const alerts = (alertsData ?? []) as AlertRow[];
-  if (alerts.length === 0) {
-    return NextResponse.json({ ok: true, fired: 0, reason: "no enabled alerts" });
-  }
+  if (alerts.length === 0) return { ok: true, fired: 0, reason: "no enabled alerts" };
 
-  // 2. Current snow report for every resort referenced by an alert.
+  // 2. Current snow number + open state for every resort referenced by an
+  //    alert, plus the weather refresh stamp that dates the measured number.
   const resortIds = Array.from(new Set(alerts.map((a) => a.resort_id)));
-  const { data: resortsData, error: resortsErr } = await supabase
-    .from("resorts")
-    .select("id, slug, name, state, snow_new_24h_in, snow_report_status, snow_report_updated_at")
-    .in("id", resortIds);
-  if (resortsErr) {
-    return NextResponse.json({ ok: false, reason: resortsErr.message }, { status: 500 });
-  }
+  const [{ data: resortsData, error: resortsErr }, { data: weatherData, error: weatherErr }] = await Promise.all([
+    supabase
+      .from("resorts")
+      .select("id, slug, name, state, snow_new_24h_in, snow_report_status, snow_report_updated_at, currently_open")
+      .in("id", resortIds),
+    supabase.from("weather_cache").select("resort_id, fetched_at").in("resort_id", resortIds),
+  ]);
+  if (resortsErr) return { ok: false, reason: `resorts: ${resortsErr.message}` };
+  if (weatherErr) return { ok: false, reason: `weather_cache: ${weatherErr.message}` };
   const resortMap = new Map<number, ResortRow>();
   for (const r of (resortsData ?? []) as ResortRow[]) resortMap.set(r.id, r);
+  const weatherStamp = new Map<number, string | null>();
+  for (const w of (weatherData ?? []) as WeatherStamp[]) weatherStamp.set(w.resort_id, w.fetched_at);
+
+  /** When the resort's snow number was last written (see lib/alertRules). */
+  const snowUpdatedAt = (r: ResortRow): string | null =>
+    isReportedStatus(r.snow_report_status) ? r.snow_report_updated_at : (weatherStamp.get(r.id) ?? null);
 
   // 3. Decide which alerts fire this run.
-  const now = new Date();
   type Firing = { alert: AlertRow; resort: ResortRow; timeZone?: string };
   const firing: Firing[] = [];
   const skipped: Record<Exclude<AlertVerdict, "fire"> | "missing_resort", number> = {
@@ -179,8 +166,8 @@ export async function GET(request: Request) {
         thresholdIn: a.threshold_in,
         lastAlertedAt: a.last_alerted_at,
         snowNew24hIn: r.snow_new_24h_in,
-        snowReportStatus: r.snow_report_status,
-        snowReportUpdatedAt: r.snow_report_updated_at,
+        currentlyOpen: r.currently_open,
+        snowUpdatedAt: snowUpdatedAt(r),
         timeZone,
       },
       now,
@@ -189,9 +176,7 @@ export async function GET(request: Request) {
     else skipped[verdict]++;
   }
 
-  if (firing.length === 0) {
-    return NextResponse.json({ ok: true, fired: 0, skipped });
-  }
+  if (firing.length === 0) return { ok: true, fired: 0, skipped };
 
   // 4. Registered devices for the affected users, one query.
   const userIds = Array.from(new Set(firing.map((f) => f.alert.user_id)));
@@ -199,9 +184,7 @@ export async function GET(request: Request) {
     .from("push_subscriptions")
     .select("user_id, endpoint, p256dh, auth")
     .in("user_id", userIds);
-  if (subsErr) {
-    return NextResponse.json({ ok: false, reason: subsErr.message }, { status: 500 });
-  }
+  if (subsErr) return { ok: false, reason: `push_subscriptions: ${subsErr.message}` };
   const subsByUser = new Map<string, SubRow[]>();
   for (const s of (subsData ?? []) as SubRow[]) {
     if (!s.user_id) continue;
@@ -215,6 +198,7 @@ export async function GET(request: Request) {
   //    user accepted the push, which is what makes the per-day dedupe hold.
   let fired = 0;
   let noDevice = 0;
+  let attempts = 0;
   const errors: Array<{ alert_id: number; endpoint: string; error: string }> = [];
   const deadEndpoints = new Set<string>();
   const vapidMismatchEndpoints = new Set<string>();
@@ -226,17 +210,17 @@ export async function GET(request: Request) {
       continue;
     }
     const inches = resort.snow_new_24h_in ?? 0;
+    const reported = isReportedStatus(resort.snow_report_status);
     // Only stamp a time when we know the resort's zone: printing the
     // server's UTC clock as if it were local would be worse than no time.
-    const checkedAt =
-      resort.snow_report_updated_at && timeZone
-        ? formatResortLocalTime(new Date(resort.snow_report_updated_at), timeZone)
-        : null;
+    const stampSource = snowUpdatedAt(resort);
+    const stamp = stampSource && timeZone ? formatResortLocalTime(new Date(stampSource), timeZone) : null;
+    const provenance = reported
+      ? `Resort-reported 24 h snowfall${stamp ? ` (report from ${stamp})` : ""}.`
+      : `Measured 24 h snowfall from the NOAA snow analysis${stamp ? `, checked at ${stamp}` : ""}.`;
     const payload = {
       title: `${inches} in of new snow at ${resort.name}`,
-      body:
-        `Resort-reported 24 h snowfall${checkedAt ? `, checked at ${checkedAt}` : ""}. ` +
-        `Your alert threshold is ${alert.threshold_in} in.`,
+      body: `${provenance} Your alert threshold is ${alert.threshold_in} in.`,
       url: `/resort/${resort.slug}`,
       label: "Snow alert",
       tag: `snow-alert-${resort.id}`,
@@ -245,6 +229,7 @@ export async function GET(request: Request) {
     let anyOk = false;
     for (const sub of subs) {
       if (deadEndpoints.has(sub.endpoint)) continue;
+      attempts++;
       const result = await sendWebPush(
         { endpoint: sub.endpoint, keys: { p256dh: sub.p256dh, auth: sub.auth } },
         payload,
@@ -254,7 +239,12 @@ export async function GET(request: Request) {
         anyOk = true;
         continue;
       }
-      if (result.dead) deadEndpoints.add(sub.endpoint);
+      if (result.dead) {
+        // The browser uninstalled the subscription — prune, not a failure.
+        deadEndpoints.add(sub.endpoint);
+        attempts--;
+        continue;
+      }
       if (result.vapidMismatch) vapidMismatchEndpoints.add(sub.endpoint);
       errors.push({
         alert_id: alert.id,
@@ -287,9 +277,14 @@ export async function GET(request: Request) {
     }
   }
 
-  return NextResponse.json({
-    ok: true,
+  const failShare = attempts ? errors.length / attempts : 0;
+  const ok = failShare <= FAIL_SHARE_LIMIT;
+  return {
+    ok,
+    reason: ok ? undefined : "too_many_push_failures",
     fired,
+    attempts,
+    fail_share: Math.round(failShare * 100) / 100,
     noDevice,
     skipped,
     expiredPruned,
@@ -298,6 +293,10 @@ export async function GET(request: Request) {
     // rotation is expected until those users re-enable alerts; non-zero
     // on a fresh deploy means the browser and server keys do not match.
     vapidMismatch: vapidMismatchEndpoints.size,
-    errors,
-  });
+    errors: errors.slice(0, 20),
+  };
+}
+
+export async function GET(request: Request) {
+  return runCron(request, "check-snow-alerts", maxDuration, runAlerts);
 }

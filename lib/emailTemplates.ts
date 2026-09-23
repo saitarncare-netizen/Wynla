@@ -5,9 +5,9 @@
 // lives on the element itself.
 //
 // Every number is labelled with what it is and where it came from
-// ("Reported" = the resort's own snow report, "Estimated" = weather
-// model, "Forecast" = NWS forecast), because a bare 6" means nothing
-// to a reader deciding whether to drive.
+// ("Reported" = the resort's own snow report, "Measured" = the NOAA
+// snowfall analysis / SNOTEL at the resort, "Forecast" = NWS forecast),
+// because a bare 6" means nothing to a reader deciding whether to drive.
 //
 // Wynla brand palette:
 //   navy     #1E2952  primary text / headings
@@ -38,20 +38,20 @@ export type FavoriteResortSnapshot = {
   conditions: string | null;
   /** New snow in the last 24 h, inches. */
   snowNew24h: number | null;
-  /** New snow in the last 7 days, inches (resort-reported only). */
+  /** New snow in the last 7 days, inches (reported or measured). */
   snowNew7d: number | null;
   /** Where snowNew24h came from. */
   snowSource: SnowSource;
   /** Friendly operating status, e.g. "Open", "Off-season". */
   statusLabel: string;
-  /** True when the resort is open or running limited operations. */
+  /** True when the resort is verified open (resorts.currently_open). */
   operating: boolean;
-  /** False when the resort's report could not be read (status unknown),
-   *  so the row must not claim the hill is closed. */
+  /** False when we do not know whether the hill runs (currently_open
+   *  null), so the row must not claim the hill is closed. */
   statusKnown: boolean;
   /** Today's snow surface class label from the classifier, if any. */
   surfaceLabel: string | null;
-  /** Whether the snow report is recent enough to trust (see alertRules). */
+  /** Whether the snow number is recent enough to trust (see alertRules). */
   reportFresh: boolean;
   primaryPass: string;
 };
@@ -92,12 +92,12 @@ function sourceWord(r: FavoriteResortSnapshot): string {
 function snowLine(r: FavoriteResortSnapshot): string {
   if (!r.operating) {
     // A row whose status line says "Status unknown" must not also say
-    // "closed": the report failed to parse, we do not know either way.
-    // Show the model estimate when there is one, clearly labelled, so the
-    // footer's "unless marked estimated" promise holds.
+    // "closed": we have no season evidence, we do not know either way.
+    // Show the number when there is one, clearly labelled with its source
+    // and the caveat, so the footer's provenance promise holds.
     if (!r.statusKnown) {
       if (r.reportFresh && r.snowNew24h != null && r.snowNew24h > 0) {
-        return `Estimated ${r.snowNew24h} in new snow in 24 h (weather model, no resort report)`;
+        return `${r.snowNew24h} in new snow in 24 h (${sourceWord(r)}, open status unconfirmed)`;
       }
       return "No snow report available";
     }
@@ -175,12 +175,12 @@ export function buildDigestEmail(input: DigestEmailInput): DigestEmailOutput {
     : `Your Wynla ${cadence} snow digest for ${date}`;
 
   const intro = powderResort
-    ? `Fresh snow at <strong style="color:${NAVY};">${escapeHtml(powderResort.name)}</strong>: ${powderResort.snowNew24h} in reported in the last 24 h. ${isRecap ? "Top resorts for new snow right now:" : "Here is your watchlist:"}`
+    ? `Fresh snow at <strong style="color:${NAVY};">${escapeHtml(powderResort.name)}</strong>: ${powderResort.snowNew24h} in of new snow in the last 24 h. ${isRecap ? "Top resorts for new snow right now:" : "Here is your watchlist:"}`
     : isRecap
       ? "You have no favorites yet, so here are the resorts reporting the most new snow right now:"
       : "Here is the latest from your favorites:";
   const introText = powderResort
-    ? `Fresh snow at ${powderResort.name}: ${powderResort.snowNew24h} in reported in the last 24 h.`
+    ? `Fresh snow at ${powderResort.name}: ${powderResort.snowNew24h} in of new snow in the last 24 h.`
     : isRecap
       ? "You have no favorites yet, so here are the resorts reporting the most new snow right now:"
       : "Here is the latest from your favorites:";
@@ -229,7 +229,7 @@ export function buildDigestEmail(input: DigestEmailInput): DigestEmailOutput {
           <tr>
             <td style="padding:16px 24px 24px 24px;border-top:1px solid #e6e2d8;">
               <p style="margin:0 0 6px 0;font-size:12px;color:${CHARCOAL};line-height:1.5;">
-                Snow figures are the resort&rsquo;s own report unless marked estimated or forecast. Temperatures are the NWS forecast high for today.
+                Every snow figure names its source: resort-reported (the resort&rsquo;s own report), measured (NOAA snowfall analysis at the resort) or forecast (NWS). Temperatures are the NWS forecast high for today.
               </p>
               <p style="margin:0;font-size:12px;color:${CHARCOAL};line-height:1.5;">
                 You get this because you turned on digest emails on Wynla.
@@ -265,7 +265,7 @@ export function buildDigestEmail(input: DigestEmailInput): DigestEmailOutput {
       return parts.join("\n");
     }),
     "",
-    "Snow figures are the resort's own report unless marked estimated or forecast. Temperatures are the NWS forecast high for today.",
+    "Every snow figure names its source: resort-reported (the resort's own report), measured (NOAA snowfall analysis at the resort) or forecast (NWS). Temperatures are the NWS forecast high for today.",
     "",
     `Open Wynla: ${SITE_BASE}`,
     `Change cadence or threshold: ${preferencesUrl}`,

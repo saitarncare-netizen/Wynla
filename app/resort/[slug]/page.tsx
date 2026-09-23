@@ -55,6 +55,7 @@ import { airportByIata } from "@/lib/airports";
 import { haversineMeters, estimateDriveSeconds } from "@/lib/distance";
 import { formatDriveTime } from "@/lib/origins";
 import { skyscannerUrl } from "@/lib/affiliateLinks";
+import { forecastDaysFrom } from "@/lib/weather/forecastJson";
 
 // ISR — resort detail data (lifts/trails/passes/coords) changes rarely.
 // Snow conditions are stamped on the row by the cron; ISR every 10 min
@@ -163,10 +164,14 @@ type ForecastDay = {
   wind_short: string | null;
   wind_dir_short: string | null;
   uv_index_max?: number | null;
-  // forecast_json v2 (pipeline package) may add these; we read them
-  // defensively and fall back to the fields above when absent.
+  // forecast_json v2 (pipeline package, lib/weather/forecastJson.ts)
+  // adds these; read defensively — v1 rows lack them.
   rain_in?: number | null;
   precip_in?: number | null;
+  /** Liquid-equivalent precipitation (NWS QPF), v2. */
+  qpf_in?: number | null;
+  /** Peak gust, v2. */
+  gust_mph?: number | null;
   wind_gust_mph?: number | null;
 };
 
@@ -181,7 +186,8 @@ type WeatherSnapshot = {
   wind_mph_gust: number | null;
   wind_dir_short: string | null;
   fetched_at: string | null;
-  forecast_json: ForecastDay[] | null;
+  /** v1 array or v2 object; always read through forecastDaysFrom(). */
+  forecast_json: ForecastDay[] | { v: 2; days: ForecastDay[] } | null;
 };
 
 type HistoryRow = {
@@ -380,9 +386,10 @@ export default async function ResortPage({
     return fromHistory;
   })();
 
-  const surfaceForecastDays: SurfaceForecastDay[] = (
-    weather?.forecast_json ?? []
-  )
+  // forecast_json is v1 (bare array) or v2 ({ v: 2, days: [...] }) —
+  // forecastDaysFrom() reads both while rows roll over.
+  const forecastDays = forecastDaysFrom(weather?.forecast_json);
+  const surfaceForecastDays: SurfaceForecastDay[] = forecastDays
     .slice(1, 4)
     .map((d) => ({
       date: d.date,
@@ -393,7 +400,8 @@ export default async function ResortPage({
       conditions_short: d.conditions_short,
       wind_short: d.wind_short,
       rain_in: typeof d.rain_in === "number" ? d.rain_in : null,
-      precip_in: typeof d.precip_in === "number" ? d.precip_in : null,
+      precip_in:
+        typeof d.precip_in === "number" ? d.precip_in : typeof d.qpf_in === "number" ? d.qpf_in : null,
     }));
 
   // Context the classifier needs beyond the weather rows. isOpen is a
@@ -652,17 +660,17 @@ export default async function ResortPage({
             planning range. Always rendered when forecast_json is
             populated; the summer cards still give users a "is the
             mountain getting cold yet" pulse leading into November. */}
-        {weather?.forecast_json && weather.forecast_json.length > 0 && (
+        {forecastDays.length > 0 && (
           <Section
-            title={`${Math.min(weather.forecast_json.length, 10)}-day forecast`}
+            title={`${Math.min(forecastDays.length, 10)}-day forecast`}
             subtitle={
-              weather.forecast_json.length >= 8
+              forecastDays.length >= 8
                 ? "Swipe sideways to see the full window. Days 8–10 are trend-only."
                 : "Swipe sideways to see the full window."
             }
           >
             <TenDayForecast
-              days={weather.forecast_json.slice(0, 10)}
+              days={forecastDays.slice(0, 10)}
               resortWind={windContextFor(resort)}
             />
           </Section>
@@ -1312,17 +1320,19 @@ function FullWeatherCard({
     );
   }
 
-  // Combine new-snow from weather_cache (live NWS-derived) and the
-  // Stage 26 cron column. Prefer the cron column when set since it
-  // pulls from OnTheSnow's resort-reported numbers; fall back to NWS.
+  // New snow: resorts.snow_new_24h_in is MEASURED (NOHRSC analysis /
+  // SNOTEL, or a licensed resort report when one exists) while
+  // weather_cache holds today's FORECAST. Prefer measured, else forecast.
   const snowNew24 =
     resort.snow_new_24h_in ?? (weather.snow_24h_in != null ? Number(weather.snow_24h_in) : null);
   const base = resort.snow_base_depth_in;
 
   // Status line — the same derived status the at-a-glance pill shows
-  // (open / limited / opens ~date / off-season / check resort), so the
-  // weather card never contradicts the strip. Off-season is said plainly
-  // instead of the old hard-coded "opens in Nov".
+  // (open / opens ~date / off-season / check resort), so the weather card
+  // never contradicts the strip. lib/seasonDates.deriveResortStatus reads
+  // the verified open flag (resorts.currently_open: true / false with
+  // evidence, null unknown) and only prints lifts / trails counts when a
+  // licensed report (snow_report_status = 'reported') supplied them.
   const statusTone: Record<ResortStatus["tone"], string> = {
     green: "text-emerald-800",
     amber: "text-amber-800",
@@ -1330,7 +1340,10 @@ function FullWeatherCard({
     navy: "text-wn-navy",
     muted: "text-wn-charcoal/65",
   };
-  const rawReportStatus = (resort.snow_report_status ?? "unknown").toLowerCase();
+  // Only a licensed resort report has a "Snow report" time worth dating;
+  // for 'no_feed' rows snow_report_updated_at is just the last season-
+  // status evaluation.
+  const reported = resort.snow_report_status === "reported";
 
   return (
     <div className="rounded-lg border border-wn-charcoal/10 bg-white p-4">
@@ -1409,7 +1422,7 @@ function FullWeatherCard({
           available. */}
       {(() => {
         const sun = computeSunTimes(lat, lng);
-        const todayUv = weather.forecast_json?.[0]?.uv_index_max ?? null;
+        const todayUv = forecastDaysFrom(weather.forecast_json)[0]?.uv_index_max ?? null;
         if (!sun && todayUv == null) return null;
         return (
           <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] font-medium text-wn-charcoal/70">
@@ -1449,12 +1462,12 @@ function FullWeatherCard({
 
       {/* Sync stamps in the RESORT's clock with the zone named — the ISR
           server renders in UTC, so a bare "12:03 PM" was wrong for every
-          visitor. The snow-report stamp is gated on the raw scrape
-          status: an "unknown" report has no data worth dating. */}
+          visitor. The snow-report stamp only shows for a licensed resort
+          report; a 'no_feed' row has no report worth dating. */}
       {weather.fetched_at && (
         <p className="mt-3 text-[10px] text-wn-charcoal/45">
           Weather synced {formatStampInZone(new Date(weather.fetched_at), tz)}
-          {resort.snow_report_updated_at && rawReportStatus !== "unknown" && (
+          {reported && resort.snow_report_updated_at && (
             <>
               {" · Snow report "}
               {formatStampInZone(new Date(resort.snow_report_updated_at), tz)}
