@@ -1,0 +1,247 @@
+{
+  "generatedAt": "2026-09-23T17:42:53.006Z",
+  "resorts": 394,
+  "withCandidates": 232,
+  "withoutCandidates": 162,
+  "withExistingStorageHero": 104,
+  "noCandidateAndNoHero": 141,
+  "totalCandidates": 906,
+  "candidateDistribution": {
+    "0": 162,
+    "1": 55,
+    "2": 25,
+    "3": 20,
+    "4": 20,
+    "5": 11,
+    "6": 101
+  },
+  "wikidataMatch": {
+    "coord": 190,
+    "name": 3,
+    "none": 201
+  },
+  "candidateSeasons": {
+    "winter": 878,
+    "unknown": 28
+  },
+  "candidateSources": {
+    "p18": 48,
+    "category": 383,
+    "geosearch": 305,
+    "search": 170
+  },
+  "byTier": {
+    "listed": {
+      "resorts": 344,
+      "withCandidates": 186
+    },
+    "featured": {
+      "resorts": 50,
+      "withCandidates": 46
+    }
+  },
+  "byState": {
+    "AK": {
+      "resorts": 6,
+      "withCandidates": 5
+    },
+    "AL": {
+      "resorts": 1,
+      "withCandidates": 0
+    },
+    "AZ": {
+      "resorts": 3,
+      "withCandidates": 2
+    },
+    "CA": {
+      "resorts": 25,
+      "withCandidates": 23
+    },
+    "CO": {
+      "resorts": 32,
+      "withCandidates": 27
+    },
+    "CT": {
+      "resorts": 4,
+      "withCandidates": 4
+    },
+    "IA": {
+      "resorts": 4,
+      "withCandidates": 1
+    },
+    "ID": {
+      "resorts": 15,
+      "withCandidates": 7
+    },
+    "IL": {
+      "resorts": 4,
+      "withCandidates": 0
+    },
+    "IN": {
+      "resorts": 2,
+      "withCandidates": 2
+    },
+    "MA": {
+      "resorts": 11,
+      "withCandidates": 7
+    },
+    "MD": {
+      "resorts": 1,
+      "withCandidates": 0
+    },
+    "ME": {
+      "resorts": 17,
+      "withCandidates": 6
+    },
+    "MI": {
+      "resorts": 30,
+      "withCandidates": 12
+    },
+    "MN": {
+      "resorts": 15,
+      "withCandidates": 7
+    },
+    "MO": {
+      "resorts": 2,
+      "withCandidates": 2
+    },
+    "MT": {
+      "resorts": 16,
+      "withCandidates": 9
+    },
+    "NC": {
+      "resorts": 6,
+      "withCandidates": 1
+    },
+    "ND": {
+      "resorts": 4,
+      "withCandidates": 0
+    },
+    "NH": {
+      "resorts": 19,
+      "withCandidates": 11
+    },
+    "NJ": {
+      "resorts": 2,
+      "withCandidates": 1
+    },
+    "NM": {
+      "resorts": 8,
+      "withCandidates": 6
+    },
+    "NV": {
+      "resorts": 4,
+      "withCandidates": 3
+    },
+    "NY": {
+      "resorts": 33,
+      "withCandidates": 10
+    },
+    "OH": {
+      "resorts": 5,
+      "withCandidates": 3
+    },
+    "OR": {
+      "resorts": 12,
+      "withCandidates": 12
+    },
+    "PA": {
+      "resorts": 21,
+      "withCandidates": 14
+    },
+    "SD": {
+      "resorts": 2,
+      "withCandidates": 0
+    },
+    "TN": {
+      "resorts": 1,
+      "withCandidates": 1
+    },
+    "UT": {
+      "resorts": 16,
+      "withCandidates": 13
+    },
+    "VA": {
+      "resorts": 4,
+      "withCandidates": 4
+    },
+    "VT": {
+      "resorts": 21,
+      "withCandidates": 17
+    },
+    "WA": {
+      "resorts": 14,
+      "withCandidates": 12
+    },
+    "WI": {
+      "resorts": 20,
+      "withCandidates": 3
+    },
+    "WV": {
+      "resorts": 5,
+      "withCandidates": 3
+    },
+    "WY": {
+      "resorts": 9,
+      "withCandidates": 4
+    }
+  },
+  "topRejections": [
+    {
+      "reason": "exif-summer",
+      "n": 4647
+    },
+    {
+      "reason": "too-small",
+      "n": 2313
+    },
+    {
+      "reason": "not-landscape",
+      "n": 1986
+    },
+    {
+      "reason": "not-jpg-png",
+      "n": 1429
+    },
+    {
+      "reason": "not-relevant",
+      "n": 987
+    },
+    {
+      "reason": "title-excluded",
+      "n": 528
+    },
+    {
+      "reason": "category-excluded",
+      "n": 226
+    },
+    {
+      "reason": "restrictions",
+      "n": 43
+    },
+    {
+      "reason": "licence:No restrictions",
+      "n": 36
+    },
+    {
+      "reason": "licence:Attribution",
+      "n": 9
+    },
+    {
+      "reason": "licence:KOGL Type 1",
+      "n": 2
+    },
+    {
+      "reason": "licence:GFDL 1.2",
+      "n": 2
+    },
+    {
+      "reason": "licence:GFDL",
+      "n": 1
+    },
+    {
+      "reason": "licence:Hungarian banknote",
+      "n": 1
+    }
+  ]
+}

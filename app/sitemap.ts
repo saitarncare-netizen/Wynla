@@ -119,6 +119,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.3,
     },
     {
+      url: `${SITE_URL}/credits`,
+      lastModified: STATIC_CONTENT_UPDATED,
+      changeFrequency: "monthly",
+      priority: 0.3,
+    },
+    {
       url: `${SITE_URL}/privacy`,
       lastModified: STATIC_CONTENT_UPDATED,
       changeFrequency: "yearly",
