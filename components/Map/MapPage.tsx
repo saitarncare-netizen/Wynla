@@ -128,6 +128,9 @@ export type Resort = {
   trails_open_today: number | null;
   lifts_open_today: number | null;
   snow_report_status: string | null;
+  /** When the status jobs last wrote the row; deriveResortStatus ignores a
+   *  stale open flag (surface package). */
+  snow_report_updated_at: string | null;
   // Stage 27 — lift ticket pricing (trip-cost estimator). Currency,
   // booking URL and updated-at stay on the resort page.
   ticket_price_adult_min: number | null;
@@ -158,6 +161,9 @@ export type Resort = {
     magic_carpet?: number;
   } | null;
   currently_open: boolean | null;
+  /** Last season's close until the status jobs refresh it; only used as
+   *  "until …" copy while still ahead (ResortPanel status). */
+  season_end_date: string | null;
   // Inaugural Season 2026 — Snow Surface Forecast. Written by the
   // refresh-weather cron after each daily run; off-season resorts get
   // NULL. Filterable via ?surface=PP,PPC,MG on the URL.
