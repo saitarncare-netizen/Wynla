@@ -2,7 +2,7 @@
 // template definition from lib/tripTemplates and the resort details
 // (name, lat/lng, passes) from the resorts table. Renders the full
 // itinerary + a "Customize and save" CTA that hands off to the planner
-// with ?plan=1&template=<slug>.
+// with ?plan=1&template=<slug>&route=…&days=N (see customizeHref below).
 
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -10,7 +10,7 @@ import type { Metadata } from "next";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { getTemplate, TEMPLATES } from "@/lib/tripTemplates";
 import { haversineMeters, estimateDriveSeconds } from "@/lib/distance";
-import { formatDriveTime } from "@/lib/origins";
+import { formatDriveTime, ORIGINS } from "@/lib/origins";
 import { metersToMiles } from "@/lib/tripCost";
 import { passColor, primaryPass } from "@/lib/passColors";
 
@@ -92,17 +92,32 @@ export default async function TripTemplatePage({
   const totalMiles = Math.round(metersToMiles(totalMeters * 1.2)); // 1.2 highway factor
   const totalDays = tpl.daysPerResort.reduce((a, b) => a + b, 0);
 
-  // Build the "Customize and save" deep link. The planner reads
-  // ?template=<slug> on mount and hydrates from getTemplate(slug).
-  // ?plan=1 opens the planner sheet immediately. We also set
-  // ?from=geo&fromLat=…&fromLng=… so the map's origin resolver picks
-  // up the template's origin city (most template origins aren't in
-  // the global city list yet — Denver / SLC / Reno / Bozeman). MapPage
-  // resolves this as a "geo" origin with the template's label.
+  // Build the "Customize and save" deep link. Everything the planner
+  // needs is in the URL from the first render so nothing has to be
+  // patched in afterwards:
+  //   plan=1      opens the planner sheet immediately
+  //   template=   title + "Template loaded" banner
+  //   route=      one slug per day (Vail,Vail,Aspen) — the planner's
+  //               route seed groups repeats into stops with day counts
+  //   days=       the template's total, so the trip length matches the
+  //               stops instead of defaulting to 1 and being bumped
+  //   from=       the origin. Cities in the global list (NYC, Boston)
+  //               use their code; the others (Denver, SLC, Reno,
+  //               Bozeman) go as geo coordinates plus fromLabel= so the
+  //               planner shows "Denver", not "Your location".
+  const routeSlugs = tpl.resortSlugs.flatMap((slug, i) =>
+    Array.from({ length: Math.max(1, tpl.daysPerResort[i] ?? 1) }, () => slug),
+  );
+  const originParams = ORIGINS.some((o) => o.code === tpl.origin.code)
+    ? `from=${tpl.origin.code}`
+    : `from=geo&fromLat=${tpl.origin.lat.toFixed(5)}` +
+      `&fromLng=${tpl.origin.lon.toFixed(5)}` +
+      `&fromLabel=${encodeURIComponent(tpl.origin.name)}`;
   const customizeHref =
     `/?plan=1&template=${tpl.slug}` +
-    `&from=geo&fromLat=${tpl.origin.lat.toFixed(5)}` +
-    `&fromLng=${tpl.origin.lon.toFixed(5)}`;
+    `&route=${encodeURIComponent(routeSlugs.join(","))}` +
+    `&days=${Math.max(1, totalDays)}` +
+    `&${originParams}`;
 
   return (
     <main className="min-h-dvh bg-wn-offwhite">
