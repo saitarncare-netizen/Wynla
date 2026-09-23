@@ -16,20 +16,24 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import type { HeroSource } from "@/lib/heroSource";
+import Link from "next/link";
+import { isDeniedHero, isStorageHeroUrl, tidyAttribution, type HeroSource } from "@/lib/heroSource";
 
 type Props = {
   /** Resolved by heroSourceFor(resort). Preferred. */
   source?: HeroSource;
   /**
    * Legacy props, kept so components/Map/ResortPanel.tsx (owned by the
-   * sheet package) keeps compiling until it switches to `source`. They
-   * are treated as a storage-hosted photo; new callers must pass `source`.
+   * sheet package) keeps compiling until it switches to `source`. The URL
+   * still has to pass the storage-host check and the denylist, so the
+   * legacy path cannot show a hotlinked or rejected photo; it never falls
+   * back to a terrain card (it has no slug), which is what `source` adds.
+   * Remove once ResortPanel passes `source`.
    */
   src?: string;
   alt?: string;
   attribution?: string | null;
-  /** Panel hero is shorter — slightly lighter scrim. */
+  /** Panel hero is shorter — slightly lighter scrim, credit top-left. */
   compact?: boolean;
   /**
    * Layout-accurate `sizes` for the optimizer. The two consumers differ a
@@ -40,17 +44,22 @@ type Props = {
   sizes?: string;
 };
 
+function fromLegacy(src: string | undefined, alt: string | undefined, attribution: string | null | undefined): HeroSource | null {
+  if (!src || !isStorageHeroUrl(src) || isDeniedHero(src)) return null;
+  return { kind: "photo", src, thumb: src, alt: alt ?? "", credit: tidyAttribution(attribution) };
+}
+
 export default function HeroImage({ source, src, alt, attribution, compact, sizes = "100vw" }: Props) {
   const [failed, setFailed] = useState(false);
-  const resolved: HeroSource | null = source ?? (src ? { kind: "photo", src, thumb: src, alt: alt ?? "", credit: attribution ?? null } : null);
+  const resolved: HeroSource | null = source ?? fromLegacy(src, alt, attribution);
   if (!resolved || resolved.kind === "gradient" || !resolved.src || failed) return null;
   const scrim = compact
     ? "linear-gradient(180deg, rgba(15,21,48,0.35) 0%, rgba(15,21,48,0.15) 40%, rgba(15,21,48,0.8) 100%)"
     : "linear-gradient(180deg, rgba(15,21,48,0.5) 0%, rgba(15,21,48,0.2) 38%, rgba(15,21,48,0.8) 100%)";
-  // A terrain card already carries its own name, scrim and provenance
-  // note at the bottom; the page's own heading sits over the same area,
-  // so mask the card's text band and print the provenance in our chip.
   const isCard = resolved.kind === "card";
+  // Terrain cards are rendered without text, so the page's own heading is
+  // the only name on screen; the chip says what the image is.
+  const chip = isCard ? "Terrain render · USGS 3DEP" : resolved.credit ? `Photo: ${resolved.credit}` : null;
   return (
     <>
       <Image
@@ -61,17 +70,34 @@ export default function HeroImage({ source, src, alt, attribution, compact, size
         // LCP element — preload + skip lazy-loading.
         priority
         sizes={sizes}
-        className={isCard ? "object-cover object-top" : "object-cover"}
+        className="object-cover"
         // The source photos are already curated 1280px thumbs and the cards
         // are WebP; mild compression on top is fine for a scrimmed hero.
         quality={70}
       />
       <div aria-hidden="true" className="absolute inset-0" style={{ background: scrim }} />
-      {!compact && resolved.credit && (
-        <p className="absolute bottom-1 right-2 z-10 text-[9px] text-white/45">
-          {isCard ? "Terrain render · USGS 3DEP" : resolved.credit}
-        </p>
-      )}
+      {chip &&
+        (compact ? (
+          // The map panel has no footer to carry the credit, so the chip is
+          // the attribution CC BY / BY-SA asks for, and it links to the full
+          // entry. Top-left is the one free corner (buttons top-right, the
+          // name bottom-left). The link box is 44 px tall for touch while
+          // the visible pill stays small.
+          <Link
+            href="/credits"
+            className="group absolute left-2 top-0 z-10 flex min-h-11 max-w-[55%] items-center"
+            aria-label={isCard ? "Terrain render from USGS 3DEP elevation data. Photo credits" : `${chip}. Photo credits`}
+          >
+            <span className="rounded bg-[#0F1530]/70 px-1.5 py-0.5 text-[10px] leading-tight text-white/90 group-hover:underline">
+              {chip}
+            </span>
+          </Link>
+        ) : (
+          // The resort page prints the full credit and a /credits link in
+          // its footer; this chip is the on-image label. White/70 over the
+          // 0.8 navy scrim clears 4.5:1.
+          <p className="absolute bottom-1 right-2 z-10 text-[10px] text-white/70">{chip}</p>
+        ))}
     </>
   );
 }

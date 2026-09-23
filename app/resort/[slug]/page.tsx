@@ -897,7 +897,7 @@ export default async function ResortPage({
           </p>
           {hero.kind === "photo" && (
             <p className="mt-2">
-              Header photo: {hero.credit ?? "Wikimedia Commons"}, cropped and resized.{" "}
+              Header photo: {hero.credit ?? "Wikimedia Commons"}, resized and may be cropped.{" "}
               <Link href="/credits" className="font-medium text-wn-charcoal/80 underline hover:text-wn-navy">
                 Photo credits
               </Link>

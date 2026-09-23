@@ -29,6 +29,8 @@ type Source = {
   url: string;
   usedFor: string;
   license: string;
+  /** An internal page with the per-item credits, when one exists. */
+  details?: { href: string; label: string };
 };
 
 // Order matters: government / public-domain sources first, then open
@@ -45,6 +47,13 @@ const SOURCES: Source[] = [
     license: "US government work, public domain (17 U.S.C. § 105)",
   },
   {
+    name: "AWS Terrain Tiles (USGS 3DEP and SRTM elevation)",
+    url: "https://registry.opendata.aws/terrain-tiles/",
+    usedFor: "The shaded-relief terrain render shown in place of a photo for resorts without one",
+    license: "Public domain; elevation data courtesy of the U.S. Geological Survey and NASA JPL",
+    details: { href: "/credits", label: "How the renders are made" },
+  },
+  {
     name: "Open-Meteo",
     url: "https://open-meteo.com/",
     usedFor: "Hourly temperature, precipitation and wind used by the snow surface forecast",
@@ -59,9 +68,10 @@ const SOURCES: Source[] = [
   {
     name: "Wikimedia Commons",
     url: "https://commons.wikimedia.org/",
-    usedFor: "Some resort hero photos",
+    usedFor: "Resort header photos",
     license:
-      "Each photo carries its own license (CC BY, CC BY-SA or public domain); the photographer and license are credited on the resort page that shows the photo",
+      "Each photo carries its own license (CC0, CC BY, CC BY-SA or public domain); the photographer, license and source file are credited on the resort page that shows the photo and on the photo credits page",
+    details: { href: "/credits", label: "Photo credits" },
   },
   {
     name: "Mapbox",
@@ -141,6 +151,14 @@ export default function DataSourcesPage() {
                     <dd>{s.license}</dd>
                   </div>
                 </dl>
+                {s.details && (
+                  <Link
+                    href={s.details.href}
+                    className="mt-1 inline-flex min-h-11 items-center text-sm font-semibold text-wn-navy underline hover:no-underline"
+                  >
+                    {s.details.label}
+                  </Link>
+                )}
               </li>
             ))}
           </ul>
@@ -188,6 +206,10 @@ export default function DataSourcesPage() {
 
         <p className="text-xs text-wn-charcoal/55">
           See also our{" "}
+          <Link href="/credits" className="font-semibold text-wn-navy underline hover:no-underline">
+            photo credits
+          </Link>
+          ,{" "}
           <Link href="/privacy" className="font-semibold text-wn-navy underline hover:no-underline">
             privacy policy
           </Link>{" "}

@@ -5,16 +5,27 @@
 //
 // Read-only: the list comes from the resorts row's hero_image_* columns
 // (the same policy as the hero itself, lib/heroSource.ts, so a photo that
-// is not shown is not credited) plus lib/data/heroCredits.json for the
-// source-page links the 2026-06 batch did not store. Terrain cards are
+// is not shown, including a denylisted one, is not credited) plus
+// lib/data/heroCredits.json, the pipeline's credit ledger. A ledger entry
+// is used only when its `url` is the exact URL on the row: between
+// 3-publish --confirm (which rewrites the entry for the new file) and the
+// SQL being applied, the row still shows the old photo, and it must not
+// be credited with the new file's author or source. Terrain cards are
 // public-domain renders and get one line, not 395.
 
 import type { Metadata } from "next";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { getStateName } from "@/lib/usStates";
-import { commonsSearchUrl, heroSourceFor, licenceUrlFor, parseAttribution, HERO_BUCKET } from "@/lib/heroSource";
-import terrainCards from "@/lib/data/terrainCards.json";
+import {
+  commonsSearchUrl,
+  heroSourceFor,
+  licenceUrlFor,
+  parseAttribution,
+  terrainCardCount,
+  tidyAttribution,
+  HERO_BUCKET,
+} from "@/lib/heroSource";
 import heroCredits from "@/lib/data/heroCredits.json";
 
 export const revalidate = 3600; // credits change when a photo is published, not per view
@@ -54,17 +65,36 @@ type Credit = {
   sourceLabel: string;
 };
 
-type LegacyCredit = { title?: string; sourcePage?: string };
-const LEGACY = heroCredits as Record<string, LegacyCredit>;
+type LedgerCredit = {
+  url?: string;
+  title?: string;
+  sourcePage?: string;
+  author?: string | null;
+  licence?: string | null;
+  licenceUrl?: string | null;
+};
+const LEDGER = heroCredits as Record<string, LedgerCredit>;
+
+/** The ledger entry for this row, only when it describes the photo actually on the row. */
+function ledgerFor(row: Row): LedgerCredit | null {
+  const entry = LEDGER[row.slug];
+  return entry?.url && entry.url === row.hero_image_url ? entry : null;
+}
 
 /** hero_image_credit is the source page when the 2026-09 pipeline wrote it;
- *  older rows fall back to the recovered link, then to a Commons search. */
-function sourceFor(row: Row): { url: string; label: string } {
+ *  older rows fall back to the matching ledger entry, then to a Commons search. */
+function sourceFor(row: Row, ledger: LedgerCredit | null): { url: string; label: string } {
   const credit = row.hero_image_credit?.trim() ?? "";
   if (/^https?:\/\//.test(credit)) return { url: credit, label: "Source" };
-  const legacy = LEGACY[row.slug];
-  if (legacy?.sourcePage) return { url: legacy.sourcePage, label: "Source" };
+  if (ledger?.sourcePage) return { url: ledger.sourcePage, label: "Source" };
   return { url: commonsSearchUrl(row.name), label: "Search on Wikimedia Commons" };
+}
+
+/** Deed link: the ledger's (straight from Commons) when present, else derived from the short name. */
+function deedFor(licence: string | null, ledger: LedgerCredit | null): string | null {
+  const fromLedger = ledger?.licenceUrl?.trim();
+  if (fromLedger && /^https:\/\//.test(fromLedger)) return fromLedger;
+  return licenceUrlFor(licence);
 }
 
 async function loadCredits(): Promise<{ credits: Credit[]; error: string | null }> {
@@ -81,15 +111,21 @@ async function loadCredits(): Promise<{ credits: Credit[]; error: string | null 
   for (const row of data ?? []) {
     // Same gate as the hero: a photo we do not show is not credited here.
     if (heroSourceFor(row).kind !== "photo") continue;
-    const { author, licence } = parseAttribution(row.hero_image_attribution);
-    const source = sourceFor(row);
+    const ledger = ledgerFor(row);
+    // The ledger holds the cleaned, live-checked author and licence; the
+    // column may still hold the 2026-06 batch's raw text until
+    // scripts/photos/legacy/legacy-heroes.sql is applied.
+    const column = parseAttribution(tidyAttribution(row.hero_image_attribution));
+    const author = ledger ? (ledger.author ?? null) : column.author;
+    const licence = ledger?.licence ?? column.licence;
+    const source = sourceFor(row, ledger);
     credits.push({
       slug: row.slug,
       name: row.name,
       state: row.state,
       author,
       licence,
-      licenceUrl: licenceUrlFor(licence),
+      licenceUrl: deedFor(licence, ledger),
       sourcePage: source.url,
       sourceLabel: source.label,
     });
@@ -106,7 +142,7 @@ export default async function CreditsPage() {
     byState.set(c.state, list);
   }
   const states = [...byState.keys()].sort((a, b) => (getStateName(a) ?? a).localeCompare(getStateName(b) ?? b));
-  const cardCount = Object.keys(terrainCards).length;
+  const cardCount = terrainCardCount();
 
   return (
     <main className="min-h-dvh bg-wn-offwhite px-4 py-10 sm:px-6 sm:py-16">
@@ -122,8 +158,8 @@ export default async function CreditsPage() {
           <h1 className="mt-3 text-3xl font-extrabold text-wn-navy sm:text-4xl">Photo credits</h1>
           <p className="mt-4 text-sm text-wn-charcoal/75 sm:text-base">
             Every resort photo on Wynla is a Creative Commons or public-domain photograph from Wikimedia Commons, re-hosted on our
-            own storage, cropped to 16:9 and resized. The photographer, licence and source file are listed below for each one
-            ({credits.length} photo{credits.length === 1 ? "" : "s"}). Resorts without a vetted photo show a terrain render
+            own storage, resized and possibly cropped. The photographer, licence and source file are listed below for each one
+            ({credits.length} photo{credits.length === 1 ? "" : "s"} credited). Resorts without a vetted photo show a terrain render
             instead; see the last section.
           </p>
         </header>
@@ -168,7 +204,7 @@ export default async function CreditsPage() {
                       {c.sourceLabel}
                     </a>
                     <span aria-hidden="true">·</span>
-                    <span className="text-wn-charcoal/60">cropped and resized</span>
+                    <span className="text-wn-charcoal/70">resized, may be cropped</span>
                   </p>
                 </li>
               ))}
