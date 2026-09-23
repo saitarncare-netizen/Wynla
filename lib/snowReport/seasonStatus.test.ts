@@ -56,3 +56,28 @@ describe("deriveSeasonStatus", () => {
     expect(deriveSeasonStatus(e, new Date("2026-03-01T12:00:00Z")).currently_open).toBeNull();
   });
 });
+
+describe("deriveSeasonStatus with '(projected)' season text (2026-09-23 backfill)", () => {
+  const base: SeasonEvidence = {
+    operating_status: "active",
+    season_open_text: null,
+    season_close_text: null,
+    typical_season_start: null,
+    typical_season_end: null,
+    season_end_date: null,
+  };
+  const d = (y: number, m: number, day: number) => new Date(Date.UTC(y, m, day, 12));
+
+  it("never claims open from a projected opening: false before it, null inside the window", () => {
+    const e = { ...base, season_open_text: "December 4, 2026 (projected)", season_close_text: "March 28, 2027 (projected)" };
+    expect(deriveSeasonStatus(e, d(2026, 9, 1)).currently_open).toBe(false);
+    expect(deriveSeasonStatus(e, d(2027, 0, 15)).currently_open).toBeNull();
+    expect(deriveSeasonStatus(e, d(2027, 0, 15)).reason).toContain("projected");
+  });
+
+  it("an announced opening with only a projected close still proves open in season", () => {
+    const e = { ...base, season_open_text: "November 13, 2026", season_close_text: "April 11, 2027 (projected)" };
+    expect(deriveSeasonStatus(e, d(2027, 0, 15)).currently_open).toBe(true);
+    expect(deriveSeasonStatus(e, d(2027, 4, 15)).currently_open).toBe(false);
+  });
+});

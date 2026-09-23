@@ -463,3 +463,5 @@ describe("parseSeasonDates with backfilled 'Month D, YYYY' text", () => {
     const info = parseSeasonDates("Late November", "Early April", new Date(Date.UTC(2026, 8, 23)));
     expect(info.status).toBe("off-season");
     expect(info.nextOpenDate?.toISOString().slice(0, 10)).toBe("2026-11-25");
+  });
+});

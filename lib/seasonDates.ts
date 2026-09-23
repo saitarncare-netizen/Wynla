@@ -94,12 +94,6 @@ export function isProjectedSeasonText(text: string | null | undefined): boolean 
   return !!text && PROJECTED.test(text);
 }
 
-const PROJECTED = /\bprojected\b/i;
-
-function isProjected(text: string | null): boolean {
-  return !!text && PROJECTED.test(text);
-}
-
 const MONTH_NAMES: Record<string, number> = {
   january: 0,
   jan: 0,

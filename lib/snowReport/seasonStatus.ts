@@ -9,7 +9,10 @@
 //      off-season) — handled by the caller, this module never sees it.
 //   2. operating_status = 'closed' (permanently closed) → false.
 //   3. Resort-declared season dates (season_open_text / season_close_text):
-//      in-season → true, before opening / after closing → false.
+//      in-season → true, before opening / after closing → false. An
+//      opening text marked "(projected)" (2026-09-23 backfill, third-party
+//      projection) never yields true — inside its window the verdict is
+//      null, like a typical window.
 //   4. typical_season_* ("Mid-November" / "Mid-April") is a generic
 //      expectation, not a declaration: it yields false BEFORE the typical
 //      opening (which, once the typical close has passed, is the next
@@ -54,7 +57,13 @@ export function deriveSeasonStatus(e: SeasonEvidence, today: Date = new Date()):
   if (e.season_open_text || e.season_close_text) {
     const info = parseSeasonDates(unhyphenate(e.season_open_text), unhyphenate(e.season_close_text), today);
     const span = `${e.season_open_text ?? "?"} to ${e.season_close_text ?? "?"}`;
-    if (info.status === "in-season") return { currently_open: true, reason: `season dates (${span})` };
+    if (info.status === "in-season") {
+      // A "(projected)" opening (2026-09-23 backfill: a third-party
+      // projection, not the operator's announcement) is treated like
+      // typical_season_*: it can say "not yet", never "open".
+      if (info.openProjected) return { currently_open: null, reason: `projected opening only (${span})` };
+      return { currently_open: true, reason: `season dates (${span})` };
+    }
     if (info.status === "off-season") {
       return {
         currently_open: false,
