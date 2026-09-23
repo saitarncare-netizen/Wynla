@@ -18,6 +18,10 @@
 //                  "early/mid April", "Mid-to-late March", "end of March"
 //   Bare month     "November"               → day 15 of that month
 //   Anything else  → null for that side (status "unknown" if both null)
+//   A "(projected)" qualifier anywhere in the text (the 2026-09-23 backfill
+//   writes third-party projections as "December 4, 2026 (projected)") is
+//   ignored by the date parser and surfaces as openProjected /
+//   closeProjected on the result, so the UI can say so.
 //
 // Hyphens, en/em dashes and slashes are treated as separators, so
 // "Mid-November" and "Mid November" parse identically (audit finding
@@ -72,7 +76,29 @@ export type SeasonInfo = {
   /** True when at least one side came from a qualifier, bare month or
    *  holiday phrase rather than an explicit day — the UI prefixes "~". */
   approximate: boolean;
+  /**
+   * True when the opening / closing text is a third-party projection
+   * rather than the operator's announcement. The 2026-09-23 backfill
+   * writes projected dates as "November 13, 2026 (projected)" so the
+   * countdown can say so instead of presenting a guess as a fact, and
+   * the season-status job never derives currently_open=true from one.
+   */
+  openProjected: boolean;
+  closeProjected: boolean;
 };
+
+const PROJECTED = /\bprojected\b/i;
+
+/** "(projected)" anywhere in a season text marks a third-party estimate. */
+export function isProjectedSeasonText(text: string | null | undefined): boolean {
+  return !!text && PROJECTED.test(text);
+}
+
+const PROJECTED = /\bprojected\b/i;
+
+function isProjected(text: string | null): boolean {
+  return !!text && PROJECTED.test(text);
+}
 
 const MONTH_NAMES: Record<string, number> = {
   january: 0,
@@ -480,6 +506,8 @@ const UNKNOWN_SEASON: SeasonInfo = {
   nextOpenDate: null,
   nextCloseDate: null,
   approximate: false,
+  openProjected: false,
+  closeProjected: false,
 };
 
 /**
@@ -498,8 +526,12 @@ export function parseSeasonDates(
   const open = parseSingleSeasonText(openText, refYear, todayUTC);
   const close = parseSingleSeasonText(closeText, refYear, todayUTC);
   const approximate = (open?.approximate ?? false) || (close?.approximate ?? false);
+  const projected = {
+    openProjected: isProjectedSeasonText(openText),
+    closeProjected: isProjectedSeasonText(closeText),
+  };
 
-  if (!open && !close) return UNKNOWN_SEASON;
+  if (!open && !close) return { ...UNKNOWN_SEASON, ...projected };
 
   // One-sided text: we only know when the season starts OR when it ends,
   // so the other edge is guessed from a typical US season length. Both
@@ -527,6 +559,7 @@ export function parseSeasonDates(
         nextOpenDate: openedToday ? open.date : lastOpen,
         nextCloseDate: null,
         approximate,
+        ...projected,
       };
     }
     return {
@@ -536,6 +569,7 @@ export function parseSeasonDates(
       nextOpenDate: open.date,
       nextCloseDate: null,
       approximate,
+      ...projected,
     };
   }
   if (!open && close) {
@@ -548,6 +582,7 @@ export function parseSeasonDates(
         nextOpenDate: null,
         nextCloseDate: close.date,
         approximate,
+        ...projected,
       };
     }
     if (!summer && days <= TYPICAL_SEASON_DAYS) {
@@ -558,12 +593,13 @@ export function parseSeasonDates(
         nextOpenDate: null,
         nextCloseDate: close.date,
         approximate,
+        ...projected,
       };
     }
     // Too early to assume lifts are running: the status stays unknown
     // (so the pill falls through to off-season / check-resort) but the
     // close date is kept for the season-preview copy.
-    return { ...UNKNOWN_SEASON, nextCloseDate: close.date, approximate };
+    return { ...UNKNOWN_SEASON, nextCloseDate: close.date, approximate, ...projected };
   }
 
   // Both present. Handle the year-wrap case where close < open in calendar
@@ -605,6 +641,7 @@ export function parseSeasonDates(
         nextOpenDate: openD,
         nextCloseDate: closeD,
         approximate,
+        ...projected,
       };
     }
   }
@@ -622,11 +659,12 @@ export function parseSeasonDates(
       nextOpenDate: next.openD,
       nextCloseDate: next.closeD,
       approximate,
+      ...projected,
     };
   }
 
   // 3. Fallback — shouldn't hit, but degrade gracefully.
-  return UNKNOWN_SEASON;
+  return { ...UNKNOWN_SEASON, ...projected };
 }
 
 /** The season-text columns a resort row may carry. `typical_*` are the

@@ -15,6 +15,7 @@ import {
   driveLabel,
   mapsPlaceUrl,
   mapsDirectionsUrl,
+  prettifyDescription,
 } from "@/lib/nearbyCategories";
 
 type Props = {
@@ -65,6 +66,10 @@ export default function NearbyGroup({ emoji, label, blurb, rows, variant = "full
           const placeUrl = mapsPlaceUrl(r.name, r.latitude, r.longitude);
           const dirUrl = mapsDirectionsUrl(r.name, r.latitude, r.longitude);
           const rec = !!r.is_recommended;
+          // Raw OSM tags ("Steak_house", "donut;coffee_shop") and the
+          // importer's street-address fallback are normalised at render
+          // time; an address comes back as "" and the line is hidden.
+          const description = prettifyDescription(r.description);
           const base = isCompact
             ? "flex w-[180px] shrink-0 snap-start flex-col rounded-lg border bg-white p-2"
             : "flex w-[220px] shrink-0 snap-start flex-col rounded-lg border bg-white p-3 shadow-sm";
@@ -87,9 +92,9 @@ export default function NearbyGroup({ emoji, label, blurb, rows, variant = "full
                 <div className={isCompact ? "truncate text-[13px] font-semibold text-wn-navy group-hover:underline" : "truncate text-sm font-bold text-wn-navy group-hover:underline"}>
                   {r.name}
                 </div>
-                {r.description && (
-                  <div className="mt-0.5 truncate text-[11px] capitalize text-wn-charcoal/55">
-                    {r.description}
+                {description && (
+                  <div className="mt-0.5 truncate text-[11px] text-wn-charcoal/55">
+                    {description}
                   </div>
                 )}
                 {meta && (

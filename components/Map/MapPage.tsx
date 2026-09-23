@@ -45,6 +45,7 @@ import { resolveOrigin } from "@/lib/origins";
 import { haversineMeters, estimateDriveSeconds, estimateDriveMeters } from "@/lib/distance";
 import { PASS_COLORS, PASS_LABELS, PASS_KEYS } from "@/lib/passColors";
 import { sizeTier, matchesSizeFilter, type SizeTier } from "@/lib/sizeTier";
+import { liftCounts, type LiftTypes } from "@/lib/liftTypes";
 
 // mapbox-gl is ~500 KB gzipped. Loaded statically it sat on the critical
 // path of the whole homepage, so the header, search and filter buttons
@@ -143,23 +144,12 @@ export type Resort = {
   has_backcountry_access: boolean | null;
   webcam_url: string | null;
   closest_airport_iata: string | null;
-  // Stage 4 (filter expansion, 2026-05-22) — schema updated to match
-  // the Phase 2 mass-research keys actually populated in production.
-  // Previous keys (chair_fixed / chair_detach / tbar / poma / rope /
-  // carpet) were never populated — they were a placeholder schema from
-  // Phase 0. New canonical keys below.
-  lift_types: {
-    high_speed_six?: number;
-    high_speed_quad?: number;
-    fixed_quad?: number;
-    fixed_triple?: number;
-    fixed_double?: number;
-    gondola?: number;
-    bubble_chair?: number;
-    tram?: number;
-    surface?: number;
-    magic_carpet?: number;
-  } | null;
+  // Canonical lift_types keys. The Phase 0 placeholder keys
+  // (chair_fixed / chair_detach / tbar / poma / rope / carpet) lived on
+  // ~30 marquee rows until the 2026-09-23 backfill remapped them
+  // (scripts/backfill-2026-09-23/01-lift-types.mjs); read through
+  // liftCounts() so a stray non-numeric value can never break a filter.
+  lift_types: LiftTypes | null;
   currently_open: boolean | null;
   /** Last season's close until the status jobs refresh it; only used as
    *  "until …" copy while still ahead (ResortPanel status). */
@@ -805,31 +795,16 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
       if (liftReq) {
         const t = r.lift_types;
         if (!t) return false;
-        // Stage 4 — schema migrated from {chair_fixed, chair_detach}
-        // to the Phase 2 keys {high_speed_six, high_speed_quad,
-        // fixed_quad, fixed_triple, fixed_double, gondola, bubble_chair,
-        // tram, surface, magic_carpet}. Update logic in lockstep.
-        if (liftReq === "gondola" && (t.gondola ?? 0) < 1) return false;
-        if (liftReq === "tram" && (t.tram ?? 0) < 1) return false;
-        if (liftReq === "highspeed") {
-          const hs = (t.high_speed_six ?? 0) + (t.high_speed_quad ?? 0);
-          if (hs < 1) return false;
-        }
-        if (liftReq === "nosurface") {
-          // exclude resorts where surface lifts / carpets are the
-          // ONLY uphill option. Aerial = anything that's not surface
-          // or magic_carpet.
-          const aerial =
-            (t.high_speed_six ?? 0) +
-            (t.high_speed_quad ?? 0) +
-            (t.fixed_quad ?? 0) +
-            (t.fixed_triple ?? 0) +
-            (t.fixed_double ?? 0) +
-            (t.gondola ?? 0) +
-            (t.tram ?? 0) +
-            (t.bubble_chair ?? 0);
-          if (aerial < 1) return false;
-        }
+        // Keys are the canonical lift_types set (see liftCounts); the
+        // 2026-09-23 backfill remapped the last legacy rows, so every
+        // populated row now uses these keys.
+        const lc = liftCounts(t);
+        if (liftReq === "gondola" && lc.gondola < 1) return false;
+        if (liftReq === "tram" && lc.tram < 1) return false;
+        if (liftReq === "highspeed" && lc.highSpeed < 1) return false;
+        // "No surface-only": exclude resorts where surface lifts /
+        // carpets are the ONLY uphill option.
+        if (liftReq === "nosurface" && lc.aerial < 1) return false;
       }
       // Stage 4 — amenity / snow-feature filters. Strict semantics:
       // NULL on the column fails the filter (matches size pattern).
@@ -933,24 +908,11 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
       if (liftReq) {
         const t = r.lift_types;
         if (!t) return false;
-        if (liftReq === "gondola" && (t.gondola ?? 0) < 1) return false;
-        if (liftReq === "tram" && (t.tram ?? 0) < 1) return false;
-        if (liftReq === "highspeed") {
-          const hs = (t.high_speed_six ?? 0) + (t.high_speed_quad ?? 0);
-          if (hs < 1) return false;
-        }
-        if (liftReq === "nosurface") {
-          const aerial =
-            (t.high_speed_six ?? 0) +
-            (t.high_speed_quad ?? 0) +
-            (t.fixed_quad ?? 0) +
-            (t.fixed_triple ?? 0) +
-            (t.fixed_double ?? 0) +
-            (t.gondola ?? 0) +
-            (t.tram ?? 0) +
-            (t.bubble_chair ?? 0);
-          if (aerial < 1) return false;
-        }
+        const lc = liftCounts(t);
+        if (liftReq === "gondola" && lc.gondola < 1) return false;
+        if (liftReq === "tram" && lc.tram < 1) return false;
+        if (liftReq === "highspeed" && lc.highSpeed < 1) return false;
+        if (liftReq === "nosurface" && lc.aerial < 1) return false;
       }
       if (lessonsOnly && r.has_lessons !== true) return false;
       if (rentalsOnly && r.has_rentals !== true) return false;

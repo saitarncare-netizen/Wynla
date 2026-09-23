@@ -1,0 +1,1278 @@
+{
+  "step": "01-lift-types",
+  "table": "resorts",
+  "mode": "applied",
+  "taken_at": "2026-09-23T04:53:00.088Z",
+  "columns": [
+    "lift_types",
+    "high_speed_lifts",
+    "operating_status"
+  ],
+  "rows": [
+    {
+      "id": 60,
+      "slug": "arapahoe-basin",
+      "before": {
+        "lift_types": {
+          "poma": 0,
+          "rope": 1,
+          "tbar": 0,
+          "tram": 0,
+          "carpet": 2,
+          "gondola": 0,
+          "chair_fixed": 4,
+          "chair_detach": 2
+        },
+        "high_speed_lifts": null,
+        "operating_status": "active"
+      },
+      "after": {
+        "lift_types": {
+          "tram": 0,
+          "gondola": 0,
+          "surface": 1,
+          "fixed_quad": 4,
+          "bubble_chair": 0,
+          "fixed_double": 0,
+          "fixed_triple": 0,
+          "magic_carpet": 2,
+          "high_speed_six": 0,
+          "high_speed_quad": 2,
+          "high_speed_eight": 0,
+          "high_speed_triple": 0
+        },
+        "high_speed_lifts": 2
+      }
+    },
+    {
+      "id": 65,
+      "slug": "beaver-creek",
+      "before": {
+        "lift_types": {
+          "poma": 0,
+          "rope": 0,
+          "tbar": 0,
+          "tram": 0,
+          "carpet": 7,
+          "gondola": 3,
+          "chair_fixed": 3,
+          "chair_detach": 13
+        },
+        "high_speed_lifts": 12,
+        "operating_status": "active"
+      },
+      "after": {
+        "lift_types": {
+          "tram": 0,
+          "gondola": 3,
+          "surface": 0,
+          "fixed_quad": 3,
+          "bubble_chair": 0,
+          "fixed_double": 0,
+          "fixed_triple": 0,
+          "magic_carpet": 7,
+          "high_speed_six": 0,
+          "high_speed_quad": 13,
+          "high_speed_eight": 0,
+          "high_speed_triple": 0
+        }
+      }
+    },
+    {
+      "id": 66,
+      "slug": "breckenridge",
+      "before": {
+        "lift_types": {
+          "poma": 0,
+          "rope": 1,
+          "tbar": 1,
+          "tram": 0,
+          "carpet": 10,
+          "gondola": 1,
+          "chair_fixed": 4,
+          "chair_detach": 10
+        },
+        "high_speed_lifts": 13,
+        "operating_status": "active"
+      },
+      "after": {
+        "lift_types": {
+          "tram": 0,
+          "gondola": 1,
+          "surface": 2,
+          "fixed_quad": 4,
+          "bubble_chair": 0,
+          "fixed_double": 0,
+          "fixed_triple": 0,
+          "magic_carpet": 10,
+          "high_speed_six": 0,
+          "high_speed_quad": 10,
+          "high_speed_eight": 0,
+          "high_speed_triple": 0
+        }
+      }
+    },
+    {
+      "id": 68,
+      "slug": "copper-mountain",
+      "before": {
+        "lift_types": {
+          "poma": 0,
+          "rope": 0,
+          "tbar": 3,
+          "tram": 0,
+          "carpet": 5,
+          "gondola": 1,
+          "chair_fixed": 9,
+          "chair_detach": 6
+        },
+        "high_speed_lifts": null,
+        "operating_status": "active"
+      },
+      "after": {
+        "lift_types": {
+          "tram": 0,
+          "gondola": 1,
+          "surface": 3,
+          "fixed_quad": 9,
+          "bubble_chair": 0,
+          "fixed_double": 0,
+          "fixed_triple": 0,
+          "magic_carpet": 5,
+          "high_speed_six": 0,
+          "high_speed_quad": 6,
+          "high_speed_eight": 0,
+          "high_speed_triple": 0
+        },
+        "high_speed_lifts": 6
+      }
+    },
+    {
+      "id": 70,
+      "slug": "crested-butte",
+      "before": {
+        "lift_types": {
+          "poma": 0,
+          "rope": 0,
+          "tbar": 2,
+          "tram": 0,
+          "carpet": 3,
+          "gondola": 0,
+          "chair_fixed": 6,
+          "chair_detach": 4
+        },
+        "high_speed_lifts": 4,
+        "operating_status": "active"
+      },
+      "after": {
+        "lift_types": {
+          "tram": 0,
+          "gondola": 0,
+          "surface": 2,
+          "fixed_quad": 6,
+          "bubble_chair": 0,
+          "fixed_double": 0,
+          "fixed_triple": 0,
+          "magic_carpet": 3,
+          "high_speed_six": 0,
+          "high_speed_quad": 4,
+          "high_speed_eight": 0,
+          "high_speed_triple": 0
+        }
+      }
+    },
+    {
+      "id": 77,
+      "slug": "keystone",
+      "before": {
+        "lift_types": {
+          "poma": 0,
+          "rope": 0,
+          "tbar": 0,
+          "tram": 0,
+          "carpet": 8,
+          "gondola": 2,
+          "chair_fixed": 4,
+          "chair_detach": 7
+        },
+        "high_speed_lifts": 7,
+        "operating_status": "active"
+      },
+      "after": {
+        "lift_types": {
+          "tram": 0,
+          "gondola": 2,
+          "surface": 0,
+          "fixed_quad": 4,
+          "bubble_chair": 0,
+          "fixed_double": 0,
+          "fixed_triple": 0,
+          "magic_carpet": 8,
+          "high_speed_six": 0,
+          "high_speed_quad": 7,
+          "high_speed_eight": 0,
+          "high_speed_triple": 0
+        }
+      }
+    },
+    {
+      "id": 80,
+      "slug": "loveland",
+      "before": {
+        "lift_types": {
+          "poma": 0,
+          "rope": 0,
+          "tbar": 0,
+          "tram": 0,
+          "carpet": 2,
+          "gondola": 0,
+          "chair_fixed": 8,
+          "chair_detach": 1
+        },
+        "high_speed_lifts": 1,
+        "operating_status": "active"
+      },
+      "after": {
+        "lift_types": {
+          "tram": 0,
+          "gondola": 0,
+          "surface": 0,
+          "fixed_quad": 8,
+          "bubble_chair": 0,
+          "fixed_double": 0,
+          "fixed_triple": 0,
+          "magic_carpet": 2,
+          "high_speed_six": 0,
+          "high_speed_quad": 1,
+          "high_speed_eight": 0,
+          "high_speed_triple": 0
+        }
+      }
+    },
+    {
+      "id": 86,
+      "slug": "steamboat",
+      "before": {
+        "lift_types": {
+          "poma": 0,
+          "rope": 0,
+          "tbar": 0,
+          "tram": 0,
+          "carpet": 1,
+          "gondola": 4,
+          "chair_fixed": 6,
+          "chair_detach": 9
+        },
+        "high_speed_lifts": null,
+        "operating_status": "active"
+      },
+      "after": {
+        "lift_types": {
+          "tram": 0,
+          "gondola": 4,
+          "surface": 0,
+          "fixed_quad": 6,
+          "bubble_chair": 0,
+          "fixed_double": 0,
+          "fixed_triple": 0,
+          "magic_carpet": 1,
+          "high_speed_six": 0,
+          "high_speed_quad": 9,
+          "high_speed_eight": 0,
+          "high_speed_triple": 0
+        },
+        "high_speed_lifts": 9
+      }
+    },
+    {
+      "id": 88,
+      "slug": "telluride",
+      "before": {
+        "lift_types": {
+          "poma": 0,
+          "rope": 0,
+          "tbar": 1,
+          "tram": 0,
+          "carpet": 3,
+          "gondola": 4,
+          "chair_fixed": 4,
+          "chair_detach": 7
+        },
+        "high_speed_lifts": null,
+        "operating_status": "active"
+      },
+      "after": {
+        "lift_types": {
+          "tram": 0,
+          "gondola": 4,
+          "surface": 1,
+          "fixed_quad": 4,
+          "bubble_chair": 0,
+          "fixed_double": 0,
+          "fixed_triple": 0,
+          "magic_carpet": 3,
+          "high_speed_six": 0,
+          "high_speed_quad": 7,
+          "high_speed_eight": 0,
+          "high_speed_triple": 0
+        },
+        "high_speed_lifts": 7
+      }
+    },
+    {
+      "id": 89,
+      "slug": "vail",
+      "before": {
+        "lift_types": {
+          "poma": 4,
+          "rope": 0,
+          "tbar": 0,
+          "tram": 0,
+          "carpet": 7,
+          "gondola": 2,
+          "chair_fixed": 3,
+          "chair_detach": 18
+        },
+        "high_speed_lifts": 18,
+        "operating_status": "active"
+      },
+      "after": {
+        "lift_types": {
+          "tram": 0,
+          "gondola": 2,
+          "surface": 4,
+          "fixed_quad": 3,
+          "bubble_chair": 0,
+          "fixed_double": 0,
+          "fixed_triple": 0,
+          "magic_carpet": 7,
+          "high_speed_six": 0,
+          "high_speed_quad": 18,
+          "high_speed_eight": 0,
+          "high_speed_triple": 0
+        }
+      }
+    },
+    {
+      "id": 90,
+      "slug": "winter-park",
+      "before": {
+        "lift_types": {
+          "poma": 0,
+          "rope": 1,
+          "tbar": 1,
+          "tram": 0,
+          "carpet": 3,
+          "gondola": 3,
+          "chair_fixed": 8,
+          "chair_detach": 9
+        },
+        "high_speed_lifts": null,
+        "operating_status": "active"
+      },
+      "after": {
+        "lift_types": {
+          "tram": 0,
+          "gondola": 3,
+          "surface": 2,
+          "fixed_quad": 8,
+          "bubble_chair": 0,
+          "fixed_double": 0,
+          "fixed_triple": 0,
+          "magic_carpet": 3,
+          "high_speed_six": 0,
+          "high_speed_quad": 9,
+          "high_speed_eight": 0,
+          "high_speed_triple": 0
+        },
+        "high_speed_lifts": 9
+      }
+    },
+    {
+      "id": 95,
+      "slug": "brighton",
+      "before": {
+        "lift_types": {
+          "poma": 0,
+          "rope": 0,
+          "tbar": 0,
+          "tram": 0,
+          "carpet": 2,
+          "gondola": 0,
+          "chair_fixed": 1,
+          "chair_detach": 6
+        },
+        "high_speed_lifts": null,
+        "operating_status": "active"
+      },
+      "after": {
+        "lift_types": {
+          "tram": 0,
+          "gondola": 0,
+          "surface": 0,
+          "fixed_quad": 1,
+          "bubble_chair": 0,
+          "fixed_double": 0,
+          "fixed_triple": 0,
+          "magic_carpet": 2,
+          "high_speed_six": 0,
+          "high_speed_quad": 6,
+          "high_speed_eight": 0,
+          "high_speed_triple": 0
+        },
+        "high_speed_lifts": 6
+      }
+    },
+    {
+      "id": 99,
+      "slug": "park-city",
+      "before": {
+        "lift_types": {
+          "poma": 0,
+          "rope": 0,
+          "tbar": 0,
+          "tram": 0,
+          "carpet": 4,
+          "gondola": 5,
+          "chair_fixed": 17,
+          "chair_detach": 15
+        },
+        "high_speed_lifts": 15,
+        "operating_status": "active"
+      },
+      "after": {
+        "lift_types": {
+          "tram": 0,
+          "gondola": 5,
+          "surface": 0,
+          "fixed_quad": 17,
+          "bubble_chair": 0,
+          "fixed_double": 0,
+          "fixed_triple": 0,
+          "magic_carpet": 4,
+          "high_speed_six": 0,
+          "high_speed_quad": 15,
+          "high_speed_eight": 0,
+          "high_speed_triple": 0
+        }
+      }
+    },
+    {
+      "id": 101,
+      "slug": "snowbasin",
+      "before": {
+        "lift_types": {
+          "poma": 0,
+          "rope": 1,
+          "tbar": 0,
+          "tram": 1,
+          "carpet": 2,
+          "gondola": 2,
+          "chair_fixed": 1,
+          "chair_detach": 6
+        },
+        "high_speed_lifts": null,
+        "operating_status": "active"
+      },
+      "after": {
+        "lift_types": {
+          "tram": 1,
+          "gondola": 2,
+          "surface": 1,
+          "fixed_quad": 1,
+          "bubble_chair": 0,
+          "fixed_double": 0,
+          "fixed_triple": 0,
+          "magic_carpet": 2,
+          "high_speed_six": 0,
+          "high_speed_quad": 6,
+          "high_speed_eight": 0,
+          "high_speed_triple": 0
+        },
+        "high_speed_lifts": 6
+      }
+    },
+    {
+      "id": 102,
+      "slug": "snowbird",
+      "before": {
+        "lift_types": {
+          "poma": 0,
+          "rope": 0,
+          "tbar": 0,
+          "tram": 1,
+          "carpet": 3,
+          "gondola": 0,
+          "chair_fixed": 6,
+          "chair_detach": 4
+        },
+        "high_speed_lifts": null,
+        "operating_status": "active"
+      },
+      "after": {
+        "lift_types": {
+          "tram": 1,
+          "gondola": 0,
+          "surface": 0,
+          "fixed_quad": 6,
+          "bubble_chair": 0,
+          "fixed_double": 0,
+          "fixed_triple": 0,
+          "magic_carpet": 3,
+          "high_speed_six": 0,
+          "high_speed_quad": 4,
+          "high_speed_eight": 0,
+          "high_speed_triple": 0
+        },
+        "high_speed_lifts": 4
+      }
+    },
+    {
+      "id": 104,
+      "slug": "solitude",
+      "before": {
+        "lift_types": {
+          "poma": 0,
+          "rope": 0,
+          "tbar": 0,
+          "tram": 0,
+          "carpet": 1,
+          "gondola": 0,
+          "chair_fixed": 4,
+          "chair_detach": 4
+        },
+        "high_speed_lifts": null,
+        "operating_status": "active"
+      },
+      "after": {
+        "lift_types": {
+          "tram": 0,
+          "gondola": 0,
+          "surface": 0,
+          "fixed_quad": 4,
+          "bubble_chair": 0,
+          "fixed_double": 0,
+          "fixed_triple": 0,
+          "magic_carpet": 1,
+          "high_speed_six": 0,
+          "high_speed_quad": 4,
+          "high_speed_eight": 0,
+          "high_speed_triple": 0
+        },
+        "high_speed_lifts": 4
+      }
+    },
+    {
+      "id": 106,
+      "slug": "woodward-park-city",
+      "before": {
+        "lift_types": {
+          "note": "Powdr action sports facility, lift inventory unverified",
+          "verified": false
+        },
+        "high_speed_lifts": 0,
+        "operating_status": "active"
+      },
+      "after": {
+        "lift_types": null
+      }
+    },
+    {
+      "id": 108,
+      "slug": "jackson-hole",
+      "before": {
+        "lift_types": {
+          "poma": 0,
+          "rope": 1,
+          "tbar": 0,
+          "tram": 1,
+          "carpet": 1,
+          "gondola": 2,
+          "chair_fixed": 7,
+          "chair_detach": 2
+        },
+        "high_speed_lifts": 5,
+        "operating_status": "active"
+      },
+      "after": {
+        "lift_types": {
+          "tram": 1,
+          "gondola": 2,
+          "surface": 1,
+          "fixed_quad": 7,
+          "bubble_chair": 0,
+          "fixed_double": 0,
+          "fixed_triple": 0,
+          "magic_carpet": 1,
+          "high_speed_six": 0,
+          "high_speed_quad": 2,
+          "high_speed_eight": 0,
+          "high_speed_triple": 0
+        }
+      }
+    },
+    {
+      "id": 115,
+      "slug": "sleeping-giant",
+      "before": {
+        "lift_types": {
+          "tram": 0,
+          "gondola": 0,
+          "surface": 0,
+          "fixed_quad": 0,
+          "bubble_chair": 0,
+          "fixed_double": 1,
+          "fixed_triple": 2,
+          "magic_carpet": 1,
+          "defunct_status": "closed_2025_26",
+          "high_speed_six": 0,
+          "high_speed_quad": 0
+        },
+        "high_speed_lifts": 0,
+        "operating_status": "active"
+      },
+      "after": {
+        "lift_types": {
+          "tram": 0,
+          "gondola": 0,
+          "surface": 0,
+          "fixed_quad": 0,
+          "bubble_chair": 0,
+          "fixed_double": 1,
+          "fixed_triple": 2,
+          "magic_carpet": 1,
+          "high_speed_six": 0,
+          "high_speed_quad": 0
+        },
+        "operating_status": "closed"
+      }
+    },
+    {
+      "id": 118,
+      "slug": "big-sky",
+      "before": {
+        "lift_types": {
+          "poma": 0,
+          "rope": 2,
+          "tbar": 3,
+          "tram": 1,
+          "carpet": 8,
+          "gondola": 2,
+          "chair_fixed": 14,
+          "chair_detach": 10
+        },
+        "high_speed_lifts": null,
+        "operating_status": "active"
+      },
+      "after": {
+        "lift_types": {
+          "tram": 1,
+          "gondola": 2,
+          "surface": 5,
+          "fixed_quad": 14,
+          "bubble_chair": 0,
+          "fixed_double": 0,
+          "fixed_triple": 0,
+          "magic_carpet": 8,
+          "high_speed_six": 0,
+          "high_speed_quad": 10,
+          "high_speed_eight": 0,
+          "high_speed_triple": 0
+        },
+        "high_speed_lifts": 10
+      }
+    },
+    {
+      "id": 134,
+      "slug": "sun-valley",
+      "before": {
+        "lift_types": {
+          "poma": 0,
+          "rope": 0,
+          "tbar": 0,
+          "tram": 0,
+          "carpet": 2,
+          "gondola": 1,
+          "chair_fixed": 4,
+          "chair_detach": 10
+        },
+        "high_speed_lifts": null,
+        "operating_status": "active"
+      },
+      "after": {
+        "lift_types": {
+          "tram": 0,
+          "gondola": 1,
+          "surface": 0,
+          "fixed_quad": 4,
+          "bubble_chair": 0,
+          "fixed_double": 0,
+          "fixed_triple": 0,
+          "magic_carpet": 2,
+          "high_speed_six": 0,
+          "high_speed_quad": 10,
+          "high_speed_eight": 0,
+          "high_speed_triple": 0
+        },
+        "high_speed_lifts": 10
+      }
+    },
+    {
+      "id": 154,
+      "slug": "skiland",
+      "before": {
+        "lift_types": {
+          "note": "buses transport skiers to summit + 1 rope tow",
+          "tram": 0,
+          "gondola": 0,
+          "surface": 1,
+          "fixed_quad": 0,
+          "bubble_chair": 0,
+          "fixed_double": 0,
+          "fixed_triple": 0,
+          "magic_carpet": 0,
+          "high_speed_six": 0,
+          "high_speed_quad": 0
+        },
+        "high_speed_lifts": 0,
+        "operating_status": "active"
+      },
+      "after": {
+        "lift_types": {
+          "tram": 0,
+          "gondola": 0,
+          "surface": 1,
+          "fixed_quad": 0,
+          "bubble_chair": 0,
+          "fixed_double": 0,
+          "fixed_triple": 0,
+          "magic_carpet": 0,
+          "high_speed_six": 0,
+          "high_speed_quad": 0
+        }
+      }
+    },
+    {
+      "id": 155,
+      "slug": "palisades-tahoe",
+      "before": {
+        "lift_types": {
+          "poma": 0,
+          "rope": 0,
+          "tbar": 0,
+          "tram": 1,
+          "carpet": 3,
+          "gondola": 3,
+          "chair_fixed": 15,
+          "chair_detach": 10
+        },
+        "high_speed_lifts": null,
+        "operating_status": "active"
+      },
+      "after": {
+        "lift_types": {
+          "tram": 1,
+          "gondola": 3,
+          "surface": 0,
+          "fixed_quad": 15,
+          "bubble_chair": 0,
+          "fixed_double": 0,
+          "fixed_triple": 0,
+          "magic_carpet": 3,
+          "high_speed_six": 0,
+          "high_speed_quad": 10,
+          "high_speed_eight": 0,
+          "high_speed_triple": 0
+        },
+        "high_speed_lifts": 10
+      }
+    },
+    {
+      "id": 157,
+      "slug": "heavenly-mountain-resort",
+      "before": {
+        "lift_types": {
+          "poma": 0,
+          "rope": 2,
+          "tbar": 0,
+          "tram": 1,
+          "carpet": 5,
+          "gondola": 1,
+          "chair_fixed": 8,
+          "chair_detach": 10
+        },
+        "high_speed_lifts": 12,
+        "operating_status": "active"
+      },
+      "after": {
+        "lift_types": {
+          "tram": 1,
+          "gondola": 1,
+          "surface": 2,
+          "fixed_quad": 8,
+          "bubble_chair": 0,
+          "fixed_double": 0,
+          "fixed_triple": 0,
+          "magic_carpet": 5,
+          "high_speed_six": 0,
+          "high_speed_quad": 10,
+          "high_speed_eight": 0,
+          "high_speed_triple": 0
+        }
+      }
+    },
+    {
+      "id": 158,
+      "slug": "northstar-california",
+      "before": {
+        "lift_types": {
+          "poma": 0,
+          "rope": 0,
+          "tbar": 1,
+          "tram": 0,
+          "carpet": 5,
+          "gondola": 3,
+          "chair_fixed": 3,
+          "chair_detach": 7
+        },
+        "high_speed_lifts": 7,
+        "operating_status": "active"
+      },
+      "after": {
+        "lift_types": {
+          "tram": 0,
+          "gondola": 3,
+          "surface": 1,
+          "fixed_quad": 3,
+          "bubble_chair": 0,
+          "fixed_double": 0,
+          "fixed_triple": 0,
+          "magic_carpet": 5,
+          "high_speed_six": 0,
+          "high_speed_quad": 7,
+          "high_speed_eight": 0,
+          "high_speed_triple": 0
+        }
+      }
+    },
+    {
+      "id": 159,
+      "slug": "kirkwood-mountain-resort",
+      "before": {
+        "lift_types": {
+          "poma": 0,
+          "rope": 1,
+          "tbar": 1,
+          "tram": 0,
+          "carpet": 2,
+          "gondola": 0,
+          "chair_fixed": 9,
+          "chair_detach": 2
+        },
+        "high_speed_lifts": 2,
+        "operating_status": "active"
+      },
+      "after": {
+        "lift_types": {
+          "tram": 0,
+          "gondola": 0,
+          "surface": 2,
+          "fixed_quad": 9,
+          "bubble_chair": 0,
+          "fixed_double": 0,
+          "fixed_triple": 0,
+          "magic_carpet": 2,
+          "high_speed_six": 0,
+          "high_speed_quad": 2,
+          "high_speed_eight": 0,
+          "high_speed_triple": 0
+        }
+      }
+    },
+    {
+      "id": 163,
+      "slug": "soda-springs",
+      "before": {
+        "lift_types": {
+          "note": "primary sources lacked lift inventory",
+          "verified": false
+        },
+        "high_speed_lifts": null,
+        "operating_status": "active"
+      },
+      "after": {
+        "lift_types": null
+      }
+    },
+    {
+      "id": 171,
+      "slug": "mammoth-mountain",
+      "before": {
+        "lift_types": {
+          "poma": 0,
+          "rope": 0,
+          "tbar": 0,
+          "tram": 0,
+          "carpet": 6,
+          "gondola": 3,
+          "chair_fixed": 10,
+          "chair_detach": 12
+        },
+        "high_speed_lifts": null,
+        "operating_status": "active"
+      },
+      "after": {
+        "lift_types": {
+          "tram": 0,
+          "gondola": 3,
+          "surface": 0,
+          "fixed_quad": 10,
+          "bubble_chair": 0,
+          "fixed_double": 0,
+          "fixed_triple": 0,
+          "magic_carpet": 6,
+          "high_speed_six": 0,
+          "high_speed_quad": 12,
+          "high_speed_eight": 0,
+          "high_speed_triple": 0
+        },
+        "high_speed_lifts": 12
+      }
+    },
+    {
+      "id": 193,
+      "slug": "spout-springs",
+      "before": {
+        "lift_types": {
+          "tram": 0,
+          "defunct": true,
+          "gondola": 0,
+          "surface": 0,
+          "fixed_quad": 0,
+          "bubble_chair": 0,
+          "fixed_double": 2,
+          "fixed_triple": 0,
+          "magic_carpet": 0,
+          "high_speed_six": 0,
+          "high_speed_quad": 0
+        },
+        "high_speed_lifts": 0,
+        "operating_status": "seasonal"
+      },
+      "after": {
+        "lift_types": {
+          "tram": 0,
+          "gondola": 0,
+          "surface": 0,
+          "fixed_quad": 0,
+          "bubble_chair": 0,
+          "fixed_double": 2,
+          "fixed_triple": 0,
+          "magic_carpet": 0,
+          "high_speed_six": 0,
+          "high_speed_quad": 0
+        }
+      }
+    },
+    {
+      "id": 254,
+      "slug": "killington",
+      "before": {
+        "lift_types": {
+          "poma": 0,
+          "rope": 1,
+          "tbar": 1,
+          "tram": 0,
+          "carpet": 3,
+          "gondola": 2,
+          "chair_fixed": 8,
+          "chair_detach": 6
+        },
+        "high_speed_lifts": null,
+        "operating_status": "active"
+      },
+      "after": {
+        "lift_types": {
+          "tram": 0,
+          "gondola": 2,
+          "surface": 2,
+          "fixed_quad": 8,
+          "bubble_chair": 0,
+          "fixed_double": 0,
+          "fixed_triple": 0,
+          "magic_carpet": 3,
+          "high_speed_six": 0,
+          "high_speed_quad": 6,
+          "high_speed_eight": 0,
+          "high_speed_triple": 0
+        },
+        "high_speed_lifts": 6
+      }
+    },
+    {
+      "id": 256,
+      "slug": "sugarbush",
+      "before": {
+        "lift_types": {
+          "poma": 0,
+          "rope": 0,
+          "tbar": 2,
+          "tram": 0,
+          "carpet": 3,
+          "gondola": 0,
+          "chair_fixed": 8,
+          "chair_detach": 5
+        },
+        "high_speed_lifts": null,
+        "operating_status": "active"
+      },
+      "after": {
+        "lift_types": {
+          "tram": 0,
+          "gondola": 0,
+          "surface": 2,
+          "fixed_quad": 8,
+          "bubble_chair": 0,
+          "fixed_double": 0,
+          "fixed_triple": 0,
+          "magic_carpet": 3,
+          "high_speed_six": 0,
+          "high_speed_quad": 5,
+          "high_speed_eight": 0,
+          "high_speed_triple": 0
+        },
+        "high_speed_lifts": 5
+      }
+    },
+    {
+      "id": 257,
+      "slug": "stowe-mountain-resort",
+      "before": {
+        "lift_types": {
+          "poma": 0,
+          "rope": 0,
+          "tbar": 0,
+          "tram": 0,
+          "carpet": 2,
+          "gondola": 2,
+          "chair_fixed": 4,
+          "chair_detach": 4
+        },
+        "high_speed_lifts": 6,
+        "operating_status": "active"
+      },
+      "after": {
+        "lift_types": {
+          "tram": 0,
+          "gondola": 2,
+          "surface": 0,
+          "fixed_quad": 4,
+          "bubble_chair": 0,
+          "fixed_double": 0,
+          "fixed_triple": 0,
+          "magic_carpet": 2,
+          "high_speed_six": 0,
+          "high_speed_quad": 4,
+          "high_speed_eight": 0,
+          "high_speed_triple": 0
+        }
+      }
+    },
+    {
+      "id": 261,
+      "slug": "mad-river-glen",
+      "before": {
+        "lift_types": {
+          "poma": 0,
+          "rope": 1,
+          "tbar": 0,
+          "tram": 0,
+          "carpet": 0,
+          "gondola": 0,
+          "chair_fixed": 4,
+          "chair_detach": 0
+        },
+        "high_speed_lifts": null,
+        "operating_status": "active"
+      },
+      "after": {
+        "lift_types": {
+          "tram": 0,
+          "gondola": 0,
+          "surface": 1,
+          "fixed_quad": 4,
+          "bubble_chair": 0,
+          "fixed_double": 0,
+          "fixed_triple": 0,
+          "magic_carpet": 0,
+          "high_speed_six": 0,
+          "high_speed_quad": 0,
+          "high_speed_eight": 0,
+          "high_speed_triple": 0
+        }
+      }
+    },
+    {
+      "id": 281,
+      "slug": "song-mountain",
+      "before": {
+        "lift_types": {
+          "note": "lift count not verifiable from accessible sources",
+          "verified": false
+        },
+        "high_speed_lifts": null,
+        "operating_status": "active"
+      },
+      "after": {
+        "lift_types": null
+      }
+    },
+    {
+      "id": 328,
+      "slug": "apple-mountain",
+      "before": {
+        "lift_types": {
+          "tram": 0,
+          "defunct": true,
+          "gondola": 0,
+          "surface": 0,
+          "fixed_quad": 0,
+          "bubble_chair": 0,
+          "fixed_double": 0,
+          "fixed_triple": 0,
+          "magic_carpet": 0,
+          "high_speed_six": 0,
+          "high_speed_quad": 0
+        },
+        "high_speed_lifts": 0,
+        "operating_status": "active"
+      },
+      "after": {
+        "lift_types": {
+          "tram": 0,
+          "gondola": 0,
+          "surface": 0,
+          "fixed_quad": 0,
+          "bubble_chair": 0,
+          "fixed_double": 0,
+          "fixed_triple": 0,
+          "magic_carpet": 0,
+          "high_speed_six": 0,
+          "high_speed_quad": 0
+        },
+        "operating_status": "closed"
+      }
+    },
+    {
+      "id": 344,
+      "slug": "sunburst",
+      "before": {
+        "lift_types": {
+          "note": "specific lift counts not published",
+          "verified": false
+        },
+        "high_speed_lifts": null,
+        "operating_status": "active"
+      },
+      "after": {
+        "lift_types": {
+          "tram": 0,
+          "gondola": 0,
+          "surface": 3,
+          "fixed_quad": 0,
+          "bubble_chair": 0,
+          "fixed_double": 3,
+          "fixed_triple": 0,
+          "magic_carpet": 1,
+          "high_speed_six": 0,
+          "high_speed_quad": 0
+        },
+        "high_speed_lifts": 0
+      }
+    },
+    {
+      "id": 348,
+      "slug": "mount-ashwabay",
+      "before": {
+        "lift_types": {
+          "note": "lift breakdown unverified — small nonprofit, ~65 acres",
+          "verified": false
+        },
+        "high_speed_lifts": null,
+        "operating_status": "active"
+      },
+      "after": {
+        "lift_types": null
+      }
+    },
+    {
+      "id": 422,
+      "slug": "mt-eyak",
+      "before": {
+        "lift_types": {
+          "poma": 0,
+          "rope": 1,
+          "tbar": 0,
+          "tram": 0,
+          "carpet": 0,
+          "gondola": 0,
+          "chair_fixed": 1,
+          "chair_detach": 0
+        },
+        "high_speed_lifts": null,
+        "operating_status": "active"
+      },
+      "after": {
+        "lift_types": {
+          "tram": 0,
+          "gondola": 0,
+          "surface": 1,
+          "fixed_quad": 1,
+          "bubble_chair": 0,
+          "fixed_double": 0,
+          "fixed_triple": 0,
+          "magic_carpet": 0,
+          "high_speed_six": 0,
+          "high_speed_quad": 0,
+          "high_speed_eight": 0,
+          "high_speed_triple": 0
+        }
+      }
+    },
+    {
+      "id": 427,
+      "slug": "aspen-snowmass",
+      "before": {
+        "lift_types": {
+          "poma": 1,
+          "rope": 0,
+          "tbar": 1,
+          "tram": 0,
+          "carpet": 5,
+          "gondola": 3,
+          "chair_fixed": 10,
+          "chair_detach": 18
+        },
+        "high_speed_lifts": null,
+        "operating_status": "active"
+      },
+      "after": {
+        "lift_types": {
+          "tram": 0,
+          "gondola": 3,
+          "surface": 2,
+          "fixed_quad": 10,
+          "bubble_chair": 0,
+          "fixed_double": 0,
+          "fixed_triple": 0,
+          "magic_carpet": 5,
+          "high_speed_six": 0,
+          "high_speed_quad": 18,
+          "high_speed_eight": 0,
+          "high_speed_triple": 0
+        },
+        "high_speed_lifts": 18
+      }
+    }
+  ]
+}
