@@ -1,13 +1,23 @@
 {
+  "id": "/",
+  "scope": "/",
   "name": "Wynla — Ski Resort Trip Planner",
   "short_name": "Wynla",
-  "description": "Plan smart. Ride better. Find ski resorts by pass, drive time, and size — across the US.",
-  "start_url": "/",
+  "description": "Find ski resorts by pass, drive time, and snow forecast. Every US resort on one map, with the snow surface forecast, trip planner, and powder alerts.",
+  "lang": "en-US",
+  "dir": "ltr",
+  "start_url": "/?source=pwa",
   "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
   "orientation": "portrait-primary",
   "background_color": "#1E2952",
   "theme_color": "#1E2952",
-  "categories": ["sports", "travel", "lifestyle"],
+  "categories": ["sports", "travel", "lifestyle", "weather"],
+  "launch_handler": { "client_mode": "navigate-existing" },
+  "prefer_related_applications": false,
+  "related_applications": [
+    { "platform": "webapp", "url": "https://wynla.app/manifest.json" }
+  ],
   "icons": [
     {
       "src": "/icon-192.png",
@@ -22,10 +32,40 @@
       "purpose": "any"
     },
     {
-      "src": "/icon-512.png",
+      "src": "/icon-maskable-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/narrow-map.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Every US ski resort on one map"
+    },
+    {
+      "src": "/screenshots/narrow-forecast.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Drive time, pass info, and the snow surface forecast"
+    },
+    {
+      "src": "/screenshots/narrow-alerts.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Powder alerts straight to your home screen"
+    },
+    {
+      "src": "/screenshots/wide-map.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Wynla on desktop"
     }
   ],
   "shortcuts": [
@@ -33,7 +73,22 @@
       "name": "View favorites",
       "short_name": "Favorites",
       "description": "Resorts you saved",
-      "url": "/favorites"
+      "url": "/favorites?source=shortcut",
+      "icons": [{ "src": "/icon-96.png", "sizes": "96x96", "type": "image/png" }]
+    },
+    {
+      "name": "My trips",
+      "short_name": "Trips",
+      "description": "Trips you planned",
+      "url": "/trips?source=shortcut",
+      "icons": [{ "src": "/icon-96.png", "sizes": "96x96", "type": "image/png" }]
+    },
+    {
+      "name": "Pass deals",
+      "short_name": "Deals",
+      "description": "Current season pass prices",
+      "url": "/deals?source=shortcut",
+      "icons": [{ "src": "/icon-96.png", "sizes": "96x96", "type": "image/png" }]
     }
   ]
 }

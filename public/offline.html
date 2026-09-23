@@ -1,0 +1,176 @@
+<!doctype html>
+<!--
+  Offline fallback served by public/sw.js when a navigation fails with no
+  network. It is a plain static file on purpose: a Next route would need
+  its own JS chunks, which are never in the cache the first time someone
+  goes offline, so the page would render and then break on hydration.
+  Everything this page needs is inline; the only external request is the
+  icon, which the worker precaches.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#1E2952" />
+    <meta name="robots" content="noindex" />
+    <title>You're offline · Wynla</title>
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+      }
+      body {
+        display: flex;
+        min-height: 100dvh;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: calc(env(safe-area-inset-top, 0px) + 48px) 24px
+          calc(env(safe-area-inset-bottom, 0px) + 48px);
+        background: #1e2952;
+        color: #fff;
+        font-family:
+          system-ui,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        text-align: center;
+        -webkit-font-smoothing: antialiased;
+      }
+      main {
+        width: 100%;
+        max-width: 24rem;
+      }
+      .mark {
+        width: 64px;
+        height: 64px;
+        border-radius: 16px;
+        box-shadow: 0 8px 24px rgb(0 0 0 / 0.3);
+      }
+      h1 {
+        margin: 20px 0 0;
+        font-size: 1.6rem;
+        font-weight: 800;
+        line-height: 1.2;
+      }
+      p {
+        margin: 12px 0 0;
+        font-size: 0.9rem;
+        line-height: 1.55;
+        color: rgb(255 255 255 / 0.75);
+      }
+      button {
+        display: inline-flex;
+        width: 100%;
+        height: 44px;
+        margin-top: 24px;
+        align-items: center;
+        justify-content: center;
+        border: 0;
+        border-radius: 10px;
+        background: #f5c443;
+        color: #1e2952;
+        font: inherit;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #e9b62f;
+      }
+      #status {
+        margin-top: 8px;
+        font-size: 0.75rem;
+        color: rgb(255 255 255 / 0.55);
+      }
+      .label {
+        margin-top: 32px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: rgb(255 255 255 / 0.5);
+      }
+      ul {
+        display: flex;
+        margin: 8px 0 0;
+        padding: 0;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+        list-style: none;
+      }
+      ul a {
+        display: inline-flex;
+        height: 36px;
+        align-items: center;
+        padding: 0 16px;
+        border: 1px solid rgb(255 255 255 / 0.2);
+        border-radius: 999px;
+        color: rgb(255 255 255 / 0.85);
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-decoration: none;
+      }
+      ul a:hover {
+        border-color: rgb(255 255 255 / 0.5);
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <img class="mark" src="/icon-192.png" width="64" height="64" alt="" />
+      <h1>You're offline</h1>
+      <p>
+        Wynla needs a connection to load the map, forecasts, and your saved trips. It will pick up
+        where you left off as soon as you are back online.
+      </p>
+      <button type="button" id="retry">Try again</button>
+      <p id="status" role="status">No connection right now.</p>
+
+      <p class="label">Once you are back online</p>
+      <ul>
+        <li><a href="/">Map</a></li>
+        <li><a href="/favorites">Favorites</a></li>
+        <li><a href="/trips">My trips</a></li>
+      </ul>
+    </main>
+    <script>
+      // The address bar still holds the page the user asked for (the
+      // worker only swapped the response body), so a reload is the retry.
+      // Auto-retry fires only on an offline -> online transition: reloading
+      // just because navigator.onLine is true at load would loop forever
+      // when the network is up but the server is unreachable.
+      (function () {
+        var status = document.getElementById("status");
+        var timer = 0;
+        function retry() {
+          window.location.reload();
+        }
+        function onOnline() {
+          status.textContent = "Connection detected. Retrying…";
+          // Give the radio a beat to settle; a reload fired the same
+          // instant `online` flips often still fails.
+          clearTimeout(timer);
+          timer = setTimeout(retry, 800);
+        }
+        function onOffline() {
+          clearTimeout(timer);
+          status.textContent = "No connection right now.";
+        }
+        document.getElementById("retry").addEventListener("click", retry);
+        window.addEventListener("online", onOnline);
+        window.addEventListener("offline", onOffline);
+      })();
+    </script>
+  </body>
+</html>

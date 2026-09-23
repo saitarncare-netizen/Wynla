@@ -46,6 +46,26 @@ body.route-map > footer {
   display: none;
 }
 
+/* Installed-app safe area. The iOS status bar is translucent over our
+   content (apple-mobile-web-app-status-bar-style: black-translucent),
+   so every non-map route pads its top by the inset once, here, instead
+   of each page hand-rolling it (compare / resort used to, /trips,
+   /favorites, /account, /login did not — their "← Map" link sat under
+   the clock). The map route opts out because MapPage pads its own
+   floating header: `.route-map` is toggled in a client effect, so the
+   `:has([data-route="map"])` clause covers the server-rendered first
+   paint before that effect runs. env() is 0 outside iOS/notched Android,
+   so this is a no-op on desktop. */
+body:not(.route-map):not(:has([data-route="map"])) > #main-content {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+/* Every page's <main> is min-h-dvh; without this the padded wrapper is
+   viewport + inset tall and short pages (/login, /get) rubber-band by a
+   few pixels in the installed app. */
+body:not(.route-map):not(:has([data-route="map"])) > #main-content > main {
+  min-height: calc(100dvh - env(safe-area-inset-top, 0px));
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
