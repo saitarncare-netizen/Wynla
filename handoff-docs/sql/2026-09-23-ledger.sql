@@ -11,7 +11,9 @@
 -- later the observed value for that same day plus a hit/miss verdict.
 -- One row per (resort, target day, horizon): the same Saturday is
 -- predicted several times as it approaches, and each of those is its
--- own row so accuracy can be reported per horizon.
+-- own row so accuracy can be reported per horizon. A row is inserted
+-- once and never overwritten (ON CONFLICT DO NOTHING in the writer):
+-- made_at is the first forecast of that resort-local day.
 --
 -- No public UI reads this in season 1. See
 -- handoff-docs/PREDICTION_LEDGER_2026-09-23.md for what may be claimed
@@ -59,10 +61,33 @@ create index if not exists prediction_log_scored_at_idx
   on public.prediction_log (scored_at desc)
   where scored_at is not null;
 
+-- Scorer, scheduled path: "oldest unscored target day" (partial index
+-- above) and keyset pages by id inside one day.
+create index if not exists prediction_log_for_date_id_unscored_idx
+  on public.prediction_log (for_date, id)
+  where scored_at is null;
+
 -- Service role only. No policies on purpose: the ledger is written and
 -- read by the crons with the service key; nothing user-facing reads it
 -- until the founder has reviewed the numbers (see the handoff doc).
 alter table public.prediction_log enable row level security;
+
+-- Founder gate: compared / hit counts per region and horizon, all time,
+-- rows with a verdict only (dormant, closed and unobserved rows have a
+-- null surface_hit and never count). Read by /api/health when the
+-- request carries the cron bearer token; feature-detected like the
+-- table. security_invoker so the anon role, which has no policy on the
+-- table, sees nothing through the view either.
+create or replace view public.prediction_log_region_stats
+  with (security_invoker = true) as
+select r.region,
+       p.horizon_days,
+       count(*)::int                             as compared,
+       count(*) filter (where p.surface_hit)::int as hits
+from public.prediction_log p
+join public.resorts r on r.id = p.resort_id
+where p.surface_hit is not null
+group by r.region, p.horizon_days;
 
 -- Retention: keep two seasons. Run by hand each summer, or with pg_cron:
 --   select cron.schedule('prune-prediction-log', '0 3 1 7 *',

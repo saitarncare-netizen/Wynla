@@ -13,15 +13,29 @@
 // Shape: one prediction_log row per (resort, target day, horizon). The
 // same Saturday is predicted several times as it approaches, once per
 // horizon, so accuracy can later be reported per horizon rather than
-// blended. The table is feature-detected: when the migration
+// blended. A row is written once and never overwritten: in season the
+// refresh runs every 30 minutes, and a "frozen" call that moved with
+// every re-run until the day was over would inflate the same-day hit
+// rate. made_at is therefore the first forecast of that resort-local day
+// (for the daily 11:00 UTC schedule that is 03:00-07:00 local; for the
+// in-season half-hourly schedule, shortly after local midnight).
+//
+// The table is feature-detected: when the migration
 // (handoff-docs/sql/2026-09-23-ledger.sql) has not been applied every
-// entry point logs one warning per process and returns without failing
-// the cron.
+// entry point logs one warning and returns without failing the cron,
+// then re-probes after a short TTL so a long-lived process notices the
+// migration without a restart.
 //
 // "Actual" surface: the same classifier, re-run on OBSERVED inputs only
 // (weather_history rows through the target day, no forecast day mixed
 // in). That is the fairest label available without a human on the hill;
 // the doc lists its known biases.
+//
+// PostgREST caps every response at the project's max-rows (1,000 on
+// Supabase) even when no limit is requested, so every read here pages:
+// weather_history by range with an exact count, unscored rows by keyset
+// on id (the scored set shrinks as pages are written, so an offset would
+// skip rows).
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { isMissingSchemaError } from "@/lib/cronRun";
@@ -108,14 +122,18 @@ export type ScoredUpdate = {
 
 export type LedgerWriteResult = {
   available: boolean;
+  /** Rows inserted. Rows whose key already existed are left untouched
+   *  (the first call of the day is the frozen one) and counted in
+   *  `already_frozen`. */
   written: number;
+  already_frozen: number;
   errors: string[];
 };
 
 export type LedgerScoreResult = {
   available: boolean;
   date: string;
-  /** Rows that were unscored for this date when the run started. */
+  /** Unscored rows for this date that the run looked at. */
   candidates: number;
   /** Rows scored against an observation. */
   scored: number;
@@ -125,23 +143,57 @@ export type LedgerScoreResult = {
   pending: number;
   surface_hits: number;
   surface_compared: number;
+  /** Pages of unscored rows read (each at most SCORE_PAGE rows). */
+  pages: number;
+  /** "out_of_time" when the budget ran out before the last page. */
+  stopped: string | null;
   errors: string[];
 };
 
 export type LedgerSummary = {
   available: boolean;
+  window_days: number;
+  /** Rows frozen in the last 24 h (the daily volume). */
   predictions_logged_24h: number;
-  scored_7d: number;
-  surface_compared_7d: number;
-  surface_hits_7d: number;
-  /** Hits / compared over the last 7 days; null below MIN_RATE_SAMPLE so
-   *  a lucky first week never reads as a track record. */
-  surface_hit_rate_7d: number | null;
+  /** Rows scored against an observation inside the window. */
+  scored: number;
+  /** Rows closed inside the window because no observation ever landed;
+   *  a feed gap, not a score. */
+  closed_unobserved: number;
+  surface_compared: number;
+  surface_hits: number;
+  /** Hits / compared inside the window; null below MIN_RATE_SAMPLE so a
+   *  lucky first week never reads as a track record. */
+  surface_hit_rate: number | null;
+};
+
+/** One row of the prediction_log_region_stats view (all time). */
+export type RegionStat = {
+  region: string | null;
+  horizon_days: number;
+  compared: number;
+  hits: number;
+};
+
+export type ScoreOptions = {
+  /** Milliseconds left in the caller's budget; scoring stops between
+   *  pages when it drops under PAGE_FLOOR_MS. */
+  msLeft?: () => number;
+};
+
+export type PendingScoreResult = {
+  available: boolean;
+  /** Oldest unscored target day found (bounded by the lookback), or null. */
+  from: string | null;
+  through: string;
+  days: LedgerScoreResult[];
+  stopped: string | null;
 };
 
 // ---------- constants ----------
 
 export const LEDGER_TABLE = "prediction_log";
+export const LEDGER_REGION_VIEW = "prediction_log_region_stats";
 export const LEDGER_MIGRATION = "handoff-docs/sql/2026-09-23-ledger.sql";
 
 /** Below this many compared rows the hit rate is withheld (null). */
@@ -152,11 +204,26 @@ export const MIN_RATE_SAMPLE = 30;
  *  day and it will not be backfilled. */
 export const UNOBSERVED_CLOSE_AFTER_DAYS = 3;
 
+/** How far back the scheduled scorer looks for unscored days. Covers
+ *  the close-unobserved pass (day 3) plus a week of missed runs; older
+ *  rows are for the manual backfill route. */
+export const SCORE_LOOKBACK_DAYS = 10;
+
+/** After a "table missing" verdict the ledger stays quiet this long,
+ *  then re-probes, so the migration is picked up without a restart. */
+export const AVAILABILITY_TTL_MS = 10 * 60_000;
+
 /** Upsert batch size; PostgREST accepts far more but this keeps each
  *  request small enough that a single slow write cannot eat the budget. */
 const WRITE_BATCH = 200;
 /** `in (...)` filter batch size (keeps the URL short). */
 const ID_BATCH = 150;
+/** PostgREST max-rows on Supabase; every read pages at this size. */
+const PAGE_SIZE = 1000;
+/** Unscored rows per scoring page. */
+export const SCORE_PAGE = PAGE_SIZE;
+/** Scoring stops between pages below this much remaining budget. */
+const PAGE_FLOOR_MS = 8_000;
 
 /**
  * Adjacent classes count as a hit. The pairs are the ones a rider would
@@ -190,18 +257,38 @@ export const SURFACE_NEIGHBOURS: Record<SurfaceCode, readonly SurfaceCode[]> = {
 
 // ---------- feature detection ----------
 
-let ledgerAvailable: boolean | null = null;
+type Availability = { missing: boolean; since: number };
+const availability = new Map<string, Availability>();
 
-function noteLedgerMissing(where: string): void {
-  if (ledgerAvailable !== false) {
-    ledgerAvailable = false;
-    console.warn(`[predictionLog] ${LEDGER_TABLE} table is missing (${where}); run ${LEDGER_MIGRATION} to enable the ledger`);
-  }
+/** True while a relation is known to be missing and the TTL has not
+ *  elapsed. After the TTL the next call probes again. */
+function knownMissing(relation: string, now: Date): boolean {
+  const a = availability.get(relation);
+  if (!a?.missing) return false;
+  if (now.getTime() - a.since < AVAILABILITY_TTL_MS) return true;
+  availability.delete(relation);
+  return false;
+}
+
+function noteMissing(relation: string, where: string, error: { code?: string | null; message?: string }, now: Date): void {
+  const a = availability.get(relation);
+  if (a?.missing) return;
+  availability.set(relation, { missing: true, since: now.getTime() });
+  // 42P01 / PGRST205 = no such table; 42703 / PGRST204 = a column is
+  // missing (a partial migration). The code is printed so the two can be
+  // told apart from the log alone.
+  console.warn(
+    `[predictionLog] ${relation} is unavailable (${where}, ${error.code ?? "no code"}: ${error.message ?? ""}); run ${LEDGER_MIGRATION} to enable the ledger`,
+  );
+}
+
+function noteAvailable(relation: string): void {
+  availability.delete(relation);
 }
 
 /** Test hook: forget a previous "table missing" verdict. */
 export function resetLedgerAvailability(): void {
-  ledgerAvailable = null;
+  availability.clear();
 }
 
 // ---------- pure helpers ----------
@@ -247,11 +334,14 @@ export function isSurfaceHit(predicted: SurfaceCode | null, actual: SurfaceCode 
   return SURFACE_NEIGHBOURS[predicted]?.includes(actual) ?? false;
 }
 
-/** Forecast confidence decays with horizon exactly as classifyForecast
- *  caps it: one day out can be at most medium, further out is low. */
+/** Forecast confidence decays with horizon exactly as the resort page
+ *  does (classifyForecast over days 1..3): tomorrow keeps the
+ *  classifier's own confidence, two days out is at most medium, three or
+ *  more days out is low. The ledger's label for a day therefore matches
+ *  what the page showed for that same day. */
 export function capConfidence(c: Confidence, horizon: number): Confidence {
-  if (horizon <= 0) return c;
-  if (horizon === 1) return c === "high" ? "medium" : c;
+  if (horizon <= 1) return c;
+  if (horizon === 2) return c === "high" ? "medium" : c;
   return "low";
 }
 
@@ -477,46 +567,147 @@ export function scoreRows(input: ScoreInput): { updates: ScoredUpdate[]; pending
 
 // ---------- I/O ----------
 
-/** Upsert predictions by (resort_id, for_date, horizon_days). A re-run
- *  the same day overwrites the row with the fresher forecast, which is
- *  what "made_at" then reflects. */
-export async function writePredictions(supabase: SupabaseClient, rows: PredictionRow[]): Promise<LedgerWriteResult> {
-  const result: LedgerWriteResult = { available: ledgerAvailable !== false, written: 0, errors: [] };
-  if (ledgerAvailable === false || rows.length === 0) return result;
+/**
+ * Freeze predictions. Insert-only on (resort_id, for_date, horizon_days):
+ * a key that already exists is left exactly as first written, so the
+ * in-season half-hourly re-runs never move a call after it was made.
+ * Returns how many rows were new; the rest were already frozen.
+ */
+export async function writePredictions(
+  supabase: SupabaseClient,
+  rows: PredictionRow[],
+  now: Date = new Date(),
+): Promise<LedgerWriteResult> {
+  const result: LedgerWriteResult = { available: true, written: 0, already_frozen: 0, errors: [] };
+  if (knownMissing(LEDGER_TABLE, now)) return { ...result, available: false };
+  if (rows.length === 0) return result;
   for (let off = 0; off < rows.length; off += WRITE_BATCH) {
     const batch = rows.slice(off, off + WRITE_BATCH);
-    const { error } = await supabase.from(LEDGER_TABLE).upsert(batch, { onConflict: "resort_id,for_date,horizon_days" });
+    // ON CONFLICT DO NOTHING; RETURNING yields only the rows inserted,
+    // which is the written count.
+    const { data, error } = await supabase
+      .from(LEDGER_TABLE)
+      .upsert(batch, { onConflict: "resort_id,for_date,horizon_days", ignoreDuplicates: true })
+      .select("id");
     if (error) {
       if (isMissingSchemaError(error)) {
-        noteLedgerMissing("write");
+        noteMissing(LEDGER_TABLE, "write", error, now);
         result.available = false;
         return result;
       }
       result.errors.push(error.message);
       continue;
     }
-    ledgerAvailable = true;
-    result.written += batch.length;
+    noteAvailable(LEDGER_TABLE);
+    const inserted = Array.isArray(data) ? data.length : 0;
+    result.written += inserted;
+    result.already_frozen += batch.length - inserted;
   }
   return result;
 }
 
-async function inBatches<T>(ids: number[], fetchBatch: (slice: number[]) => Promise<T[]>): Promise<T[]> {
-  const out: T[] = [];
-  for (let off = 0; off < ids.length; off += ID_BATCH) {
-    out.push(...(await fetchBatch(ids.slice(off, off + ID_BATCH))));
+type PageReply<T> = { data: T[] | null; error: { code?: string; message: string } | null; count: number | null };
+
+/**
+ * Read a whole result set through PostgREST's max-rows cap: windows of
+ * PAGE_SIZE with an exact count, stopping on the count rather than on a
+ * short page (the app/page.tsx pattern). `build` must apply a
+ * deterministic order.
+ */
+async function readAllPages<T>(build: (from: number, to: number) => PromiseLike<PageReply<T>>): Promise<{ rows: T[]; error: string | null }> {
+  const rows: T[] = [];
+  let total: number | null = null;
+  while (total === null || rows.length < total) {
+    const from = rows.length;
+    const { data, error, count } = await build(from, from + PAGE_SIZE - 1);
+    if (error) return { rows, error: error.message };
+    const page = data ?? [];
+    // An empty page with rows still owed means the set shrank mid-read;
+    // stop rather than loop forever.
+    if (page.length === 0) break;
+    rows.push(...page);
+    total = count ?? rows.length;
   }
-  return out;
+  return { rows, error: null };
 }
 
 /**
- * Score every unscored row whose target day is `date`. Reads the
- * observations and resort status it needs, computes the observed surface,
- * writes the updates in batches. Never throws on a missing table.
+ * weather_history rows for a set of resorts between two dates inclusive,
+ * paged. Exported for the refresh route, whose own history read hit the
+ * same cap (437 resorts x 9 days is well over 1,000 rows).
  */
-export async function scoreDay(supabase: SupabaseClient, date: string, now: Date = new Date()): Promise<LedgerScoreResult> {
+export async function readHistoryRange(
+  supabase: SupabaseClient,
+  resortIds: number[],
+  since: string,
+  until: string,
+): Promise<{ rows: ObservedDay[]; error: string | null }> {
+  const out: ObservedDay[] = [];
+  for (let off = 0; off < resortIds.length; off += ID_BATCH) {
+    const slice = resortIds.slice(off, off + ID_BATCH);
+    const { rows, error } = await readAllPages<ObservedDay>((from, to) =>
+      supabase
+        .from("weather_history")
+        .select("resort_id, observed_date, temp_high_f, temp_low_f, snow_24h_in, rain_24h_in, precip_24h_in, wind_mph_avg", {
+          count: "exact",
+        })
+        .in("resort_id", slice)
+        .gte("observed_date", since)
+        .lte("observed_date", until)
+        // (resort_id, observed_date) is the table's unique key, so this
+        // order is total and windows cannot straddle a duplicate.
+        .order("resort_id")
+        .order("observed_date")
+        .range(from, to),
+    );
+    if (error) return { rows: out, error };
+    out.push(...rows);
+  }
+  return { rows: out, error: null };
+}
+
+/** Per-run memo of resort status + measured provenance, so the pages of
+ *  one scoreDay call do not re-read the same resorts. */
+class ResortLookup {
+  readonly resorts = new Map<number, ResortStatusLite>();
+  readonly measured = new Map<number, MeasuredSnow | null>();
+  private fetched = new Set<number>();
+  constructor(private supabase: SupabaseClient) {}
+
+  async ensure(ids: number[], errors: string[]): Promise<void> {
+    const missing = ids.filter((id) => !this.fetched.has(id));
+    for (const id of missing) this.fetched.add(id);
+    for (let off = 0; off < missing.length; off += ID_BATCH) {
+      const slice = missing.slice(off, off + ID_BATCH);
+      const [r, c] = await Promise.all([
+        this.supabase.from("resorts").select("id, currently_open, snow_base_depth_in").in("id", slice),
+        this.supabase.from("weather_cache").select("resort_id, measured:forecast_json->measured").in("resort_id", slice),
+      ]);
+      if (r.error) errors.push(`resorts: ${r.error.message}`);
+      else for (const row of (r.data ?? []) as ResortStatusLite[]) this.resorts.set(row.id, row);
+      // Provenance only; scoring proceeds without it.
+      if (c.error) errors.push(`weather_cache: ${c.error.message}`);
+      else for (const row of (c.data ?? []) as Array<{ resort_id: number; measured: MeasuredSnow | null }>) this.measured.set(row.resort_id, row.measured);
+    }
+  }
+}
+
+/**
+ * Score every unscored row whose target day is `date`. Pages by keyset
+ * on id: each page's observations and resort status are read, the
+ * observed surface computed, the updates written, then the next page is
+ * fetched with id > the last one seen (rows left pending are unscored
+ * but never re-read in this call, so the loop always terminates). Never
+ * throws on a missing table.
+ */
+export async function scoreDay(
+  supabase: SupabaseClient,
+  date: string,
+  now: Date = new Date(),
+  opts: ScoreOptions = {},
+): Promise<LedgerScoreResult> {
   const result: LedgerScoreResult = {
-    available: ledgerAvailable !== false,
+    available: true,
     date,
     candidates: 0,
     scored: 0,
@@ -524,138 +715,211 @@ export async function scoreDay(supabase: SupabaseClient, date: string, now: Date
     pending: 0,
     surface_hits: 0,
     surface_compared: 0,
+    pages: 0,
+    stopped: null,
     errors: [],
   };
-  if (ledgerAvailable === false) return result;
+  if (knownMissing(LEDGER_TABLE, now)) return { ...result, available: false };
 
+  const lookup = new ResortLookup(supabase);
+  const since = shiftDate(date, -8);
+  let lastId = 0;
+  for (;;) {
+    if (opts.msLeft && opts.msLeft() < PAGE_FLOOR_MS) {
+      result.stopped = "out_of_time";
+      break;
+    }
+    const { data, error } = await supabase
+      .from(LEDGER_TABLE)
+      .select("id, resort_id, for_date, horizon_days, made_at, surface_class, forecast_snow_in, forecast_high_f, forecast_low_f")
+      .eq("for_date", date)
+      .is("scored_at", null)
+      .gt("id", lastId)
+      .order("id")
+      .limit(SCORE_PAGE);
+    if (error) {
+      if (isMissingSchemaError(error)) {
+        noteMissing(LEDGER_TABLE, "score", error, now);
+        result.available = false;
+      } else result.errors.push(`select: ${error.message}`);
+      return result;
+    }
+    noteAvailable(LEDGER_TABLE);
+    const rows = (data ?? []) as UnscoredRow[];
+    if (rows.length === 0) break;
+    result.pages++;
+    result.candidates += rows.length;
+    lastId = rows[rows.length - 1].id;
+
+    const ids = Array.from(new Set(rows.map((r) => r.resort_id)));
+    const [history] = await Promise.all([readHistoryRange(supabase, ids, since, date), lookup.ensure(ids, result.errors)]);
+    if (history.error) {
+      // A failed history read must not close every row as "unobserved".
+      result.errors.push(`weather_history: ${history.error}`);
+      result.stopped = "history_read_failed";
+      return result;
+    }
+
+    const { updates, pending } = scoreRows({
+      rows,
+      history: history.rows,
+      resorts: lookup.resorts,
+      measured: lookup.measured,
+      now,
+    });
+    result.pending += pending.length;
+
+    for (let off = 0; off < updates.length; off += WRITE_BATCH) {
+      const batch = updates.slice(off, off + WRITE_BATCH);
+      // Upsert on the primary key updates only the columns in the payload;
+      // the not-null key columns ride along so the INSERT half of the
+      // statement is valid even though it never runs.
+      const { error: writeError } = await supabase.from(LEDGER_TABLE).upsert(batch, { onConflict: "id" });
+      if (writeError) {
+        result.errors.push(`update: ${writeError.message}`);
+        continue;
+      }
+      for (const u of batch) {
+        if (u.actual_source.reason === "no_observation") result.closed_unobserved++;
+        else result.scored++;
+        if (u.surface_hit !== null) {
+          result.surface_compared++;
+          if (u.surface_hit) result.surface_hits++;
+        }
+      }
+    }
+    if (rows.length < SCORE_PAGE) break;
+  }
+  return result;
+}
+
+/**
+ * Score every unscored target day up to and including `through`, oldest
+ * first, looking back at most SCORE_LOOKBACK_DAYS. One cheap query finds
+ * the oldest unscored day so a quiet ledger costs one request and a
+ * missed week is caught up automatically. This is what the daily refresh
+ * calls; it reaches the close-unobserved pass (day 3) on its own.
+ */
+export async function scorePendingDays(
+  supabase: SupabaseClient,
+  through: string,
+  now: Date = new Date(),
+  opts: ScoreOptions = {},
+): Promise<PendingScoreResult> {
+  const result: PendingScoreResult = { available: true, from: null, through, days: [], stopped: null };
+  if (knownMissing(LEDGER_TABLE, now)) return { ...result, available: false };
   const { data, error } = await supabase
     .from(LEDGER_TABLE)
-    .select("id, resort_id, for_date, horizon_days, made_at, surface_class, forecast_snow_in, forecast_high_f, forecast_low_f")
-    .eq("for_date", date)
+    .select("for_date")
     .is("scored_at", null)
-    .limit(10_000);
+    .lte("for_date", through)
+    .order("for_date")
+    .limit(1);
   if (error) {
     if (isMissingSchemaError(error)) {
-      noteLedgerMissing("score");
-      result.available = false;
-    } else result.errors.push(`select: ${error.message}`);
+      noteMissing(LEDGER_TABLE, "pending", error, now);
+      return { ...result, available: false };
+    }
+    result.stopped = `oldest: ${error.message}`;
     return result;
   }
-  ledgerAvailable = true;
-  const rows = (data ?? []) as UnscoredRow[];
-  result.candidates = rows.length;
-  if (rows.length === 0) return result;
-
-  const ids = Array.from(new Set(rows.map((r) => r.resort_id)));
-  const since = shiftDate(date, -8);
-  const [history, resorts, caches] = await Promise.all([
-    inBatches(ids, async (slice) => {
-      const { data, error } = await supabase
-        .from("weather_history")
-        .select("resort_id, observed_date, temp_high_f, temp_low_f, snow_24h_in, rain_24h_in, precip_24h_in, wind_mph_avg")
-        .in("resort_id", slice)
-        .gte("observed_date", since)
-        .lte("observed_date", date);
-      if (error) {
-        result.errors.push(`weather_history: ${error.message}`);
-        return [];
-      }
-      return (data ?? []) as ObservedDay[];
-    }),
-    inBatches(ids, async (slice) => {
-      const { data, error } = await supabase
-        .from("resorts")
-        .select("id, currently_open, snow_base_depth_in")
-        .in("id", slice);
-      if (error) {
-        result.errors.push(`resorts: ${error.message}`);
-        return [];
-      }
-      return (data ?? []) as ResortStatusLite[];
-    }),
-    inBatches(ids, async (slice) => {
-      const { data, error } = await supabase
-        .from("weather_cache")
-        .select("resort_id, measured:forecast_json->measured")
-        .in("resort_id", slice);
-      if (error) {
-        // Provenance only; scoring proceeds without it.
-        result.errors.push(`weather_cache: ${error.message}`);
-        return [];
-      }
-      return (data ?? []) as Array<{ resort_id: number; measured: MeasuredSnow | null }>;
-    }),
-  ]);
-  // A failed history read must not close every row as "unobserved".
-  if (result.errors.some((e) => e.startsWith("weather_history:"))) return result;
-
-  const { updates, pending } = scoreRows({
-    rows,
-    history,
-    resorts: new Map(resorts.map((r) => [r.id, r])),
-    measured: new Map(caches.map((c) => [c.resort_id, c.measured])),
-    now,
-  });
-  result.pending = pending.length;
-
-  for (let off = 0; off < updates.length; off += WRITE_BATCH) {
-    const batch = updates.slice(off, off + WRITE_BATCH);
-    // Upsert on the primary key updates only the columns in the payload;
-    // the not-null key columns ride along so the INSERT half of the
-    // statement is valid even though it never runs.
-    const { error } = await supabase.from(LEDGER_TABLE).upsert(batch, { onConflict: "id" });
-    if (error) {
-      result.errors.push(`update: ${error.message}`);
-      continue;
+  noteAvailable(LEDGER_TABLE);
+  const oldest = (data?.[0] as { for_date: string } | undefined)?.for_date ?? null;
+  if (!oldest) return result;
+  const floor = shiftDate(through, -(SCORE_LOOKBACK_DAYS - 1));
+  result.from = oldest < floor ? floor : oldest;
+  for (let d = result.from; d <= through; d = shiftDate(d, 1)) {
+    if (opts.msLeft && opts.msLeft() < PAGE_FLOOR_MS) {
+      result.stopped = "out_of_time";
+      break;
     }
-    for (const u of batch) {
-      if (u.actual_source.reason === "no_observation") result.closed_unobserved++;
-      else result.scored++;
-      if (u.surface_hit !== null) {
-        result.surface_compared++;
-        if (u.surface_hit) result.surface_hits++;
-      }
+    const day = await scoreDay(supabase, d, now, opts);
+    result.days.push(day);
+    if (!day.available) {
+      result.available = false;
+      break;
+    }
+    if (day.stopped) {
+      result.stopped = day.stopped;
+      break;
     }
   }
   return result;
 }
 
-/** Ledger counts for /api/health. Never throws; `available: false` when
- *  the table is missing. */
-export async function ledgerSummary(supabase: SupabaseClient, now: Date = new Date()): Promise<LedgerSummary> {
+/**
+ * Ledger counts for /api/health. `days` sets the scoring window (the
+ * logged count is always the last 24 h). Never throws; `available: false`
+ * when the table is missing.
+ */
+export async function ledgerSummary(supabase: SupabaseClient, days = 7, now: Date = new Date()): Promise<LedgerSummary> {
   const empty: LedgerSummary = {
     available: false,
+    window_days: days,
     predictions_logged_24h: 0,
-    scored_7d: 0,
-    surface_compared_7d: 0,
-    surface_hits_7d: 0,
-    surface_hit_rate_7d: null,
+    scored: 0,
+    closed_unobserved: 0,
+    surface_compared: 0,
+    surface_hits: 0,
+    surface_hit_rate: null,
   };
-  if (ledgerAvailable === false) return empty;
+  if (knownMissing(LEDGER_TABLE, now)) return empty;
   const dayAgo = new Date(now.getTime() - 86_400_000).toISOString();
-  const weekAgo = new Date(now.getTime() - 7 * 86_400_000).toISOString();
+  const windowStart = new Date(now.getTime() - days * 86_400_000).toISOString();
   const head = { count: "exact" as const, head: true };
-  const [logged, scored, compared, hits] = await Promise.all([
+  const [logged, scoredAll, closed, compared, hits] = await Promise.all([
     supabase.from(LEDGER_TABLE).select("id", head).gte("made_at", dayAgo),
-    supabase.from(LEDGER_TABLE).select("id", head).gte("scored_at", weekAgo),
-    supabase.from(LEDGER_TABLE).select("id", head).gte("scored_at", weekAgo).not("surface_hit", "is", null),
-    supabase.from(LEDGER_TABLE).select("id", head).gte("scored_at", weekAgo).eq("surface_hit", true),
+    supabase.from(LEDGER_TABLE).select("id", head).gte("scored_at", windowStart),
+    supabase.from(LEDGER_TABLE).select("id", head).gte("scored_at", windowStart).eq("actual_source->>reason", "no_observation"),
+    supabase.from(LEDGER_TABLE).select("id", head).gte("scored_at", windowStart).not("surface_hit", "is", null),
+    supabase.from(LEDGER_TABLE).select("id", head).gte("scored_at", windowStart).eq("surface_hit", true),
   ]);
-  const firstError = [logged, scored, compared, hits].find((r) => r.error)?.error;
+  const firstError = [logged, scoredAll, closed, compared, hits].find((r) => r.error)?.error;
   if (firstError) {
-    if (isMissingSchemaError(firstError)) noteLedgerMissing("summary");
+    if (isMissingSchemaError(firstError)) noteMissing(LEDGER_TABLE, "summary", firstError, now);
     else console.warn(`[predictionLog] summary query failed: ${firstError.message}`);
     return empty;
   }
-  ledgerAvailable = true;
+  noteAvailable(LEDGER_TABLE);
   const n = compared.count ?? 0;
   const h = hits.count ?? 0;
+  const closedN = closed.count ?? 0;
   return {
     available: true,
+    window_days: days,
     predictions_logged_24h: logged.count ?? 0,
-    scored_7d: scored.count ?? 0,
-    surface_compared_7d: n,
-    surface_hits_7d: h,
-    surface_hit_rate_7d: n >= MIN_RATE_SAMPLE ? Math.round((h / n) * 1000) / 1000 : null,
+    scored: Math.max(0, (scoredAll.count ?? 0) - closedN),
+    closed_unobserved: closedN,
+    surface_compared: n,
+    surface_hits: h,
+    surface_hit_rate: n >= MIN_RATE_SAMPLE ? Math.round((h / n) * 1000) / 1000 : null,
   };
+}
+
+/**
+ * All-time compared / hit counts per region and horizon from the
+ * prediction_log_region_stats view (created by the same migration), so
+ * the founder's "200 compared rows per region per horizon" gate is
+ * visible without the SQL editor. Null when the view is missing.
+ */
+export async function ledgerRegionStats(supabase: SupabaseClient, now: Date = new Date()): Promise<RegionStat[] | null> {
+  if (knownMissing(LEDGER_REGION_VIEW, now)) return null;
+  const { data, error } = await supabase
+    .from(LEDGER_REGION_VIEW)
+    .select("region, horizon_days, compared, hits")
+    .order("region")
+    .order("horizon_days")
+    .limit(PAGE_SIZE);
+  if (error) {
+    if (isMissingSchemaError(error)) noteMissing(LEDGER_REGION_VIEW, "region", error, now);
+    else console.warn(`[predictionLog] region stats query failed: ${error.message}`);
+    return null;
+  }
+  noteAvailable(LEDGER_REGION_VIEW);
+  return ((data ?? []) as Array<Record<string, unknown>>).map((r) => ({
+    region: (r.region as string | null) ?? null,
+    horizon_days: Number(r.horizon_days),
+    compared: Number(r.compared ?? 0),
+    hits: Number(r.hits ?? 0),
+  }));
 }

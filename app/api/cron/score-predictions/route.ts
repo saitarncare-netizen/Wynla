@@ -1,20 +1,21 @@
 // Prediction-ledger scorer, on demand.
 //
-// The daily refresh-weather run already scores yesterday and the day
-// before at the end of each pass (see that route), so this is NOT in
-// vercel.json. It exists for two cases: backfilling a stretch of days
-// after an outage (the refresh only looks back two days), and re-running
-// the scorer by hand while reviewing the numbers. Same auth as every
-// cron (Authorization: Bearer CRON_SECRET).
+// The daily refresh-weather run already scores every pending target day
+// through UTC yesterday at the end of each pass (see that route and
+// lib/predictionLog scorePendingDays), so this is NOT in vercel.json. It
+// exists for two cases: backfilling a stretch of days older than the
+// refresh's lookback after an outage, and re-running the scorer by hand
+// while reviewing the numbers. Same auth as every cron (Authorization:
+// Bearer CRON_SECRET).
 //
-// Query params: ?date=YYYY-MM-DD (one target day; default UTC yesterday)
-// or ?from=YYYY-MM-DD&to=YYYY-MM-DD (inclusive range, oldest first, at
-// most 31 days, stops early when the budget runs low). Scoring is
-// idempotent: a row is only scored once, and re-running a day only
-// touches rows that are still unscored.
+// Query params: none = the same pending-days pass the refresh does;
+// ?date=YYYY-MM-DD (one target day); ?from=YYYY-MM-DD&to=YYYY-MM-DD
+// (inclusive range, oldest first, at most 31 days, stops early when the
+// budget runs low). Scoring is idempotent: a row is only scored once, and
+// re-running a day only touches rows that are still unscored.
 
 import { runCron, type CronContext } from "@/lib/cronRun";
-import { scoreDay, type LedgerScoreResult } from "@/lib/predictionLog";
+import { scoreDay, scorePendingDays, type LedgerScoreResult } from "@/lib/predictionLog";
 import { shiftDate } from "@/lib/weather/time";
 
 export const runtime = "nodejs";
@@ -24,7 +25,7 @@ const MAX_RANGE_DAYS = 31;
 const DAY_FLOOR_MS = 15_000;
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
-function datesFrom(url: URL, now: Date): string[] | { error: string } {
+function datesFrom(url: URL, now: Date): string[] | null | { error: string } {
   const one = url.searchParams.get("date");
   const from = url.searchParams.get("from");
   const to = url.searchParams.get("to");
@@ -42,26 +43,11 @@ function datesFrom(url: URL, now: Date): string[] | { error: string } {
     for (let d = start; d <= end && out.length < MAX_RANGE_DAYS; d = shiftDate(d, 1)) out.push(d);
     return out;
   }
-  return [shiftDate(todayUtc, -1)];
+  // No params: whatever is pending, exactly as the daily run does it.
+  return null;
 }
 
-async function score(ctx: CronContext, request: Request) {
-  const dates = datesFrom(new URL(request.url), ctx.startedAt);
-  if (!Array.isArray(dates)) return { ok: false, reason: dates.error };
-  const days: LedgerScoreResult[] = [];
-  let stopped: string | null = null;
-  for (const date of dates) {
-    if (ctx.msLeft() < DAY_FLOOR_MS) {
-      stopped = "out_of_time";
-      break;
-    }
-    const r = await scoreDay(ctx.supabase, date, ctx.startedAt);
-    days.push(r);
-    if (!r.available) {
-      stopped = "ledger_table_missing";
-      break;
-    }
-  }
+function summarize(days: LedgerScoreResult[], stopped: string | null, extra: Record<string, unknown>) {
   const errors = days.flatMap((d) => d.errors.map((e) => `${d.date}: ${e}`));
   const totals = days.reduce(
     (t, d) => ({
@@ -74,18 +60,50 @@ async function score(ctx: CronContext, request: Request) {
     }),
     { candidates: 0, scored: 0, closed_unobserved: 0, pending: 0, surface_hits: 0, surface_compared: 0 },
   );
-  const available = days.length === 0 || days[days.length - 1].available;
+  const available = days.length === 0 ? stopped !== "ledger_table_missing" : days[days.length - 1].available;
   return {
-    ok: errors.length === 0 && stopped !== "ledger_table_missing",
-    reason: errors.length ? "score_errors" : stopped === "ledger_table_missing" ? "ledger_table_missing" : undefined,
+    ok: errors.length === 0 && available,
+    reason: errors.length ? "score_errors" : !available ? "ledger_table_missing" : undefined,
     available,
     stopped,
-    requested: dates.length,
     processed: days.length,
+    ...extra,
     ...totals,
     days: days.map((d) => ({ ...d, errors: d.errors.length })),
     error_sample: errors.slice(0, 8),
   };
+}
+
+async function score(ctx: CronContext, request: Request) {
+  const dates = datesFrom(new URL(request.url), ctx.startedAt);
+  if (dates !== null && !Array.isArray(dates)) return { ok: false, reason: dates.error };
+  const opts = { msLeft: ctx.msLeft };
+
+  if (dates === null) {
+    const through = shiftDate(ctx.startedAt.toISOString().slice(0, 10), -1);
+    const r = await scorePendingDays(ctx.supabase, through, ctx.startedAt, opts);
+    return summarize(r.days, r.available ? r.stopped : "ledger_table_missing", { mode: "pending", from: r.from, through });
+  }
+
+  const days: LedgerScoreResult[] = [];
+  let stopped: string | null = null;
+  for (const date of dates) {
+    if (ctx.msLeft() < DAY_FLOOR_MS) {
+      stopped = "out_of_time";
+      break;
+    }
+    const r = await scoreDay(ctx.supabase, date, ctx.startedAt, opts);
+    days.push(r);
+    if (!r.available) {
+      stopped = "ledger_table_missing";
+      break;
+    }
+    if (r.stopped) {
+      stopped = r.stopped;
+      break;
+    }
+  }
+  return summarize(days, stopped, { mode: "dates", requested: dates.length });
 }
 
 export async function GET(request: Request) {
