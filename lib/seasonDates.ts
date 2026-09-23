@@ -1,15 +1,33 @@
-// Season-dates parser — converts the loosely-typed `season_open_text` and
-// `season_close_text` strings on the resorts table into a structured
-// SeasonInfo object the UI can render.
+// Season-dates parser — converts the loosely-typed `season_open_text` /
+// `season_close_text` (and the legacy `typical_season_start` /
+// `typical_season_end`) strings on the resorts table into a structured
+// SeasonInfo the UI can render, plus the resort-status derivation the
+// resort page and map panel share.
 //
 // Input formats handled (in order of attempt):
-//   ISO-ish      "2026-11-22"      → exact
-//   US slash     "11/22/2026"      → exact
-//   Month Day    "November 22"     → assume current or next year (whichever
-//                                    is still in the future)
-//   Qualifier+Mo "Late November"   → day 25 of that month (Early=5, Mid=15)
-//   Bare month   "November"        → day 15 of that month
-//   Anything else → null for that side (status "unknown" if both null)
+//   ISO-ish        "2026-11-22"              → exact
+//   US slash       "11/22/2026"              → exact
+//   Named holiday  "Thanksgiving", "Day after Thanksgiving", "Christmas",
+//                  "Memorial Day", "Presidents' Day", "Easter" → computed
+//                  per year (nth-weekday / computus), so they roll correctly
+//                  into every future season
+//   Nth weekday    "Second Sunday in April", "Last Saturday of March",
+//                  "Second week of December"
+//   Month Day      "November 22", "Nov 22nd", "May 17", "17th of May"
+//   Qualifier+Mo   "Late November", "Mid-November", "mid November",
+//                  "early/mid April", "Mid-to-late March", "end of March"
+//   Bare month     "November"               → day 15 of that month
+//   Anything else  → null for that side (status "unknown" if both null)
+//
+// Hyphens, en/em dashes and slashes are treated as separators, so
+// "Mid-November" and "Mid November" parse identically (audit finding
+// domain-logic-24: the hyphenated form — the DB's own documented example
+// — used to fail and hide the countdown on every resort that used it).
+//
+// Years are never hard-coded: a text without a year is anchored on the
+// reference year and rolled forward when the date has already passed,
+// so "Late November" read in September 2027 means November 2027, and read
+// in December 2027 means November 2028.
 //
 // The window can WRAP year-end — ski resorts open in Nov and close in Apr.
 // If parsed `close` < `open` we treat it as "open → close of NEXT year"
@@ -20,15 +38,24 @@ export type SeasonStatus = "in-season" | "off-season" | "unknown";
 
 /**
  * Global "is this currently off-season for most US resorts?" helper.
- * May 1 (month 4) through Oct 31 (month 9). Used to gate UI that's
- * pointless during summer (powder-day filter chips, etc) and to unify
- * the "closed" vs "off-season" status copy on resort pages — during
- * this window we want one consistent message regardless of what the
- * OnTheSnow scraper literally reports.
+ *
+ * May 1 through Oct 15 (UTC calendar, so the server render and the
+ * client hydration agree at month boundaries). Used to gate UI that is
+ * pointless in summer (fresh-snow chips, crowd estimates) and to soften
+ * per-resort status copy when the scraper has nothing live to say.
+ *
+ * The window ends mid-October rather than at Halloween on purpose: the
+ * earliest US openings (Arapahoe Basin, Loveland, Killington, Wild
+ * Mountain) and the first real Rockies storms land in the second half of
+ * October, and hiding those behind a "summer" switch was the audit's
+ * domain-logic-28 complaint. Per-resort truth (currently_open, snow
+ * report status, parsed season dates) always wins over this flag.
  */
 export function isGlobalOffSeasonNow(now: Date = new Date()): boolean {
-  const m = now.getMonth();
-  return m >= 4 && m <= 9;
+  const m = now.getUTCMonth();
+  const d = now.getUTCDate();
+  if (m >= 4 && m <= 8) return true; // May 1 – Sep 30
+  return m === 9 && d <= 15; // Oct 1 – Oct 15
 }
 
 export type SeasonInfo = {
@@ -39,6 +66,9 @@ export type SeasonInfo = {
   daysUntilClose: number | null;
   nextOpenDate: Date | null;
   nextCloseDate: Date | null;
+  /** True when at least one side came from a qualifier, bare month or
+   *  holiday phrase rather than an explicit day — the UI prefixes "~". */
+  approximate: boolean;
 };
 
 const MONTH_NAMES: Record<string, number> = {
@@ -68,12 +98,48 @@ const MONTH_NAMES: Record<string, number> = {
   dec: 11,
 };
 
+// Day-of-month a qualifier stands for. When several appear ("mid to
+// late", "early/mid") we average them, which lands "mid-to-late March"
+// on the 20th and "early/mid April" on the 10th.
 const QUALIFIER_DAY: Record<string, number> = {
+  beginning: 3,
+  start: 3,
   early: 5,
   mid: 15,
   middle: 15,
   late: 25,
-  end: 25,
+  end: 27,
+};
+
+const WEEKDAY_NAMES: Record<string, number> = {
+  sunday: 0,
+  sun: 0,
+  monday: 1,
+  mon: 1,
+  tuesday: 2,
+  tue: 2,
+  tues: 2,
+  wednesday: 3,
+  wed: 3,
+  thursday: 4,
+  thu: 4,
+  thurs: 4,
+  friday: 5,
+  fri: 5,
+  saturday: 6,
+  sat: 6,
+};
+
+const ORDINAL_WORDS: Record<string, number> = {
+  first: 1,
+  "1st": 1,
+  second: 2,
+  "2nd": 2,
+  third: 3,
+  "3rd": 3,
+  fourth: 4,
+  "4th": 4,
+  last: -1,
 };
 
 const MS_PER_DAY = 86_400_000;
@@ -86,21 +152,104 @@ function makeUTCDate(year: number, month: number, day: number): Date {
   return new Date(Date.UTC(year, month, day));
 }
 
+// ---------- Calendar helpers (exported: crowdForecast shares them) ----------
+
+/** Day-of-month of the nth given weekday in a month (n = 1..5). */
+export function nthWeekdayOfMonth(year: number, month: number, weekday: number, n: number): number {
+  const first = new Date(Date.UTC(year, month, 1)).getUTCDay();
+  const offset = (weekday - first + 7) % 7;
+  return 1 + offset + (n - 1) * 7;
+}
+
+/** Day-of-month of the last given weekday in a month. */
+export function lastWeekdayOfMonth(year: number, month: number, weekday: number): number {
+  const lastDay = lastDayOfMonth(year, month);
+  const lastDow = new Date(Date.UTC(year, month, lastDay)).getUTCDay();
+  return lastDay - ((lastDow - weekday + 7) % 7);
+}
+
+/** US Thanksgiving = fourth Thursday of November. */
+export function thanksgivingDate(year: number): Date {
+  return makeUTCDate(year, 10, nthWeekdayOfMonth(year, 10, 4, 4));
+}
+
+/** Western Easter Sunday (Meeus/Jones/Butcher computus). */
+export function easterDate(year: number): Date {
+  const a = year % 19;
+  const b = Math.floor(year / 100);
+  const c = year % 100;
+  const d = Math.floor(b / 4);
+  const e = b % 4;
+  const f = Math.floor((b + 8) / 25);
+  const g = Math.floor((b - f + 1) / 3);
+  const h = (19 * a + b - d - g + 15) % 30;
+  const i = Math.floor(c / 4);
+  const k = c % 4;
+  const l = (32 + 2 * e + 2 * i - h - k) % 7;
+  const m = Math.floor((a + 11 * h + 22 * l) / 451);
+  const month = Math.floor((h + l - 7 * m + 114) / 31) - 1;
+  const day = ((h + l - 7 * m + 114) % 31) + 1;
+  return makeUTCDate(year, month, day);
+}
+
+type NamedHoliday = {
+  pattern: RegExp;
+  date: (year: number) => Date;
+};
+
+// Named-holiday phrases the DB uses (or plausibly will). Order matters:
+// the more specific "day after thanksgiving" must beat "thanksgiving".
+const NAMED_HOLIDAYS: NamedHoliday[] = [
+  {
+    pattern: /(day after|friday after|weekend of|weekend after)\s+thanksgiving|thanksgiving\s+(weekend|friday)/,
+    date: (y) => addDays(thanksgivingDate(y), 1),
+  },
+  { pattern: /thanksgiving/, date: (y) => thanksgivingDate(y) },
+  { pattern: /christmas/, date: (y) => makeUTCDate(y, 11, 25) },
+  { pattern: /new\s*years?/, date: (y) => makeUTCDate(y, 0, 1) },
+  {
+    pattern: /(mlk|martin luther king)/,
+    date: (y) => makeUTCDate(y, 0, nthWeekdayOfMonth(y, 0, 1, 3)),
+  },
+  {
+    pattern: /presidents?/,
+    date: (y) => makeUTCDate(y, 1, nthWeekdayOfMonth(y, 1, 1, 3)),
+  },
+  { pattern: /easter/, date: (y) => easterDate(y) },
+  {
+    pattern: /memorial day/,
+    date: (y) => makeUTCDate(y, 4, lastWeekdayOfMonth(y, 4, 1)),
+  },
+  {
+    pattern: /labor day/,
+    date: (y) => makeUTCDate(y, 8, nthWeekdayOfMonth(y, 8, 1, 1)),
+  },
+  {
+    pattern: /(columbus|indigenous peoples)/,
+    date: (y) => makeUTCDate(y, 9, nthWeekdayOfMonth(y, 9, 1, 2)),
+  },
+  { pattern: /veterans/, date: (y) => makeUTCDate(y, 10, 11) },
+  { pattern: /halloween/, date: (y) => makeUTCDate(y, 9, 31) },
+];
+
+function addDays(d: Date, n: number): Date {
+  return new Date(d.getTime() + n * MS_PER_DAY);
+}
+
+type ParsedSide = { date: Date; approximate: boolean };
+
 /**
  * Parse a single season-text field into a Date.
  *
- * `referenceYear` is the year we anchor on when the text omits a year
- * (e.g. "November 22" or "Late December"). We try `referenceYear` first
- * and roll forward by one year if that date has already passed.
- *
- * `referenceToday` is used to decide whether to roll forward. Defaults
- * to the current date when not provided.
+ * `referenceYear` is the year we anchor on when the text omits a year.
+ * We try `referenceYear` first and roll forward by one year if that date
+ * has already passed relative to `referenceToday`.
  */
 function parseSingleSeasonText(
-  text: string | null,
+  text: string | null | undefined,
   referenceYear: number,
   referenceToday: Date,
-): Date | null {
+): ParsedSide | null {
   if (!text) return null;
   const raw = text.trim();
   if (raw.length === 0) return null;
@@ -111,30 +260,52 @@ function parseSingleSeasonText(
     const y = Number(isoMatch[1]);
     const m = Number(isoMatch[2]) - 1;
     const d = Number(isoMatch[3]);
-    if (isValidYMD(y, m, d)) return makeUTCDate(y, m, d);
+    if (isValidYMD(y, m, d)) return { date: makeUTCDate(y, m, d), approximate: false };
+    return null;
   }
 
-  // US slash "M/D/YYYY" or "MM/DD/YYYY"
+  // US slash "M/D/YYYY" or "MM/DD/YY"
   const usMatch = raw.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/);
   if (usMatch) {
     const m = Number(usMatch[1]) - 1;
     const d = Number(usMatch[2]);
     let y = Number(usMatch[3]);
     if (y < 100) y += 2000; // "26" → 2026
-    if (isValidYMD(y, m, d)) return makeUTCDate(y, m, d);
+    if (isValidYMD(y, m, d)) return { date: makeUTCDate(y, m, d), approximate: false };
+    return null;
   }
 
-  // Normalize for textual parsing: strip punctuation, collapse whitespace,
-  // lower-case for keyword lookup.
+  // Normalize for textual parsing: lower-case, drop apostrophes
+  // ("Presidents' Day"), turn every separator — including hyphens, dashes
+  // and slashes — into whitespace, collapse runs.
   const cleaned = raw
-    .replace(/[.,]/g, " ")
+    .toLowerCase()
+    .replace(/['’]/g, "")
+    .replace(/[.,;:()\-–—/]+/g, " ")
     .replace(/\s+/g, " ")
-    .trim()
-    .toLowerCase();
+    .trim();
   const tokens = cleaned.split(" ").filter(Boolean);
   if (tokens.length === 0) return null;
 
-  // Try to find a month token + optional qualifier + optional day-of-month.
+  // Explicit 4-digit year anywhere in the phrase (optional).
+  let parsedYear: number | null = null;
+  for (const t of tokens) {
+    const m = t.match(/^(\d{4})$/);
+    if (m) {
+      parsedYear = Number(m[1]);
+      break;
+    }
+  }
+
+  // Named holidays are year-dependent, so resolve them through the same
+  // reference-year / roll-forward path as month phrases.
+  for (const h of NAMED_HOLIDAYS) {
+    if (h.pattern.test(cleaned)) {
+      return rollForward((y) => h.date(y), parsedYear, referenceYear, referenceToday, false);
+    }
+  }
+
+  // Month token + optional qualifier / ordinal weekday / day-of-month.
   let monthIdx: number | null = null;
   let monthTokenIdx = -1;
   for (let i = 0; i < tokens.length; i++) {
@@ -146,13 +317,60 @@ function parseSingleSeasonText(
     }
   }
   if (monthIdx === null) return null;
+  const month = monthIdx;
 
-  // Look for a numeric day-of-month adjacent to the month token. Accept
-  // "November 22", "Nov 22nd", "22 November" — but ignore 4-digit years.
+  // "Second Sunday in April" / "Last Saturday of March" / "Second week of
+  // December" — ordinal + (weekday | week | weekend) before the month.
+  const ordinalIdx = tokens.findIndex((t) => t in ORDINAL_WORDS);
+  if (ordinalIdx >= 0 && ordinalIdx < monthTokenIdx) {
+    const n = ORDINAL_WORDS[tokens[ordinalIdx]];
+    const unit = tokens[ordinalIdx + 1] ?? "";
+    if (unit in WEEKDAY_NAMES) {
+      const weekday = WEEKDAY_NAMES[unit];
+      return rollForward(
+        (y) => {
+          const day = n === -1 ? lastWeekdayOfMonth(y, month, weekday) : nthWeekdayOfMonth(y, month, weekday, n);
+          return makeUTCDate(y, month, Math.min(day, lastDayOfMonth(y, month)));
+        },
+        parsedYear,
+        referenceYear,
+        referenceToday,
+        false,
+      );
+    }
+    if (unit === "weekend") {
+      // The nth weekend = the nth Saturday.
+      return rollForward(
+        (y) => {
+          const day = n === -1 ? lastWeekdayOfMonth(y, month, 6) : nthWeekdayOfMonth(y, month, 6, n);
+          return makeUTCDate(y, month, Math.min(day, lastDayOfMonth(y, month)));
+        },
+        parsedYear,
+        referenceYear,
+        referenceToday,
+        true,
+      );
+    }
+    if (unit === "week") {
+      // Middle of the nth week: 1st ≈ 4th, 2nd ≈ 11th, 3rd ≈ 18th, last ≈ 26th.
+      const day = n === -1 ? 26 : 4 + (n - 1) * 7;
+      return rollForward(
+        (y) => makeUTCDate(y, month, Math.min(day, lastDayOfMonth(y, month))),
+        parsedYear,
+        referenceYear,
+        referenceToday,
+        true,
+      );
+    }
+  }
+
+  // Numeric day-of-month near the month token: "November 22", "Nov 22nd",
+  // "22 November", "17th of May" (two tokens before, across "of").
   let day: number | null = null;
   for (const candidate of [
     tokens[monthTokenIdx + 1],
     tokens[monthTokenIdx - 1],
+    tokens[monthTokenIdx - 1] === "of" ? tokens[monthTokenIdx - 2] : undefined,
   ]) {
     if (!candidate) continue;
     const m = candidate.match(/^(\d{1,2})(?:st|nd|rd|th)?$/);
@@ -164,48 +382,45 @@ function parseSingleSeasonText(
       }
     }
   }
+  let approximate = false;
 
-  // Year token (e.g. "November 22 2026" or "Nov 2026") — optional.
-  let parsedYear: number | null = null;
-  for (const t of tokens) {
-    const m = t.match(/^(\d{4})$/);
-    if (m) {
-      parsedYear = Number(m[1]);
-      break;
-    }
-  }
-
-  // Qualifier (early/mid/late) — used only when no explicit day.
+  // Qualifiers (early / mid / late / end …) — used only without an
+  // explicit day. Several qualifiers average out ("mid to late" → 20).
   if (day === null) {
-    for (const t of tokens) {
-      if (t in QUALIFIER_DAY) {
-        day = QUALIFIER_DAY[t];
-        break;
-      }
+    const qualifierDays = tokens.filter((t) => t in QUALIFIER_DAY).map((t) => QUALIFIER_DAY[t]);
+    if (qualifierDays.length > 0) {
+      day = Math.round(qualifierDays.reduce((a, b) => a + b, 0) / qualifierDays.length);
     }
+    approximate = true;
   }
 
-  // Just a month name → assume day 15.
+  // Just a month name → assume the middle of the month.
   if (day === null) day = 15;
+  const dayFinal = day;
 
-  // Decide the year. Explicit > referenceYear with rollover.
-  let year = parsedYear ?? referenceYear;
-  if (!isValidYMD(year, monthIdx, day)) {
-    // Clamp invalid day (e.g. Feb 30) to last day of that month.
-    day = lastDayOfMonth(year, monthIdx);
-  }
-  let candidate = makeUTCDate(year, monthIdx, day);
+  return rollForward(
+    (y) => makeUTCDate(y, month, Math.min(dayFinal, lastDayOfMonth(y, month))),
+    parsedYear,
+    referenceYear,
+    referenceToday,
+    approximate,
+  );
+}
 
-  if (parsedYear === null && candidate < startOfDayUTC(referenceToday)) {
-    // Roll forward one year so "November 22" in May 2026 → 2026, not 2025.
-    year += 1;
-    if (!isValidYMD(year, monthIdx, day)) {
-      day = lastDayOfMonth(year, monthIdx);
-    }
-    candidate = makeUTCDate(year, monthIdx, day);
-  }
-
-  return candidate;
+/** Build the date for `parsedYear ?? referenceYear`; when the year was
+ *  implicit and the date has already passed, rebuild it for the next
+ *  year (holidays and nth-weekdays move, so we recompute, not add 365). */
+function rollForward(
+  build: (year: number) => Date,
+  parsedYear: number | null,
+  referenceYear: number,
+  referenceToday: Date,
+  approximate: boolean,
+): ParsedSide {
+  if (parsedYear !== null) return { date: build(parsedYear), approximate };
+  let candidate = build(referenceYear);
+  if (candidate < startOfDayUTC(referenceToday)) candidate = build(referenceYear + 1);
+  return { date: candidate, approximate };
 }
 
 function isValidYMD(y: number, m: number, d: number): boolean {
@@ -226,13 +441,29 @@ function diffDays(later: Date, earlier: Date): number {
   );
 }
 
+/** Exposed for tests + callers that only need one side (e.g. "when does
+ *  it open?" copy). Returns the resolved UTC date or null. */
+export function parseSeasonText(text: string | null | undefined, today: Date = new Date()): Date | null {
+  const todayUTC = startOfDayUTC(today);
+  return parseSingleSeasonText(text, todayUTC.getUTCFullYear(), todayUTC)?.date ?? null;
+}
+
+const UNKNOWN_SEASON: SeasonInfo = {
+  status: "unknown",
+  daysUntilOpen: null,
+  daysUntilClose: null,
+  nextOpenDate: null,
+  nextCloseDate: null,
+  approximate: false,
+};
+
 /**
  * Parse a resort's season_open_text + season_close_text into a structured
  * SeasonInfo. The `today` arg is mainly for testing — defaults to now.
  */
 export function parseSeasonDates(
-  openText: string | null,
-  closeText: string | null,
+  openText: string | null | undefined,
+  closeText: string | null | undefined,
   today?: Date,
 ): SeasonInfo {
   const now = today ?? new Date();
@@ -241,47 +472,43 @@ export function parseSeasonDates(
 
   const open = parseSingleSeasonText(openText, refYear, todayUTC);
   const close = parseSingleSeasonText(closeText, refYear, todayUTC);
+  const approximate = (open?.approximate ?? false) || (close?.approximate ?? false);
 
-  if (!open && !close) {
-    return {
-      status: "unknown",
-      daysUntilOpen: null,
-      daysUntilClose: null,
-      nextOpenDate: null,
-      nextCloseDate: null,
-    };
-  }
+  if (!open && !close) return UNKNOWN_SEASON;
 
   // If we only have one side, infer status from it alone.
   if (open && !close) {
-    const days = diffDays(open, todayUTC);
+    const days = diffDays(open.date, todayUTC);
     if (days <= 0) {
       // Past the open date but no close known — call it in-season w/o close.
       return {
         status: "in-season",
         daysUntilOpen: null,
         daysUntilClose: null,
-        nextOpenDate: open,
+        nextOpenDate: open.date,
         nextCloseDate: null,
+        approximate,
       };
     }
     return {
       status: "off-season",
       daysUntilOpen: days,
       daysUntilClose: null,
-      nextOpenDate: open,
+      nextOpenDate: open.date,
       nextCloseDate: null,
+      approximate,
     };
   }
   if (!open && close) {
-    const days = diffDays(close, todayUTC);
+    const days = diffDays(close.date, todayUTC);
     if (days < 0) {
       return {
         status: "off-season",
         daysUntilOpen: null,
         daysUntilClose: null,
         nextOpenDate: null,
-        nextCloseDate: close,
+        nextCloseDate: close.date,
+        approximate,
       };
     }
     return {
@@ -289,7 +516,8 @@ export function parseSeasonDates(
       daysUntilOpen: null,
       daysUntilClose: days,
       nextOpenDate: null,
-      nextCloseDate: close,
+      nextCloseDate: close.date,
+      approximate,
     };
   }
 
@@ -302,13 +530,10 @@ export function parseSeasonDates(
   // Strategy: build candidate (open, close) pairs across adjacent years and
   // pick the first one whose [open, close] interval contains today, else
   // the one whose open is soonest in the future.
-  const o = open!;
-  const c = close!;
+  const o = open!.date;
+  const c = close!.date;
 
   const candidates: Array<{ openD: Date; closeD: Date }> = [];
-  // Try open as-parsed paired with close in the same season:
-  //   - if close > open same year, that's the natural pair
-  //   - if close < open, the close belongs to the FOLLOWING year
   for (const oYearDelta of [-1, 0, 1]) {
     const oCandidate = makeUTCDate(
       o.getUTCFullYear() + oYearDelta,
@@ -334,6 +559,7 @@ export function parseSeasonDates(
         daysUntilClose: diffDays(closeD, todayUTC),
         nextOpenDate: openD,
         nextCloseDate: closeD,
+        approximate,
       };
     }
   }
@@ -350,20 +576,152 @@ export function parseSeasonDates(
       daysUntilClose: null,
       nextOpenDate: next.openD,
       nextCloseDate: next.closeD,
+      approximate,
     };
   }
 
   // 3. Fallback — shouldn't hit, but degrade gracefully.
-  return {
-    status: "unknown",
-    daysUntilOpen: null,
-    daysUntilClose: null,
-    nextOpenDate: null,
-    nextCloseDate: null,
-  };
+  return UNKNOWN_SEASON;
 }
 
-// Short date formatter used by SeasonCountdown. "Nov 22" / "Apr 15".
+/** The season-text columns a resort row may carry. `typical_*` are the
+ *  legacy pair (21 rows have them without the newer `season_*` pair). */
+export type SeasonTextSource = {
+  season_open_text?: string | null;
+  season_close_text?: string | null;
+  typical_season_start?: string | null;
+  typical_season_end?: string | null;
+};
+
+/** Per-side fallback from `season_*` to `typical_season_*`, then parse. */
+export function resolveSeasonInfo(r: SeasonTextSource, today?: Date): SeasonInfo {
+  return parseSeasonDates(
+    r.season_open_text ?? r.typical_season_start ?? null,
+    r.season_close_text ?? r.typical_season_end ?? null,
+    today,
+  );
+}
+
+/** Human window for the season-preview card: "late November – mid April"
+ *  from the raw texts, or null when neither side is known. */
+export function seasonWindowText(r: SeasonTextSource): string | null {
+  const open = (r.season_open_text ?? r.typical_season_start ?? "").trim();
+  const close = (r.season_close_text ?? r.typical_season_end ?? "").trim();
+  if (!open && !close) return null;
+  if (open && close) return `${open} – ${close}`;
+  return open ? `opens ${open}` : `closes ${close}`;
+}
+
+// ---------- Resort status (shared by the resort page + map panel) ----------
+
+export type ResortStatusKind =
+  | "open"
+  | "limited"
+  | "opens"
+  | "likely-open"
+  | "closed-season"
+  | "off-season"
+  | "closed-permanent"
+  | "unknown";
+
+export type ResortStatus = {
+  kind: ResortStatusKind;
+  /** Short headline, e.g. "Open today", "Opens ~Nov 22". */
+  label: string;
+  /** Optional second clause, e.g. "in 61 days", "12/20 lifts". */
+  detail: string | null;
+  /** Visual tone the pill maps to a colour. */
+  tone: "green" | "amber" | "red" | "navy" | "muted";
+  /** True when the resort is not running lifts today as far as we know —
+   *  the gate the surface forecast + crowd estimate use to go dormant. */
+  dormant: boolean;
+};
+
+export type ResortStatusSource = {
+  currently_open?: boolean | null;
+  snow_report_status?: string | null;
+  operating_status?: string | null;
+  lifts_open_today?: number | null;
+  total_lifts?: number | null;
+  trails_open_today?: number | null;
+  total_trails?: number | null;
+  season_end_date?: string | null;
+};
+
+/**
+ * One status for every resort, in priority order: live scrape → parsed
+ * season dates → global calendar → "check resort". Never claims a
+ * mountain is open without a live signal.
+ */
+export function deriveResortStatus(
+  r: ResortStatusSource,
+  season: SeasonInfo,
+  now: Date = new Date(),
+): ResortStatus {
+  if (r.operating_status === "closed") {
+    return { kind: "closed-permanent", label: "Permanently closed", detail: null, tone: "red", dormant: true };
+  }
+  const report = (r.snow_report_status ?? "").toLowerCase();
+  if (r.currently_open === true || report === "open") {
+    const lifts =
+      r.lifts_open_today != null && r.total_lifts != null && r.total_lifts > 0
+        ? `${r.lifts_open_today}/${r.total_lifts} lifts`
+        : null;
+    const trails =
+      r.trails_open_today != null && r.total_trails != null && r.total_trails > 0
+        ? `${r.trails_open_today}/${r.total_trails} trails`
+        : null;
+    const until =
+      season.status === "in-season" && season.nextCloseDate
+        ? `until ${season.approximate ? "~" : ""}${formatShortDate(season.nextCloseDate)}`
+        : r.season_end_date
+          ? `until ${formatShortDate(new Date(r.season_end_date + "T00:00:00Z"))}`
+          : null;
+    return {
+      kind: "open",
+      label: "Open today",
+      detail: [lifts, trails, until].filter(Boolean).join(" · ") || null,
+      tone: "green",
+      dormant: false,
+    };
+  }
+  if (report === "limited") {
+    return { kind: "limited", label: "Limited operations", detail: "Some lifts running", tone: "amber", dormant: false };
+  }
+  if (season.status === "off-season" && season.nextOpenDate) {
+    const days = season.daysUntilOpen;
+    return {
+      kind: "opens",
+      label: `Opens ${season.approximate ? "~" : ""}${formatShortDate(season.nextOpenDate)}`,
+      detail: days != null && days <= 365 ? (days === 1 ? "tomorrow" : `in ${days} days`) : null,
+      tone: "navy",
+      dormant: true,
+    };
+  }
+  const globalOff = isGlobalOffSeasonNow(now);
+  if (report === "closed") {
+    return globalOff
+      ? { kind: "off-season", label: "Off-season", detail: "Opening date not published yet", tone: "muted", dormant: true }
+      : { kind: "closed-season", label: "Closed for the season", detail: null, tone: "red", dormant: true };
+  }
+  if (season.status === "in-season") {
+    return {
+      kind: "likely-open",
+      label: "Likely open",
+      detail: season.nextCloseDate
+        ? `season runs to ${season.approximate ? "~" : ""}${formatShortDate(season.nextCloseDate)} · confirm with resort`
+        : "confirm with resort",
+      tone: "green",
+      dormant: false,
+    };
+  }
+  if (globalOff) {
+    return { kind: "off-season", label: "Off-season", detail: "Check resort for opening date", tone: "muted", dormant: true };
+  }
+  return { kind: "unknown", label: "Check resort", detail: "Live status not available", tone: "muted", dormant: false };
+}
+
+// Short date formatter used by SeasonCountdown + status pills. "Nov 22".
 export function formatShortDate(d: Date): string {
   return d.toLocaleDateString("en-US", {
     month: "short",
@@ -371,13 +729,3 @@ export function formatShortDate(d: Date): string {
     timeZone: "UTC",
   });
 }
-
-// --- Inline sanity checks (uncomment to run via `node --loader ts-node ...` or vitest):
-// const may2026 = new Date(Date.UTC(2026, 4, 14));
-// console.assert(parseSeasonDates("2026-11-22", "2027-04-15", may2026).status === "off-season");
-// console.assert(parseSeasonDates("November 22", "April 15", may2026).daysUntilOpen! > 100);
-// console.assert(parseSeasonDates("Late November", "Mid-April", may2026).status === "off-season");
-// const feb2026 = new Date(Date.UTC(2026, 1, 1));
-// console.assert(parseSeasonDates("Late November", "Mid April", feb2026).status === "in-season");
-// console.assert(parseSeasonDates(null, null, may2026).status === "unknown");
-// console.assert(parseSeasonDates("Thanksgiving weekend", null, may2026).status === "unknown");
