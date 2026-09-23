@@ -15,7 +15,8 @@ import FilterBar, { type ActiveFilterChip } from "./FilterBar";
 // FilterDrawer removed in Stage 14 — Size + Night now inline pills.
 import ResortPanel, { sheetMapPadding } from "./ResortPanel";
 import type { SheetSnap } from "./ResortSheet";
-import { bottomStackPx } from "./ResortSheetMath";
+import { bottomStackPx, phoneBottomRow } from "./ResortSheetMath";
+import { customHistoryState } from "./sheetHistory";
 import ResortPicker, { primeSearchKeyboard } from "./ResortPicker";
 import LocationButton from "./LocationButton";
 import FeedbackButton from "@/components/FeedbackButton";
@@ -25,7 +26,7 @@ import TripPlannerPanel from "./TripPlannerPanel";
 import AuthButton from "@/components/auth/AuthButton";
 import ProBadge from "@/components/ProBadge";
 import Icon from "@/components/icons/Icon";
-import CompareFloatingButton from "@/components/CompareFloatingButton";
+import CompareFloatingButton, { ComparePill, useCompareIds } from "@/components/CompareFloatingButton";
 import ActiveTripChip from "@/components/Map/ActiveTripChip";
 import TodayChip from "./TodayChip";
 import RecentlyViewedStrip, {
@@ -58,7 +59,7 @@ import { getStoredOrigin, setStoredOrigin } from "@/lib/preferences";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { haversineMeters, estimateDriveSeconds, estimateDriveMeters } from "@/lib/distance";
 import { PASS_COLORS, PASS_LABELS, PASS_KEYS } from "@/lib/passColors";
-import { sizeTier, matchesSizeFilter, SIZE_TIER_LABELS, type SizeTier } from "@/lib/sizeTier";
+import { matchesSizeFilter, SIZE_TIER_LABELS, type SizeTier } from "@/lib/sizeTier";
 import { liftCounts, type LiftTypes } from "@/lib/liftTypes";
 
 // mapbox-gl is ~500 KB gzipped. Loaded statically it sat on the critical
@@ -76,16 +77,13 @@ const AlaskaInset = dynamic(() => import("./AlaskaInset"), { ssr: false });
 // but the Mapbox instance behind it used to boot (and bill) anyway.
 const DESKTOP_QUERY = "(min-width: 768px)";
 
-// Header button: a 44 px square (icon over a 9 px label) on phones, the
-// text pill on sm+. One class string so every button is the same weight.
+// Header button: at least a 44 px square (icon over an 11 px label) on
+// phones, the text pill on sm+. min-w + px-1 lets a longer label
+// ("Saturday") widen its button instead of clipping at 44 px. One class
+// string so every button is the same weight.
 const HEADER_BTN =
-  "inline-flex h-11 w-11 flex-col items-center justify-center gap-0.5 rounded-lg border border-wn-charcoal/20 bg-white text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 sm:w-auto sm:flex-row sm:gap-1.5 sm:rounded-md sm:px-3 sm:text-xs sm:font-semibold";
-const HEADER_BTN_LABEL = "text-[9px] font-semibold leading-none sm:text-xs";
-// Secondary-row pill (Saturday / Today / active trip): 36 px in a 44 px row.
-const SECONDARY_PILL =
-  "inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-wn-navy/20 bg-white/95 pl-3 pr-2 text-xs font-bold text-wn-navy shadow-md backdrop-blur-sm transition hover:border-wn-navy active:scale-95";
-const SECONDARY_PILL_ARROW =
-  "inline-flex h-5 w-5 items-center justify-center rounded-full bg-wn-navy text-[11px] text-white";
+  "inline-flex h-11 min-w-11 flex-col items-center justify-center gap-0.5 rounded-lg border border-wn-charcoal/20 bg-white px-1 text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 sm:flex-row sm:gap-1.5 sm:rounded-md sm:px-3 sm:text-xs sm:font-semibold";
+const HEADER_BTN_LABEL = "text-[11px] font-semibold leading-none tracking-tight sm:text-xs sm:tracking-normal";
 
 // Monoline glyphs for the two header buttons the shared Icon set lacks.
 function SearchGlyph() {
@@ -185,6 +183,9 @@ export type Resort = {
   snowmaking_pct: number | null;
   hero_image_url: string | null;
   hero_image_alt: string | null;
+  /** Photo credit (CC BY / BY-SA heroes need it shown); the sheet hero
+   *  renders it. Optional so older payloads still type-check. */
+  hero_image_attribution?: string | null;
   // Stage 26 — live snow + open conditions (cron-refreshed). Only the
   // 24h figure ships to the map (fresh-snow filter); 48h/7d and the
   // report timestamp are rendered on /resort/[slug].
@@ -371,11 +372,9 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
     check();
     return () => mo.disconnect();
   }, []);
-  // A pin tap opens the sheet; a tap on bare map with the sheet open
-  // collapses it to peek. Mapbox fires its layer click (openResort)
-  // synchronously on the canvas before the DOM click reaches the wrapper,
-  // so the wrapper can tell the two apart by this stamp.
-  const lastPinTapRef = useRef(0);
+  // Compare list (localStorage) for the phone bottom pill row: while it
+  // holds two or more resorts the Compare pill joins List and Location.
+  const compareIds = useCompareIds();
   // Sticky highlight for the LAST resort the user opened. When the
   // ResortPanel closes (Esc / × / outside-tap), selectedId drops to
   // null and the bold blue ring around the pin would normally vanish
@@ -1215,10 +1214,16 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   // native replaceState, so every searchParams reader here and in the
   // planner still updates, share links stay correct, and a tap is now a
   // purely local re-render. router.push stays for real navigations.
+  //
+  // The state object keeps any non-Next keys already on the entry (the
+  // resort sheet's { wnSheet, wnSheetHref }), so a back press after a
+  // filter tap still closes the sheet. Next's own keys are left out on
+  // purpose: with them present its patched replaceState treats the call
+  // as internal and would not sync useSearchParams (sheetHistory.ts).
   function writeQuery(params: URLSearchParams) {
     const qs = params.toString();
     window.history.replaceState(
-      null,
+      customHistoryState(window.history.state),
       "",
       qs ? `?${qs}` : window.location.pathname,
     );
@@ -1496,6 +1501,11 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Phone bottom pill row (see the row's comment in the JSX below).
+  const showListPill =
+    !searchOpen && !filtersOpen && !plannerOpen && (selectedId == null || sheetSnap === "peek");
+  const phoneRow = phoneBottomRow({ list: showListPill, compare: compareIds.length >= 2 });
+
   return (
     <div
       className="relative h-dvh w-full overflow-hidden bg-wn-offwhite"
@@ -1535,9 +1545,9 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         // the iOS clock (an earlier +8px bump read as floating too low).
         style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}
       >
-        {/* Row 1 (44 px): brand mark + Search / Plan / Filters / Account.
-            Phones get 44 px square buttons with a monoline icon and a
-            9 px label (audit fresh-eyes-newbie-24: the primary action was
+        {/* Row 1 (44 px): brand mark + Search / Plan / Saturday / Filters /
+            Account. Phones get 44 px square buttons with a monoline icon
+            and an 11 px label (audit fresh-eyes-newbie-24: the primary action was
             an unlabelled emoji; design-system-13: six emoji weights).
             sm+ keeps the text pills. Heights are fixed so the chrome
             budget in ResortSheetMath.MOBILE_CHROME is real. */}
@@ -1587,16 +1597,19 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
                 <span className={HEADER_BTN_LABEL}>Plan</span>
               </button>
             )}
-            {/* "Where to ride Saturday" (/go). Desktop-only here; phones
-                get it in the secondary row below. */}
+            {/* "Where to ride Saturday" (/go). A header button on every
+                width: on phones it used to be the first pill of the
+                secondary row, which then rendered on every visit and
+                made its 44 px the everyday chrome cost, not the worst
+                case. */}
             <Link
               href={goHref}
-              className="hidden h-11 items-center justify-center gap-1.5 rounded-md border border-wn-charcoal/20 bg-white px-3 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 md:inline-flex"
+              className={HEADER_BTN}
               title="Where to ride Saturday"
               aria-label="Where to ride Saturday"
             >
-              <span aria-hidden="true">🏔️</span>
-              <span>
+              <Icon name="mountain" className="h-5 w-5 sm:h-4 sm:w-4" />
+              <span className={HEADER_BTN_LABEL}>
                 <span className="hidden lg:inline">Where to ride </span>Saturday
               </span>
             </Link>
@@ -1662,17 +1675,20 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
             updateParam("pass", passes.length === 0 ? null : passes.join(","))
           }
         />
-        {/* Row 3 (44 px, phones): ONE secondary row — Saturday pick,
-            Today, active trip and recently viewed, as pills in a single
-            horizontal scroller. Ambient UI for the idle map, so it hides
-            while the user is searching, planning, filtering or reading a
-            resort (audit mobile-ergonomics-11: these used to be four
-            stacked rows covering ~30 % of the screen). The async pills
-            (Today, active trip) render after the Saturday pill so their
-            arrival never shifts the row vertically (map-core-45). */}
+        {/* Row 3 (44 px, phones): ONE secondary row — Today, active trip
+            and recently viewed, as pills in a single horizontal scroller.
+            Ambient UI for the idle map, so it hides while the user is
+            searching, planning, filtering or reading a resort (audit
+            mobile-ergonomics-11: these used to be four stacked rows
+            covering ~30 % of the screen). It only takes space when one
+            of the pills actually rendered (:has(a, button)), so a first
+            visit with no recents shows no secondary row at all; the
+            trade-off is a one-time 44 px shift of the banner below when
+            the async Today / trip pill arrives. max-md keeps the :has()
+            rule from beating md:hidden on desktop. */}
         {!searchOpen && !plannerOpen && !filtersOpen && selectedId == null && (
           <div
-            className="flex h-11 items-center overflow-x-auto px-2 md:hidden"
+            className="hidden h-11 items-center overflow-x-auto px-2 max-md:has-[a,button]:flex"
             style={{ touchAction: "pan-x", WebkitOverflowScrolling: "touch", scrollbarWidth: "none" }}
             role="region"
             aria-label="Shortcuts"
@@ -1681,11 +1697,6 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
             onTouchEnd={stopTouchBubble}
           >
             <div className="pointer-events-auto flex w-max items-center gap-1.5">
-              <Link href={goHref} className={SECONDARY_PILL}>
-                <span aria-hidden="true">🏔️</span>
-                <span>Saturday</span>
-                <span aria-hidden="true" className={SECONDARY_PILL_ARROW}>→</span>
-              </Link>
               {isAuthed && <TodayChip />}
               {isAuthed && <ActiveTripChip />}
               <RecentChips />
@@ -1743,17 +1754,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
       </header>
 
 
-      {/* The wrapper hears clicks Mapbox lets through (bare map, not a
-          pin: pin taps are stamped by onResortClick first) and collapses
-          an open phone sheet to peek, the Google Maps gesture. */}
-      <div
-        className="h-full w-full"
-        onClick={() => {
-          if (isDesktop || selectedId == null) return;
-          if (Date.now() - lastPinTapRef.current < 300) return;
-          if (sheetSnap !== "peek") setSheetSnap("peek");
-        }}
-      >
+      <div className="h-full w-full">
       <MapView
         resorts={filteredForMap}
         originName={origin.name}
@@ -1779,7 +1780,6 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
           // clicks through to handlePicked — let the user build a
           // trip from the map. Otherwise fall through to the normal
           // "open the resort panel" behavior.
-          lastPinTapRef.current = Date.now();
           const pickHandler = mapPickHandlerRef.current;
           if (pickHandler) {
             const r = resorts.find((c) => c.id === id);
@@ -1794,6 +1794,13 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         previewLeg={previewLeg}
         fitTripVersion={fitTripVersion}
         airportMarker={activeAirport}
+        // A tap on bare map (MapView rules out pins, clusters, DOM
+        // markers and controls) collapses an open phone sheet to peek,
+        // the Google Maps gesture.
+        onBareMapClick={() => {
+          if (isDesktop || selectedId == null) return;
+          if (sheetSnap !== "peek") setSheetSnap("peek");
+        }}
         resortSheetPadding={
           !isDesktop && selectedId != null && sheetHeight != null
             ? sheetMapPadding(sheetHeight, typeof window === "undefined" ? 812 : window.innerHeight)
@@ -1902,29 +1909,55 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         />
       )}
 
-      {/* Map ⇄ List: a bottom-centre glass pill that opens the existing
-          search/list sheet (the ResortPicker sorted by drive time). Hidden
-          while any flow or a half/full sheet has the screen. Phones only:
-          desktop has the search button and inline filter bar. */}
-      {!searchOpen && !filtersOpen && !plannerOpen && (selectedId == null || sheetSnap === "peek") && (
-        <div
-          className="pointer-events-none absolute inset-x-0 z-20 flex justify-center md:hidden"
-          style={{ bottom: "var(--wn-bottom-stack, 40px)" }}
-        >
+      {/* Phone bottom pill row: List · Compare · Location in ONE flex
+          row anchored at --wn-bottom-stack (attribution band, install
+          nudge or peek sheet), so the three can never overlap. The
+          Feedback pill (its own component, bottom-10 left-3) shares the
+          line, so the row reserves its slot on the left (pl-[132px] =
+          PHONE_ROW.edge + feedbackSlot) and packs right. With List on
+          screen Location is an icon; with Compare up List is too
+          (phoneBottomRow). The whole row hides while a resort sheet is at
+          half or full. Desktop keeps the floating Location and Compare
+          pills below. */}
+      <div
+        className="pointer-events-none absolute inset-x-0 z-20 flex items-center justify-end gap-1.5 pl-[132px] pr-3 md:hidden [[data-sheet-snap=full]_&]:hidden [[data-sheet-snap=half]_&]:hidden"
+        style={{
+          bottom: "var(--wn-bottom-stack, 40px)",
+          // Same inset as the Feedback pill so the two sit on one line.
+          paddingBottom: "env(safe-area-inset-bottom, 0px)",
+        }}
+      >
+        {showListPill && (
           <button
             type="button"
             onClick={() => setSearchOpen(true)}
-            className="pointer-events-auto inline-flex h-11 items-center gap-2 rounded-full border border-white/60 bg-white/80 px-4 text-sm font-bold text-wn-navy shadow-lg backdrop-blur-md transition hover:bg-white active:scale-95"
+            className={[
+              "pointer-events-auto inline-flex h-11 shrink-0 items-center justify-center rounded-full border border-white/60 bg-white/80 text-sm font-bold text-wn-navy shadow-lg backdrop-blur-md transition hover:bg-white active:scale-95",
+              phoneRow.listCompact ? "w-11" : "gap-2 px-4",
+            ].join(" ")}
             aria-label={`Show ${filtered.length} resorts as a list`}
           >
             <ListGlyph />
-            <span>List</span>
-            <span className="rounded-full bg-wn-navy/10 px-1.5 text-[11px] font-semibold tabular-nums text-wn-navy/80">
-              {filtered.length}
-            </span>
+            {!phoneRow.listCompact && (
+              <>
+                <span>List</span>
+                <span className="rounded-full bg-wn-navy/10 px-1.5 text-[11px] font-semibold tabular-nums text-wn-navy">
+                  {filtered.length}
+                </span>
+              </>
+            )}
           </button>
-        </div>
-      )}
+        )}
+        <ComparePill ids={compareIds} />
+        {!isDesktop && (
+          <LocationButton
+            placement="row"
+            compact={phoneRow.locationCompact}
+            isUsingGeo={origin.kind === "geo"}
+            onUseMyLocation={handleFromGeo}
+          />
+        )}
+      </div>
 
       <TripPlannerPanel
         open={plannerOpen}
@@ -1992,23 +2025,23 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         onClose={() => setSearchOpen(false)}
       />
 
-      {/* Floating "use my location" pill — replaces Stage 19's GeoBanner.
-          Always discoverable on mobile, doesn't occlude the map. */}
-      <LocationButton
-        isUsingGeo={origin.kind === "geo"}
-        onUseMyLocation={handleFromGeo}
-      />
+      {/* Floating "use my location" pill (desktop). Phones get the same
+          button inside the bottom pill row above. */}
+      {isDesktop && (
+        <LocationButton
+          isUsingGeo={origin.kind === "geo"}
+          onUseMyLocation={handleFromGeo}
+        />
+      )}
 
       {/* Inaugural Season — Floating feedback pill at the bottom-left
           corner (mirror of LocationButton). Tap opens a modal that
           POSTs to /api/feedback. */}
       <FeedbackButton />
 
-      {/* Compare CTA — fixed pill bottom-center (mobile) / bottom-left
-          (desktop). Renders only when the localStorage list has ≥2.
-          Routes to /compare?ids=… (RecentlyViewedStrip moved into the
-          header above so it stacks inline on mobile instead of
-          absolute-overlapping the off-season banner / quick filters.) */}
+      {/* Compare CTA — floating bottom-centre pill on desktop only
+          (phones render ComparePill in the bottom pill row). Renders only
+          when the localStorage list has ≥2; routes to /compare?ids=…. */}
       <CompareFloatingButton />
 
       {/* Stage 21.2 — mobile filters drawer. Triggered by the ☰ Filters

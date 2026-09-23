@@ -70,6 +70,7 @@ import { haversineMeters, estimateDriveSeconds } from "@/lib/distance";
 import { formatDriveTime } from "@/lib/origins";
 import { skyscannerUrl } from "@/lib/affiliateLinks";
 import { forecastDaysFrom } from "@/lib/weather/forecastJson";
+import { buildGlanceTiles } from "@/lib/glanceTiles";
 
 // ISR — resort detail data (lifts/trails/passes/coords) changes rarely.
 // Snow conditions are stamped on the row by the cron; ISR every 10 min
@@ -1139,10 +1140,12 @@ function windContextFor(resort: Resort): ResortWindContext {
   };
 }
 
-// At-a-glance strip — status pill + four labelled numbers. Reads from
-// the resort-reported snow columns first (what the mountain measured)
-// and falls back to the station-derived weather_cache values, and says
-// which one it is showing.
+// At-a-glance strip — status pill + four labelled numbers. The tiles come
+// from lib/glanceTiles, the same builder the map's resort sheet uses, so
+// the page and the sheet say the same thing about the same numbers:
+// Measured (NOHRSC / SNOTEL analysis or a weather station), Reported (a
+// licensed resort report), Forecast (weather_cache / the surface model),
+// each with its age when the row has a stamp.
 function AtAGlance({
   resort,
   weather,
@@ -1154,36 +1157,13 @@ function AtAGlance({
   status: ResortStatus;
   report: SurfaceReport;
 }) {
-  const snowFromReport = resort.snow_new_24h_in != null;
-  const snowNew24 = snowFromReport
-    ? resort.snow_new_24h_in
-    : weather?.snow_24h_in != null
-      ? Number(weather.snow_24h_in)
-      : null;
-  const tiles: Array<{ label: string; value: string; sub?: string; accent?: boolean }> = [];
-  tiles.push({
-    label: "New snow (24h)",
-    value: snowNew24 != null ? `${snowNew24}"` : "—",
-    sub: snowNew24 == null ? "not reported" : snowFromReport ? "resort report" : "weather station",
-    accent: snowNew24 != null && snowNew24 > 0,
-  });
-  tiles.push({
-    label: "Base depth",
-    value: resort.snow_base_depth_in != null ? `${resort.snow_base_depth_in}"` : "—",
-    sub: resort.snow_base_depth_in != null ? "resort report" : "not reported",
-  });
-  tiles.push(
-    report.dormant
-      ? { label: "Surface", value: report.headline, sub: "forecast paused" }
-      : { label: "Surface", value: report.today.label, sub: `${report.today.short} · ${report.today.confidence} confidence` },
-  );
-  tiles.push({
-    label: "Today's temp",
-    value:
-      weather?.temp_high_f != null
-        ? `${weather.temp_high_f}°${weather.temp_low_f != null ? ` / ${weather.temp_low_f}°F` : "F"}`
-        : "—",
-    sub: weather?.temp_high_f != null ? "high / low" : "not synced",
+  const tiles = buildGlanceTiles({
+    resort,
+    weather,
+    status,
+    surface: report.dormant
+      ? { kind: "paused", label: report.headline }
+      : { kind: "active", label: report.today.label, confidence: report.today.confidence },
   });
 
   return (
@@ -1193,12 +1173,16 @@ function AtAGlance({
       </div>
       <dl className="grid grid-cols-2 gap-2 sm:grid-cols-4">
         {tiles.map((t) => (
-          <div key={t.label} className="rounded-lg bg-wn-offwhite px-3 py-2">
-            <dt className="text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">{t.label}</dt>
+          <div key={t.key} className="rounded-lg bg-wn-offwhite px-3 py-2">
+            {/* 11 px at 75 % charcoal: about 5.9:1 on the off-white tile,
+                AA for the label and the source line that says which
+                numbers are measured and which are forecast. */}
+            <dt className="text-[11px] font-semibold uppercase tracking-wide text-wn-charcoal/75">{t.label}</dt>
             <dd className={`mt-0.5 truncate text-base font-extrabold tracking-tight ${t.accent ? "text-wn-sky" : "text-wn-navy"}`}>
               {t.value}
             </dd>
-            {t.sub && <dd className="text-[10px] text-wn-charcoal/50">{t.sub}</dd>}
+            {t.detail && <dd className="text-[11px] font-medium leading-snug text-wn-charcoal/80">{t.detail}</dd>}
+            <dd className="text-[11px] leading-snug text-wn-charcoal/75">{t.source}</dd>
           </div>
         ))}
       </dl>

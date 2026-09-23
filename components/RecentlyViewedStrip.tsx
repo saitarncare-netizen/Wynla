@@ -7,6 +7,7 @@ import {
   type RecentResort,
 } from "@/lib/recentlyViewed";
 import { passColor } from "@/lib/passColors";
+import { HIT_AREA_44 } from "@/lib/hitArea";
 
 // Custom event the strip emits when a chip is tapped. MapPage listens
 // for this and re-uses its existing setSelectedId + setCameraTarget
@@ -54,7 +55,7 @@ export function RecentChips() {
   return (
     <>
       <span
-        className="shrink-0 pl-1 text-[10px] font-bold uppercase tracking-wider text-wn-charcoal/50"
+        className="shrink-0 pl-1 text-[11px] font-bold uppercase tracking-wider text-wn-charcoal/75"
         aria-hidden="true"
       >
         Recent
@@ -64,7 +65,7 @@ export function RecentChips() {
           key={r.id}
           type="button"
           onClick={() => openResort(r)}
-          className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-wn-charcoal/15 bg-white/95 px-3 text-[12px] font-medium text-wn-charcoal shadow-sm backdrop-blur-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95"
+          className={`${HIT_AREA_44} inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-wn-charcoal/15 bg-white/95 px-3 text-[12px] font-medium text-wn-charcoal shadow-sm backdrop-blur-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95`}
           title={r.name}
           aria-label={`Open ${r.name}`}
         >

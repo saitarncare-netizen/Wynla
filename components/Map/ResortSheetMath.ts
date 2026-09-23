@@ -123,6 +123,23 @@ export function bodyGestureFor(
   return scrollTop <= 0 ? "drag" : "scroll";
 }
 
+/**
+ * Mid-gesture handover for a touch that started as a content scroll: at
+ * full, once the content is back at its top and the finger is still
+ * moving down, the same gesture continues as a sheet drag (Google Maps:
+ * "drag down scrolls to the top, then collapses"). Sideways swipes belong
+ * to the horizontal strips and never hand over.
+ *   stepDy: finger movement since the previous touchmove, positive = down.
+ */
+export function scrollHandsOverToDrag(opts: {
+  fromSnap: SheetSnap;
+  horizontal: boolean;
+  stepDy: number;
+  scrollTop: number;
+}): boolean {
+  return opts.fromSnap === "full" && !opts.horizontal && opts.stepDy > 0 && opts.scrollTop <= 0;
+}
+
 /** Velocity from the last two samples of a drag, px per ms. */
 export function velocityFrom(
   samples: ReadonlyArray<{ y: number; t: number }>,
@@ -141,22 +158,9 @@ export function velocityFrom(
   return (last.y - ref.y) / dt;
 }
 
-/**
- * "just now" / "12m ago" / "3h ago" / "2d ago" for an ISO stamp, or null
- * when the stamp is missing or unparsable. Relative ages are zone-free,
- * which matters because the map does not know each resort's time zone.
- */
-export function formatRelativeAge(iso: string | null | undefined, now: Date = new Date()): string | null {
-  if (!iso) return null;
-  const t = Date.parse(iso);
-  if (!Number.isFinite(t)) return null;
-  const diffMin = Math.round((now.getTime() - t) / 60_000);
-  if (diffMin < 1) return "just now";
-  if (diffMin < 60) return `${diffMin}m ago`;
-  const h = Math.round(diffMin / 60);
-  if (h < 48) return `${h}h ago`;
-  return `${Math.round(h / 24)}d ago`;
-}
+// Relative ages live in lib/glanceTiles.ts (shared with the resort page);
+// re-exported so the sheet and its tests keep one import.
+export { formatRelativeAge } from "@/lib/glanceTiles";
 
 /** Google Maps driving directions to a coordinate (opens the native app on phones). */
 export function directionsUrl(lat: number, lng: number): string {
@@ -174,9 +178,12 @@ export const MOBILE_CHROME = {
   topGap: 8,
   /** Brand mark + search / map / filters / account buttons. */
   primaryRow: 44,
-  /** Pass chip strip (36 px chips in a 40 px row). */
+  /** Pass chip strip: 36 px chips in a 40 px row. The scroller itself is
+   *  44 px with -2 px margins so each chip's 44 px hit area is not clipped
+   *  by the scroller while the row still adds only 40 px of chrome. */
   chipRow: 40,
-  /** Saturday / Today / active trip / recents pills. Only when it has content. */
+  /** Today / active trip / recents pills. Only rendered when one of them
+   *  has content; the Saturday pick lives in the button row on phones. */
   secondaryRow: 44,
   /** Founder banner strip. Only in the off-season and until dismissed. */
   bannerRow: 32,
@@ -191,6 +198,67 @@ export function mobileChromeTotal(opts: { secondary: boolean; banner: boolean })
     (opts.secondary ? c.secondaryRow : 0) +
     (opts.banner ? c.bannerRow : 0)
   );
+}
+
+// ---------- Phone bottom pill row ----------
+//
+// List, Location and Compare share ONE flex row anchored at
+// --wn-bottom-stack (MapPage). The Feedback pill (components/
+// FeedbackButton.tsx, positioned on its own at bottom-10 left-3) sits on
+// the same line in the default state, so the row reserves its slot on the
+// left and packs the rest to the right. Widths are the rendered sizes of
+// the current pills (text-sm / text-xs Inter, 44 px tall); the test in
+// tests/resortSheetMath.test.ts keeps the worst case inside a 360 px
+// phone, and the Compare label truncates (flex-shrink) before anything
+// can overlap if a font renders wider than measured.
+export const PHONE_ROW = {
+  /** Screen edge padding on both sides (right-3 / left-3). */
+  edge: 12,
+  /** Feedback pill (💬 Feedback, px-4 text-xs) plus the gap after it. */
+  feedbackSlot: 120,
+  gap: 6,
+  /** ☰ List 812 pill. */
+  listFull: 128,
+  /** Icon-only buttons: List (when Compare is up), Location. */
+  icon: 44,
+  /** "Use my location" / "Using your location" full pill. */
+  locationFull: 170,
+  /** ⇄ Compare N pill. */
+  compare: 116,
+} as const;
+
+export type PhoneRowLayout = {
+  /** List collapses to a 44 px icon button (count stays in its label). */
+  listCompact: boolean;
+  /** Location collapses to a 44 px icon button. */
+  locationCompact: boolean;
+};
+
+/** Which pills collapse to icons so the row fits beside Feedback. */
+export function phoneBottomRow(opts: { list: boolean; compare: boolean }): PhoneRowLayout {
+  return {
+    // With List or Compare on screen Location is the icon: its full
+    // label is wider than the space left beside either and Feedback.
+    locationCompact: opts.list || opts.compare,
+    // Compare is the rarer, time-boxed action; while it shows, List gives
+    // up its text so all three fit on a 360 px phone.
+    listCompact: opts.list && opts.compare,
+  };
+}
+
+/** Pixel width of the right-hand group for a layout (pure, for tests). */
+export function phoneBottomRowWidth(opts: { list: boolean; compare: boolean }): number {
+  const layout = phoneBottomRow(opts);
+  const items: number[] = [];
+  if (opts.list) items.push(layout.listCompact ? PHONE_ROW.icon : PHONE_ROW.listFull);
+  if (opts.compare) items.push(PHONE_ROW.compare);
+  items.push(layout.locationCompact ? PHONE_ROW.icon : PHONE_ROW.locationFull);
+  return items.reduce((a, b) => a + b, 0) + PHONE_ROW.gap * (items.length - 1);
+}
+
+/** Space the row has beside the Feedback pill on a phone of this width. */
+export function phoneBottomRowSpace(viewportW: number): number {
+  return viewportW - PHONE_ROW.edge - PHONE_ROW.feedbackSlot - PHONE_ROW.edge;
 }
 
 /** Attribution band Mapbox's terms need visible at the bottom of the canvas. */

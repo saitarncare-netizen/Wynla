@@ -22,7 +22,9 @@ import NearbyGroup from "@/components/NearbyGroup";
 import { fetchNearbyRestaurants, fetchNearbyActivities } from "@/lib/fetchNearby";
 import type { NearbyRow } from "@/lib/nearbyCategories";
 import type { Resort, WeatherSnapshot } from "./MapPage";
-import { directionsUrl, formatRelativeAge } from "./ResortSheetMath";
+import { directionsUrl } from "./ResortSheetMath";
+import { buildGlanceTiles, type GlanceTile } from "@/lib/glanceTiles";
+import { HIT_AREA_44_FROM_32 } from "@/lib/hitArea";
 
 // Families that have per-product rules in lib/data/passAccess.json. Kept
 // local (not imported from lib/passAccess) so the map bundle does not pull
@@ -49,7 +51,14 @@ export function heroGradient(passHex: string): string {
 const NOISE_BG =
   "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.85'/></svg>\")";
 
-/** Photo (or pass-colour gradient) layer with the film-grain overlay. */
+/**
+ * Photo (or pass-colour gradient) layer with the film-grain overlay.
+ * When the photo carries an attribution (CC BY / CC BY-SA hero photos
+ * require one) the credit is shown in the top-left corner; HeroImage's
+ * own credit is suppressed by `compact`, and its bottom-right spot is
+ * where the sheet puts the resort name. The credit fades with the photo
+ * as the sheet collapses to its title bar.
+ */
 export function HeroBackdrop({
   resort,
   passHex,
@@ -61,25 +70,37 @@ export function HeroBackdrop({
   sizes: string;
   opacity?: number;
 }) {
+  const credit = resort.hero_image_url ? resort.hero_image_attribution?.trim() : null;
   return (
-    <div
-      aria-hidden="true"
-      className="absolute inset-0 overflow-hidden"
-      style={{ background: heroGradient(passHex), opacity }}
-    >
-      {resort.hero_image_url && (
-        <HeroImage
-          src={resort.hero_image_url}
-          alt=""
-          compact
-          sizes={sizes}
-        />
-      )}
+    <>
       <div
-        className="pointer-events-none absolute inset-0 opacity-[0.06] mix-blend-overlay"
-        style={{ backgroundImage: NOISE_BG, backgroundSize: "160px 160px" }}
-      />
-    </div>
+        aria-hidden="true"
+        className="absolute inset-0 overflow-hidden"
+        style={{ background: heroGradient(passHex), opacity }}
+      >
+        {resort.hero_image_url && (
+          <HeroImage
+            src={resort.hero_image_url}
+            alt=""
+            compact
+            sizes={sizes}
+          />
+        )}
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.06] mix-blend-overlay"
+          style={{ backgroundImage: NOISE_BG, backgroundSize: "160px 160px" }}
+        />
+      </div>
+      {credit && opacity > 0.05 && (
+        <p
+          className="pointer-events-none absolute left-3 top-2.5 z-[1] max-w-[40%] truncate text-[11px] leading-tight text-white drop-shadow"
+          style={{ opacity }}
+        >
+          <span className="sr-only">Photo: </span>
+          {credit}
+        </p>
+      )}
+    </>
   );
 }
 
@@ -117,20 +138,13 @@ export function pickKeyStat(resort: {
 
 // ---------- Stat row ----------
 
-type Tile = {
-  label: string;
-  value: string;
-  /** Source + age line, e.g. "Measured · 3h ago". */
-  source: string;
-  accent?: boolean;
-  icon?: React.ReactNode;
-};
+type Tile = GlanceTile & { icon?: React.ReactNode };
 
 /**
  * The same four tiles as the resort page's at-a-glance strip: new snow /
- * base (or status) / surface / temp. Fixed order so users learn the row
- * once (Slopes, Ikon home). Labels follow the page's wording; the age
- * comes from the row stamps the map already ships.
+ * base (or status) / surface / high. Built by lib/glanceTiles so the
+ * labels and the source words (Measured / Reported / Forecast) are
+ * identical on the map and the page; the map only adds the surface icon.
  */
 export function buildStatTiles(
   resort: Resort,
@@ -138,82 +152,38 @@ export function buildStatTiles(
   status: ResortStatus,
   now: Date = new Date(),
 ): Tile[] {
-  const reported = resort.snow_report_status === "reported";
-  const reportAge = reported ? formatRelativeAge(resort.snow_report_updated_at, now) : null;
-  const weatherAge = formatRelativeAge(weather?.fetched_at ?? null, now);
-  const withAge = (source: string, age: string | null) => (age ? `${source} · ${age}` : source);
-
-  const tiles: Tile[] = [];
-
-  // 1. New snow. resorts.snow_new_24h_in is written either by a licensed
-  //    resort report (Reported) or by the daily NOHRSC / SNOTEL analysis
-  //    (Measured, stamped by the same weather sync).
-  const snow = resort.snow_new_24h_in;
-  tiles.push({
-    label: "New snow 24h",
-    value: snow != null ? `${snow}"` : "—",
-    source:
-      snow == null
-        ? "Not reported"
-        : reported
-          ? withAge("Reported", reportAge)
-          : withAge("Measured", weatherAge ?? "daily"),
-    accent: snow != null && snow > 0,
-  });
-
-  // 2. Base depth when the resort reports one, otherwise the derived
-  //    open / opens-on status so the tile never sits empty off-season.
-  if (resort.snow_base_depth_in != null) {
-    tiles.push({
-      label: "Base depth",
-      value: `${resort.snow_base_depth_in}"`,
-      source: withAge("Reported", reportAge),
-    });
-  } else {
-    tiles.push({
-      label: "Status",
-      value: status.label,
-      source: status.detail ?? (status.kind === "unknown" ? "Check the resort" : "Season dates"),
-    });
-  }
-
-  // 3. Surface class: written by the daily forecast run, null while the
-  //    surface model is dormant (closed / off-season / no evidence).
+  // Surface class: written by the daily forecast run, null while the
+  // surface model is dormant (closed / off-season / no evidence). The
+  // map row carries no confidence, so the tile says Forecast + age only.
   const code = resort.current_surface_class as SurfaceCode | null;
   const glossary = code ? SURFACE_GLOSSARY[code] : undefined;
-  tiles.push(
-    glossary
-      ? {
-          label: "Surface",
-          value: glossary.label,
-          source: withAge("Forecast", weatherAge ?? "today"),
-          icon: <SurfaceIcon code={code as SurfaceCode} className="h-4 w-4 text-wn-navy" />,
-        }
-      : {
-          label: "Surface",
-          value: "Paused",
-          source: status.dormant ? "Until lifts run" : "No forecast yet",
-        },
-  );
-
-  // 4. Today's high from weather_cache (the forecast row).
-  tiles.push({
-    label: weather?.conditions_short ? weather.conditions_short : "High today",
-    value: weather?.temp_high_f != null ? `${weather.temp_high_f}°F` : "—",
-    source: weather?.temp_high_f != null ? withAge("Forecast", weatherAge ?? "today") : "Not synced",
+  const tiles: Tile[] = buildGlanceTiles({
+    resort,
+    weather,
+    status,
+    surface: glossary ? { kind: "active", label: glossary.label } : null,
+    statusWhenNoBase: true,
+    now,
   });
-
+  if (glossary && code) {
+    const surface = tiles.find((t) => t.key === "surface");
+    if (surface) surface.icon = <SurfaceIcon code={code} className="h-4 w-4 text-wn-navy" />;
+  }
   return tiles;
 }
 
 export function StatRow({ tiles }: { tiles: Tile[] }) {
+  // Label and source lines are load-bearing (they say which numbers are
+  // measured and which are forecast), so they sit at 11 px and 75 %
+  // charcoal: about 5.9:1 on the tinted tile, AA for small text.
   return (
     <dl className="grid grid-cols-4 gap-1.5" aria-label="Conditions at a glance">
       {tiles.map((t) => (
-        <div key={t.label} className="min-w-0 rounded-xl bg-wn-navy/5 px-2 py-2">
-          <dt className="truncate text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
-            {t.label}
-          </dt>
+        <div key={t.key} className="min-w-0 rounded-xl bg-wn-navy/5 px-2 py-2">
+          {/* Sentence case and allowed to wrap: at 375 px a tile is ~67 px
+              wide, and a truncated "New sno…" would hide what the number
+              is. */}
+          <dt className="text-[11px] font-semibold leading-tight text-wn-charcoal/75">{t.label}</dt>
           <dd
             className={[
               "mt-0.5 flex items-center gap-1 truncate text-[17px] font-extrabold leading-tight tracking-tight tabular-nums",
@@ -223,7 +193,14 @@ export function StatRow({ tiles }: { tiles: Tile[] }) {
             {t.icon}
             <span className="truncate">{t.value}</span>
           </dd>
-          <dd className="truncate text-[10px] leading-tight text-wn-charcoal/55">{t.source}</dd>
+          {t.detail && (
+            <dd className="truncate text-[11px] font-medium leading-tight text-wn-charcoal/80" title={t.detail}>
+              {t.detail}
+            </dd>
+          )}
+          <dd className="line-clamp-2 text-[11px] leading-tight text-wn-charcoal/75" title={t.source}>
+            {t.source}
+          </dd>
         </div>
       ))}
     </dl>
@@ -288,14 +265,16 @@ export function PassChips({ resort }: { resort: Resort }) {
   if (!resort.passes || resort.passes.length === 0) return null;
   return (
     <div>
-      <div className="flex flex-wrap gap-1.5">
+      {/* 32 px badges; the buttons get a 44 px hit area (6 px above and
+          below), which is why wrapped rows are 12 px apart. */}
+      <div className="flex flex-wrap gap-x-1.5 gap-y-3">
         {resort.passes.map((p) => {
           const fg = p === "ikon" ? "#1E2952" : "#FFFFFF";
           if (!PASS_FAMILIES_WITH_RULES.has(p)) {
             return (
               <span
                 key={p}
-                className="inline-flex h-7 items-center rounded-md px-2 text-[11px] font-semibold"
+                className="inline-flex h-8 items-center rounded-md px-2.5 text-[12px] font-semibold"
                 style={{ backgroundColor: passColor(p), color: fg }}
               >
                 {passLabel(p)}
@@ -312,7 +291,7 @@ export function PassChips({ resort }: { resort: Resort }) {
               aria-expanded={open}
               aria-controls={active ? detailId : undefined}
               title={`${passLabel(p)}: days and blackout dates here`}
-              className={`inline-flex h-7 items-center rounded-md px-2 text-[11px] font-semibold transition ${
+              className={`${HIT_AREA_44_FROM_32} inline-flex h-8 items-center rounded-md px-2.5 text-[12px] font-semibold transition ${
                 open ? "ring-2 ring-wn-navy/40 ring-offset-1" : "hover:brightness-110"
               }`}
               style={{ backgroundColor: passColor(p), color: fg }}
@@ -343,8 +322,10 @@ export function PassChips({ resort }: { resort: Resort }) {
 
 /**
  * Docked action bar: Plan trip (gold, the one primary action) · Directions
- * · Save · Share. Google Maps pinned the same row to the bottom of its
- * place sheet in Sept 2025 so the main action never scrolls away.
+ * · Save · Compare · Share. Google Maps pinned the same row to the bottom
+ * of its place sheet in Sept 2025 so the main action never scrolls away.
+ * Compare lives here on phones (the desktop rail keeps it in the hero,
+ * RailControls), so the map's compare flow works on every width.
  */
 export function ActionBar({
   resort,
@@ -352,12 +333,15 @@ export function ActionBar({
   lng,
   onPlanTrip,
   safeArea = true,
+  showCompare = false,
 }: {
   resort: Resort;
   lat: number;
   lng: number;
   onPlanTrip: () => void;
   safeArea?: boolean;
+  /** Phone sheet only: the rail already has CompareToggle in its hero. */
+  showCompare?: boolean;
 }) {
   const [shared, setShared] = useState<"idle" | "copied" | "failed">("idle");
   const canDirect = Number.isFinite(lat) && Number.isFinite(lng);
@@ -381,7 +365,7 @@ export function ActionBar({
   }
 
   const secondary =
-    "inline-flex h-11 min-w-11 flex-col items-center justify-center gap-0.5 rounded-xl px-2 text-[10px] font-semibold text-wn-navy transition hover:bg-wn-navy/5 active:scale-95";
+    "inline-flex h-11 min-w-11 flex-col items-center justify-center gap-0.5 rounded-xl px-1.5 text-[10px] font-semibold text-wn-navy transition hover:bg-wn-navy/5 active:scale-95";
 
   return (
     <div
@@ -394,7 +378,7 @@ export function ActionBar({
         <button
           type="button"
           onClick={onPlanTrip}
-          className="inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-wn-gold px-4 text-sm font-bold text-wn-navy shadow-sm transition hover:bg-wn-gold/90 active:scale-[0.98]"
+          className="inline-flex h-11 min-w-0 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-wn-gold px-3 text-sm font-bold text-wn-navy shadow-sm transition hover:bg-wn-gold/90 active:scale-[0.98]"
         >
           <Icon name="trips" className="h-4 w-4" />
           Plan trip
@@ -411,10 +395,14 @@ export function ActionBar({
             Directions
           </a>
         )}
-        <div className="flex flex-col items-center gap-0.5 text-[10px] font-semibold text-wn-navy">
+        {/* FavoriteToggle is a 36 px circle; the ::before on its button
+            grows the hit area over the whole 44 x 52 column, "Save"
+            label included, without changing the shared component. */}
+        <div className="flex min-w-11 flex-col items-center gap-0.5 text-[10px] font-semibold text-wn-navy [&>button:first-child]:relative [&>button:first-child]:before:absolute [&>button:first-child]:before:-inset-x-1 [&>button:first-child]:before:-top-1 [&>button:first-child]:before:-bottom-4 [&>button:first-child]:before:content-['']">
           <FavoriteToggle resortId={resort.id} />
           <span aria-hidden="true">Save</span>
         </div>
+        {showCompare && <CompareToggle resortId={resort.id} variant="action" />}
         <button
           type="button"
           onClick={share}

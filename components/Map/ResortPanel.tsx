@@ -231,7 +231,16 @@ export default function ResortPanel({
   );
 
   const actionBar = (
-    <ActionBar resort={resort} lat={lat} lng={lng} onPlanTrip={onPlanTrip} safeArea={mobile} />
+    <ActionBar
+      resort={resort}
+      lat={lat}
+      lng={lng}
+      onPlanTrip={onPlanTrip}
+      safeArea={mobile}
+      // The rail has CompareToggle in its hero (RailControls); the phone
+      // sheet's hero has no room for it, so it joins the action bar.
+      showCompare={mobile}
+    />
   );
 
   if (mobile) {

@@ -84,37 +84,45 @@ export default function OffSeasonBanner() {
       onTouchMove={stopTouchBubble}
       onTouchEnd={stopTouchBubble}
     >
-      <div className="relative flex min-w-0 flex-1 items-stretch overflow-hidden rounded-lg bg-wn-navy/95 shadow-sm backdrop-blur-sm sm:mx-auto sm:max-w-2xl">
-        <Link
-          href="/early"
-          className="flex min-w-0 flex-1 items-center gap-2 pl-3 pr-11 text-[11px] font-medium text-white sm:text-xs"
-          aria-label="Learn about the inaugural season and Founder pricing"
-        >
-          <span aria-hidden="true" className="shrink-0">⛷️</span>
-          {/* Phones: short single-line copy that fits 320-390 px. */}
-          <span className="truncate sm:hidden">
-            Free Founder Season ·{" "}
-            <span className="font-semibold underline decoration-wn-gold/70 underline-offset-2">
-              Lock founder pricing →
+      {/* The dismiss button sits outside the rounded, overflow-hidden
+          strip so its 44 x 44 hit area can overhang the 32 px strip
+          (6 px above and below) without being clipped. */}
+      <div className="relative flex min-w-0 flex-1 sm:mx-auto sm:max-w-2xl">
+        <div className="flex min-w-0 flex-1 items-stretch overflow-hidden rounded-lg bg-wn-navy/95 shadow-sm backdrop-blur-sm">
+          <Link
+            href="/early"
+            className="flex min-w-0 flex-1 items-center gap-2 pl-3 pr-11 text-[11px] font-medium text-white sm:text-xs"
+            aria-label="Learn about the inaugural season and Founder pricing"
+          >
+            <span aria-hidden="true" className="shrink-0">⛷️</span>
+            {/* Phones: short single-line copy that fits 320-390 px. */}
+            <span className="truncate sm:hidden">
+              Free Founder Season ·{" "}
+              <span className="font-semibold underline decoration-wn-gold/70 underline-offset-2">
+                Lock founder pricing →
+              </span>
             </span>
-          </span>
-          {/* Desktop: full sentence. */}
-          <span className="hidden truncate sm:inline">
-            Wynla opens Nov 2026 — free for the inaugural season.{" "}
-            <span className="font-semibold underline decoration-wn-gold/70 underline-offset-2">
-              Lock founder pricing →
+            {/* Desktop: full sentence. */}
+            <span className="hidden truncate sm:inline">
+              Wynla opens Nov 2026 — free for the inaugural season.{" "}
+              <span className="font-semibold underline decoration-wn-gold/70 underline-offset-2">
+                Lock founder pricing →
+              </span>
             </span>
-          </span>
-        </Link>
-        {/* 44 px wide hit area on a 32 px strip: the button spans the
-            strip and the visible × sits in the middle. */}
+          </Link>
+        </div>
         <button
           type="button"
           onClick={handleDismiss}
           aria-label="Dismiss founder banner"
-          className="absolute inset-y-0 right-0 inline-flex w-11 items-center justify-center text-white/85 transition hover:bg-white/10 hover:text-white"
+          className="group absolute right-0 top-1/2 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center text-white/85 transition hover:text-white"
         >
-          <span aria-hidden="true" className="text-base leading-none">×</span>
+          <span
+            aria-hidden="true"
+            className="inline-flex h-8 w-11 items-center justify-center rounded-r-lg text-base leading-none transition group-hover:bg-white/10"
+          >
+            ×
+          </span>
         </button>
       </div>
     </div>

@@ -50,6 +50,11 @@ type Props = {
    *  is reset so later camera moves are not offset into empty space. */
   plannerOpen?: boolean;
   onResortClick: (id: number) => void;
+  /** A tap on bare map: not a pin, not a cluster, not a DOM marker (trip
+   *  stop, user dot) and not a Mapbox control, which live outside the
+   *  canvas and never fire the map's click. MapPage collapses an open
+   *  phone resort sheet to peek on it, the Google Maps gesture. */
+  onBareMapClick?: () => void;
   /** Called once after Mapbox emits its 'load' event. MapPage uses it to
    *  fade the branded splash and to unmount its "Loading map" pill. The
    *  splash also has its own safety timeout in case the map never loads
@@ -269,6 +274,7 @@ export default function MapView({
   recentlyViewedId,
   plannerOpen = false,
   onResortClick,
+  onBareMapClick,
   tripRoute,
   cameraTarget,
   tripResortIds,
@@ -321,6 +327,10 @@ export default function MapView({
   useEffect(() => {
     onResortClickRef.current = onResortClick;
   }, [onResortClick]);
+  const onBareMapClickRef = useRef(onBareMapClick);
+  useEffect(() => {
+    onBareMapClickRef.current = onBareMapClick;
+  }, [onBareMapClick]);
   // Latest props for effects that must NOT re-run when these change:
   // the camera effect below is keyed on selectedId alone (a filter
   // toggle used to re-center the map on the open resort because
@@ -779,7 +789,10 @@ export default function MapView({
           ],
           { layers: [LAYER_FEATURED, LAYER_LISTED, LAYER_CLUSTERS] },
         );
-        if (hits.length === 0) return;
+        if (hits.length === 0) {
+          onBareMapClickRef.current?.();
+          return;
+        }
         let best: (typeof hits)[number] | null = null;
         let bestDistance = Infinity;
         for (const f of hits) {
@@ -791,7 +804,10 @@ export default function MapView({
             best = f;
           }
         }
-        if (!best || best.geometry.type !== "Point") return;
+        if (!best || best.geometry.type !== "Point") {
+          onBareMapClickRef.current?.();
+          return;
+        }
         const coords = best.geometry.coordinates as [number, number];
         const clusterId = best.properties?.cluster_id as number | undefined;
         if (clusterId != null) {

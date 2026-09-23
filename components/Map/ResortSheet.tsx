@@ -26,11 +26,18 @@ import {
   heroCollapseProgress,
   heroHeightFor,
   resolveSnap,
+  scrollHandsOverToDrag,
   snapHeights,
   velocityFrom,
   type SheetSnap,
   type SnapHeights,
 } from "./ResortSheetMath";
+import {
+  readSheetEntry,
+  sheetCloseAction,
+  withSheetEntry,
+  withoutSheetEntry,
+} from "./sheetHistory";
 
 export type { SheetSnap } from "./ResortSheetMath";
 
@@ -57,17 +64,25 @@ type Gesture = {
   startY: number;
   startHeight: number;
   fromSnap: SheetSnap;
-  /** undecided → drag | scroll, decided on the first move past the slop. */
+  /** undecided → drag | scroll, decided on the first move past the slop.
+   *  A vertical "scroll" can still become a "drag" mid-gesture (see
+   *  scrollHandsOverToDrag); a sideways one never does. */
   mode: "pending" | "drag" | "scroll";
   fromBody: boolean;
+  horizontal: boolean;
+  /** Finger y at the previous touchmove, for the per-move direction. */
+  lastY: number;
   samples: Array<{ y: number; t: number }>;
 };
 
 // Settle easing: an ease-out, not a spring. Off under reduced motion.
 const SETTLE_MS = 260;
 const SETTLE_EASING = "cubic-bezier(0.2, 0.8, 0.2, 1)";
-const HISTORY_KEY = "wnSheet";
 
+// Lazy initial value for the reduced-motion flag, so the very first paint
+// already skips the slide-in when the user asked for less motion. The
+// sheet only mounts after a tap (or the history reopen effect), never
+// during SSR, so reading matchMedia here cannot cause a hydration mismatch.
 function readReducedMotion(): boolean {
   if (typeof window === "undefined") return false;
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -75,9 +90,7 @@ function readReducedMotion(): boolean {
 
 function historySheetId(): number | null {
   if (typeof window === "undefined") return null;
-  const s = window.history.state as Record<string, unknown> | null;
-  const v = s?.[HISTORY_KEY];
-  return typeof v === "number" ? v : null;
+  return readSheetEntry(window.history.state)?.id ?? null;
 }
 
 export default function ResortSheet({
@@ -102,7 +115,7 @@ export default function ResortSheet({
     snapHeights(typeof window === "undefined" ? 812 : window.innerHeight),
   );
   const [dragHeight, setDragHeight] = useState<number | null>(null);
-  const [reducedMotion, setReducedMotion] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(readReducedMotion);
   // Latest props / state for the native listeners, which are bound once.
   const snapRef = useRef(snap);
   const snapsRef = useRef(snaps);
@@ -122,7 +135,6 @@ export default function ResortSheet({
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     const sync = () => setReducedMotion(mq.matches);
-    sync();
     mq.addEventListener("change", sync);
     const onResize = () => setSnaps(snapHeights(window.innerHeight));
     window.addEventListener("resize", onResize);
@@ -146,58 +158,77 @@ export default function ResortSheet({
   }, [resetScrollKey]);
 
   // ---- Back gesture: one history entry per open sheet ----
-  // Opening pushes { wnSheet: id }; switching resorts replaces it; the
-  // phone's back gesture (popstate) closes the sheet; closing from the
-  // UI pops our own entry so the history never fills with stale steps.
-  // Next.js patches pushState/replaceState and keeps its own tree in the
-  // state object, so the URL is left untouched and only our key is added.
+  // Opening pushes an entry with the SAME URL plus { wnSheet: id,
+  // wnSheetHref: href }; switching resorts rewrites the id in place; the
+  // phone's back gesture (popstate) closes the sheet. Rules for UI closes
+  // (the pure decision lives in sheetHistory.ts): pop our entry only while
+  // it is on top and its URL is still the pushed one; once a filter tap
+  // has rewritten the URL, going back would restore the pre-filter URL,
+  // so the key is dropped in place instead. Next.js patches pushState /
+  // replaceState and keeps its own tree in the state object; passing the
+  // existing state through (it carries __NA) makes Next treat these calls
+  // as its own, which is right because the URL does not change.
   useEffect(() => {
     const current = historySheetId();
     if (current === entryId) return;
-    const base = (window.history.state as Record<string, unknown> | null) ?? {};
+    const state = window.history.state;
     if (current == null) {
-      window.history.pushState({ ...base, [HISTORY_KEY]: entryId }, "");
+      window.history.pushState(withSheetEntry(state, entryId, window.location.href), "");
     } else {
-      window.history.replaceState({ ...base, [HISTORY_KEY]: entryId }, "");
+      // Same entry, new resort: keep the recorded push URL.
+      window.history.replaceState(withSheetEntry(state, entryId, readSheetEntry(state)?.href ?? null), "");
     }
   }, [entryId]);
-  // Filter taps while the sheet is open go through history.replaceState
-  // (MapPage writeQuery) with a null state, and Next rebuilds the state
-  // object without our key. Re-assert it whenever the query changes so
-  // the back gesture keeps closing the sheet instead of leaving the map.
+  // MapPage.writeQuery keeps our keys when it rewrites the URL. Anything
+  // else that replaces the entry (a router.replace) rebuilds the state
+  // without them; re-assert the id so the back gesture keeps closing the
+  // sheet, with an unknown push URL so a UI close never goes back from it.
   const search = useSearchParams();
   const searchKey = search.toString();
   useEffect(() => {
     if (historySheetId() === entryId) return;
-    const base = (window.history.state as Record<string, unknown> | null) ?? {};
-    window.history.replaceState({ ...base, [HISTORY_KEY]: entryId }, "");
+    window.history.replaceState(withSheetEntry(window.history.state, entryId, null), "");
   }, [searchKey, entryId]);
   useEffect(() => {
     function onPop(e: PopStateEvent) {
-      const s = e.state as Record<string, unknown> | null;
-      if (s?.[HISTORY_KEY] === entryId) return; // forward nav back onto us
+      if (readSheetEntry(e.state)?.id === entryId) return; // forward nav back onto us
       onCloseRef.current();
     }
     window.addEventListener("popstate", onPop);
     return () => window.removeEventListener("popstate", onPop);
   }, [entryId]);
-  // Unmount with our entry still on top (Escape, a pin tap that closed the
-  // panel some other way): pop it so the next back press is not a no-op.
-  // A Link navigation has already pushed the next page's state by the
-  // time this runs, so it is left alone.
+  // Unmount with our entry still on top (× and Escape close through
+  // MapPage, Plan trip unmounts after rewriting the URL): apply the same
+  // rule as requestClose. Deferred one task and skipped if the sheet is
+  // mounted again by then, so React's development double-invoke of
+  // effects does not pop the entry it just pushed. A Link navigation has
+  // already pushed the next page's entry by then, which reads as "none".
+  const aliveRef = useRef(false);
   useEffect(() => {
+    aliveRef.current = true;
     return () => {
-      if (historySheetId() === entryIdRef.current) window.history.back();
+      aliveRef.current = false;
+      const id = entryIdRef.current;
+      window.setTimeout(() => {
+        if (aliveRef.current) return;
+        const action = sheetCloseAction(window.history.state, id, window.location.href);
+        if (action === "back") window.history.back();
+        else if (action === "replace") window.history.replaceState(withoutSheetEntry(window.history.state), "");
+      }, 0);
     };
   }, []);
 
   const requestClose = useCallback(() => {
-    if (historySheetId() === entryIdRef.current) {
+    const action = sheetCloseAction(window.history.state, entryIdRef.current, window.location.href);
+    if (action === "back") {
       // popstate → onClose
       window.history.back();
-    } else {
-      onCloseRef.current();
+      return;
     }
+    if (action === "replace") {
+      window.history.replaceState(withoutSheetEntry(window.history.state), "");
+    }
+    onCloseRef.current();
   }, []);
 
   // ---- Touch gestures (native listeners: React's are passive) ----
@@ -228,6 +259,8 @@ export default function ResortSheet({
         fromSnap: snapRef.current,
         mode: "pending",
         fromBody,
+        horizontal: false,
+        lastY: t.clientY,
         samples: [{ y: t.clientY, t: e.timeStamp }],
       };
     }
@@ -238,6 +271,25 @@ export default function ResortSheet({
       if (!g || e.touches.length !== 1) return;
       const y = e.touches[0].clientY;
       const dy = y - g.startY; // positive = finger down = sheet shrinks
+      const stepDy = y - g.lastY;
+      g.lastY = y;
+      if (g.mode === "scroll") {
+        // Google's rule inside one gesture: dragging down at full scrolls
+        // the content to its top, then keeps going as a sheet drag. The
+        // browser may already own the pan (its touchmoves are then not
+        // cancelable), so the content can bounce while the sheet follows.
+        const scrollTop = bodyRef.current?.scrollTop ?? 0;
+        if (
+          !g.fromBody ||
+          !scrollHandsOverToDrag({ fromSnap: g.fromSnap, horizontal: g.horizontal, stepDy, scrollTop })
+        ) {
+          return;
+        }
+        g.mode = "drag";
+        g.startY = y;
+        g.startHeight = snapsRef.current[g.fromSnap];
+        g.samples = [{ y, t: e.timeStamp }];
+      }
       if (g.mode === "pending") {
         const dx = e.touches[0].clientX - g.startX;
         if (Math.abs(dy) < DRAG_SLOP_PX && Math.abs(dx) < DRAG_SLOP_PX) return;
@@ -245,6 +297,7 @@ export default function ResortSheet({
         // (nearby picks); the browser pans those natively.
         if (Math.abs(dx) > Math.abs(dy)) {
           g.mode = "scroll";
+          g.horizontal = true;
           return;
         }
         if (g.fromBody) {
@@ -259,7 +312,7 @@ export default function ResortSheet({
         g.samples = [{ y, t: e.timeStamp }];
       }
       if (g.mode !== "drag") return;
-      e.preventDefault();
+      if (e.cancelable) e.preventDefault();
       g.samples.push({ y, t: e.timeStamp });
       if (g.samples.length > 8) g.samples.shift();
       applyHeight(clampDragHeight(g.startHeight - (y - g.startY), snapsRef.current));
@@ -401,10 +454,14 @@ export default function ResortSheet({
       {/* Body: scrolls vertically only at full (nested-scroll rule); pan-y
           there lets the browser own upward scrolls while our touchmove
           handler takes over for the collapse drag from the top. pan-x at
-          every snap keeps the horizontal strips inside swipeable. */}
+          every snap keeps the horizontal strips inside swipeable.
+          overscroll-none (not just contain) also turns off iOS's rubber
+          band on the body, so when a downward scroll reaches the top and
+          hands over to a sheet drag mid-gesture the content does not
+          bounce while the sheet follows the finger. */}
       <div
         ref={bodyRef}
-        className="min-h-0 flex-1 overflow-y-auto overscroll-contain"
+        className="min-h-0 flex-1 overflow-y-auto overscroll-none"
         style={{ touchAction: snap === "full" ? "pan-x pan-y" : "pan-x" }}
       >
         {children}

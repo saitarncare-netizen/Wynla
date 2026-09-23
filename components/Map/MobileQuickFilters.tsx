@@ -11,6 +11,7 @@
 // not mistaken for a pass product (fresh-eyes-newbie-44).
 
 import { PASS_COLORS, PASS_LABELS, type Pass } from "@/lib/passColors";
+import { HIT_AREA_44 } from "@/lib/hitArea";
 
 type Props = {
   passFilter: string[];
@@ -48,9 +49,14 @@ export default function MobileQuickFilters({ passFilter, passCounts, onPassChang
   // and only the chip strip (sized to its content) opts back in: a touch
   // right of the last chip pans the map, a touch on a chip scrolls the
   // strip because scrolling walks up to the nearest scrollable ancestor.
+  //
+  // The scroller is 44 px tall with -2 px margins: an overflow scroller
+  // clips hit-testing at its own box, so this is what lets each 36 px
+  // chip keep a full 44 px hit area while the row still adds only 40 px
+  // to the header (MOBILE_CHROME.chipRow).
   return (
     <div
-      className="flex h-10 items-center overflow-x-auto px-2 md:hidden"
+      className="-my-0.5 flex h-11 items-center overflow-x-auto px-2 md:hidden"
       style={{ touchAction: "pan-x", WebkitOverflowScrolling: "touch", scrollbarWidth: "none" }}
       aria-label="Quick pass filters"
       role="region"
@@ -69,6 +75,7 @@ export default function MobileQuickFilters({ passFilter, passCounts, onPassChang
               type="button"
               onClick={() => toggle(key)}
               className={[
+                HIT_AREA_44,
                 "inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full px-3 text-[12px] font-semibold shadow-sm backdrop-blur-sm transition active:scale-95",
                 active
                   ? "border-2 border-wn-navy bg-white text-wn-navy"
@@ -83,7 +90,7 @@ export default function MobileQuickFilters({ passFilter, passCounts, onPassChang
                 style={{ backgroundColor: PASS_COLORS[key] }}
               />
               <span>{label}</span>
-              <span className="text-[11px] font-normal tabular-nums text-wn-charcoal/55">{count}</span>
+              <span className="text-[11px] font-normal tabular-nums text-wn-charcoal/75">{count}</span>
             </button>
           );
         })}

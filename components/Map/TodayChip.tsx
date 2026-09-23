@@ -3,12 +3,13 @@
 // "☀️ Today" pill in the phone header's secondary row for signed-in users
 // who have saved at least one resort: one tap to the Go / Wait / Skip
 // screen. Renders nothing while the favorites count is unknown or zero,
-// so a brand-new account sees no dead link. MapPage places it after the
-// Saturday pill so its async arrival never shifts the row.
+// so a brand-new account sees no dead link. The secondary row only takes
+// space once a pill like this one has rendered (MapPage).
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+import { HIT_AREA_44 } from "@/lib/hitArea";
 
 export default function TodayChip() {
   const [count, setCount] = useState<number | null>(null);
@@ -41,7 +42,8 @@ export default function TodayChip() {
   return (
     <Link
       href="/today"
-      className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-wn-navy/20 bg-white/95 pl-3 pr-2 text-xs font-bold text-wn-navy shadow-md backdrop-blur-sm transition hover:border-wn-navy active:scale-95"
+      // 36 px pill with a 44 px hit area (lib/hitArea) in the 44 px row.
+      className={`${HIT_AREA_44} inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-wn-navy/20 bg-white/95 pl-3 pr-2 text-xs font-bold text-wn-navy shadow-md backdrop-blur-sm transition hover:border-wn-navy active:scale-95`}
     >
       <span aria-hidden="true">☀️</span>
       <span>

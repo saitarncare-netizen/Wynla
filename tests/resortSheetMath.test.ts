@@ -10,6 +10,11 @@ import {
   mapBottomPadding,
   mobileChromeTotal,
   nearestSnap,
+  phoneBottomRow,
+  phoneBottomRowSpace,
+  phoneBottomRowWidth,
+  PHONE_ROW,
+  scrollHandsOverToDrag,
   PEEK_PX,
   resolveSnap,
   snapHeights,
@@ -163,5 +168,45 @@ describe("bottomStackPx", () => {
   });
   it("ignores the sheet at half and full (pills hide there)", () => {
     expect(bottomStackPx({ installNudgeVisible: false, sheetHeight: 420, sheetSnap: "half" })).toBe(40);
+  });
+});
+
+describe("scrollHandsOverToDrag (nested scroll inside one gesture)", () => {
+  it("hands a downward scroll at the top of full content to the sheet", () => {
+    expect(scrollHandsOverToDrag({ fromSnap: "full", horizontal: false, stepDy: 4, scrollTop: 0 })).toBe(true);
+  });
+  it("keeps scrolling while there is content above", () => {
+    expect(scrollHandsOverToDrag({ fromSnap: "full", horizontal: false, stepDy: 4, scrollTop: 120 })).toBe(false);
+  });
+  it("never hands over an upward move, a sideways swipe or a non-full sheet", () => {
+    expect(scrollHandsOverToDrag({ fromSnap: "full", horizontal: false, stepDy: -4, scrollTop: 0 })).toBe(false);
+    expect(scrollHandsOverToDrag({ fromSnap: "full", horizontal: true, stepDy: 4, scrollTop: 0 })).toBe(false);
+    expect(scrollHandsOverToDrag({ fromSnap: "half", horizontal: false, stepDy: 4, scrollTop: 0 })).toBe(false);
+  });
+});
+
+describe("phone bottom pill row", () => {
+  const cases = [
+    { list: false, compare: false },
+    { list: true, compare: false },
+    { list: false, compare: true },
+    { list: true, compare: true },
+  ];
+  it("fits beside the Feedback pill on 375 and 360 px phones in every state", () => {
+    for (const c of cases) {
+      expect(phoneBottomRowWidth(c)).toBeLessThanOrEqual(phoneBottomRowSpace(375));
+      expect(phoneBottomRowWidth(c)).toBeLessThanOrEqual(phoneBottomRowSpace(360));
+    }
+  });
+  it("collapses Location to an icon whenever List or Compare is on screen", () => {
+    expect(phoneBottomRow({ list: false, compare: false })).toEqual({ listCompact: false, locationCompact: false });
+    expect(phoneBottomRow({ list: true, compare: false })).toEqual({ listCompact: false, locationCompact: true });
+    expect(phoneBottomRow({ list: false, compare: true })).toEqual({ listCompact: false, locationCompact: true });
+  });
+  it("collapses List to an icon only while Compare is up", () => {
+    expect(phoneBottomRow({ list: true, compare: true })).toEqual({ listCompact: true, locationCompact: true });
+  });
+  it("keeps every pill at the 44 px tap minimum", () => {
+    expect(PHONE_ROW.icon).toBeGreaterThanOrEqual(44);
   });
 });
