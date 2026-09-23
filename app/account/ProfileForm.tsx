@@ -2,9 +2,16 @@
 
 // Client island for the profile form. Saves display_name + preferred_origin
 // via POST /api/account/profile. The preferred_origin picker uses the same
-// 4 metro codes as the map's "from" picker — that's the column's domain.
+// city codes as the map's "from" picker (lib/origins ORIGINS), which is
+// the column's domain.
+//
+// A saved default is also mirrored to this device's stored origin so the
+// map picks it up on the next visit without a profile round-trip. Before
+// this the setting was written and never read (audit account-social-2 /
+// fresh-eyes-power-13).
 
 import { useState, useTransition } from "react";
+import { clearStoredOrigin, setStoredOrigin } from "@/lib/preferences";
 
 type OriginOption = { code: string; label: string };
 
@@ -48,6 +55,11 @@ export default function ProfileForm({
         const j = (await res.json().catch(() => ({}))) as { error?: string };
         throw new Error(j.error ?? `HTTP ${res.status}`);
       }
+      // Keep this device in step with the account: the map reads the
+      // stored origin first, so without this the old local choice would
+      // keep winning over the default the user just saved.
+      if (preferredOrigin === "") clearStoredOrigin();
+      else setStoredOrigin({ kind: "city", code: preferredOrigin });
       startTransition(() => setStatus("saved"));
       setTimeout(() => setStatus("idle"), 2500);
     } catch (e) {
@@ -100,7 +112,9 @@ export default function ProfileForm({
           ))}
         </select>
         <p className="mt-1 text-[11px] text-wn-charcoal/55">
-          Used to pre-fill drive times. You can always change it on the map.
+          Sets where drive times start on the map and in Compare. You can
+          always change it on the map. Cities outside the Northeast show
+          estimated (≈) drive times.
         </p>
       </div>
 

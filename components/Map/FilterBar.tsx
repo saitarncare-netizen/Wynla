@@ -1,147 +1,78 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ORIGINS, type Origin } from "@/lib/origins";
+import { originLabel, originsForPicker, type Origin } from "@/lib/origins";
 import { PASS_COLORS, PASS_KEYS, PASS_LABELS } from "@/lib/passColors";
 import { SIZE_TIER_LABELS, type SizeTier } from "@/lib/sizeTier";
+
+/** One removable chip in the active-filter strip. MapPage builds the
+ *  list (it owns every filter's URL state) and this bar only renders
+ *  it, so the strip and the ☰ badge can never disagree. */
+export type ActiveFilterChip = {
+  key: string;
+  label: string;
+  onRemove: () => void;
+};
 
 type Props = {
   passFilter: string[];
   origin: Origin;
+  /** True when drive times from this origin are Haversine estimates
+   *  (geo origin, or a city without drive_time_cache rows). */
+  originIsEstimate: boolean;
   withinHours: number;
-  days: number;
   sizeFilter: SizeTier | null;
   nightOnly: boolean;
   passCounts: Record<string, number>;
   hiddenByNullSize: number;
   filteredCount: number;
   totalCount: number;
+  activeChips: ActiveFilterChip[];
   onPassChange: (passes: string[]) => void;
   onFromCity: (code: string) => void;
   onFromGeo: (lat: number, lng: number) => void;
   onWithinChange: (w: string | null) => void;
-  onDaysChange: (d: number) => void;
   onSizeChange: (s: SizeTier | null) => void;
   onNightChange: (v: boolean) => void;
   onClearAll: () => void;
 };
 
-// Trip-type presets — pure trip length. The drive cap is now its own
-// independent filter ("≤ Xh") so a Weekend trip with willingness to
-// drive 10h on day 1 is expressible. Anytime = no trip-length filter
-// at all (single day, no cap). Day/Weekend/Big differ only in days.
-type TripKind = "anytime" | "day" | "weekend" | "big";
-const TRIP_PRESETS: { kind: TripKind; emoji: string; label: string; defaultDays: number }[] = [
-  { kind: "anytime", emoji: "",   label: "Anytime",  defaultDays: 1 },
-  { kind: "day",     emoji: "🚗", label: "Day trip", defaultDays: 1 },
-  { kind: "weekend", emoji: "🏕️", label: "Weekend",  defaultDays: 2 },
-  { kind: "big",     emoji: "🎿", label: "Big trip", defaultDays: 5 },
-];
-
-function tripKindFor(days: number, hasDayTripFlag: boolean): TripKind {
-  if (days >= 4) return "big";
-  if (days >= 2) return "weekend";
-  if (hasDayTripFlag) return "day";
-  return "anytime";
-}
-
 // Drive-time presets for the new standalone Drive-time dropdown.
 const DRIVE_TIME_PRESETS = [0, 3, 5, 8, 12];
-
-type ActiveChip = {
-  key: string;
-  label: string;
-  onRemove: () => void;
-};
 
 export default function FilterBar({
   passFilter,
   origin,
+  originIsEstimate,
   withinHours,
-  days,
   sizeFilter,
   nightOnly,
   passCounts,
   hiddenByNullSize,
   filteredCount,
   totalCount,
+  activeChips,
   onPassChange,
   onFromCity,
   onFromGeo,
   onWithinChange,
-  onDaysChange,
   onSizeChange,
   onNightChange,
   onClearAll,
 }: Props) {
   const totalPass = Object.values(passCounts).reduce((a, b) => a + b, 0);
-
-  // Build active-chip strip from current filter state. Chips render in a
-  // stable order so the strip doesn't shuffle as users add/remove.
   const driveActive = withinHours > 0;
-  const tripKind = tripKindFor(days, false);
-  const tripPreset = TRIP_PRESETS.find((p) => p.kind === tripKind) ?? TRIP_PRESETS[0];
-  const tripActive = tripKind !== "anytime";
-  const isMultiDay = days >= 2;
-
-  const activeChips: ActiveChip[] = [];
-  if (passFilter.length > 0) {
-    const labels = passFilter
-      .map((p) => PASS_LABELS[p as keyof typeof PASS_LABELS] ?? p)
-      .join(" + ");
-    activeChips.push({
-      key: "pass",
-      label: `Pass: ${labels}`,
-      onRemove: () => onPassChange([]),
-    });
-  }
-  // Computed once and reused for the chip strip + the dropdown label.
   const fromShort = origin.kind === "geo" ? "here" : origin.short;
-  if (driveActive) {
-    activeChips.push({
-      key: "drive",
-      label: `≤ ${withinHours}h drive from ${fromShort}`,
-      onRemove: () => onWithinChange(null),
-    });
-  }
-  if (tripActive) {
-    const dayPart = isMultiDay ? ` · ${days} days` : "";
-    activeChips.push({
-      key: "trip",
-      label: `${tripPreset.label}${dayPart}`,
-      onRemove: () => onDaysChange(1),
-    });
-  }
-  if (sizeFilter) {
-    activeChips.push({
-      key: "size",
-      label: `Size: ${SIZE_TIER_LABELS[sizeFilter]}`,
-      onRemove: () => onSizeChange(null),
-    });
-  }
-  if (nightOnly) {
-    activeChips.push({
-      key: "night",
-      label: "🌙 Night skiing",
-      onRemove: () => onNightChange(false),
-    });
-  }
 
-
-  // Trip dropdown label = From + trip-length preset. Drive cap is
-  // surfaced through its own dropdown.
-  const fromLabel = origin.kind === "geo" ? "📍 From here" : `From ${origin.short}`;
-  const tripLabelTail = tripActive
-    ? `${tripPreset.label}${isMultiDay ? ` ${days}d` : ""}`
-    : "Anytime";
-  const tripLabel = `${fromLabel} · ${tripLabelTail}`;
   // Always include the from-city in the drive chip label — Saitarn
   // 2026-05-23 feedback: bare "Any drive" / "≤ 5h drive" read ambiguously
   // (drive from where?). Including "from NYC" / "from Boston" makes the
-  // reference point explicit at a glance.
+  // reference point explicit at a glance. The "≈" prefix marks origins
+  // whose drive times are estimates rather than cached road routes.
+  const estimateMark = originIsEstimate ? "≈ " : "";
   const driveLabel = driveActive
-    ? `≤ ${withinHours}h drive from ${fromShort}`
-    : `Any drive from ${fromShort}`;
+    ? `${estimateMark}≤ ${withinHours}h drive from ${fromShort}`
+    : `${estimateMark}Any drive from ${fromShort}`;
 
   // Pass dropdown label — multi-select aware. "All passes" when empty,
   // single label when one selected, "Ikon + Epic" when multiple.
@@ -174,6 +105,7 @@ export default function FilterBar({
           />
           <FromDropdown
             origin={origin}
+            originIsEstimate={originIsEstimate}
             onFromCity={onFromCity}
             onFromGeo={onFromGeo}
           />
@@ -360,15 +292,17 @@ function PassDropdown({
 }
 
 /* -------------------------------------------------------------------------- */
-/* From dropdown — geolocation primary, 4-city fallback                       */
+/* From dropdown — geolocation, ZIP, or any city in lib/origins            */
 /* -------------------------------------------------------------------------- */
 
 function FromDropdown({
   origin,
+  originIsEstimate,
   onFromCity,
   onFromGeo,
 }: {
   origin: Origin;
+  originIsEstimate: boolean;
   onFromCity: (code: string) => void;
   onFromGeo: (lat: number, lng: number) => void;
 }) {
@@ -528,6 +462,7 @@ function FromDropdown({
           <select
             value={origin.kind === "city" ? origin.code : ""}
             onChange={(e) => {
+              if (!e.target.value) return;
               onFromCity(e.target.value);
               setOpen(false);
             }}
@@ -537,12 +472,18 @@ function FromDropdown({
             {origin.kind === "geo" && (
               <option value="" disabled>— pick a city —</option>
             )}
-            {ORIGINS.map((o) => (
+            {originsForPicker().map((o) => (
               <option key={o.code} value={o.code}>
-                {o.name}
+                {originLabel(o)}
+                {o.cached ? "" : " (≈ estimated)"}
               </option>
             ))}
           </select>
+          <p className="mt-2 text-[10px] leading-tight text-wn-charcoal/55">
+            {originIsEstimate
+              ? "Drive times from this origin are estimates (≈). Open a resort for an exact route."
+              : "Drive times from this city are cached road routes."}
+          </p>
         </div>
       )}
     </div>

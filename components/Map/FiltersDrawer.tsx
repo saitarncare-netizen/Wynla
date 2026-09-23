@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useFocusTrap } from "@/lib/useFocusTrap";
-// Origin import dropped Stage 33 along with the Origin section.
+import { originLabel, originsForPicker, type Origin } from "@/lib/origins";
 import { PASS_COLORS, PASS_KEYS, PASS_LABELS } from "@/lib/passColors";
 import { SIZE_TIER_LABELS, type SizeTier } from "@/lib/sizeTier";
 import { isGlobalOffSeasonNow } from "@/lib/seasonDates";
@@ -12,21 +12,29 @@ type Props = {
   open: boolean;
   // Stage 33 final — Pass filter back in the drawer. The drawer is now
   // the single source of truth for every filter (Pass · Conditions ·
-  // Drive · Size · Airport). Map chip strip still exists as a 1-tap
+  // Drive · Size). Map chip strip still exists as a 1-tap
   // shortcut for Pass + as the pin color legend, but those chips and
   // these checkboxes share the same URL state.
   passFilter: string[];
   passCounts: Record<string, number>;
   onPassChange: (passes: string[]) => void;
   withinHours: number;
-  // Display label for the origin (e.g. "NYC", "Boston") shown in the
-  // Drive time section title — Saitarn 2026-05-23: "อยากให้เขียนว่า
-  // Drive time from NYC". Empty string falls back to bare "Drive time"
-  // so we don't render a dangling "from " label if origin isn't known.
-  fromLabel: string;
+  // The drive-time origin. Its short label goes in the Drive time
+  // section title (Saitarn 2026-05-23: "อยากให้เขียนว่า Drive time from
+  // NYC") and the section itself now holds the city / location picker
+  // that mobile lacked (audit map-core-8 / fresh-eyes-newbie-4).
+  origin: Origin;
+  /** True when drive times from this origin are Haversine estimates. */
+  originIsEstimate: boolean;
+  onFromCity: (code: string) => void;
+  onFromGeo: (lat: number, lng: number) => void;
   sizeFilter: SizeTier | null;
   nightOnly: boolean;
+  // "Fly to" airport jump (not a filter): IATA code or null.
   airportFilter: string | null;
+  /** Resorts within about two hours of the picked airport, by the
+   *  lib/distance estimate. 0 when no airport is picked. */
+  nearAirportCount: number;
   filteredCount: number;
   totalCount: number;
   freshSnowOnly: boolean;
@@ -83,9 +91,9 @@ type Props = {
   onClose: () => void;
 };
 
-// Stage 8 — most-relevant US ski-trip airports. IATA codes match
-// resort.closest_airport_iata values stored on each resort. Stage 33
-// added lat/lng so MapPage can fly the camera to the picked airport.
+// Most-relevant US ski-trip airports for the Fly to jump. IATA codes
+// match resort.closest_airport_iata values stored on each resort;
+// lat/lng let MapPage fly the camera to the picked airport.
 export const AIRPORT_OPTIONS: Array<{
   iata: string;
   label: string;
@@ -118,7 +126,7 @@ export const AIRPORT_OPTIONS: Array<{
 // Stage 22 — redesigned to group filters into clearly-labeled sections
 // with horizontal dividers so the long-scroll feels structured. Each
 // section maps to a desktop FilterBar pill cluster: Pass, Conditions,
-// Origin, Drive time, Resort size, Airport, More.
+// Drive time (with the origin picker), Resort size, Fly to, More.
 //
 // Desktop still uses FilterBar inline — its pills work fine with the
 // extra horizontal space and the dropdown menus.
@@ -141,7 +149,7 @@ const LIFT_OPTIONS: Array<{
   { value: "nosurface", label: "No surface-only", icon: "🚫" },
 ];
 
-function liftLabel(v: string | null): string | null {
+export function liftLabel(v: string | null): string | null {
   if (!v) return null;
   return LIFT_OPTIONS.find((o) => o.value === v)?.label ?? null;
 }
@@ -152,10 +160,14 @@ export default function FiltersDrawer({
   passCounts,
   onPassChange,
   withinHours,
-  fromLabel,
+  origin,
+  originIsEstimate,
+  onFromCity,
+  onFromGeo,
   sizeFilter,
   nightOnly,
   airportFilter,
+  nearAirportCount,
   filteredCount,
   totalCount,
   freshSnowOnly,
@@ -212,10 +224,39 @@ export default function FiltersDrawer({
       ? String(withinHours)
       : "",
   );
-  // Stage 33 — airport search box. Filters the AIRPORT_OPTIONS list as
-  // the user types so the section is browsable for non-USA travellers
-  // who don't know the IATA codes off-hand.
+  // Airport search box. Filters the AIRPORT_OPTIONS list as the user
+  // types so the section is browsable for travellers who don't know
+  // the IATA codes off-hand.
   const [airportQuery, setAirportQuery] = useState("");
+  // "Use my location" state for the origin picker. Mirrors the desktop
+  // FromDropdown; the error copy points at the floating 📍 button whose
+  // help modal walks through re-enabling a denied permission.
+  const [requestingGeo, setRequestingGeo] = useState(false);
+  const [geoError, setGeoError] = useState<string | null>(null);
+  function handleUseHere() {
+    if (typeof navigator === "undefined" || !navigator.geolocation) {
+      setGeoError("This browser does not support location.");
+      return;
+    }
+    setRequestingGeo(true);
+    setGeoError(null);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        onFromGeo(pos.coords.latitude, pos.coords.longitude);
+        setRequestingGeo(false);
+      },
+      (err) => {
+        setRequestingGeo(false);
+        setGeoError(
+          err.code === err.PERMISSION_DENIED
+            ? "Location is blocked. Tap the 📍 button on the map for how to allow it, or pick a city below."
+            : "Could not get your location. Pick a city below instead.",
+        );
+      },
+      { enableHighAccuracy: false, timeout: 8000, maximumAge: 60_000 },
+    );
+  }
+  const fromLabel = origin.kind === "geo" ? "here" : origin.short;
 
   // ESC to close.
   useEffect(() => {
@@ -522,24 +563,72 @@ export default function FiltersDrawer({
             )}
           </Section>
 
-          {/* Stage 33 — ORIGIN section removed from drawer. The
-              onboarding wizard already collects origin once (Use my
-              location OR a city), and the floating LocationButton at
-              the bottom-right of the map lets users opt into geo at
-              any time. Surfacing the picker again here was redundant
-              and added clutter. ZIP-code entry is dropped along with
-              it; if users need to change origin they can either tap
-              the floating geo button or clear browser data to
-              re-onboard. */}
-
           {/* DRIVE TIME (DAY 1) — section title pulls the from-city in
               so users always see "Drive time from NYC" / "Drive time
               from Boston" instead of a bare "Drive time" that could
-              read as drive-time-from-anywhere. Saitarn 2026-05-23. */}
+              read as drive-time-from-anywhere. Saitarn 2026-05-23.
+              The origin picker lives here too: this was the only
+              surface on mobile with no way to change "from NYC". */}
           <Section
-            title={fromLabel ? `Drive time from ${fromLabel}` : "Drive time"}
-            summary={withinHours > 0 ? `≤ ${withinHours}h` : "Any"}
+            title={`Drive time from ${fromLabel}`}
+            summary={[
+              origin.kind === "geo" ? "From your location" : `From ${originLabel(origin)}`,
+              withinHours > 0 ? `≤ ${withinHours}h` : "Any",
+            ].join(" · ")}
           >
+            <div className="mb-3">
+              <label
+                htmlFor="drawer-origin"
+                className="mb-1 block text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55"
+              >
+                Starting from
+              </label>
+              <div className="flex gap-2">
+                <select
+                  id="drawer-origin"
+                  value={origin.kind === "city" ? origin.code : ""}
+                  onChange={(e) => {
+                    if (e.target.value) onFromCity(e.target.value);
+                  }}
+                  // 16px so iOS does not auto-zoom on focus.
+                  style={{ fontSize: "16px" }}
+                  className="min-h-[44px] min-w-0 flex-1 rounded-lg border border-wn-charcoal/20 bg-white px-3 font-medium text-wn-charcoal focus:border-wn-navy focus:outline-none focus:ring-2 focus:ring-wn-navy/20"
+                  aria-label="Starting city"
+                >
+                  {origin.kind === "geo" && (
+                    <option value="">Your location</option>
+                  )}
+                  {originsForPicker().map((o) => (
+                    <option key={o.code} value={o.code}>
+                      {originLabel(o)}
+                      {o.cached ? "" : " (≈ estimated)"}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  type="button"
+                  onClick={handleUseHere}
+                  disabled={requestingGeo}
+                  aria-pressed={origin.kind === "geo"}
+                  className={`inline-flex min-h-[44px] shrink-0 items-center gap-1.5 rounded-lg border px-3 text-xs font-semibold transition disabled:opacity-60 ${
+                    origin.kind === "geo"
+                      ? "border-wn-navy bg-wn-navy text-white"
+                      : "border-wn-charcoal/15 bg-white text-wn-charcoal hover:border-wn-charcoal/40"
+                  }`}
+                >
+                  <span aria-hidden="true">📍</span>
+                  <span>{requestingGeo ? "Locating…" : origin.kind === "geo" ? "Using here" : "Use my location"}</span>
+                </button>
+              </div>
+              {geoError && (
+                <p className="mt-1.5 text-[11px] leading-snug text-wn-charcoal/65">{geoError}</p>
+              )}
+              <p className="mt-1.5 text-[11px] leading-snug text-wn-charcoal/55">
+                {originIsEstimate
+                  ? "Drive times from here are estimates (≈). Open a resort for an exact route."
+                  : "Drive times from this city are cached road routes."}
+              </p>
+            </div>
             <div className="grid grid-cols-5 gap-1">
               {DRIVE_TIME_PRESETS.map((h) => {
                 const isAny = h === 0;
@@ -550,7 +639,7 @@ export default function FiltersDrawer({
                     type="button"
                     onClick={() => onWithinChange(isAny ? null : String(h))}
                     aria-pressed={active}
-                    className={`rounded-lg border px-2 py-2 text-xs font-semibold transition ${
+                    className={`min-h-[44px] rounded-lg border px-2 py-2 text-xs font-semibold transition ${
                       active
                         ? "border-wn-navy bg-wn-navy text-white"
                         : "border-wn-charcoal/15 bg-white text-wn-charcoal hover:border-wn-charcoal/40"
@@ -608,7 +697,7 @@ export default function FiltersDrawer({
                     type="button"
                     onClick={() => onSizeChange(tier)}
                     aria-pressed={active}
-                    className={`rounded-lg border px-2 py-2 text-xs font-semibold transition ${
+                    className={`min-h-[44px] rounded-lg border px-2 py-2 text-xs font-semibold transition ${
                       active
                         ? "border-wn-navy bg-wn-navy text-white"
                         : "border-wn-charcoal/15 bg-white text-wn-charcoal hover:border-wn-charcoal/40"
@@ -621,26 +710,33 @@ export default function FiltersDrawer({
             </div>
           </Section>
 
-          {/* 6. AIRPORT — Stage 8. Filters resorts where
-              closest_airport_iata matches AND distance ≤ 120 mi (shuttle
-              range). Horizontal-scroll chip row to keep the drawer
-              compact while exposing all 15 top US ski airports. */}
+          {/* 6. FLY TO — a camera jump, not a filter. Picking an airport
+              flies the map there, drops a ✈️ marker and reports how many
+              resorts sit within about two hours of it. It never hides
+              resorts and is not counted in the filter badge; the old
+              "Airport" section was both, and matched nothing (audit
+              map-core-7 / fresh-eyes-newbie-11). */}
           <Section
-            title="Airport"
+            title="Fly to"
             summary={
               airportFilter
-                ? AIRPORT_OPTIONS.find((a) => a.iata === airportFilter)?.label ??
-                  airportFilter
-                : "Any airport"
+                ? `${AIRPORT_OPTIONS.find((a) => a.iata === airportFilter)?.label ?? airportFilter} · ${nearAirportCount} resort${nearAirportCount === 1 ? "" : "s"} within ≈ 2 h`
+                : "Jump the map to an airport"
             }
           >
-            {/* Stage 33 — airport picker rebuilt as a searchable
-                vertical list. Horizontal chips required the user to
-                already know the IATA; the list makes scanning easier
-                and the search box covers travellers who type the
-                city name. Selecting an airport ALSO flies the map
-                camera to it (handled in MapPage via the airport URL
-                param). */}
+            <p className="mb-2 text-[11px] leading-snug text-wn-charcoal/60">
+              Jumps the map to the airport. It does not hide resorts, so the
+              count below only tells you what is within reach.
+            </p>
+            {airportFilter && (
+              <p className="mb-2 rounded-lg bg-wn-navy/5 px-3 py-2 text-xs font-semibold text-wn-navy">
+                {nearAirportCount} resort{nearAirportCount === 1 ? "" : "s"} within ≈ 2 h
+                drive of {AIRPORT_OPTIONS.find((a) => a.iata === airportFilter)?.label ?? airportFilter}
+                <span className="block text-[10px] font-normal text-wn-charcoal/55">
+                  Estimated from straight-line distance
+                </span>
+              </p>
+            )}
             <input
               type="search"
               aria-label="Search airports"
@@ -656,14 +752,14 @@ export default function FiltersDrawer({
                 type="button"
                 onClick={() => onAirportChange(null)}
                 aria-pressed={airportFilter === null}
-                className={`flex w-full items-center gap-2 border-b border-wn-charcoal/10 px-3 py-2 text-left text-sm font-semibold transition ${
+                className={`flex min-h-[44px] w-full items-center gap-2 border-b border-wn-charcoal/10 px-3 py-2 text-left text-sm font-semibold transition ${
                   airportFilter === null
                     ? "bg-wn-navy/5 text-wn-navy"
                     : "text-wn-charcoal hover:bg-wn-charcoal/5"
                 }`}
               >
                 <span aria-hidden="true" className="text-base">✈️</span>
-                <span className="flex-1">Any airport</span>
+                <span className="flex-1">No jump</span>
                 {airportFilter === null && (
                   <span aria-hidden="true" className="text-wn-navy">✓</span>
                 )}
@@ -685,7 +781,7 @@ export default function FiltersDrawer({
                       onAirportChange(active ? null : a.iata)
                     }
                     aria-pressed={active}
-                    className={`flex w-full items-center gap-2 border-b border-wn-charcoal/10 px-3 py-2 text-left text-sm font-semibold transition last:border-b-0 ${
+                    className={`flex min-h-[44px] w-full items-center gap-2 border-b border-wn-charcoal/10 px-3 py-2 text-left text-sm font-semibold transition last:border-b-0 ${
                       active
                         ? "bg-wn-navy/5 text-wn-navy"
                         : "text-wn-charcoal hover:bg-wn-charcoal/5"
@@ -847,7 +943,7 @@ export default function FiltersDrawer({
                       onClick={() => onSnowmakeMinChange(threshold)}
                       aria-pressed={active}
                       title={threshold === 0 ? "Any snowmaking coverage" : `≥ ${threshold}% snowmaking`}
-                      className={`rounded-lg border px-2 py-2 text-xs font-semibold transition ${
+                      className={`min-h-[44px] rounded-lg border px-2 py-2 text-xs font-semibold transition ${
                         active
                           ? "border-wn-navy bg-wn-navy text-white"
                           : "border-wn-charcoal/15 bg-white text-wn-charcoal hover:border-wn-charcoal/40"

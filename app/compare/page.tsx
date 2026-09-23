@@ -13,8 +13,20 @@
 // "compare table" UX.
 import Link from "next/link";
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import { supabase } from "@/lib/supabase";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { passColor, passLabel, primaryPass } from "@/lib/passColors";
+import {
+  decodeStoredOrigin,
+  findOrigin,
+  hasCachedDriveTimes,
+  resolveOriginWithFallback,
+  type Origin,
+  type StoredOrigin,
+} from "@/lib/origins";
+import { ORIGIN_COOKIE } from "@/lib/preferences";
+import { estimateDriveSeconds, haversineMeters } from "@/lib/distance";
 import { getDifficultyMix, type DifficultyMix } from "@/lib/difficulty";
 import { COMPARE_MAX } from "@/lib/compareList";
 import ClearCompareButton from "./CompareActions";
@@ -28,7 +40,7 @@ export const dynamic = "force-dynamic";
 export async function generateMetadata({
   searchParams,
 }: {
-  searchParams: Promise<{ ids?: string | string[] }>;
+  searchParams: Promise<CompareSearchParams>;
 }): Promise<Metadata> {
   const ids = parseIds((await searchParams).ids);
   const base: Metadata = {
@@ -73,6 +85,8 @@ type CompareResort = {
   name: string;
   state: string;
   region: string | null;
+  latitude: number | string | null;
+  longitude: number | string | null;
   passes: string[];
   vertical_drop: number | null;
   total_trails: number | null;
@@ -128,15 +142,67 @@ function parseIds(raw: string | string[] | undefined): number[] {
   return deduped;
 }
 
-// Drive-time lookup uses the cached "New York City, NY" origin row —
-// matches the homepage default. Optional: if the row is missing for a
-// given resort the column just shows "—".
-const DEFAULT_ORIGIN = "New York City, NY";
+type CompareSearchParams = {
+  ids?: string | string[];
+  from?: string | string[];
+  fromLat?: string | string[];
+  fromLng?: string | string[];
+};
+
+function firstParam(v: string | string[] | undefined): string | null {
+  if (v == null) return null;
+  const s = Array.isArray(v) ? v[0] : v;
+  return s ? s : null;
+}
+
+// The origin the drive-time row is measured from. Same precedence as
+// the map: URL ?from= (share links), then the origin cookie the map
+// writes when the user picks a city or "here", then the account's
+// default starting city, then NYC. The page used to hard-code an
+// origin_name ("New York City, NY") that never existed in
+// drive_time_cache, so the column was always "—" (audit performance-9
+// / fresh-eyes-newbie-39 / account-social-13).
+async function resolveCompareOrigin(sp: CompareSearchParams): Promise<Origin> {
+  let stored: StoredOrigin | null = null;
+  try {
+    stored = decodeStoredOrigin((await cookies()).get(ORIGIN_COOKIE)?.value);
+  } catch {
+    stored = null;
+  }
+  if (!stored) {
+    try {
+      const ssr = await createSupabaseServerClient();
+      const { data: u } = await ssr.auth.getUser();
+      if (u.user?.id) {
+        const { data, error } = await ssr
+          .from("profiles")
+          .select("preferred_origin")
+          .eq("id", u.user.id)
+          .maybeSingle<{ preferred_origin: string | null }>();
+        if (error) {
+          console.warn("[compare] profiles.preferred_origin read failed", error.message);
+        } else if (data?.preferred_origin && findOrigin(data.preferred_origin)) {
+          stored = { kind: "city", code: data.preferred_origin };
+        }
+      }
+    } catch (e) {
+      console.warn("[compare] profile lookup failed", e instanceof Error ? e.message : e);
+    }
+  }
+  return resolveOriginWithFallback(
+    firstParam(sp.from),
+    firstParam(sp.fromLat),
+    firstParam(sp.fromLng),
+    stored,
+  );
+}
+
+type DriveCell = { seconds: number | null; estimate: boolean };
 
 export default async function ComparePage({
   searchParams,
 }: {
-  searchParams: Promise<{ ids?: string | string[] }>;
+  searchParams: Promise<CompareSearchParams>;
 }) {
   const sp = await searchParams;
   const ids = parseIds(sp.ids);
@@ -183,6 +249,8 @@ export default async function ComparePage({
         "name",
         "state",
         "region",
+        "latitude",
+        "longitude",
         "passes",
         "vertical_drop",
         "total_trails",
@@ -219,18 +287,34 @@ export default async function ComparePage({
     .map((id) => byId.get(id))
     .filter((r): r is CompareResort => !!r);
 
-  // Drive-time enrichment — best-effort lookup against the default
-  // origin's cache row. We don't fail the page if the table is empty.
-  const { data: dtRows } = await supabase
-    .from("drive_time_cache")
-    .select("resort_id, origin_name, duration_seconds")
-    .in("resort_id", ids)
-    .eq("origin_name", DEFAULT_ORIGIN)
-    .returns<DriveTimeRow[]>();
-  const driveByResort = new Map<number, number | null>();
-  for (const row of dtRows ?? []) {
-    driveByResort.set(row.resort_id, row.duration_seconds);
+  // Drive-time enrichment. Cached cities read drive_time_cache (keyed
+  // by origin.name, the same key the map uses); every other origin gets
+  // the lib/distance estimate from the resort coordinates, labelled
+  // "≈". We don't fail the page if the table is empty.
+  const origin = await resolveCompareOrigin(sp);
+  const driveByResort = new Map<number, DriveCell>();
+  if (hasCachedDriveTimes(origin)) {
+    const { data: dtRows, error } = await supabase
+      .from("drive_time_cache")
+      .select("resort_id, origin_name, duration_seconds")
+      .in("resort_id", ids)
+      .eq("origin_name", origin.name)
+      .returns<DriveTimeRow[]>();
+    if (error) console.warn("[compare] drive_time_cache read failed", error.message);
+    for (const row of dtRows ?? []) {
+      driveByResort.set(row.resort_id, { seconds: row.duration_seconds, estimate: false });
+    }
   }
+  for (const r of resorts) {
+    if (driveByResort.has(r.id)) continue;
+    const lat = Number(r.latitude);
+    const lng = Number(r.longitude);
+    if (!Number.isFinite(lat) || !Number.isFinite(lng)) continue;
+    const meters = haversineMeters(origin.lat, origin.lon, lat, lng);
+    driveByResort.set(r.id, { seconds: estimateDriveSeconds(meters), estimate: true });
+  }
+  const driveLabel = `Drive from ${origin.kind === "geo" ? "your location" : origin.short}`;
+  const anyEstimate = [...driveByResort.values()].some((c) => c.estimate);
 
   if (resorts.length === 0) {
     return (
@@ -278,16 +362,30 @@ export default async function ComparePage({
             Side-by-side stats, amenities, and difficulty mix. Tap any column
             header for the full resort page.
           </p>
+          <p className="mt-1 text-xs text-wn-charcoal/55">
+            {driveLabel}
+            {anyEstimate
+              ? " · ≈ times are estimated from straight-line distance. Change the origin from the map's From picker."
+              : " · cached road routes. Change the origin from the map's From picker."}
+          </p>
         </header>
 
         {/* Desktop: resort-major table */}
         <div className="hidden md:block">
-          <DesktopCompareTable resorts={resorts} driveByResort={driveByResort} />
+          <DesktopCompareTable
+            resorts={resorts}
+            driveByResort={driveByResort}
+            driveLabel={driveLabel}
+          />
         </div>
 
         {/* Mobile: metric-major stacked rows */}
         <div className="md:hidden">
-          <MobileCompareList resorts={resorts} driveByResort={driveByResort} />
+          <MobileCompareList
+            resorts={resorts}
+            driveByResort={driveByResort}
+            driveLabel={driveLabel}
+          />
         </div>
       </div>
     </main>
@@ -347,12 +445,14 @@ function boolCell(v: boolean | null): string {
   return "—";
 }
 
-function formatDriveTime(seconds: number | null | undefined): string {
+function formatDriveTime(cell: DriveCell | undefined): string {
+  const seconds = cell?.seconds;
   if (seconds == null || !Number.isFinite(seconds)) return "—";
   const hours = seconds / 3600;
-  if (hours < 1) return `${Math.round(seconds / 60)} min`;
-  if (hours < 10) return `${hours.toFixed(1)} h`;
-  return `${Math.round(hours)} h`;
+  const mark = cell?.estimate ? "≈ " : "";
+  if (hours < 1) return `${mark}${Math.round(seconds / 60)} min`;
+  if (hours < 10) return `${mark}${hours.toFixed(1)} h`;
+  return `${mark}${Math.round(hours)} h`;
 }
 
 function difficultyText(mix: DifficultyMix | null): string {
@@ -365,9 +465,11 @@ function difficultyText(mix: DifficultyMix | null): string {
 function DesktopCompareTable({
   resorts,
   driveByResort,
+  driveLabel,
 }: {
   resorts: CompareResort[];
-  driveByResort: Map<number, number | null>;
+  driveByResort: Map<number, DriveCell>;
+  driveLabel: string;
 }) {
   // Column widths: shrink the metric label column as more resorts pile up.
   return (
@@ -386,9 +488,9 @@ function DesktopCompareTable({
         <tbody>
           {/* Drive-time first (most actionable). */}
           <MetricRow
-            label={`Drive from NYC`}
+            label={driveLabel}
             resorts={resorts}
-            render={(r) => formatDriveTime(driveByResort.get(r.id) ?? null)}
+            render={(r) => formatDriveTime(driveByResort.get(r.id))}
           />
           {/* Difficulty row uses the shared helper. */}
           <MetricRow
@@ -495,9 +597,11 @@ function MetricRow({
 function MobileCompareList({
   resorts,
   driveByResort,
+  driveLabel,
 }: {
   resorts: CompareResort[];
-  driveByResort: Map<number, number | null>;
+  driveByResort: Map<number, DriveCell>;
+  driveLabel: string;
 }) {
   // Use exactly N columns matching the resort count so the layout
   // never leaves an asymmetric half-empty row — Saitarn's complaint
@@ -549,9 +653,9 @@ function MobileCompareList({
       </div>
 
       <MobileMetricCard
-        label="Drive from NYC"
+        label={driveLabel}
         resorts={resorts}
-        render={(r) => formatDriveTime(driveByResort.get(r.id) ?? null)}
+        render={(r) => formatDriveTime(driveByResort.get(r.id))}
       />
       <MobileMetricCard
         label="Difficulty mix"
