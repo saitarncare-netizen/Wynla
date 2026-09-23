@@ -583,6 +583,19 @@ export default async function ResortPage({
             ← Map
           </Link>
           <div className="flex items-center gap-2">
+            {/* Opens the planner with this resort as day 1, so the page
+                is a doorway into a trip rather than a dead end (audit
+                trip-planner-46-entry). Icon-only on the narrowest phones;
+                the label shows from sm. */}
+            <Link
+              href={`/?plan=1&route=${encodeURIComponent(resort.slug)}&days=1`}
+              aria-label={`Plan a trip to ${resort.name}`}
+              title="Plan a trip here"
+              className="inline-flex h-11 items-center justify-center gap-1 rounded-full bg-white/95 px-3 text-xs font-semibold text-wn-charcoal shadow-md backdrop-blur-sm transition hover:text-wn-navy active:scale-95 motion-reduce:transition-none sm:px-3.5"
+            >
+              <span aria-hidden="true" className="text-sm leading-none">🗺️</span>
+              <span className="hidden sm:inline">Plan a trip</span>
+            </Link>
             <CompareToggle resortId={resort.id} size="lg" />
             <FavoriteToggle resortId={resort.id} size="lg" />
           </div>

@@ -45,7 +45,7 @@ export default function DeleteAccount() {
       <button
         type="button"
         onClick={() => setArmed(true)}
-        className="rounded-md border border-red-300 px-4 py-2 text-sm font-semibold text-red-800 transition hover:border-red-400 hover:bg-red-50"
+        className="inline-flex min-h-11 items-center rounded-md border border-red-300 px-4 text-sm font-semibold text-red-800 transition hover:border-red-400 hover:bg-red-50"
       >
         Delete my account…
       </button>
@@ -54,6 +54,19 @@ export default function DeleteAccount() {
 
   return (
     <div className="space-y-3">
+      {/* Spell out what goes, so the confirmation is informed. Mirrors
+          the cascade list in /api/account/delete (audit account-social-35). */}
+      <div className="rounded-md border border-red-200 bg-red-50 p-3 text-xs text-red-900">
+        <p className="font-semibold">Deleting your account removes, permanently:</p>
+        <ul className="mt-1 list-disc space-y-0.5 pl-4">
+          <li>your favorites and saved trips, including any trip share links</li>
+          <li>snow alerts and push subscriptions</li>
+          <li>the Thursday email digest subscription</li>
+          <li>your profile, reviews and sign-in</li>
+          <li>any Stripe subscription, which is cancelled first so nothing bills afterwards</li>
+        </ul>
+        <p className="mt-1">Resorts saved on this device before sign-in stay in this browser.</p>
+      </div>
       <label
         htmlFor="confirm-delete"
         className="block text-xs font-semibold text-red-900"
@@ -75,7 +88,7 @@ export default function DeleteAccount() {
           type="button"
           onClick={deleteAccount}
           disabled={confirm !== "DELETE" || status === "deleting"}
-          className="rounded-md bg-red-700 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-800 disabled:cursor-not-allowed disabled:opacity-50"
+          className="inline-flex min-h-11 items-center rounded-md bg-red-700 px-4 text-sm font-semibold text-white transition hover:bg-red-800 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {status === "deleting" ? "Deleting…" : "Permanently delete"}
         </button>
@@ -88,7 +101,7 @@ export default function DeleteAccount() {
             setErrorMsg(null);
           }}
           disabled={status === "deleting"}
-          className="rounded-md border border-wn-charcoal/20 px-4 py-2 text-sm font-semibold text-wn-charcoal/75 transition hover:bg-wn-charcoal/5 disabled:opacity-50"
+          className="inline-flex min-h-11 items-center rounded-md border border-wn-charcoal/20 px-4 text-sm font-semibold text-wn-charcoal/75 transition hover:bg-wn-charcoal/5 disabled:opacity-50"
         >
           Cancel
         </button>

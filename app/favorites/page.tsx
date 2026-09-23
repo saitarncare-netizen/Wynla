@@ -1,15 +1,16 @@
 // /favorites — server-rendered grid of the signed-in user's saved resorts.
-// Auth-guarded: redirects to /login?next=/favorites if not signed in.
+// Signed out, the page hands off to GuestFavorites (the device list from
+// lib/guestFavorites) with a sign-in banner instead of a login wall.
 // Shows the same hero/state/passes summary as the side panel, plus the
 // day's Go / Wait / Skip pill from the same loader /today uses, and a
 // link to /today so the grid is a doorway rather than a dead end.
 
-import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { passColor, passLabel } from "@/lib/passColors";
 import { loadTodayRows, type TodayRow } from "@/app/today/data";
 import VerdictPill from "@/app/today/VerdictPill";
+import GuestFavorites from "./GuestFavorites";
 
 export const dynamic = "force-dynamic";
 
@@ -17,7 +18,7 @@ export default async function FavoritesPage() {
   const supabase = await createSupabaseServerClient();
   const { data: userData } = await supabase.auth.getUser();
   if (!userData.user) {
-    redirect("/login?next=/favorites");
+    return <GuestFavorites />;
   }
 
   // RLS makes this implicitly user-scoped. History is loaded here too

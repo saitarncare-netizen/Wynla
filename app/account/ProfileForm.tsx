@@ -19,9 +19,10 @@ type Props = {
   initialPreferredOrigin: string;
 };
 
-// Same order and labels as the map's pickers (cached cities first, then
-// A-Z with "(≈ estimated)"), so the account page never shows a
-// different list from the one the user sees on the map.
+// All 29 launch cities from lib/origins, in the same order and with the
+// same labels as the map's pickers (cached cities first, then A-Z with
+// "(≈ estimated)"), so the account page never shows a different list
+// from the one the user sees on the map.
 const ORIGIN_OPTIONS = originsForPicker().map((o) => ({
   code: o.code,
   label: originOptionLabel(o),
@@ -128,7 +129,7 @@ export default function ProfileForm({
           type="button"
           onClick={save}
           disabled={status === "saving" || !dirty}
-          className="rounded-md bg-wn-navy px-4 py-2 text-sm font-semibold text-white transition hover:bg-wn-navy/90 disabled:opacity-50"
+          className="inline-flex min-h-11 items-center rounded-md bg-wn-navy px-4 text-sm font-semibold text-white transition hover:bg-wn-navy/90 disabled:opacity-50"
         >
           {status === "saving" ? "Saving…" : "Save changes"}
         </button>
