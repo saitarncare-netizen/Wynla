@@ -429,12 +429,10 @@ export default async function ResortPage({
         className="relative w-full overflow-hidden"
         style={{
           background: `linear-gradient(135deg, ${heroBg} 0%, #1E2952 60%, #0F1530 100%)`,
-          // User feedback (post-Round-5 install): on iPhone PWA, the
-          // hero's back link + resort title sat too close to the iOS
-          // status bar. Add safe-area padding + 12px breathing room so
-          // those clear the status bar comfortably on any device.
-          // Desktop env(safe-area-inset-top) is 0 → no visual change.
-          paddingTop: "calc(env(safe-area-inset-top, 0px) + 12px)",
+          // 12px breathing room under the iOS status bar. The safe-area
+          // inset itself is applied once for every non-map route by the
+          // #main-content rule in globals.css.
+          paddingTop: "12px",
         }}
       >
         {resort.hero_image_url && (

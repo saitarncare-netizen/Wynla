@@ -99,10 +99,7 @@ export default async function ComparePage({
 
   if (ids.length === 0) {
     return (
-      <main
-        className="min-h-dvh bg-wn-offwhite px-4 py-12 sm:px-6"
-        style={{ paddingTop: "calc(env(safe-area-inset-top, 0px) + 3rem)" }}
-      >
+      <main className="min-h-dvh bg-wn-offwhite px-4 py-12 sm:px-6">
         <div className="mx-auto max-w-2xl">
           <Link
             href="/"
@@ -193,10 +190,7 @@ export default async function ComparePage({
 
   if (resorts.length === 0) {
     return (
-      <main
-        className="min-h-dvh bg-wn-offwhite px-4 py-12 sm:px-6"
-        style={{ paddingTop: "calc(env(safe-area-inset-top, 0px) + 3rem)" }}
-      >
+      <main className="min-h-dvh bg-wn-offwhite px-4 py-12 sm:px-6">
         <div className="mx-auto max-w-2xl">
           <Link
             href="/"
@@ -213,16 +207,10 @@ export default async function ComparePage({
     );
   }
 
+  // iOS safe-area padding for the "← Map" link comes from the #main-content
+  // rule in globals.css (shared by every non-map route).
   return (
-    <main
-      className="min-h-dvh bg-wn-offwhite"
-      // iOS safe-area padding so the "← Map" link + title don't slide
-      // under the status bar (clock / battery). Without this, Saitarn's
-      // 2026-05-23 screenshot showed the "21:09" status bar overlapping
-      // "← Map" on the iPhone PWA. env(safe-area-inset-top) is 0 on
-      // desktop so this is free for non-mobile.
-      style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}
-    >
+    <main className="min-h-dvh bg-wn-offwhite">
       <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-10">
         <div className="mb-3 flex items-center justify-between gap-2">
           <Link
