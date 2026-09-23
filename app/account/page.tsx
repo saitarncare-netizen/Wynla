@@ -80,6 +80,15 @@ export default async function AccountPage() {
           <ul className="divide-y divide-wn-charcoal/10">
             <li>
               <Link
+                href="/today"
+                className="flex min-h-11 items-center justify-between py-3 text-sm text-wn-charcoal transition hover:text-wn-navy"
+              >
+                <span className="font-medium">☀️ My mountains today</span>
+                <span className="text-wn-charcoal/50">→</span>
+              </Link>
+            </li>
+            <li>
+              <Link
                 href="/favorites"
                 className="flex items-center justify-between py-3 text-sm text-wn-charcoal transition hover:text-wn-navy"
               >

@@ -24,6 +24,7 @@ import AuthButton from "@/components/auth/AuthButton";
 import ProBadge from "@/components/ProBadge";
 import CompareFloatingButton from "@/components/CompareFloatingButton";
 import ActiveTripChip from "@/components/Map/ActiveTripChip";
+import TodayChip from "./TodayChip";
 import RecentlyViewedStrip, {
   OPEN_RESORT_EVENT,
   type OpenResortDetail,
@@ -1302,6 +1303,17 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
     };
   }, []);
 
+  // Tell the phone tab bar (components/AppTabBar.tsx) when a sheet or
+  // drawer has the bottom of the screen, so it steps aside instead of
+  // sitting under the resort panel / planner / filters / search.
+  useEffect(() => {
+    const open = selectedId != null || plannerOpen || filtersOpen || searchOpen;
+    document.documentElement.dataset.sheetOpen = open ? "1" : "0";
+    return () => {
+      delete document.documentElement.dataset.sheetOpen;
+    };
+  }, [selectedId, plannerOpen, filtersOpen, searchOpen]);
+
   // Hydrate the gold-ring timer + clean up the ?recent=<slug> param.
   // If we mounted with recentlyViewedId already set from the URL
   // (the cross-route round-trip from /resort/[slug]), schedule the
@@ -1573,6 +1585,15 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
             {isAuthed && (
               <div className="[&_a]:pointer-events-auto">
                 <ActiveTripChip />
+              </div>
+            )}
+            {/* "Today" chip: the Go / Wait / Skip screen for signed-in
+                users with favorites (the chip checks the count itself).
+                Hidden with the resort sheet or filter drawer up so it
+                never floats over them. */}
+            {isAuthed && selectedId == null && !filtersOpen && (
+              <div className="[&_a]:pointer-events-auto">
+                <TodayChip />
               </div>
             )}
             {/* RecentlyViewedStrip already marks its scroll strip
