@@ -255,6 +255,20 @@ function amenityFeatures(resort: Resort): Array<Record<string, unknown>> {
 
 type Faq = { question: string; answer: string };
 
+/** Widest radius the FAQ will name a city at: twice the /near radius. */
+const FAQ_DISTANCE_MAX_HOURS = 12;
+
+/** The FAQ and priceRange print a "$" sign, so they only fire for USD
+ *  rows; ticket_price_currency exists precisely so a non-USD row can
+ *  appear, and that row should stay silent rather than mislabelled. */
+function hasUsdTicketPrice(resort: Resort): boolean {
+  return (
+    resort.ticket_price_adult_min != null &&
+    resort.ticket_price_adult_min > 0 &&
+    (resort.ticket_price_currency ?? "USD").toUpperCase() === "USD"
+  );
+}
+
 /** Up to five questions, each only when its data exists. Order is the
  *  order a first-time visitor asks them (pass, opening, price, distance,
  *  size, then extras). */
@@ -287,10 +301,19 @@ function buildResortFaq(resort: Resort, status: ResortStatus, lat: number, lng: 
   const window = seasonWindowText(resort);
   if (status.kind === "opens" || status.kind === "open" || status.kind === "limited" || status.kind === "likely-open") {
     const projected = isProjectedSeasonText(resort.season_open_text ?? resort.typical_season_start);
+    // The sentence is built per status kind rather than by lowercasing the
+    // pill label: the label carries a month name ("Opens Nov 22") that
+    // must keep its capital, and this text goes verbatim to search and
+    // answer engines.
+    const detail = status.detail ? ` (${status.detail})` : "";
     const line =
       status.kind === "opens"
-        ? `${resort.name} ${status.label.toLowerCase()}${status.detail ? ` (${status.detail})` : ""}${projected ? ". This is a projected date from a third-party calendar, not the resort's announcement" : ""}.`
-        : `${resort.name} is ${status.label.toLowerCase()}${status.detail ? ` (${status.detail})` : ""}.`;
+        ? `${resort.name} ${status.label.replace(/^Opens/, "opens")}${detail}${projected ? ". This is a projected date from a third-party calendar, not the resort's announcement" : ""}.`
+        : status.kind === "open"
+          ? `${resort.name} is open today${detail}.`
+          : status.kind === "limited"
+            ? `${resort.name} is running limited operations${detail}.`
+            : `${resort.name} is likely open${detail}.`;
     faqs.push({
       question: `When does ${resort.name} open for the season?`,
       answer: `${line}${window ? ` The usual season runs ${window}.` : ""} Checked ${formatStampDate(now.toISOString()) ?? "today"}; confirm with the resort before you drive.`,
@@ -302,8 +325,8 @@ function buildResortFaq(resort: Resort, status: ResortStatus, lat: number, lng: 
     });
   }
 
-  if (resort.ticket_price_adult_min != null && resort.ticket_price_adult_min > 0) {
-    const min = resort.ticket_price_adult_min;
+  if (hasUsdTicketPrice(resort)) {
+    const min = resort.ticket_price_adult_min as number;
     const max = resort.ticket_price_adult_max;
     const asOf = formatStampDate(resort.ticket_price_updated_at);
     faqs.push({
@@ -312,7 +335,11 @@ function buildResortFaq(resort: Resort, status: ResortStatus, lat: number, lng: 
     });
   }
 
-  const [nearest] = nearestCities(lat, lng, 1);
+  // The distance question only exists when an origin city is within a
+  // plausible day's drive (12 h, the /go ceiling doubled); past that the
+  // estimate describes a trip nobody makes, and Alaska is skipped outright
+  // because Juneau and Cordova have no road connection at all.
+  const [nearest] = resort.state === "AK" ? [] : nearestCities(lat, lng, 1, FAQ_DISTANCE_MAX_HOURS, false);
   if (nearest) {
     const city = nearCityName(nearest.city);
     const airport = resort.closest_airport_iata ? airportByIata(resort.closest_airport_iata) : null;
@@ -382,11 +409,12 @@ function resortJsonLd(resort: Resort, status: ResortStatus, lat: number, lng: nu
   if (resort.hero_image_url) skiResort.image = resort.hero_image_url;
   if (amenities.length > 0) skiResort.amenityFeature = amenities;
   if (hours.length > 0) skiResort.openingHoursSpecification = hours;
-  if (resort.ticket_price_adult_min != null && resort.ticket_price_adult_min > 0) {
+  if (hasUsdTicketPrice(resort)) {
+    const min = resort.ticket_price_adult_min as number;
     skiResort.priceRange =
-      resort.ticket_price_adult_max != null && resort.ticket_price_adult_max > resort.ticket_price_adult_min
-        ? `$${resort.ticket_price_adult_min}-$${resort.ticket_price_adult_max}`
-        : `$${resort.ticket_price_adult_min}`;
+      resort.ticket_price_adult_max != null && resort.ticket_price_adult_max > min
+        ? `$${min}-$${resort.ticket_price_adult_max}`
+        : `$${min}`;
   }
 
   const breadcrumb = {

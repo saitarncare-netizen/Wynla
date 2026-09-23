@@ -237,12 +237,12 @@ export default async function StatePage({
           </div>
         </section>
 
-        {/* Nearest launch city — the crawl path from a state directory to
-            the "near <City>" list and the Saturday answer behind it. */}
+        {/* Nearest cities — the crawl path from a state directory to the
+            "near <City>" list; launch cities also get the Saturday link. */}
         {nearby.length > 0 && (
           <section aria-labelledby="nearest-city">
             <h2 id="nearest-city" className="mb-2 text-sm font-bold uppercase tracking-wide text-wn-charcoal/60">
-              Nearest launch city
+              Nearest city
             </h2>
             <ul className="grid grid-cols-1 gap-2 sm:grid-cols-3">
               {nearby.map((c) => (

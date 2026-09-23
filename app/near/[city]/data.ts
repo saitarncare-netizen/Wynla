@@ -101,7 +101,13 @@ const getCachedNearData = unstable_cache(
     const [resortsRes, cached] = await Promise.all([
       supabase.from("resorts").select(RESORT_COLUMNS).eq("active", true).order("name"),
       hasCachedDriveTimes(city)
-        ? loadDrives(city.name)
+        ? loadDrives(city.name).catch((err: unknown) => {
+            // Drive times are enrichment: without them the page still
+            // renders on the ≈ estimate path with "estimated" copy, the
+            // same way app/page.tsx degrades. Only the resorts read is fatal.
+            console.error(`near-data: drive_time_cache read failed for ${city.name}; using estimates`, err);
+            return new Map<number, { seconds: number; meters: number | null }>();
+          })
         : Promise.resolve(new Map<number, { seconds: number; meters: number | null }>()),
     ]);
     // Throwing keeps a failed read out of the cache so the next request

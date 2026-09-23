@@ -8,7 +8,7 @@
 // carrying the same "≈" mark every other drive-time surface uses.
 //
 // This module is the pure half (no I/O): banding, row building, the
-// nearest-launch-city helper the state pages use, and the page's
+// nearest-city helper the state pages and resort FAQ use, and the page's
 // canonical paths. The reads live in app/near/[city]/data.ts so this
 // file stays unit-testable without a Supabase client.
 
@@ -148,7 +148,10 @@ export function buildNearRows(
     if (!band) continue;
     const season = resolveSeasonInfo(r, now);
     const status = deriveResortStatus(r, season, now);
-    const minUsd = r.ticket_price_adult_min;
+    // The row prints "$", so only USD prices qualify; a non-USD row stays
+    // silent rather than mislabelled.
+    const minUsd =
+      (r.ticket_price_currency ?? "USD").toUpperCase() === "USD" ? r.ticket_price_adult_min : null;
     rows.push({
       id: r.id,
       slug: r.slug,
@@ -235,7 +238,7 @@ export function nearDescription(city: CityOrigin, count: number): string {
   return `${count} ski resort${count === 1 ? "" : "s"} within ${NEAR_MAX_HOURS} hours of ${label}, sorted by ${how}, with pass, opening status, vertical and measured snow. Then see this Saturday's picks.`;
 }
 
-// ---------- Nearest launch city (state pages) ----------
+// ---------- Nearest city (state pages, resort FAQ) ----------
 
 export type NearbyCity = {
   city: CityOrigin;
@@ -245,22 +248,37 @@ export type NearbyCity = {
 };
 
 /**
- * The cities closest to a point, nearest first, for the "Nearest launch
- * city" links on /state/[code]. The distance is the lib/distance
- * estimate to the city centroid; every result is labelled ≈ by the
- * caller. Launch cities (the ones /go answers for) sort first within the
- * radius because that is the link with a Saturday answer behind it.
+ * The origin cities within `maxHours` of a point, nearest first, for the
+ * "Nearest city" links on /state/[code] and the distance question in the
+ * resort FAQ. The distance is the lib/distance estimate to the city
+ * centroid; every result is labelled ≈ by the caller. Launch cities (the
+ * ones /go answers for) sort first within the radius because that is the
+ * link with a Saturday answer behind it.
+ *
+ * Returns an empty list when nothing is inside the radius. There is no
+ * "nearest anyway" fallback on purpose: a straight-line estimate to a
+ * city 18 h away is not a drive anyone takes, and for road-less resorts
+ * (Juneau, Cordova) it would state a route that does not exist.
  */
-export function nearestCities(lat: number, lon: number, limit = 3, maxHours = NEAR_MAX_HOURS): NearbyCity[] {
+export function nearestCities(
+  lat: number,
+  lon: number,
+  limit = 3,
+  maxHours = NEAR_MAX_HOURS,
+  /** False for "how far from <city>" copy, where the closest city is the
+   *  honest one even when a launch city is a little farther. */
+  launchFirst = true,
+): NearbyCity[] {
   const launch = new Set(LAUNCH_CITIES.map((c) => c.code));
-  const all: NearbyCity[] = ORIGINS.map((city) => ({
+  const inside: NearbyCity[] = ORIGINS.map((city) => ({
     city,
     seconds: estimateDriveSeconds(haversineMeters(lat, lon, city.lat, city.lon)),
     isLaunch: launch.has(city.code),
-  })).sort((a, b) => a.seconds - b.seconds);
-  const inside = all.filter((c) => c.seconds <= maxHours * 3600);
-  const pool = inside.length > 0 ? inside : all.slice(0, 1);
-  return [...pool.filter((c) => c.isLaunch), ...pool.filter((c) => !c.isLaunch)].slice(0, limit);
+  }))
+    .filter((c) => c.seconds <= maxHours * 3600)
+    .sort((a, b) => a.seconds - b.seconds);
+  const ordered = launchFirst ? [...inside.filter((c) => c.isLaunch), ...inside.filter((c) => !c.isLaunch)] : inside;
+  return ordered.slice(0, limit);
 }
 
 /** Mean of the coordinates that parse; null when none do. */

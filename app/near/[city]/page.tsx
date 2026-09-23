@@ -169,7 +169,7 @@ export default async function NearCityPage({ params }: { params: Promise<{ city:
           <p className="mt-2">
             Drive times start from downtown {name} ({formatCoords(city)}).{" "}
             {city.cached && data.driveSource === "cache"
-              ? `Times without a mark are road routes cached from Mapbox Directions; a ${ESTIMATE_MARK} mark means no route is cached for that resort and the time is estimated from straight-line distance at 60 mph with a 1.2 road factor.`
+              ? `Times without a mark are road routes cached from Mapbox (Matrix API), computed once and stored; a ${ESTIMATE_MARK} mark means no route is cached for that resort and the time is estimated from straight-line distance at 60 mph with a 1.2 road factor.`
               : `${name} has no cached road routes yet, so every time is marked ${ESTIMATE_MARK} and estimated from straight-line distance at 60 mph with a 1.2 road factor. Expect real drives to be longer in mountain traffic.`}{" "}
             Opening status comes from each resort&apos;s own report when it is fresh, otherwise from its announced or projected season dates. Snow is the NOHRSC 24 h analysis (Measured) and only appears while a resort is running.
             {loadedAt ? ` Data loaded ${loadedAt}, refreshed every ${Math.round(NEAR_DATA_REVALIDATE_SECONDS / 60)} minutes.` : ""}
@@ -254,6 +254,14 @@ export default async function NearCityPage({ params }: { params: Promise<{ city:
   );
 }
 
+/** Chip text colour per pass. Epic orange (#F37021) and Ikon yellow are
+ *  light enough that white text falls below WCAG AA at chip size, so both
+ *  take navy; the darker Indy / Mountain Collective / independent
+ *  backgrounds keep white. */
+function passChipText(pass: string): string {
+  return pass === "ikon" || pass === "epic" ? "#1E2952" : "#FFFFFF";
+}
+
 function ResortRow({ row }: { row: NearRow }) {
   const drive = `${row.drive.estimated ? `${ESTIMATE_MARK} ` : ""}${formatDriveRounded(row.drive.seconds)}`;
   const ticketDate = formatStampDate(row.ticket?.updatedAt);
@@ -277,8 +285,8 @@ function ResortRow({ row }: { row: NearRow }) {
             <span
               key={p}
               title={passLabel(p)}
-              className="rounded px-1.5 py-0.5 text-[10px] font-semibold"
-              style={{ backgroundColor: passColor(p), color: p === "ikon" ? "#1E2952" : "#FFFFFF" }}
+              className="rounded px-1.5 py-0.5 text-[11px] font-bold"
+              style={{ backgroundColor: passColor(p), color: passChipText(p) }}
             >
               {passShort(p)}
             </span>

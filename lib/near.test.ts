@@ -216,11 +216,25 @@ describe("nearestCities", () => {
     expect(near.every((c) => c.seconds <= 6 * 3600)).toBe(true);
   });
 
-  it("falls back to the single nearest city when nothing is inside the radius", () => {
-    // Anchorage: no origin within 6 h; the nearest one still gets a link.
-    const near = nearestCities(61.2, -149.9, 3);
-    expect(near).toHaveLength(1);
-    expect(near[0].seconds).toBeGreaterThan(6 * 3600);
+  it("returns nothing when no origin is inside the radius", () => {
+    // Anchorage: no origin within 6 h, and Seattle at ≈28 h is not a
+    // drive anyone plans, so no link and no FAQ claim.
+    expect(nearestCities(61.2, -149.9, 3)).toEqual([]);
+    // Juneau has no road connection at all; the same guard covers it.
+    expect(nearestCities(58.3, -134.4, 1, 12)).toEqual([]);
+  });
+
+  it("honours a wider radius for the resort FAQ", () => {
+    // Eastern Montana plains (Glendive): outside 6 h of every origin but
+    // ≈10 h from Denver, so the FAQ can still name a city at 12 h.
+    expect(nearestCities(47.1, -104.7, 1)).toEqual([]);
+    // Launch-first ordering picks Minneapolis (≈11 h) for the state
+    // links; the FAQ asks for the truly nearest city and gets Denver.
+    expect(nearestCities(47.1, -104.7, 1, 12)[0].city.code).toBe("minneapolis");
+    const wide = nearestCities(47.1, -104.7, 1, 12, false);
+    expect(wide).toHaveLength(1);
+    expect(wide[0].city.code).toBe("denver");
+    expect(wide[0].seconds).toBeLessThanOrEqual(12 * 3600);
   });
 });
 

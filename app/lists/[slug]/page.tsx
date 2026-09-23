@@ -158,10 +158,35 @@ export default async function ListPage({
           )}
         </section>
 
+        {/* Next step — the /near and /go pages behind a "from a city"
+            list, so the curated ranking leads to the drive-sorted list and
+            the Saturday answer (content-seo-27). Data lives on the list. */}
+        {list.related && list.related.length > 0 && (
+          <section aria-labelledby="list-related">
+            <h2 id="list-related" className="mb-2 text-sm font-bold uppercase tracking-wide text-wn-charcoal/60">
+              Next step
+            </h2>
+            <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+              {list.related.map((r) => (
+                <li key={r.href}>
+                  <Link
+                    href={r.href}
+                    className="flex min-h-11 items-center rounded-xl border border-wn-charcoal/10 bg-white px-4 py-2 text-sm font-semibold text-wn-navy shadow-sm underline-offset-2 transition hover:border-wn-navy/40 hover:underline"
+                  >
+                    {r.label} →
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        {/* h2, not h3: the page outline is h1 > h2 sections, and this
+            block sat above the "More lists" h2 (content-seo-21). */}
         <section className="rounded-2xl border border-wn-charcoal/10 bg-white p-6 text-center shadow-sm">
-          <h3 className="text-lg font-bold text-wn-navy">
+          <h2 className="text-lg font-bold text-wn-navy">
             Plan a trip around this list
-          </h3>
+          </h2>
           <p className="mt-1 text-sm text-wn-charcoal/70">
             Use the map to stitch these resorts into a multi-stop trip.
           </p>
