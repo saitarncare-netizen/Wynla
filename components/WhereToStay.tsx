@@ -21,6 +21,8 @@ import {
   vrboUrl,
   type AffiliateContext,
 } from "@/lib/affiliateLinks";
+import Icon from "@/components/icons/Icon";
+import Section from "@/components/ui/Section";
 
 type Props = {
   resort: {
@@ -72,16 +74,16 @@ export default function WhereToStay({ resort }: Props) {
   ];
 
   return (
-    <section aria-label={`Lodging near ${resort.name}`}>
-      <div className="mb-3">
-        <h2 className="text-lg font-bold text-wn-navy sm:text-xl">
-          Where to stay
-        </h2>
-        <p className="text-xs text-wn-charcoal/60">
+    <Section
+      id="where-to-stay"
+      title="Where to stay"
+      description={
+        <>
           Search lodging near {resort.name}. Some links earn Wynla a
           commission at no extra cost to you.
-        </p>
-      </div>
+        </>
+      }
+    >
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
         {cards.map((c) => (
           <a
@@ -89,27 +91,28 @@ export default function WhereToStay({ resort }: Props) {
             href={c.href}
             target="_blank"
             rel="noopener noreferrer sponsored"
-            className="group flex items-center justify-between gap-3 rounded-lg border border-wn-charcoal/10 bg-white px-4 py-3 transition hover:border-wn-navy hover:shadow-sm"
+            className="group flex items-center justify-between gap-3 rounded-wn-md border border-wn-line bg-white px-4 py-3 transition hover:border-wn-navy hover:shadow-wn-sm"
           >
             <div className="flex items-center gap-3 min-w-0">
-              <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-wn-navy/5 text-lg" aria-hidden="true">
+              <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-wn-sm bg-wn-navy/5 text-lg" aria-hidden="true">
                 {c.emoji}
               </span>
               <div className="min-w-0">
                 <div className="text-sm font-semibold text-wn-navy">
                   {c.title}
                 </div>
-                <div className="truncate text-xs text-wn-charcoal/60">
+                <div className="truncate text-xs text-wn-muted">
                   {c.sub} · {c.partner}
                 </div>
               </div>
             </div>
-            <span className="text-wn-navy/40 transition group-hover:translate-x-0.5 group-hover:text-wn-navy">
-              →
-            </span>
+            <Icon
+              name="arrow-right"
+              className="h-4 w-4 shrink-0 text-wn-subtle transition group-hover:translate-x-0.5 group-hover:text-wn-navy"
+            />
           </a>
         ))}
       </div>
-    </section>
+    </Section>
   );
 }

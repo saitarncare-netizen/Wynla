@@ -35,6 +35,9 @@ import {
   type SurfaceResult,
 } from "@/lib/snowSurface";
 import SurfaceIcon from "@/components/icons/SurfaceIcon";
+import Icon from "@/components/icons/Icon";
+import Button from "@/components/ui/Button";
+import Section from "@/components/ui/Section";
 
 /** Facts the dormant card shows instead of a classification. The
  *  opening date is deliberately absent — the status pill above the
@@ -61,30 +64,29 @@ export default function SnowSurfaceForecast({ report, forecastDates, preview }: 
   const [showModal, setShowModal] = useState(false);
 
   return (
-    <section aria-label="Snow surface forecast">
-      <div className="mb-3 flex items-center justify-between gap-3">
-        <div>
-          <h2 className="text-lg font-bold text-wn-navy sm:text-xl">
-            {report.dormant ? "Snow surface" : "Snow surface today"}
-          </h2>
-          <p className="text-xs text-wn-charcoal/60">
-            {report.dormant
-              ? "What the snow will feel like under your edges, once the lifts are running."
-              : "What the snow feels like under your edges, worked out from the last 7 days of weather."}
-          </p>
-        </div>
-        <button
-          type="button"
+    <Section
+      id="snow-surface"
+      title={report.dormant ? "Snow surface" : "Snow surface today"}
+      description={
+        report.dormant
+          ? "What the snow will feel like under your edges, once the lifts are running."
+          : "What the snow feels like under your edges, worked out from the last 7 days of weather."
+      }
+      action={
+        <Button
+          variant="secondary"
           onClick={() => setShowModal(true)}
           aria-haspopup="dialog"
           aria-expanded={showModal}
-          className="inline-flex min-h-[44px] shrink-0 touch-manipulation items-center gap-1 rounded-full border border-wn-charcoal/15 bg-white px-3 text-xs font-semibold text-wn-charcoal/80 transition hover:border-wn-navy hover:text-wn-navy"
           aria-label="Surface types: what each one means"
+          iconLeft={<Icon name="info" />}
+          className="touch-manipulation"
         >
-          <span aria-hidden="true">ⓘ</span>
-          <span>Surface types</span>
-        </button>
-      </div>
+          Surface types
+        </Button>
+      }
+    >
+      <div>
 
       {report.dormant ? (
         <DormantCard reason={report.reason} headline={report.headline} message={report.message} preview={preview} />
@@ -93,7 +95,7 @@ export default function SnowSurfaceForecast({ report, forecastDates, preview }: 
           <TodayCard today={report.today} basedOn={report.basedOn} />
           {report.forecast.some(Boolean) && (
             <div className="mt-4">
-              <div className="mb-2 text-[11px] font-bold uppercase tracking-wider text-wn-charcoal/55">
+              <div className="mb-2 text-eyebrow font-bold uppercase text-wn-muted">
                 3-day surface outlook
               </div>
               <div className="grid grid-cols-3 gap-2">
@@ -106,7 +108,7 @@ export default function SnowSurfaceForecast({ report, forecastDates, preview }: 
                   />
                 ))}
               </div>
-              <p className="mt-2 text-[10px] text-wn-charcoal/50">
+              <p className="mt-2 text-xs text-wn-muted">
                 Confidence drops with distance — day 3 is trend only.
               </p>
             </div>
@@ -116,38 +118,39 @@ export default function SnowSurfaceForecast({ report, forecastDates, preview }: 
 
       {/* EDUCATION MODAL */}
       {showModal && <SurfaceEducationModal onClose={() => setShowModal(false)} />}
-    </section>
+      </div>
+    </Section>
   );
 }
 
 function TodayCard({ today, basedOn }: { today: SurfaceResult; basedOn: string[] }) {
   const tone = toneFor(today.code);
   return (
-    <div className={`rounded-xl border p-4 shadow-sm sm:p-5 ${tone.container}`}>
+    <div className={`rounded-wn-md border p-4 shadow-wn-sm sm:p-5 ${tone.container}`}>
       <div className="flex items-start gap-4">
         {/* The bubble carries the surface ICON, not the code: a beginner
             should meet the plain-English label first and the SANY code
             only once, in the small mono tag beside it. */}
         <div
           aria-hidden="true"
-          className={`relative flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ${tone.bubble} sm:h-16 sm:w-16`}
+          className={`relative flex h-14 w-14 shrink-0 items-center justify-center rounded-wn-lg ${tone.bubble} sm:h-16 sm:w-16`}
         >
           <SurfaceIcon code={today.code} className="h-7 w-7 sm:h-8 sm:w-8" />
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex flex-wrap items-center gap-2">
-            <h3 className={`text-lg font-extrabold leading-tight ${tone.headline} sm:text-xl`}>
+            <h3 className={`text-lg font-extrabold leading-tight ${tone.headline} sm:text-wn-xl`}>
               {today.label}
             </h3>
             <CodeTag code={today.short} />
             <ConfidenceChip confidence={today.confidence} />
           </div>
           {today.alsoCalled && (
-            <p className="mt-0.5 text-[11px] italic text-wn-charcoal/60">
+            <p className="mt-0.5 text-xs italic text-wn-muted">
               also called {today.alsoCalled}
             </p>
           )}
-          <p className="mt-1 text-sm text-wn-charcoal/85 sm:text-base">
+          <p className="mt-1 text-sm text-wn-charcoal sm:text-base">
             {today.description}
           </p>
           {today.reasons.length > 0 && (
@@ -155,7 +158,7 @@ function TodayCard({ today, basedOn }: { today: SurfaceResult; basedOn: string[]
               {today.reasons.map((r, i) => (
                 <li
                   key={`${i}-${r}`}
-                  className="text-xs text-wn-charcoal/75 sm:text-sm"
+                  className="text-xs text-wn-muted sm:text-sm"
                 >
                   · {r}
                 </li>
@@ -163,13 +166,13 @@ function TodayCard({ today, basedOn }: { today: SurfaceResult; basedOn: string[]
             </ul>
           )}
           {today.when && (
-            <p className="mt-2 text-xs font-semibold text-wn-navy/80 sm:text-sm">
+            <p className="mt-2 text-xs font-semibold text-wn-navy sm:text-sm">
               {today.when}
             </p>
           )}
           {basedOn.length > 0 && (
-            <p className="mt-3 text-[11px] leading-snug text-wn-charcoal/55">
-              <span className="font-semibold text-wn-charcoal/70">Based on:</span>{" "}
+            <p className="mt-3 text-xs leading-snug text-wn-muted">
+              <span className="font-semibold text-wn-charcoal">Based on:</span>{" "}
               {basedOn.join(" · ")}
             </p>
           )}
@@ -211,27 +214,27 @@ function DormantCard({
     });
   }
   return (
-    <div className="rounded-xl border border-wn-charcoal/10 bg-wn-offwhite p-4 shadow-sm sm:p-5">
+    <div className="rounded-wn-md border border-wn-line bg-wn-offwhite p-4 shadow-wn-sm sm:p-5">
       <div className="flex items-start gap-4">
         <div
           aria-hidden="true"
-          className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-wn-navy/10 text-2xl sm:h-16 sm:w-16"
+          className="flex h-14 w-14 shrink-0 items-center justify-center rounded-wn-lg bg-wn-navy/10 text-wn-navy sm:h-16 sm:w-16"
         >
-          🏔️
+          <Icon name="mountain" className="h-7 w-7 sm:h-8 sm:w-8" />
         </div>
         <div className="flex-1 min-w-0">
-          <div className="text-[11px] font-bold uppercase tracking-wider text-wn-charcoal/55">
+          <div className="text-eyebrow font-bold uppercase text-wn-muted">
             {eyebrow}
           </div>
-          <h3 className="mt-0.5 text-lg font-extrabold leading-tight text-wn-navy sm:text-xl">
+          <h3 className="mt-0.5 text-lg font-extrabold leading-tight text-wn-navy sm:text-wn-xl">
             {headline}
           </h3>
-          <p className="mt-1 text-sm text-wn-charcoal/80">{message}</p>
+          <p className="mt-1 text-sm text-wn-charcoal">{message}</p>
           {facts.length > 0 && (
             <dl className="mt-3 grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-2">
               {facts.map((f) => (
                 <div key={f.label}>
-                  <dt className="text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/50">
+                  <dt className="text-eyebrow font-semibold uppercase text-wn-muted">
                     {f.label}
                   </dt>
                   <dd className="text-sm font-semibold text-wn-navy">{f.value}</dd>
@@ -240,7 +243,7 @@ function DormantCard({
             </dl>
           )}
           {facts.length === 0 && preview && (
-            <p className="mt-2 text-xs text-wn-charcoal/55">
+            <p className="mt-2 text-xs text-wn-muted">
               Opening dates for {preview.resortName} are not published yet — most US resorts open between late November and mid December.
             </p>
           )}
@@ -253,7 +256,7 @@ function DormantCard({
 function CodeTag({ code }: { code: string }) {
   return (
     <span
-      className="inline-flex items-center rounded border border-wn-charcoal/15 bg-white/70 px-1.5 py-0.5 font-mono text-[10px] font-semibold tracking-wide text-wn-charcoal/70"
+      className="inline-flex items-center rounded border border-wn-line bg-white/70 px-1.5 py-0.5 font-mono text-eyebrow font-semibold text-wn-muted"
       title="The code resorts use in their snow reports"
     >
       {code}
@@ -268,13 +271,13 @@ function ConfidenceChip({
 }) {
   const c =
     confidence === "high"
-      ? "bg-emerald-100 text-emerald-800"
+      ? "bg-wn-success-bg text-wn-success"
       : confidence === "medium"
-        ? "bg-amber-100 text-amber-800"
-        : "bg-wn-charcoal/10 text-wn-charcoal/60";
+        ? "bg-wn-warning-bg text-wn-warning"
+        : "bg-wn-line text-wn-muted";
   return (
     <span
-      className={`inline-flex items-center rounded px-1.5 py-0.5 text-[9px] font-extrabold uppercase tracking-wider ${c}`}
+      className={`inline-flex items-center rounded px-1.5 py-0.5 text-eyebrow font-extrabold uppercase ${c}`}
     >
       {confidenceLabel(confidence)}
     </span>
@@ -296,30 +299,30 @@ function ForecastSlot({
 
   if (!result) {
     return (
-      <div className="rounded-lg border border-dashed border-wn-charcoal/15 bg-white p-3 text-center">
-        <div className="text-[10px] font-bold uppercase tracking-wider text-wn-navy">
+      <div className="rounded-wn-sm border border-dashed border-wn-line bg-white p-3 text-center">
+        <div className="text-eyebrow font-bold uppercase text-wn-navy">
           {headerLabel}
         </div>
-        <div className="mt-2 text-xs text-wn-charcoal/50">No data</div>
+        <div className="mt-2 text-xs text-wn-muted">No data</div>
       </div>
     );
   }
   const tone = toneFor(result.code);
   return (
-    <div className={`rounded-lg border p-3 text-center ${tone.container}`}>
-      <div className="text-[10px] font-bold uppercase tracking-wider text-wn-navy">
+    <div className={`rounded-wn-sm border p-3 text-center ${tone.container}`}>
+      <div className="text-eyebrow font-bold uppercase text-wn-navy">
         {headerLabel}
       </div>
       <div
         aria-hidden="true"
-        className={`mx-auto mt-1.5 flex h-7 w-7 items-center justify-center rounded-lg ${tone.bubble}`}
+        className={`mx-auto mt-1.5 flex h-7 w-7 items-center justify-center rounded-wn-sm ${tone.bubble}`}
       >
         <SurfaceIcon code={result.code} className="h-4 w-4" />
       </div>
       <div className={`mt-1.5 text-sm font-extrabold leading-tight ${tone.headline}`}>
         {result.label}
       </div>
-      <div className="mt-1 font-mono text-[10px] font-semibold text-wn-charcoal/55">
+      <div className="mt-1 font-mono text-xs font-semibold text-wn-muted">
         {result.short}
       </div>
     </div>
@@ -346,11 +349,11 @@ function SurfaceEducationModal({ onClose }: { onClose: () => void }) {
       onClick={onClose}
     >
       <div
-        className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-t-2xl bg-white shadow-2xl sm:max-h-[80vh] sm:rounded-2xl"
+        className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-t-wn-lg bg-white shadow-2xl sm:max-h-[80vh] sm:rounded-wn-lg"
         style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-wn-charcoal/10 bg-white px-5 py-3">
+        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-wn-line bg-white px-5 py-3">
           <h3
             id="surface-edu-title"
             className="text-base font-bold text-wn-navy sm:text-lg"
@@ -361,13 +364,13 @@ function SurfaceEducationModal({ onClose }: { onClose: () => void }) {
             type="button"
             onClick={onClose}
             aria-label="Close surface types"
-            className="inline-flex h-11 w-11 touch-manipulation items-center justify-center rounded-full text-wn-charcoal/60 transition hover:bg-wn-charcoal/5 hover:text-wn-navy"
+            className="inline-flex h-11 w-11 touch-manipulation items-center justify-center rounded-full text-wn-muted transition hover:bg-wn-charcoal/5 hover:text-wn-navy"
           >
-            <span aria-hidden="true" className="text-xl leading-none">×</span>
+            <Icon name="close" className="h-5 w-5" />
           </button>
         </div>
         <div className="space-y-3 px-5 py-4">
-          <p className="text-xs text-wn-charcoal/65">
+          <p className="text-xs text-wn-muted">
             These are the surface types US resorts use in their daily snow reports, with the
             short code each one goes by. Wynla predicts which one you&apos;ll be skiing on from
             the last 7 days of weather.
@@ -379,11 +382,11 @@ function SurfaceEducationModal({ onClose }: { onClose: () => void }) {
               return (
                 <li
                   key={c}
-                  className={`flex gap-3 rounded-lg border p-3 ${tone.container}`}
+                  className={`flex gap-3 rounded-wn-sm border p-3 ${tone.container}`}
                 >
                   <div
                     aria-hidden="true"
-                    className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${tone.bubble}`}
+                    className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-wn-md ${tone.bubble}`}
                   >
                     <SurfaceIcon code={c} className="h-6 w-6" />
                   </div>
@@ -395,16 +398,16 @@ function SurfaceEducationModal({ onClose }: { onClose: () => void }) {
                       <CodeTag code={g.short} />
                     </div>
                     {g.alsoCalled && (
-                      <p className="mt-0.5 text-[11px] italic text-wn-charcoal/60">
+                      <p className="mt-0.5 text-xs italic text-wn-muted">
                         also called {g.alsoCalled}
                       </p>
                     )}
-                    <p className="mt-1 text-xs text-wn-charcoal/75 sm:text-sm">
+                    <p className="mt-1 text-xs text-wn-muted sm:text-sm">
                       <strong className="text-wn-navy">Feels like:</strong>{" "}
                       {g.feelsLike}
                     </p>
-                    <p className="mt-1 text-xs text-wn-charcoal/65 sm:text-sm">
-                      <strong className="text-wn-navy/80">Caused by:</strong>{" "}
+                    <p className="mt-1 text-xs text-wn-muted sm:text-sm">
+                      <strong className="text-wn-navy">Caused by:</strong>{" "}
                       {g.causedBy}
                     </p>
                   </div>
@@ -412,7 +415,7 @@ function SurfaceEducationModal({ onClose }: { onClose: () => void }) {
               );
             })}
           </ul>
-          <p className="pt-2 text-[10px] text-wn-charcoal/50">
+          <p className="pt-2 text-xs text-wn-muted">
             Wynla&apos;s predictions are rule-based for v1 (realistic 75–85% accuracy on
             the dominant classes). We bias toward calling ice when in doubt —
             over-warning is recoverable, under-warning is not.
@@ -442,42 +445,42 @@ function toneFor(code: SurfaceCode): {
         container: "border-wn-sky/40 bg-wn-sky/10",
         bubble: "bg-wn-sky text-wn-navy",
         headline: "text-wn-navy",
-        code: "text-sky-700",
+        code: "text-wn-info",
       };
     case "PPC":
       return {
         container: "border-wn-navy/15 bg-white",
         bubble: "bg-wn-navy text-white",
         headline: "text-wn-navy",
-        code: "text-wn-navy/70",
+        code: "text-wn-navy",
       };
     case "MG":
       return {
-        container: "border-wn-charcoal/10 bg-white",
+        container: "border-wn-line bg-white",
         bubble: "bg-wn-charcoal/70 text-white",
         headline: "text-wn-charcoal",
-        code: "text-wn-charcoal/70",
+        code: "text-wn-muted",
       };
     case "LSG":
       return {
-        container: "border-wn-charcoal/15 bg-wn-offwhite",
+        container: "border-wn-line bg-wn-offwhite",
         bubble: "bg-wn-charcoal/50 text-white",
         headline: "text-wn-charcoal",
-        code: "text-wn-charcoal/70",
+        code: "text-wn-muted",
       };
     case "FG":
       return {
-        container: "border-wn-charcoal/15 bg-white",
+        container: "border-wn-line bg-white",
         bubble: "bg-slate-500 text-white",
         headline: "text-wn-charcoal",
-        code: "text-slate-700",
+        code: "text-wn-muted",
       };
     case "WS":
       return {
         container: "border-wn-sky/30 bg-wn-sky/5",
         bubble: "bg-wn-sky/70 text-wn-navy",
         headline: "text-wn-navy",
-        code: "text-sky-700",
+        code: "text-wn-info",
       };
     case "WG":
       return {
@@ -488,18 +491,18 @@ function toneFor(code: SurfaceCode): {
       };
     case "IP":
       return {
-        container: "border-red-500/30 bg-red-50",
-        bubble: "bg-red-600 text-white",
-        headline: "text-red-800",
-        code: "text-red-700",
+        container: "border-wn-danger/30 bg-wn-danger-bg",
+        bubble: "bg-wn-danger text-white",
+        headline: "text-wn-danger",
+        code: "text-wn-danger",
       };
     case "VC":
     default:
       return {
-        container: "border-wn-charcoal/10 bg-wn-offwhite",
+        container: "border-wn-line bg-wn-offwhite",
         bubble: "bg-wn-charcoal/30 text-white",
-        headline: "text-wn-charcoal/70",
-        code: "text-wn-charcoal/60",
+        headline: "text-wn-muted",
+        code: "text-wn-muted",
       };
   }
 }
