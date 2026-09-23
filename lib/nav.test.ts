@@ -34,8 +34,10 @@ describe("nav model", () => {
     expect(backLinkFor("/lists/powder")).toEqual({ href: "/lists", label: "Lists" });
     expect(backLinkFor("/trip/abc")).toEqual({ href: "/trips", label: "Trips" });
     expect(backLinkFor("/trip/share/abc")).toEqual({ href: "/", label: "Map" });
+    expect(backLinkFor("/resort/killington")).toEqual({ href: "/?recent=killington", label: "Map" });
+    expect(backLinkFor("/resort/killington/")).toEqual({ href: "/?recent=killington", label: "Map" });
     expect(backLinkFor("/account/pro")).toEqual({ href: "/account", label: "Account" });
-    expect(backLinkFor("/resort/vail")).toEqual({ href: "/", label: "Map" });
+    expect(backLinkFor("/resort/vail")).toEqual({ href: "/?recent=vail", label: "Map" });
     expect(backLinkFor("/near/nyc")).toEqual({ href: "/", label: "Map" });
     expect(backLinkFor("/privacy")).toEqual({ href: "/", label: "Map" });
   });

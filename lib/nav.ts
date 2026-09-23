@@ -93,6 +93,11 @@ export function backLinkFor(pathname: string): BackLink {
   if (pathname.startsWith("/trip-templates/")) return { href: "/trip-templates", label: "Trip ideas" };
   if (pathname.startsWith("/trip/") && !pathname.startsWith("/trip/share")) return { href: "/trips", label: "Trips" };
   if (pathname.startsWith("/account/")) return { href: "/account", label: "Account" };
+  // Resort pages hand the slug back as ?recent=<slug> so the map rings the
+  // pin the user just looked at (Saitarn 2026-05-23: the highlight must
+  // survive leaving the resort page).
+  const resort = pathname.match(/^\/resort\/([^/?#]+)/);
+  if (resort) return { href: `/?recent=${encodeURIComponent(decodeURIComponent(resort[1]))}`, label: "Map" };
   return { href: "/", label: "Map" };
 }
 

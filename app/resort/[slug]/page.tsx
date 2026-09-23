@@ -830,24 +830,11 @@ export default async function ResortPage({
           }}
         />
 
-        {/* Top bar — back link + plan + compare + favorite.
-            The Map pill stays (for now) even though the AppShell bar
-            also links to the map: it carries the slug back as
-            ?recent=<slug> so the map page promotes it into the
-            recentlyViewedId slot and paints the gold ring on the pin the
-            user just visited (Saitarn 2026-05-23 "พอออกมายังไม่เห็นมีไฮไลท์เลย").
-            lib/nav.ts backLinkFor() returns a plain "/" for /resort/*, so
-            the shell link alone would drop that highlight. Once
-            backLinkFor returns /?recent=<slug> for resort pages, this
-            pill can go. */}
-        <div className="relative z-10 mx-auto flex max-w-5xl items-center justify-between px-4 py-4 sm:px-6">
-          <Link
-            href={`/?recent=${encodeURIComponent(resort.slug)}`}
-            className="inline-flex h-11 items-center gap-1 rounded-full bg-white/95 px-3 text-xs font-semibold text-wn-navy shadow-wn-md backdrop-blur-sm transition hover:bg-white sm:h-9"
-          >
-            <Icon name="arrow-left" className="h-4 w-4" />
-            Map
-          </Link>
+        {/* Hero actions — plan + compare + favorite. The way back to the
+            map is the AppShell bar: lib/nav.ts backLinkFor() returns
+            /?recent=<slug> for resort pages, so the map still rings the
+            pin the user just visited (Saitarn 2026-05-23). */}
+        <div className="relative z-10 mx-auto flex max-w-5xl items-center justify-end px-4 py-4 sm:px-6">
           <div className="flex items-center gap-2">
             {/* Opens the planner with this resort as day 1, so the page
                 is a doorway into a trip rather than a dead end (audit
