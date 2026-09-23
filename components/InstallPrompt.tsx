@@ -14,19 +14,22 @@
 //      Safari / Chrome" (x-safari-https:// on iOS, intent:// on Android)
 //      and a copy-link fallback that lands on /get.
 //   D. Already installed (display-mode standalone) → renders nothing.
+//   Desktop browsers with no install at all (Firefox, Safari on Mac
+//   before 17) → no nudge, no /account row; /get says so plainly.
 //
 // Entry points exported from this file:
 //   <InstallPrompt />  — mounted once in the root layout. Owns the
-//                        "second visit" nudge (top toast, at most once per
-//                        7 days, never on /login, auth, shared trip/list
-//                        links, /get or /offline) and the installed toast.
+//                        "second visit" nudge (bottom pill, at most once
+//                        per 7 days, never on /login, auth, shared
+//                        trip/list links, /get or /offline.html) and the
+//                        installed toast.
 //   <InstallCard />    — the hero card on /get.
 //   <InstallRow />     — the "Install Wynla" row on /account.
 // Every entry point opens the same <InstallSheet />.
 
 import { useCallback, useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useFocusTrap } from "@/lib/useFocusTrap";
 
 // ---------------------------------------------------------------------
@@ -62,6 +65,15 @@ export type InstallInfo = {
   isAndroid: boolean;
   /** In-app browsers only: the host app's name for copy. */
   inAppName: string;
+  /**
+   * False when this browser cannot install a web app at all (desktop
+   * Firefox, desktop Safari before 17). The nudge and the /account row
+   * stay hidden rather than promising an "Install app" menu item that
+   * does not exist; /get explains instead.
+   */
+  canInstall: boolean;
+  /** Safari 17+ on macOS: installs via File > Add to Dock, nothing else. */
+  macSafariDock: boolean;
 };
 
 const IN_APP_PATTERNS: Array<[RegExp, string]> = [
@@ -94,6 +106,8 @@ export function detectInstallPlatform(): InstallInfo {
     isIpad: false,
     isAndroid: false,
     inAppName: "",
+    canInstall: false,
+    macSafariDock: false,
   };
   if (typeof window === "undefined") return base;
   const ua = navigator.userAgent;
@@ -102,10 +116,10 @@ export function detectInstallPlatform(): InstallInfo {
   const isIos = isIpad || /iPhone|iPod/.test(ua);
   const isAndroid = /Android/i.test(ua);
   const iosMajor = Number((ua.match(/OS (\d+)_/) ?? [])[1] ?? 0);
-  const info: InstallInfo = { ...base, isIpad, isAndroid, iosMajor };
+  const info: InstallInfo = { ...base, isIpad, isAndroid, iosMajor, canInstall: true };
 
   if (isStandaloneDisplay()) {
-    return { ...info, platform: "installed" };
+    return { ...info, platform: "installed", canInstall: false };
   }
   for (const [re, name] of IN_APP_PATTERNS) {
     if (re.test(ua)) return { ...info, platform: "in-app", inAppName: name };
@@ -126,7 +140,15 @@ export function detectInstallPlatform(): InstallInfo {
   // engine that fires beforeinstallprompt. Firefox desktop has no install
   // at all; Firefox Android + Samsung 27+ install from their own menu.
   const isChromium = /Chrome\/|CriOS|Chromium\/|EdgA\/|Edg\//.test(ua) && !/OPR\/|Opera/.test(ua);
-  return { ...info, platform: isChromium ? "chromium" : "other" };
+  if (isChromium) return { ...info, platform: "chromium" };
+  if (isAndroid) return { ...info, platform: "other" }; // Firefox / Samsung 27+: menu install
+  // Desktop, non-Chromium. Safari 17+ on macOS has File > Add to Dock;
+  // everything else (Firefox, older Safari) cannot install a web app.
+  const macSafariDock =
+    /Macintosh/.test(ua) &&
+    /Safari\//.test(ua) &&
+    Number((ua.match(/Version\/(\d+)/) ?? [])[1] ?? 0) >= 17;
+  return { ...info, platform: "other", canInstall: macSafariDock, macSafariDock };
 }
 
 // ---------------------------------------------------------------------
@@ -380,6 +402,20 @@ function iosSteps(info: InstallInfo): React.ReactNode {
 }
 
 function genericSteps(info: InstallInfo): React.ReactNode {
+  if (info.macSafariDock) {
+    return (
+      <ol className="space-y-3">
+        <Step n={1}>
+          In the Safari menu bar, choose <b className="font-semibold">File</b> &rsaquo;{" "}
+          <b className="font-semibold">Add to Dock</b>.
+        </Step>
+        <Step n={2} icon={<PlusSquareGlyph />}>
+          Confirm the name and click <b className="font-semibold">Add</b>. Wynla opens from the
+          Dock and Launchpad from then on.
+        </Step>
+      </ol>
+    );
+  }
   return (
     <ol className="space-y-3">
       <Step n={1}>
@@ -584,7 +620,9 @@ function InstallButton({
       ? `Open outside ${info.inAppName}`
       : canPromptNatively
         ? "Install Wynla"
-        : "Add to home screen");
+        : info.macSafariDock
+          ? "Add to Dock"
+          : "Add to home screen");
   return (
     <button
       type="button"
@@ -592,7 +630,8 @@ function InstallButton({
       onClick={async () => {
         // Same tap for both paths: the OS dialog must run inside the user
         // gesture, and if Chromium never handed us the event (criteria
-        // unmet, Samsung 27+, Firefox) the guide is the honest fallback.
+        // unmet, Samsung 27+, Firefox Android) the guide is the honest
+        // fallback.
         if (canPromptNatively && (await onNative())) return;
         onGuide();
       }}
@@ -623,7 +662,7 @@ export function InstallCard({
   // Chromium needs a real tap for prompt(), so only the manual guides
   // auto-open. Deferred one tick so the platform detection has settled.
   useEffect(() => {
-    if (!autoOpenGuide || !info) return;
+    if (!autoOpenGuide || !info || !info.canInstall) return;
     if (info.platform === "ios" || info.platform === "other") {
       const t = window.setTimeout(() => setSheet(true), 400);
       return () => window.clearTimeout(t);
@@ -634,6 +673,20 @@ export function InstallCard({
     return <div className="h-40 animate-pulse rounded-2xl bg-white/60" aria-hidden="true" />;
   }
   if (dismissed) return null;
+
+  if (!info.canInstall && info.platform !== "installed" && !installed) {
+    return (
+      <section className="rounded-2xl border border-wn-charcoal/10 bg-white p-5 shadow-sm">
+        <h2 className="text-base font-bold text-wn-navy">
+          Install isn&rsquo;t available in this browser
+        </h2>
+        <p className="mt-1 text-sm text-wn-charcoal/70">
+          Open wynla.app in Chrome or Edge on this computer, or in Safari or Chrome on your phone,
+          and the install button appears here.
+        </p>
+      </section>
+    );
+  }
 
   if (info.platform === "installed" || installed) {
     return (
@@ -663,10 +716,12 @@ export function InstallCard({
             {info.platform === "in-app"
               ? "Apps can't be installed from here. One tap opens Wynla in your real browser."
               : info.platform === "ios"
-                ? "Two taps in Safari. No App Store."
+                ? `Two taps in ${info.iosBrowser === "safari" ? "Safari" : "your browser"}. No App Store.`
                 : canPromptNatively
                   ? "One tap. No app store."
-                  : "A couple of taps in your browser menu."}
+                  : info.macSafariDock
+                    ? "Two clicks in Safari. No App Store."
+                    : "A couple of taps in your browser menu."}
           </p>
         </div>
         <button
@@ -701,7 +756,7 @@ export function InstallRow() {
   const { info, canPromptNatively, installed, prompting, promptNative } = useInstall();
   const [sheet, setSheet] = useState(false);
   const closeSheet = useCallback(() => setSheet(false), []);
-  if (!info || info.platform === "installed" || installed) return null;
+  if (!info || !info.canInstall || installed) return null;
   return (
     <li>
       <InstallButton
@@ -729,7 +784,7 @@ const NUDGE_INTERVAL_MS = 7 * 24 * 60 * 60 * 1000;
 const NUDGE_MIN_VISITS = 2;
 // Routes where an install nudge would get in the way or make no sense:
 // sign-in, auth callbacks, shared trip / list links (first-time visitors
-// following a friend's link), /get (has its own card) and /offline.
+// following a friend's link), /get (has its own card) and /offline.html.
 const NUDGE_BLOCKED_PREFIXES = ["/login", "/auth", "/trip/", "/lists/", "/get", "/offline"];
 
 function nudgeAllowedOn(pathname: string): boolean {
@@ -764,7 +819,6 @@ function markNudged() {
 
 export default function InstallPrompt() {
   const pathname = usePathname();
-  const router = useRouter();
   const { info, canPromptNatively, installed, prompting, promptNative } = useInstall();
   const [nudge, setNudge] = useState(false);
   const [sheet, setSheet] = useState(false);
@@ -775,18 +829,28 @@ export default function InstallPrompt() {
   // Strip the ?source=pwa / ?source=shortcut attribution the manifest adds
   // to launch URLs. It has been recorded by analytics by now; leaving it
   // in the address bar breaks share links and back-navigation on the map.
+  // Native replaceState on purpose: Next keeps usePathname/useSearchParams
+  // in sync with it, whereas router.replace() would re-fetch the
+  // force-dynamic home page (resorts, drive times, weather) a second time
+  // right after first paint on every app launch.
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     if (params.get("source") === "pwa" || params.get("source") === "shortcut") {
       params.delete("source");
       const qs = params.toString();
-      router.replace(`${window.location.pathname}${qs ? `?${qs}` : ""}`, { scroll: false });
+      window.history.replaceState(
+        window.history.state,
+        "",
+        `${window.location.pathname}${qs ? `?${qs}` : ""}${window.location.hash}`,
+      );
     }
-  }, [router]);
+  }, []);
 
   const nudgeAllowed = nudgeAllowedOn(pathname);
   useEffect(() => {
-    if (!info || info.platform === "installed" || !nudgeAllowed) return;
+    // Mac Safari's File > Add to Dock is real but niche; it stays on /get
+    // and /account rather than interrupting a desktop session.
+    if (!info || !info.canInstall || info.macSafariDock || !nudgeAllowed) return;
     if (!recordVisitAndCheckNudge()) return;
     // Show after the page has had a moment to become useful, per the
     // "promote install after engagement, not on load" guidance.
@@ -800,7 +864,8 @@ export default function InstallPrompt() {
   if (!info) return null;
 
   const onMap = pathname === "/";
-  const showNudge = nudge && nudgeAllowed && !installed && info.platform !== "installed";
+  const showNudge = nudge && nudgeAllowed && !installed && info.canInstall;
+  const onPhone = info.isAndroid || info.platform === "ios" || info.platform === "in-app";
 
   return (
     <>
@@ -812,14 +877,18 @@ export default function InstallPrompt() {
           role="region"
           aria-label="Install Wynla"
           className="pointer-events-none fixed inset-x-0 z-[70] flex justify-center px-3"
-          // The map's search + filter row occupies the first 56px under
-          // the status bar; everywhere else the toast can hug the top.
-          style={{ top: `calc(env(safe-area-inset-top, 0px) + ${onMap ? 68 : 12}px)` }}
+          // Bottom pill: that is the thumb zone on a phone. The map keeps
+          // its feedback / compare / location pills in the first ~60px
+          // above the home indicator, so the nudge sits above that band;
+          // everywhere else it hugs the bottom edge.
+          style={{ bottom: `calc(env(safe-area-inset-bottom, 0px) + ${onMap ? 72 : 16}px)` }}
         >
           <div className="pointer-events-auto flex w-full max-w-[480px] items-center gap-3 rounded-2xl bg-wn-navy px-3 py-2.5 text-white shadow-lg shadow-black/25 ring-1 ring-white/10">
             <Image src="/icon-192.png" alt="" width={36} height={36} className="h-9 w-9 rounded-lg" />
             <p className="flex-1 text-[12.5px] leading-tight">
-              <span className="font-semibold">Add Wynla to your home screen</span>
+              <span className="font-semibold">
+                {onPhone ? "Add Wynla to your home screen" : "Install Wynla as an app"}
+              </span>
               <span className="block text-white/75">
                 {info.platform === "in-app"
                   ? `Open outside ${info.inAppName} to install`

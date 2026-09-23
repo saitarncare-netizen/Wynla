@@ -59,6 +59,12 @@ body.route-map > footer {
 body:not(.route-map):not(:has([data-route="map"])) > #main-content {
   padding-top: env(safe-area-inset-top, 0px);
 }
+/* Every page's <main> is min-h-dvh; without this the padded wrapper is
+   viewport + inset tall and short pages (/login, /get) rubber-band by a
+   few pixels in the installed app. */
+body:not(.route-map):not(:has([data-route="map"])) > #main-content > main {
+  min-height: calc(100dvh - env(safe-area-inset-top, 0px));
+}
 
 body {
   background: var(--background);

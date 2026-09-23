@@ -6,9 +6,12 @@
 //      one in Chrome 108/112, the prompt did not), so the fetch handler
 //      below is what makes the one-tap Install button possible at all.
 //   2. Offline fallback: navigations are network-first and fall back to
-//      the precached /offline page. HTML is never cached — most routes
-//      are personalised (favorites, trips, account) and a cached copy
-//      would leak one user's page to the next person on a shared device.
+//      the precached /offline.html. That file is static with everything
+//      inline (a Next route would need JS chunks that are never cached
+//      the first time someone goes offline). HTML is otherwise never
+//      cached — most routes are personalised (favorites, trips, account)
+//      and a cached copy would leak one user's page to the next person
+//      on a shared device.
 //   3. Static asset caching: /_next/static/* is content-hashed and
 //      immutable, so it is cache-first; icons, manifest and fonts too.
 //   4. Web Push receive + click, plus re-subscribing when the push
@@ -18,7 +21,7 @@
 // activate() deletes every cache that does not carry the current name,
 // and PwaRegistrar reloads the page once the new worker takes control.
 
-const VERSION = "2026-09-23.1";
+const VERSION = "2026-09-23.2";
 const PRECACHE = `wynla-precache-${VERSION}`;
 const RUNTIME = `wynla-runtime-${VERSION}`;
 // Small key/value store for config the page hands us (VAPID public key).
@@ -26,8 +29,10 @@ const RUNTIME = `wynla-runtime-${VERSION}`;
 // and plain variables do not survive that; the name has no version so
 // it persists across SW updates.
 const CONFIG = "wynla-config";
-const OFFLINE_URL = "/offline";
+const OFFLINE_URL = "/offline.html";
 
+// /icon-192.png is the one asset offline.html references; the manifest
+// and the other icons are what the OS asks for right after install.
 const PRECACHE_URLS = [
   OFFLINE_URL,
   "/manifest.json",
@@ -42,8 +47,8 @@ self.addEventListener("install", (event) => {
     caches
       .open(PRECACHE)
       .then((cache) =>
-        // `reload` bypasses the HTTP cache so a stale /offline from a
-        // previous deploy is never precached into the new version.
+        // `reload` bypasses the HTTP cache so a stale offline.html from
+        // a previous deploy is never precached into the new version.
         cache.addAll(PRECACHE_URLS.map((u) => new Request(u, { cache: "reload" }))),
       )
       // Activate immediately; PwaRegistrar handles the single reload.
@@ -78,11 +83,13 @@ function isStaticAsset(url) {
 }
 
 async function cacheFirst(request) {
-  const cache = await caches.open(RUNTIME);
-  const hit = await cache.match(request);
+  // caches.match() searches every cache, so the icons and manifest put in
+  // PRECACHE at install are served from there; only new hits go to RUNTIME.
+  const hit = await caches.match(request);
   if (hit) return hit;
   const response = await fetch(request);
   if (response.ok) {
+    const cache = await caches.open(RUNTIME);
     cache.put(request, response.clone());
   }
   return response;
@@ -221,12 +228,22 @@ self.addEventListener("pushsubscriptionchange", (event) => {
           applicationServerKey: key,
         });
       }
-      await fetch("/api/push/subscribe", {
+      const resp = await fetch("/api/push/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify({ subscription: sub.toJSON(), userAgent: "sw:pushsubscriptionchange" }),
       });
+      // Retire the expired endpoint once the replacement is stored, or the
+      // snow-alert cron keeps pushing to a dead endpoint (410) until someone
+      // cleans the table by hand. Same-endpoint rotations skip this.
+      const old = event.oldSubscription;
+      if (resp.ok && old && old.endpoint && old.endpoint !== sub.endpoint) {
+        await fetch(`/api/push/subscribe?endpoint=${encodeURIComponent(old.endpoint)}`, {
+          method: "DELETE",
+          credentials: "include",
+        });
+      }
     })(),
   );
 });
