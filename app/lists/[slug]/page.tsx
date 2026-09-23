@@ -4,6 +4,7 @@
 // active in the DB it's silently skipped — the page still renders.
 
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { getList, LISTS } from "@/lib/lists";
@@ -135,6 +136,27 @@ export default async function ListPage({
             .
           </p>
         </section>
+
+        {/* Next step — the /near and /go pages behind a "from a city"
+            list, so the curated ranking leads to the drive-sorted list and
+            the Saturday answer (content-seo-27). Data lives on the list. */}
+        {list.related && list.related.length > 0 && (
+          <Section id="list-related" title="Next step">
+            <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+              {list.related.map((r) => (
+                <li key={r.href}>
+                  <Link
+                    href={r.href}
+                    className="flex min-h-11 items-center gap-2 rounded-wn-md border border-wn-line bg-white px-4 py-2 text-sm font-semibold text-wn-navy shadow-wn-sm underline-offset-2 transition hover:border-wn-navy/40 hover:underline"
+                  >
+                    {r.label}
+                    <Icon name="arrow-right" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </Section>
+        )}
 
         <Card padding="lg" className="text-center">
           <h2 className="text-lg font-bold text-wn-navy">Plan a trip around this list</h2>

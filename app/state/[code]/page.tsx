@@ -17,35 +17,52 @@ import {
   isStateCodeWithResorts,
   US_STATES,
 } from "@/lib/usStates";
+import Link from "next/link";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Chip from "@/components/ui/Chip";
 import PageHeader from "@/components/ui/PageHeader";
 import Section from "@/components/ui/Section";
 import Icon from "@/components/icons/Icon";
+import {
+  deriveResortStatus,
+  resolveSeasonInfo,
+  type ResortStatusSource,
+  type SeasonTextSource,
+} from "@/lib/seasonDates";
+import { centroidOf, formatDriveRounded, nearCityName, nearPath, nearestCities } from "@/lib/near";
+import { ESTIMATE_MARK } from "@/lib/origins";
 
 // ISR — state pages list resorts in a single state and rarely change.
 // Hourly revalidate is plenty.
 export const revalidate = 3600;
 
-type Resort = {
-  id: number;
-  slug: string;
-  name: string;
-  state: string;
-  region: string | null;
-  passes: string[];
-  vertical_drop: number | null;
-  total_trails: number | null;
-  total_acres: number | null;
-};
+// Status + season columns feed lib/seasonDates.deriveResortStatus, the
+// same derivation the resort page and the map panel use, so the opening
+// date on a card here can never disagree with the resort page. Coordinates
+// feed the "Nearest launch city" links (centroid of the state's resorts).
+type Resort = ResortStatusSource &
+  SeasonTextSource & {
+    id: number;
+    slug: string;
+    name: string;
+    state: string;
+    region: string | null;
+    latitude: number | string | null;
+    longitude: number | string | null;
+    passes: string[];
+    vertical_drop: number | null;
+    total_trails: number | null;
+    total_acres: number | null;
+  };
+
+const STATE_RESORT_COLS =
+  "id, slug, name, state, region, latitude, longitude, passes, vertical_drop, total_trails, total_acres, season_open_text, season_close_text, typical_season_start, typical_season_end, operating_status, currently_open, snow_report_status, snow_report_updated_at, lifts_open_today, total_lifts, trails_open_today, season_end_date";
 
 async function getResortsForState(code: string): Promise<Resort[] | null> {
   const { data, error } = await supabase
     .from("resorts")
-    .select(
-      "id, slug, name, state, region, passes, vertical_drop, total_trails, total_acres",
-    )
+    .select(STATE_RESORT_COLS)
     .eq("active", true)
     .eq("state", code)
     .order("vertical_drop", { ascending: false, nullsFirst: false });
@@ -108,6 +125,23 @@ export default async function StatePage({
   const avgVertical =
     verticalCount > 0 ? Math.round(totalVertical / verticalCount) : 0;
 
+  // Opening-date labels: one derivation per card, same inputs as the
+  // resort page. Only the "opens" / "open" / "off-season" family is shown
+  // here; the card is a directory entry, not a status board.
+  const now = new Date();
+  const statusBySlug = new Map(
+    resorts.map((r) => {
+      const season = resolveSeasonInfo(r, now);
+      return [r.slug, { status: deriveResortStatus(r, season, now), projected: season.openProjected }] as const;
+    }),
+  );
+
+  // Nearest launch city: the drive-time origin most of this state's
+  // visitors start from, measured to the centroid of its resorts. Always
+  // an estimate (≈), so it is labelled as one.
+  const centroid = centroidOf(resorts);
+  const nearby = centroid ? nearestCities(centroid.lat, centroid.lon, 3) : [];
+
   // JSON-LD ItemList — feeds Google rich-results / AI summarization with
   // an ordered list of the state's resorts. listOrder matches our visual
   // sort (vertical_drop desc).
@@ -162,10 +196,46 @@ export default async function StatePage({
         <Section title="All resorts" description="Biggest vertical drop first.">
           <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
             {resorts.map((r) => (
-              <ResortCard key={r.id} resort={r} />
+              <ResortCard key={r.id} resort={r} opening={statusBySlug.get(r.slug) ?? null} />
             ))}
           </div>
         </Section>
+
+        {/* Nearest cities — the crawl path from a state directory to the
+            "near <City>" list; launch cities also get the Saturday link. */}
+        {nearby.length > 0 && (
+          <Section id="nearest-city" title="Nearest city">
+            <ul className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+              {nearby.map((c) => (
+                <li key={c.city.code}>
+                  <Card className="h-full">
+                    <Link
+                      href={nearPath(c.city.code)}
+                      className="flex min-h-11 flex-col justify-center text-sm font-bold text-wn-navy underline-offset-2 hover:underline"
+                    >
+                      <span className="inline-flex items-center gap-1">
+                        Ski resorts near {nearCityName(c.city)}
+                        <Icon name="arrow-right" />
+                      </span>
+                      <span className="mt-0.5 text-xs font-normal text-wn-muted">
+                        {ESTIMATE_MARK} {formatDriveRounded(c.seconds)} to the middle of {stateName}, estimated
+                      </span>
+                    </Link>
+                    {c.isLaunch && (
+                      <Link
+                        href={`/go?city=${c.city.code}`}
+                        className="mt-1 inline-flex min-h-11 items-center gap-1 text-xs font-semibold text-wn-navy underline-offset-2 hover:underline"
+                      >
+                        This Saturday&apos;s picks from {c.city.short}
+                        <Icon name="arrow-right" />
+                      </Link>
+                    )}
+                  </Card>
+                </li>
+              ))}
+            </ul>
+          </Section>
+        )}
 
         <Card padding="lg" className="text-center">
           <h2 className="text-lg font-bold text-wn-navy text-balance">Stringing together a multi-stop {stateName} trip?</h2>
@@ -203,9 +273,22 @@ function Stat({ label, value }: { label: string; value: string }) {
   );
 }
 
-function ResortCard({ resort }: { resort: Resort }) {
+function ResortCard({
+  resort,
+  opening,
+}: {
+  resort: Resort;
+  opening: { status: ReturnType<typeof deriveResortStatus>; projected: boolean } | null;
+}) {
   const primary = primaryPass(resort.passes);
   const accent = passColor(primary);
+  // "Opens Dec 4 · projected" when the date is a third-party projection
+  // (the 2026-09-23 backfill marks those), plain otherwise. Nothing is
+  // shown for "Check resort", which would only add noise to a directory.
+  const openingLabel =
+    opening && opening.status.kind !== "unknown"
+      ? `${opening.status.label}${opening.projected && opening.status.kind === "opens" ? " · projected" : ""}`
+      : null;
   return (
     <Card href={`/resort/${resort.slug}`} accent={accent} className="h-full">
       <h3 className="text-sm font-bold leading-tight text-wn-navy sm:text-base">{resort.name}</h3>
@@ -213,6 +296,7 @@ function ResortCard({ resort }: { resort: Resort }) {
         {resort.state}
         {resort.region ? " · " + resort.region : ""}
       </p>
+      {openingLabel && <p className="mt-1 text-xs font-semibold text-wn-navy">{openingLabel}</p>}
 
       <dl className="mt-3 grid grid-cols-3 gap-1.5 text-xs">
         <div>
