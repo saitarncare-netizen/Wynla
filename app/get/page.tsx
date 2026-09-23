@@ -85,6 +85,20 @@ export default async function GetPage({
         </section>
 
         <section className="rounded-2xl border border-wn-charcoal/10 bg-white p-5 shadow-sm">
+          <h2 className="text-base font-bold text-wn-navy">Where to ride Saturday</h2>
+          <p className="mt-2 text-sm text-wn-charcoal/70">
+            Pick your pass and your city and get the three best mountains for this
+            Saturday, with the snow surface and the drive. No sign-in needed.
+          </p>
+          <Link
+            href="/go"
+            className="mt-3 inline-flex min-h-11 items-center rounded-lg bg-wn-navy px-4 text-sm font-semibold text-white hover:bg-wn-navy/90"
+          >
+            Find my Saturday
+          </Link>
+        </section>
+
+        <section className="rounded-2xl border border-wn-charcoal/10 bg-white p-5 shadow-sm">
           <h2 className="text-base font-bold text-wn-navy">Good to know</h2>
           <dl className="mt-3 space-y-3 text-sm">
             <div>

@@ -11,12 +11,61 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { haversineMeters, estimateDriveSeconds } from "@/lib/distance";
-import { formatDriveTime } from "@/lib/origins";
+import { formatDriveTimeLabel } from "@/lib/origins";
 import { PASS_COLORS, PASS_KEYS, PASS_LABELS } from "@/lib/passColors";
 import { isGlobalOffSeasonNow } from "@/lib/seasonDates";
-// isGlobalOffSeasonNow no longer needed — fresh-snow chip removed
-// from picker in Stage 33 final cleanup.
+import { US_STATES } from "@/lib/usStates";
 import type { Resort } from "./MapPage";
+
+// Sheet slide-in duration (matches the slideUp keyframe used by the
+// drawers). Autofocus waits for it so the iOS keyboard does not fight
+// the animation and the caret lands in a settled input.
+const SHEET_ANIMATION_MS = 240;
+
+// iOS Safari raises the keyboard only for a focus() that runs
+// synchronously inside the user's tap. The picker's input does not
+// exist yet at that moment (the sheet mounts on the next render), so
+// the tap handler focuses this tiny off-screen input instead; once the
+// keyboard is up, iOS lets focus move to another input programmatically
+// without dropping it. ResortPicker hands focus to the real input after
+// the sheet animation and removes the primer. Desktop and Android do
+// not need this and skip it (they honour a deferred focus).
+const KEYBOARD_PRIMER_ID = "wynla-search-keyboard-primer";
+
+function isMobileViewport(): boolean {
+  return typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches;
+}
+
+/** Call synchronously from the tap that opens the header search. */
+export function primeSearchKeyboard(): void {
+  if (typeof document === "undefined" || !isMobileViewport()) return;
+  let primer = document.getElementById(KEYBOARD_PRIMER_ID) as HTMLInputElement | null;
+  if (!primer) {
+    primer = document.createElement("input");
+    primer.id = KEYBOARD_PRIMER_ID;
+    primer.type = "search";
+    primer.setAttribute("aria-hidden", "true");
+    primer.tabIndex = -1;
+    // Visible to the focus system (not display:none) but not to the eye;
+    // 16px keeps iOS from zooming the viewport on focus.
+    primer.style.cssText =
+      "position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;border:0;padding:0;font-size:16px;pointer-events:none;";
+    document.body.appendChild(primer);
+  }
+  primer.focus({ preventScroll: true });
+}
+
+function releaseSearchKeyboardPrimer(): void {
+  if (typeof document === "undefined") return;
+  document.getElementById(KEYBOARD_PRIMER_ID)?.remove();
+}
+
+// Search normaliser: lower-case, strip everything but letters and
+// digits, so "Blue wood" matches "Bluewood", "park-city" matches
+// "Park City", and apostrophes / ampersands never fail a match.
+function normalize(s: string): string {
+  return s.toLowerCase().replace(/[^a-z0-9]+/g, "");
+}
 
 type Props = {
   open: boolean;
@@ -69,10 +118,15 @@ type Props = {
    *  full filter drawer STACKED on top of the picker so users can
    *  refine size / night / drive without leaving search. */
   onOpenFilters?: () => void;
-  /** Count of currently-active "other" filters (size, night, drive,
-   *  airport). Rendered as a badge on the More filters pill so the
-   *  user can see at a glance what's set without opening the drawer. */
+  /** Count of currently-active filters. Rendered as a badge on the
+   *  Filters pill so the user can see at a glance what's set without
+   *  opening the drawer. */
   activeFilterCount?: number;
+  /** Ids of resorts that pass the map's current filters. When given,
+   *  `allResorts` is the FULL catalog and rows outside this set are
+   *  still searchable but tagged "hidden by filters", with a count in
+   *  the header. Omitted by the trip planner, whose list is its own. */
+  visibleIds?: Set<number>;
 };
 
 type Snap = "collapsed" | "half" | "full";
@@ -130,6 +184,7 @@ export default function ResortPicker({
   onHover,
   onOpenFilters,
   activeFilterCount = 0,
+  visibleIds,
 }: Props) {
   const [query, setQuery] = useState("");
   const [sortBy, setSortBy] = useState<"distance" | "name">("distance");
@@ -179,13 +234,36 @@ export default function ResortPicker({
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (!open) return;
-    // Skip autofocus on mobile — focusing the search input pops the
-    // iOS keyboard, which immediately occludes half the picker. The
-    // user can tap the input themselves when they want to type.
-    if (typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches) return;
-    requestAnimationFrame(() => inputRef.current?.focus());
-  }, [open]);
+    if (!open) {
+      // Closed before the hand-off (or opened without a primer): drop
+      // the primer so a stray focused input cannot keep the keyboard up.
+      releaseSearchKeyboardPrimer();
+      return;
+    }
+    const mobile = isMobileViewport();
+    // Snap-sheet mode (trip planner) keeps the map visible, so popping
+    // the keyboard on open would hide the candidates the user wants to
+    // see. The full-screen header search has no map behind it: there
+    // the user opened it to type, and needing a second tap to start
+    // was the first thing mobile testers hit (audit mobile-ergonomics-12).
+    if (mobile && !fullScreen) return;
+    if (!mobile) {
+      requestAnimationFrame(() => inputRef.current?.focus());
+      return;
+    }
+    // Mobile: the keyboard is already up if the opener called
+    // primeSearchKeyboard() in its tap handler; moving focus here keeps
+    // it. The wait lets the slide-in finish so the keyboard animation
+    // does not stack on the sheet animation.
+    const t = setTimeout(() => {
+      inputRef.current?.focus({ preventScroll: true });
+      releaseSearchKeyboardPrimer();
+    }, SHEET_ANIMATION_MS);
+    return () => {
+      clearTimeout(t);
+      releaseSearchKeyboardPrimer();
+    };
+  }, [open, fullScreen]);
 
   // ESC to close.
   useEffect(() => {
@@ -205,20 +283,30 @@ export default function ResortPicker({
         const lat = Number(r.latitude);
         const lng = Number(r.longitude);
         const meters = haversineMeters(fromPoint.lat, fromPoint.lng, lat, lng);
+        const stateName = US_STATES[r.state] ?? "";
         return {
+          id: r.id,
           slug: r.slug,
           name: r.name,
           state: r.state,
+          // Name, state code, full state name ("Vermont"), town and
+          // region all count as a match (audit map-core-15: name +
+          // state code only meant "Stowe VT" worked but "Vermont" and
+          // "Ludlow" did not).
+          haystack: normalize(
+            [r.name, r.state, stateName, r.city ?? "", r.region ?? ""].join(" "),
+          ),
           passes: r.passes ?? [],
           driveSeconds: estimateDriveSeconds(meters),
           alreadyInTrip: pickedSet.has(r.slug),
+          hiddenByFilters: visibleIds ? !visibleIds.has(r.id) : false,
           // Stage 33 — surface live snow data on the row so the user
           // can spot powder destinations without opening each resort.
           snowNew24h: r.snow_new_24h_in,
           currentlyOpen: r.currently_open,
         };
       });
-  }, [allResorts, fromPoint, alreadyPicked]);
+  }, [allResorts, fromPoint, alreadyPicked, visibleIds]);
 
   // Pass counts inside the picker — used for chip badges so the user
   // can see "12 Ikon · 18 Epic" before clicking. Counts respect the
@@ -235,25 +323,17 @@ export default function ResortPicker({
   }, [enriched]);
 
   const visible = useMemo(() => {
-    // Stage 33 — typo-tolerant search.
-    // Strip non-alphanumerics from BOTH sides so "Blue wood" matches
-    // "Bluewood", "park-city" matches "Park City", and apostrophes /
-    // ampersands don't fail the match. Then split into tokens and
-    // require ALL tokens to be substring-present (any order).
-    const normalize = (s: string) =>
-      s.toLowerCase().replace(/[^a-z0-9]+/g, "");
+    // Typo-tolerant search: split the query into tokens and require
+    // ALL tokens to be substring-present in the normalised haystack
+    // (any order).
     const tokens = query
       .trim()
-      .toLowerCase()
       .split(/\s+/)
       .map((t) => normalize(t))
       .filter((t) => t.length > 0);
     let list = enriched;
     if (tokens.length > 0) {
-      list = list.filter((r) => {
-        const haystack = normalize(r.name + " " + r.state);
-        return tokens.every((t) => haystack.includes(t));
-      });
+      list = list.filter((r) => tokens.every((t) => r.haystack.includes(t)));
     }
     if (activePasses.length > 0) {
       const filterSet = new Set(activePasses);
@@ -265,6 +345,14 @@ export default function ResortPicker({
     });
     return list;
   }, [enriched, query, sortBy, activePasses]);
+
+  // How many of the matching rows the map's filters currently hide.
+  // Surfaces as a note so "No resorts match" never lies about a resort
+  // that exists but is filtered out.
+  const hiddenCount = useMemo(
+    () => (visibleIds ? visible.filter((r) => r.hiddenByFilters).length : 0),
+    [visible, visibleIds],
+  );
 
   function togglePassChip(key: string) {
     const next = activePasses.includes(key)
@@ -415,7 +503,11 @@ export default function ResortPicker({
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => {
-            if (isMobile && snap === "collapsed") setSnap("half");
+            // The keyboard takes the lower ~40% of the viewport, so a
+            // half-height sheet anchored to the bottom ends up almost
+            // entirely behind it (audit mobile-ergonomics-13). Go to
+            // full while typing; the user can drag it back down.
+            if (isMobile && !fullScreen && snap !== "full") setSnap("full");
           }}
           // Stage 33 — explicit 16px font-size so iOS Safari doesn't
           // auto-zoom the viewport when the field is focused. Anything
@@ -473,11 +565,16 @@ export default function ResortPicker({
           </div>
         )}
 
-        <div className="mt-1.5 flex items-center gap-1 text-[10px]">
+        {hiddenCount > 0 && (
+          <p className="mt-1.5 text-[11px] leading-snug text-wn-charcoal/65">
+            {hiddenCount} hidden by filters — still listed below, tap to open.
+          </p>
+        )}
+        <div className="mt-1 flex items-center gap-1 text-[11px]">
           <button
             type="button"
             onClick={() => setSortBy("distance")}
-            className={`rounded px-2 py-0.5 font-semibold transition ${
+            className={`inline-flex min-h-[44px] items-center rounded px-2.5 font-semibold transition md:min-h-0 md:py-0.5 ${
               sortBy === "distance"
                 ? "bg-wn-navy text-white"
                 : "bg-wn-charcoal/5 text-wn-charcoal/70 hover:bg-wn-charcoal/10"
@@ -488,7 +585,7 @@ export default function ResortPicker({
           <button
             type="button"
             onClick={() => setSortBy("name")}
-            className={`rounded px-2 py-0.5 font-semibold transition ${
+            className={`inline-flex min-h-[44px] items-center rounded px-2.5 font-semibold transition md:min-h-0 md:py-0.5 ${
               sortBy === "name"
                 ? "bg-wn-navy text-white"
                 : "bg-wn-charcoal/5 text-wn-charcoal/70 hover:bg-wn-charcoal/10"
@@ -504,7 +601,7 @@ export default function ResortPicker({
               type="button"
               onClick={onOpenFilters}
               aria-label="Open more filters"
-              className="inline-flex items-center gap-1.5 rounded-full border-2 border-wn-navy bg-wn-navy/5 px-2.5 py-0.5 text-[11px] font-bold text-wn-navy transition hover:bg-wn-navy/10"
+              className="inline-flex min-h-[44px] items-center gap-1.5 rounded-full border-2 border-wn-navy bg-wn-navy/5 px-3 text-[11px] font-bold text-wn-navy transition hover:bg-wn-navy/10 md:min-h-0 md:px-2.5 md:py-0.5"
             >
               <svg
                 aria-hidden="true"
@@ -536,7 +633,14 @@ export default function ResortPicker({
         // top/bottom of the list let the touchmove escape to the map
         // canvas and pan it instead.
         className="flex-1 overflow-y-auto overscroll-contain"
-        style={{ touchAction: "pan-y" }}
+        style={{
+          touchAction: "pan-y",
+          // Full-screen mode pins the list to the viewport bottom, so
+          // the last rows scrolled under the iPhone home indicator.
+          paddingBottom: fullScreen
+            ? "calc(env(safe-area-inset-bottom, 0px) + 12px)"
+            : undefined,
+        }}
         onTouchMove={(e) => {
           // Belt-and-suspenders: stop the scroll touchmove from
           // bubbling to Mapbox's document-level listeners.
@@ -545,7 +649,7 @@ export default function ResortPicker({
       >
         {visible.length === 0 && (
           <li className="px-4 py-6 text-center text-xs text-wn-charcoal/55">
-            No resorts match your search.
+            No resorts match your search. Try the town or the state name.
           </li>
         )}
         {visible.map((r) => {
@@ -581,6 +685,14 @@ export default function ResortPicker({
                         in trip
                       </span>
                     )}
+                    {r.hiddenByFilters && !isPending && !r.alreadyInTrip && (
+                      <span
+                        className="ml-auto shrink-0 rounded bg-wn-charcoal/10 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-wn-charcoal/60"
+                        title="A map filter hides this resort. You can still open it."
+                      >
+                        hidden by filters
+                      </span>
+                    )}
                   </div>
                   {/* Live snow indicator. Shows ❄️ amount when a resort
                       has fresh snow > 0; otherwise a small open / limited
@@ -607,8 +719,13 @@ export default function ResortPicker({
                     </div>
                   ) : null}
                 </div>
-                <span className="shrink-0 rounded bg-wn-offwhite px-2 py-0.5 text-[11px] font-semibold text-wn-navy">
-                  ≈ {formatDriveTime(r.driveSeconds)}
+                {/* Estimated: straight-line distance through the
+                    lib/distance model, never a routed time. */}
+                <span
+                  className="shrink-0 rounded bg-wn-offwhite px-2 py-0.5 text-[11px] font-semibold text-wn-navy"
+                  title="Estimated drive time"
+                >
+                  {formatDriveTimeLabel(r.driveSeconds, true)}
                 </span>
               </button>
             </li>
