@@ -52,6 +52,11 @@ const JOBS = {
   }),
   "check-snow-alerts": () => ({ path: "/api/cron/check-snow-alerts", auth: true, timeoutMs: 330_000 }),
   "daily-digest": () => ({ path: "/api/cron/daily-digest", auth: true, timeoutMs: 330_000 }),
+  "thursday-picks": () => ({
+    path: `/api/cron/thursday-picks${flag("force") ? "?force=1" : ""}`,
+    auth: true,
+    timeoutMs: 330_000,
+  }),
   health: () => ({ path: `/api/health${flag("notify") ? "?notify=1" : ""}`, auth: false, timeoutMs: 60_000 }),
   resort: () => {
     const id = args.filter((a) => !a.startsWith("--"))[1];

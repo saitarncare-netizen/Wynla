@@ -6,11 +6,12 @@ import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { passColor, primaryPass, passLabel } from "@/lib/passColors";
+import { textOn } from "@/lib/contrast";
 import { haversineMeters, estimateDriveSeconds } from "@/lib/distance";
 import { formatDriveTime } from "@/lib/origins";
 import TripActions, { StartDateBadge } from "./TripActions";
 import TripNameEditor from "./TripNameEditor";
-import TripShareButton from "./TripShareButton";
+import TripStickyBar from "./TripStickyBar";
 import TripCalendarExport from "@/components/TripCalendarExport";
 import DayPlan, { type NearbyOption } from "./DayPlan";
 import DayResortSwap from "./DayResortSwap";
@@ -333,7 +334,8 @@ export default async function TripPage({
                   };
                 })}
               />
-              <TripShareButton tripId={String(trip.id)} tripName={trip.name ?? fallbackName} />
+              {/* Share lives in the sticky bar below, one instance per
+                  page so two mounts never race to create share tokens. */}
             </div>
           </div>
 
@@ -373,7 +375,9 @@ export default async function TripPage({
         </div>
       </header>
 
-      <div className="mx-auto max-w-3xl px-4 py-6 sm:px-6 sm:py-8">
+      {/* pb-28 keeps the last card and the controls clear of the sticky
+          action bar. */}
+      <div className="mx-auto max-w-3xl px-4 py-6 pb-28 sm:px-6 sm:py-8 sm:pb-28">
         {/* Trip summary tiles — replaces the old terse "total drive"
             line. Three stats so the page has visual weight without an
             image. */}
@@ -470,8 +474,8 @@ export default async function TripPage({
                       {(r.passes ?? []).slice(0, 4).map((p) => (
                         <span
                           key={p}
-                          className="rounded px-1.5 py-0.5 text-[10px] font-semibold text-white"
-                          style={{ backgroundColor: passColor(p) }}
+                          className="rounded px-1.5 py-0.5 text-[10px] font-semibold"
+                          style={{ backgroundColor: passColor(p), color: textOn(passColor(p)) }}
                         >
                           {passLabel(p)}
                         </span>
@@ -529,6 +533,17 @@ export default async function TripPage({
           />
         </section>
       </div>
+
+      {/* Mark day done / Undo / Share, always within reach. */}
+      <TripStickyBar
+        tripId={trip.id}
+        tripName={trip.name ?? fallbackName}
+        isActive={isActive}
+        tripFinished={tripFinished}
+        currentDay={currentDay}
+        lastCompletedDay={lastCompletedDay}
+        totalDays={expandedSlugs.length}
+      />
     </main>
   );
 }

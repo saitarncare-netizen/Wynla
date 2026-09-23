@@ -2,9 +2,11 @@
 //
 // Body: { display_name?: string | null, preferred_origin?: string | null }
 //   - display_name: trimmed; empty string → null; max 60 chars.
-//   - preferred_origin: must be one of the known origin codes
-//     (nyc | boston | philadelphia | hartford) or null. Anything else
-//     is rejected so we don't pollute the column with arbitrary strings.
+//   - preferred_origin: must be one of the city codes in lib/origins.ts
+//     (ORIGINS: every city the map's origin picker, the account default
+//     and /go offer) or null. Anything else is rejected so we don't
+//     pollute the column with arbitrary strings. The map persists each
+//     origin pick here, so the set must cover the whole picker.
 //
 // Auth via the SSR-aware Supabase server client (reads cookie set by
 // /auth/callback). RLS on `profiles` already restricts updates to the
@@ -13,7 +15,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { ORIGINS } from "@/lib/origins";
+import { isValidOriginCode } from "@/lib/origins";
 
 export const runtime = "nodejs";
 
@@ -21,8 +23,6 @@ type PostBody = {
   display_name?: string | null;
   preferred_origin?: string | null;
 };
-
-const ORIGIN_CODES = new Set(ORIGINS.map((o) => o.code));
 
 export async function POST(req: NextRequest) {
   const supabase = await createSupabaseServerClient();
@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
       update.preferred_origin = null;
     } else if (
       typeof body.preferred_origin === "string" &&
-      ORIGIN_CODES.has(body.preferred_origin)
+      isValidOriginCode(body.preferred_origin)
     ) {
       update.preferred_origin = body.preferred_origin;
     } else {

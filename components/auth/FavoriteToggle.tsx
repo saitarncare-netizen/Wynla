@@ -1,11 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
-import { useProStatus } from "@/lib/proClient";
 import { FREE_LIMITS } from "@/lib/tierLimits";
-import UpsellModal from "@/components/UpsellModal";
+import {
+  GUEST_FAVORITES_CHANGE_EVENT,
+  addGuestFavorite,
+  claimGuestToast,
+  isGuestFavorite,
+  removeGuestFavorite,
+} from "@/lib/guestFavorites";
 
 type Props = {
   resortId: number;
@@ -13,30 +17,43 @@ type Props = {
   size?: "sm" | "lg";
 };
 
-// Heart icon — toggles a row in the `favorites` table. Optimistic UI: flip
-// the heart immediately, then revert if the request fails. Signed-out users
-// are routed to /login (with a `next` param so they return here after login).
+// Heart icon. Signed in: toggles a row in the `favorites` table with an
+// optimistic flip that reverts if the request fails. Signed out: toggles
+// the device list in lib/guestFavorites instead of bouncing to /login,
+// with a one-time toast saying where the save lives. GuestFavoritesSync
+// (root layout) merges the device list into the account on sign-in.
 export default function FavoriteToggle({ resortId, size = "sm" }: Props) {
-  const router = useRouter();
   const supabase = createSupabaseBrowserClient();
   const [signedIn, setSignedIn] = useState<boolean | undefined>(undefined);
   const [favorited, setFavorited] = useState(false);
   const [pending, setPending] = useState(false);
   const [favCount, setFavCount] = useState<number | null>(null);
-  const [showUpsell, setShowUpsell] = useState(false);
-  const { isPro, isLoading: proLoading } = useProStatus();
+  // Short status line under the heart: the device toast, a full-list
+  // notice, or a save failure. Cleared on a timer.
+  const [notice, setNotice] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
+
+    const syncGuest = () => {
+      if (!cancelled) setFavorited(isGuestFavorite(resortId));
+    };
 
     supabase.auth.getUser().then(({ data }) => {
       if (cancelled) return;
       const isSignedIn = !!data.user;
       setSignedIn(isSignedIn);
-      if (!isSignedIn) return;
+      if (!isSignedIn) {
+        syncGuest();
+        // Another heart for this resort (panel header + hero) may flip
+        // the device list; keep every instance in step.
+        window.addEventListener(GUEST_FAVORITES_CHANGE_EVENT, syncGuest);
+        window.addEventListener("storage", syncGuest);
+        return;
+      }
 
       // Fetch favorited state for this resort AND total favorites count
-      // in parallel so the Pro gate has the data it needs before tap.
+      // in parallel so the cap check has its data before the first tap.
       const uid = data.user!.id;
       void Promise.all([
         supabase
@@ -58,30 +75,44 @@ export default function FavoriteToggle({ resortId, size = "sm" }: Props) {
 
     return () => {
       cancelled = true;
+      window.removeEventListener(GUEST_FAVORITES_CHANGE_EVENT, syncGuest);
+      window.removeEventListener("storage", syncGuest);
     };
   }, [resortId, supabase]);
 
-  async function toggle() {
-    if (signedIn === false) {
-      // Bounce to login, preserving where to come back to.
-      const here = window.location.pathname + window.location.search;
-      router.push(`/login?next=${encodeURIComponent(here)}`);
+  useEffect(() => {
+    if (!notice) return;
+    const id = window.setTimeout(() => setNotice(null), 4000);
+    return () => window.clearTimeout(id);
+  }, [notice]);
+
+  function toggleGuest() {
+    if (favorited) {
+      removeGuestFavorite(resortId);
+      setFavorited(false);
       return;
     }
-    if (signedIn === undefined || pending) return;
-    // Wait for Pro status + fav count to load before gating, otherwise a
-    // tap in the first ~200ms could misfire (Pro user sees upsell, or a
-    // free-user-at-cap silently slips past). favCount is null until the
-    // initial fetch resolves; treat both as "not ready yet".
-    if (!favorited && (proLoading || favCount === null)) return;
-    // Pro gate: free user adding favorite #6 sees upsell instead.
-    if (
-      !favorited &&
-      !isPro &&
-      favCount !== null &&
-      favCount >= FREE_LIMITS.favorites
-    ) {
-      setShowUpsell(true);
+    const r = addGuestFavorite(resortId);
+    if (r.full) {
+      setNotice("This device's list is full. Sign in to keep saving.");
+      return;
+    }
+    setFavorited(true);
+    if (claimGuestToast()) setNotice("Saved on this device. Sign in to keep them everywhere.");
+  }
+
+  async function toggle() {
+    if (pending) return;
+    if (signedIn === false) {
+      toggleGuest();
+      return;
+    }
+    if (signedIn === undefined) return;
+    // Wait for the count before the first add so a tap in the first
+    // ~200 ms cannot slip past the cap; null means "not loaded yet".
+    if (!favorited && favCount === null) return;
+    if (!favorited && favCount !== null && favCount >= FREE_LIMITS.favorites) {
+      setNotice(`You can save up to ${FREE_LIMITS.favorites} resorts.`);
       return;
     }
     const prev = favorited;
@@ -108,15 +139,18 @@ export default function FavoriteToggle({ resortId, size = "sm" }: Props) {
       }
     } catch {
       setFavorited(prev);
+      setNotice("Could not save. Check your connection and try again.");
     } finally {
       setPending(false);
     }
   }
 
-  const dim = size === "lg" ? "h-10 w-10 text-xl" : "h-9 w-9 text-base";
+  // lg (resort hero) meets the 44 px tap target; sm matches the 36 px
+  // controls it sits beside in the map panel header.
+  const dim = size === "lg" ? "h-11 w-11 text-xl" : "h-9 w-9 text-base";
 
   return (
-    <>
+    <div className="relative inline-flex">
       <button
         type="button"
         onClick={toggle}
@@ -124,13 +158,15 @@ export default function FavoriteToggle({ resortId, size = "sm" }: Props) {
         aria-pressed={favorited}
         title={
           signedIn === false
-            ? "Sign in to save"
+            ? favorited
+              ? "Remove from this device's favorites"
+              : "Save on this device"
             : favorited
               ? "Remove from favorites"
               : "Save to favorites"
         }
         className={[
-          "inline-flex items-center justify-center rounded-full bg-white/95 shadow-md backdrop-blur-sm transition",
+          "inline-flex items-center justify-center rounded-full bg-white/95 shadow-md backdrop-blur-sm transition motion-reduce:transition-none",
           dim,
           favorited ? "text-red-500" : "text-wn-charcoal/60 hover:text-wn-navy",
           pending ? "scale-95" : "",
@@ -138,12 +174,16 @@ export default function FavoriteToggle({ resortId, size = "sm" }: Props) {
       >
         <span aria-hidden="true">{favorited ? "♥" : "♡"}</span>
       </button>
-      <UpsellModal
-        open={showUpsell}
-        onClose={() => setShowUpsell(false)}
-        gate="favorites"
-        detail={`You've saved ${favCount ?? FREE_LIMITS.favorites} resorts on the free tier. Pro lets you save unlimited resorts and organize them in named lists.`}
-      />
-    </>
+      {/* Toast anchored under the heart. role=status so screen readers
+          hear it without stealing focus. */}
+      {notice && (
+        <div
+          role="status"
+          className="absolute right-0 top-full z-30 mt-2 w-56 rounded-lg border border-wn-charcoal/10 bg-wn-navy px-3 py-2 text-left text-[11px] font-medium leading-snug text-white shadow-lg"
+        >
+          {notice}
+        </div>
+      )}
+    </div>
   );
 }

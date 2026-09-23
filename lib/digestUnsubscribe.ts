@@ -47,8 +47,23 @@ export function verifyUnsubscribeToken(token: string | null | undefined, secret:
   return id;
 }
 
+/**
+ * Which email list a token-bearing link acts on. Both lists hang off the
+ * same digest_subscriptions row (it holds the address and the signed id),
+ * but they are separate consents: "digest" is the favorites snow digest
+ * (row.enabled), "thursday" is the Saturday picks email
+ * (profiles.pass_product). An unsubscribe link must stop exactly the
+ * list the email came from.
+ */
+export type UnsubscribeList = "digest" | "thursday";
+
+export function parseUnsubscribeList(value: string | null | undefined): UnsubscribeList {
+  return value === "thursday" ? "thursday" : "digest";
+}
+
 /** Absolute URL the email links to. Lives here so the cron and the
  *  confirmation page cannot drift apart on the path or the param name. */
-export function unsubscribeUrl(siteBase: string, token: string): string {
-  return `${siteBase.replace(/\/+$/, "")}/api/digest/unsubscribe?token=${encodeURIComponent(token)}`;
+export function unsubscribeUrl(siteBase: string, token: string, list: UnsubscribeList = "digest"): string {
+  const base = `${siteBase.replace(/\/+$/, "")}/api/digest/unsubscribe?token=${encodeURIComponent(token)}`;
+  return list === "digest" ? base : `${base}&list=${list}`;
 }

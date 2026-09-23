@@ -1,80 +1,75 @@
 // /favorites — server-rendered grid of the signed-in user's saved resorts.
-// Auth-guarded: redirects to /login?next=/favorites if not signed in.
-// Shows the same hero/state/passes summary as the side panel.
+// Signed out, the page hands off to GuestFavorites (the device list from
+// lib/guestFavorites) with a sign-in banner instead of a login wall.
+// Shows the same hero/state/passes summary as the side panel, plus the
+// day's Go / Wait / Skip pill from the same loader /today uses, and a
+// link to /today so the grid is a doorway rather than a dead end.
 
-import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { passColor, passLabel } from "@/lib/passColors";
+import { textOn } from "@/lib/contrast";
+import { loadTodayRows, type TodayRow } from "@/app/today/data";
+import VerdictPill from "@/app/today/VerdictPill";
+import GuestFavorites from "./GuestFavorites";
 
 export const dynamic = "force-dynamic";
-
-type FavoriteRow = {
-  resort_id: number;
-  resorts: {
-    id: number;
-    slug: string;
-    name: string;
-    state: string;
-    region: string | null;
-    latitude: number | string;
-    longitude: number | string;
-    passes: string[];
-    tier: "featured" | "listed";
-    vertical_drop: number | null;
-  };
-};
 
 export default async function FavoritesPage() {
   const supabase = await createSupabaseServerClient();
   const { data: userData } = await supabase.auth.getUser();
   if (!userData.user) {
-    redirect("/login?next=/favorites");
+    return <GuestFavorites />;
   }
 
-  // RLS makes this implicitly user-scoped — no need to filter by user_id here.
-  const { data, error } = await supabase
-    .from("favorites")
-    .select(
-      "resort_id, resorts(id, slug, name, state, region, latitude, longitude, passes, tier, vertical_drop)",
-    )
-    .order("created_at", { ascending: false })
-    .returns<FavoriteRow[]>();
+  // RLS makes this implicitly user-scoped. History is loaded here too
+  // (one indexed query) so the surface classifier sees the same week as
+  // /today and the two pages never disagree on the same resort.
+  const { rows, error } = await loadTodayRows(supabase, { now: new Date(), withHistory: true });
 
   if (error) {
     return (
       <main className="flex min-h-dvh items-center justify-center p-8">
         <p className="rounded-md border border-red-200 bg-red-50 px-4 py-2 text-sm text-red-800">
-          Failed to load favorites: {error.message}
+          Failed to load favorites: {error}
         </p>
       </main>
     );
   }
-
-  const favorites = (data ?? []).map((r) => r.resorts).filter(Boolean);
 
   return (
     <main className="min-h-dvh bg-wn-offwhite px-4 py-8 sm:px-6 sm:py-12">
       <div className="mx-auto max-w-5xl">
         <Link
           href="/"
-          className="mb-4 inline-block text-xs font-semibold text-wn-charcoal/60 hover:text-wn-navy"
+          className="mb-4 inline-flex min-h-11 items-center text-xs font-semibold text-wn-charcoal/60 hover:text-wn-navy"
         >
           ← Map
         </Link>
 
-        <header className="mb-6">
-          <h1 className="text-2xl font-extrabold text-wn-navy sm:text-3xl">
-            ❤️ Your favorites
-          </h1>
-          <p className="mt-1 text-sm text-wn-charcoal/70">
-            {favorites.length === 0
-              ? "Nothing saved yet — tap the heart on any resort to keep it here."
-              : `${favorites.length} resort${favorites.length === 1 ? "" : "s"} saved.`}
-          </p>
+        <header className="mb-6 flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <h1 className="text-2xl font-extrabold text-wn-navy sm:text-3xl">
+              ❤️ Your favorites
+            </h1>
+            <p className="mt-1 text-sm text-wn-charcoal/70">
+              {rows.length === 0
+                ? "Nothing saved yet — tap the heart on any resort to keep it here."
+                : `${rows.length} resort${rows.length === 1 ? "" : "s"} saved.`}
+            </p>
+          </div>
+          {rows.length > 0 && (
+            <Link
+              href="/today"
+              className="inline-flex min-h-11 items-center gap-1.5 rounded-lg bg-wn-navy px-4 py-2 text-sm font-semibold text-white transition hover:bg-wn-navy/90"
+            >
+              <span aria-hidden="true">☀️</span>
+              Today&rsquo;s call
+            </Link>
+          )}
         </header>
 
-        {favorites.length === 0 ? (
+        {rows.length === 0 ? (
           <div className="rounded-xl border border-dashed border-wn-charcoal/20 bg-white p-8 text-center">
             <div className="mb-2 text-3xl">🏔️</div>
             <p className="text-sm text-wn-charcoal/70">
@@ -82,15 +77,15 @@ export default async function FavoritesPage() {
             </p>
             <Link
               href="/"
-              className="mt-4 inline-flex items-center gap-1 rounded-md bg-wn-navy px-4 py-2 text-sm font-semibold text-white transition hover:bg-wn-navy/90"
+              className="mt-4 inline-flex min-h-11 items-center gap-1 rounded-md bg-wn-navy px-4 py-2 text-sm font-semibold text-white transition hover:bg-wn-navy/90"
             >
               Browse the map
             </Link>
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {favorites.map((r) => (
-              <FavoriteCard key={r.id} r={r} />
+            {rows.map((row) => (
+              <FavoriteCard key={row.resort.id} row={row} />
             ))}
           </div>
         )}
@@ -99,7 +94,8 @@ export default async function FavoritesPage() {
   );
 }
 
-function FavoriteCard({ r }: { r: FavoriteRow["resorts"] }) {
+function FavoriteCard({ row }: { row: TodayRow }) {
+  const { resort: r, verdict: v } = row;
   const primary = r.passes?.[0] ?? "independent";
   const bg = passColor(primary);
 
@@ -119,10 +115,17 @@ function FavoriteCard({ r }: { r: FavoriteRow["resorts"] }) {
         </h3>
       </div>
       <div className="p-3">
-        <p className="text-xs text-wn-charcoal/60">
-          {r.state}
-          {r.region ? ` · ${r.region}` : ""}
-          {r.vertical_drop ? ` · ${r.vertical_drop.toLocaleString()} ft vert` : ""}
+        <div className="flex items-start justify-between gap-2">
+          <p className="text-xs text-wn-charcoal/60">
+            {r.state}
+            {r.region ? ` · ${r.region}` : ""}
+            {r.vertical_drop ? ` · ${r.vertical_drop.toLocaleString()} ft vert` : ""}
+          </p>
+          <VerdictPill v={v} />
+        </div>
+        {/* The one-line reason, so the pill is never a bare word. */}
+        <p className="mt-1.5 line-clamp-2 text-[11px] leading-snug text-wn-charcoal/70">
+          {v.dormant ? v.reasons[0] : `${v.headline}. ${v.reasons[0]}`}
         </p>
         <div className="mt-2 flex flex-wrap gap-1">
           {(r.passes ?? []).map((p) => (
@@ -131,7 +134,7 @@ function FavoriteCard({ r }: { r: FavoriteRow["resorts"] }) {
               className="inline-block rounded px-1.5 py-0.5 text-[9px] font-semibold"
               style={{
                 backgroundColor: passColor(p),
-                color: p === "ikon" ? "#1E2952" : "white",
+                color: textOn(passColor(p)),
               }}
             >
               {passLabel(p)}

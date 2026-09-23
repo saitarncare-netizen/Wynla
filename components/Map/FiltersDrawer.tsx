@@ -1,9 +1,15 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useId, useRef, useState } from "react";
 import Link from "next/link";
-import { useFocusTrap } from "@/lib/useFocusTrap";
-// Origin import dropped Stage 33 along with the Origin section.
+import { TRAP_KEEP_ATTR, useFocusTrap } from "@/lib/useFocusTrap";
+import {
+  formatDriveTimeLabel,
+  originLabel,
+  originOptionLabel,
+  originsForPicker,
+  type Origin,
+} from "@/lib/origins";
 import { PASS_COLORS, PASS_KEYS, PASS_LABELS } from "@/lib/passColors";
 import { SIZE_TIER_LABELS, type SizeTier } from "@/lib/sizeTier";
 import { isGlobalOffSeasonNow } from "@/lib/seasonDates";
@@ -12,21 +18,32 @@ type Props = {
   open: boolean;
   // Stage 33 final — Pass filter back in the drawer. The drawer is now
   // the single source of truth for every filter (Pass · Conditions ·
-  // Drive · Size · Airport). Map chip strip still exists as a 1-tap
+  // Drive · Size). Map chip strip still exists as a 1-tap
   // shortcut for Pass + as the pin color legend, but those chips and
   // these checkboxes share the same URL state.
   passFilter: string[];
   passCounts: Record<string, number>;
   onPassChange: (passes: string[]) => void;
   withinHours: number;
-  // Display label for the origin (e.g. "NYC", "Boston") shown in the
-  // Drive time section title — Saitarn 2026-05-23: "อยากให้เขียนว่า
-  // Drive time from NYC". Empty string falls back to bare "Drive time"
-  // so we don't render a dangling "from " label if origin isn't known.
-  fromLabel: string;
+  // The drive-time origin. Its short label goes in the Drive time
+  // section title (Saitarn 2026-05-23: "อยากให้เขียนว่า Drive time from
+  // NYC") and the section itself now holds the city / location picker
+  // that mobile lacked (audit map-core-8 / fresh-eyes-newbie-4).
+  origin: Origin;
+  /** True when drive times from this origin are Haversine estimates. */
+  originIsEstimate: boolean;
+  onFromCity: (code: string) => void;
+  onFromGeo: (lat: number, lng: number) => void;
   sizeFilter: SizeTier | null;
   nightOnly: boolean;
+  // "Fly to" airport jump (not a filter): IATA code or null.
   airportFilter: string | null;
+  /** Resorts within about two hours of the picked airport, by the
+   *  lib/distance estimate, nearest first. Empty when no airport is
+   *  picked. */
+  nearAirportResorts: NearAirportResort[];
+  /** Opens a resort from the Fly to list (panel + camera). */
+  onJumpToResort: (id: number) => void;
   filteredCount: number;
   totalCount: number;
   freshSnowOnly: boolean;
@@ -83,9 +100,9 @@ type Props = {
   onClose: () => void;
 };
 
-// Stage 8 — most-relevant US ski-trip airports. IATA codes match
-// resort.closest_airport_iata values stored on each resort. Stage 33
-// added lat/lng so MapPage can fly the camera to the picked airport.
+// Most-relevant US ski-trip airports for the Fly to jump. IATA codes
+// match resort.closest_airport_iata values stored on each resort;
+// lat/lng let MapPage fly the camera to the picked airport.
 export const AIRPORT_OPTIONS: Array<{
   iata: string;
   label: string;
@@ -118,7 +135,7 @@ export const AIRPORT_OPTIONS: Array<{
 // Stage 22 — redesigned to group filters into clearly-labeled sections
 // with horizontal dividers so the long-scroll feels structured. Each
 // section maps to a desktop FilterBar pill cluster: Pass, Conditions,
-// Origin, Drive time, Resort size, Airport, More.
+// Drive time (with the origin picker), Resort size, Fly to, More.
 //
 // Desktop still uses FilterBar inline — its pills work fine with the
 // extra horizontal space and the dropdown menus.
@@ -141,7 +158,19 @@ const LIFT_OPTIONS: Array<{
   { value: "nosurface", label: "No surface-only", icon: "🚫" },
 ];
 
-function liftLabel(v: string | null): string | null {
+export type NearAirportResort = {
+  id: number;
+  name: string;
+  state: string;
+  /** Estimated drive from the airport (lib/distance), never routed. */
+  seconds: number;
+};
+
+// How many Fly to rows show before the list folds behind "+N more".
+// Six is about one phone screen under the airport search box.
+const NEAR_AIRPORT_PREVIEW = 6;
+
+export function liftLabel(v: string | null): string | null {
   if (!v) return null;
   return LIFT_OPTIONS.find((o) => o.value === v)?.label ?? null;
 }
@@ -152,10 +181,15 @@ export default function FiltersDrawer({
   passCounts,
   onPassChange,
   withinHours,
-  fromLabel,
+  origin,
+  originIsEstimate,
+  onFromCity,
+  onFromGeo,
   sizeFilter,
   nightOnly,
   airportFilter,
+  nearAirportResorts,
+  onJumpToResort,
   filteredCount,
   totalCount,
   freshSnowOnly,
@@ -212,20 +246,41 @@ export default function FiltersDrawer({
       ? String(withinHours)
       : "",
   );
-  // Stage 33 — airport search box. Filters the AIRPORT_OPTIONS list as
-  // the user types so the section is browsable for non-USA travellers
-  // who don't know the IATA codes off-hand.
+  // Airport search box. Filters the AIRPORT_OPTIONS list as the user
+  // types so the section is browsable for travellers who don't know
+  // the IATA codes off-hand.
   const [airportQuery, setAirportQuery] = useState("");
-
-  // ESC to close.
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [open, onClose]);
+  // Fly to list folds after NEAR_AIRPORT_PREVIEW rows; this unfolds it.
+  const [showAllNearAirport, setShowAllNearAirport] = useState(false);
+  // "Use my location" state for the origin picker. Mirrors the desktop
+  // FromDropdown; the error copy points at the floating 📍 button whose
+  // help modal walks through re-enabling a denied permission.
+  const [requestingGeo, setRequestingGeo] = useState(false);
+  const [geoError, setGeoError] = useState<string | null>(null);
+  function handleUseHere() {
+    if (typeof navigator === "undefined" || !navigator.geolocation) {
+      setGeoError("This browser does not support location.");
+      return;
+    }
+    setRequestingGeo(true);
+    setGeoError(null);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        onFromGeo(pos.coords.latitude, pos.coords.longitude);
+        setRequestingGeo(false);
+      },
+      (err) => {
+        setRequestingGeo(false);
+        setGeoError(
+          err.code === err.PERMISSION_DENIED
+            ? "Location is blocked. Tap the 📍 button on the map for how to allow it, or pick a city below."
+            : "Could not get your location. Pick a city below instead.",
+        );
+      },
+      { enableHighAccuracy: false, timeout: 8000, maximumAge: 60_000 },
+    );
+  }
+  const fromLabel = origin.kind === "geo" ? "here" : origin.short;
 
   function commitCustomDrive() {
     const n = Number(customHours);
@@ -236,8 +291,10 @@ export default function FiltersDrawer({
     }
   }
 
+  // Focus trap, Escape, inert map behind, body scroll lock and focus
+  // return to the Filters button all come from the shared hook.
   const drawerRef = useRef<HTMLElement>(null);
-  useFocusTrap(drawerRef, open);
+  useFocusTrap(drawerRef, open, { onEscape: onClose });
 
   if (!open) return null;
 
@@ -258,10 +315,16 @@ export default function FiltersDrawer({
     <>
       {/* Backdrop — desktop only. Mobile drawer is full-screen so the
           backdrop would be hidden behind it anyway. Tap to close on
-          desktop where the modal is centered + smaller. */}
+          desktop where the modal is centered + smaller. Hidden from
+          assistive tech and out of the Tab order: the header × is the
+          one named close control (audit a11y-33 counted three). It sits
+          outside the dialog in the DOM, so it opts out of the trap's
+          inert pass to stay clickable. */}
       <button
         type="button"
-        aria-label="Close filters"
+        aria-hidden="true"
+        tabIndex={-1}
+        {...{ [TRAP_KEEP_ATTR]: "" }}
         onClick={onClose}
         className="fixed inset-0 z-[65] hidden cursor-default bg-wn-charcoal/35 backdrop-blur-[1px] md:block"
       />
@@ -301,11 +364,12 @@ export default function FiltersDrawer({
             real visible affordance now. */}
         <button
           type="button"
+          aria-hidden="true"
+          tabIndex={-1}
           onClick={onClose}
-          aria-label="Close filters"
           className="flex shrink-0 cursor-pointer justify-center py-2 md:hidden"
         >
-          <span aria-hidden="true" className="h-1 w-10 rounded-full bg-wn-charcoal/25" />
+          <span className="h-1 w-10 rounded-full bg-wn-charcoal/25" />
         </button>
 
         <header
@@ -338,7 +402,9 @@ export default function FiltersDrawer({
               <span className="md:hidden">Close</span>
             </button>
           </div>
-          <p className="mt-0.5 text-[11px] text-wn-charcoal/60">
+          {/* Live: the map behind is inert while the drawer is open, so
+              its own announcer is silent and this line has to speak. */}
+          <p aria-live="polite" aria-atomic="true" className="mt-0.5 text-[11px] text-wn-charcoal/65">
             Showing <strong className="text-wn-navy">{filteredCount}</strong> of {totalCount} resorts
           </p>
         </header>
@@ -373,7 +439,7 @@ export default function FiltersDrawer({
                     .join(" · ")
             }
           >
-            <div className="grid grid-cols-1 gap-1">
+            <div className="grid grid-cols-1 gap-1" role="group" aria-label="Pass">
               {PASS_KEYS.map((key) => {
                 const isActive = passFilter.includes(key);
                 const count = passCounts[key] ?? 0;
@@ -381,20 +447,21 @@ export default function FiltersDrawer({
                   <button
                     key={key}
                     type="button"
+                    role="checkbox"
+                    aria-checked={isActive}
                     onClick={() => togglePass(key)}
-                    aria-pressed={isActive}
                     className={[
-                      "flex items-center gap-2.5 rounded-lg border px-3 py-2 text-left text-sm transition",
+                      "flex min-h-[44px] touch-manipulation items-center gap-2.5 rounded-lg border px-3 py-2 text-left text-sm transition",
                       isActive
                         ? "border-wn-navy bg-wn-navy/5"
                         : "border-wn-charcoal/15 bg-white hover:border-wn-charcoal/30",
                     ].join(" ")}
                   >
                     <span
-                      className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-sm border ${
+                      className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-sm border-2 ${
                         isActive
                           ? "border-wn-navy bg-wn-navy text-white"
-                          : "border-wn-charcoal/30 bg-white"
+                          : "border-wn-charcoal/60 bg-white"
                       }`}
                       aria-hidden="true"
                     >
@@ -422,7 +489,10 @@ export default function FiltersDrawer({
                     <span className="flex-1 font-semibold text-wn-charcoal">
                       {PASS_LABELS[key]}
                     </span>
-                    <span className="text-xs text-wn-charcoal/55">{count}</span>
+                    <span className="text-xs text-wn-charcoal/65">
+                      {count}
+                      <span className="sr-only"> resorts</span>
+                    </span>
                   </button>
                 );
               })}
@@ -495,11 +565,12 @@ export default function FiltersDrawer({
                         type="button"
                         role="radio"
                         aria-checked={active}
+                        onKeyDown={onRadioKey}
                         onClick={() =>
                           onSurfaceChange(active ? [] : [code])
                         }
                         className={[
-                          "flex flex-col items-center justify-center gap-1 rounded-lg border px-2 py-2 text-[11px] font-semibold transition",
+                          "flex min-h-[44px] touch-manipulation flex-col items-center justify-center gap-1 rounded-lg border px-2 py-2 text-[11px] font-semibold transition",
                           active
                             ? "border-wn-navy bg-wn-navy text-white"
                             : "border-wn-charcoal/15 bg-white text-wn-charcoal hover:border-wn-charcoal/40",
@@ -514,33 +585,79 @@ export default function FiltersDrawer({
               )}
             </div>
             {surfaceCount > 0 && (
-              <p className="mt-2 px-1 text-[10.5px] leading-snug text-wn-charcoal/55">
-                Pick one surface type — these are mutually exclusive
-                (a resort can&apos;t be both fresh powder AND packed at
-                the same time). Tap the active chip to clear.
+              <p className="mt-2 px-1 text-[11px] leading-snug text-wn-charcoal/65">
+                Pick one surface type. A resort cannot be both fresh
+                powder and packed at the same time. Tap the active chip
+                to clear.
               </p>
             )}
           </Section>
 
-          {/* Stage 33 — ORIGIN section removed from drawer. The
-              onboarding wizard already collects origin once (Use my
-              location OR a city), and the floating LocationButton at
-              the bottom-right of the map lets users opt into geo at
-              any time. Surfacing the picker again here was redundant
-              and added clutter. ZIP-code entry is dropped along with
-              it; if users need to change origin they can either tap
-              the floating geo button or clear browser data to
-              re-onboard. */}
-
           {/* DRIVE TIME (DAY 1) — section title pulls the from-city in
               so users always see "Drive time from NYC" / "Drive time
               from Boston" instead of a bare "Drive time" that could
-              read as drive-time-from-anywhere. Saitarn 2026-05-23. */}
+              read as drive-time-from-anywhere. Saitarn 2026-05-23.
+              The origin picker lives here too: this was the only
+              surface on mobile with no way to change "from NYC". */}
           <Section
-            title={fromLabel ? `Drive time from ${fromLabel}` : "Drive time"}
-            summary={withinHours > 0 ? `≤ ${withinHours}h` : "Any"}
+            title={`Drive time from ${fromLabel}`}
+            summary={[
+              origin.kind === "geo" ? "From your location" : `From ${originLabel(origin)}`,
+              withinHours > 0 ? `≤ ${withinHours}h` : "Any",
+            ].join(" · ")}
           >
-            <div className="grid grid-cols-5 gap-1">
+            <div className="mb-3">
+              <label
+                htmlFor="drawer-origin"
+                className="mb-1 block text-[11px] font-semibold uppercase tracking-wide text-wn-charcoal/65"
+              >
+                Starting from
+              </label>
+              <div className="flex gap-2">
+                <select
+                  id="drawer-origin"
+                  value={origin.kind === "city" ? origin.code : ""}
+                  onChange={(e) => {
+                    if (e.target.value) onFromCity(e.target.value);
+                  }}
+                  // 16px so iOS does not auto-zoom on focus.
+                  style={{ fontSize: "16px" }}
+                  className="min-h-[44px] min-w-0 flex-1 rounded-lg border border-wn-charcoal/20 bg-white px-3 font-medium text-wn-charcoal focus:border-wn-navy focus:outline-none focus:ring-2 focus:ring-wn-navy/20"
+                >
+                  {origin.kind === "geo" && (
+                    <option value="">Your location</option>
+                  )}
+                  {originsForPicker().map((o) => (
+                    <option key={o.code} value={o.code}>
+                      {originOptionLabel(o)}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  type="button"
+                  onClick={handleUseHere}
+                  disabled={requestingGeo}
+                  aria-pressed={origin.kind === "geo"}
+                  className={`inline-flex min-h-[44px] shrink-0 touch-manipulation items-center gap-1.5 rounded-lg border px-3 text-xs font-semibold transition disabled:opacity-60 ${
+                    origin.kind === "geo"
+                      ? "border-wn-navy bg-wn-navy text-white"
+                      : "border-wn-charcoal/15 bg-white text-wn-charcoal hover:border-wn-charcoal/40"
+                  }`}
+                >
+                  <span aria-hidden="true">📍</span>
+                  <span>{requestingGeo ? "Locating…" : origin.kind === "geo" ? "Using here" : "Use my location"}</span>
+                </button>
+              </div>
+              {geoError && (
+                <p role="alert" className="mt-1.5 text-[11px] leading-snug text-wn-charcoal/75">{geoError}</p>
+              )}
+              <p className="mt-1.5 text-[11px] leading-snug text-wn-charcoal/65">
+                {originIsEstimate
+                  ? "Drive times from here are estimates (≈). Open a resort for an exact route."
+                  : "Drive times from this city are cached road routes."}
+              </p>
+            </div>
+            <div className="grid grid-cols-5 gap-1" role="radiogroup" aria-label="Maximum drive time">
               {DRIVE_TIME_PRESETS.map((h) => {
                 const isAny = h === 0;
                 const active = isAny ? withinHours === 0 : withinHours === h;
@@ -548,9 +665,11 @@ export default function FiltersDrawer({
                   <button
                     key={h}
                     type="button"
+                    role="radio"
+                    aria-checked={active}
+                    onKeyDown={onRadioKey}
                     onClick={() => onWithinChange(isAny ? null : String(h))}
-                    aria-pressed={active}
-                    className={`rounded-lg border px-2 py-2 text-xs font-semibold transition ${
+                    className={`min-h-[44px] touch-manipulation rounded-lg border px-2 py-2 text-xs font-semibold transition ${
                       active
                         ? "border-wn-navy bg-wn-navy text-white"
                         : "border-wn-charcoal/15 bg-white text-wn-charcoal hover:border-wn-charcoal/40"
@@ -562,11 +681,17 @@ export default function FiltersDrawer({
               })}
             </div>
             <div className="mt-2 flex items-center gap-2">
-              <span className="text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
+              <label
+                htmlFor="drawer-custom-hours"
+                className="text-[11px] font-semibold uppercase tracking-wide text-wn-charcoal/65"
+              >
                 Custom
-              </span>
+              </label>
               <input
+                id="drawer-custom-hours"
                 type="number"
+                inputMode="numeric"
+                enterKeyHint="done"
                 min={1}
                 max={24}
                 step={1}
@@ -579,14 +704,14 @@ export default function FiltersDrawer({
                     commitCustomDrive();
                   }
                 }}
-                className="w-20 rounded-md border border-wn-charcoal/20 bg-white px-2 py-1 text-sm font-medium text-wn-charcoal focus:border-wn-navy focus:outline-none focus:ring-2 focus:ring-wn-navy/20"
-                aria-label="Custom max drive hours"
+                className="min-h-[44px] w-20 rounded-md border border-wn-charcoal/20 bg-white px-2 py-1 text-sm font-medium text-wn-charcoal focus:border-wn-navy focus:outline-none focus:ring-2 focus:ring-wn-navy/20"
+                aria-describedby="drawer-custom-hours-unit"
               />
-              <span className="text-[11px] text-wn-charcoal/55">hrs</span>
+              <span id="drawer-custom-hours-unit" className="text-[11px] text-wn-charcoal/65">hours, 1 to 24</span>
               <button
                 type="button"
                 onClick={commitCustomDrive}
-                className="ml-auto rounded-md bg-wn-navy px-2.5 py-1 text-[11px] font-semibold text-white transition hover:bg-wn-navy/90 active:scale-95"
+                className="ml-auto min-h-[44px] touch-manipulation rounded-md bg-wn-navy px-3 text-xs font-semibold text-white transition hover:bg-wn-navy/90 active:scale-95"
               >
                 Apply
               </button>
@@ -598,7 +723,7 @@ export default function FiltersDrawer({
             title="Resort size"
             summary={sizeFilter ? SIZE_TIER_LABELS[sizeFilter] : "Any size"}
           >
-            <div className="grid grid-cols-4 gap-1">
+            <div className="grid grid-cols-4 gap-1" role="radiogroup" aria-label="Resort size">
               {([null, "small", "medium", "large"] as const).map((tier) => {
                 const active = sizeFilter === tier;
                 const label = tier === null ? "Any" : SIZE_TIER_LABELS[tier];
@@ -606,9 +731,11 @@ export default function FiltersDrawer({
                   <button
                     key={String(tier)}
                     type="button"
+                    role="radio"
+                    aria-checked={active}
+                    onKeyDown={onRadioKey}
                     onClick={() => onSizeChange(tier)}
-                    aria-pressed={active}
-                    className={`rounded-lg border px-2 py-2 text-xs font-semibold transition ${
+                    className={`min-h-[44px] touch-manipulation rounded-lg border px-2 py-2 text-xs font-semibold transition ${
                       active
                         ? "border-wn-navy bg-wn-navy text-white"
                         : "border-wn-charcoal/15 bg-white text-wn-charcoal hover:border-wn-charcoal/40"
@@ -621,49 +748,100 @@ export default function FiltersDrawer({
             </div>
           </Section>
 
-          {/* 6. AIRPORT — Stage 8. Filters resorts where
-              closest_airport_iata matches AND distance ≤ 120 mi (shuttle
-              range). Horizontal-scroll chip row to keep the drawer
-              compact while exposing all 15 top US ski airports. */}
+          {/* 6. FLY TO — a camera jump, not a filter. Picking an airport
+              flies the map there, drops a ✈️ marker and reports how many
+              resorts sit within about two hours of it. It never hides
+              resorts and is not counted in the filter badge; the old
+              "Airport" section was both, and matched nothing (audit
+              map-core-7 / fresh-eyes-newbie-11). */}
           <Section
-            title="Airport"
+            title="Fly to"
             summary={
               airportFilter
-                ? AIRPORT_OPTIONS.find((a) => a.iata === airportFilter)?.label ??
-                  airportFilter
-                : "Any airport"
+                ? `${AIRPORT_OPTIONS.find((a) => a.iata === airportFilter)?.label ?? airportFilter} · ${nearAirportResorts.length} resort${nearAirportResorts.length === 1 ? "" : "s"} within ≈ 2 h`
+                : "Jump the map to an airport"
             }
           >
-            {/* Stage 33 — airport picker rebuilt as a searchable
-                vertical list. Horizontal chips required the user to
-                already know the IATA; the list makes scanning easier
-                and the search box covers travellers who type the
-                city name. Selecting an airport ALSO flies the map
-                camera to it (handled in MapPage via the airport URL
-                param). */}
+            <p className="mb-2 text-[11px] leading-snug text-wn-charcoal/65">
+              Jumps the map to the airport. It does not hide resorts and
+              survives Clear all; the list below only tells you what is
+              within reach.
+            </p>
+            {airportFilter && (
+              <div className="mb-2 rounded-lg bg-wn-navy/5 px-3 py-2">
+                <p className="text-xs font-semibold text-wn-navy">
+                  {nearAirportResorts.length} resort{nearAirportResorts.length === 1 ? "" : "s"} within ≈ 2 h
+                  drive of {AIRPORT_OPTIONS.find((a) => a.iata === airportFilter)?.label ?? airportFilter}
+                  <span className="block text-[11px] font-normal text-wn-charcoal/65">
+                    Estimated from straight-line distance, nearest first
+                  </span>
+                </p>
+                {nearAirportResorts.length > 0 && (
+                  <ul className="mt-1.5 divide-y divide-wn-navy/10">
+                    {(showAllNearAirport
+                      ? nearAirportResorts
+                      : nearAirportResorts.slice(0, NEAR_AIRPORT_PREVIEW)
+                    ).map((r) => (
+                      <li key={r.id}>
+                        <button
+                          type="button"
+                          onClick={() => onJumpToResort(r.id)}
+                          className="flex min-h-[44px] w-full items-center gap-2 py-1 text-left text-sm text-wn-charcoal hover:text-wn-navy"
+                        >
+                          <span className="min-w-0 flex-1 truncate font-semibold">{r.name}</span>
+                          <span className="shrink-0 text-[11px] text-wn-charcoal/65">{r.state}</span>
+                          <span className="shrink-0 rounded bg-white px-2 py-0.5 text-[11px] font-semibold text-wn-navy">
+                            <span className="sr-only">estimated drive </span>
+                            {formatDriveTimeLabel(r.seconds, true)}
+                          </span>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {nearAirportResorts.length > NEAR_AIRPORT_PREVIEW && (
+                  <button
+                    type="button"
+                    onClick={() => setShowAllNearAirport((v) => !v)}
+                    className="mt-1 min-h-[44px] w-full text-left text-xs font-semibold text-wn-navy underline-offset-2 hover:underline"
+                  >
+                    {showAllNearAirport
+                      ? "Show fewer"
+                      : `+${nearAirportResorts.length - NEAR_AIRPORT_PREVIEW} more`}
+                  </button>
+                )}
+              </div>
+            )}
             <input
               type="search"
               aria-label="Search airports"
-              placeholder="Search airports… (Denver, DEN, etc.)"
+              enterKeyHint="search"
+              placeholder="Search airports (Denver, DEN, etc.)"
               value={airportQuery}
               onChange={(e) => setAirportQuery(e.target.value)}
               // 16px so iOS doesn't auto-zoom on focus.
               style={{ fontSize: "16px" }}
-              className="mb-2 w-full rounded-lg border border-wn-charcoal/20 bg-white px-3 py-2 font-medium text-wn-charcoal placeholder:text-wn-charcoal/40 focus:border-wn-navy focus:outline-none focus:ring-2 focus:ring-wn-navy/20"
+              className="mb-2 min-h-[44px] w-full rounded-lg border border-wn-charcoal/20 bg-white px-3 py-2 font-medium text-wn-charcoal placeholder:text-wn-charcoal/40 focus:border-wn-navy focus:outline-none focus:ring-2 focus:ring-wn-navy/20"
             />
-            <div className="max-h-[280px] overflow-y-auto rounded-lg border border-wn-charcoal/10 bg-white">
+            <div
+              className="max-h-[280px] overflow-y-auto rounded-lg border border-wn-charcoal/10 bg-white"
+              role="radiogroup"
+              aria-label="Fly to airport"
+            >
               <button
                 type="button"
+                role="radio"
+                aria-checked={airportFilter === null}
+                onKeyDown={onRadioKey}
                 onClick={() => onAirportChange(null)}
-                aria-pressed={airportFilter === null}
-                className={`flex w-full items-center gap-2 border-b border-wn-charcoal/10 px-3 py-2 text-left text-sm font-semibold transition ${
+                className={`flex min-h-[44px] w-full touch-manipulation items-center gap-2 border-b border-wn-charcoal/10 px-3 py-2 text-left text-sm font-semibold transition ${
                   airportFilter === null
                     ? "bg-wn-navy/5 text-wn-navy"
                     : "text-wn-charcoal hover:bg-wn-charcoal/5"
                 }`}
               >
                 <span aria-hidden="true" className="text-base">✈️</span>
-                <span className="flex-1">Any airport</span>
+                <span className="flex-1">No jump</span>
                 {airportFilter === null && (
                   <span aria-hidden="true" className="text-wn-navy">✓</span>
                 )}
@@ -681,17 +859,19 @@ export default function FiltersDrawer({
                   <button
                     key={a.iata}
                     type="button"
+                    role="radio"
+                    aria-checked={active}
+                    onKeyDown={onRadioKey}
                     onClick={() =>
                       onAirportChange(active ? null : a.iata)
                     }
-                    aria-pressed={active}
-                    className={`flex w-full items-center gap-2 border-b border-wn-charcoal/10 px-3 py-2 text-left text-sm font-semibold transition last:border-b-0 ${
+                    className={`flex min-h-[44px] w-full touch-manipulation items-center gap-2 border-b border-wn-charcoal/10 px-3 py-2 text-left text-sm font-semibold transition last:border-b-0 ${
                       active
                         ? "bg-wn-navy/5 text-wn-navy"
                         : "text-wn-charcoal hover:bg-wn-charcoal/5"
                     }`}
                   >
-                    <span className="font-mono text-xs font-bold text-wn-charcoal/60">{a.iata}</span>
+                    <span className="font-mono text-xs font-bold text-wn-charcoal/65">{a.iata}</span>
                     <span className="flex-1 truncate">{a.label}</span>
                     {active && (
                       <span aria-hidden="true" className="text-wn-navy">✓</span>
@@ -736,20 +916,19 @@ export default function FiltersDrawer({
                 label="Expert mountain"
                 active={expertOnly}
                 onToggle={() => onExpertChange(!expertOnly)}
-                title="≥30% expert terrain + ≥2000 ft vertical"
+                info="At least 30% expert terrain and 2,000 ft of vertical"
               />
               <FilterCheckbox
                 icon="♿"
                 label="Adaptive program"
                 active={adaptiveOnly}
                 onToggle={() => onAdaptiveChange(!adaptiveOnly)}
-                title="Has certified adaptive ski school"
+                info="Has a certified adaptive ski school"
               />
             </div>
-            <p className="mt-2 px-1 text-[10.5px] leading-snug text-wn-charcoal/55">
-              Family = ski school + rentals + ≥25% beginner terrain (or a
-              magic carpet). Expert = ≥30% expert terrain &amp; ≥2000 ft
-              vertical. Adaptive = has a certified adaptive ski school.
+            <p className="mt-2 px-1 text-[11px] leading-snug text-wn-charcoal/65">
+              Family = ski school + rentals + at least 25% beginner terrain
+              (or a magic carpet).
             </p>
           </Section>
 
@@ -819,8 +998,8 @@ export default function FiltersDrawer({
                 so the URL param + DB query are unchanged, only the
                 visible label flips. */}
             <div className="mt-4 rounded-lg border border-wn-charcoal/10 bg-wn-offwhite/40 p-3">
-              <div className="mb-1.5 flex items-center justify-between text-[11px] font-bold uppercase tracking-wide text-wn-charcoal/60">
-                <span>Snowmaking coverage</span>
+              <div className="mb-1.5 flex items-center justify-between text-[11px] font-bold uppercase tracking-wide text-wn-charcoal/65">
+                <span id="drawer-snowmaking-label">Snowmaking coverage</span>
                 <span className="text-wn-navy">
                   {snowmakeMin === 0
                     ? "Any"
@@ -831,7 +1010,11 @@ export default function FiltersDrawer({
                         : "Heavy+"}
                 </span>
               </div>
-              <div className="grid grid-cols-4 gap-1">
+              <div
+                className="grid grid-cols-4 gap-1"
+                role="radiogroup"
+                aria-labelledby="drawer-snowmaking-label"
+              >
                 {([
                   { threshold: 0, label: "Any" },
                   { threshold: 25, label: "Light" },
@@ -844,10 +1027,12 @@ export default function FiltersDrawer({
                     <button
                       key={threshold}
                       type="button"
+                      role="radio"
+                      aria-checked={active}
+                      onKeyDown={onRadioKey}
                       onClick={() => onSnowmakeMinChange(threshold)}
-                      aria-pressed={active}
-                      title={threshold === 0 ? "Any snowmaking coverage" : `≥ ${threshold}% snowmaking`}
-                      className={`rounded-lg border px-2 py-2 text-xs font-semibold transition ${
+                      aria-label={threshold === 0 ? "Any snowmaking coverage" : `${label}: at least ${threshold}% snowmaking`}
+                      className={`min-h-[44px] touch-manipulation rounded-lg border px-2 py-2 text-xs font-semibold transition ${
                         active
                           ? "border-wn-navy bg-wn-navy text-white"
                           : "border-wn-charcoal/15 bg-white text-wn-charcoal hover:border-wn-charcoal/40"
@@ -858,9 +1043,9 @@ export default function FiltersDrawer({
                   );
                 })}
               </div>
-              <p className="mt-2 text-[10px] leading-tight text-wn-charcoal/55">
-                Heavier snowmaking coverage = more reliable conditions
-                early + late season + during lean snow years.
+              <p className="mt-2 text-[11px] leading-snug text-wn-charcoal/65">
+                Heavier snowmaking coverage means more reliable conditions
+                early and late in the season and in lean snow years.
               </p>
             </div>
           </Section>
@@ -916,7 +1101,7 @@ export default function FiltersDrawer({
             title="Lifts"
             summary={liftLabel(liftReq) ?? "Any"}
           >
-            <div className="grid grid-cols-2 gap-1.5">
+            <div className="grid grid-cols-2 gap-1.5" role="radiogroup" aria-label="Lifts">
               {LIFT_OPTIONS.map((opt) => {
                 const active =
                   opt.value === null ? liftReq === null : liftReq === opt.value;
@@ -924,10 +1109,12 @@ export default function FiltersDrawer({
                   <button
                     key={opt.value ?? "any"}
                     type="button"
+                    role="radio"
+                    aria-checked={active}
+                    onKeyDown={onRadioKey}
                     onClick={() => onLiftReqChange(opt.value)}
-                    aria-pressed={active}
                     className={[
-                      "flex items-center justify-center gap-1.5 rounded-lg border px-2 py-2 text-xs font-semibold transition",
+                      "flex min-h-[44px] touch-manipulation items-center justify-center gap-1.5 rounded-lg border px-2 py-2 text-xs font-semibold transition",
                       active
                         ? "border-wn-navy bg-wn-navy text-white"
                         : "border-wn-charcoal/15 bg-white text-wn-charcoal hover:border-wn-charcoal/40",
@@ -955,7 +1142,7 @@ export default function FiltersDrawer({
               <Link
                 href="/guides"
                 onClick={onClose}
-                className="flex items-center justify-between rounded-lg border border-wn-charcoal/15 bg-white px-3 py-2.5 text-sm font-semibold text-wn-navy transition hover:border-wn-navy"
+                className="flex min-h-[44px] items-center justify-between rounded-lg border border-wn-charcoal/15 bg-white px-3 py-2.5 text-sm font-semibold text-wn-navy transition hover:border-wn-navy"
               >
                 <span className="flex items-center gap-2">
                   <span aria-hidden="true">📚</span>
@@ -968,7 +1155,7 @@ export default function FiltersDrawer({
               <Link
                 href="/lists"
                 onClick={onClose}
-                className="flex items-center justify-between rounded-lg border border-wn-charcoal/15 bg-white px-3 py-2.5 text-sm font-semibold text-wn-navy transition hover:border-wn-navy"
+                className="flex min-h-[44px] items-center justify-between rounded-lg border border-wn-charcoal/15 bg-white px-3 py-2.5 text-sm font-semibold text-wn-navy transition hover:border-wn-navy"
               >
                 <span className="flex items-center gap-2">
                   <span aria-hidden="true">⭐</span>
@@ -981,7 +1168,7 @@ export default function FiltersDrawer({
               <Link
                 href="/deals"
                 onClick={onClose}
-                className="flex items-center justify-between rounded-lg border border-wn-charcoal/15 bg-white px-3 py-2.5 text-sm font-semibold text-wn-navy transition hover:border-wn-navy"
+                className="flex min-h-[44px] items-center justify-between rounded-lg border border-wn-charcoal/15 bg-white px-3 py-2.5 text-sm font-semibold text-wn-navy transition hover:border-wn-navy"
               >
                 <span className="flex items-center gap-2">
                   <span aria-hidden="true">🎟</span>
@@ -1010,14 +1197,14 @@ export default function FiltersDrawer({
               setCustomHours("");
               setAirportQuery("");
             }}
-            className="rounded-lg border border-wn-charcoal/20 bg-white px-3 py-2 text-sm font-semibold text-wn-charcoal transition hover:border-wn-charcoal/40"
+            className="min-h-[44px] touch-manipulation rounded-lg border border-wn-charcoal/20 bg-white px-3 py-2 text-sm font-semibold text-wn-charcoal transition hover:border-wn-charcoal/40"
           >
             Clear all
           </button>
           <button
             type="button"
             onClick={onClose}
-            className="flex flex-1 items-center justify-center rounded-lg bg-wn-navy px-4 py-2 text-sm font-semibold text-white transition hover:bg-wn-navy/90"
+            className="flex min-h-[44px] flex-1 touch-manipulation items-center justify-center rounded-lg bg-wn-navy px-4 py-2 text-sm font-semibold text-white transition hover:bg-wn-navy/90"
           >
             Done · Show {filteredCount} resort{filteredCount === 1 ? "" : "s"}
           </button>
@@ -1047,40 +1234,70 @@ function Section({
   last?: boolean;
 }) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
+  const panelId = useId();
   return (
     <section
       className={[
         last ? "" : "border-b border-wn-charcoal/10",
       ].join(" ")}
     >
-      <button
-        type="button"
-        onClick={() => setIsOpen((v) => !v)}
-        className="flex w-full items-center justify-between gap-3 py-3 text-left transition active:bg-wn-charcoal/5"
-        aria-expanded={isOpen}
-      >
-        <div className="min-w-0 flex-1">
-          <h3 className="text-[11px] font-bold uppercase tracking-[0.15em] text-wn-charcoal/55">
-            {title}
-          </h3>
-          {summary && !isOpen && (
-            <p className="mt-0.5 truncate text-xs font-semibold text-wn-navy">
-              {summary}
-            </p>
-          )}
+      {/* Heading wraps the disclosure button (a button inside a heading
+          is valid; a heading inside a button is not, audit a11y-19). The
+          collapsed summary lives outside the heading so the heading
+          reads as just the section name. */}
+      <div className="flex items-center justify-between gap-3">
+        <h3 className="min-w-0 flex-1 text-[11px] font-bold uppercase tracking-[0.15em] text-wn-charcoal/65">
+          <button
+            type="button"
+            onClick={() => setIsOpen((v) => !v)}
+            className="flex min-h-[44px] w-full touch-manipulation items-center justify-between gap-3 py-2 text-left transition active:bg-wn-charcoal/5"
+            aria-expanded={isOpen}
+            aria-controls={panelId}
+          >
+            <span className="min-w-0 flex-1">
+              <span className="block">{title}</span>
+              {summary && !isOpen && (
+                <span className="mt-0.5 block truncate text-xs font-semibold normal-case tracking-normal text-wn-navy">
+                  {summary}
+                </span>
+              )}
+            </span>
+            <span
+              aria-hidden="true"
+              className={`shrink-0 text-sm text-wn-charcoal/45 transition-transform duration-200 ${
+                isOpen ? "rotate-180" : ""
+              }`}
+            >
+              ▾
+            </span>
+          </button>
+        </h3>
+      </div>
+      {isOpen && (
+        <div id={panelId} className="pb-4">
+          {children}
         </div>
-        <span
-          aria-hidden="true"
-          className={`shrink-0 text-sm text-wn-charcoal/45 transition-transform duration-200 ${
-            isOpen ? "rotate-180" : ""
-          }`}
-        >
-          ▾
-        </span>
-      </button>
-      {isOpen && <div className="pb-4">{children}</div>}
+      )}
     </section>
   );
+}
+
+// Arrow keys move between the buttons of the enclosing radiogroup and
+// select the one they land on, the way native radios behave. The group
+// wraps at both ends.
+function onRadioKey(e: React.KeyboardEvent<HTMLButtonElement>) {
+  const forward = e.key === "ArrowRight" || e.key === "ArrowDown";
+  const backward = e.key === "ArrowLeft" || e.key === "ArrowUp";
+  if (!forward && !backward) return;
+  const group = e.currentTarget.closest('[role="radiogroup"]');
+  if (!group) return;
+  const radios = Array.from(group.querySelectorAll<HTMLButtonElement>('[role="radio"]'));
+  const i = radios.indexOf(e.currentTarget);
+  if (i < 0) return;
+  e.preventDefault();
+  const next = radios[(i + (forward ? 1 : -1) + radios.length) % radios.length];
+  next.focus();
+  next.click();
 }
 
 // Stage 4 — reusable checkbox-in-a-row for Snow features + Amenities
@@ -1094,7 +1311,6 @@ function FilterCheckbox({
   active,
   onToggle,
   count,
-  title,
   info,
 }: {
   icon: string;
@@ -1102,34 +1318,33 @@ function FilterCheckbox({
   active: boolean;
   onToggle: () => void;
   count?: number;
-  /** Optional tooltip — used by the Best-for composite filters to
-   *  explain the threshold (">350 in/yr", "≥30% expert", etc) without
-   *  cluttering the label itself. */
-  title?: string;
   /** Optional inline subtitle rendered below the label. Use for
    *  filter names that are jargon-y ("Terrain park", "XC / Nordic")
-   *  so first-time users get a one-line gloss. Skip on self-evident
-   *  labels (Tubing, Night skiing). */
+   *  and for thresholds that used to hide in hover-only tooltips, so
+   *  touch users get the same gloss. Skip on self-evident labels
+   *  (Tubing, Night skiing). */
   info?: string;
 }) {
   return (
     <button
       type="button"
+      role="checkbox"
+      aria-checked={active}
       onClick={onToggle}
-      aria-pressed={active}
-      title={title}
       className={[
-        "flex items-start gap-2 rounded-lg border px-2.5 py-2 text-left text-xs font-semibold transition",
+        "flex min-h-[44px] touch-manipulation items-start gap-2 rounded-lg border px-2.5 py-2 text-left text-xs font-semibold transition",
         active
           ? "border-wn-navy bg-wn-navy/5"
           : "border-wn-charcoal/15 bg-white hover:border-wn-charcoal/30",
       ].join(" ")}
     >
+      {/* 2px border at 60% charcoal clears the 3:1 non-text contrast
+          floor that the old 1px 30% box missed. */}
       <span
-        className={`mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-sm border ${
+        className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-sm border-2 ${
           active
             ? "border-wn-navy bg-wn-navy text-white"
-            : "border-wn-charcoal/30 bg-white"
+            : "border-wn-charcoal/60 bg-white"
         }`}
         aria-hidden="true"
       >
@@ -1155,20 +1370,21 @@ function FilterCheckbox({
       <span className="min-w-0 flex-1">
         <span className="block truncate text-wn-charcoal">{label}</span>
         {info && (
-          <span className="mt-0.5 block text-[10px] font-normal leading-tight text-wn-charcoal/55">
+          <span className="mt-0.5 block text-[11px] font-normal leading-tight text-wn-charcoal/65">
             {info}
           </span>
         )}
       </span>
       {count != null && count > 0 && (
         <span
-          className={`mt-0.5 shrink-0 rounded-full px-1.5 py-0.5 text-[10px] font-bold ${
+          className={`mt-0.5 shrink-0 rounded-full px-1.5 py-0.5 text-[11px] font-bold ${
             active
               ? "bg-wn-navy text-white"
-              : "bg-wn-charcoal/10 text-wn-charcoal/70"
+              : "bg-wn-charcoal/10 text-wn-charcoal/75"
           }`}
         >
           {count}
+          <span className="sr-only"> resorts</span>
         </span>
       )}
     </button>

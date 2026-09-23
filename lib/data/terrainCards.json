@@ -1,0 +1,1980 @@
+{
+  "base": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-cards/",
+  "cards": {
+    "49-degrees-north": {
+      "hero": "49-degrees-north-hero-2f5f6aa5.webp",
+      "thumb": "49-degrees-north-thumb-704a4ace.webp",
+      "share": "49-degrees-north-share-8e86546e.webp"
+    },
+    "afton-alps": {
+      "hero": "afton-alps-hero-173529f2.webp",
+      "thumb": "afton-alps-thumb-5de533c6.webp",
+      "share": "afton-alps-share-69349776.webp"
+    },
+    "alpine-meadows": {
+      "hero": "alpine-meadows-hero-045dcda8.webp",
+      "thumb": "alpine-meadows-thumb-7839d55e.webp",
+      "share": "alpine-meadows-share-410044fb.webp"
+    },
+    "alpine-valley-mi": {
+      "hero": "alpine-valley-mi-hero-644ec70a.webp",
+      "thumb": "alpine-valley-mi-thumb-1ef43598.webp",
+      "share": "alpine-valley-mi-share-2e51ba8b.webp"
+    },
+    "alpine-valley-oh": {
+      "hero": "alpine-valley-oh-hero-860daeb5.webp",
+      "thumb": "alpine-valley-oh-thumb-9789b369.webp",
+      "share": "alpine-valley-oh-share-01046534.webp"
+    },
+    "alpine-valley-wi": {
+      "hero": "alpine-valley-wi-hero-3e877de7.webp",
+      "thumb": "alpine-valley-wi-thumb-fd482453.webp",
+      "share": "alpine-valley-wi-share-ec5ade15.webp"
+    },
+    "alta": {
+      "hero": "alta-hero-d1b5f37a.webp",
+      "thumb": "alta-thumb-57fdf1c2.webp",
+      "share": "alta-share-fea20ff8.webp"
+    },
+    "alyeska-resort": {
+      "hero": "alyeska-resort-hero-58063cbf.webp",
+      "thumb": "alyeska-resort-thumb-af1f0f2f.webp",
+      "share": "alyeska-resort-share-86244052.webp"
+    },
+    "andes-tower-hills": {
+      "hero": "andes-tower-hills-hero-b8aa887d.webp",
+      "thumb": "andes-tower-hills-thumb-ee9787a1.webp",
+      "share": "andes-tower-hills-share-9b202d46.webp"
+    },
+    "angel-fire-resort": {
+      "hero": "angel-fire-resort-hero-506f2c0f.webp",
+      "thumb": "angel-fire-resort-thumb-a41e7166.webp",
+      "share": "angel-fire-resort-share-62aa01dc.webp"
+    },
+    "antelope-butte": {
+      "hero": "antelope-butte-hero-d63a4edc.webp",
+      "thumb": "antelope-butte-thumb-6e69e255.webp",
+      "share": "antelope-butte-share-006ed8df.webp"
+    },
+    "anthony-lakes": {
+      "hero": "anthony-lakes-hero-ac12eae6.webp",
+      "thumb": "anthony-lakes-thumb-7254d019.webp",
+      "share": "anthony-lakes-share-5bdbb06c.webp"
+    },
+    "appalachian-ski-mountain": {
+      "hero": "appalachian-ski-mountain-hero-43408fed.webp",
+      "thumb": "appalachian-ski-mountain-thumb-a955b151.webp",
+      "share": "appalachian-ski-mountain-share-f64a0336.webp"
+    },
+    "arapahoe-basin": {
+      "hero": "arapahoe-basin-hero-f0e46d89.webp",
+      "thumb": "arapahoe-basin-thumb-ad58b3c7.webp",
+      "share": "arapahoe-basin-share-6244c1ac.webp"
+    },
+    "arctic-valley": {
+      "hero": "arctic-valley-hero-06ca7955.webp",
+      "thumb": "arctic-valley-thumb-dbc1b923.webp",
+      "share": "arctic-valley-share-b9768472.webp"
+    },
+    "arizona-snowbowl": {
+      "hero": "arizona-snowbowl-hero-92d88cf3.webp",
+      "thumb": "arizona-snowbowl-thumb-2d6e3a3c.webp",
+      "share": "arizona-snowbowl-share-b0856437.webp"
+    },
+    "ascutney-outdoors": {
+      "hero": "ascutney-outdoors-hero-28d41393.webp",
+      "thumb": "ascutney-outdoors-thumb-924292c0.webp",
+      "share": "ascutney-outdoors-share-bc134432.webp"
+    },
+    "aspen-highlands": {
+      "hero": "aspen-highlands-hero-8053943f.webp",
+      "thumb": "aspen-highlands-thumb-f314a2d6.webp",
+      "share": "aspen-highlands-share-ff6bd974.webp"
+    },
+    "aspen-mountain": {
+      "hero": "aspen-mountain-hero-0a240cd6.webp",
+      "thumb": "aspen-mountain-thumb-7cf2436f.webp",
+      "share": "aspen-mountain-share-24292264.webp"
+    },
+    "attitash": {
+      "hero": "attitash-hero-fbf4f98b.webp",
+      "thumb": "attitash-thumb-8fca1829.webp",
+      "share": "attitash-share-081f3b93.webp"
+    },
+    "badger-mountain-wa": {
+      "hero": "badger-mountain-wa-hero-d794d4b2.webp",
+      "thumb": "badger-mountain-wa-thumb-6b655f85.webp",
+      "share": "badger-mountain-wa-share-cd9751e6.webp"
+    },
+    "badger-pass": {
+      "hero": "badger-pass-hero-35d497ee.webp",
+      "thumb": "badger-pass-thumb-db3772e6.webp",
+      "share": "badger-pass-share-22e17b57.webp"
+    },
+    "bear-creek-mountain-resort": {
+      "hero": "bear-creek-mountain-resort-hero-94aa8d50.webp",
+      "thumb": "bear-creek-mountain-resort-thumb-6f64966a.webp",
+      "share": "bear-creek-mountain-resort-share-24cefac1.webp"
+    },
+    "bear-mountain": {
+      "hero": "bear-mountain-hero-22142e3b.webp",
+      "thumb": "bear-mountain-thumb-cf190e26.webp",
+      "share": "bear-mountain-share-ca16b40b.webp"
+    },
+    "bear-paw": {
+      "hero": "bear-paw-hero-19376ba4.webp",
+      "thumb": "bear-paw-thumb-77f63ee2.webp",
+      "share": "bear-paw-share-5437a190.webp"
+    },
+    "bear-valley-mountain": {
+      "hero": "bear-valley-mountain-hero-f4c74d02.webp",
+      "thumb": "bear-valley-mountain-thumb-97994460.webp",
+      "share": "bear-valley-mountain-share-857dfaac.webp"
+    },
+    "beartooth-basin": {
+      "hero": "beartooth-basin-hero-9ea4f38e.webp",
+      "thumb": "beartooth-basin-thumb-18da5608.webp",
+      "share": "beartooth-basin-share-b7f2b999.webp"
+    },
+    "beaver-creek": {
+      "hero": "beaver-creek-hero-6f7e2fa0.webp",
+      "thumb": "beaver-creek-thumb-deb98679.webp",
+      "share": "beaver-creek-share-2fa1ff34.webp"
+    },
+    "beaver-mountain": {
+      "hero": "beaver-mountain-hero-0e2c8efe.webp",
+      "thumb": "beaver-mountain-thumb-93603061.webp",
+      "share": "beaver-mountain-share-1389d093.webp"
+    },
+    "beech-mountain-resort": {
+      "hero": "beech-mountain-resort-hero-8728ff5d.webp",
+      "thumb": "beech-mountain-resort-thumb-9154963f.webp",
+      "share": "beech-mountain-resort-share-d85f0d5f.webp"
+    },
+    "belleayre-mountain": {
+      "hero": "belleayre-mountain-hero-38f13600.webp",
+      "thumb": "belleayre-mountain-thumb-f2aca783.webp",
+      "share": "belleayre-mountain-share-99566aa2.webp"
+    },
+    "berkshire-east": {
+      "hero": "berkshire-east-hero-2537a5c3.webp",
+      "thumb": "berkshire-east-thumb-52c278b6.webp",
+      "share": "berkshire-east-share-ec1b4a32.webp"
+    },
+    "big-bear-pa": {
+      "hero": "big-bear-pa-hero-0d5a9717.webp",
+      "thumb": "big-bear-pa-thumb-1a20b721.webp",
+      "share": "big-bear-pa-share-f333d0c5.webp"
+    },
+    "big-boulder": {
+      "hero": "big-boulder-hero-7fd9bc2f.webp",
+      "thumb": "big-boulder-thumb-54b56386.webp",
+      "share": "big-boulder-share-801585b5.webp"
+    },
+    "big-powderhorn-mountain": {
+      "hero": "big-powderhorn-mountain-hero-bcb4748e.webp",
+      "thumb": "big-powderhorn-mountain-thumb-4ec57d9b.webp",
+      "share": "big-powderhorn-mountain-share-6340689a.webp"
+    },
+    "big-rock": {
+      "hero": "big-rock-hero-a277e704.webp",
+      "thumb": "big-rock-thumb-3cd07e34.webp",
+      "share": "big-rock-share-7425d973.webp"
+    },
+    "big-sky": {
+      "hero": "big-sky-hero-5caaff36.webp",
+      "thumb": "big-sky-thumb-c96402e4.webp",
+      "share": "big-sky-share-ec3898a7.webp"
+    },
+    "big-squaw-mountain": {
+      "hero": "big-squaw-mountain-hero-808812ca.webp",
+      "thumb": "big-squaw-mountain-thumb-d2cadee7.webp",
+      "share": "big-squaw-mountain-share-00937ca6.webp"
+    },
+    "bittersweet-ski-resort": {
+      "hero": "bittersweet-ski-resort-hero-fe8c55cb.webp",
+      "thumb": "bittersweet-ski-resort-thumb-e8b1003a.webp",
+      "share": "bittersweet-ski-resort-share-b7d96ad4.webp"
+    },
+    "black-mountain-nh": {
+      "hero": "black-mountain-nh-hero-ad18b1ae.webp",
+      "thumb": "black-mountain-nh-thumb-148213fe.webp",
+      "share": "black-mountain-nh-share-22ba30c6.webp"
+    },
+    "black-mountain-of-maine": {
+      "hero": "black-mountain-of-maine-hero-b306ba49.webp",
+      "thumb": "black-mountain-of-maine-thumb-9d19db52.webp",
+      "share": "black-mountain-of-maine-share-c789cb5b.webp"
+    },
+    "blackjack-mountain": {
+      "hero": "blackjack-mountain-hero-3d20f8c0.webp",
+      "thumb": "blackjack-mountain-thumb-37977a04.webp",
+      "share": "blackjack-mountain-share-6d5539e9.webp"
+    },
+    "blacktail": {
+      "hero": "blacktail-hero-791f7bb2.webp",
+      "thumb": "blacktail-thumb-ba506e20.webp",
+      "share": "blacktail-share-b8da3e31.webp"
+    },
+    "blue-hills-ski-area": {
+      "hero": "blue-hills-ski-area-hero-309a4558.webp",
+      "thumb": "blue-hills-ski-area-thumb-41e198c4.webp",
+      "share": "blue-hills-ski-area-share-0ec39700.webp"
+    },
+    "blue-knob": {
+      "hero": "blue-knob-hero-d9bea20e.webp",
+      "thumb": "blue-knob-thumb-57cdc186.webp",
+      "share": "blue-knob-share-5b36db50.webp"
+    },
+    "blue-mountain-resort": {
+      "hero": "blue-mountain-resort-hero-1ab267fb.webp",
+      "thumb": "blue-mountain-resort-thumb-7b404793.webp",
+      "share": "blue-mountain-resort-share-8373da21.webp"
+    },
+    "bluewood": {
+      "hero": "bluewood-hero-56eccfcf.webp",
+      "thumb": "bluewood-thumb-8aa748f4.webp",
+      "share": "bluewood-share-e3904f8d.webp"
+    },
+    "bogus-basin": {
+      "hero": "bogus-basin-hero-624a1cd3.webp",
+      "thumb": "bogus-basin-thumb-323d49f6.webp",
+      "share": "bogus-basin-share-6147ed0e.webp"
+    },
+    "bolton-valley": {
+      "hero": "bolton-valley-hero-9606ea54.webp",
+      "thumb": "bolton-valley-thumb-beba76a2.webp",
+      "share": "bolton-valley-share-b994ab65.webp"
+    },
+    "boreal-mountain-resort": {
+      "hero": "boreal-mountain-resort-hero-4f05a5c3.webp",
+      "thumb": "boreal-mountain-resort-thumb-6373cbbf.webp",
+      "share": "boreal-mountain-resort-share-b8f96d48.webp"
+    },
+    "boston-mills": {
+      "hero": "boston-mills-hero-4897ecb1.webp",
+      "thumb": "boston-mills-thumb-7eebacf7.webp",
+      "share": "boston-mills-share-a770dbeb.webp"
+    },
+    "bottineau-winter-park": {
+      "hero": "bottineau-winter-park-hero-dcad49b7.webp",
+      "thumb": "bottineau-winter-park-thumb-6aaae562.webp",
+      "share": "bottineau-winter-park-share-43b8c79f.webp"
+    },
+    "bousquet-mountain": {
+      "hero": "bousquet-mountain-hero-dd5816d8.webp",
+      "thumb": "bousquet-mountain-thumb-691ec776.webp",
+      "share": "bousquet-mountain-share-078d09a1.webp"
+    },
+    "boyne-mountain": {
+      "hero": "boyne-mountain-hero-126b67ce.webp",
+      "thumb": "boyne-mountain-thumb-86718914.webp",
+      "share": "boyne-mountain-share-f5669283.webp"
+    },
+    "brandywine": {
+      "hero": "brandywine-hero-ee4cfe54.webp",
+      "thumb": "brandywine-thumb-572814e1.webp",
+      "share": "brandywine-share-7d8d666a.webp"
+    },
+    "breckenridge": {
+      "hero": "breckenridge-hero-3b6adbc7.webp",
+      "thumb": "breckenridge-thumb-f4a43a73.webp",
+      "share": "breckenridge-share-6e83f7ba.webp"
+    },
+    "bretton-woods": {
+      "hero": "bretton-woods-hero-72eb18ca.webp",
+      "thumb": "bretton-woods-thumb-08e56205.webp",
+      "share": "bretton-woods-share-a53d508d.webp"
+    },
+    "brian-head": {
+      "hero": "brian-head-hero-cd00483e.webp",
+      "thumb": "brian-head-thumb-0ada610d.webp",
+      "share": "brian-head-share-295827dd.webp"
+    },
+    "bridger-bowl": {
+      "hero": "bridger-bowl-hero-ef117353.webp",
+      "thumb": "bridger-bowl-thumb-f844ff0d.webp",
+      "share": "bridger-bowl-share-be35b7f0.webp"
+    },
+    "brighton": {
+      "hero": "brighton-hero-bb73c300.webp",
+      "thumb": "brighton-thumb-e85cac57.webp",
+      "share": "brighton-share-5ff9c75d.webp"
+    },
+    "bristol-mountain": {
+      "hero": "bristol-mountain-hero-49c203c4.webp",
+      "thumb": "bristol-mountain-thumb-936e3ef0.webp",
+      "share": "bristol-mountain-share-9a44501b.webp"
+    },
+    "bromley-mountain": {
+      "hero": "bromley-mountain-hero-d78cd020.webp",
+      "thumb": "bromley-mountain-thumb-fedbe42a.webp",
+      "share": "bromley-mountain-share-9b99483b.webp"
+    },
+    "bruce-mound-winter-sports-area": {
+      "hero": "bruce-mound-winter-sports-area-hero-b1f1bd06.webp",
+      "thumb": "bruce-mound-winter-sports-area-thumb-8cb5303a.webp",
+      "share": "bruce-mound-winter-sports-area-share-edfece41.webp"
+    },
+    "brundage-mountain": {
+      "hero": "brundage-mountain-hero-ff748870.webp",
+      "thumb": "brundage-mountain-thumb-936e0f83.webp",
+      "share": "brundage-mountain-share-6d491de4.webp"
+    },
+    "bryce-resort": {
+      "hero": "bryce-resort-hero-a3d68cce.webp",
+      "thumb": "bryce-resort-thumb-cf405b62.webp",
+      "share": "bryce-resort-share-122fcafb.webp"
+    },
+    "buck-hill": {
+      "hero": "buck-hill-hero-1a4916b0.webp",
+      "thumb": "buck-hill-thumb-ebe2fb09.webp",
+      "share": "buck-hill-share-653c87c8.webp"
+    },
+    "buena-vista": {
+      "hero": "buena-vista-hero-c2ca365d.webp",
+      "thumb": "buena-vista-thumb-865c96cd.webp",
+      "share": "buena-vista-share-8ae63e29.webp"
+    },
+    "buffalo-ski-club": {
+      "hero": "buffalo-ski-club-hero-907b79c9.webp",
+      "thumb": "buffalo-ski-club-thumb-9743701b.webp",
+      "share": "buffalo-ski-club-share-932ba659.webp"
+    },
+    "burke-mountain": {
+      "hero": "burke-mountain-hero-6cfbf975.webp",
+      "thumb": "burke-mountain-thumb-c8a6c974.webp",
+      "share": "burke-mountain-share-336c855b.webp"
+    },
+    "buttermilk": {
+      "hero": "buttermilk-hero-119af7f3.webp",
+      "thumb": "buttermilk-thumb-1ae5b442.webp",
+      "share": "buttermilk-share-2ea33ec2.webp"
+    },
+    "caberfae-peaks": {
+      "hero": "caberfae-peaks-hero-e7a07f68.webp",
+      "thumb": "caberfae-peaks-thumb-142064cd.webp",
+      "share": "caberfae-peaks-share-52a342f3.webp"
+    },
+    "camden-snow-bowl": {
+      "hero": "camden-snow-bowl-hero-966c778e.webp",
+      "thumb": "camden-snow-bowl-thumb-55cd2d60.webp",
+      "share": "camden-snow-bowl-share-87c0e6e2.webp"
+    },
+    "camelback-mountain-resort": {
+      "hero": "camelback-mountain-resort-hero-5d2338a1.webp",
+      "thumb": "camelback-mountain-resort-thumb-e4184814.webp",
+      "share": "camelback-mountain-resort-share-b643f782.webp"
+    },
+    "camp-10-area": {
+      "hero": "camp-10-area-hero-e6d401f6.webp",
+      "thumb": "camp-10-area-thumb-35cb37c3.webp",
+      "share": "camp-10-area-share-10493361.webp"
+    },
+    "campgaw-mountain": {
+      "hero": "campgaw-mountain-hero-431395d9.webp",
+      "thumb": "campgaw-mountain-thumb-1e4756c7.webp",
+      "share": "campgaw-mountain-share-e9db749c.webp"
+    },
+    "campton-mountain": {
+      "hero": "campton-mountain-hero-6307cd44.webp",
+      "thumb": "campton-mountain-thumb-34790a01.webp",
+      "share": "campton-mountain-share-b5dd1306.webp"
+    },
+    "canaan-valley-resort": {
+      "hero": "canaan-valley-resort-hero-1fa3cf66.webp",
+      "thumb": "canaan-valley-resort-thumb-798baffa.webp",
+      "share": "canaan-valley-resort-share-1fe30c33.webp"
+    },
+    "cannon-mountain": {
+      "hero": "cannon-mountain-hero-71eb2a6a.webp",
+      "thumb": "cannon-mountain-thumb-bc54dc56.webp",
+      "share": "cannon-mountain-share-6c1a13e3.webp"
+    },
+    "cannonsburg": {
+      "hero": "cannonsburg-hero-e59c9923.webp",
+      "thumb": "cannonsburg-thumb-f26aa5b4.webp",
+      "share": "cannonsburg-share-d0dcbacc.webp"
+    },
+    "cascade-mountain": {
+      "hero": "cascade-mountain-hero-15200c40.webp",
+      "thumb": "cascade-mountain-thumb-ab678174.webp",
+      "share": "cascade-mountain-share-74bea742.webp"
+    },
+    "cataloochee-ski-area": {
+      "hero": "cataloochee-ski-area-hero-075ac3cd.webp",
+      "thumb": "cataloochee-ski-area-thumb-f1746c54.webp",
+      "share": "cataloochee-ski-area-share-6afba46e.webp"
+    },
+    "catamount-ski-area": {
+      "hero": "catamount-ski-area-hero-f5bd8bb4.webp",
+      "thumb": "catamount-ski-area-thumb-8095fd5e.webp",
+      "share": "catamount-ski-area-share-a540c8fa.webp"
+    },
+    "chapman-hill": {
+      "hero": "chapman-hill-hero-8ef59b08.webp",
+      "thumb": "chapman-hill-thumb-7b1497f2.webp",
+      "share": "chapman-hill-share-069f7241.webp"
+    },
+    "cherry-peak": {
+      "hero": "cherry-peak-hero-8a0a46e3.webp",
+      "thumb": "cherry-peak-thumb-fbc94559.webp",
+      "share": "cherry-peak-share-4df69ffe.webp"
+    },
+    "chestnut-mountain": {
+      "hero": "chestnut-mountain-hero-1a0aeb78.webp",
+      "thumb": "chestnut-mountain-thumb-793371ea.webp",
+      "share": "chestnut-mountain-share-36736d25.webp"
+    },
+    "china-peak": {
+      "hero": "china-peak-hero-9b78c80a.webp",
+      "thumb": "china-peak-thumb-88da62c2.webp",
+      "share": "china-peak-share-d5573e9b.webp"
+    },
+    "christie": {
+      "hero": "christie-hero-008532d8.webp",
+      "thumb": "christie-thumb-9a6c1a0d.webp",
+      "share": "christie-share-6a2c1586.webp"
+    },
+    "christmas-mountain": {
+      "hero": "christmas-mountain-hero-54a18ffd.webp",
+      "thumb": "christmas-mountain-thumb-f71864b5.webp",
+      "share": "christmas-mountain-share-a7bf0239.webp"
+    },
+    "cloudmont-ski-resort": {
+      "hero": "cloudmont-ski-resort-hero-9d2f55c2.webp",
+      "thumb": "cloudmont-ski-resort-thumb-6b01b1b0.webp",
+      "share": "cloudmont-ski-resort-share-ea07272c.webp"
+    },
+    "cochrans-ski-area": {
+      "hero": "cochrans-ski-area-hero-42d38d85.webp",
+      "thumb": "cochrans-ski-area-thumb-0a525f4a.webp",
+      "share": "cochrans-ski-area-share-30516667.webp"
+    },
+    "cooper-spur-area": {
+      "hero": "cooper-spur-area-hero-b888cf0f.webp",
+      "thumb": "cooper-spur-area-thumb-2a841c65.webp",
+      "share": "cooper-spur-area-share-df13f890.webp"
+    },
+    "copper-mountain": {
+      "hero": "copper-mountain-hero-6687ddb2.webp",
+      "thumb": "copper-mountain-thumb-2b55a3e4.webp",
+      "share": "copper-mountain-share-96cedcf4.webp"
+    },
+    "cottonwood-butte": {
+      "hero": "cottonwood-butte-hero-c301af28.webp",
+      "thumb": "cottonwood-butte-thumb-13fc1390.webp",
+      "share": "cottonwood-butte-share-f0b065a8.webp"
+    },
+    "cranor-ski-hill": {
+      "hero": "cranor-ski-hill-hero-68c259c2.webp",
+      "thumb": "cranor-ski-hill-thumb-21a5e80c.webp",
+      "share": "cranor-ski-hill-share-86dbe65b.webp"
+    },
+    "crested-butte": {
+      "hero": "crested-butte-hero-1b4e5fe2.webp",
+      "thumb": "crested-butte-thumb-ce73d7f6.webp",
+      "share": "crested-butte-share-5bc2e06d.webp"
+    },
+    "crotched-mountain": {
+      "hero": "crotched-mountain-hero-f629cf6f.webp",
+      "thumb": "crotched-mountain-thumb-aa7352af.webp",
+      "share": "crotched-mountain-share-0671c443.webp"
+    },
+    "crystal-mountain": {
+      "hero": "crystal-mountain-hero-9fc9da59.webp",
+      "thumb": "crystal-mountain-thumb-3b571a76.webp",
+      "share": "crystal-mountain-share-a3c8c068.webp"
+    },
+    "crystal-mountain-mi": {
+      "hero": "crystal-mountain-mi-hero-173eb282.webp",
+      "thumb": "crystal-mountain-mi-thumb-371aa4f7.webp",
+      "share": "crystal-mountain-mi-share-1ec21ae3.webp"
+    },
+    "crystal-ridge": {
+      "hero": "crystal-ridge-hero-10bf21a6.webp",
+      "thumb": "crystal-ridge-thumb-f3c9554d.webp",
+      "share": "crystal-ridge-share-014815c8.webp"
+    },
+    "cuchara": {
+      "hero": "cuchara-hero-ffa0fec6.webp",
+      "thumb": "cuchara-thumb-61118fc2.webp",
+      "share": "cuchara-share-bdac7ad4.webp"
+    },
+    "dartmouth-skiway": {
+      "hero": "dartmouth-skiway-hero-3fd93fba.webp",
+      "thumb": "dartmouth-skiway-thumb-bd6df925.webp",
+      "share": "dartmouth-skiway-share-eaca25a1.webp"
+    },
+    "deer-valley": {
+      "hero": "deer-valley-hero-f80aa868.webp",
+      "thumb": "deer-valley-thumb-16a09454.webp",
+      "share": "deer-valley-share-a2fb266b.webp"
+    },
+    "detroit-mountain": {
+      "hero": "detroit-mountain-hero-5cbd1303.webp",
+      "thumb": "detroit-mountain-thumb-634227c5.webp",
+      "share": "detroit-mountain-share-124929ac.webp"
+    },
+    "devils-head": {
+      "hero": "devils-head-hero-7bb67102.webp",
+      "thumb": "devils-head-thumb-96377022.webp",
+      "share": "devils-head-share-91583f12.webp"
+    },
+    "diamond-peak": {
+      "hero": "diamond-peak-hero-d7a3a139.webp",
+      "thumb": "diamond-peak-thumb-fc747c99.webp",
+      "share": "diamond-peak-share-edb63f50.webp"
+    },
+    "discovery": {
+      "hero": "discovery-hero-0a9f2c5e.webp",
+      "thumb": "discovery-thumb-866039de.webp",
+      "share": "discovery-share-6576a345.webp"
+    },
+    "dodge-ridge": {
+      "hero": "dodge-ridge-hero-53d41a53.webp",
+      "thumb": "dodge-ridge-thumb-16d8bca3.webp",
+      "share": "dodge-ridge-share-8b78c9ed.webp"
+    },
+    "donner-ski-ranch": {
+      "hero": "donner-ski-ranch-hero-c60aba23.webp",
+      "thumb": "donner-ski-ranch-thumb-c23fbffc.webp",
+      "share": "donner-ski-ranch-share-29cc8209.webp"
+    },
+    "dry-hill-area": {
+      "hero": "dry-hill-area-hero-6541f802.webp",
+      "thumb": "dry-hill-area-thumb-d156ccd2.webp",
+      "share": "dry-hill-area-share-0dc8a580.webp"
+    },
+    "eagle-point": {
+      "hero": "eagle-point-hero-d80b403f.webp",
+      "thumb": "eagle-point-thumb-9b3caf99.webp",
+      "share": "eagle-point-share-6438edba.webp"
+    },
+    "eagle-rock-resort": {
+      "hero": "eagle-rock-resort-hero-fe231a38.webp",
+      "thumb": "eagle-rock-resort-thumb-4c39c84c.webp",
+      "share": "eagle-rock-resort-share-7ec3cbfb.webp"
+    },
+    "eaglecrest-ski-area": {
+      "hero": "eaglecrest-ski-area-hero-93d9257d.webp",
+      "thumb": "eaglecrest-ski-area-thumb-91c76b43.webp",
+      "share": "eaglecrest-ski-area-share-4cca863e.webp"
+    },
+    "eaton-mountain": {
+      "hero": "eaton-mountain-hero-51cdff00.webp",
+      "thumb": "eaton-mountain-thumb-ff0e2e36.webp",
+      "share": "eaton-mountain-share-d5f586e0.webp"
+    },
+    "echo-mountain": {
+      "hero": "echo-mountain-hero-db5d42a4.webp",
+      "thumb": "echo-mountain-thumb-ab70d9e8.webp",
+      "share": "echo-mountain-share-f9c0d3d2.webp"
+    },
+    "echo-valley": {
+      "hero": "echo-valley-hero-5b32c427.webp",
+      "thumb": "echo-valley-thumb-48faf0a1.webp",
+      "share": "echo-valley-share-21030285.webp"
+    },
+    "eldora": {
+      "hero": "eldora-hero-840fdf2f.webp",
+      "thumb": "eldora-thumb-2881d86d.webp",
+      "share": "eldora-share-30b39233.webp"
+    },
+    "elk-mountain": {
+      "hero": "elk-mountain-hero-d86c8022.webp",
+      "thumb": "elk-mountain-thumb-998a9749.webp",
+      "share": "elk-mountain-share-e288e529.webp"
+    },
+    "elko-snobowl": {
+      "hero": "elko-snobowl-hero-3fad9c86.webp",
+      "thumb": "elko-snobowl-thumb-9b638f0f.webp",
+      "share": "elko-snobowl-share-6b90e7dc.webp"
+    },
+    "ferguson-ridge": {
+      "hero": "ferguson-ridge-hero-7e8d08c5.webp",
+      "thumb": "ferguson-ridge-thumb-22693ab8.webp",
+      "share": "ferguson-ridge-share-9df14502.webp"
+    },
+    "four-lakes": {
+      "hero": "four-lakes-hero-77f1d1c3.webp",
+      "thumb": "four-lakes-thumb-65d9dfb1.webp",
+      "share": "four-lakes-share-05b7fb05.webp"
+    },
+    "frost-fire-park": {
+      "hero": "frost-fire-park-hero-c5c18559.webp",
+      "thumb": "frost-fire-park-thumb-ae5b51d5.webp",
+      "share": "frost-fire-park-share-320c3481.webp"
+    },
+    "giants-ridge": {
+      "hero": "giants-ridge-hero-41781b79.webp",
+      "thumb": "giants-ridge-thumb-5a2d280a.webp",
+      "share": "giants-ridge-share-839ad30b.webp"
+    },
+    "gore-mountain": {
+      "hero": "gore-mountain-hero-97a73552.webp",
+      "thumb": "gore-mountain-thumb-4da80f84.webp",
+      "share": "gore-mountain-share-ad9d71d2.webp"
+    },
+    "granby-ranch": {
+      "hero": "granby-ranch-hero-72511009.webp",
+      "thumb": "granby-ranch-thumb-b1950e4e.webp",
+      "share": "granby-ranch-share-68acca3f.webp"
+    },
+    "grand-targhee": {
+      "hero": "grand-targhee-hero-e5c55f13.webp",
+      "thumb": "grand-targhee-thumb-946ecf37.webp",
+      "share": "grand-targhee-share-87b20f37.webp"
+    },
+    "granite-gorge": {
+      "hero": "granite-gorge-hero-bba617de.webp",
+      "thumb": "granite-gorge-thumb-ca5ffe3e.webp",
+      "share": "granite-gorge-share-9abba527.webp"
+    },
+    "granite-peak": {
+      "hero": "granite-peak-hero-290e6860.webp",
+      "thumb": "granite-peak-thumb-e3d27e86.webp",
+      "share": "granite-peak-share-486535a8.webp"
+    },
+    "great-bear-valley": {
+      "hero": "great-bear-valley-hero-032d7b84.webp",
+      "thumb": "great-bear-valley-thumb-a501d9a4.webp",
+      "share": "great-bear-valley-share-ba742318.webp"
+    },
+    "great-divide": {
+      "hero": "great-divide-hero-8e9152fe.webp",
+      "thumb": "great-divide-thumb-2e072295.webp",
+      "share": "great-divide-share-44c0fe29.webp"
+    },
+    "greek-peak": {
+      "hero": "greek-peak-hero-5dc78d37.webp",
+      "thumb": "greek-peak-thumb-aedfa9b9.webp",
+      "share": "greek-peak-share-750f71ef.webp"
+    },
+    "gunstock-mountain-resort": {
+      "hero": "gunstock-mountain-resort-hero-2e3b1812.webp",
+      "thumb": "gunstock-mountain-resort-thumb-3b7aa392.webp",
+      "share": "gunstock-mountain-resort-share-540d3658.webp"
+    },
+    "hatley-pointe": {
+      "hero": "hatley-pointe-hero-e92021b3.webp",
+      "thumb": "hatley-pointe-thumb-73d0e672.webp",
+      "share": "hatley-pointe-share-2f6d92db.webp"
+    },
+    "heavenly-mountain-resort": {
+      "hero": "heavenly-mountain-resort-hero-4f13e120.webp",
+      "thumb": "heavenly-mountain-resort-thumb-ff9a5eff.webp",
+      "share": "heavenly-mountain-resort-share-5d507e3a.webp"
+    },
+    "hermon-mountain": {
+      "hero": "hermon-mountain-hero-c5c59a28.webp",
+      "thumb": "hermon-mountain-thumb-972a8977.webp",
+      "share": "hermon-mountain-share-044515db.webp"
+    },
+    "hesperus-ski-area": {
+      "hero": "hesperus-ski-area-hero-a27f81e9.webp",
+      "thumb": "hesperus-ski-area-thumb-a8d0c22b.webp",
+      "share": "hesperus-ski-area-share-13c5b554.webp"
+    },
+    "hidden-valley": {
+      "hero": "hidden-valley-hero-2c5e79f0.webp",
+      "thumb": "hidden-valley-thumb-aa9d47f6.webp",
+      "share": "hidden-valley-share-e296509d.webp"
+    },
+    "hidden-valley-mo": {
+      "hero": "hidden-valley-mo-hero-bed053ff.webp",
+      "thumb": "hidden-valley-mo-thumb-897f31af.webp",
+      "share": "hidden-valley-mo-share-74dbe79b.webp"
+    },
+    "hilltop-ski-area": {
+      "hero": "hilltop-ski-area-hero-6792114f.webp",
+      "thumb": "hilltop-ski-area-thumb-435ad07b.webp",
+      "share": "hilltop-ski-area-share-0e921733.webp"
+    },
+    "hoedown-hill": {
+      "hero": "hoedown-hill-hero-a9c2ca02.webp",
+      "thumb": "hoedown-hill-thumb-194b109d.webp",
+      "share": "hoedown-hill-share-66ce2d3f.webp"
+    },
+    "hogadon": {
+      "hero": "hogadon-hero-5e5ebe43.webp",
+      "thumb": "hogadon-thumb-6d666478.webp",
+      "share": "hogadon-share-e31adc63.webp"
+    },
+    "holiday-mountain": {
+      "hero": "holiday-mountain-hero-49c680c8.webp",
+      "thumb": "holiday-mountain-thumb-21412508.webp",
+      "share": "holiday-mountain-share-4b6e2ecc.webp"
+    },
+    "holiday-valley": {
+      "hero": "holiday-valley-hero-5ce38416.webp",
+      "thumb": "holiday-valley-thumb-78b954c2.webp",
+      "share": "holiday-valley-share-34c5a3cb.webp"
+    },
+    "holimont": {
+      "hero": "holimont-hero-40f257c4.webp",
+      "thumb": "holimont-thumb-487983d1.webp",
+      "share": "holimont-share-caec774a.webp"
+    },
+    "homestead-resort": {
+      "hero": "homestead-resort-hero-4f5a69a9.webp",
+      "thumb": "homestead-resort-thumb-d26ded94.webp",
+      "share": "homestead-resort-share-27989957.webp"
+    },
+    "homewood-mountain-resort": {
+      "hero": "homewood-mountain-resort-hero-ca52950a.webp",
+      "thumb": "homewood-mountain-resort-thumb-3be0352f.webp",
+      "share": "homewood-mountain-resort-share-53ac41f2.webp"
+    },
+    "hoodoo": {
+      "hero": "hoodoo-hero-7cb21d0a.webp",
+      "thumb": "hoodoo-thumb-65ee4760.webp",
+      "share": "hoodoo-share-015a17a1.webp"
+    },
+    "howelsen-hill": {
+      "hero": "howelsen-hill-hero-a044f494.webp",
+      "thumb": "howelsen-hill-thumb-550fb4bd.webp",
+      "share": "howelsen-hill-share-734b28fe.webp"
+    },
+    "huff-hills": {
+      "hero": "huff-hills-hero-0f8427dd.webp",
+      "thumb": "huff-hills-thumb-7af43b83.webp",
+      "share": "huff-hills-share-af653006.webp"
+    },
+    "hunt-hollow-club": {
+      "hero": "hunt-hollow-club-hero-bf9702df.webp",
+      "thumb": "hunt-hollow-club-thumb-cf4cd63f.webp",
+      "share": "hunt-hollow-club-share-9bb779c0.webp"
+    },
+    "hunter-mountain": {
+      "hero": "hunter-mountain-hero-987a9f0a.webp",
+      "thumb": "hunter-mountain-thumb-44d75d0f.webp",
+      "share": "hunter-mountain-share-5050cfc6.webp"
+    },
+    "hurricane-ridge": {
+      "hero": "hurricane-ridge-hero-ef7fb306.webp",
+      "thumb": "hurricane-ridge-thumb-26efd4b7.webp",
+      "share": "hurricane-ridge-share-87764dea.webp"
+    },
+    "hyland-hills": {
+      "hero": "hyland-hills-hero-eeb473d9.webp",
+      "thumb": "hyland-hills-thumb-88861f7a.webp",
+      "share": "hyland-hills-share-746c77b0.webp"
+    },
+    "indianhead-mountain": {
+      "hero": "indianhead-mountain-hero-ce77977e.webp",
+      "thumb": "indianhead-mountain-thumb-efb3bfba.webp",
+      "share": "indianhead-mountain-share-dffd8c7e.webp"
+    },
+    "jack-frost-mountain": {
+      "hero": "jack-frost-mountain-hero-f834613a.webp",
+      "thumb": "jack-frost-mountain-thumb-169044de.webp",
+      "share": "jack-frost-mountain-share-902fba44.webp"
+    },
+    "jackson-hole": {
+      "hero": "jackson-hole-hero-bbb0463b.webp",
+      "thumb": "jackson-hole-thumb-fc752c59.webp",
+      "share": "jackson-hole-share-e50c5d9b.webp"
+    },
+    "jay-peak": {
+      "hero": "jay-peak-hero-7081d7c5.webp",
+      "thumb": "jay-peak-thumb-13f14762.webp",
+      "share": "jay-peak-share-ddff4223.webp"
+    },
+    "jiminy-peak": {
+      "hero": "jiminy-peak-hero-72a48033.webp",
+      "thumb": "jiminy-peak-thumb-5510e5ac.webp",
+      "share": "jiminy-peak-share-bdcfd4b2.webp"
+    },
+    "june-mountain": {
+      "hero": "june-mountain-hero-d45e8343.webp",
+      "thumb": "june-mountain-thumb-f94f284e.webp",
+      "share": "june-mountain-share-d8940c05.webp"
+    },
+    "kelly-canyon": {
+      "hero": "kelly-canyon-hero-400f7204.webp",
+      "thumb": "kelly-canyon-thumb-2528a728.webp",
+      "share": "kelly-canyon-share-b0b1e1df.webp"
+    },
+    "keystone": {
+      "hero": "keystone-hero-02404543.webp",
+      "thumb": "keystone-thumb-3cc8dd8e.webp",
+      "share": "keystone-share-f9793ce2.webp"
+    },
+    "killington": {
+      "hero": "killington-hero-d5d9dcda.webp",
+      "thumb": "killington-thumb-9397dc22.webp",
+      "share": "killington-share-d928458b.webp"
+    },
+    "king-pine": {
+      "hero": "king-pine-hero-59f8ade3.webp",
+      "thumb": "king-pine-thumb-815c06f0.webp",
+      "share": "king-pine-share-25551bf9.webp"
+    },
+    "kirkwood-mountain-resort": {
+      "hero": "kirkwood-mountain-resort-hero-e28ee96a.webp",
+      "thumb": "kirkwood-mountain-resort-thumb-7798ad2d.webp",
+      "share": "kirkwood-mountain-resort-share-70802e0d.webp"
+    },
+    "kissing-bridge": {
+      "hero": "kissing-bridge-hero-53ac3494.webp",
+      "thumb": "kissing-bridge-thumb-c7474962.webp",
+      "share": "kissing-bridge-share-3cb02e9a.webp"
+    },
+    "labrador-mountain": {
+      "hero": "labrador-mountain-hero-d2368a13.webp",
+      "thumb": "labrador-mountain-thumb-b10a2473.webp",
+      "share": "labrador-mountain-share-9f531a73.webp"
+    },
+    "lake-city-ski-hill": {
+      "hero": "lake-city-ski-hill-hero-d90e9a20.webp",
+      "thumb": "lake-city-ski-hill-thumb-9b0dfeb4.webp",
+      "share": "lake-city-ski-hill-share-066bd630.webp"
+    },
+    "laurel-mountain": {
+      "hero": "laurel-mountain-hero-24b52f39.webp",
+      "thumb": "laurel-mountain-thumb-6928eff9.webp",
+      "share": "laurel-mountain-share-05b2a771.webp"
+    },
+    "leavenworth-winter-sports-club": {
+      "hero": "leavenworth-winter-sports-club-hero-e68ffc5e.webp",
+      "thumb": "leavenworth-winter-sports-club-thumb-f4c924ff.webp",
+      "share": "leavenworth-winter-sports-club-share-6b90d0f8.webp"
+    },
+    "lee-canyon": {
+      "hero": "lee-canyon-hero-ec2219e0.webp",
+      "thumb": "lee-canyon-thumb-d36ec96a.webp",
+      "share": "lee-canyon-share-76c1b7fe.webp"
+    },
+    "lees-ski-hill": {
+      "hero": "lees-ski-hill-hero-b9c286d7.webp",
+      "thumb": "lees-ski-hill-thumb-1edcde83.webp",
+      "share": "lees-ski-hill-share-9110dca5.webp"
+    },
+    "liberty-mountain": {
+      "hero": "liberty-mountain-hero-b3b44a6b.webp",
+      "thumb": "liberty-mountain-thumb-1786283d.webp",
+      "share": "liberty-mountain-share-16fa41b7.webp"
+    },
+    "little-ski-hill": {
+      "hero": "little-ski-hill-hero-2478fd37.webp",
+      "thumb": "little-ski-hill-thumb-6888fd1d.webp",
+      "share": "little-ski-hill-share-01ea8335.webp"
+    },
+    "little-switzerland": {
+      "hero": "little-switzerland-hero-bbac4008.webp",
+      "thumb": "little-switzerland-thumb-12c5077c.webp",
+      "share": "little-switzerland-share-f3bf3139.webp"
+    },
+    "lookout-pass": {
+      "hero": "lookout-pass-hero-6174f80c.webp",
+      "thumb": "lookout-pass-thumb-c4134780.webp",
+      "share": "lookout-pass-share-9c40af06.webp"
+    },
+    "loon-mountain": {
+      "hero": "loon-mountain-hero-bc8a06db.webp",
+      "thumb": "loon-mountain-thumb-b3f18055.webp",
+      "share": "loon-mountain-share-f9793bc3.webp"
+    },
+    "lost-trail": {
+      "hero": "lost-trail-hero-a2051401.webp",
+      "thumb": "lost-trail-thumb-ca300041.webp",
+      "share": "lost-trail-share-3ed90d81.webp"
+    },
+    "lost-valley": {
+      "hero": "lost-valley-hero-69a5c256.webp",
+      "thumb": "lost-valley-thumb-ad768d47.webp",
+      "share": "lost-valley-share-003fb7c8.webp"
+    },
+    "loup-loup": {
+      "hero": "loup-loup-hero-5cfe2bea.webp",
+      "thumb": "loup-loup-thumb-fab2a272.webp",
+      "share": "loup-loup-share-715a5ca7.webp"
+    },
+    "loveland": {
+      "hero": "loveland-hero-5360d6e8.webp",
+      "thumb": "loveland-thumb-1fa5a122.webp",
+      "share": "loveland-share-7e67d7f2.webp"
+    },
+    "lutsen-mountains": {
+      "hero": "lutsen-mountains-hero-e6aecb63.webp",
+      "thumb": "lutsen-mountains-thumb-294261b6.webp",
+      "share": "lutsen-mountains-share-9f877e7e.webp"
+    },
+    "lyndon-outing-club": {
+      "hero": "lyndon-outing-club-hero-2be4f9e2.webp",
+      "thumb": "lyndon-outing-club-thumb-245f83fc.webp",
+      "share": "lyndon-outing-club-share-6165cfac.webp"
+    },
+    "mad-river-glen": {
+      "hero": "mad-river-glen-hero-621630db.webp",
+      "thumb": "mad-river-glen-thumb-4c8af9d6.webp",
+      "share": "mad-river-glen-share-04cd6a94.webp"
+    },
+    "mad-river-mountain": {
+      "hero": "mad-river-mountain-hero-58d467a7.webp",
+      "thumb": "mad-river-mountain-thumb-1ad05c60.webp",
+      "share": "mad-river-mountain-share-d3138651.webp"
+    },
+    "magic-mountain": {
+      "hero": "magic-mountain-hero-2d70b60c.webp",
+      "thumb": "magic-mountain-thumb-c069ef8b.webp",
+      "share": "magic-mountain-share-967fdae8.webp"
+    },
+    "magic-mountain-id": {
+      "hero": "magic-mountain-id-hero-6873277a.webp",
+      "thumb": "magic-mountain-id-thumb-e1df2e15.webp",
+      "share": "magic-mountain-id-share-9f34d85d.webp"
+    },
+    "mammoth-mountain": {
+      "hero": "mammoth-mountain-hero-781d07e7.webp",
+      "thumb": "mammoth-mountain-thumb-e295d9e6.webp",
+      "share": "mammoth-mountain-share-e22ee411.webp"
+    },
+    "maple-ski-ridge": {
+      "hero": "maple-ski-ridge-hero-ac5d30b1.webp",
+      "thumb": "maple-ski-ridge-thumb-415c614c.webp",
+      "share": "maple-ski-ridge-share-43345d91.webp"
+    },
+    "marquette-mountain": {
+      "hero": "marquette-mountain-hero-9de1c5a5.webp",
+      "thumb": "marquette-mountain-thumb-d7c5f4f1.webp",
+      "share": "marquette-mountain-share-d3a26f3b.webp"
+    },
+    "massanutten-resort": {
+      "hero": "massanutten-resort-hero-2f8b3583.webp",
+      "thumb": "massanutten-resort-thumb-ed65265f.webp",
+      "share": "massanutten-resort-share-b5260ad1.webp"
+    },
+    "maverick-mountain": {
+      "hero": "maverick-mountain-hero-d0509fa8.webp",
+      "thumb": "maverick-mountain-thumb-5734facc.webp",
+      "share": "maverick-mountain-share-bb99c8eb.webp"
+    },
+    "mccauley-mountain": {
+      "hero": "mccauley-mountain-hero-5a84a1ee.webp",
+      "thumb": "mccauley-mountain-thumb-d8116eae.webp",
+      "share": "mccauley-mountain-share-2871ad9a.webp"
+    },
+    "mcintyre-ski-area": {
+      "hero": "mcintyre-ski-area-hero-07c5c83c.webp",
+      "thumb": "mcintyre-ski-area-thumb-a9214178.webp",
+      "share": "mcintyre-ski-area-share-e7b01247.webp"
+    },
+    "meadowlark": {
+      "hero": "meadowlark-hero-1d0821e0.webp",
+      "thumb": "meadowlark-thumb-6a443842.webp",
+      "share": "meadowlark-share-3a3e4bc3.webp"
+    },
+    "middlebury-snow-bowl": {
+      "hero": "middlebury-snow-bowl-hero-cda0208a.webp",
+      "thumb": "middlebury-snow-bowl-thumb-5775e0d5.webp",
+      "share": "middlebury-snow-bowl-share-7a983380.webp"
+    },
+    "mission-ridge": {
+      "hero": "mission-ridge-hero-43073834.webp",
+      "thumb": "mission-ridge-thumb-65343bdf.webp",
+      "share": "mission-ridge-share-9684e9d4.webp"
+    },
+    "mohawk-mountain-ski-area": {
+      "hero": "mohawk-mountain-ski-area-hero-5feff015.webp",
+      "thumb": "mohawk-mountain-ski-area-thumb-f5d18b3d.webp",
+      "share": "mohawk-mountain-ski-area-share-dd53a917.webp"
+    },
+    "monarch-mountain": {
+      "hero": "monarch-mountain-hero-ee450324.webp",
+      "thumb": "monarch-mountain-thumb-e6f738ed.webp",
+      "share": "monarch-mountain-share-6e7510ce.webp"
+    },
+    "mont-ripley": {
+      "hero": "mont-ripley-hero-1b921f82.webp",
+      "thumb": "mont-ripley-thumb-836c0999.webp",
+      "share": "mont-ripley-share-410840af.webp"
+    },
+    "montage-mountain": {
+      "hero": "montage-mountain-hero-34214d5b.webp",
+      "thumb": "montage-mountain-thumb-7ceefebc.webp",
+      "share": "montage-mountain-share-e62d2c75.webp"
+    },
+    "montana-snowbowl": {
+      "hero": "montana-snowbowl-hero-6f57f5be.webp",
+      "thumb": "montana-snowbowl-thumb-05ab000a.webp",
+      "share": "montana-snowbowl-share-bb799094.webp"
+    },
+    "mount-ashwabay": {
+      "hero": "mount-ashwabay-hero-b04dec08.webp",
+      "thumb": "mount-ashwabay-thumb-f8b68ecd.webp",
+      "share": "mount-ashwabay-share-e1e8a453.webp"
+    },
+    "mount-bohemia": {
+      "hero": "mount-bohemia-hero-641e1889.webp",
+      "thumb": "mount-bohemia-thumb-eb0611ee.webp",
+      "share": "mount-bohemia-share-a8b428af.webp"
+    },
+    "mount-holly": {
+      "hero": "mount-holly-hero-8c1a1f29.webp",
+      "thumb": "mount-holly-thumb-0c9c2333.webp",
+      "share": "mount-holly-share-b98f683a.webp"
+    },
+    "mount-itasca": {
+      "hero": "mount-itasca-hero-f188aff8.webp",
+      "thumb": "mount-itasca-thumb-384f9b6f.webp",
+      "share": "mount-itasca-share-b8a34537.webp"
+    },
+    "mount-jefferson-ski-area": {
+      "hero": "mount-jefferson-ski-area-hero-d88e529e.webp",
+      "thumb": "mount-jefferson-ski-area-thumb-74f7d1e7.webp",
+      "share": "mount-jefferson-ski-area-share-a54bc82c.webp"
+    },
+    "mount-kato": {
+      "hero": "mount-kato-hero-6e6c6e79.webp",
+      "thumb": "mount-kato-thumb-7a44ece5.webp",
+      "share": "mount-kato-share-c61a74f0.webp"
+    },
+    "mount-peter": {
+      "hero": "mount-peter-hero-e6c59aa3.webp",
+      "thumb": "mount-peter-thumb-8f9c6ca5.webp",
+      "share": "mount-peter-share-bc105ff9.webp"
+    },
+    "mount-pisgah": {
+      "hero": "mount-pisgah-hero-b306718f.webp",
+      "thumb": "mount-pisgah-thumb-3f107012.webp",
+      "share": "mount-pisgah-share-8fa26c69.webp"
+    },
+    "mount-snow": {
+      "hero": "mount-snow-hero-b3c4bff6.webp",
+      "thumb": "mount-snow-thumb-f78f6775.webp",
+      "share": "mount-snow-share-50f97037.webp"
+    },
+    "mount-southington": {
+      "hero": "mount-southington-hero-ee139924.webp",
+      "thumb": "mount-southington-thumb-5407831d.webp",
+      "share": "mount-southington-share-2938bfdd.webp"
+    },
+    "mount-sunapee": {
+      "hero": "mount-sunapee-hero-d9d899d1.webp",
+      "thumb": "mount-sunapee-thumb-a41963d4.webp",
+      "share": "mount-sunapee-share-6864f353.webp"
+    },
+    "mountain-creek": {
+      "hero": "mountain-creek-hero-47a40da5.webp",
+      "thumb": "mountain-creek-thumb-f841d66a.webp",
+      "share": "mountain-creek-share-22798519.webp"
+    },
+    "mountain-high": {
+      "hero": "mountain-high-hero-71b17a65.webp",
+      "thumb": "mountain-high-thumb-82b0b07b.webp",
+      "share": "mountain-high-share-80b79659.webp"
+    },
+    "mt-abram": {
+      "hero": "mt-abram-hero-0c0c7dd3.webp",
+      "thumb": "mt-abram-thumb-b76205b4.webp",
+      "share": "mt-abram-share-d4b59deb.webp"
+    },
+    "mt-bachelor": {
+      "hero": "mt-bachelor-hero-20d4971a.webp",
+      "thumb": "mt-bachelor-thumb-d73ca211.webp",
+      "share": "mt-bachelor-share-f1a2cd1a.webp"
+    },
+    "mt-baker-ski-area": {
+      "hero": "mt-baker-ski-area-hero-70654a7e.webp",
+      "thumb": "mt-baker-ski-area-thumb-fa43fef7.webp",
+      "share": "mt-baker-ski-area-share-42f81958.webp"
+    },
+    "mt-baldy": {
+      "hero": "mt-baldy-hero-e149d5e7.webp",
+      "thumb": "mt-baldy-thumb-8edd3741.webp",
+      "share": "mt-baldy-share-1864c48c.webp"
+    },
+    "mt-brighton": {
+      "hero": "mt-brighton-hero-c98c5c6c.webp",
+      "thumb": "mt-brighton-thumb-e5c9df93.webp",
+      "share": "mt-brighton-share-2613979a.webp"
+    },
+    "mt-crescent": {
+      "hero": "mt-crescent-hero-796ef585.webp",
+      "thumb": "mt-crescent-thumb-adef7683.webp",
+      "share": "mt-crescent-share-45620c07.webp"
+    },
+    "mt-eyak": {
+      "hero": "mt-eyak-hero-2ff3849e.webp",
+      "thumb": "mt-eyak-thumb-fb261e6d.webp",
+      "share": "mt-eyak-share-f346d074.webp"
+    },
+    "mt-holiday": {
+      "hero": "mt-holiday-hero-e2599111.webp",
+      "thumb": "mt-holiday-thumb-6bab6016.webp",
+      "share": "mt-holiday-share-8f8c00ed.webp"
+    },
+    "mt-hood-meadows": {
+      "hero": "mt-hood-meadows-hero-2e18cbc3.webp",
+      "thumb": "mt-hood-meadows-thumb-23321646.webp",
+      "share": "mt-hood-meadows-share-597f8424.webp"
+    },
+    "mt-hood-skibowl": {
+      "hero": "mt-hood-skibowl-hero-916783e4.webp",
+      "thumb": "mt-hood-skibowl-thumb-e5787d88.webp",
+      "share": "mt-hood-skibowl-share-14b70917.webp"
+    },
+    "mt-la-crosse": {
+      "hero": "mt-la-crosse-hero-fc8139ca.webp",
+      "thumb": "mt-la-crosse-thumb-cc210834.webp",
+      "share": "mt-la-crosse-share-88ae260c.webp"
+    },
+    "mt-lemmon-ski-valley": {
+      "hero": "mt-lemmon-ski-valley-hero-be73acc7.webp",
+      "thumb": "mt-lemmon-ski-valley-thumb-25cd1886.webp",
+      "share": "mt-lemmon-ski-valley-share-151ed68e.webp"
+    },
+    "mt-rose-ski-tahoe": {
+      "hero": "mt-rose-ski-tahoe-hero-81dc47c0.webp",
+      "thumb": "mt-rose-ski-tahoe-thumb-71c0888a.webp",
+      "share": "mt-rose-ski-tahoe-share-568f0681.webp"
+    },
+    "mt-shasta-ski-park": {
+      "hero": "mt-shasta-ski-park-hero-335371e2.webp",
+      "thumb": "mt-shasta-ski-park-thumb-9a5f2837.webp",
+      "share": "mt-shasta-ski-park-share-d69d8ead.webp"
+    },
+    "mt-spokane": {
+      "hero": "mt-spokane-hero-3e018198.webp",
+      "thumb": "mt-spokane-thumb-bf304cbd.webp",
+      "share": "mt-spokane-share-670d845f.webp"
+    },
+    "mt-waterman": {
+      "hero": "mt-waterman-hero-566457ea.webp",
+      "thumb": "mt-waterman-thumb-39456f0e.webp",
+      "share": "mt-waterman-share-a79259a8.webp"
+    },
+    "mystic-mountain": {
+      "hero": "mystic-mountain-hero-3b45a6fd.webp",
+      "thumb": "mystic-mountain-thumb-415a7f37.webp",
+      "share": "mystic-mountain-share-a8949e96.webp"
+    },
+    "nashoba-valley-ski-area": {
+      "hero": "nashoba-valley-ski-area-hero-2885ad97.webp",
+      "thumb": "nashoba-valley-ski-area-thumb-23e0d41b.webp",
+      "share": "nashoba-valley-ski-area-share-fa2024c6.webp"
+    },
+    "nordic-mountain": {
+      "hero": "nordic-mountain-hero-3842260f.webp",
+      "thumb": "nordic-mountain-thumb-6f665708.webp",
+      "share": "nordic-mountain-share-4d92cbf2.webp"
+    },
+    "nordic-valley": {
+      "hero": "nordic-valley-hero-66abcfd6.webp",
+      "thumb": "nordic-valley-thumb-0a22b0ac.webp",
+      "share": "nordic-valley-share-5f89864f.webp"
+    },
+    "northeast-slopes": {
+      "hero": "northeast-slopes-hero-a2915677.webp",
+      "thumb": "northeast-slopes-thumb-0d9cff2c.webp",
+      "share": "northeast-slopes-share-2d478efa.webp"
+    },
+    "northstar-california": {
+      "hero": "northstar-california-hero-4291a0a4.webp",
+      "thumb": "northstar-california-thumb-174d3482.webp",
+      "share": "northstar-california-share-56d6b63f.webp"
+    },
+    "norway-mountain": {
+      "hero": "norway-mountain-hero-a052ab15.webp",
+      "thumb": "norway-mountain-thumb-54326ff3.webp",
+      "share": "norway-mountain-share-6644c2c5.webp"
+    },
+    "nubs-nob": {
+      "hero": "nubs-nob-hero-4eef2a70.webp",
+      "thumb": "nubs-nob-thumb-997df975.webp",
+      "share": "nubs-nob-share-db5da558.webp"
+    },
+    "oak-mountain": {
+      "hero": "oak-mountain-hero-e52f42ca.webp",
+      "thumb": "oak-mountain-thumb-048d46b0.webp",
+      "share": "oak-mountain-share-fc8a0951.webp"
+    },
+    "ober-mountain": {
+      "hero": "ober-mountain-hero-4bd10b84.webp",
+      "thumb": "ober-mountain-thumb-ffdac592.webp",
+      "share": "ober-mountain-share-ab8a5ea8.webp"
+    },
+    "oglebay-resort": {
+      "hero": "oglebay-resort-hero-7bca375c.webp",
+      "thumb": "oglebay-resort-thumb-9b1e88d1.webp",
+      "share": "oglebay-resort-share-e4e1c5dc.webp"
+    },
+    "okemo-mountain-resort": {
+      "hero": "okemo-mountain-resort-hero-ccfb614b.webp",
+      "thumb": "okemo-mountain-resort-thumb-5af38b7d.webp",
+      "share": "okemo-mountain-resort-share-8075d69f.webp"
+    },
+    "otis-ridge": {
+      "hero": "otis-ridge-hero-8b42cde8.webp",
+      "thumb": "otis-ridge-thumb-4f41dc67.webp",
+      "share": "otis-ridge-share-328dee1f.webp"
+    },
+    "otsego-resort": {
+      "hero": "otsego-resort-hero-fd7c119c.webp",
+      "thumb": "otsego-resort-thumb-a948af5e.webp",
+      "share": "otsego-resort-share-1c826eef.webp"
+    },
+    "pajarito-mountain": {
+      "hero": "pajarito-mountain-hero-eb3d97fc.webp",
+      "thumb": "pajarito-mountain-thumb-2282f064.webp",
+      "share": "pajarito-mountain-share-46537f4e.webp"
+    },
+    "palisades-tahoe": {
+      "hero": "palisades-tahoe-hero-3b57288d.webp",
+      "thumb": "palisades-tahoe-thumb-33079cbf.webp",
+      "share": "palisades-tahoe-share-93ab4440.webp"
+    },
+    "paoli-peaks": {
+      "hero": "paoli-peaks-hero-2f37891a.webp",
+      "thumb": "paoli-peaks-thumb-aa169806.webp",
+      "share": "paoli-peaks-share-f841edce.webp"
+    },
+    "park-city": {
+      "hero": "park-city-hero-ff0f71f4.webp",
+      "thumb": "park-city-thumb-ab48e710.webp",
+      "share": "park-city-share-8912dfe6.webp"
+    },
+    "pats-peak": {
+      "hero": "pats-peak-hero-8886108c.webp",
+      "thumb": "pats-peak-thumb-a978d5bd.webp",
+      "share": "pats-peak-share-78700257.webp"
+    },
+    "paul-bunyan-hill": {
+      "hero": "paul-bunyan-hill-hero-9048333b.webp",
+      "thumb": "paul-bunyan-hill-thumb-829bcbc4.webp",
+      "share": "paul-bunyan-hill-share-880eef48.webp"
+    },
+    "pebble-creek": {
+      "hero": "pebble-creek-hero-97e75036.webp",
+      "thumb": "pebble-creek-thumb-3c2e609c.webp",
+      "share": "pebble-creek-share-a1fcb96a.webp"
+    },
+    "peek-n-peak": {
+      "hero": "peek-n-peak-hero-369d164c.webp",
+      "thumb": "peek-n-peak-thumb-45ff706f.webp",
+      "share": "peek-n-peak-share-ac489374.webp"
+    },
+    "perfect-north": {
+      "hero": "perfect-north-hero-27a67b3a.webp",
+      "thumb": "perfect-north-thumb-9d9cbc83.webp",
+      "share": "perfect-north-share-9f8e0673.webp"
+    },
+    "pico-mountain": {
+      "hero": "pico-mountain-hero-9e9b6b96.webp",
+      "thumb": "pico-mountain-thumb-78487664.webp",
+      "share": "pico-mountain-share-2d284813.webp"
+    },
+    "pine-knob": {
+      "hero": "pine-knob-hero-11377112.webp",
+      "thumb": "pine-knob-thumb-415a1b89.webp",
+      "share": "pine-knob-share-3e36f731.webp"
+    },
+    "pine-mountain": {
+      "hero": "pine-mountain-hero-58776a65.webp",
+      "thumb": "pine-mountain-thumb-ba720930.webp",
+      "share": "pine-mountain-share-e71c977a.webp"
+    },
+    "plattekill-mountain": {
+      "hero": "plattekill-mountain-hero-a36c9181.webp",
+      "thumb": "plattekill-mountain-thumb-53e01b0a.webp",
+      "share": "plattekill-mountain-share-18217f72.webp"
+    },
+    "pomerelle": {
+      "hero": "pomerelle-hero-d2edd1ac.webp",
+      "thumb": "pomerelle-thumb-0733fda3.webp",
+      "share": "pomerelle-share-5525ea50.webp"
+    },
+    "porcupine-mountains": {
+      "hero": "porcupine-mountains-hero-1bcb2313.webp",
+      "thumb": "porcupine-mountains-thumb-663b1e30.webp",
+      "share": "porcupine-mountains-share-d9366ccd.webp"
+    },
+    "powder-mountain": {
+      "hero": "powder-mountain-hero-157f4b21.webp",
+      "thumb": "powder-mountain-thumb-30a8247f.webp",
+      "share": "powder-mountain-share-41af76bf.webp"
+    },
+    "powder-ridge": {
+      "hero": "powder-ridge-hero-c1e1ada5.webp",
+      "thumb": "powder-ridge-thumb-5ab1687f.webp",
+      "share": "powder-ridge-share-53f3ce7b.webp"
+    },
+    "powder-ridge-mountain-park": {
+      "hero": "powder-ridge-mountain-park-hero-09d67635.webp",
+      "thumb": "powder-ridge-mountain-park-thumb-99fc40c6.webp",
+      "share": "powder-ridge-mountain-park-share-0fe5a1ac.webp"
+    },
+    "powderhorn": {
+      "hero": "powderhorn-hero-68c6467d.webp",
+      "thumb": "powderhorn-thumb-adf401fa.webp",
+      "share": "powderhorn-share-b772faa5.webp"
+    },
+    "powderhouse-hill": {
+      "hero": "powderhouse-hill-hero-baa06614.webp",
+      "thumb": "powderhouse-hill-thumb-e81b70ee.webp",
+      "share": "powderhouse-hill-share-7d2c6122.webp"
+    },
+    "purgatory": {
+      "hero": "purgatory-hero-4d617d91.webp",
+      "thumb": "purgatory-thumb-d3f8e8e8.webp",
+      "share": "purgatory-share-d3f2d9c2.webp"
+    },
+    "quarry-road-trails": {
+      "hero": "quarry-road-trails-hero-b77ecf4e.webp",
+      "thumb": "quarry-road-trails-thumb-74ff4588.webp",
+      "share": "quarry-road-trails-share-b16d4246.webp"
+    },
+    "quechee-club": {
+      "hero": "quechee-club-hero-2171dcb8.webp",
+      "thumb": "quechee-club-thumb-a8c2aba3.webp",
+      "share": "quechee-club-share-b2fc1eba.webp"
+    },
+    "ragged-mountain": {
+      "hero": "ragged-mountain-hero-8392bc49.webp",
+      "thumb": "ragged-mountain-thumb-df8f4e47.webp",
+      "share": "ragged-mountain-share-96060b9a.webp"
+    },
+    "red-lodge": {
+      "hero": "red-lodge-hero-58bf5145.webp",
+      "thumb": "red-lodge-thumb-4764e93d.webp",
+      "share": "red-lodge-share-118a1c8c.webp"
+    },
+    "red-river-ski-area": {
+      "hero": "red-river-ski-area-hero-2a73a313.webp",
+      "thumb": "red-river-ski-area-thumb-4c9038a5.webp",
+      "share": "red-river-ski-area-share-bfd8df69.webp"
+    },
+    "rotarun": {
+      "hero": "rotarun-hero-85a59baa.webp",
+      "thumb": "rotarun-thumb-4c33fbe9.webp",
+      "share": "rotarun-share-c9b55dae.webp"
+    },
+    "roundtop-mountain-resort": {
+      "hero": "roundtop-mountain-resort-hero-b414ec1d.webp",
+      "thumb": "roundtop-mountain-resort-thumb-cca7a9c7.webp",
+      "share": "roundtop-mountain-resort-share-5d204d5b.webp"
+    },
+    "royal-mountain": {
+      "hero": "royal-mountain-hero-d7c2ee1d.webp",
+      "thumb": "royal-mountain-thumb-d3aec37c.webp",
+      "share": "royal-mountain-share-424c56a4.webp"
+    },
+    "saddleback": {
+      "hero": "saddleback-hero-ecba9050.webp",
+      "thumb": "saddleback-thumb-6b168fb1.webp",
+      "share": "saddleback-share-b851d83c.webp"
+    },
+    "sandia-peak": {
+      "hero": "sandia-peak-hero-41824c38.webp",
+      "thumb": "sandia-peak-thumb-1c626306.webp",
+      "share": "sandia-peak-share-93f401d4.webp"
+    },
+    "sapphire-valley-resort": {
+      "hero": "sapphire-valley-resort-hero-30775ef6.webp",
+      "thumb": "sapphire-valley-resort-thumb-a9fbe7b4.webp",
+      "share": "sapphire-valley-resort-share-b6323c67.webp"
+    },
+    "saskadena-six-area": {
+      "hero": "saskadena-six-area-hero-923d3c18.webp",
+      "thumb": "saskadena-six-area-thumb-b07913a4.webp",
+      "share": "saskadena-six-area-share-29bafa00.webp"
+    },
+    "schweitzer": {
+      "hero": "schweitzer-hero-7d726460.webp",
+      "thumb": "schweitzer-thumb-6b7a0893.webp",
+      "share": "schweitzer-share-ab8f5dc6.webp"
+    },
+    "seven-oaks": {
+      "hero": "seven-oaks-hero-5fc5c178.webp",
+      "thumb": "seven-oaks-thumb-3b4b6a93.webp",
+      "share": "seven-oaks-share-caeb2f05.webp"
+    },
+    "seven-springs": {
+      "hero": "seven-springs-hero-8d900ed0.webp",
+      "thumb": "seven-springs-thumb-610e5288.webp",
+      "share": "seven-springs-share-95506291.webp"
+    },
+    "shanty-creek": {
+      "hero": "shanty-creek-hero-19db3e67.webp",
+      "thumb": "shanty-creek-thumb-1d6de2c8.webp",
+      "share": "shanty-creek-share-789ff871.webp"
+    },
+    "shawnee-mountain": {
+      "hero": "shawnee-mountain-hero-6ff2a793.webp",
+      "thumb": "shawnee-mountain-thumb-6f6da62c.webp",
+      "share": "shawnee-mountain-share-1df811fe.webp"
+    },
+    "shawnee-peak": {
+      "hero": "shawnee-peak-hero-b69b35db.webp",
+      "thumb": "shawnee-peak-thumb-b09ec5bc.webp",
+      "share": "shawnee-peak-share-1978f96a.webp"
+    },
+    "showdown": {
+      "hero": "showdown-hero-d82a95a8.webp",
+      "thumb": "showdown-thumb-479d5758.webp",
+      "share": "showdown-share-dd4524fd.webp"
+    },
+    "sierra-at-tahoe": {
+      "hero": "sierra-at-tahoe-hero-f7a3ba15.webp",
+      "thumb": "sierra-at-tahoe-thumb-33a19ed1.webp",
+      "share": "sierra-at-tahoe-share-efbed1af.webp"
+    },
+    "silver-mountain": {
+      "hero": "silver-mountain-hero-2e19e8e2.webp",
+      "thumb": "silver-mountain-thumb-37a1264d.webp",
+      "share": "silver-mountain-share-f8e4e027.webp"
+    },
+    "silverton-mountain": {
+      "hero": "silverton-mountain-hero-a426cc2e.webp",
+      "thumb": "silverton-mountain-thumb-e8aa3155.webp",
+      "share": "silverton-mountain-share-93e4b3ef.webp"
+    },
+    "sipapu": {
+      "hero": "sipapu-hero-6f947298.webp",
+      "thumb": "sipapu-thumb-94f0ead8.webp",
+      "share": "sipapu-share-1849cfb6.webp"
+    },
+    "skaneateles-club": {
+      "hero": "skaneateles-club-hero-8a2c3e87.webp",
+      "thumb": "skaneateles-club-thumb-1499fe97.webp",
+      "share": "skaneateles-club-share-81084cc0.webp"
+    },
+    "ski-apache": {
+      "hero": "ski-apache-hero-fa95dcba.webp",
+      "thumb": "ski-apache-thumb-48b9ede2.webp",
+      "share": "ski-apache-share-c8d9f2a1.webp"
+    },
+    "ski-bradford": {
+      "hero": "ski-bradford-hero-bb4dd613.webp",
+      "thumb": "ski-bradford-thumb-c04d52d8.webp",
+      "share": "ski-bradford-share-904dce24.webp"
+    },
+    "ski-brule": {
+      "hero": "ski-brule-hero-9f3f1fe6.webp",
+      "thumb": "ski-brule-thumb-c0518661.webp",
+      "share": "ski-brule-share-285b4866.webp"
+    },
+    "ski-butternut": {
+      "hero": "ski-butternut-hero-55d653e9.webp",
+      "thumb": "ski-butternut-thumb-915444b6.webp",
+      "share": "ski-butternut-share-08e6b42e.webp"
+    },
+    "ski-cooper": {
+      "hero": "ski-cooper-hero-0b6cf999.webp",
+      "thumb": "ski-cooper-thumb-121ecc41.webp",
+      "share": "ski-cooper-share-bad9a9dd.webp"
+    },
+    "ski-gull": {
+      "hero": "ski-gull-hero-43612707.webp",
+      "thumb": "ski-gull-thumb-e72959bb.webp",
+      "share": "ski-gull-share-fa28c5dc.webp"
+    },
+    "ski-santa-fe": {
+      "hero": "ski-santa-fe-hero-bc01999e.webp",
+      "thumb": "ski-santa-fe-thumb-a9430e7e.webp",
+      "share": "ski-santa-fe-share-e1587276.webp"
+    },
+    "ski-sawmill": {
+      "hero": "ski-sawmill-hero-e1a21d2f.webp",
+      "thumb": "ski-sawmill-thumb-f9aa1f55.webp",
+      "share": "ski-sawmill-share-69835334.webp"
+    },
+    "ski-sundown": {
+      "hero": "ski-sundown-hero-54eaa6d5.webp",
+      "thumb": "ski-sundown-thumb-8fc75335.webp",
+      "share": "ski-sundown-share-affba642.webp"
+    },
+    "ski-ward": {
+      "hero": "ski-ward-hero-767ebc90.webp",
+      "thumb": "ski-ward-thumb-db4ac0b7.webp",
+      "share": "ski-ward-share-a527a0fd.webp"
+    },
+    "skiland": {
+      "hero": "skiland-hero-167f401d.webp",
+      "thumb": "skiland-thumb-36847d64.webp",
+      "share": "skiland-share-ffffa07e.webp"
+    },
+    "sleepy-hollow": {
+      "hero": "sleepy-hollow-hero-06e72c84.webp",
+      "thumb": "sleepy-hollow-thumb-226b0cd8.webp",
+      "share": "sleepy-hollow-share-159fdc4a.webp"
+    },
+    "smugglers-notch": {
+      "hero": "smugglers-notch-hero-a5f388c0.webp",
+      "thumb": "smugglers-notch-thumb-8832ca1e.webp",
+      "share": "smugglers-notch-share-69d7e78d.webp"
+    },
+    "snow-creek": {
+      "hero": "snow-creek-hero-cfd9f500.webp",
+      "thumb": "snow-creek-thumb-f791f0b0.webp",
+      "share": "snow-creek-share-2455f7d9.webp"
+    },
+    "snow-king": {
+      "hero": "snow-king-hero-ff375df5.webp",
+      "thumb": "snow-king-thumb-f80bcb74.webp",
+      "share": "snow-king-share-fb714bab.webp"
+    },
+    "snow-ridge": {
+      "hero": "snow-ridge-hero-44f8df98.webp",
+      "thumb": "snow-ridge-thumb-62137186.webp",
+      "share": "snow-ridge-share-c536c71b.webp"
+    },
+    "snow-snake": {
+      "hero": "snow-snake-hero-f8f502a5.webp",
+      "thumb": "snow-snake-thumb-f7670618.webp",
+      "share": "snow-snake-share-2695a37d.webp"
+    },
+    "snow-summit": {
+      "hero": "snow-summit-hero-f51f847c.webp",
+      "thumb": "snow-summit-thumb-a647a7c2.webp",
+      "share": "snow-summit-share-81754227.webp"
+    },
+    "snow-trails": {
+      "hero": "snow-trails-hero-7d2d8228.webp",
+      "thumb": "snow-trails-thumb-16af38dc.webp",
+      "share": "snow-trails-share-3c031c75.webp"
+    },
+    "snow-valley": {
+      "hero": "snow-valley-hero-c18ee47a.webp",
+      "thumb": "snow-valley-thumb-f66314ae.webp",
+      "share": "snow-valley-share-667dd10d.webp"
+    },
+    "snowbasin": {
+      "hero": "snowbasin-hero-bee9a94f.webp",
+      "thumb": "snowbasin-thumb-ec329964.webp",
+      "share": "snowbasin-share-ff0401a9.webp"
+    },
+    "snowbird": {
+      "hero": "snowbird-hero-3d5afca1.webp",
+      "thumb": "snowbird-thumb-c9d84f29.webp",
+      "share": "snowbird-share-53463e47.webp"
+    },
+    "snowhaven": {
+      "hero": "snowhaven-hero-9b9639c3.webp",
+      "thumb": "snowhaven-thumb-311ceab4.webp",
+      "share": "snowhaven-share-b37d065e.webp"
+    },
+    "snowmass": {
+      "hero": "snowmass-hero-3f6989d3.webp",
+      "thumb": "snowmass-thumb-09b6a807.webp",
+      "share": "snowmass-share-e1b56a37.webp"
+    },
+    "snowriver": {
+      "hero": "snowriver-hero-5b2f15f6.webp",
+      "thumb": "snowriver-thumb-87266ab4.webp",
+      "share": "snowriver-share-4532b2bb.webp"
+    },
+    "snowshoe-mountain": {
+      "hero": "snowshoe-mountain-hero-901cd69a.webp",
+      "thumb": "snowshoe-mountain-thumb-38ada179.webp",
+      "share": "snowshoe-mountain-share-2e9124bb.webp"
+    },
+    "snowstar": {
+      "hero": "snowstar-hero-4d27e3ce.webp",
+      "thumb": "snowstar-thumb-dade4936.webp",
+      "share": "snowstar-share-8f022b1e.webp"
+    },
+    "snowy-range": {
+      "hero": "snowy-range-hero-87fd535f.webp",
+      "thumb": "snowy-range-thumb-a6e03e23.webp",
+      "share": "snowy-range-share-74d890e0.webp"
+    },
+    "soda-springs": {
+      "hero": "soda-springs-hero-de2a019a.webp",
+      "thumb": "soda-springs-thumb-d3714088.webp",
+      "share": "soda-springs-share-21f0be4b.webp"
+    },
+    "soldier-hollow": {
+      "hero": "soldier-hollow-hero-8df410da.webp",
+      "thumb": "soldier-hollow-thumb-990f780c.webp",
+      "share": "soldier-hollow-share-81fde282.webp"
+    },
+    "soldier-mountain": {
+      "hero": "soldier-mountain-hero-05a96dc1.webp",
+      "thumb": "soldier-mountain-thumb-f77b68cf.webp",
+      "share": "soldier-mountain-share-bb461073.webp"
+    },
+    "solitude": {
+      "hero": "solitude-hero-c92c3b02.webp",
+      "thumb": "solitude-thumb-732bea0d.webp",
+      "share": "solitude-share-5a93a693.webp"
+    },
+    "song-mountain": {
+      "hero": "song-mountain-hero-1a38ce59.webp",
+      "thumb": "song-mountain-thumb-63d2c9a2.webp",
+      "share": "song-mountain-share-ebe1af40.webp"
+    },
+    "spirit-mountain": {
+      "hero": "spirit-mountain-hero-7535fd43.webp",
+      "thumb": "spirit-mountain-thumb-f3e964ac.webp",
+      "share": "spirit-mountain-share-d110261d.webp"
+    },
+    "spout-springs": {
+      "hero": "spout-springs-hero-ff33856c.webp",
+      "thumb": "spout-springs-thumb-2e3b5ec3.webp",
+      "share": "spout-springs-share-964b228a.webp"
+    },
+    "spring-mountain": {
+      "hero": "spring-mountain-hero-74fa199c.webp",
+      "thumb": "spring-mountain-thumb-1fde094e.webp",
+      "share": "spring-mountain-share-217952a7.webp"
+    },
+    "spruce-mountain-ski-area": {
+      "hero": "spruce-mountain-ski-area-hero-08d14707.webp",
+      "thumb": "spruce-mountain-ski-area-thumb-076358d5.webp",
+      "share": "spruce-mountain-ski-area-share-cef5ed0a.webp"
+    },
+    "steamboat": {
+      "hero": "steamboat-hero-4b67a73b.webp",
+      "thumb": "steamboat-thumb-003e29ad.webp",
+      "share": "steamboat-share-e263a441.webp"
+    },
+    "stevens-pass": {
+      "hero": "stevens-pass-hero-8a390362.webp",
+      "thumb": "stevens-pass-thumb-26151b99.webp",
+      "share": "stevens-pass-share-f54c908e.webp"
+    },
+    "stowe-mountain-resort": {
+      "hero": "stowe-mountain-resort-hero-5b2df263.webp",
+      "thumb": "stowe-mountain-resort-thumb-64c683eb.webp",
+      "share": "stowe-mountain-resort-share-3d4eaff2.webp"
+    },
+    "stratton-mountain": {
+      "hero": "stratton-mountain-hero-1bc5c10f.webp",
+      "thumb": "stratton-mountain-thumb-08eb2419.webp",
+      "share": "stratton-mountain-share-88076753.webp"
+    },
+    "sugar-bowl-resort": {
+      "hero": "sugar-bowl-resort-hero-39f2d9c5.webp",
+      "thumb": "sugar-bowl-resort-thumb-60bbe631.webp",
+      "share": "sugar-bowl-resort-share-1f2c89bd.webp"
+    },
+    "sugar-mountain-resort": {
+      "hero": "sugar-mountain-resort-hero-4006672b.webp",
+      "thumb": "sugar-mountain-resort-thumb-bb62f32f.webp",
+      "share": "sugar-mountain-resort-share-26572bc8.webp"
+    },
+    "sugarbush": {
+      "hero": "sugarbush-hero-3e4df70a.webp",
+      "thumb": "sugarbush-thumb-65c795ff.webp",
+      "share": "sugarbush-share-7f06f8a5.webp"
+    },
+    "sugarloaf": {
+      "hero": "sugarloaf-hero-184731f4.webp",
+      "thumb": "sugarloaf-thumb-4ab48bb3.webp",
+      "share": "sugarloaf-share-5cbedecb.webp"
+    },
+    "summit-ski-area": {
+      "hero": "summit-ski-area-hero-bf46032d.webp",
+      "thumb": "summit-ski-area-thumb-28da0316.webp",
+      "share": "summit-ski-area-share-8a3c8d34.webp"
+    },
+    "sun-valley": {
+      "hero": "sun-valley-hero-aa02873c.webp",
+      "thumb": "sun-valley-thumb-6f7cd32e.webp",
+      "share": "sun-valley-share-777aaf10.webp"
+    },
+    "sunburst": {
+      "hero": "sunburst-hero-be4c8a1c.webp",
+      "thumb": "sunburst-thumb-73e732fa.webp",
+      "share": "sunburst-share-d9464efa.webp"
+    },
+    "sundance": {
+      "hero": "sundance-hero-2a1d8b7c.webp",
+      "thumb": "sundance-thumb-9e1ee2cf.webp",
+      "share": "sundance-share-215ce174.webp"
+    },
+    "sunday-river": {
+      "hero": "sunday-river-hero-2b83076a.webp",
+      "thumb": "sunday-river-thumb-cb0e5dc0.webp",
+      "share": "sunday-river-share-9b4bd50a.webp"
+    },
+    "sundown-mountain": {
+      "hero": "sundown-mountain-hero-395134a3.webp",
+      "thumb": "sundown-mountain-thumb-dee012b1.webp",
+      "share": "sundown-mountain-share-7c9e6fda.webp"
+    },
+    "sunlight-mountain": {
+      "hero": "sunlight-mountain-hero-6c415916.webp",
+      "thumb": "sunlight-mountain-thumb-2ca5583d.webp",
+      "share": "sunlight-mountain-share-ecfe9e1d.webp"
+    },
+    "sunrise-park-resort": {
+      "hero": "sunrise-park-resort-hero-70daa0c1.webp",
+      "thumb": "sunrise-park-resort-thumb-938582b5.webp",
+      "share": "sunrise-park-resort-share-c3a93d86.webp"
+    },
+    "swain-resort": {
+      "hero": "swain-resort-hero-2c65c6b1.webp",
+      "thumb": "swain-resort-thumb-41884957.webp",
+      "share": "swain-resort-share-c167213b.webp"
+    },
+    "swiss-valley": {
+      "hero": "swiss-valley-hero-4e705399.webp",
+      "thumb": "swiss-valley-thumb-4353f3bf.webp",
+      "share": "swiss-valley-share-e34896e1.webp"
+    },
+    "tahoe-donner-downhill": {
+      "hero": "tahoe-donner-downhill-hero-81f7fba6.webp",
+      "thumb": "tahoe-donner-downhill-thumb-1a67942a.webp",
+      "share": "tahoe-donner-downhill-share-c0fe57f4.webp"
+    },
+    "tamarack": {
+      "hero": "tamarack-hero-667d9cac.webp",
+      "thumb": "tamarack-thumb-c6dc0279.webp",
+      "share": "tamarack-share-1e3f27ff.webp"
+    },
+    "taos-ski-valley": {
+      "hero": "taos-ski-valley-hero-fa94f92a.webp",
+      "thumb": "taos-ski-valley-thumb-2de1d88c.webp",
+      "share": "taos-ski-valley-share-ac019ce7.webp"
+    },
+    "telluride": {
+      "hero": "telluride-hero-feaa9f6d.webp",
+      "thumb": "telluride-thumb-008a4a19.webp",
+      "share": "telluride-share-332d265b.webp"
+    },
+    "tenney-mountain": {
+      "hero": "tenney-mountain-hero-a5bbca63.webp",
+      "thumb": "tenney-mountain-thumb-975dba68.webp",
+      "share": "tenney-mountain-share-ecf7e6ad.webp"
+    },
+    "terry-peak": {
+      "hero": "terry-peak-hero-a992f14b.webp",
+      "thumb": "terry-peak-thumb-0fef5ea1.webp",
+      "share": "terry-peak-share-07847069.webp"
+    },
+    "teton-pass": {
+      "hero": "teton-pass-hero-9578c546.webp",
+      "thumb": "teton-pass-thumb-d866aa10.webp",
+      "share": "teton-pass-share-a1136e46.webp"
+    },
+    "the-highlands": {
+      "hero": "the-highlands-hero-f3094928.webp",
+      "thumb": "the-highlands-thumb-2700f43a.webp",
+      "share": "the-highlands-share-0bccdcbf.webp"
+    },
+    "the-omni-homestead-resort": {
+      "hero": "the-omni-homestead-resort-hero-8bc80249.webp",
+      "thumb": "the-omni-homestead-resort-thumb-f7a6b270.webp",
+      "share": "the-omni-homestead-resort-share-9fd344e4.webp"
+    },
+    "the-rock-snowpark": {
+      "hero": "the-rock-snowpark-hero-914a1c52.webp",
+      "thumb": "the-rock-snowpark-thumb-e84804cb.webp",
+      "share": "the-rock-snowpark-share-19078097.webp"
+    },
+    "the-summit-at-snoqualmie": {
+      "hero": "the-summit-at-snoqualmie-hero-df945166.webp",
+      "thumb": "the-summit-at-snoqualmie-thumb-a216a57f.webp",
+      "share": "the-summit-at-snoqualmie-share-c037dea6.webp"
+    },
+    "thrill-hills": {
+      "hero": "thrill-hills-hero-9888fd70.webp",
+      "thumb": "thrill-hills-thumb-e5219003.webp",
+      "share": "thrill-hills-share-76ee91e2.webp"
+    },
+    "thunder-ridge-ski-area": {
+      "hero": "thunder-ridge-ski-area-hero-62782186.webp",
+      "thumb": "thunder-ridge-ski-area-thumb-eb1b1773.webp",
+      "share": "thunder-ridge-ski-area-share-b64000eb.webp"
+    },
+    "timber-ridge": {
+      "hero": "timber-ridge-hero-d08b93e9.webp",
+      "thumb": "timber-ridge-thumb-7e67ee08.webp",
+      "share": "timber-ridge-share-fe93d0d5.webp"
+    },
+    "timberline-lodge": {
+      "hero": "timberline-lodge-hero-9160bab7.webp",
+      "thumb": "timberline-lodge-thumb-8e9f9ba8.webp",
+      "share": "timberline-lodge-share-eff27813.webp"
+    },
+    "timberline-mountain": {
+      "hero": "timberline-mountain-hero-e547a4e4.webp",
+      "thumb": "timberline-mountain-thumb-37dd585d.webp",
+      "share": "timberline-mountain-share-e93b4e87.webp"
+    },
+    "titcomb-mountain": {
+      "hero": "titcomb-mountain-hero-2b7cd4e5.webp",
+      "thumb": "titcomb-mountain-thumb-2f75720b.webp",
+      "share": "titcomb-mountain-share-cc1b4ccd.webp"
+    },
+    "titus-mountain": {
+      "hero": "titus-mountain-hero-9205090c.webp",
+      "thumb": "titus-mountain-thumb-ceb93813.webp",
+      "share": "titus-mountain-share-ba09836a.webp"
+    },
+    "treetops-resort": {
+      "hero": "treetops-resort-hero-f4a0dad1.webp",
+      "thumb": "treetops-resort-thumb-f2cfdcc8.webp",
+      "share": "treetops-resort-share-f95db948.webp"
+    },
+    "trollhaugen": {
+      "hero": "trollhaugen-hero-f110dfad.webp",
+      "thumb": "trollhaugen-thumb-e0e58cb2.webp",
+      "share": "trollhaugen-share-d26bf2a6.webp"
+    },
+    "turner-mountain": {
+      "hero": "turner-mountain-hero-7b5adf1e.webp",
+      "thumb": "turner-mountain-thumb-5f7e2ccf.webp",
+      "share": "turner-mountain-share-437ce272.webp"
+    },
+    "tussey-mountain": {
+      "hero": "tussey-mountain-hero-46464467.webp",
+      "thumb": "tussey-mountain-thumb-c5467e04.webp",
+      "share": "tussey-mountain-share-04f9a3be.webp"
+    },
+    "tyrol-basin": {
+      "hero": "tyrol-basin-hero-b7b821d5.webp",
+      "thumb": "tyrol-basin-thumb-601aae9a.webp",
+      "share": "tyrol-basin-share-6125ea05.webp"
+    },
+    "vail": {
+      "hero": "vail-hero-081215b7.webp",
+      "thumb": "vail-thumb-f8420dff.webp",
+      "share": "vail-share-909a72af.webp"
+    },
+    "victor-constant-ski-area": {
+      "hero": "victor-constant-ski-area-hero-bef3b224.webp",
+      "thumb": "victor-constant-ski-area-thumb-aef6027c.webp",
+      "share": "victor-constant-ski-area-share-4e2e2524.webp"
+    },
+    "villa-olivia": {
+      "hero": "villa-olivia-hero-e8c63238.webp",
+      "thumb": "villa-olivia-thumb-279e606e.webp",
+      "share": "villa-olivia-share-e67c5a0b.webp"
+    },
+    "wachusett-mountain": {
+      "hero": "wachusett-mountain-hero-f31655d5.webp",
+      "thumb": "wachusett-mountain-thumb-d480569d.webp",
+      "share": "wachusett-mountain-share-1acbf8e1.webp"
+    },
+    "warner-canyon": {
+      "hero": "warner-canyon-hero-36854f1a.webp",
+      "thumb": "warner-canyon-thumb-760a3f61.webp",
+      "share": "warner-canyon-share-d26aacaa.webp"
+    },
+    "waterville-valley": {
+      "hero": "waterville-valley-hero-a7510868.webp",
+      "thumb": "waterville-valley-thumb-0217c5e8.webp",
+      "share": "waterville-valley-share-7b2f8b8c.webp"
+    },
+    "welch-village": {
+      "hero": "welch-village-hero-73a62a8e.webp",
+      "thumb": "welch-village-thumb-8b6f51f3.webp",
+      "share": "welch-village-share-70460529.webp"
+    },
+    "west-mountain": {
+      "hero": "west-mountain-hero-8a644ec4.webp",
+      "thumb": "west-mountain-thumb-02046317.webp",
+      "share": "west-mountain-share-4cdd8a30.webp"
+    },
+    "whaleback-mountain": {
+      "hero": "whaleback-mountain-hero-02416859.webp",
+      "thumb": "whaleback-mountain-thumb-77c2af8c.webp",
+      "share": "whaleback-mountain-share-496bffa0.webp"
+    },
+    "white-pass": {
+      "hero": "white-pass-hero-8f7f30ac.webp",
+      "thumb": "white-pass-thumb-233eb510.webp",
+      "share": "white-pass-share-77dc90f7.webp"
+    },
+    "white-pine": {
+      "hero": "white-pine-hero-94303d3f.webp",
+      "thumb": "white-pine-thumb-9a7168f7.webp",
+      "share": "white-pine-share-c5dc8b2f.webp"
+    },
+    "whitecap-mountains": {
+      "hero": "whitecap-mountains-hero-79709d8e.webp",
+      "thumb": "whitecap-mountains-thumb-053ff415.webp",
+      "share": "whitecap-mountains-share-c8b0d78c.webp"
+    },
+    "whiteface-mountain": {
+      "hero": "whiteface-mountain-hero-4bb1eece.webp",
+      "thumb": "whiteface-mountain-thumb-584f0e30.webp",
+      "share": "whiteface-mountain-share-4efb8ec8.webp"
+    },
+    "whitefish": {
+      "hero": "whitefish-hero-1d510aba.webp",
+      "thumb": "whitefish-thumb-6586d562.webp",
+      "share": "whitefish-share-642ca06b.webp"
+    },
+    "whitetail-resort": {
+      "hero": "whitetail-resort-hero-e9681d67.webp",
+      "thumb": "whitetail-resort-thumb-afb7a0a7.webp",
+      "share": "whitetail-resort-share-d56b14d7.webp"
+    },
+    "wild-mountain": {
+      "hero": "wild-mountain-hero-d0bbe100.webp",
+      "thumb": "wild-mountain-thumb-dc717d61.webp",
+      "share": "wild-mountain-share-43049938.webp"
+    },
+    "wildcat-mountain": {
+      "hero": "wildcat-mountain-hero-51e53b65.webp",
+      "thumb": "wildcat-mountain-thumb-df67af93.webp",
+      "share": "wildcat-mountain-share-a408cb70.webp"
+    },
+    "willamette-pass": {
+      "hero": "willamette-pass-hero-964076ba.webp",
+      "thumb": "willamette-pass-thumb-622280cb.webp",
+      "share": "willamette-pass-share-cc1aba80.webp"
+    },
+    "willard-mountain": {
+      "hero": "willard-mountain-hero-bb7fc28b.webp",
+      "thumb": "willard-mountain-thumb-631d44a0.webp",
+      "share": "willard-mountain-share-35a94e52.webp"
+    },
+    "wilmot-mountain": {
+      "hero": "wilmot-mountain-hero-159494fc.webp",
+      "thumb": "wilmot-mountain-thumb-f9dc07be.webp",
+      "share": "wilmot-mountain-share-98a5c810.webp"
+    },
+    "windham-mountain": {
+      "hero": "windham-mountain-hero-eb9b8c10.webp",
+      "thumb": "windham-mountain-thumb-3da58471.webp",
+      "share": "windham-mountain-share-97fb5ff3.webp"
+    },
+    "winter-park": {
+      "hero": "winter-park-hero-3fc0e08c.webp",
+      "thumb": "winter-park-thumb-54de85a1.webp",
+      "share": "winter-park-share-986f76e0.webp"
+    },
+    "wintergreen-resort": {
+      "hero": "wintergreen-resort-hero-43fd6e43.webp",
+      "thumb": "wintergreen-resort-thumb-9df503f1.webp",
+      "share": "wintergreen-resort-share-27fd05cf.webp"
+    },
+    "winterplace-ski-resort": {
+      "hero": "winterplace-ski-resort-hero-aa4c7ab3.webp",
+      "thumb": "winterplace-ski-resort-thumb-a1176fcf.webp",
+      "share": "winterplace-ski-resort-share-fbad6a85.webp"
+    },
+    "wisp-resort": {
+      "hero": "wisp-resort-hero-de4c9635.webp",
+      "thumb": "wisp-resort-thumb-253bf47c.webp",
+      "share": "wisp-resort-share-75646d9e.webp"
+    },
+    "wolf-creek": {
+      "hero": "wolf-creek-hero-887a7f1e.webp",
+      "thumb": "wolf-creek-thumb-b52c268b.webp",
+      "share": "wolf-creek-share-2b7aead1.webp"
+    },
+    "woods-valley": {
+      "hero": "woods-valley-hero-589f833d.webp",
+      "thumb": "woods-valley-thumb-5cf9e27e.webp",
+      "share": "woods-valley-share-6d2af925.webp"
+    },
+    "woodward-park-city": {
+      "hero": "woodward-park-city-hero-dba9cdf4.webp",
+      "thumb": "woodward-park-city-thumb-edac3fe7.webp",
+      "share": "woodward-park-city-share-75f035c2.webp"
+    },
+    "yellowstone-club": {
+      "hero": "yellowstone-club-hero-a54a5add.webp",
+      "thumb": "yellowstone-club-thumb-4ce8f10a.webp",
+      "share": "yellowstone-club-share-ba6f0d9a.webp"
+    }
+  }
+}

@@ -11,21 +11,28 @@ import {
 import { useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
 import type { TripRoutePoint } from "./MapView";
-import FilterBar from "./FilterBar";
+import FilterBar, { type ActiveFilterChip } from "./FilterBar";
 // FilterDrawer removed in Stage 14 — Size + Night now inline pills.
-import ResortPanel from "./ResortPanel";
-import ResortPicker from "./ResortPicker";
+import ResortPanel, { sheetMapPadding } from "./ResortPanel";
+import type { SheetSnap } from "./ResortSheet";
+import { bottomStackPx, phoneBottomRow } from "./ResortSheetMath";
+import { customHistoryState } from "./sheetHistory";
+import ResortPicker, { primeSearchKeyboard } from "./ResortPicker";
 import LocationButton from "./LocationButton";
 import FeedbackButton from "@/components/FeedbackButton";
-import FiltersDrawer, { AIRPORT_OPTIONS } from "./FiltersDrawer";
+import BrandMark from "@/components/BrandMark";
+import FiltersDrawer, { AIRPORT_OPTIONS, liftLabel, type NearAirportResort } from "./FiltersDrawer";
 import MobileQuickFilters from "./MobileQuickFilters";
 import TripPlannerPanel from "./TripPlannerPanel";
 import AuthButton from "@/components/auth/AuthButton";
 import ProBadge from "@/components/ProBadge";
-import CompareFloatingButton from "@/components/CompareFloatingButton";
+import Icon from "@/components/icons/Icon";
+import CompareFloatingButton, { ComparePill, useCompareIds } from "@/components/CompareFloatingButton";
 import ActiveTripChip from "@/components/Map/ActiveTripChip";
+import TodayChip from "./TodayChip";
 import RecentlyViewedStrip, {
   OPEN_RESORT_EVENT,
+  RecentChips,
   type OpenResortDetail,
 } from "@/components/RecentlyViewedStrip";
 // OnboardingCard import removed — 3-step wizard retired (Round 5 polish).
@@ -41,10 +48,19 @@ import ProBenefitsCard from "@/components/ProBenefitsCard";
 // resorts having plenty of green terrain in absolute acreage. Bad
 // for both users and resorts.
 import Link from "next/link";
-import { resolveOrigin } from "@/lib/origins";
+import {
+  driveFilterLabel,
+  findOrigin,
+  hasCachedDriveTimes,
+  launchCityByCode,
+  resolveOriginWithFallback,
+  type StoredOrigin,
+} from "@/lib/origins";
+import { getStoredOrigin, setStoredOrigin } from "@/lib/preferences";
+import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { haversineMeters, estimateDriveSeconds, estimateDriveMeters } from "@/lib/distance";
 import { PASS_COLORS, PASS_LABELS, PASS_KEYS } from "@/lib/passColors";
-import { sizeTier, matchesSizeFilter, type SizeTier } from "@/lib/sizeTier";
+import { matchesSizeFilter, SIZE_TIER_LABELS, type SizeTier } from "@/lib/sizeTier";
 import { liftCounts, type LiftTypes } from "@/lib/liftTypes";
 
 // mapbox-gl is ~500 KB gzipped. Loaded statically it sat on the critical
@@ -61,6 +77,51 @@ const AlaskaInset = dynamic(() => import("./AlaskaInset"), { ssr: false });
 // mounting the Alaska inset on phones, where its wrapper is display:none
 // but the Mapbox instance behind it used to boot (and bill) anyway.
 const DESKTOP_QUERY = "(min-width: 768px)";
+
+// Header button: at least a 44 px square (icon over an 11 px label) on
+// phones, the text pill on sm+. min-w + px-1 lets a longer label
+// ("Saturday") widen its button instead of clipping at 44 px. One class
+// string so every button is the same weight.
+const HEADER_BTN =
+  "inline-flex h-11 min-w-11 flex-col items-center justify-center gap-0.5 rounded-lg border border-wn-charcoal/20 bg-white px-1 text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 sm:flex-row sm:gap-1.5 sm:rounded-md sm:px-3 sm:text-xs sm:font-semibold";
+const HEADER_BTN_LABEL = "text-[11px] font-semibold leading-none tracking-tight sm:text-xs sm:tracking-normal";
+
+// Monoline glyphs for the two header buttons the shared Icon set lacks.
+function SearchGlyph() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="h-5 w-5 sm:h-4 sm:w-4">
+      <circle cx="11" cy="11" r="6.5" />
+      <path d="m20 20-4.2-4.2" />
+    </svg>
+  );
+}
+function SlidersGlyph() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="h-5 w-5 sm:h-4 sm:w-4">
+      <path d="M4 7h16M4 12h16M4 17h16" />
+      <circle cx="9" cy="7" r="1.8" fill="#fff" />
+      <circle cx="15" cy="12" r="1.8" fill="#fff" />
+      <circle cx="10" cy="17" r="1.8" fill="#fff" />
+    </svg>
+  );
+}
+function ListGlyph() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="h-5 w-5">
+      <path d="M8 6h12M8 12h12M8 18h12" />
+      <circle cx="4" cy="6" r="1" fill="currentColor" />
+      <circle cx="4" cy="12" r="1" fill="currentColor" />
+      <circle cx="4" cy="18" r="1" fill="currentColor" />
+    </svg>
+  );
+}
+
+// Touches on header rows must not reach Mapbox (it listens at document
+// level for an in-flight drag), at both the React and native layers.
+function stopTouchBubble(e: React.TouchEvent) {
+  e.stopPropagation();
+  e.nativeEvent.stopImmediatePropagation();
+}
 function subscribeDesktop(onChange: () => void) {
   const mq = window.matchMedia(DESKTOP_QUERY);
   mq.addEventListener("change", onChange);
@@ -80,6 +141,8 @@ export type Resort = {
   name: string;
   state: string;
   region: string | null;
+  /** Nearest town, when known (about 60% of rows). Search-only. */
+  city: string | null;
   latitude: number | string;
   longitude: number | string;
   passes: string[];
@@ -121,6 +184,12 @@ export type Resort = {
   snowmaking_pct: number | null;
   hero_image_url: string | null;
   hero_image_alt: string | null;
+  /** Photo credit (CC BY / BY-SA heroes need it shown); the sheet hero
+   *  renders it. Optional so older payloads still type-check. */
+  hero_image_attribution?: string | null;
+  /** false = rejected by the photo vetting; lib/heroSource then falls back
+   *  to the terrain card. Optional so older payloads still type-check. */
+  hero_image_verified_winter?: boolean | null;
   // Stage 26 — live snow + open conditions (cron-refreshed). Only the
   // 24h figure ships to the map (fresh-snow filter); 48h/7d and the
   // report timestamp are rendered on /resort/[slug].
@@ -191,6 +260,9 @@ export type WeatherSnapshot = {
   resort_id: number;
   temp_high_f: number | null;
   conditions_short: string | null;
+  /** When the weather sync wrote the row; the sheet's stat tiles show
+   *  it as "Forecast · 3h ago". Optional so older payloads still type. */
+  fetched_at?: string | null;
 };
 
 type Props = {
@@ -202,6 +274,59 @@ type Props = {
 
 function isSizeTier(v: string | null): v is SizeTier {
   return v === "small" || v === "medium" || v === "large";
+}
+
+// "Within reach of this airport" threshold for the Fly to jump: two
+// hours by the lib/distance estimate, which is how far a rental-car
+// day from the terminal realistically goes.
+const AIRPORT_REACH_SECONDS = 2 * 3600;
+
+// Runs once per page load. Reads the origin the user picked last time
+// (localStorage) and, for signed-in users with nothing stored locally,
+// the account's "Default starting city". Failures are logged once and
+// leave the origin on NYC.
+function useStoredOrigin(
+  isAuthed: boolean,
+): [StoredOrigin | null, (s: StoredOrigin) => void] {
+  const [stored, setStored] = useState<StoredOrigin | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    const local = getStoredOrigin();
+    if (local) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- one-shot hydration of a browser-only value (localStorage) into React state on mount.
+      setStored(local);
+      return;
+    }
+    if (!isAuthed) return;
+    (async () => {
+      try {
+        const supabase = createSupabaseBrowserClient();
+        const { data: u } = await supabase.auth.getUser();
+        if (!u.user?.id) return;
+        const { data, error } = await supabase
+          .from("profiles")
+          .select("preferred_origin")
+          .eq("id", u.user.id)
+          .maybeSingle<{ preferred_origin: string | null }>();
+        if (error) {
+          console.warn("[origin] profiles.preferred_origin read failed", error.message);
+          return;
+        }
+        const code = data?.preferred_origin;
+        if (cancelled || !code || !findOrigin(code)) return;
+        const fromProfile: StoredOrigin = { kind: "city", code };
+        // Mirror to this device so the next visit skips the round-trip.
+        setStoredOrigin(fromProfile);
+        setStored(fromProfile);
+      } catch (e) {
+        console.warn("[origin] profile lookup failed", e instanceof Error ? e.message : e);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [isAuthed]);
+  return [stored, setStored];
 }
 
 export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Props) {
@@ -233,6 +358,27 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   // because the banner + recent-strip rows come and go.
   const headerRef = useRef<HTMLElement>(null);
   const [headerHeight, setHeaderHeight] = useState(0);
+  // Map shell 2026-09-23 — phone resort sheet state. MapPage owns the
+  // snap so a tap on the map can collapse the sheet to peek, and the
+  // settled height so the map padding and the bottom pill stack follow
+  // the sheet. Both are null / "half" whenever no resort is open.
+  const [sheetSnap, setSheetSnap] = useState<SheetSnap>("half");
+  const [sheetHeight, setSheetHeight] = useState<number | null>(null);
+  // The install nudge (components/InstallPrompt.tsx) floats 72-136 px
+  // above the home indicator on this route; while it is in the DOM the
+  // bottom pills move above it. Feature-detected through its landmark so
+  // the two components stay decoupled.
+  const [installNudgeVisible, setInstallNudgeVisible] = useState(false);
+  useEffect(() => {
+    const check = () => setInstallNudgeVisible(!!document.querySelector('[role="region"][aria-label="Install Wynla"]'));
+    const mo = new MutationObserver(check);
+    mo.observe(document.body, { childList: true, subtree: true });
+    check();
+    return () => mo.disconnect();
+  }, []);
+  // Compare list (localStorage) for the phone bottom pill row: while it
+  // holds two or more resorts the Compare pill joins List and Location.
+  const compareIds = useCompareIds();
   // Sticky highlight for the LAST resort the user opened. When the
   // ResortPanel closes (Esc / × / outside-tap), selectedId drops to
   // null and the bold blue ring around the pin would normally vanish
@@ -318,9 +464,25 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
       }
       setSearchOpenRaw(false);
       setFiltersOpenRaw(false);
+      // Fresh open starts at half (stat row + action bar visible); a pin
+      // tapped while the sheet is already up keeps the user's snap so a
+      // pin → pin → pin comparison at peek is not interrupted.
+      if (selectedId == null) setSheetSnap("half");
     }
     setSelectedId(id);
   }
+  // Back from /resort/[slug] (or a reload) with our history entry on top:
+  // reopen the same sheet, the way Google Maps restores its place sheet.
+  // ResortSheet writes { wnSheet: id } into history.state when it opens.
+  useEffect(() => {
+    const s = window.history.state as Record<string, unknown> | null;
+    const id = s?.wnSheet;
+    if (typeof id !== "number" || !resorts.some((r) => r.id === id)) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- one-shot hydration of a browser-only value (history.state) on mount.
+    setSelectedId(id);
+    // Mount only: history.state is read once.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   // Onboarding wizard removed (Round 5 polish). First-time users go
   // straight to the full map — no skill / pass / origin questions
   // upfront. Personalization can return later as a passive sort-order
@@ -590,7 +752,11 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   );
   const sizeParam = searchParams.get("size");
   const sizeFilter: SizeTier | null = isSizeTier(sizeParam) ? sizeParam : null;
-  const fromCode = searchParams.get("from") ?? "nyc";
+  // No "nyc" default here any more: when the URL carries no ?from= the
+  // origin comes from the user's stored choice (localStorage, mirrored
+  // from profiles.preferred_origin when signed in) and only then NYC.
+  // See resolveOriginWithFallback in lib/origins.
+  const fromCode = searchParams.get("from");
   const fromLat = searchParams.get("fromLat");
   const fromLng = searchParams.get("fromLng");
   const withinHours = Number(searchParams.get("within")) || 0;
@@ -690,29 +856,46 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
     if (!Number.isFinite(n) || n <= 0) return 0;
     return Math.min(100, Math.max(0, Math.round(n)));
   })();
-  // Stage 8 — airport filter. URL form: ?airport=DEN. Empty / missing
-  // = no airport filter. Matched against resort.closest_airport_iata
-  // with a 120-mile shuttle-range distance cap; resorts with NULL
-  // airport data are excluded when this filter is active.
+  // "Fly to" airport jump. URL form: ?airport=DEN. This is NOT a filter:
+  // it flies the camera to the airport, drops a plane marker and tells
+  // the user how many resorts sit within about two hours of it. It is
+  // therefore excluded from every active-filter count and from the
+  // match pipeline (audit map-core-7 / fresh-eyes-newbie-11, which
+  // found it counted as a filter while matching nothing).
   const airportParam = searchParams.get("airport");
   const airportFilter: string | null = airportParam
     ? airportParam.toUpperCase()
     : null;
-  // AIRPORT_MAX_DISTANCE_MI = 120 was the shuttle-range cap when airport
-  // was still a filter (pre-Round-8). Kept as documentation only — the
-  // const is no longer referenced by any code path. If we ever re-enable
-  // "near airport X" filtering, this is the historical value to revive.
-  // const AIRPORT_MAX_DISTANCE_MI = 120;
 
   // Resolve the picked airport's coordinates from AIRPORT_OPTIONS so
   // MapView can drop a ✈️ marker and ResortPanel can compute drive
-  // time from the airport. Null when no airport filter is active.
+  // time from the airport. Null when no airport is picked.
   const activeAirport = useMemo(() => {
     if (!airportFilter) return null;
     const a = AIRPORT_OPTIONS.find((opt) => opt.iata === airportFilter);
     if (!a) return null;
     return { lat: a.lat, lng: a.lng, label: a.label, iata: a.iata };
   }, [airportFilter]);
+
+  // Resorts within roughly two hours' drive of the picked airport, by
+  // the same Haversine estimate the rest of the app labels "≈", nearest
+  // first. Listed in the Fly to section so the jump answers "what can I
+  // reach from here" without hiding the rest of the map.
+  const nearAirportResorts = useMemo((): NearAirportResort[] => {
+    if (!activeAirport) return [];
+    const out: NearAirportResort[] = [];
+    for (const r of resorts) {
+      const lat = Number(r.latitude);
+      const lon = Number(r.longitude);
+      if (!Number.isFinite(lat) || !Number.isFinite(lon)) continue;
+      const meters = haversineMeters(activeAirport.lat, activeAirport.lng, lat, lon);
+      const seconds = estimateDriveSeconds(meters);
+      if (seconds <= AIRPORT_REACH_SECONDS) {
+        out.push({ id: r.id, name: r.name, state: r.state, seconds });
+      }
+    }
+    return out.sort((a, b) => a.seconds - b.seconds);
+  }, [activeAirport, resorts]);
 
   // Round 8 (Saitarn 2026-05-23, Option A): picking an airport flies
   // the camera to it so the user lands on the right region of the map
@@ -749,18 +932,32 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   // featured URL param kept for backward compatibility (no UI control).
   const featuredOnly = searchParams.get("featured") === "1";
 
+  const [storedOrigin, setStoredOriginState] = useStoredOrigin(isAuthed);
   const origin = useMemo(
-    () => resolveOrigin(fromCode, fromLat, fromLng),
-    [fromCode, fromLat, fromLng],
+    () => resolveOriginWithFallback(fromCode, fromLat, fromLng, storedOrigin),
+    [fromCode, fromLat, fromLng, storedOrigin],
   );
+  // True when every drive time on screen is a Haversine estimate: geo
+  // origins and cities outside the cached Northeast four. The drawer
+  // and FilterBar show this so a "≈ 4h 10m" is never read as measured.
+  // Entry to the Saturday picks page. The map's origin rides along as
+  // ?city= only when it is one of /go's launch cities (lib/origins
+  // LAUNCH_CITIES); for any other origin /go asks for a city itself
+  // rather than answering for the wrong one.
+  const goHref =
+    origin.kind === "city" && launchCityByCode(origin.code) ? `/go?city=${origin.code}` : "/go";
+  const cachedRows = origin.kind === "city" ? driveTimes[origin.name] : undefined;
+  const originIsEstimate =
+    !hasCachedDriveTimes(origin) || !cachedRows || cachedRows.length === 0;
 
-  // For city origins we use the precomputed drive_time_cache rows. For a
-  // geo origin we synthesize Haversine ESTIMATES on the fly so filters
-  // ("Day trip ≤ 3h") and map UI keep working everywhere. ResortPanel
-  // upgrades the estimate to a Mapbox Matrix exact value on click.
+  // For cached city origins we use the precomputed drive_time_cache
+  // rows. For a geo origin, or a city with no cache rows yet, we
+  // synthesize Haversine ESTIMATES on the fly so filters ("Day trip
+  // ≤ 3h") and map UI keep working everywhere. ResortPanel upgrades the
+  // estimate to a Mapbox Matrix exact value on click.
   const driveTimeByResort = useMemo(() => {
     const map = new Map<number, Map<string, DriveTime>>();
-    if (origin.kind === "geo") {
+    if (originIsEstimate) {
       for (const r of resorts) {
         const lat = Number(r.latitude);
         const lon = Number(r.longitude);
@@ -791,26 +988,16 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
       }
     }
     return map;
-  }, [driveTimes, origin, resorts]);
+  }, [driveTimes, origin, resorts, originIsEstimate]);
 
-  // Round 8 (Saitarn 2026-05-23, Option A): airport is no longer a
-  // FILTER — it's just a "fly to this airport" affordance + a plane
-  // marker on the map. PR #36 tried to blend airport + drive-time
-  // into one filter and the result was a "20h drive cap" that still
-  // showed the same 12 resorts the 120mi shuttle-cap had carved out,
-  // because the cap stack was unclear. Saitarn proposed (and we
-  // agreed): drop the airport-as-filter entirely, keep drive-time
-  // anchored to the user's origin city, and surface
-  // "X min drive from {airport}" per-resort instead.
-  //
-  // matchesAirport now always returns true — the predicate is kept
-  // (rather than ripped out) so the call sites in the filter
-  // pipeline don't have to change shape, but the function is
-  // effectively a no-op. AIRPORT_MAX_DISTANCE_MI is now only used
-  // by ResortPanel + /resort/[slug] to label "Closest airport"
-  // confidence.
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const matchesAirport = (_r: Resort): boolean => true;
+  // Round 8 (Saitarn 2026-05-23, Option A): airport is not a filter.
+  // PR #36 tried to blend airport + drive-time into one filter and the
+  // result was a "20h drive cap" that still showed the same 12 resorts
+  // the 120mi shuttle-cap had carved out. Drive time stays anchored to
+  // the user's origin; the airport is a camera jump plus a per-resort
+  // "X min drive from {airport}" line in ResortPanel. The no-op
+  // matchesAirport predicate that used to sit in the pipeline is gone
+  // so the filter memos no longer re-run when the airport changes.
 
   // Resorts that pass every filter EXCEPT size — used to compute the
   // "X with unknown size hidden" caption when the size chip is active.
@@ -868,13 +1055,8 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         const dt = driveTimeByResort.get(r.id)?.get(origin.name);
         if (!dt || dt.duration_seconds > withinHours * 3600) return false;
       }
-      // matchesAirport is a no-op post-Round-8 but kept in the chain
-      // to avoid disturbing the memoization deps + pipeline shape.
-      if (!matchesAirport(r)) return false;
       return true;
     });
-    // matchesAirport closes over airportFilter; depending on
-    // airportFilter is enough for memoization correctness.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     resorts,
@@ -900,7 +1082,6 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
     withinHours,
     origin,
     driveTimeByResort,
-    airportFilter,
   ]);
 
   const filtered = useMemo(() => {
@@ -972,7 +1153,6 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         if (!dt || dt.duration_seconds > withinHours * 3600) return false;
       }
       if (!matchesSizeFilter(r.vertical_drop, sizeFilter)) return false;
-      if (!matchesAirport(r)) return false;
       return true;
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -1000,7 +1180,6 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
     origin,
     driveTimeByResort,
     sizeFilter,
-    airportFilter,
   ]);
 
   // Open Now count — drives whether the chip surfaces in the
@@ -1039,10 +1218,16 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   // native replaceState, so every searchParams reader here and in the
   // planner still updates, share links stay correct, and a tap is now a
   // purely local re-render. router.push stays for real navigations.
+  //
+  // The state object keeps any non-Next keys already on the entry (the
+  // resort sheet's { wnSheet, wnSheetHref }), so a back press after a
+  // filter tap still closes the sheet. Next's own keys are left out on
+  // purpose: with them present its patched replaceState treats the call
+  // as internal and would not sync useSearchParams (sheetHistory.ts).
   function writeQuery(params: URLSearchParams) {
     const qs = params.toString();
     window.history.replaceState(
-      null,
+      customHistoryState(window.history.state),
       "",
       qs ? `?${qs}` : window.location.pathname,
     );
@@ -1066,9 +1251,32 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
     writeQuery(params);
   }
 
+  // Persist an origin choice: localStorage + cookie always, and the
+  // account's "Default starting city" when signed in. Only city codes
+  // go to the profile (the column's domain is ORIGINS codes); a geo
+  // origin leaves the account default untouched. The POST is
+  // fire-and-forget: a failure only means the choice does not follow
+  // the user to another device.
+  function persistOrigin(stored: StoredOrigin) {
+    setStoredOrigin(stored);
+    // Keep the in-memory fallback current so a later Clear all (which
+    // drops ?from=) lands on this choice, not the one read at mount.
+    setStoredOriginState(stored);
+    if (!isAuthed || stored.kind !== "city") return;
+    fetch("/api/account/profile", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ preferred_origin: stored.code }),
+    }).catch((e: unknown) => {
+      console.warn("[origin] profile sync failed", e instanceof Error ? e.message : e);
+    });
+  }
+
   // Switch the From-origin to a city. Drops any stale geo lat/lng params.
   function handleFromCity(code: string) {
+    if (!findOrigin(code)) return;
     updateParams({ from: code, fromLat: null, fromLng: null });
+    persistOrigin({ kind: "city", code });
   }
 
   // Switch the From-origin to the user's actual location.
@@ -1078,11 +1286,109 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
       fromLat: lat.toFixed(5),
       fromLng: lng.toFixed(5),
     });
+    persistOrigin({ kind: "geo", lat, lon: lng });
   }
 
+  // Clears every filter. The origin is not a filter, so it survives:
+  // resolveOriginWithFallback re-reads the stored choice once ?from= is
+  // gone, which keeps "Drive time from Denver" after a Clear all. The
+  // Fly to airport is a camera jump, not a filter either, so it stays
+  // in the URL and the plane marker does not vanish on Clear all.
   function clearAll() {
-    writeQuery(new URLSearchParams());
+    const next = new URLSearchParams();
+    if (airportFilter) next.set("airport", airportFilter);
+    writeQuery(next);
   }
+
+  // One list of every active filter, each with its own clear action.
+  // It is the single source of truth for the ☰ badge, the search
+  // picker's Filters badge and the desktop chip strip, so the number a
+  // user sees always matches the chips they can remove (audit
+  // map-core-17: the strip used to omit every drawer-only filter while
+  // the badge counted them). Origin and the Fly to airport are not
+  // filters and are deliberately absent.
+  const activeChips: ActiveFilterChip[] = [];
+  for (const p of passFilter) {
+    activeChips.push({
+      key: `pass-${p}`,
+      label: `Pass: ${PASS_LABELS[p as keyof typeof PASS_LABELS] ?? p}`,
+      onRemove: () => {
+        const next = passFilter.filter((x) => x !== p);
+        updateParam("pass", next.length === 0 ? null : next.join(","));
+      },
+    });
+  }
+  if (withinHours > 0) {
+    activeChips.push({
+      key: "drive",
+      // Same formatter as the desktop From button, so the chip carries
+      // the "≈" whenever the origin's times are estimates.
+      label: driveFilterLabel(withinHours, origin, originIsEstimate),
+      onRemove: () => updateParam("within", null),
+    });
+  }
+  if (days > 1) {
+    activeChips.push({
+      key: "trip",
+      label: `${days >= 4 ? "Big trip" : "Weekend"} · ${days} days`,
+      onRemove: () => updateParam("days", null),
+    });
+  }
+  if (sizeFilter) {
+    activeChips.push({
+      key: "size",
+      label: `Size: ${SIZE_TIER_LABELS[sizeFilter]}`,
+      onRemove: () => updateParam("size", null),
+    });
+  }
+  const booleanChips: Array<[key: string, active: boolean, label: string]> = [
+    ["night", nightOnly, "🌙 Night skiing"],
+    ["freshsnow", freshSnowOnly, "❄️ Fresh snow"],
+    ["open", openNowOnly, "🟢 Open now"],
+    ["lessons", lessonsOnly, "🎓 Lessons"],
+    ["rentals", rentalsOnly, "🎿 Rentals"],
+    ["lodging", lodgingOnly, "🏨 Lodging on mountain"],
+    ["tubing", tubingOnly, "🛷 Tubing"],
+    ["xc", xcOnly, "🥾 XC / Nordic"],
+    ["backcountry", backcountryOnly, "🏔️ Backcountry access"],
+    ["terrainpark", terrainparkOnly, "🛹 Terrain park"],
+    ["webcam", webcamOnly, "📷 Webcam"],
+    ["family", familyOnly, "👨‍👩‍👧 Family mountain"],
+    ["expert", expertOnly, "◆ Expert mountain"],
+    ["adaptive", adaptiveOnly, "♿ Adaptive program"],
+  ];
+  for (const [key, active, label] of booleanChips) {
+    if (!active) continue;
+    activeChips.push({ key, label, onRemove: () => updateParam(key, null) });
+  }
+  if (liftReq) {
+    activeChips.push({
+      key: "lift",
+      label: `Lift: ${liftLabel(liftReq) ?? liftReq}`,
+      onRemove: () => updateParam("lift", null),
+    });
+  }
+  if (surfaceFilter.length > 0) {
+    activeChips.push({
+      key: "surface",
+      label: `Snow today: ${surfaceFilter.join(" / ")}`,
+      onRemove: () => updateParam("surface", null),
+    });
+  }
+  if (snowmakeMin > 0) {
+    activeChips.push({
+      key: "snowmake",
+      label: `Snowmaking ≥ ${snowmakeMin}%`,
+      onRemove: () => updateParam("snowmake", null),
+    });
+  }
+  const activeFilterCount = activeChips.length;
+
+  // Ids of resorts that pass the current filters. The header search
+  // looks through the full catalog and uses this to flag rows the
+  // filters would hide (audit map-core-15: searching for a resort that
+  // was filtered out used to return "No resorts match").
+  const filteredIds = useMemo(() => new Set(filtered.map((r) => r.id)), [filtered]);
 
   // Resolve the currently-selected resort once per render (not in click
   // handler) so the panel always reflects the latest data — e.g. drive-time
@@ -1106,6 +1412,17 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
       document.body.classList.remove("route-map");
     };
   }, []);
+
+  // Tell the phone tab bar (components/AppTabBar.tsx) when a sheet or
+  // drawer has the bottom of the screen, so it steps aside instead of
+  // sitting under the resort panel / planner / filters / search.
+  useEffect(() => {
+    const open = selectedId != null || plannerOpen || filtersOpen || searchOpen;
+    document.documentElement.dataset.sheetOpen = open ? "1" : "0";
+    return () => {
+      delete document.documentElement.dataset.sheetOpen;
+    };
+  }, [selectedId, plannerOpen, filtersOpen, searchOpen]);
 
   // Hydrate the gold-ring timer + clean up the ?recent=<slug> param.
   // If we mounted with recentlyViewedId already set from the URL
@@ -1188,15 +1505,34 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Phone bottom pill row (see the row's comment in the JSX below).
+  const showListPill =
+    !searchOpen && !filtersOpen && !plannerOpen && (selectedId == null || sheetSnap === "peek");
+  const phoneRow = phoneBottomRow({ list: showListPill, compare: compareIds.length >= 2 });
+
   return (
     <div
       className="relative h-dvh w-full overflow-hidden bg-wn-offwhite"
       data-route="map"
-      // Left unset until the first measurement so consumers' var()
-      // fallbacks (ResortPanel: 64px, MapView: 140px) apply instead of 0.
+      // While a resort sheet is up on a phone, the floating pills (List /
+      // Location / Feedback / Compare) hide at half and full and ride the
+      // sheet's shoulder at peek; consumers key on this attribute.
+      data-sheet-snap={selectedId != null && !isDesktop ? sheetSnap : undefined}
+      // --wn-header-h is left unset until the first measurement so
+      // consumers' var() fallbacks (ResortPanel: 64px, MapView: 140px)
+      // apply instead of 0. --wn-bottom-stack is the offset (px from this
+      // container's bottom edge) at which the floating pills start: the
+      // Mapbox attribution band, the install nudge when it shows, or the
+      // peek sheet. The phone tab bar is already excluded because
+      // app/globals.css shrinks this container by --wn-tab-bar-h.
       style={
         {
           "--wn-header-h": headerHeight > 0 ? `${headerHeight}px` : undefined,
+          "--wn-bottom-stack": `${bottomStackPx({
+            installNudgeVisible,
+            sheetHeight: selectedId != null && !isDesktop ? sheetHeight : null,
+            sheetSnap: selectedId != null && !isDesktop ? sheetSnap : null,
+          })}px`,
         } as React.CSSProperties
       }
     >
@@ -1209,122 +1545,107 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
       <header
         ref={headerRef}
         className="pointer-events-none absolute inset-x-0 top-0 z-10 md:pointer-events-auto md:border-b md:border-wn-charcoal/10 md:bg-white/95 md:backdrop-blur-sm"
-        // User feedback (post-Round-5 install): the +8px bump felt like
-        // the header was floating too far below the iOS status bar.
-        // Reverted to bare env(safe-area-inset-top) so the button row
-        // sits snug under the iOS clock/battery — no extra gap. The
-        // FiltersDrawer + /resort/[slug] hero keep their +12px padding
-        // because those views don't have the same "search pill +
-        // tappable row" affordance directly below the status bar.
+        // Bare env(safe-area-inset-top): the button row sits snug under
+        // the iOS clock (an earlier +8px bump read as floating too low).
         style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}
       >
-        <div className="flex items-center justify-between gap-1.5 px-2 pt-3 sm:gap-2 sm:px-6">
-          <div className="pointer-events-auto flex items-baseline gap-3">
-            {/* Brand pill — gets its own bg on mobile (header is transparent
-                there for a Google-Maps-style float), inherits the solid
-                header bg on desktop. Slightly smaller on mobile so the
-                button row to its right has more breathing room — 6 pills
-                + logo otherwise wrap into a second line on iPhone widths. */}
-            <span className="rounded-md bg-white/90 px-1.5 py-0.5 text-lg font-extrabold tracking-tight text-wn-navy shadow-sm backdrop-blur-sm sm:px-2 sm:text-xl md:bg-transparent md:px-0 md:py-0 md:shadow-none md:backdrop-blur-none">
-              Wynla
+        {/* Row 1 (44 px): brand mark + Search / Plan / Saturday / Filters /
+            Account. Phones get 44 px square buttons with a monoline icon
+            and an 11 px label (audit fresh-eyes-newbie-24: the primary action was
+            an unlabelled emoji; design-system-13: six emoji weights).
+            sm+ keeps the text pills. Heights are fixed so the chrome
+            budget in ResortSheetMath.MOBILE_CHROME is real. */}
+        <div className="mt-2 flex h-11 items-center justify-between gap-1.5 px-2 sm:h-auto sm:gap-2 sm:px-6 sm:pt-1">
+          <div className="pointer-events-auto flex items-center gap-3">
+            {/* The designer's mark (components/BrandMark). Phones get the
+                44 px glyph so the 44 px row still fits Search / Plan /
+                Saturday / Filters / Sign in at 360 px; the solid md+ bar
+                has room for the lockup. Static (no link): this is home. */}
+            <span className="inline-flex items-center rounded-lg bg-white/90 px-2 py-1 shadow-sm backdrop-blur-sm md:bg-transparent md:px-0 md:py-0 md:shadow-none md:backdrop-blur-none">
+              <span className="flex md:hidden">
+                <BrandMark variant="mark" size="sm" href={null} />
+              </span>
+              <span className="hidden md:flex">
+                <BrandMark variant="lockup" size="sm" href={null} />
+              </span>
             </span>
             <span className="hidden text-xs text-wn-charcoal/50 sm:inline">
               Plan smart. Ride better.
             </span>
           </div>
-          <div className="pointer-events-auto flex items-center gap-1 sm:gap-2">
-            {/* Stage 21.3 — mobile header buttons are all same-size
-                icon-only square pills. Plan-a-trip is navy (primary
-                action), others are white pills. Desktop keeps text
-                labels (`sm:` reveals them). */}
-            {/* Header-level resort search. Click → opens the same
-                ResortPicker the planner uses, but seeded with the
-                origin so results are sorted by drive time. */}
+          <div className="pointer-events-auto flex items-center gap-1.5 sm:gap-2">
+            {/* Header-level resort search: the same ResortPicker the
+                planner uses, seeded with the origin so results sort by
+                drive time. */}
             <button
               type="button"
-              onClick={() => setSearchOpen(true)}
-              className="inline-flex h-11 items-center justify-center gap-1.5 rounded-md border border-wn-charcoal/20 bg-white px-2 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 sm:px-3"
+              onClick={() => {
+                // Must run inside the tap: iOS only opens the keyboard
+                // for a synchronous focus, and the search input mounts
+                // on the next render (see primeSearchKeyboard).
+                primeSearchKeyboard();
+                setSearchOpen(true);
+              }}
+              className={HEADER_BTN}
               title="Search resorts"
               aria-label="Search resorts"
             >
-              <span aria-hidden="true">🔍</span>
-              <span className="hidden sm:inline">Search</span>
+              <SearchGlyph />
+              <span className={HEADER_BTN_LABEL}>Search</span>
             </button>
-            {/* Stage 4 — "Plan a trip" + "My trips" moved into the
-                AuthButton dropdown for signed-in users (keeps the
-                header less crowded). Anonymous visitors still need a
-                discoverable entry to the planner. It opens the planner
-                directly (?plan=1, keeping the current origin/filter
-                params) — the Stage-4 login bounce was dropped because
-                the planner already supports anonymous planning and
-                asks for sign-in only at Save, with the draft restored
-                after the magic-link round-trip. Do not reintroduce
-                the /login redirect here. */}
+            {/* "Plan a trip" + "My trips" live in the AuthButton dropdown
+                for signed-in users. Anonymous visitors still need a
+                discoverable entry: opens the planner directly (?plan=1);
+                the planner asks for sign-in only at Save. Do not
+                reintroduce the /login redirect here. */}
             {!isAuthed && (
               <button
                 type="button"
                 onClick={() => updateParam("plan", "1")}
-                className="inline-flex h-11 items-center justify-center gap-1.5 rounded-md bg-wn-navy px-2 text-xs font-semibold text-white shadow-sm transition hover:bg-wn-navy/90 active:scale-95 sm:px-3"
+                className={`${HEADER_BTN} !border-wn-navy !bg-wn-navy !text-white hover:!bg-wn-navy/90`}
                 title="Plan a multi-day ski trip"
                 aria-label="Plan a trip"
               >
-                <span aria-hidden="true">🗺️</span>
-                <span className="hidden sm:inline">Plan a trip</span>
+                <Icon name="trips" className="h-5 w-5 sm:h-4 sm:w-4" />
+                <span className={HEADER_BTN_LABEL}>Plan</span>
               </button>
             )}
-            {/* Mobile-only Filters trigger. */}
-            {(() => {
-              const activeFilterCount =
-                passFilter.length +
-                (withinHours > 0 ? 1 : 0) +
-                (sizeFilter ? 1 : 0) +
-                (nightOnly ? 1 : 0) +
-                (airportFilter ? 1 : 0) +
-                (origin.kind === "geo" ? 1 : 0) +
-                // Stage 4 — new filters add to the badge count so users
-                // can see at a glance how many filters are stacked.
-                (freshSnowOnly ? 1 : 0) +
-                (openNowOnly ? 1 : 0) +
-                (liftReq ? 1 : 0) +
-                (lessonsOnly ? 1 : 0) +
-                (rentalsOnly ? 1 : 0) +
-                (lodgingOnly ? 1 : 0) +
-                (tubingOnly ? 1 : 0) +
-                (xcOnly ? 1 : 0) +
-                (backcountryOnly ? 1 : 0) +
-                (terrainparkOnly ? 1 : 0) +
-                (webcamOnly ? 1 : 0) +
-                (familyOnly ? 1 : 0) +
-                (expertOnly ? 1 : 0) +
-                (adaptiveOnly ? 1 : 0) +
-                (surfaceFilter.length > 0 ? 1 : 0) +
-                (snowmakeMin > 0 ? 1 : 0);
-              return (
-                <button
-                  type="button"
-                  onClick={() => setFiltersOpen(true)}
-                  className="relative inline-flex h-11 items-center justify-center gap-1.5 rounded-md border border-wn-charcoal/20 bg-white px-2 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 md:px-3"
-                  title="All filters"
-                  aria-label={`Filters${activeFilterCount > 0 ? ` (${activeFilterCount} active)` : ""}`}
-                >
-                  <span aria-hidden="true" className="text-base leading-none">☰</span>
-                  {/* Label on desktop — the inline FilterBar covers the
-                      common filters, but the full drawer (terrain, amenities,
-                      lifts, surface, snowmaking, adaptive…) was previously
-                      mobile-only. Desktop users now get the same escape hatch. */}
-                  <span className="hidden md:inline">All filters</span>
-                  {activeFilterCount > 0 && (
-                    <span className="inline-flex h-4 min-w-[16px] items-center justify-center rounded-full bg-wn-navy px-1 text-[10px] font-bold text-white">
-                      {activeFilterCount}
-                    </span>
-                  )}
-                </button>
-              );
-            })()}
-            {/* Deals — desktop only. Sits between My trips and Pro so
-                users can pop over to the season-pass tracker while
-                browsing the map. Mobile placement lives in the
-                FiltersDrawer footer to keep the header minimal. */}
+            {/* "Where to ride Saturday" (/go). A header button on every
+                width: on phones it used to be the first pill of the
+                secondary row, which then rendered on every visit and
+                made its 44 px the everyday chrome cost, not the worst
+                case. */}
+            <Link
+              href={goHref}
+              className={HEADER_BTN}
+              title="Where to ride Saturday"
+              aria-label="Where to ride Saturday"
+            >
+              <Icon name="mountain" className="h-5 w-5 sm:h-4 sm:w-4" />
+              <span className={HEADER_BTN_LABEL}>
+                <span className="hidden lg:inline">Where to ride </span>Saturday
+              </span>
+            </Link>
+            <button
+              type="button"
+              onClick={() => setFiltersOpen(true)}
+              className={`${HEADER_BTN} relative`}
+              title="All filters"
+              aria-label={`Filters${activeFilterCount > 0 ? ` (${activeFilterCount} active)` : ""}`}
+            >
+              <SlidersGlyph />
+              <span className={HEADER_BTN_LABEL}>
+                <span className="sm:hidden">Filters</span>
+                <span className="hidden sm:inline">All filters</span>
+              </span>
+              {activeFilterCount > 0 && (
+                <span className="absolute -right-1 -top-1 inline-flex h-4 min-w-[16px] items-center justify-center rounded-full bg-wn-gold px-1 text-[10px] font-bold text-wn-navy sm:static sm:bg-wn-navy sm:text-white">
+                  {activeFilterCount}
+                </span>
+              )}
+            </button>
+            {/* Deals / Guides / Lists — desktop only; phones reach them
+                through the Filters drawer footer and the tab bar. */}
             <Link
               href="/deals"
               className="hidden h-11 items-center justify-center gap-1.5 rounded-md border border-wn-charcoal/20 bg-white px-3 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 sm:inline-flex"
@@ -1334,9 +1655,6 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
               <span aria-hidden="true">🎟️</span>
               <span>Deals</span>
             </Link>
-            {/* Stage 8 — Guides + Lists SEO surfaces. Desktop-only nav
-                entries; mobile users reach them via the FiltersDrawer
-                footer "More" section. */}
             <Link
               href="/guides"
               className="hidden h-11 items-center justify-center gap-1.5 rounded-md border border-wn-charcoal/20 bg-white px-3 text-xs font-semibold text-wn-charcoal shadow-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95 lg:inline-flex"
@@ -1355,20 +1673,14 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
               <span aria-hidden="true">⭐</span>
               <span>Lists</span>
             </Link>
-            {/* Stage 35 — Pro badge. ProBadge client island swaps between
-                "✨ Pro · Free trial" (free / anon) and "💎 Pro" (subscribed)
-                so paying users see the badge they paid for and free users
-                see the trial nudge. */}
             <ProBadge />
             <AuthButton />
           </div>
         </div>
-        {/* Mobile-only quick pass-filter chips. Doubles as the pass
-            legend (chip color = pin color) which used to be desktop-only
-            in the bottom-right legend card. Hidden on md+. */}
-        {/* MobileQuickFilters opts its chip strip back into pointer
-            events itself, sized to the chips, so the empty space right
-            of the last chip still pans the map. */}
+        {/* Row 2 (40 px, phones): pass chips = quick filter + pin colour
+            legend. Scrolls with no visible scrollbar; the strip opts back
+            into pointer events itself so the space right of the last chip
+            still pans the map. */}
         <MobileQuickFilters
           passFilter={passFilter}
           passCounts={passCounts}
@@ -1376,48 +1688,53 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
             updateParam("pass", passes.length === 0 ? null : passes.join(","))
           }
         />
-        {/* Stage 33 — both the off-season banner and the recently-viewed
-            chips hide when the user is actively searching or planning
-            (searchOpen / plannerOpen). They're "ambient" UI for the
-            idle-map state; while the user is focused on picking a
-            resort or building a trip those rows just push the map down
-            and add noise. Show them again the moment those flows close. */}
-        {/* Stage 4 — most-personal-context first. RecentlyViewedStrip
-            (which returns null when empty, so no clutter for new
-            users) sits ABOVE the promotional OffSeasonBanner. Hidden
-            entirely while the user is searching or planning. */}
-        {!searchOpen && !plannerOpen && (
-          <>
-            {/* Trip-mode discoverability — active trip jumps out at the
-                user instead of hiding inside /trips. Auth-gated so anon
-                users never pay the query. The chip and the banner are
-                centered pills in full-width rows; only the pill itself
-                (its link / dismiss button) takes pointer events so the
-                empty sides of the row still reach the map. */}
-            {isAuthed && (
-              <div className="[&_a]:pointer-events-auto">
-                <ActiveTripChip />
-              </div>
-            )}
-            {/* RecentlyViewedStrip already marks its scroll strip
-                pointer-events-auto. */}
-            <RecentlyViewedStrip />
-            <div className="[&_a]:pointer-events-auto [&_button]:pointer-events-auto">
-              <OffSeasonBanner />
+        {/* Row 3 (44 px, phones): ONE secondary row — Today, active trip
+            and recently viewed, as pills in a single horizontal scroller.
+            Ambient UI for the idle map, so it hides while the user is
+            searching, planning, filtering or reading a resort (audit
+            mobile-ergonomics-11: these used to be four stacked rows
+            covering ~30 % of the screen). It only takes space when one
+            of the pills actually rendered (:has(a, button)), so a first
+            visit with no recents shows no secondary row at all; the
+            trade-off is a one-time 44 px shift of the banner below when
+            the async Today / trip pill arrives. max-md keeps the :has()
+            rule from beating md:hidden on desktop. */}
+        {!searchOpen && !plannerOpen && !filtersOpen && selectedId == null && (
+          <div
+            className="hidden h-11 items-center overflow-x-auto px-2 max-md:has-[a,button]:flex"
+            style={{ touchAction: "pan-x", WebkitOverflowScrolling: "touch", scrollbarWidth: "none" }}
+            role="region"
+            aria-label="Shortcuts"
+            onTouchStart={stopTouchBubble}
+            onTouchMove={stopTouchBubble}
+            onTouchEnd={stopTouchBubble}
+          >
+            <div className="pointer-events-auto flex w-max items-center gap-1.5">
+              {isAuthed && <TodayChip />}
+              {isAuthed && <ActiveTripChip />}
+              <RecentChips />
             </div>
-          </>
+          </div>
         )}
-        {/* Stage 35 — Pro benefits / status card. Free users see a
-            "Try Pro · 7 days free" pitch with 3 bullet benefits; Pro
-            users see a "You're a Pro" confirmation with their unlocked
-            features. Dismissable (free: re-appears in 14d; Pro: stays
-            dismissed). Hidden while a flow is active. */}
+        {/* Desktop keeps the recently viewed strip inline under the filter
+            bar (the phone row above already carries the chips). */}
+        {!searchOpen && !plannerOpen && (
+          <div className="hidden md:block">
+            <RecentlyViewedStrip />
+          </div>
+        )}
+        {/* Row 4 (32 px): founder banner as a dismissable strip, not a
+            floating pill. Hidden with a flow or a resort open. */}
+        {!searchOpen && !plannerOpen && selectedId == null && (
+          <div className="[&_a]:pointer-events-auto [&_button]:pointer-events-auto">
+            <OffSeasonBanner />
+          </div>
+        )}
         <ProBenefitsCard hidden={searchOpen || plannerOpen} />
         {/* Inline filter pills row — desktop only. Mobile uses the
-            single ☰ Filters button above + FiltersDrawer below. */}
-        {/* With a resort open the 380px panel (z-40) sits above the
-            header (z-10), so the row is padded away from it and the
-            pills' popovers never open underneath the panel. */}
+            Filters button above + FiltersDrawer below. With a resort
+            open the 380px panel (z-40) sits above the header (z-10), so
+            the row is padded away from it. */}
         <div
           className={[
             "pointer-events-auto hidden md:block",
@@ -1427,21 +1744,21 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
           <FilterBar
             passFilter={passFilter}
             origin={origin}
+            originIsEstimate={originIsEstimate}
             withinHours={withinHours}
-            days={days}
             sizeFilter={sizeFilter}
             nightOnly={nightOnly}
             passCounts={passCounts}
             hiddenByNullSize={hiddenByNullSize}
             filteredCount={filtered.length}
             totalCount={resorts.length}
+            activeChips={activeChips}
             onPassChange={(passes) =>
               updateParam("pass", passes.length === 0 ? null : passes.join(","))
             }
             onFromCity={handleFromCity}
             onFromGeo={handleFromGeo}
             onWithinChange={(w) => updateParam("within", w)}
-            onDaysChange={(d) => updateParam("days", d > 1 ? String(d) : null)}
             onSizeChange={(s) => updateParam("size", s)}
             onNightChange={(v) => updateParam("night", v ? "1" : null)}
             onClearAll={clearAll}
@@ -1450,6 +1767,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
       </header>
 
 
+      <div className="h-full w-full">
       <MapView
         resorts={filteredForMap}
         originName={origin.name}
@@ -1489,7 +1807,20 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         previewLeg={previewLeg}
         fitTripVersion={fitTripVersion}
         airportMarker={activeAirport}
+        // A tap on bare map (MapView rules out pins, clusters, DOM
+        // markers and controls) collapses an open phone sheet to peek,
+        // the Google Maps gesture.
+        onBareMapClick={() => {
+          if (isDesktop || selectedId == null) return;
+          if (sheetSnap !== "peek") setSheetSnap("peek");
+        }}
+        resortSheetPadding={
+          !isDesktop && selectedId != null && sheetHeight != null
+            ? sheetMapPadding(sheetHeight, typeof window === "undefined" ? 812 : window.innerHeight)
+            : null
+        }
       />
+      </div>
 
       {/* The inset is display:none below md, so mounting it there only
           booted (and billed) a second Mapbox map nobody could see. */}
@@ -1575,9 +1906,72 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
           origin={origin}
           weather={weatherByResort.get(selectedResort.id) ?? null}
           activeAirport={activeAirport}
+          mobile={!isDesktop}
+          snap={sheetSnap}
+          onSnapChange={setSheetSnap}
+          onSheetHeightChange={setSheetHeight}
+          // Plan trip from the sheet: open the planner seeded with this
+          // resort (?route=<slug>, the share-link form the planner reads).
+          // The planner and the sheet are mutually exclusive on phones,
+          // so the sheet closes as the planner opens.
+          onPlanTrip={() => {
+            updateParams({ plan: "1", route: selectedResort.slug });
+            openResort(null);
+          }}
           onClose={() => openResort(null)}
         />
       )}
+
+      {/* Phone bottom pill row: List · Compare · Location in ONE flex
+          row anchored at --wn-bottom-stack (attribution band, install
+          nudge or peek sheet), so the three can never overlap. The
+          Feedback pill (its own component, left-3 on the same
+          --wn-bottom-stack anchor, hidden at half/full too) shares the
+          line, so the row reserves its slot on the left (pl-[132px] =
+          PHONE_ROW.edge + feedbackSlot) and packs right. With List on
+          screen Location is an icon; with Compare up List is too
+          (phoneBottomRow). The whole row hides while a resort sheet is at
+          half or full. Desktop keeps the floating Location and Compare
+          pills below. */}
+      <div
+        className="pointer-events-none absolute inset-x-0 z-20 flex items-center justify-end gap-1.5 pl-[132px] pr-3 md:hidden [[data-sheet-snap=full]_&]:hidden [[data-sheet-snap=half]_&]:hidden"
+        style={{
+          bottom: "var(--wn-bottom-stack, 40px)",
+          // Same inset as the Feedback pill so the two sit on one line.
+          paddingBottom: "env(safe-area-inset-bottom, 0px)",
+        }}
+      >
+        {showListPill && (
+          <button
+            type="button"
+            onClick={() => setSearchOpen(true)}
+            className={[
+              "pointer-events-auto inline-flex h-11 shrink-0 items-center justify-center rounded-full border border-white/60 bg-white/80 text-sm font-bold text-wn-navy shadow-lg backdrop-blur-md transition hover:bg-white active:scale-95",
+              phoneRow.listCompact ? "w-11" : "gap-2 px-4",
+            ].join(" ")}
+            aria-label={`Show ${filtered.length} resorts as a list`}
+          >
+            <ListGlyph />
+            {!phoneRow.listCompact && (
+              <>
+                <span>List</span>
+                <span className="rounded-full bg-wn-navy/10 px-1.5 text-[11px] font-semibold tabular-nums text-wn-navy">
+                  {filtered.length}
+                </span>
+              </>
+            )}
+          </button>
+        )}
+        <ComparePill ids={compareIds} />
+        {!isDesktop && (
+          <LocationButton
+            placement="row"
+            compact={phoneRow.locationCompact}
+            isUsingGeo={origin.kind === "geo"}
+            onUseMyLocation={handleFromGeo}
+          />
+        )}
+      </div>
 
       <TripPlannerPanel
         open={plannerOpen}
@@ -1603,36 +1997,11 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         // header search: refine candidates by pass/conditions/etc
         // without leaving the planner.
         onOpenFilters={() => setFiltersOpenRaw(true)}
-        activeFilterCount={
-          passFilter.length +
-          (sizeFilter ? 1 : 0) +
-          (nightOnly ? 1 : 0) +
-          (withinHours > 0 ? 1 : 0) +
-          (airportFilter ? 1 : 0) +
-          (freshSnowOnly ? 1 : 0) +
-          // Stage 4 — comprehensive filter expansion counted here too.
-          (openNowOnly ? 1 : 0) +
-          (liftReq ? 1 : 0) +
-          (lessonsOnly ? 1 : 0) +
-          (rentalsOnly ? 1 : 0) +
-          (lodgingOnly ? 1 : 0) +
-          (tubingOnly ? 1 : 0) +
-          (xcOnly ? 1 : 0) +
-          (backcountryOnly ? 1 : 0) +
-          (terrainparkOnly ? 1 : 0) +
-          (webcamOnly ? 1 : 0) +
-          (familyOnly ? 1 : 0) +
-          (expertOnly ? 1 : 0) +
-          (adaptiveOnly ? 1 : 0) +
-          (surfaceFilter.length > 0 ? 1 : 0) +
-          (snowmakeMin > 0 ? 1 : 0)
-        }
+        activeFilterCount={activeFilterCount}
       />
 
       {/* Header search modal — re-uses the planner's ResortPicker.
-          Selecting a resort flies the camera + opens its panel. We pass
-          the active filter set (not all 451) so a user who's narrowed
-          down by Pass / Size / Night / Drive sees only those resorts. */}
+          Selecting a resort flies the camera + opens its panel. */}
       <ResortPicker
         open={searchOpen}
         title="Find a resort"
@@ -1645,34 +2014,15 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         // mutually-exclusive `setFiltersOpen` wrapper that kills
         // search; we want both open with filter stacked above.
         onOpenFilters={() => setFiltersOpenRaw(true)}
-        // Stage 33 — count of "other" filters set (size, night,
-        // drive, airport). Pass chips + fresh snow live inline in
-        // the picker so they're not counted; this badge represents
-        // only the filters that require opening the drawer to see.
-        activeFilterCount={
-          (sizeFilter ? 1 : 0) +
-          (nightOnly ? 1 : 0) +
-          (withinHours > 0 ? 1 : 0) +
-          (airportFilter ? 1 : 0) +
-          // Stage 4 — new filters surface in the search-picker badge.
-          (openNowOnly ? 1 : 0) +
-          (liftReq ? 1 : 0) +
-          (lessonsOnly ? 1 : 0) +
-          (rentalsOnly ? 1 : 0) +
-          (lodgingOnly ? 1 : 0) +
-          (tubingOnly ? 1 : 0) +
-          (xcOnly ? 1 : 0) +
-          (backcountryOnly ? 1 : 0) +
-          (terrainparkOnly ? 1 : 0) +
-          (webcamOnly ? 1 : 0) +
-          (familyOnly ? 1 : 0) +
-          (expertOnly ? 1 : 0) +
-          (adaptiveOnly ? 1 : 0) +
-          (surfaceFilter.length > 0 ? 1 : 0) +
-          (snowmakeMin > 0 ? 1 : 0)
-        }
+        // Badge on the picker's Filters pill: the same count as the ☰
+        // button so the two never disagree.
+        activeFilterCount={activeFilterCount}
         fromPoint={{ lat: origin.lat, lng: origin.lon, label: origin.kind === "geo" ? "your location" : origin.name }}
-        allResorts={filtered}
+        // Full catalog, not the filtered pool: a user typing a name
+        // expects to find it even when a filter hides it. Rows outside
+        // filteredIds get a "hidden by filters" tag instead.
+        allResorts={resorts}
+        visibleIds={filteredIds}
         alreadyPicked={[]}
         onSelect={(slug) => {
           const r = resorts.find((c) => c.slug === slug);
@@ -1689,23 +2039,23 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         onClose={() => setSearchOpen(false)}
       />
 
-      {/* Floating "use my location" pill — replaces Stage 19's GeoBanner.
-          Always discoverable on mobile, doesn't occlude the map. */}
-      <LocationButton
-        isUsingGeo={origin.kind === "geo"}
-        onUseMyLocation={handleFromGeo}
-      />
+      {/* Floating "use my location" pill (desktop). Phones get the same
+          button inside the bottom pill row above. */}
+      {isDesktop && (
+        <LocationButton
+          isUsingGeo={origin.kind === "geo"}
+          onUseMyLocation={handleFromGeo}
+        />
+      )}
 
       {/* Inaugural Season — Floating feedback pill at the bottom-left
           corner (mirror of LocationButton). Tap opens a modal that
           POSTs to /api/feedback. */}
       <FeedbackButton />
 
-      {/* Compare CTA — fixed pill bottom-center (mobile) / bottom-left
-          (desktop). Renders only when the localStorage list has ≥2.
-          Routes to /compare?ids=… (RecentlyViewedStrip moved into the
-          header above so it stacks inline on mobile instead of
-          absolute-overlapping the off-season banner / quick filters.) */}
+      {/* Compare CTA — floating bottom-centre pill on desktop only
+          (phones render ComparePill in the bottom pill row). Renders only
+          when the localStorage list has ≥2; routes to /compare?ids=…. */}
       <CompareFloatingButton />
 
       {/* Stage 21.2 — mobile filters drawer. Triggered by the ☰ Filters
@@ -1721,10 +2071,24 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
           updateParam("pass", passes.length === 0 ? null : passes.join(","))
         }
         withinHours={withinHours}
-        fromLabel={origin.kind === "geo" ? "here" : origin.short}
+        origin={origin}
+        originIsEstimate={originIsEstimate}
+        onFromCity={handleFromCity}
+        onFromGeo={handleFromGeo}
         sizeFilter={sizeFilter}
         nightOnly={nightOnly}
         airportFilter={airportFilter}
+        nearAirportResorts={nearAirportResorts}
+        onJumpToResort={(id) => {
+          const r = resorts.find((c) => c.id === id);
+          if (!r) return;
+          openResort(r.id);
+          setCameraTarget({
+            lat: Number(r.latitude),
+            lng: Number(r.longitude),
+            token: `flyto-${Date.now()}`,
+          });
+        }}
         filteredCount={filtered.length}
         totalCount={resorts.length}
         freshSnowOnly={freshSnowOnly}
@@ -1781,10 +2145,9 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         onNightChange={(v) => updateParam("night", v ? "1" : null)}
         onAirportChange={(iata) => {
           updateParam("airport", iata);
-          // Stage 33 — fly the map camera to the picked airport so
-          // the user immediately sees its surrounding resorts. Skips
-          // when iata is null (filter cleared) — leave the map where
-          // it was.
+          // Fly the map camera to the picked airport so the user
+          // immediately sees its surrounding resorts. Skips when iata
+          // is null (jump cleared): leave the map where it was.
           if (iata) {
             const a = AIRPORT_OPTIONS.find((opt) => opt.iata === iata);
             if (a) {

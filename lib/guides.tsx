@@ -312,6 +312,14 @@ export const GUIDES: Guide[] = [
               Indy Pass hidden gems →
             </Link>
           </li>
+          <li>
+            <Link
+              href="/go"
+              className="font-semibold text-wn-navy underline-offset-2 hover:underline"
+            >
+              Where to ride this Saturday with your pass →
+            </Link>
+          </li>
         </ul>
       </>
     ),
@@ -485,6 +493,14 @@ export const GUIDES: Guide[] = [
               className="font-semibold text-wn-navy underline-offset-2 hover:underline"
             >
               All Colorado ski resorts →
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/near/denver"
+              className="font-semibold text-wn-navy underline-offset-2 hover:underline"
+            >
+              Ski resorts near Denver, sorted by drive time →
             </Link>
           </li>
         </ul>
@@ -674,6 +690,14 @@ export const GUIDES: Guide[] = [
               className="font-semibold text-wn-navy underline-offset-2 hover:underline"
             >
               Night skiing East list →
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/near/boston"
+              className="font-semibold text-wn-navy underline-offset-2 hover:underline"
+            >
+              Ski resorts near Boston, sorted by drive time →
             </Link>
           </li>
         </ul>
@@ -871,6 +895,22 @@ export const GUIDES: Guide[] = [
               className="font-semibold text-wn-navy underline-offset-2 hover:underline"
             >
               East Coast classics list →
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/near/nyc"
+              className="font-semibold text-wn-navy underline-offset-2 hover:underline"
+            >
+              Ski resorts near New York City →
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/go?city=boston"
+              className="font-semibold text-wn-navy underline-offset-2 hover:underline"
+            >
+              This Saturday&apos;s picks from Boston →
             </Link>
           </li>
         </ul>

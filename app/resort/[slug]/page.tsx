@@ -4,12 +4,14 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import HeroImage from "@/components/HeroImage";
+import { heroSourceFor } from "@/lib/heroSource";
 import {
   passColor,
   passLabel,
   primaryPass,
   PASS_KEYS,
 } from "@/lib/passColors";
+import { textOn } from "@/lib/contrast";
 import {
   blackoutText,
   familyInfo,
@@ -17,6 +19,7 @@ import {
   getFamilyAccess,
   isPassFamily,
   sourceHost,
+  summaryLine,
   PASS_ACCESS_SEASON,
   PASS_ACCESS_VERIFIED_ON,
   type PassFamily,
@@ -35,6 +38,7 @@ import SeasonCountdown, { ResortStatusPill } from "@/components/SeasonCountdown"
 import {
   resolveSeasonInfo,
   deriveResortStatus,
+  isProjectedSeasonText,
   seasonWindowText,
   type ResortStatus,
 } from "@/lib/seasonDates";
@@ -70,6 +74,10 @@ import { haversineMeters, estimateDriveSeconds } from "@/lib/distance";
 import { formatDriveTime } from "@/lib/origins";
 import { skyscannerUrl } from "@/lib/affiliateLinks";
 import { forecastDaysFrom } from "@/lib/weather/forecastJson";
+import { buildGlanceTiles } from "@/lib/glanceTiles";
+import { getStateName } from "@/lib/usStates";
+import { formatDriveRounded, formatStampDate, nearCityName, nearestCities } from "@/lib/near";
+import { ESTIMATE_MARK } from "@/lib/origins";
 
 // ISR — resort detail data (lifts/trails/passes/coords) changes rarely.
 // Snow conditions are stamped on the row by the cron; ISR every 10 min
@@ -82,7 +90,7 @@ export const revalidate = 600;
 // blobs). Keeping this in sync with the local Resort type is enforced by
 // TS at the cast site. ~3-5KB per detail page hit saved.
 const RESORT_DETAIL_COLS =
-  "id, slug, name, state, region, city, address, latitude, longitude, passes, tier, operating_status, vertical_drop, total_trails, total_lifts, total_acres, difficulty_pct_beginner, difficulty_pct_intermediate, difficulty_pct_advanced, difficulty_pct_expert, trails_beginner, trails_intermediate, trails_advanced, trails_expert, has_terrain_park, terrain_park_count, has_glades, has_halfpipe, has_night_skiing, longest_run_miles, elevation_base, elevation_summit, typical_season_start, typical_season_end, weekday_hours, weekend_hours, website_url, trail_map_url, ticket_booking_url, hero_image_url, hero_image_source, hero_image_alt, hero_image_attribution, last_verified_at, high_speed_lifts, base_elevation_ft, summit_elevation_ft, annual_snowfall_in, season_open_text, season_close_text, snowmaking_pct, has_tubing, has_lessons, has_rentals, has_lodging_on_mountain, has_xc_skiing, has_backcountry_access, webcam_url, closest_airport_iata, closest_airport_distance_mi, snow_base_depth_in, snow_new_24h_in, snow_new_48h_in, snow_new_7d_in, trails_open_today, lifts_open_today, snow_report_status, snow_report_updated_at, allows_snowboards, wind_hold_mph_chair, wind_hold_mph_gondola, currently_open, season_end_date, lift_types, terrain_park_features, avalanche_zone_id";
+  "id, slug, name, state, region, city, address, latitude, longitude, passes, tier, operating_status, vertical_drop, total_trails, total_lifts, total_acres, difficulty_pct_beginner, difficulty_pct_intermediate, difficulty_pct_advanced, difficulty_pct_expert, trails_beginner, trails_intermediate, trails_advanced, trails_expert, has_terrain_park, terrain_park_count, has_glades, has_halfpipe, has_night_skiing, longest_run_miles, elevation_base, elevation_summit, typical_season_start, typical_season_end, weekday_hours, weekend_hours, website_url, trail_map_url, ticket_booking_url, hero_image_url, hero_image_source, hero_image_alt, hero_image_attribution, hero_image_verified_winter, last_verified_at, high_speed_lifts, base_elevation_ft, summit_elevation_ft, annual_snowfall_in, season_open_text, season_close_text, snowmaking_pct, has_tubing, has_lessons, has_rentals, has_lodging_on_mountain, has_xc_skiing, has_backcountry_access, webcam_url, closest_airport_iata, closest_airport_distance_mi, snow_base_depth_in, snow_new_24h_in, snow_new_48h_in, snow_new_7d_in, trails_open_today, lifts_open_today, snow_report_status, snow_report_updated_at, allows_snowboards, wind_hold_mph_chair, wind_hold_mph_gondola, currently_open, season_end_date, lift_types, terrain_park_features, avalanche_zone_id, ticket_price_adult_min, ticket_price_adult_max, ticket_price_currency, ticket_price_updated_at";
 
 type Resort = {
   id: number;
@@ -128,6 +136,7 @@ type Resort = {
   hero_image_source: string | null;
   hero_image_alt: string | null;
   hero_image_attribution: string | null;
+  hero_image_verified_winter: boolean | null;
   last_verified_at: string | null;
   // Stage 23 columns — preferred over the legacy elevation_base /
   // typical_season_* fields above when both exist.
@@ -165,7 +174,279 @@ type Resort = {
   lift_types: LiftTypes | null;
   terrain_park_features: number | null;
   avalanche_zone_id: string | null;
+  // Adult window lift ticket (fresh-eyes-newbie-35). Read here for the
+  // FAQ structured data only; null on every row until the price backfill
+  // runs, in which case the question is simply not emitted.
+  ticket_price_adult_min: number | null;
+  ticket_price_adult_max: number | null;
+  ticket_price_currency: string | null;
+  ticket_price_updated_at: string | null;
 };
+
+// ---------- JSON-LD (audit finding content-seo-16) ----------
+//
+// Three graphs: SkiResort enriched with image / amenities / hours when
+// the row has them, a BreadcrumbList (Wynla › <State> ski resorts ›
+// resort) and a FAQPage built from the same fields the page renders.
+// Every answer is data-driven and labelled the way the page labels it
+// (≈ estimates, "projected" dates, "reported" prices with their date),
+// and a question is emitted only when its data exists, so the markup
+// never claims more than the page shows.
+
+const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://wynla.app").replace(/\/+$/, "");
+
+/** "9am-4pm", "9:30am-4pm", "4pm-9:30pm" → schema.org 24 h times, or
+ *  null for anything else ("varies", "see website"). */
+function parseHoursRange(text: string | null | undefined): { opens: string; closes: string } | null {
+  if (!text) return null;
+  const m = text
+    .trim()
+    .toLowerCase()
+    .match(/^(\d{1,2})(?::(\d{2}))?\s*(am|pm)?\s*(?:-|–|—|to)\s*(\d{1,2})(?::(\d{2}))?\s*(am|pm)$/);
+  if (!m) return null;
+  const to24 = (h: string, min: string | undefined, ap: string | undefined): string | null => {
+    let hour = Number(h);
+    if (!Number.isFinite(hour) || hour < 1 || hour > 12) return null;
+    if (ap === "pm" && hour !== 12) hour += 12;
+    if (ap === "am" && hour === 12) hour = 0;
+    return `${String(hour).padStart(2, "0")}:${min ?? "00"}`;
+  };
+  // "9-4pm" style: a start below 12 with no meridiem is a morning start;
+  // otherwise it inherits the closing meridiem.
+  const startAp = m[3] ?? (Number(m[1]) < 12 && m[6] === "pm" ? "am" : m[6]);
+  const opens = to24(m[1], m[2], startAp);
+  const closes = to24(m[4], m[5], m[6]);
+  return opens && closes ? { opens, closes } : null;
+}
+
+function openingHoursSpec(resort: Resort): Array<Record<string, unknown>> {
+  const out: Array<Record<string, unknown>> = [];
+  const weekday = parseHoursRange(resort.weekday_hours);
+  const weekend = parseHoursRange(resort.weekend_hours);
+  if (weekday) {
+    out.push({
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      opens: weekday.opens,
+      closes: weekday.closes,
+    });
+  }
+  if (weekend) {
+    out.push({ "@type": "OpeningHoursSpecification", dayOfWeek: ["Saturday", "Sunday"], opens: weekend.opens, closes: weekend.closes });
+  }
+  return out;
+}
+
+function amenityFeatures(resort: Resort): Array<Record<string, unknown>> {
+  const flags: Array<[string, boolean | null]> = [
+    ["Night skiing", resort.has_night_skiing],
+    ["Terrain park", resort.has_terrain_park],
+    ["Halfpipe", resort.has_halfpipe],
+    ["Glades", resort.has_glades],
+    ["Ski and snowboard lessons", resort.has_lessons],
+    ["Equipment rentals", resort.has_rentals],
+    ["On-mountain lodging", resort.has_lodging_on_mountain],
+    ["Snow tubing", resort.has_tubing],
+    ["Cross-country skiing", resort.has_xc_skiing],
+    ["Backcountry access", resort.has_backcountry_access],
+    ["Snowboards allowed", resort.allows_snowboards],
+  ];
+  // Only known values: a null flag is "not verified", not "no".
+  return flags
+    .filter(([, v]) => v === true || v === false)
+    .map(([name, v]) => ({ "@type": "LocationFeatureSpecification", name, value: v }));
+}
+
+type Faq = { question: string; answer: string };
+
+/** Widest radius the FAQ will name a city at: twice the /near radius. */
+const FAQ_DISTANCE_MAX_HOURS = 12;
+
+/** The FAQ and priceRange print a "$" sign, so they only fire for USD
+ *  rows; ticket_price_currency exists precisely so a non-USD row can
+ *  appear, and that row should stay silent rather than mislabelled. */
+function hasUsdTicketPrice(resort: Resort): boolean {
+  return (
+    resort.ticket_price_adult_min != null &&
+    resort.ticket_price_adult_min > 0 &&
+    (resort.ticket_price_currency ?? "USD").toUpperCase() === "USD"
+  );
+}
+
+/** Up to five questions, each only when its data exists. Order is the
+ *  order a first-time visitor asks them (pass, opening, price, distance,
+ *  size, then extras). */
+function buildResortFaq(resort: Resort, status: ResortStatus, lat: number, lng: number, now: Date): Faq[] {
+  const faqs: Faq[] = [];
+  const passes = (resort.passes ?? []).filter((p) => p !== "independent");
+
+  if (passes.length > 0) {
+    const detail = passes
+      .filter(isPassFamily)
+      .map((f) => {
+        const line = summaryLine(resort.slug, f);
+        return line ? `${passLabel(f)}: ${line}` : null;
+      })
+      .filter(Boolean)
+      .join(". ");
+    faqs.push({
+      question: `Is ${resort.name} on the ${passes.map((p) => passLabel(p)).join(" or ")}?`,
+      answer:
+        `Yes. ${resort.name} is on the ${passes.map((p) => passLabel(p)).join(" and ")}.` +
+        (detail ? ` ${detail}. Access rules verified ${formatVerifiedOn(PASS_ACCESS_VERIFIED_ON)} for the ${PASS_ACCESS_SEASON} season.` : ""),
+    });
+  } else if ((resort.passes ?? []).includes("independent")) {
+    faqs.push({
+      question: `Is ${resort.name} on the Epic or Ikon Pass?`,
+      answer: `No. ${resort.name} is an independent resort and is not on the Epic Pass, Ikon Pass, Indy Pass or Mountain Collective. Day tickets are sold by the resort.`,
+    });
+  }
+
+  const window = seasonWindowText(resort);
+  if (status.kind === "opens" || status.kind === "open" || status.kind === "limited" || status.kind === "likely-open") {
+    const projected = isProjectedSeasonText(resort.season_open_text ?? resort.typical_season_start);
+    // The sentence is built per status kind rather than by lowercasing the
+    // pill label: the label carries a month name ("Opens Nov 22") that
+    // must keep its capital, and this text goes verbatim to search and
+    // answer engines.
+    const detail = status.detail ? ` (${status.detail})` : "";
+    const line =
+      status.kind === "opens"
+        ? `${resort.name} ${status.label.replace(/^Opens/, "opens")}${detail}${projected ? ". This is a projected date from a third-party calendar, not the resort's announcement" : ""}.`
+        : status.kind === "open"
+          ? `${resort.name} is open today${detail}.`
+          : status.kind === "limited"
+            ? `${resort.name} is running limited operations${detail}.`
+            : `${resort.name} is likely open${detail}.`;
+    faqs.push({
+      question: `When does ${resort.name} open for the season?`,
+      answer: `${line}${window ? ` The usual season runs ${window}.` : ""} Checked ${formatStampDate(now.toISOString()) ?? "today"}; confirm with the resort before you drive.`,
+    });
+  } else if (window) {
+    faqs.push({
+      question: `When is ${resort.name} open?`,
+      answer: `The usual season at ${resort.name} runs ${window}. Confirm dates with the resort before you drive.`,
+    });
+  }
+
+  if (hasUsdTicketPrice(resort)) {
+    const min = resort.ticket_price_adult_min as number;
+    const max = resort.ticket_price_adult_max;
+    const asOf = formatStampDate(resort.ticket_price_updated_at);
+    faqs.push({
+      question: `How much is a lift ticket at ${resort.name}?`,
+      answer: `An adult window lift ticket at ${resort.name} starts at $${min.toLocaleString()}${max != null && max > min ? ` and goes up to $${max.toLocaleString()} on peak days` : ""}. Reported${asOf ? ` ${asOf}` : ""} from the resort's price page; buying online in advance is usually cheaper.`,
+    });
+  }
+
+  // The distance question only exists when an origin city is within a
+  // plausible day's drive (12 h, the /go ceiling doubled); past that the
+  // estimate describes a trip nobody makes, and Alaska is skipped outright
+  // because Juneau and Cordova have no road connection at all.
+  const [nearest] = resort.state === "AK" ? [] : nearestCities(lat, lng, 1, FAQ_DISTANCE_MAX_HOURS, false);
+  if (nearest) {
+    const city = nearCityName(nearest.city);
+    const airport = resort.closest_airport_iata ? airportByIata(resort.closest_airport_iata) : null;
+    faqs.push({
+      question: `How far is ${resort.name} from ${city}?`,
+      answer:
+        `${resort.name} is about ${formatDriveRounded(nearest.seconds)} by car from downtown ${city} (${ESTIMATE_MARK} estimated from straight-line distance at 60 mph with a 1.2 road factor; the map upgrades this to a road route).` +
+        (airport && resort.closest_airport_distance_mi != null
+          ? ` The closest airport is ${airport.name} (${resort.closest_airport_iata}), ${resort.closest_airport_distance_mi} miles away.`
+          : airport
+            ? ` The closest airport is ${airport.name} (${resort.closest_airport_iata}).`
+            : ""),
+    });
+  }
+
+  const sizeBits = [
+    resort.vertical_drop != null ? `${resort.vertical_drop.toLocaleString()} ft of vertical` : null,
+    resort.total_trails != null ? `${resort.total_trails} trails` : null,
+    resort.total_lifts != null ? `${resort.total_lifts} lifts` : null,
+    resort.total_acres != null ? `${resort.total_acres.toLocaleString()} skiable acres` : null,
+    resort.annual_snowfall_in != null ? `about ${resort.annual_snowfall_in} in of snow in an average season` : null,
+  ].filter(Boolean);
+  if (sizeBits.length > 0) {
+    faqs.push({
+      question: `How big is ${resort.name}?`,
+      answer: `${resort.name} has ${sizeBits.join(", ")}. Figures are the resort's published statistics as last verified by Wynla${resort.last_verified_at ? ` (${formatStampDate(resort.last_verified_at)})` : ""}.`,
+    });
+  }
+
+  if (faqs.length < 5 && (resort.has_night_skiing === true || resort.has_terrain_park === true)) {
+    const yes = [
+      resort.has_night_skiing === true ? "night skiing" : null,
+      resort.has_terrain_park === true ? `a terrain park${resort.terrain_park_count ? ` (${resort.terrain_park_count} parks)` : ""}` : null,
+    ].filter(Boolean);
+    faqs.push({
+      question: `Does ${resort.name} have night skiing or a terrain park?`,
+      answer: `${resort.name} has ${yes.join(" and ")}, according to the resort's published information.`,
+    });
+  }
+
+  return faqs.slice(0, 5);
+}
+
+function resortJsonLd(resort: Resort, status: ResortStatus, lat: number, lng: number, now: Date): Array<Record<string, unknown>> {
+  const stateName = getStateName(resort.state);
+  const pageUrl = `${SITE_URL}/resort/${resort.slug}`;
+  const hours = openingHoursSpec(resort);
+  const amenities = amenityFeatures(resort);
+  const faq = buildResortFaq(resort, status, lat, lng, now);
+
+  const skiResort: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "SkiResort",
+    "@id": `${pageUrl}#resort`,
+    name: resort.name,
+    description: `Ski resort in ${stateName ?? resort.state}${resort.region ? " (" + resort.region + ")" : ""}`,
+    url: resort.website_url ?? pageUrl,
+    address: {
+      "@type": "PostalAddress",
+      addressRegion: resort.state,
+      addressLocality: resort.city ?? undefined,
+      addressCountry: "US",
+      streetAddress: resort.address ?? undefined,
+    },
+    geo: { "@type": "GeoCoordinates", latitude: lat, longitude: lng },
+  };
+  if (resort.hero_image_url) skiResort.image = resort.hero_image_url;
+  if (amenities.length > 0) skiResort.amenityFeature = amenities;
+  if (hours.length > 0) skiResort.openingHoursSpecification = hours;
+  if (hasUsdTicketPrice(resort)) {
+    const min = resort.ticket_price_adult_min as number;
+    skiResort.priceRange =
+      resort.ticket_price_adult_max != null && resort.ticket_price_adult_max > min
+        ? `$${min}-$${resort.ticket_price_adult_max}`
+        : `$${min}`;
+  }
+
+  const breadcrumb = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Wynla", item: SITE_URL },
+      ...(stateName
+        ? [{ "@type": "ListItem", position: 2, name: `${stateName} ski resorts`, item: `${SITE_URL}/state/${resort.state.toLowerCase()}` }]
+        : []),
+      { "@type": "ListItem", position: stateName ? 3 : 2, name: resort.name, item: pageUrl },
+    ],
+  };
+
+  const graphs: Array<Record<string, unknown>> = [skiResort, breadcrumb];
+  if (faq.length > 0) {
+    graphs.push({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: faq.map((f) => ({
+        "@type": "Question",
+        name: f.question,
+        acceptedAnswer: { "@type": "Answer", text: f.answer },
+      })),
+    });
+  }
+  return graphs;
+}
 
 type ForecastDay = {
   date: string;
@@ -474,6 +755,9 @@ export default async function ResortPage({
   const lat = Number(resort.latitude);
   const primary = primaryPass(resort.passes);
   const heroBg = passColor(primary);
+  // Photo / terrain card / gradient, one policy for every surface
+  // (lib/heroSource.ts): only storage-hosted, licence-clear photos show.
+  const hero = heroSourceFor(resort);
 
   // QuickStats / Listed-footer gating: show the listed-footer fallback only
   // when QuickStats would render nothing. Mirrors the QuickStats null-check.
@@ -499,36 +783,16 @@ export default async function ResortPage({
         lat={lat}
         lng={lng}
       />
-      {/* JSON-LD for SEO */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "SkiResort",
-            name: resort.name,
-            description: `Ski resort in ${resort.state}${resort.region ? " (" + resort.region + ")" : ""}`,
-            url: resort.website_url ?? undefined,
-            address: {
-              "@type": "PostalAddress",
-              addressRegion: resort.state,
-              addressLocality: resort.city ?? undefined,
-              addressCountry: "US",
-              streetAddress: resort.address ?? undefined,
-            },
-            geo: {
-              "@type": "GeoCoordinates",
-              latitude: lat,
-              longitude: lng,
-            },
-          }),
-        }}
-      />
+      {/* JSON-LD for SEO: SkiResort + BreadcrumbList + FAQPage, all built
+          from the fields this page renders (see resortJsonLd above). */}
+      {resortJsonLd(resort, status, lat, lng, now).map((graph, i) => (
+        <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(graph) }} />
+      ))}
 
-      {/* HERO — vetted winter photo (hero_image_url) when present, else a
-          designed navy gradient. hero_image_url is filled by the
-          scripts/hero-*.mjs sourcing + vision-vetting pipeline (every photo
-          is a hand-vetted winter ski scene; rest fall back to the gradient). */}
+      {/* HERO — vetted winter photo when the row has a storage-hosted one,
+          else the resort's terrain card (scripts/photos/2-terrain-cards.mjs),
+          else the designed navy gradient. Photos come from the
+          scripts/photos/* Commons harvest + vision-vetting pipeline. */}
       <header
         className="relative w-full overflow-hidden"
         style={{
@@ -539,13 +803,7 @@ export default async function ResortPage({
           paddingTop: "12px",
         }}
       >
-        {resort.hero_image_url && (
-          <HeroImage
-            src={resort.hero_image_url}
-            alt={resort.hero_image_alt ?? `${resort.name} in winter`}
-            attribution={resort.hero_image_attribution}
-          />
-        )}
+        {hero.kind !== "gradient" && <HeroImage source={hero} />}
         {/* Two-stop atmosphere overlay — soft highlight top-left, deeper
             shadow bottom-right. Plus a faint SVG-grain layer that gives
             the gradient a Stripe/Linear-style depth instead of a flat fill. */}
@@ -583,6 +841,19 @@ export default async function ResortPage({
             ← Map
           </Link>
           <div className="flex items-center gap-2">
+            {/* Opens the planner with this resort as day 1, so the page
+                is a doorway into a trip rather than a dead end (audit
+                trip-planner-46-entry). Icon-only on the narrowest phones;
+                the label shows from sm. */}
+            <Link
+              href={`/?plan=1&route=${encodeURIComponent(resort.slug)}&days=1`}
+              aria-label={`Plan a trip to ${resort.name}`}
+              title="Plan a trip here"
+              className="inline-flex h-11 items-center justify-center gap-1 rounded-full bg-white/95 px-3 text-xs font-semibold text-wn-charcoal shadow-md backdrop-blur-sm transition hover:text-wn-navy active:scale-95 motion-reduce:transition-none sm:px-3.5"
+            >
+              <span aria-hidden="true" className="text-sm leading-none">🗺️</span>
+              <span className="hidden sm:inline">Plan a trip</span>
+            </Link>
             <CompareToggle resortId={resort.id} size="lg" />
             <FavoriteToggle resortId={resort.id} size="lg" />
           </div>
@@ -896,6 +1167,22 @@ export default async function ResortPage({
             a value isn’t confirmed — better that than a wrong number. Always check
             the resort site for live trail status.
           </p>
+          {hero.kind === "photo" && (
+            <p className="mt-2">
+              Header photo: {hero.credit ?? "Wikimedia Commons"}, resized and may be cropped.{" "}
+              <Link href="/credits" className="font-medium text-wn-charcoal/80 underline hover:text-wn-navy">
+                Photo credits
+              </Link>
+            </p>
+          )}
+          {hero.kind === "card" && (
+            <p className="mt-2">
+              Header image: a terrain render from USGS 3DEP elevation data (public domain), not a photo.{" "}
+              <Link href="/credits" className="font-medium text-wn-charcoal/80 underline hover:text-wn-navy">
+                Photo credits
+              </Link>
+            </p>
+          )}
         </footer>
       </div>
     </main>
@@ -919,7 +1206,7 @@ function uvChipClass(uv: number): string {
 
 function PassBadge({ pass, href }: { pass: string; href?: string }) {
   const color = passColor(pass);
-  const fg = pass === "ikon" ? "#1E2952" : "#FFFFFF";
+  const fg = textOn(color);
   const className = "inline-block rounded-md px-2 py-0.5 text-[11px] font-semibold";
   if (href) {
     return (
@@ -1139,10 +1426,12 @@ function windContextFor(resort: Resort): ResortWindContext {
   };
 }
 
-// At-a-glance strip — status pill + four labelled numbers. Reads from
-// the resort-reported snow columns first (what the mountain measured)
-// and falls back to the station-derived weather_cache values, and says
-// which one it is showing.
+// At-a-glance strip — status pill + four labelled numbers. The tiles come
+// from lib/glanceTiles, the same builder the map's resort sheet uses, so
+// the page and the sheet say the same thing about the same numbers:
+// Measured (NOHRSC / SNOTEL analysis or a weather station), Reported (a
+// licensed resort report), Forecast (weather_cache / the surface model),
+// each with its age when the row has a stamp.
 function AtAGlance({
   resort,
   weather,
@@ -1154,36 +1443,13 @@ function AtAGlance({
   status: ResortStatus;
   report: SurfaceReport;
 }) {
-  const snowFromReport = resort.snow_new_24h_in != null;
-  const snowNew24 = snowFromReport
-    ? resort.snow_new_24h_in
-    : weather?.snow_24h_in != null
-      ? Number(weather.snow_24h_in)
-      : null;
-  const tiles: Array<{ label: string; value: string; sub?: string; accent?: boolean }> = [];
-  tiles.push({
-    label: "New snow (24h)",
-    value: snowNew24 != null ? `${snowNew24}"` : "—",
-    sub: snowNew24 == null ? "not reported" : snowFromReport ? "resort report" : "weather station",
-    accent: snowNew24 != null && snowNew24 > 0,
-  });
-  tiles.push({
-    label: "Base depth",
-    value: resort.snow_base_depth_in != null ? `${resort.snow_base_depth_in}"` : "—",
-    sub: resort.snow_base_depth_in != null ? "resort report" : "not reported",
-  });
-  tiles.push(
-    report.dormant
-      ? { label: "Surface", value: report.headline, sub: "forecast paused" }
-      : { label: "Surface", value: report.today.label, sub: `${report.today.short} · ${report.today.confidence} confidence` },
-  );
-  tiles.push({
-    label: "Today's temp",
-    value:
-      weather?.temp_high_f != null
-        ? `${weather.temp_high_f}°${weather.temp_low_f != null ? ` / ${weather.temp_low_f}°F` : "F"}`
-        : "—",
-    sub: weather?.temp_high_f != null ? "high / low" : "not synced",
+  const tiles = buildGlanceTiles({
+    resort,
+    weather,
+    status,
+    surface: report.dormant
+      ? { kind: "paused", label: report.headline }
+      : { kind: "active", label: report.today.label, confidence: report.today.confidence },
   });
 
   return (
@@ -1193,12 +1459,16 @@ function AtAGlance({
       </div>
       <dl className="grid grid-cols-2 gap-2 sm:grid-cols-4">
         {tiles.map((t) => (
-          <div key={t.label} className="rounded-lg bg-wn-offwhite px-3 py-2">
-            <dt className="text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">{t.label}</dt>
+          <div key={t.key} className="rounded-lg bg-wn-offwhite px-3 py-2">
+            {/* 11 px at 75 % charcoal: about 5.9:1 on the off-white tile,
+                AA for the label and the source line that says which
+                numbers are measured and which are forecast. */}
+            <dt className="text-[11px] font-semibold uppercase tracking-wide text-wn-charcoal/75">{t.label}</dt>
             <dd className={`mt-0.5 truncate text-base font-extrabold tracking-tight ${t.accent ? "text-wn-sky" : "text-wn-navy"}`}>
               {t.value}
             </dd>
-            {t.sub && <dd className="text-[10px] text-wn-charcoal/50">{t.sub}</dd>}
+            {t.detail && <dd className="text-[11px] font-medium leading-snug text-wn-charcoal/80">{t.detail}</dd>}
+            <dd className="text-[11px] leading-snug text-wn-charcoal/75">{t.source}</dd>
           </div>
         ))}
       </dl>
