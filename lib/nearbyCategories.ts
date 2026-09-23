@@ -127,6 +127,49 @@ export type NearbyRow = {
   is_recommended?: boolean | null;
 };
 
+// OSM tags that are really a street address, not a description. The
+// Round 9 importer fell back to addr:street when a place had no cuisine
+// tag, so ~2,300 rows carry values like "Main Street" or "U.S. Route 4".
+const STREET_WORDS =
+  /\b(street|st|road|rd|route|rte|avenue|ave|drive|dr|highway|hwy|way|lane|ln|boulevard|blvd|pike|turnpike|parkway|pkwy|circle|court|ct|place|plaza|square|sq|broadway|main)\b\.?/i;
+const LOOKS_LIKE_ADDRESS = /^\d+\s|\b(us|u\.s\.|state|county)\s*(hwy|highway|route|rte)?\s*-?\d+|\d{5}$/i;
+
+// A few OSM cuisine values whose word-by-word form reads wrong.
+const CUISINE_LABELS: Record<string, string> = {
+  bbq: "BBQ",
+  barbecue: "BBQ",
+  "tex-mex": "Tex-Mex",
+  fish_and_chips: "fish and chips",
+  bar_and_grill: "bar and grill",
+  coffee_shop: "coffee shop",
+  steak_house: "steak house",
+  fine_dining: "fine dining",
+};
+
+/**
+ * Turn a raw OSM description into display copy, or "" when it should be
+ * hidden. "Steak_house" -> "Steak house", "donut;coffee_shop" ->
+ * "Donut, coffee shop", "Main Street" -> "" (an address is not a
+ * description). Only the first letter is capitalised so "bar and grill"
+ * never becomes "Bar And Grill".
+ */
+export function prettifyDescription(raw: string | null | undefined): string {
+  if (!raw) return "";
+  const text = raw.trim();
+  if (!text) return "";
+  // Street-address fallbacks: hide rather than show "Peak Lodge — Killington Road".
+  if (STREET_WORDS.test(text) || LOOKS_LIKE_ADDRESS.test(text)) return "";
+  const parts = text
+    .split(/\s*;\s*/)
+    .map((p) => p.trim().toLowerCase())
+    .filter(Boolean)
+    .map((p) => CUISINE_LABELS[p] ?? p.replace(/_/g, " "));
+  const unique = [...new Set(parts)];
+  if (unique.length === 0) return "";
+  const joined = unique.join(", ");
+  return joined.charAt(0).toUpperCase() + joined.slice(1);
+}
+
 export function distanceLabel(km: number | null): string {
   // Hide 0 / sub-50m distances — those are uncomputed rows, not "0.0 mi away".
   if (km == null || km < 0.05) return "";

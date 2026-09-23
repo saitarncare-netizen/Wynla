@@ -27,6 +27,7 @@ import WhereToStay from "@/components/WhereToStay";
 import NearbyRestaurants from "@/components/NearbyRestaurants";
 import NearbyActivities from "@/components/NearbyActivities";
 import type { NearbyRow } from "@/lib/nearbyCategories";
+import { liftCounts, type LiftTypes } from "@/lib/liftTypes";
 import {
   evaluateWindHold,
   parseWindMphFromText,
@@ -134,7 +135,7 @@ type Resort = {
   wind_hold_mph_gondola: number | null;
   currently_open: boolean | null;
   season_end_date: string | null;
-  lift_types: Record<string, number> | null;
+  lift_types: LiftTypes | null;
   terrain_park_features: number | null;
   avalanche_zone_id: string | null;
 };
@@ -859,11 +860,9 @@ function QuickStats({ resort }: { resort: Resort }) {
     const t = resort.lift_types;
     let value = String(resort.total_lifts);
     if (t) {
-      // Stage 4 — schema migrated from {chair_detach} to the Phase 2
-      // keys {high_speed_six, high_speed_quad, ...}. Sum HS = six + quad.
-      const hs = (Number(t.high_speed_six) || 0) + (Number(t.high_speed_quad) || 0);
-      const gondola = Number(t.gondola) || 0;
-      const tram = Number(t.tram) || 0;
+      // Same reader as the map filters (lib/liftTypes) so the page and
+      // the "High-speed chair" filter can never disagree.
+      const { highSpeed: hs, gondola, tram } = liftCounts(t);
       const parts: string[] = [];
       if (hs > 0) parts.push(`${hs} HS chair`);
       if (gondola > 0) parts.push(`${gondola} gondola`);
