@@ -4,9 +4,11 @@
 // it is actually bought in, then summed for the whole party:
 //
 //   1. Lift tickets — per person per ski day. If the user owns a pass
-//      the resort honors, that day is free. Otherwise we use the
-//      resort's ticket_price_adult_min / _max from the DB, falling back
-//      to a national range when unknown.
+//      the resort honors, that day is free for the pass holders (just
+//      the user unless the caller says otherwise — we only know the
+//      current user's passes, so the rest of the party pays walk-up).
+//      Otherwise we use the resort's ticket_price_adult_min / _max from
+//      the DB, falling back to a national range when unknown.
 //   2. Lodging — per room per NIGHT. Nights = ski days − 1 (a 1-day trip
 //      is a day trip with no hotel; a 5-day trip sleeps 4 nights). Rooms
 //      assume two people share.
@@ -42,7 +44,7 @@ export const MAX_PARTY_SIZE = 8;
 export type CostBreakdown = {
   /** Lift-ticket cost for the whole party across all ski days, using
       the midpoint of min/max when both are known. Zero when the user's
-      pass covers every stop. */
+      pass covers every stop and nobody else is travelling. */
   liftTickets: number;
   /** Lodging for the whole party: rooms × nights × default nightly rate. */
   lodging: number;
@@ -55,7 +57,8 @@ export type CostBreakdown = {
   /** Group envelope divided evenly by partySize. */
   perPersonLow: number;
   perPersonHigh: number;
-  /** True when every ski day is covered by a pass the user owns. */
+  /** True when every ski day is covered by a pass the user owns. Says
+      nothing about the rest of the party — see passHolders. */
   passCoversAll: boolean;
   /** Number of ski days totaled (sum of daysPerResort). */
   totalDays: number;
@@ -63,6 +66,8 @@ export type CostBreakdown = {
   nights: number;
   /** Inputs echoed back so the UI can label the numbers honestly. */
   partySize: number;
+  /** People whose pass was applied (never more than partySize). */
+  passHolders: number;
   rooms: number;
   cars: number;
 };
@@ -78,6 +83,9 @@ export type EstimateOptions = {
   /** How many people are travelling (drives tickets, rooms, cars).
       Clamped to 1..8; defaults to 1. */
   partySize?: number;
+  /** How many of them hold the passes in `userPasses`. Defaults to 1
+      (the signed-in user); clamped to 0..partySize. */
+  passHolders?: number;
 };
 
 /**
@@ -96,6 +104,13 @@ function passCoversResort(userPasses: string[], resortPasses: string[]): boolean
 export function clampPartySize(n: number | null | undefined): number {
   if (n == null || !Number.isFinite(n)) return MIN_PARTY_SIZE;
   return Math.max(MIN_PARTY_SIZE, Math.min(MAX_PARTY_SIZE, Math.round(n)));
+}
+
+/** How many of the party ski on the known passes. Missing or invalid
+    input means just the signed-in user. */
+export function clampPassHolders(n: number | null | undefined, partySize: number): number {
+  if (n == null || !Number.isFinite(n)) return Math.min(1, partySize);
+  return Math.max(0, Math.min(partySize, Math.round(n)));
 }
 
 /** Hotel nights for a trip of `totalDays` ski days: you sleep between
@@ -125,10 +140,11 @@ export function estimateTripCost(
   const ticketMinMap = options.ticketPriceMin;
   const ticketMaxMap = options.ticketPriceMax;
   const partySize = clampPartySize(options.partySize);
+  const passHolders = clampPassHolders(options.passHolders, partySize);
   const rooms = Math.ceil(partySize / PEOPLE_PER_ROOM);
   const cars = Math.ceil(partySize / PEOPLE_PER_CAR);
 
-  // Per-person ticket totals first; multiplied by the party at the end.
+  // Ticket totals for everyone who has to buy one at each stop.
   let ticketsMid = 0;
   let ticketsLow = 0;
   let ticketsHigh = 0;
@@ -141,11 +157,11 @@ export function estimateTripCost(
     totalDays += days;
     if (days === 0) continue;
     const passes = resortPasses.get(slug) ?? [];
-    if (passCoversResort(userPasses, passes)) {
-      // Pass covers this resort — zero ticket cost for these days.
-      continue;
-    }
-    passCoversAll = false;
+    const covered = passCoversResort(userPasses, passes);
+    if (!covered) passCoversAll = false;
+    // Pass holders ski free here; everyone else buys a day ticket.
+    const payers = covered ? partySize - passHolders : partySize;
+    if (payers === 0) continue;
     const min = ticketMinMap?.get(slug) ?? FALLBACK_TICKET_MIN;
     const max = ticketMaxMap?.get(slug) ?? FALLBACK_TICKET_MAX;
     // If only one is known, prefer it for the midpoint; the range
@@ -158,9 +174,9 @@ export function estimateTripCost(
           : ticketMaxMap?.has(slug)
             ? max
             : DEFAULT_TICKET_PRICE;
-    ticketsMid += days * mid;
-    ticketsLow += days * min;
-    ticketsHigh += days * max;
+    ticketsMid += days * mid * payers;
+    ticketsLow += days * min * payers;
+    ticketsHigh += days * max * payers;
   }
 
   // No ski days at all → nothing covered (avoid the misleading "your
@@ -175,11 +191,11 @@ export function estimateTripCost(
   const safeMiles = Number.isFinite(totalMiles) && totalMiles > 0 ? totalMiles : 0;
   const driving = Math.round(cars * safeMiles * IRS_MILEAGE_RATE);
 
-  const totalLow = Math.round(ticketsLow * partySize + lodgingLow + driving);
-  const totalHigh = Math.round(ticketsHigh * partySize + lodgingHigh + driving);
+  const totalLow = Math.round(ticketsLow + lodgingLow + driving);
+  const totalHigh = Math.round(ticketsHigh + lodgingHigh + driving);
 
   return {
-    liftTickets: Math.round(ticketsMid * partySize),
+    liftTickets: Math.round(ticketsMid),
     lodging: Math.round(lodging),
     driving,
     totalLow,
@@ -190,6 +206,7 @@ export function estimateTripCost(
     totalDays,
     nights,
     partySize,
+    passHolders,
     rooms,
     cars,
   };

@@ -8,7 +8,7 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { passColor, primaryPass, passLabel } from "@/lib/passColors";
 import { haversineMeters, estimateDriveSeconds } from "@/lib/distance";
 import { formatDriveTime } from "@/lib/origins";
-import TripActions from "./TripActions";
+import TripActions, { StartDateBadge } from "./TripActions";
 import TripNameEditor from "./TripNameEditor";
 import TripShareButton from "./TripShareButton";
 import TripCalendarExport from "@/components/TripCalendarExport";
@@ -229,14 +229,14 @@ export default async function TripPage({
   // Trip dates. The column is feature-detected off select("*"): before
   // the DDL runs the key is absent and the date UI stays hidden. The
   // calendar export prefers the planned start date, then the day the
-  // user actually started, then today (and says so).
+  // user actually started; with neither it anchors to today on the
+  // user's clock (null here — the client decides, not this UTC server).
   const startDateEnabled = "start_date" in trip;
   const startDate =
     typeof trip.start_date === "string" && /^\d{4}-\d{2}-\d{2}$/.test(trip.start_date)
       ? trip.start_date
       : null;
-  const calendarAnchorIso = startDate ?? trip.started_at ?? new Date().toISOString();
-  const startDateLabel = startDate ? describeStartDate(startDate) : null;
+  const calendarAnchorIso = startDate ?? trip.started_at ?? null;
 
   // Google Maps multi-waypoint URL. Round-trip from origin → resorts in
   // order → back to origin. Dedupes consecutive repeats (basecamp mode
@@ -322,7 +322,6 @@ export default async function TripPage({
                 tripName={trip.name ?? fallbackName}
                 originLabel={trip.origin_label ?? "Home"}
                 startDateIso={calendarAnchorIso}
-                anchoredToToday={startDate == null && trip.started_at == null}
                 days={expandedSlugs.map((slug, i) => {
                   const r = bySlug.get(slug);
                   return {
@@ -353,9 +352,9 @@ export default async function TripPage({
 
           {/* Trip-status badge + planned dates */}
           <div className="mt-3 flex flex-wrap items-center gap-2">
-          {startDateLabel && (
+          {startDate && (
             <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[11px] font-semibold text-white/95 backdrop-blur-sm">
-              📅 <span>{startDateLabel}</span>
+              📅 <StartDateBadge isoDate={startDate} />
             </div>
           )}
           <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[11px] font-semibold text-white/95 backdrop-blur-sm">
@@ -532,34 +531,6 @@ export default async function TripPage({
       </div>
     </main>
   );
-}
-
-// "Starts Sat, Feb 14, 2027 · in 12 days" for the hero badge. The date
-// is a bare calendar day, so it is parsed part-by-part (not via
-// new Date(string), which would read it as UTC midnight).
-function describeStartDate(isoDate: string): string {
-  const [y, m, d] = isoDate.split("-").map(Number);
-  const start = new Date(y, m - 1, d);
-  const now = new Date();
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const diffDays = Math.round((start.getTime() - today.getTime()) / 86_400_000);
-  const pretty = start.toLocaleDateString("en-US", {
-    weekday: "short",
-    month: "short",
-    day: "numeric",
-    year: start.getFullYear() === today.getFullYear() ? undefined : "numeric",
-  });
-  const relative =
-    diffDays === 0
-      ? "today"
-      : diffDays === 1
-        ? "tomorrow"
-        : diffDays > 1
-          ? `in ${diffDays} days`
-          : diffDays === -1
-            ? "yesterday"
-            : `${-diffDays} days ago`;
-  return `Starts ${pretty} · ${relative}`;
 }
 
 function SummaryTile({ label, value }: { label: string; value: string }) {

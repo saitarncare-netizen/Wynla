@@ -27,13 +27,11 @@ import {
 type Props = {
   tripName: string;
   originLabel: string;
-  /** First ski day: trips.start_date when set, otherwise the server's
-      "today" fallback (flagged via anchoredToToday). */
-  startDateIso: string;
-  /** True when the trip has no start date and day 1 is being pinned to
-      today — the button says so instead of silently exporting wrong
-      dates. */
-  anchoredToToday: boolean;
+  /** First ski day: trips.start_date when set, else the day the trip
+      was started. Null means "no date known" — day 1 is then pinned to
+      today on the user's own clock at click time (not the server's,
+      which runs on UTC and can be a day off around midnight US time). */
+  startDateIso: string | null;
   days: TripIcsDay[];
 };
 
@@ -47,13 +45,21 @@ function isAppleMobile(): boolean {
   return navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1;
 }
 
+// True inside an installed iOS PWA. window.open there hands the URL to
+// Safari (or an in-app sheet) and returns null even though it opened,
+// so a null return must not be read as a pop-up block.
+function isStandalone(): boolean {
+  if (typeof navigator === "undefined") return false;
+  return (navigator as Navigator & { standalone?: boolean }).standalone === true;
+}
+
 export default function TripCalendarExport({
   tripName,
   originLabel,
   startDateIso,
-  anchoredToToday,
   days,
 }: Props) {
+  const anchoredToToday = startDateIso === null;
   const [outcome, setOutcome] = useState<Outcome>("idle");
 
   function flash(next: Outcome) {
@@ -65,7 +71,7 @@ export default function TripCalendarExport({
     const ics = buildTripIcs({
       tripName,
       originLabel,
-      startDate: parseStartDate(startDateIso),
+      startDate: startDateIso === null ? new Date() : parseStartDate(startDateIso),
       days,
     });
     const filename = tripIcsFilename(tripName);
@@ -108,17 +114,30 @@ export default function TripCalendarExport({
 
   // Safari (and the standalone PWA, which hands the URL to Safari)
   // renders a .ics blob as a Calendar preview with an "Add all" button.
+  //
+  // No "noopener" feature here: the spec makes window.open return null
+  // whenever it is set, which made every open look blocked. A
+  // same-origin blob: URL has no opener to abuse; the opener is severed
+  // by hand on the handle we get back.
   function openInNewTab(ics: string, type: string) {
     const blob = new Blob([ics], { type });
     const url = URL.createObjectURL(blob);
-    const win = window.open(url, "_blank", "noopener");
-    if (!win) {
-      URL.revokeObjectURL(url);
+    let win: Window | null = null;
+    let threw = false;
+    try {
+      win = window.open(url, "_blank");
+    } catch {
+      threw = true;
+    }
+    if (win) win.opener = null;
+    // Long enough for the new tab to fetch the blob before it is
+    // revoked — kept regardless of the return value, since a null
+    // handle can still mean "opened" (standalone PWA).
+    window.setTimeout(() => URL.revokeObjectURL(url), 60_000);
+    if (threw || (win === null && !isStandalone())) {
       flash("failed");
       return;
     }
-    // Long enough for the new tab to fetch the blob before it is revoked.
-    window.setTimeout(() => URL.revokeObjectURL(url), 60_000);
     flash("opened");
   }
 
@@ -126,7 +145,7 @@ export default function TripCalendarExport({
     outcome === "downloaded"
       ? "✓ Downloaded"
       : outcome === "shared"
-        ? "✓ Sent to calendar"
+        ? "✓ Shared — open it in Calendar"
         : outcome === "opened"
           ? "✓ Opened — tap Add all"
           : outcome === "failed"

@@ -9,15 +9,17 @@
 //   * navigator.share / clipboard.writeText are called synchronously
 //     inside the tap that asked for them — never after an await, or
 //     Safari drops the user activation and rejects the call.
-//   * The existing token is fetched on mount so that first tap on an
-//     already-shared trip needs no network round-trip.
-//   * When a link has to be created first, the button turns into a
-//     link panel (URL field + Copy + Share…) rather than pretending
-//     the copy happened.
+//   * The link is prepared on mount — the existing token is fetched,
+//     or a fresh one created — so the first tap shares synchronously
+//     with no network round-trip. A token nobody has been given is
+//     inert (16 random alphanumerics), so creating it early is safe.
+//   * If the tap lands before the mount work finishes, the button
+//     waits for it and turns into a link panel (URL field + Copy +
+//     Share…) rather than pretending the copy happened.
 //   * Every outcome is visible: copied, failed (with the URL to select
 //     by hand), shared, disabled, renewed.
 
-import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
 // Whether the device has a native share sheet. Read through
@@ -63,28 +65,41 @@ export default function TripShareButton({ tripId, tripName }: Props) {
   const [error, setError] = useState<string | null>(null);
   const [panelOpen, setPanelOpen] = useState(false);
   const canNativeShare = useCanNativeShare();
+  // The in-flight mount lookup/creation, so a tap that arrives before
+  // it settles can await the same promise instead of inserting a
+  // second row.
+  const preparing = useRef<Promise<string | null> | null>(null);
 
-  // Look up an existing share token once so the first tap can share
-  // synchronously instead of waiting on the network.
+  // Prepare the link once: reuse the newest existing token, otherwise
+  // create one. Errors are surfaced only if the user actually taps.
   useEffect(() => {
     let cancelled = false;
-    (async () => {
-      const { data: u } = await supabase.auth.getUser();
-      if (!u.user || cancelled) return;
-      const { data } = await supabase
-        .from("trip_shares")
-        .select("share_token")
-        .eq("trip_id", tripId)
-        .eq("created_by", u.user.id)
-        .order("created_at", { ascending: false })
-        .limit(1)
-        .maybeSingle<{ share_token: string }>();
-      if (cancelled || !data?.share_token) return;
-      setShareUrl(`${window.location.origin}/trip/share/${data.share_token}`);
-    })();
+    // Reuse a job already in flight (StrictMode re-runs effects in dev)
+    // so we never race two inserts for the same trip.
+    const job =
+      preparing.current ??
+      (async (): Promise<string | null> => {
+        const { data: u } = await supabase.auth.getUser();
+        if (!u.user) return null;
+        const { data } = await supabase
+          .from("trip_shares")
+          .select("share_token")
+          .eq("trip_id", tripId)
+          .eq("created_by", u.user.id)
+          .order("created_at", { ascending: false })
+          .limit(1)
+          .maybeSingle<{ share_token: string }>();
+        if (data?.share_token) return `${window.location.origin}/trip/share/${data.share_token}`;
+        return insertToken(u.user.id);
+      })();
+    preparing.current = job;
+    void job.then((url) => {
+      if (!cancelled && url) setShareUrl(url);
+    });
     return () => {
       cancelled = true;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- runs once per trip; insertToken only closes over stable props.
   }, [supabase, tripId]);
 
   function flash(next: Status) {
@@ -126,23 +141,26 @@ export default function TripShareButton({ tripId, tripName }: Props) {
     copyLink(url);
   }
 
+  async function insertToken(userId: string): Promise<string | null> {
+    const token = randomToken(16);
+    const { error: insErr } = await supabase.from("trip_shares").insert({
+      trip_id: tripId,
+      share_token: token,
+      created_by: userId,
+    });
+    if (insErr) return null;
+    return `${window.location.origin}/trip/share/${token}`;
+  }
+
   async function createToken(): Promise<string | null> {
     const { data: u } = await supabase.auth.getUser();
     if (!u.user) {
       setError("Sign in first.");
       return null;
     }
-    const token = randomToken(16);
-    const { error: insErr } = await supabase.from("trip_shares").insert({
-      trip_id: tripId,
-      share_token: token,
-      created_by: u.user.id,
-    });
-    if (insErr) {
-      setError(`Couldn't create a link (${insErr.message}). Try again.`);
-      return null;
-    }
-    return `${window.location.origin}/trip/share/${token}`;
+    const url = await insertToken(u.user.id);
+    if (!url) setError("Couldn't create a link. Check your connection and try again.");
+    return url;
   }
 
   async function deleteTokens(): Promise<boolean> {
@@ -172,7 +190,9 @@ export default function TripShareButton({ tripId, tripName }: Props) {
     }
     void (async () => {
       setBusy("create");
-      const url = await createToken();
+      // Usually the mount job is still running (the tap beat it);
+      // wait for it rather than inserting a second token.
+      const url = (await preparing.current) ?? (await createToken());
       setBusy(null);
       if (!url) return;
       // The activation is gone after the awaits above, so instead of
@@ -186,6 +206,8 @@ export default function TripShareButton({ tripId, tripName }: Props) {
   async function handleRenew() {
     setError(null);
     setBusy("renew");
+    // The mount job's URL is about to be invalid — never hand it out.
+    preparing.current = null;
     const removed = await deleteTokens();
     const url = removed ? await createToken() : null;
     setBusy(null);
@@ -198,6 +220,7 @@ export default function TripShareButton({ tripId, tripName }: Props) {
   async function handleStop() {
     setError(null);
     setBusy("stop");
+    preparing.current = null;
     const removed = await deleteTokens();
     setBusy(null);
     if (!removed) return;

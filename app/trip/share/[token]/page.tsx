@@ -36,12 +36,6 @@ type ResortRow = {
   passes: string[];
 };
 
-// Columns the public page renders. start_date is requested in a second
-// query so a missing column (42703 before the DDL runs) degrades to
-// "no date" instead of failing the whole page.
-const TRIP_COLUMNS =
-  "id, name, origin_lat, origin_lng, origin_label, resort_slugs, days_per_resort, total_days, created_at";
-
 async function getData(token: string) {
   // Resolve the token then read the user-owned trips table with a SERVICE-ROLE
   // client so the anon client never touches trips directly (no id-enumeration
@@ -67,19 +61,16 @@ async function getData(token: string) {
     .eq("share_token", token);
 
   const tripId = (share as { trip_id: string }).trip_id;
+  // select("*") feature-detects trips.start_date for free: before the
+  // DDL runs the key is simply absent from the row (no 42703, no second
+  // round-trip). The row is filtered by id, so nothing extra leaks.
   const { data: trip } = await db
     .from("trips")
-    .select(TRIP_COLUMNS)
+    .select("*")
     .eq("id", tripId)
     .maybeSingle();
   if (!trip) return null;
   const t = trip as Trip;
-  const { data: dateRow } = await db
-    .from("trips")
-    .select("start_date")
-    .eq("id", tripId)
-    .maybeSingle<{ start_date: string | null }>();
-  if (dateRow && "start_date" in dateRow) t.start_date = dateRow.start_date;
 
   const slugs = Array.from(new Set(t.resort_slugs ?? []));
   const { data: resorts } = await supabase

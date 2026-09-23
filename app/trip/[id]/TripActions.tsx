@@ -5,7 +5,7 @@
 // and Supabase mutations. Refreshes via router.refresh() after each
 // mutation so server-rendered day cards re-color correctly.
 
-import { useMemo, useState, useTransition } from "react";
+import { useMemo, useState, useSyncExternalStore, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import ConfirmButton from "@/components/ConfirmButton";
@@ -40,6 +40,52 @@ function todayIsoDate(): string {
   const m = String(d.getMonth() + 1).padStart(2, "0");
   const day = String(d.getDate()).padStart(2, "0");
   return `${d.getFullYear()}-${m}-${day}`;
+}
+
+// A bare YYYY-MM-DD parsed part-by-part, so it stays on that calendar
+// day in every time zone (new Date(string) would read UTC midnight).
+function parseIsoDate(isoDate: string): Date {
+  const [y, m, d] = isoDate.split("-").map(Number);
+  return new Date(y, m - 1, d);
+}
+
+const noopSubscribe = () => () => {};
+
+/**
+ * "Starts Sat, Feb 14, 2027 · in 12 days" for the trip page hero.
+ * Lives in this client module because "in N days" depends on the
+ * viewer's clock: computed on the server (UTC on Vercel) it could be a
+ * day off around midnight US time. The server render and the first
+ * client render show only the date; the relative part appears once the
+ * client knows its own today (useSyncExternalStore keeps the two in
+ * agreement, so there is no hydration mismatch).
+ */
+export function StartDateBadge({ isoDate }: { isoDate: string }) {
+  const today = useSyncExternalStore(noopSubscribe, todayIsoDate, () => null);
+  const start = parseIsoDate(isoDate);
+  const pretty = start.toLocaleDateString("en-US", {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    year: today && start.getFullYear() === parseIsoDate(today).getFullYear() ? undefined : "numeric",
+  });
+  if (!today) return <span>Starts {pretty}</span>;
+  const diffDays = Math.round((start.getTime() - parseIsoDate(today).getTime()) / 86_400_000);
+  const relative =
+    diffDays === 0
+      ? "today"
+      : diffDays === 1
+        ? "tomorrow"
+        : diffDays > 1
+          ? `in ${diffDays} days`
+          : diffDays === -1
+            ? "yesterday"
+            : `${-diffDays} days ago`;
+  return (
+    <span>
+      Starts {pretty} · {relative}
+    </span>
+  );
 }
 
 export default function TripActions({

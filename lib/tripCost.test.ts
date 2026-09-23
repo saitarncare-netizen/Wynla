@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   clampPartySize,
+  clampPassHolders,
   estimateTripCost,
   metersToMiles,
   nightsForDays,
@@ -31,6 +32,15 @@ describe("clampPartySize", () => {
     expect(clampPartySize(0)).toBe(1);
     expect(clampPartySize(2.4)).toBe(2);
     expect(clampPartySize(50)).toBe(8);
+  });
+});
+
+describe("clampPassHolders", () => {
+  it("defaults to the signed-in user and never exceeds the party", () => {
+    expect(clampPassHolders(undefined, 3)).toBe(1);
+    expect(clampPassHolders(Number.NaN, 3)).toBe(1);
+    expect(clampPassHolders(5, 3)).toBe(3);
+    expect(clampPassHolders(-2, 3)).toBe(0);
   });
 });
 
@@ -97,8 +107,45 @@ describe("estimateTripCost", () => {
     ]);
     const out = estimateTripCost(["vail", "breck"], [2, 2], passes, 300, ["EPIC"]);
     expect(out.passCoversAll).toBe(true);
+    expect(out.passHolders).toBe(1);
     expect(out.liftTickets).toBe(0);
     expect(out.totalLow).toBe(out.lodging === 0 ? out.driving : 3 * 80 + out.driving);
+  });
+
+  it("charges walk-up tickets for the party members without the pass", () => {
+    const passes = new Map([["vail", ["ikon"]]]);
+    const prices = {
+      ticketPriceMin: new Map([["vail", 100]]),
+      ticketPriceMax: new Map([["vail", 200]]),
+    };
+    const trio = estimateTripCost(["vail"], [2], passes, 0, ["ikon"], { ...prices, partySize: 3 });
+    // Still "covers all stops" for the user, but the other two buy
+    // 2 days × $150 midpoint each.
+    expect(trio.passCoversAll).toBe(true);
+    expect(trio.passHolders).toBe(1);
+    expect(trio.liftTickets).toBe(600);
+    // Low: 2 payers × 2 days × $100 + 2 rooms × 1 night × $80 floor.
+    expect(trio.totalLow).toBe(400 + 160);
+    // High: 2 payers × 2 days × $200 + 2 rooms × 1 night × $300 ceiling.
+    expect(trio.totalHigh).toBe(800 + 600);
+    // Everyone holding the pass zeroes the bucket again.
+    const allPasses = estimateTripCost(["vail"], [2], passes, 0, ["ikon"], {
+      ...prices,
+      partySize: 3,
+      passHolders: 3,
+    });
+    expect(allPasses.liftTickets).toBe(0);
+    expect(allPasses.passHolders).toBe(3);
+  });
+
+  it("charges the whole party at a stop the pass does not cover", () => {
+    const passes = new Map([
+      ["vail", ["epic"]],
+      ["copper", ["ikon"]],
+    ]);
+    const out = estimateTripCost(["vail", "copper"], [1, 1], passes, 0, ["epic"], { partySize: 2 });
+    // Vail: partner pays 1 × $150; Copper: both pay 2 × $150.
+    expect(out.liftTickets).toBe(150 + 300);
   });
 
   it("only flags passCoversAll when every stop is covered", () => {

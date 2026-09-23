@@ -51,6 +51,9 @@ type TripDraft = {
   /** YYYY-MM-DD or empty when the user has not picked a date. */
   startDate?: string;
   partySize?: number;
+  /** Trip length the user chose. Restored so a draft opened from a URL
+      without ?days does not read "5 of 1 days planned". */
+  days?: number;
   savedAt: number;
 };
 
@@ -256,7 +259,11 @@ function parseDraft(raw: string | null, ttlMs: number): TripDraft | null {
       stops,
       draftName: typeof draft.draftName === "string" ? draft.draftName : "",
       startDate: typeof draft.startDate === "string" ? draft.startDate : "",
-      partySize: clampPartySize(draft.partySize),
+      partySize: draft.partySize == null ? undefined : clampPartySize(draft.partySize),
+      days:
+        typeof draft.days === "number" && Number.isFinite(draft.days)
+          ? Math.min(MAX_TRIP_DAYS, Math.max(1, Math.floor(draft.days)))
+          : undefined,
       savedAt: draft.savedAt ?? 0,
     };
   } catch {
@@ -301,7 +308,10 @@ let warnedMissingStartDate = false;
 // Postgres text ("new row violates check constraint …") is kept out of
 // the UI; the constraint case gets its own sentence.
 function describeSaveError(err: { code?: string; message?: string } | null): string {
-  if (err?.code === "23514") {
+  // 23514 is any check-constraint violation; only the trip-length one
+  // (trips_total_days_check) gets the length copy, so a different
+  // constraint firing does not send the user to shorten a fine trip.
+  if (err?.code === "23514" && /total_days/.test(err.message ?? "")) {
     return `Trips can be 1 to ${MAX_TRIP_DAYS} days long. Shorten the trip and try again.`;
   }
   const detail = err?.message?.trim();
@@ -317,6 +327,14 @@ function todayIsoDate(): string {
   const m = String(d.getMonth() + 1).padStart(2, "0");
   const day = String(d.getDate()).padStart(2, "0");
   return `${d.getFullYear()}-${m}-${day}`;
+}
+
+// MapPage's convention for the ?days param: absent means 1. Mirrored
+// here because the post-mount URL cleanup has to strip ?restore/?route
+// and set days in ONE router.replace — two replaces built from the same
+// stale searchParams would drop one of the edits.
+function daysParamValue(days: number): string | null {
+  return days > 1 ? String(days) : null;
 }
 
 export default function TripPlannerPanel({
@@ -454,8 +472,11 @@ export default function TripPlannerPanel({
   // A seeded route can be longer than the URL's ?days (a template link
   // always carries a matching days=N, but a hand-edited share link may
   // not). Grow the trip length to fit rather than showing "over target".
+  // The mount seed is handled by the hydration effect below (which also
+  // strips ?route); this only covers a route that changes while the
+  // planner is already mounted.
   useEffect(() => {
-    if (routeSlugs.length === 0) return;
+    if (!hydrated || routeSlugs.length === 0) return;
     if (daysPlanned > days) onDaysChange?.(Math.min(MAX_TRIP_DAYS, daysPlanned));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [seededFor]);
@@ -476,13 +497,20 @@ export default function TripPlannerPanel({
   // One-shot draft hydration on mount. Two sources, in priority order:
   //   1. ?restore=1 — back from the magic-link login; the draft was
   //      stashed in localStorage by saveTrip (new tab, so sessionStorage
-  //      is empty). Strip the flag so a refresh doesn't re-hydrate.
+  //      is empty).
   //   2. sessionStorage — same tab came back from a refresh, a resort
   //      page, or tab eviction. Skipped when the URL carries an explicit
   //      ?route= (a share link or template must win over stale state).
+  // Afterwards the URL is cleaned in ONE router.replace: ?restore goes
+  // so a refresh does not re-hydrate, ?route goes so the next mount
+  // (back from /resort/[slug], refresh) hydrates the user's edits from
+  // sessionStorage instead of re-applying the original seed, and ?days
+  // is brought in line with the draft / seed.
   // `hydrated` gates the persist effect below so the pre-hydration
-  // empty state never overwrites the stored draft.
+  // empty state never overwrites the stored draft; `draftHydrated`
+  // tells the template effect not to re-seed over a restored draft.
   const [hydrated, setHydrated] = useState(false);
+  const draftHydrated = useRef(false);
   useEffect(() => {
     if (hydrated) return;
     const restoring = searchParams.get("restore") === "1";
@@ -493,9 +521,16 @@ export default function TripPlannerPanel({
     } else if (routeSlugs.length === 0) {
       draft = parseDraft(readStorage("session", SESSION_DRAFT_KEY), SESSION_DRAFT_TTL_MS);
     }
+    // Trip length to land on: the draft's own length grown to fit its
+    // stops, or the seeded route's length. 0 = leave the URL alone.
+    let targetDays = 0;
     if (draft) {
+      draftHydrated.current = true;
+      const draftStops = clampStopsToDays(draft.stops, MAX_TRIP_DAYS);
+      const draftPlanned = draftStops.reduce((sum, s) => sum + s.days, 0);
+      targetDays = Math.min(MAX_TRIP_DAYS, Math.max(draft.days ?? 0, draftPlanned));
       // eslint-disable-next-line react-hooks/set-state-in-effect -- hydrating from external storage is the documented exception.
-      setStops(clampStopsToDays(draft.stops, MAX_TRIP_DAYS));
+      setStops(draftStops);
       setDraftName(draft.draftName);
       setStartDate(draft.startDate ?? "");
       setPartySize(draft.partySize ?? 2);
@@ -503,11 +538,31 @@ export default function TripPlannerPanel({
       // The user already chose a length before they left; land them on
       // the stops they had, not on "How long is your trip?" again.
       setDaysLockedIn(true);
+      // They tapped Save from the review sheet (the only place it
+      // lives), so put them back on review even if days remain unplanned.
+      if (restoring) setReviewEarly(true);
+    } else if (routeSlugs.length > 0 && daysPlanned > days) {
+      targetDays = Math.min(MAX_TRIP_DAYS, daysPlanned);
     }
     setHydrated(true);
+
+    const params = new URLSearchParams(searchParams.toString());
+    let changed = false;
     if (restoring) {
-      const params = new URLSearchParams(searchParams.toString());
       params.delete("restore");
+      changed = true;
+    }
+    if (routeParam !== null) {
+      params.delete("route");
+      changed = true;
+    }
+    if (targetDays >= 1 && targetDays !== days) {
+      const value = daysParamValue(targetDays);
+      if (value === null) params.delete("days");
+      else params.set("days", value);
+      changed = true;
+    }
+    if (changed) {
       const qs = params.toString();
       router.replace(qs ? `?${qs}` : "?", { scroll: false });
     }
@@ -521,17 +576,19 @@ export default function TripPlannerPanel({
       writeStorage("session", SESSION_DRAFT_KEY, null);
       return;
     }
-    const draft: TripDraft = { stops, draftName, startDate, partySize, savedAt: Date.now() };
+    const draft: TripDraft = { stops, draftName, startDate, partySize, days, savedAt: Date.now() };
     writeStorage("session", SESSION_DRAFT_KEY, JSON.stringify(draft));
-  }, [hydrated, stops, draftName, startDate, partySize]);
+  }, [hydrated, stops, draftName, startDate, partySize, days]);
 
   // Stage-4 template hydration. Fires once per ?template=<slug> token
   // when the planner is open. The template page also passes the route
   // and day count in the URL, so the route seed above already has the
   // stops; this effect adds the title, the banner and (as a safety net
   // for hand-written links) the stops + day total. The URL flag is
-  // preserved so refresh keeps the template applied — the dismiss
-  // action strips it.
+  // preserved so refresh keeps the banner — the dismiss action strips
+  // it. When the hydration effect restored a draft (refresh, back from
+  // a resort page, or back from login) the user's edits to that
+  // template must survive, so only the banner is applied.
   useEffect(() => {
     if (!open || !templateSlug || templateApplied.current) return;
     const tpl = getTemplate(templateSlug);
@@ -547,6 +604,19 @@ export default function TripPlannerPanel({
     }
     templateApplied.current = true;
     // eslint-disable-next-line react-hooks/set-state-in-effect -- one-shot hydration from URL, same pattern as restore above.
+    setTemplateNotice({ slug: tpl.slug, title: tpl.title });
+    // A restored draft already holds the user's version of this
+    // template — banner only.
+    if (draftHydrated.current) return;
+    setDraftName(tpl.title);
+    setDaysLockedIn(true);
+    setPendingStop(null);
+    setPickerForIndex(null);
+    // With ?route= the render-phase seed owns the stops and the
+    // hydration effect owns the day total (it strips ?route and grows
+    // ?days in one replace). Setting days here as well would issue a
+    // second replace from the same stale params and undo that cleanup.
+    if (routeSlugs.length > 0) return;
     setStops(
       clampStopsToDays(
         tpl.resortSlugs.map((slug, i) => ({
@@ -556,11 +626,6 @@ export default function TripPlannerPanel({
         MAX_TRIP_DAYS,
       ),
     );
-    setDraftName(tpl.title);
-    setDaysLockedIn(true);
-    setPendingStop(null);
-    setPickerForIndex(null);
-    setTemplateNotice({ slug: tpl.slug, title: tpl.title });
     const totalDays = Math.min(
       MAX_TRIP_DAYS,
       tpl.daysPerResort.reduce((a, b) => a + b, 0),
@@ -1044,6 +1109,7 @@ export default function TripPlannerPanel({
         draftName,
         startDate,
         partySize,
+        days,
         savedAt: Date.now(),
       };
       writeStorage("local", DRAFT_KEY, JSON.stringify(draft));
@@ -2133,12 +2199,18 @@ function CostEstimateCard({
       </div>
       {breakdown.passCoversAll && (
         <p className="mb-2 rounded-md bg-emerald-50 px-2 py-1 text-[11px] font-semibold text-emerald-800">
-          ✓ Your pass covers all stops — lift tickets $0
+          {partySize === 1
+            ? "✓ Your pass covers all stops — lift tickets $0"
+            : `✓ Your pass covers your lift tickets — the other ${partySize - 1 === 1 ? "person pays" : `${partySize - 1} pay`} walk-up`}
         </p>
       )}
       <dl className="grid grid-cols-3 gap-2 text-center">
         <CostTile
-          label={`Lift tickets (${partySize} × ${totalDays} day${totalDays === 1 ? "" : "s"})`}
+          label={
+            breakdown.passCoversAll && partySize > 1
+              ? `Lift tickets (${partySize - 1} without a pass × ${totalDays} day${totalDays === 1 ? "" : "s"})`
+              : `Lift tickets (${partySize} × ${totalDays} day${totalDays === 1 ? "" : "s"})`
+          }
           value={`$${breakdown.liftTickets.toLocaleString()}`}
         />
         <CostTile
