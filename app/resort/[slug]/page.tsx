@@ -15,33 +15,46 @@ import FavoriteToggle from "@/components/auth/FavoriteToggle";
 import CompareToggle from "@/components/CompareToggle";
 import RecordRecentVisit from "@/components/RecordRecentVisit";
 import DifficultyBar from "@/components/Map/DifficultyBar";
-import { crowdForecast, CROWD_COLORS } from "@/lib/crowdForecast";
+import { crowdForecast, upcomingSaturday, CROWD_COLORS } from "@/lib/crowdForecast";
 import ResortReviews from "@/components/Map/ResortReviews";
 import SnowAlertButton from "@/components/SnowAlertButton";
-import SeasonCountdown from "@/components/SeasonCountdown";
-import { parseSeasonDates, isGlobalOffSeasonNow } from "@/lib/seasonDates";
+import SeasonCountdown, { ResortStatusPill } from "@/components/SeasonCountdown";
+import {
+  resolveSeasonInfo,
+  deriveResortStatus,
+  seasonWindowText,
+  type ResortStatus,
+} from "@/lib/seasonDates";
 import SimilarResorts from "@/components/SimilarResorts";
 import type { SimilarityResort } from "@/lib/similarity";
-import SnowSurfaceForecast from "@/components/SnowSurfaceForecast";
+import SnowSurfaceForecast, { type SeasonPreview } from "@/components/SnowSurfaceForecast";
 import WhereToStay from "@/components/WhereToStay";
 import NearbyRestaurants from "@/components/NearbyRestaurants";
 import NearbyActivities from "@/components/NearbyActivities";
 import type { NearbyRow } from "@/lib/nearbyCategories";
 import {
   evaluateWindHold,
-  parseWindMphFromText,
+  liftMixFromTypes,
+  parseWindFromText,
   windHoldChipClass,
+  type ResortWindContext,
 } from "@/lib/windHold";
 import {
   computeSunTimes,
   formatLocal,
-  timeZoneForState,
+  formatStampInZone,
+  timeZoneForResort,
 } from "@/lib/sunTimes";
 import {
   buildSurfaceReport,
   type DailyWeather,
   type ForecastDay as SurfaceForecastDay,
+  type SurfaceReport,
 } from "@/lib/snowSurface";
+import { airportByIata } from "@/lib/airports";
+import { haversineMeters, estimateDriveSeconds } from "@/lib/distance";
+import { formatDriveTime } from "@/lib/origins";
+import { skyscannerUrl } from "@/lib/affiliateLinks";
 
 // ISR — resort detail data (lifts/trails/passes/coords) changes rarely.
 // Snow conditions are stamped on the row by the cron; ISR every 10 min
@@ -150,6 +163,11 @@ type ForecastDay = {
   wind_short: string | null;
   wind_dir_short: string | null;
   uv_index_max?: number | null;
+  // forecast_json v2 (pipeline package) may add these; we read them
+  // defensively and fall back to the fields above when absent.
+  rain_in?: number | null;
+  precip_in?: number | null;
+  wind_gust_mph?: number | null;
 };
 
 type WeatherSnapshot = {
@@ -160,6 +178,7 @@ type WeatherSnapshot = {
   snow_24h_in: number | string | null;
   snow_48h_in: number | string | null;
   wind_mph_avg: number | null;
+  wind_mph_gust: number | null;
   wind_dir_short: string | null;
   fetched_at: string | null;
   forecast_json: ForecastDay[] | null;
@@ -184,6 +203,9 @@ async function getDataUncached(
   history: HistoryRow[];
   nearbyRestaurants: NearbyRow[];
   nearbyActivities: NearbyRow[];
+  /** False only when the platform has zero reviews anywhere — the
+   *  Reviews block is hidden until the first one exists. */
+  hasAnyReviews: boolean;
 } | null> {
   // Fetch resort, weather, and the active-resort pool in parallel.
   // The pool select is trimmed to just the columns similarity.ts needs
@@ -206,16 +228,19 @@ async function getDataUncached(
   if (resortRes.error || !resortRes.data) return null;
   const resort = resortRes.data as Resort;
 
-  // Weather snapshot + last-7-days history. Both keyed by resort_id; the
-  // history is sorted ascending so the most recent row sits at the end
+  // Weather snapshot + the NEWEST 7 days of history. weather_history has
+  // no retention job, so "order ascending, limit 7" returned the first
+  // week the cron ever ran (May 2026) and the surface classifier was
+  // scoring four-month-old weather (audit domain-logic-1). We fetch
+  // descending and reverse below so the most recent row sits at the end
   // (lib/snowSurface.deriveFeatures contract).
   // Round 9 (2026-06) also fetches nearby_restaurants + nearby_activities
   // here so the new sections render server-side in the same round trip.
-  const [wxRes, historyRes, restaurantsRes, activitiesRes] = await Promise.all([
+  const [wxRes, historyRes, restaurantsRes, activitiesRes, reviewsRes] = await Promise.all([
     supabase
       .from("weather_cache")
       .select(
-        "resort_id, temp_high_f, temp_low_f, conditions_short, snow_24h_in, snow_48h_in, wind_mph_avg, wind_dir_short, fetched_at, forecast_json",
+        "resort_id, temp_high_f, temp_low_f, conditions_short, snow_24h_in, snow_48h_in, wind_mph_avg, wind_mph_gust, wind_dir_short, fetched_at, forecast_json",
       )
       .eq("resort_id", resort.id)
       .maybeSingle(),
@@ -225,7 +250,7 @@ async function getDataUncached(
         "observed_date, temp_high_f, temp_low_f, snow_24h_in, rain_24h_in, precip_24h_in, wind_mph_avg",
       )
       .eq("resort_id", resort.id)
-      .order("observed_date", { ascending: true })
+      .order("observed_date", { ascending: false })
       .limit(7),
     supabase
       .from("nearby_restaurants")
@@ -245,15 +270,24 @@ async function getDataUncached(
       .order("is_recommended", { ascending: false })
       .order("distance_km", { ascending: true })
       .limit(60),
+    // Platform-wide review count (head request, no rows). Zero reviews
+    // anywhere → the Reviews block stays hidden on every page.
+    supabase.from("resort_reviews").select("id", { count: "exact", head: true }),
   ]);
+
+  const history = ((historyRes.data as HistoryRow[] | null) ?? []).slice().reverse();
+  // If the count query fails we fall back to showing the block — the
+  // old behaviour — rather than hiding a feature on a transient error.
+  const hasAnyReviews = reviewsRes.error ? true : (reviewsRes.count ?? 0) > 0;
 
   return {
     resort,
     weather: (wxRes.data as WeatherSnapshot) ?? null,
     pool: (poolRes.data ?? []) as SimilarityResort[],
-    history: (historyRes.data as HistoryRow[] | null) ?? [],
+    history,
     nearbyRestaurants: (restaurantsRes.data ?? []) as NearbyRow[],
     nearbyActivities: (activitiesRes.data ?? []) as NearbyRow[],
+    hasAnyReviews,
   };
 }
 
@@ -299,7 +333,12 @@ export default async function ResortPage({
   const { slug } = await params;
   const data = await getData(slug);
   if (!data) notFound();
-  const { resort, weather, pool, history, nearbyRestaurants, nearbyActivities } = data;
+  const { resort, weather, pool, history, nearbyRestaurants, nearbyActivities, hasAnyReviews } = data;
+
+  const now = new Date();
+  const tz = timeZoneForResort(resort);
+  const seasonInfo = resolveSeasonInfo(resort, now);
+  const status = deriveResortStatus(resort, seasonInfo, now);
 
   // Snow Surface Forecast — build the report on the server so the
   // client island stays small. We synthesize a "today" row from
@@ -353,18 +392,61 @@ export default async function ResortPage({
       precip_chance: d.precip_chance,
       conditions_short: d.conditions_short,
       wind_short: d.wind_short,
+      rain_in: typeof d.rain_in === "number" ? d.rain_in : null,
+      precip_in: typeof d.precip_in === "number" ? d.precip_in : null,
     }));
 
-  const surfaceReport = buildSurfaceReport(surfaceHistory, surfaceForecastDays);
+  // Context the classifier needs beyond the weather rows. isOpen is a
+  // three-state: a live/season signal makes it true, a dormant status
+  // makes it false, and "Check resort" leaves it null. With null the
+  // classifier only runs on positive evidence of operation (a parsed
+  // season window, a reported base, lifts counted open) — the calendar
+  // alone is not evidence, or every resort the broken scraper cannot see
+  // would get a confident class from mid-October until it actually opens.
+  const isOpen: boolean | null =
+    status.kind === "open" || status.kind === "limited" || status.kind === "likely-open"
+      ? true
+      : status.dormant
+        ? false
+        : null;
+  const liveSnowpack =
+    status.kind === "open" ||
+    status.kind === "limited" ||
+    (resort.snow_base_depth_in ?? 0) > 0 ||
+    (resort.lifts_open_today ?? 0) > 0;
+  const surfaceReport: SurfaceReport = buildSurfaceReport(surfaceHistory, surfaceForecastDays, {
+    baseDepthIn: resort.snow_base_depth_in,
+    hasSnowpack: liveSnowpack ? true : null,
+    inSeason: seasonInfo.status === "in-season",
+    isOpen,
+    offSeason: status.kind === "off-season" || status.kind === "opens",
+    lastObservedAt: weather?.fetched_at ?? null,
+    now,
+  });
   const forecastDateLabels: Array<string | null> = surfaceForecastDays.map(
     (d) =>
-      new Date(d.date + "T12:00:00").toLocaleDateString(undefined, {
+      new Date(d.date + "T12:00:00Z").toLocaleDateString("en-US", {
         weekday: "short",
         month: "short",
         day: "numeric",
+        timeZone: "UTC",
       }),
   );
   while (forecastDateLabels.length < 3) forecastDateLabels.push(null);
+
+  // Facts for the dormant "Season preview" card.
+  const lastSeasonEnded =
+    resort.season_end_date && new Date(resort.season_end_date + "T00:00:00Z") < now
+      ? resort.season_end_date
+      : null;
+  // The opening date itself is NOT repeated here: the status pill in the
+  // at-a-glance strip and the weather card already carry it.
+  const seasonPreview: SeasonPreview = {
+    resortName: resort.name,
+    seasonWindow: seasonWindowText(resort),
+    annualSnowfallIn: resort.annual_snowfall_in,
+    lastSeasonEnded,
+  };
 
   const lng = Number(resort.longitude);
   const lat = Number(resort.latitude);
@@ -494,21 +576,16 @@ export default async function ResortPage({
           <h1 className="text-4xl font-extrabold leading-[0.95] tracking-tight text-white sm:text-7xl md:text-[7.5rem] md:tracking-[-0.025em]">
             {resort.name}
           </h1>
-          {/* Season countdown — sits just under the hero title for
-              high visibility. Hidden when both season fields can't be
-              parsed (status === "unknown"). */}
-          {(() => {
-            const seasonInfo = parseSeasonDates(
-              resort.season_open_text,
-              resort.season_close_text,
-            );
-            if (seasonInfo.status === "unknown") return null;
-            return (
-              <div className="mt-4">
-                <SeasonCountdown info={seasonInfo} variant="hero" />
-              </div>
-            );
-          })()}
+          {/* Season countdown — sits just under the hero title while the
+              season is running ("Season runs to Apr 15 · 85 days left").
+              Off-season the at-a-glance pill already says "Opens ~Nov 15 ·
+              in 53 days", so repeating it here (the review counted the
+              same fact four times on one screen) adds nothing. */}
+          {seasonInfo.status === "in-season" && (
+            <div className="mt-4">
+              <SeasonCountdown info={seasonInfo} variant="hero" />
+            </div>
+          )}
           <p className="mt-3 text-base text-white/85 sm:text-lg">
             {resort.state}
             {resort.region ? " · " + resort.region : ""}
@@ -532,28 +609,18 @@ export default async function ResortPage({
               🎿 Skis only
             </p>
           )}
-          {resort.currently_open === true && (
-            <p className="ml-2 mt-3 inline-block rounded bg-emerald-600/95 px-2 py-0.5 text-xs font-semibold text-white">
-              🟢 Open today
-              {resort.season_end_date
-                ? ` · until ${new Date(resort.season_end_date + "T12:00:00").toLocaleDateString(undefined, { month: "short", day: "numeric" })}`
-                : ""}
-            </p>
-          )}
         </div>
       </header>
 
       {/* Body */}
       <div className="mx-auto max-w-5xl space-y-8 px-4 py-8 sm:px-6 sm:py-12">
-        {/* QUICK STATS — show whenever any stats exist (QuickStats returns null otherwise) */}
-        <QuickStats resort={resort} />
-
-        {/* Inaugural Season 2026 — Powder Day Score retired from the
-            UI. The new Snow Surface Forecast (below) covers the same
-            "what will today feel like?" question with more nuance —
-            powder, packed powder, frozen granular, icy, etc. — and a
-            3-day outlook. lib/powderScore.ts + components/PowderDayScore.tsx
-            stay in tree as dead code in case we want to revive it. */}
+        {/* AT A GLANCE — the five answers a visitor came for, directly
+            under the hero: is it open, did it snow, how deep, what does
+            the surface feel like, how cold. Every number is labelled
+            with what it is and where it came from. Mountain stats (the
+            static 7-tile block that used to sit here) now follows the
+            conditions block (audit resort-panel-detail-5). */}
+        <AtAGlance resort={resort} weather={weather} status={status} report={surfaceReport} />
 
         {/* CONDITIONS BLOCK — three sections sharing a single narrative.
             The Snow Surface card carries the headline ("what will today
@@ -564,20 +631,21 @@ export default async function ResortPage({
 
         {/* Snow Surface Forecast — interprets the 7-day weather window
             into a SANY surface label (PP / PPC / MG / FG / IP / etc.)
-            with a 3-day outlook + a tap-to-learn glossary modal. */}
-        {surfaceReport && (
-          <SnowSurfaceForecast
-            report={surfaceReport}
-            forecastDates={forecastDateLabels}
-            offSeason={isGlobalOffSeasonNow()}
-          />
-        )}
+            with a 3-day outlook + a tap-to-learn glossary modal. When the
+            report is dormant (closed / off-season / stale) it renders the
+            Season preview card instead — never a confident class on a
+            mountain with no lifts turning. */}
+        <SnowSurfaceForecast
+          report={surfaceReport}
+          forecastDates={forecastDateLabels}
+          preview={seasonPreview}
+        />
 
         {/* Today's weather — the current-conditions snapshot that feeds
             the surface classifier above. Kept compact and second so the
             page reads as "here's the surface, here's the evidence". */}
         <Section title="Today's weather">
-          <FullWeatherCard resort={resort} weather={weather} lat={lat} lng={lng} />
+          <FullWeatherCard resort={resort} weather={weather} lat={lat} lng={lng} status={status} tz={tz} />
         </Section>
 
         {/* 10-day forecast — same Open-Meteo + NWS data extended into
@@ -595,16 +663,22 @@ export default async function ResortPage({
           >
             <TenDayForecast
               days={weather.forecast_json.slice(0, 10)}
-              resortWind={{
-                wind_hold_mph_chair: resort.wind_hold_mph_chair,
-                wind_hold_mph_gondola: resort.wind_hold_mph_gondola,
-                hasGondolaOrTram:
-                  (resort.lift_types?.gondola ?? 0) > 0 ||
-                  (resort.lift_types?.tram ?? 0) > 0,
-              }}
+              resortWind={windContextFor(resort)}
             />
           </Section>
         )}
+
+        {/* MOUNTAIN STATS — the static profile (vertical, trails, lifts,
+            difficulty mix, weekend crowds). Below the conditions block so
+            the page opens on what changes daily, not on what never does. */}
+        <QuickStats resort={resort} status={status} tz={tz} now={now} />
+
+        {/* Inaugural Season 2026 — Powder Day Score retired from the
+            UI. The Snow Surface Forecast (above) covers the same
+            "what will today feel like?" question with more nuance —
+            powder, packed powder, frozen granular, icy, etc. — and a
+            3-day outlook. lib/powderScore.ts + components/PowderDayScore.tsx
+            stay in tree as dead code in case we want to revive it. */}
 
         {/* WHERE TO STAY — three lodging partners (Booking, Vrbo,
             Airbnb). Sits right after the conditions block so a user
@@ -633,30 +707,18 @@ export default async function ResortPage({
             quiet instead of showing an empty "Around the resort"
             header — the Section wrapper itself doesn't self-collapse). */}
         {(nearbyRestaurants.length > 0 || nearbyActivities.length > 0) && (
-          <Section title="Around the resort">
+          <Section id="around-the-resort" title="Around the resort">
             <NearbyRestaurants rows={nearbyRestaurants} />
             <NearbyActivities rows={nearbyActivities} />
           </Section>
         )}
 
-        {/* CLOSEST AIRPORT — Stage 23. */}
+        {/* CLOSEST AIRPORT — Stage 23; audit round 2 added the airport
+            name + city, an estimated distance / drive from coordinates
+            (the DB distance exists for 4 of 425 rows) and a flights link. */}
         {resort.closest_airport_iata && (
           <Section title="Closest airport">
-            <div className="rounded-lg border border-wn-charcoal/10 bg-white px-4 py-3">
-              <div className="flex items-center gap-3">
-                <span className="inline-flex h-10 w-10 items-center justify-center rounded-md bg-wn-navy/5 text-xl" aria-hidden="true">
-                  ✈️
-                </span>
-                <span className="text-2xl font-extrabold tracking-tight text-wn-navy">
-                  {resort.closest_airport_iata}
-                </span>
-                {resort.closest_airport_distance_mi != null && (
-                  <span className="text-sm text-wn-charcoal/65">
-                    · {resort.closest_airport_distance_mi} mi away
-                  </span>
-                )}
-              </div>
-            </div>
+            <ClosestAirportCard resort={resort} lat={lat} lng={lng} />
           </Section>
         )}
 
@@ -747,8 +809,10 @@ export default async function ResortPage({
         {/* Snow alerts — Stage 29. Push notifications for new-snow events. */}
         <SnowAlertButton resortId={resort.id} resortName={resort.name} />
 
-        {/* Reviews — Stage 28. RLS-driven, signed-out users see-only. */}
-        <ResortReviews resortId={resort.id} />
+        {/* Reviews — Stage 28. RLS-driven, signed-out users see-only.
+            Hidden platform-wide until the first review exists anywhere
+            (an empty "No reviews yet" block on 425 pages is noise). */}
+        {hasAnyReviews && <ResortReviews resortId={resort.id} />}
 
         {/* Listed footer — shown only when no stats are available */}
         {!hasAnyStats && (
@@ -825,16 +889,19 @@ function PassBadge({ pass }: { pass: string }) {
 }
 
 function Section({
+  id,
   title,
   subtitle,
   children,
 }: {
+  /** Anchor target, e.g. the panel's "See all places nearby" link. */
+  id?: string;
   title: string;
   subtitle?: string;
   children: React.ReactNode;
 }) {
   return (
-    <section>
+    <section id={id} className={id ? "scroll-mt-4" : undefined}>
       <div className="mb-3">
         <h2 className="text-lg font-bold text-wn-navy sm:text-xl">{title}</h2>
         {subtitle && (
@@ -846,7 +913,149 @@ function Section({
   );
 }
 
-function QuickStats({ resort }: { resort: Resort }) {
+/** Wind-hold thresholds + lift mix for a resort, shared by the today
+ *  card and the 10-day strip. */
+function windContextFor(resort: Resort): ResortWindContext {
+  const mix = liftMixFromTypes(resort.lift_types);
+  return {
+    wind_hold_mph_chair: resort.wind_hold_mph_chair,
+    wind_hold_mph_gondola: resort.wind_hold_mph_gondola,
+    hasGondolaOrTram: mix != null && mix.gondolas + mix.trams > 0,
+    liftMix: mix,
+  };
+}
+
+// At-a-glance strip — status pill + four labelled numbers. Reads from
+// the resort-reported snow columns first (what the mountain measured)
+// and falls back to the station-derived weather_cache values, and says
+// which one it is showing.
+function AtAGlance({
+  resort,
+  weather,
+  status,
+  report,
+}: {
+  resort: Resort;
+  weather: WeatherSnapshot | null;
+  status: ResortStatus;
+  report: SurfaceReport;
+}) {
+  const snowFromReport = resort.snow_new_24h_in != null;
+  const snowNew24 = snowFromReport
+    ? resort.snow_new_24h_in
+    : weather?.snow_24h_in != null
+      ? Number(weather.snow_24h_in)
+      : null;
+  const tiles: Array<{ label: string; value: string; sub?: string; accent?: boolean }> = [];
+  tiles.push({
+    label: "New snow (24h)",
+    value: snowNew24 != null ? `${snowNew24}"` : "—",
+    sub: snowNew24 == null ? "not reported" : snowFromReport ? "resort report" : "weather station",
+    accent: snowNew24 != null && snowNew24 > 0,
+  });
+  tiles.push({
+    label: "Base depth",
+    value: resort.snow_base_depth_in != null ? `${resort.snow_base_depth_in}"` : "—",
+    sub: resort.snow_base_depth_in != null ? "resort report" : "not reported",
+  });
+  tiles.push(
+    report.dormant
+      ? { label: "Surface", value: report.headline, sub: "forecast paused" }
+      : { label: "Surface", value: report.today.label, sub: `${report.today.short} · ${report.today.confidence} confidence` },
+  );
+  tiles.push({
+    label: "Today's temp",
+    value:
+      weather?.temp_high_f != null
+        ? `${weather.temp_high_f}°${weather.temp_low_f != null ? ` / ${weather.temp_low_f}°F` : "F"}`
+        : "—",
+    sub: weather?.temp_high_f != null ? "high / low" : "not synced",
+  });
+
+  return (
+    <section aria-label="At a glance" className="rounded-xl border border-wn-charcoal/10 bg-white p-3 shadow-sm sm:p-4">
+      <div className="mb-3 flex flex-wrap items-center gap-2">
+        <ResortStatusPill status={status} size="md" />
+      </div>
+      <dl className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+        {tiles.map((t) => (
+          <div key={t.label} className="rounded-lg bg-wn-offwhite px-3 py-2">
+            <dt className="text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">{t.label}</dt>
+            <dd className={`mt-0.5 truncate text-base font-extrabold tracking-tight ${t.accent ? "text-wn-sky" : "text-wn-navy"}`}>
+              {t.value}
+            </dd>
+            {t.sub && <dd className="text-[10px] text-wn-charcoal/50">{t.sub}</dd>}
+          </div>
+        ))}
+      </dl>
+    </section>
+  );
+}
+
+function ClosestAirportCard({ resort, lat, lng }: { resort: Resort; lat: number; lng: number }) {
+  const iata = resort.closest_airport_iata!.toUpperCase();
+  const airport = airportByIata(iata);
+  // Prefer the researched DB distance; otherwise estimate from the two
+  // coordinate pairs with the same drive model the trip planner uses.
+  const estimatedMiles =
+    airport && Number.isFinite(lat) && Number.isFinite(lng)
+      ? Math.round(haversineMeters(lat, lng, airport.lat, airport.lng) / 1609.34)
+      : null;
+  const miles = resort.closest_airport_distance_mi ?? estimatedMiles;
+  const isEstimate = resort.closest_airport_distance_mi == null;
+  const driveText =
+    airport && Number.isFinite(lat) && Number.isFinite(lng)
+      ? formatDriveTime(estimateDriveSeconds(haversineMeters(lat, lng, airport.lat, airport.lng)))
+      : null;
+  return (
+    <div className="rounded-lg border border-wn-charcoal/10 bg-white px-4 py-3">
+      <div className="flex flex-wrap items-center gap-3">
+        <span className="inline-flex h-10 w-10 items-center justify-center rounded-md bg-wn-navy/5 text-xl" aria-hidden="true">
+          ✈️
+        </span>
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-baseline gap-x-2">
+            <span className="text-lg font-extrabold tracking-tight text-wn-navy">
+              {airport ? airport.name : "Nearest commercial airport"}
+            </span>
+            <span className="font-mono text-sm font-semibold text-wn-charcoal/60">{iata}</span>
+          </div>
+          <div className="text-xs text-wn-charcoal/65">
+            {airport ? `${airport.city}, ${airport.state}` : "Airport details not on file"}
+            {miles != null && ` · ${isEstimate ? "≈ " : ""}${miles} mi straight-line`}
+            {driveText && ` · ~${driveText} drive (estimate)`}
+          </div>
+        </div>
+        <a
+          href={skyscannerUrl({
+            name: resort.name,
+            state: resort.state,
+            lat,
+            lng,
+            closest_airport_iata: iata,
+          })}
+          target="_blank"
+          rel="noopener noreferrer sponsored"
+          className="inline-flex items-center gap-1 rounded-md border border-wn-charcoal/15 px-3 py-1.5 text-xs font-semibold text-wn-navy transition hover:border-wn-navy"
+        >
+          Flights to {iata} →
+        </a>
+      </div>
+    </div>
+  );
+}
+
+function QuickStats({
+  resort,
+  status,
+  tz,
+  now,
+}: {
+  resort: Resort;
+  status: ResortStatus;
+  tz: string | undefined;
+  now: Date;
+}) {
   const stats: Array<{ label: string; value: string }> = [];
   if (resort.vertical_drop) stats.push({ label: "Vertical drop", value: `${resort.vertical_drop.toLocaleString()} ft` });
   if (resort.total_trails) stats.push({ label: "Trails", value: String(resort.total_trails) });
@@ -905,16 +1114,13 @@ function QuickStats({ resort }: { resort: Resort }) {
   if (resort.has_glades) features.push({ label: "Glades", emoji: "🌲" });
   if (resort.has_night_skiing) features.push({ label: "Night skiing", emoji: "🌙" });
 
-  // Expected weekend crowds — in-season only (a closed summer resort isn't busy).
+  // Expected weekend crowds — only when lifts are (likely) running; a
+  // closed mountain isn't busy. "This weekend" = the next Saturday in
+  // the resort's own calendar, not the UTC server's.
   const lat = resort.latitude == null ? null : Number(resort.latitude);
   const lng = resort.longitude == null ? null : Number(resort.longitude);
-  const upcomingSaturday = (() => {
-    const d = new Date();
-    d.setDate(d.getDate() + ((6 - d.getDay() + 7) % 7 || 7));
-    return d;
-  })();
   const crowd =
-    !isGlobalOffSeasonNow() && lat != null && Number.isFinite(lat) && lng != null && Number.isFinite(lng)
+    !status.dormant && lat != null && Number.isFinite(lat) && lng != null && Number.isFinite(lng)
       ? crowdForecast(
           {
             latitude: lat,
@@ -923,10 +1129,15 @@ function QuickStats({ resort }: { resort: Resort }) {
             vertical_drop: resort.vertical_drop,
             snow_new_24h_in: resort.snow_new_24h_in,
             snow_new_48h_in: resort.snow_new_48h_in,
+            slug: resort.slug,
+            state: resort.state,
           },
-          upcomingSaturday,
+          upcomingSaturday(now, tz),
         )
       : null;
+  // The label already says "this weekend", so the printed reason is the
+  // first one that adds information (holiday, city, powder).
+  const crowdReason = crowd?.reasons.find((r) => r !== "weekend" && r !== "midweek") ?? null;
 
   return (
     <Section title="Mountain stats">
@@ -968,8 +1179,8 @@ function QuickStats({ resort }: { resort: Resort }) {
         >
           <span className={`block h-2 w-2 rounded-full ${CROWD_COLORS[crowd.level].dot}`} aria-hidden="true" />
           <span>
-            {crowd.label} this weekend
-            {crowd.reasons[0] ? ` · ${crowd.reasons[0]}` : ""}
+            Est. {crowd.label.toLowerCase()} this weekend
+            {crowdReason ? ` · ${crowdReason}` : ""}
           </span>
         </div>
       )}
@@ -1071,11 +1282,15 @@ function FullWeatherCard({
   weather,
   lat,
   lng,
+  status,
+  tz,
 }: {
   resort: Resort;
   weather: WeatherSnapshot | null;
   lat: number;
   lng: number;
+  status: ResortStatus;
+  tz: string | undefined;
 }) {
   const conditionEmoji = (cond: string | null): string => {
     if (!cond) return "🌤️";
@@ -1104,53 +1319,30 @@ function FullWeatherCard({
     resort.snow_new_24h_in ?? (weather.snow_24h_in != null ? Number(weather.snow_24h_in) : null);
   const base = resort.snow_base_depth_in;
 
-  // Status line — open/closed/limited/off-season, with trails+lifts
-  // open ratios inline when applicable. Hide for "unknown" (Open-Meteo
-  // fallback couldn't infer status reliably).
-  let status = resort.snow_report_status;
-  // Stage 33 — unify "closed" + "off-season" + "unknown" during the
-  // global May-Oct window. The OnTheSnow scraper marks some resorts
-  // (Timberline Lodge etc) as "closed" with stale spring data while
-  // others fall through to "off-season". Both mean the same thing to
-  // a user in May; show one consistent label instead of two.
-  if (isGlobalOffSeasonNow() && status && status !== "open" && status !== "limited") {
-    status = "off-season";
-  }
-  const trailsOpen = resort.trails_open_today;
-  const totalTrails = resort.total_trails;
-  const liftsOpen = resort.lifts_open_today;
-  const totalLifts = resort.total_lifts;
-  const statusMeta: Record<
-    string,
-    { emoji: string; label: string; color: string }
-  > = {
-    open: { emoji: "🟢", label: "Open today", color: "text-emerald-800" },
-    closed: { emoji: "🔴", label: "Closed for the season", color: "text-red-800" },
-    limited: { emoji: "🟡", label: "Limited operations", color: "text-amber-800" },
-    "off-season": { emoji: "🌸", label: "Off-season — opens in Nov", color: "text-wn-charcoal/65" },
+  // Status line — the same derived status the at-a-glance pill shows
+  // (open / limited / opens ~date / off-season / check resort), so the
+  // weather card never contradicts the strip. Off-season is said plainly
+  // instead of the old hard-coded "opens in Nov".
+  const statusTone: Record<ResortStatus["tone"], string> = {
+    green: "text-emerald-800",
+    amber: "text-amber-800",
+    red: "text-red-800",
+    navy: "text-wn-navy",
+    muted: "text-wn-charcoal/65",
   };
-  const sm = status ? statusMeta[status] : null;
-  const trailsStr =
-    trailsOpen != null && totalTrails != null && totalTrails > 0
-      ? `${trailsOpen}/${totalTrails} trails`
-      : null;
-  const liftsStr =
-    liftsOpen != null && totalLifts != null && totalLifts > 0
-      ? `${liftsOpen}/${totalLifts} lifts`
-      : null;
+  const rawReportStatus = (resort.snow_report_status ?? "unknown").toLowerCase();
 
   return (
     <div className="rounded-lg border border-wn-charcoal/10 bg-white p-4">
-      {sm && (
-        <div className={`mb-3 text-xs font-semibold ${sm.color}`}>
-          <span aria-hidden="true">{sm.emoji}</span> {sm.label}
-          {(trailsStr || liftsStr) && status === "open" && (
-            <span className="ml-1 font-normal text-wn-charcoal/60">
-              · {[trailsStr, liftsStr].filter(Boolean).join(" · ")}
-            </span>
-          )}
-        </div>
-      )}
+      <div className={`mb-3 text-xs font-semibold ${statusTone[status.tone]}`}>
+        {status.label}
+        {status.detail && (
+          <span className="ml-1 font-normal text-wn-charcoal/60">· {status.detail}</span>
+        )}
+        {status.dormant && (
+          <span className="ml-1 font-normal text-wn-charcoal/60">· surface forecast paused until lifts run</span>
+        )}
+      </div>
 
       <div className="grid grid-cols-3 gap-2 text-center sm:gap-4">
         {/* Weather column */}
@@ -1165,19 +1357,21 @@ function FullWeatherCard({
           }
           label={weather.conditions_short ?? "Weather"}
         />
-        {/* Wind column — adds a wind-hold warning chip when forecast
-            wind exceeds the resort's chairlift/gondola hold threshold
-            (or default 35/50 mph when Phase 2 hasn't filled per-resort
-            values yet). Chip is hidden on normal wind days. */}
+        {/* Wind column — adds a wind-hold warning chip when GUSTS (or
+            sustained wind when gusts are unknown) exceed the resort's
+            chairlift/gondola hold threshold (or default 35/50 mph when
+            Phase 2 hasn't filled per-resort values yet). Chip is hidden
+            on normal wind days. */}
         {(() => {
-          const evaluation = evaluateWindHold(weather.wind_mph_avg, {
-            wind_hold_mph_chair: resort.wind_hold_mph_chair,
-            wind_hold_mph_gondola: resort.wind_hold_mph_gondola,
-            hasGondolaOrTram:
-              (resort.lift_types?.gondola ?? 0) > 0 ||
-              (resort.lift_types?.tram ?? 0) > 0,
-          });
+          const evaluation = evaluateWindHold(
+            { sustained: weather.wind_mph_avg, gust: weather.wind_mph_gust },
+            windContextFor(resort),
+          );
           const cls = windHoldChipClass(evaluation.level);
+          const gustLabel =
+            weather.wind_mph_gust != null && weather.wind_mph_avg != null && weather.wind_mph_gust > weather.wind_mph_avg
+              ? `gusts ${weather.wind_mph_gust} mph`
+              : "sustained";
           return (
             <WeatherStat
               icon="💨"
@@ -1186,14 +1380,14 @@ function FullWeatherCard({
                   ? `${weather.wind_mph_avg} mph${weather.wind_dir_short ? " " + weather.wind_dir_short : ""}`
                   : "—"
               }
-              label="Wind"
+              label={weather.wind_mph_avg != null ? `Wind · ${gustLabel}` : "Wind"}
               divider
               warning={
                 evaluation.level === "ok"
                   ? null
                   : {
                       icon: cls.icon,
-                      label: evaluation.label,
+                      label: `${evaluation.label} · ${evaluation.detail}`,
                       class: cls.container,
                     }
               }
@@ -1204,9 +1398,7 @@ function FullWeatherCard({
         <WeatherStat
           icon="❄️"
           value={snowNew24 != null ? `${snowNew24}"` : "—"}
-          label={
-            base != null ? `${base}" base` : "24h new"
-          }
+          label={base != null ? `24h new · ${base}" base` : "24h new"}
           accent={snowNew24 != null && snowNew24 > 0}
         />
       </div>
@@ -1218,7 +1410,6 @@ function FullWeatherCard({
       {(() => {
         const sun = computeSunTimes(lat, lng);
         const todayUv = weather.forecast_json?.[0]?.uv_index_max ?? null;
-        const tz = timeZoneForState(resort.state);
         if (!sun && todayUv == null) return null;
         return (
           <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] font-medium text-wn-charcoal/70">
@@ -1256,21 +1447,17 @@ function FullWeatherCard({
         );
       })()}
 
+      {/* Sync stamps in the RESORT's clock with the zone named — the ISR
+          server renders in UTC, so a bare "12:03 PM" was wrong for every
+          visitor. The snow-report stamp is gated on the raw scrape
+          status: an "unknown" report has no data worth dating. */}
       {weather.fetched_at && (
         <p className="mt-3 text-[10px] text-wn-charcoal/45">
-          Synced{" "}
-          {new Date(weather.fetched_at).toLocaleString(undefined, {
-            weekday: "short",
-            hour: "numeric",
-            minute: "2-digit",
-          })}
-          {resort.snow_report_updated_at && status && status !== "unknown" && (
+          Weather synced {formatStampInZone(new Date(weather.fetched_at), tz)}
+          {resort.snow_report_updated_at && rawReportStatus !== "unknown" && (
             <>
               {" · Snow report "}
-              {new Date(resort.snow_report_updated_at).toLocaleString(
-                undefined,
-                { weekday: "short", hour: "numeric", minute: "2-digit" },
-              )}
+              {formatStampInZone(new Date(resort.snow_report_updated_at), tz)}
             </>
           )}
         </p>
@@ -1343,11 +1530,7 @@ function TenDayForecast({
   resortWind,
 }: {
   days: ForecastDay[];
-  resortWind: {
-    wind_hold_mph_chair: number | null;
-    wind_hold_mph_gondola: number | null;
-    hasGondolaOrTram: boolean;
-  };
+  resortWind: ResortWindContext;
 }) {
   const emoji = (cond: string | null): string => {
     if (!cond) return "🌤️";
@@ -1424,8 +1607,13 @@ function TenDayForecast({
                   </div>
                 )}
               {d.wind_short && (() => {
-                const mph = parseWindMphFromText(d.wind_short);
-                const evaluation = evaluateWindHold(mph, resortWind);
+                // Gusts from the v2 pipeline field when present, else
+                // parsed out of NWS wording ("… gusts as high as 45 mph").
+                const parsed = parseWindFromText(d.wind_short);
+                const evaluation = evaluateWindHold(
+                  { sustained: parsed.sustained, gust: d.wind_gust_mph ?? parsed.gust },
+                  resortWind,
+                );
                 const cls = windHoldChipClass(evaluation.level);
                 return (
                   <>
@@ -1434,7 +1622,7 @@ function TenDayForecast({
                       {d.wind_dir_short ? ` ${d.wind_dir_short}` : ""}
                     </div>
                     {evaluation.level !== "ok" && (
-                      <div className={`mt-1 ${cls.container}`}>
+                      <div className={`mt-1 ${cls.container}`} title={evaluation.detail}>
                         <span aria-hidden="true">{cls.icon}</span>
                         <span>{evaluation.label}</span>
                       </div>

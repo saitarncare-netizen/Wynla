@@ -81,8 +81,9 @@ export function getDifficultyMix(r: ResortDifficultyInput): DifficultyMix | null
 }
 
 // Pin total to exactly 100 by absorbing rounding error into the largest
-// segment. Avoids "26 + 25 + 25 + 25 = 101" visual artifacts.
-function normalize(mix: DifficultyMix): DifficultyMix {
+// segment. Avoids "26 + 25 + 25 + 25 = 101" visual artifacts. Exported
+// so the unit tests can pin the rounding behaviour directly.
+export function normalize(mix: DifficultyMix): DifficultyMix {
   const sum = mix.beginner + mix.intermediate + mix.advanced + mix.expert;
   if (sum === 0 || sum === 100) return mix;
   const diff = 100 - sum;

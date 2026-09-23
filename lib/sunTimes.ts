@@ -2,9 +2,14 @@
 // last chair planning. NOAA solar-position algorithm; accurate to ~1
 // minute. No external library needed.
 //
+// Also home to the resort → IANA time-zone resolver, because sunrise /
+// sunset was its first consumer and every other "show this in the
+// mountain's local time" surface (synced stamps, crowd weekday) reuses
+// it.
+//
 // Usage:
 //   const { sunrise, sunset } = computeSunTimes(lat, lng, new Date());
-//   // → both are Date objects in UTC; format with toLocaleTimeString.
+//   // → both are Date objects in UTC; format with formatLocal(d, tz).
 
 export type SunTimes = {
   sunrise: Date;
@@ -101,11 +106,13 @@ export function computeSunTimes(
 }
 
 /**
- * Format the sunrise/sunset Date in a target IANA time zone. Example:
+ * Format a Date's clock time in a target IANA time zone. Example:
  *   formatLocal(sunrise, "America/Denver") → "6:42 AM"
+ * Locale is pinned to en-US so the server render and the client
+ * hydration agree (the resort page is ISR-rendered on a UTC server).
  */
 export function formatLocal(d: Date, timeZone?: string): string {
-  return d.toLocaleTimeString(undefined, {
+  return d.toLocaleTimeString("en-US", {
     hour: "numeric",
     minute: "2-digit",
     timeZone,
@@ -113,26 +120,139 @@ export function formatLocal(d: Date, timeZone?: string): string {
 }
 
 /**
- * Map US state code to IANA timezone for resort-local time formatting.
- * Skiing US covers ~6 zones; the simplifications here are good enough
- * for sunrise/sunset display (the Arizona DST quirk would matter for
- * Arizona Snowbowl in May but not in ski season).
+ * Short zone abbreviation for a timestamp ("MST", "EDT", "PST"). Falls
+ * back to "UTC" when the zone is unknown so a stamp is never unlabelled.
+ */
+export function zoneAbbreviation(timeZone: string | undefined, d: Date = new Date()): string {
+  if (!timeZone) return "UTC";
+  const parts = new Intl.DateTimeFormat("en-US", { timeZone, timeZoneName: "short" }).formatToParts(d);
+  return parts.find((p) => p.type === "timeZoneName")?.value ?? "UTC";
+}
+
+/**
+ * "Tue 5:03 AM MST" — a synced / updated stamp in the resort's own
+ * clock with the zone spelled out, so a Vermont visitor reading a
+ * Colorado page is never misled by a bare time.
+ */
+export function formatStampInZone(d: Date, timeZone: string | undefined): string {
+  const clock = d.toLocaleString("en-US", {
+    weekday: "short",
+    hour: "numeric",
+    minute: "2-digit",
+    timeZone: timeZone ?? "UTC",
+  });
+  return `${clock} ${zoneAbbreviation(timeZone, d)}`;
+}
+
+// ---------- Resort → time zone ----------
+
+// Slugs whose county sits on the other side of a zone line from the bulk
+// of their state (audit domain-logic-22 / resort-panel-detail-54). Kept
+// explicit so a reviewer can verify each one against the county map even
+// though the geographic rules below would catch most of them.
+const RESORT_TIMEZONE_OVERRIDES: Record<string, string> = {
+  // Idaho panhandle (north of the Salmon River) is Pacific.
+  schweitzer: "America/Los_Angeles",
+  "silver-mountain": "America/Los_Angeles",
+  "cottonwood-butte": "America/Los_Angeles",
+  snowhaven: "America/Los_Angeles",
+  "lookout-pass": "America/Los_Angeles",
+  // Western Upper Peninsula (Gogebic / Iron / Dickinson / Menominee) is Central.
+  "big-powderhorn-mountain": "America/Chicago",
+  snowriver: "America/Chicago",
+  "indianhead-mountain": "America/Chicago",
+  "blackjack-mountain": "America/Chicago",
+  "ski-brule": "America/Chicago",
+  "pine-mountain": "America/Chicago",
+  "norway-mountain": "America/Chicago",
+  // Black Hills, SD is Mountain.
+  "terry-peak": "America/Denver",
+  // East Tennessee is Eastern.
+  "ober-mountain": "America/New_York",
+};
+
+export type ResortTimeZoneSource = {
+  slug?: string | null;
+  state?: string | null;
+  latitude?: number | string | null;
+  longitude?: number | string | null;
+};
+
+/**
+ * IANA zone for a resort: explicit slug override → geographic rule for
+ * the split states → state default. Returns undefined only when even the
+ * state is unknown, so callers can fall back to UTC and say so.
+ */
+export function timeZoneForResort(r: ResortTimeZoneSource): string | undefined {
+  if (r.slug && RESORT_TIMEZONE_OVERRIDES[r.slug]) return RESORT_TIMEZONE_OVERRIDES[r.slug];
+  const state = r.state ? r.state.toUpperCase() : null;
+  const lat = r.latitude == null ? NaN : Number(r.latitude);
+  const lng = r.longitude == null ? NaN : Number(r.longitude);
+  if (state && Number.isFinite(lat) && Number.isFinite(lng)) {
+    const split = splitStateZone(state, lat, lng);
+    if (split) return split;
+  }
+  return timeZoneForState(state);
+}
+
+// Geographic rules for the states a zone line cuts through. Boundaries
+// are approximate but sit in unpopulated country between the resorts on
+// either side (verified against every resort in the catalog on 2026-09-23).
+function splitStateZone(state: string, lat: number, lng: number): string | undefined {
+  switch (state) {
+    case "ID":
+      // Panhandle (Pacific) vs the rest (Mountain); the line follows the
+      // Salmon River at ~45.5°N. Grangeville / Cottonwood are north of it.
+      return lat > 45.55 ? "America/Los_Angeles" : "America/Denver";
+    case "MI":
+      // Four western UP counties bordering Wisconsin are Central.
+      if ((lng <= -87.6 && lat < 46.3) || (lng <= -89.7 && lat < 46.6)) return "America/Chicago";
+      return "America/New_York";
+    case "SD":
+      return lng < -101 ? "America/Denver" : "America/Chicago";
+    case "ND":
+      return lng < -102.5 && lat < 47.2 ? "America/Denver" : "America/Chicago";
+    case "NE":
+      return lng < -101.5 ? "America/Denver" : "America/Chicago";
+    case "KS":
+      return lng < -101.8 ? "America/Denver" : "America/Chicago";
+    case "TN":
+      // Eastern zone starts just west of Chattanooga / Knoxville.
+      return lng > -85.6 ? "America/New_York" : "America/Chicago";
+    case "KY":
+      return lng < -86 ? "America/Chicago" : "America/New_York";
+    case "IN":
+      // NW corner (Chicago metro) and SW corner (Evansville) are Central.
+      if ((lat > 40.9 && lng < -86.7) || (lat < 38.4 && lng < -87.2)) return "America/Chicago";
+      return "America/New_York";
+    case "OR":
+      // Malheur County (Ontario, OR) runs on Mountain time.
+      return lng > -117.5 && lat < 44.5 ? "America/Denver" : "America/Los_Angeles";
+    case "NV":
+      // West Wendover / Jackpot follow Utah + Idaho.
+      return lng > -114.2 && lat > 40.5 ? "America/Denver" : "America/Los_Angeles";
+    case "TX":
+      return lng < -104.9 ? "America/Denver" : "America/Chicago";
+    case "FL":
+      return lng < -85.1 ? "America/Chicago" : "America/New_York";
+    default:
+      return undefined;
+  }
+}
+
+/**
+ * Map US state code to IANA timezone. The default zone for each state;
+ * `timeZoneForResort` layers the split-state geography on top. Arizona
+ * (no DST) is Phoenix; the Navajo Nation exception has no ski areas.
  */
 export function timeZoneForState(state: string | null | undefined): string | undefined {
   if (!state) return undefined;
   const s = state.toUpperCase();
-  if (
-    [
-      "AK",
-    ].includes(s)
-  )
-    return "America/Anchorage";
+  if (s === "AK") return "America/Anchorage";
+  if (s === "HI") return "Pacific/Honolulu";
   if (["WA", "OR", "CA", "NV"].includes(s)) return "America/Los_Angeles";
   if (s === "AZ") return "America/Phoenix";
-  if (
-    ["MT", "WY", "CO", "NM", "UT", "ID"].includes(s)
-  )
-    return "America/Denver";
+  if (["MT", "WY", "CO", "NM", "UT", "ID"].includes(s)) return "America/Denver";
   if (
     [
       "ND",

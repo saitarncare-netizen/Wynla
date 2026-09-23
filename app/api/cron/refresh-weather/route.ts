@@ -25,6 +25,7 @@ import {
   type DailyWeather,
   type SurfaceCode,
 } from "@/lib/snowSurface";
+import { isGlobalOffSeasonNow } from "@/lib/seasonDates";
 
 export const runtime = "nodejs";
 export const maxDuration = 300; // 5 minutes — comfortable for 451 resorts × 8 concurrency.
@@ -558,12 +559,16 @@ export async function GET(request: Request) {
           updates.push({ id, code: null });
           continue;
         }
-        // Resort metadata (snow base / new24h) isn't a direct classifier
-        // input — the rule tree consumes the daily weather_history rows
-        // only — but we keep the lookup here so future v2 features
-        // (resort-reported base depth as a tiebreaker) plug in cleanly.
-        void resortById.get(id);
-        const result = classifyToday(hist);
+        // Resort-reported base depth + a live "open" flag are the
+        // snowpack evidence the rain-on-old-base and spring-corn rules
+        // need (lib/snowSurface hasSnowpackEvidence); without them the
+        // stored class disagreed with the resort page's own call.
+        const meta = resortById.get(id);
+        const result = classifyToday(hist, {
+          baseDepthIn: meta?.snow_base_depth_in ?? null,
+          hasSnowpack: meta?.currently_open === true ? true : null,
+          inSeason: !isGlobalOffSeasonNow(),
+        });
         updates.push({ id, code: result?.code ?? null });
       }
 

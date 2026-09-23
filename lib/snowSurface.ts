@@ -22,6 +22,12 @@
 //   • high   ≥ 0.85   — strong signal across multiple features
 //   • medium 0.70-0.84 — clear pattern but a contradicting feature
 //   • low    0.50-0.69 — sparse data or close call between codes
+//
+// **Dormant reports (2026-09 audit round 2):** the classifier now refuses
+// to name a surface when the mountain is closed / off-season, when the
+// newest input is more than 48 hours old, or when there is no history at
+// all. A confident "Frozen granular" on a September afternoon read as a
+// bug to every tester; a dormant card that says why is honest.
 
 // ---------- Public types ----------
 
@@ -61,13 +67,59 @@ export type SurfaceResult = {
   when?: string;          // optional WHEN best-window suggestion
 };
 
-/** Full surface report including a 3-day outlook. */
-export type SurfaceReport = {
+/**
+ * What the classifier knows about the resort beyond the weather rows.
+ * Every field is optional so the cron (which only has history) and the
+ * page (which has the resort row + season status) share one entry point.
+ */
+export type SurfaceContext = {
+  /** Resort-reported base depth in inches (resorts.snow_base_depth_in). */
+  baseDepthIn?: number | null;
+  /** Explicit "there is snow on the ground" signal when the base depth
+   *  is unknown (e.g. snow report status = open). */
+  hasSnowpack?: boolean | null;
+  /** Season window says lifts should be spinning. Counts as snowpack
+   *  evidence: an operating US resort has a base by definition. */
+  inSeason?: boolean | null;
+  /** Live open state: true = lifts running, false = closed, null =
+   *  unknown. False makes the report dormant. */
+  isOpen?: boolean | null;
+  /** The calendar says it is summer for this resort. With isOpen unknown
+   *  this alone makes the report dormant. */
+  offSeason?: boolean | null;
+  /** Timestamp of the newest input row (history observed_date or the
+   *  weather_cache fetched_at). Older than 48 h → dormant "stale". */
+  lastObservedAt?: string | Date | null;
+  /** Injected clock for tests. */
+  now?: Date;
+};
+
+export type DormantReason = "closed" | "off-season" | "unconfirmed" | "stale" | "no-data";
+
+/** Report when we decline to classify. Never carries a code. */
+export type DormantSurfaceReport = {
+  dormant: true;
+  reason: DormantReason;
+  /** Short card title, e.g. "Off-season". */
+  headline: string;
+  /** One plain sentence explaining why there is no surface call. */
+  message: string;
+};
+
+/** Report with a classification plus the evidence it rests on. */
+export type ActiveSurfaceReport = {
+  dormant: false;
   today: SurfaceResult;
   // Day 1 = tomorrow, Day 2 = day after, Day 3 = three days out.
   // null entries mean the upstream forecast didn't reach that day.
   forecast: Array<SurfaceResult | null>;
+  /** Plain-English inputs for a "Based on: …" line. */
+  basedOn: string[];
+  /** The derived features, for debugging + tests. */
+  features: SurfaceFeatures;
 };
+
+export type SurfaceReport = ActiveSurfaceReport | DormantSurfaceReport;
 
 // ---------- Education content (used by the UI modal) ----------
 
@@ -88,13 +140,13 @@ export const SURFACE_GLOSSARY: Record<SurfaceCode, {
   causedBy: string;     // root cause in non-jargon terms
 }> = {
   PP:  { label: "Powder",            short: "PP",  emoji: "❄️", alsoCalled: "fresh / fluff",                feelsLike: "Soft, fluffy snow that compresses under your weight. Floaty turns, quiet underfoot.",                       causedBy: "Fresh, cold snow that hasn't been groomed or skied off yet." },
-  PPC: { label: "Packed Powder",     short: "PPC", emoji: "🌨️", alsoCalled: "hard pack with soft top",      feelsLike: "Firm but forgiving. Edges hold without chatter; the snow doesn't fly when you carve.",                       causedBy: "Powder compacted by skier traffic or wind, while still cold enough to stay soft." },
+  PPC: { label: "Packed powder",     short: "PPC", emoji: "🌨️", alsoCalled: "hard pack with soft top",      feelsLike: "Firm but forgiving. Edges hold without chatter; the snow doesn't fly when you carve.",                       causedBy: "Powder compacted by skier traffic or wind, while still cold enough to stay soft." },
   MG:  { label: "Groomed",           short: "MG",  emoji: "🧑‍🔧", alsoCalled: "corduroy from the snowcat",   feelsLike: "Smooth corduroy lines. Predictable underfoot — the safest fast-cruise surface.",                            causedBy: "Resort grooming overnight on packed snow, or snowmaking when natural snow is thin." },
-  LSG: { label: "Loose Granular",    short: "LSG", emoji: "🌾", alsoCalled: "sugar snow / dry granular",   feelsLike: "Pellet-y or sugary snow. Slides easily; edges can wash out if you push too hard.",                            causedBy: "Cold, dry conditions where old snow grains have broken down without melting." },
-  FG:  { label: "Frozen Granular",   short: "FG",  emoji: "🧊", alsoCalled: "corn snow",                   feelsLike: "Like skiing on grippy gravel. Edges work but it's loud, and it gets slick if temps climb.",                   causedBy: "Snow that thawed and refroze. One melt-freeze cycle is enough." },
-  WS:  { label: "Wet Snow",          short: "WS",  emoji: "💧", alsoCalled: "heavy / sticky new snow",     feelsLike: "Heavy and sticky. Tiring on the legs; slow underfoot. Can dam up at the base of turns.",                      causedBy: "New snow falling at warm temps, or freshly fallen powder warming up through the day." },
-  WG:  { label: "Wet Granular",      short: "WG",  emoji: "🟡", alsoCalled: "slush",                       feelsLike: "Slushy clumps. Edges sink in; great in spring sun, sketchy if it refreezes overnight.",                       causedBy: "Old snow surface warming above freezing — corn snow under the right conditions." },
-  IP:  { label: "Icy",               short: "IP",  emoji: "⚠️", alsoCalled: "boilerplate / breakable crust", feelsLike: "Hard, glassy patches. Edges chatter or wash. Tough on intermediates, dangerous on steeps. Watch for breakable crust on aspects that took rain-on-snow then refroze.", causedBy: "Rain falling on snow, OR multiple melt-freeze cycles polishing the surface." },
+  LSG: { label: "Loose granular",    short: "LSG", emoji: "🌾", alsoCalled: "sugar snow / dry granular",   feelsLike: "Pellet-y or sugary snow. Slides easily; edges can wash out if you push too hard.",                            causedBy: "Cold, dry conditions where old snow grains have broken down without melting." },
+  FG:  { label: "Frozen granular",   short: "FG",  emoji: "🧊", alsoCalled: "refrozen corn",               feelsLike: "Like skiing on grippy gravel. Edges work but it's loud, and it gets slick if temps climb.",                   causedBy: "Snow that thawed and refroze. One melt-freeze cycle is enough." },
+  WS:  { label: "Wet snow",          short: "WS",  emoji: "💧", alsoCalled: "heavy / sticky new snow",     feelsLike: "Heavy and sticky. Tiring on the legs; slow underfoot. Can dam up at the base of turns.",                      causedBy: "New snow falling at warm temps, or freshly fallen powder warming up through the day." },
+  WG:  { label: "Wet granular",      short: "WG",  emoji: "🟡", alsoCalled: "spring corn / slush",         feelsLike: "Loose, forgiving kernels once the sun gets on it. Firm early, buttery mid-morning, slushy by afternoon.",     causedBy: "Old snow cycling above and below freezing — the melt-freeze rhythm of spring skiing." },
+  IP:  { label: "Icy",               short: "IP",  emoji: "⚠️", alsoCalled: "boilerplate / breakable crust", feelsLike: "Hard, glassy patches. Edges chatter or wash. Tough on intermediates, dangerous on steeps. Watch for breakable crust on aspects that took rain-on-snow then refroze.", causedBy: "Rain falling on snow, OR repeated thaws that never get warm enough to soften before refreezing." },
   VC:  { label: "Variable",          short: "VC",  emoji: "❔", alsoCalled: "crud / mixed",                feelsLike: "Patchy — skied-out powder mixed with hard pack and ice chunks. What you find depends on aspect, time of day, and what's been groomed.", causedBy: "Mixed conditions where no single surface dominates." },
 };
 
@@ -112,6 +164,10 @@ export type SurfaceFeatures = {
   temp_high_today_f: number | null;
   temp_low_today_f: number | null;
   wind_mph_avg_today: number | null;
+  /** How many daily rows the window actually had (1-7). */
+  window_days: number;
+  /** observed_date of the newest row. */
+  latest_observed_date: string;
 };
 
 /** Snow events <1" don't really change the surface; ignore as "meaningful." */
@@ -124,6 +180,8 @@ const COLD_F = 26;
 const ICE_CYCLE_MIN = 2;
 /** Rain-on-snow icing trigger — even a trace can glaze the surface. */
 const RAIN_ICE_MIN_IN = 0.05;
+/** Inputs older than this are not "today's surface" — go dormant. */
+const STALE_AFTER_MS = 48 * 60 * 60 * 1000;
 
 /**
  * Pull derived features from a chronological array of daily snapshots.
@@ -176,6 +234,8 @@ export function deriveFeatures(history: DailyWeather[]): SurfaceFeatures | null 
     temp_high_today_f: today.temp_high_f,
     temp_low_today_f: today.temp_low_f,
     wind_mph_avg_today: today.wind_mph_avg,
+    window_days: Math.min(history.length, 7),
+    latest_observed_date: today.observed_date,
   };
 }
 
@@ -205,6 +265,37 @@ function makeResult(
 }
 
 /**
+ * Is there snow on the ground for weather to act on? Rain on bare ground
+ * makes mud, not ice; warm sun on bare ground makes nothing. Evidence, in
+ * order of trust: a reported base depth, an explicit snowpack flag, snow
+ * that fell inside our 7-day window, or a season window that says the
+ * lifts are running (an operating US resort has a base by definition).
+ *
+ * Previously only "snow fell in the last 7 days" counted, which is why a
+ * mid-January rain on a 40" base after a dry week classified as
+ * "Groomed — no rain" (audit domain-logic-3).
+ */
+export function hasSnowpackEvidence(f: SurfaceFeatures, ctx: SurfaceContext): boolean {
+  if (ctx.baseDepthIn != null && ctx.baseDepthIn > 0) return true;
+  if (ctx.hasSnowpack === true) return true;
+  if (f.snow_7d_in > 0) return true;
+  return ctx.inSeason === true;
+}
+
+/**
+ * Does the context (not the weather) say the mountain is operating?
+ * Used by the dormancy gate when the live open state is unknown: a
+ * parsed season window, a resort-reported base or an explicit snowpack
+ * flag are positive evidence; a snowy week is not (it snows on closed
+ * mountains too).
+ */
+export function hasOperatingEvidence(ctx: SurfaceContext): boolean {
+  if (ctx.inSeason === true) return true;
+  if (ctx.hasSnowpack === true) return true;
+  return ctx.baseDepthIn != null && ctx.baseDepthIn > 0;
+}
+
+/**
  * Classify today's surface from derived features.
  * Priority-ordered rules — first match wins.
  *
@@ -212,26 +303,32 @@ function makeResult(
  * melt-freeze cycles) fire first; the warm/dry buckets sit in the
  * middle; LSG and MG act as gentle fallbacks before VC catches the rest.
  */
-export function classifyFromFeatures(f: SurfaceFeatures): SurfaceResult {
+export function classifyFromFeatures(f: SurfaceFeatures, ctx: SurfaceContext = {}): SurfaceResult {
   const reasons: string[] = [];
 
   const snow24 = f.snow_24h_in ?? 0;
   const hi = f.temp_high_today_f;
   const wind = f.wind_mph_avg_today;
+  const snowpack = hasSnowpackEvidence(f, ctx);
+  const cycles = f.melt_freeze_cycles_5d;
 
   // ---------- 1. Rain-on-snow → IP (highest priority, asymmetric safety rule) ----------
   // Any meaningful rain in the last 5 days, when there's old snow on
   // the ground, glazes the surface. This rule fires BEFORE the
   // melt-freeze branches because rain produces ice faster than thermal
   // cycling does, and the resulting surface is unmistakably icy.
-  if (f.rain_5d_in >= RAIN_ICE_MIN_IN && f.snow_7d_in > 0) {
-    reasons.push(
-      `${ROUND2(f.rain_5d_in)}" rain in the last 5 days on existing snowpack`,
-    );
-    if (f.melt_freeze_cycles_5d >= 1) {
-      reasons.push(`${f.melt_freeze_cycles_5d} melt-freeze ${f.melt_freeze_cycles_5d === 1 ? "cycle" : "cycles"} after the rain`);
+  // Gate = snowpack EVIDENCE (base depth / flag / recent snow / in
+  // season), not "snow fell this week" — see hasSnowpackEvidence.
+  if (f.rain_5d_in >= RAIN_ICE_MIN_IN && snowpack) {
+    const onWhat =
+      ctx.baseDepthIn != null && ctx.baseDepthIn > 0
+        ? `on a ${Math.round(ctx.baseDepthIn)}" base`
+        : "on the existing snowpack";
+    reasons.push(`${ROUND2(f.rain_5d_in)}" rain in the last 5 days ${onWhat}`);
+    if (cycles >= 1) {
+      reasons.push(`${cycles} melt-freeze ${cycles === 1 ? "cycle" : "cycles"} after the rain`);
     }
-    const confidence = f.rain_5d_in >= 0.25 || f.melt_freeze_cycles_5d >= 1 ? "high" : "medium";
+    const confidence = f.rain_5d_in >= 0.25 || cycles >= 1 ? "high" : "medium";
     return makeResult("IP", reasons, confidence, "Best window: skip dawn, ride after the sun softens the surface.");
   }
 
@@ -260,7 +357,7 @@ export function classifyFromFeatures(f: SurfaceFeatures): SurfaceResult {
   if (
     (snow24 >= 1 || f.snow_3d_in >= 3) &&
     (hi == null || hi < WARM_F) &&
-    f.melt_freeze_cycles_5d <= 1
+    cycles <= 1
   ) {
     if (snow24 >= 1) reasons.push(`${ROUND1(snow24)}" in the last 24h`);
     if (f.snow_3d_in >= 3) reasons.push(`${ROUND1(f.snow_3d_in)}" total in the last 3 days`);
@@ -281,43 +378,49 @@ export function classifyFromFeatures(f: SurfaceFeatures): SurfaceResult {
     );
   }
 
-  // ---------- 5. Warm + no new snow + old snow on ground → WG ----------
-  // Spring corn. Old surface warming above freezing without fresh
-  // input. Confidence drops the longer since meaningful snow.
-  if (
-    hi != null &&
-    hi >= WARM_F &&
-    snow24 < 1 &&
-    f.snow_7d_in > 0 &&
-    f.days_since_meaningful_snow != null &&
-    f.days_since_meaningful_snow >= 2
-  ) {
-    reasons.push(`high ${hi}°F warming old snowpack`);
-    reasons.push(`${f.days_since_meaningful_snow} days since last meaningful snow`);
+  // ---------- 5. Warm day + old snow on the ground → WG (spring corn) ----------
+  // Old surface warming above freezing without fresh input. Freeze-thaw
+  // cycles are the SIGNATURE of corn, not a disqualifier: firm at first
+  // chair, kernels loosen mid-morning, slush after lunch. The old gate
+  // (snow inside the window AND ≥2 days since it fell) made WG almost
+  // unreachable and pushed every dry spring week into "Icy" via rule 6
+  // (audit domain-logic-5). Now: warm high + snowpack evidence is
+  // enough; cycles raise confidence and pick the timing copy. Cold-high
+  // cycling days (thaw too weak to soften) still fall through to IP.
+  if (hi != null && hi >= WARM_F && snow24 < 1 && snowpack) {
+    reasons.push(`high ${hi}°F warming the old snowpack`);
+    if (cycles >= 1) {
+      reasons.push(`${cycles} freeze-thaw ${cycles === 1 ? "cycle" : "cycles"} in the last 5 days — a corn cycle`);
+    }
+    if (f.days_since_meaningful_snow != null) {
+      reasons.push(`${f.days_since_meaningful_snow} days since last meaningful snow`);
+    }
+    const confidence = cycles >= ICE_CYCLE_MIN ? "high" : cycles === 1 ? "medium" : "low";
     return makeResult(
       "WG",
       reasons,
-      "medium",
-      "Best window: late morning once the surface softens; refreezes overnight.",
+      confidence,
+      cycles >= 1
+        ? "Firm early, corn mid-morning, slush after — ride roughly 10:30 to 1:30."
+        : "Best window: late morning once the surface softens; refreezes overnight.",
     );
   }
 
-  // ---------- 6. Multiple freeze-thaw → FG (or IP if ≥2 cycles) ----------
+  // ---------- 6. Freeze-thaw with a cold high → FG (or IP if ≥2 cycles) ----------
   // Melt-freeze cycles transform the surface into refrozen granules.
-  // Single cycle = FG. Two or more = surface gets polished — bias to
-  // IP per the asymmetric rule.
-  if (f.melt_freeze_cycles_5d >= 1) {
+  // Single cycle = FG. Two or more without a warm-enough day to soften
+  // = surface gets polished — bias to IP per the asymmetric rule.
+  if (cycles >= 1) {
     reasons.push(
-      `${f.melt_freeze_cycles_5d} freeze-thaw ${
-        f.melt_freeze_cycles_5d === 1 ? "cycle" : "cycles"
-      } in the last 5 days`,
+      `${cycles} freeze-thaw ${cycles === 1 ? "cycle" : "cycles"} in the last 5 days`,
     );
+    if (hi != null) reasons.push(`high ${hi}°F — too cool to soften the refrozen surface`);
     if (f.snow_7d_in > 0) reasons.push(`${ROUND1(f.snow_7d_in)}" snow over those days got reworked`);
-    const code: SurfaceCode = f.melt_freeze_cycles_5d >= ICE_CYCLE_MIN ? "IP" : "FG";
+    const code: SurfaceCode = cycles >= ICE_CYCLE_MIN ? "IP" : "FG";
     return makeResult(
       code,
       reasons,
-      f.melt_freeze_cycles_5d >= ICE_CYCLE_MIN ? "high" : "medium",
+      cycles >= ICE_CYCLE_MIN ? "high" : "medium",
       "Best window: midday once the sun grinds off the polish.",
     );
   }
@@ -341,7 +444,15 @@ export function classifyFromFeatures(f: SurfaceFeatures): SurfaceResult {
   // grooming day — resorts run cats overnight on whatever's left.
   if (f.snow_7d_in > 0 || (hi != null && hi <= WARM_F)) {
     if (f.snow_7d_in > 0) reasons.push(`${ROUND1(f.snow_7d_in)}" total snow over last 7 days`);
-    if (hi != null) reasons.push(`high ${hi}°F, no rain, no melt-freeze`);
+    if (hi != null) {
+      // The rain clause is conditional on the actual reading — the old
+      // hard-coded "no rain" printed under a 0.6" rain day (domain-logic-3).
+      const rainNote =
+        f.rain_5d_in >= RAIN_ICE_MIN_IN
+          ? `${ROUND2(f.rain_5d_in)}" rain but no confirmed snowpack to glaze`
+          : "no rain";
+      reasons.push(`high ${hi}°F, ${rainNote}, no melt-freeze`);
+    }
     reasons.push("conditions match an overnight grooming surface");
     return makeResult("MG", reasons, "medium", "Best window: first hour after the lifts open.");
   }
@@ -352,10 +463,10 @@ export function classifyFromFeatures(f: SurfaceFeatures): SurfaceResult {
 }
 
 /** Convenience — derive + classify in one call. */
-export function classifyToday(history: DailyWeather[]): SurfaceResult | null {
+export function classifyToday(history: DailyWeather[], ctx: SurfaceContext = {}): SurfaceResult | null {
   const f = deriveFeatures(history);
   if (!f) return null;
-  return classifyFromFeatures(f);
+  return classifyFromFeatures(f, ctx);
 }
 
 // ---------- 3-day forecast classifier ----------
@@ -378,6 +489,11 @@ export type ForecastDay = {
   precip_chance: number | null;
   conditions_short: string | null;
   wind_short?: string | null; // e.g. "10 mph"
+  /** Liquid rain for the day when the pipeline supplies it (forecast_json
+   *  v2). When present it replaces the wording-based guess below. */
+  rain_in?: number | null;
+  /** Total liquid precipitation when supplied. */
+  precip_in?: number | null;
 };
 
 function parseWindMph(short: string | null | undefined): number | null {
@@ -386,29 +502,53 @@ function parseWindMph(short: string | null | undefined): number | null {
   return m ? Number(m[1]) : null;
 }
 
+/**
+ * Does a forecast wording describe liquid rain? "Snow showers",
+ * "Flurries" and "Wintry mix" below ~34°F are snow, not rain — the old
+ * `includes("shower")` test turned every "Snow Showers Likely" day into
+ * an Icy outlook (audit domain-logic-4). A mixed phrase ("Rain and
+ * snow", "Wintry mix") counts as rain only when the day gets warm enough
+ * for the liquid part to matter.
+ */
+export function wordingLooksRainy(conditions: string | null | undefined, tempHighF: number | null | undefined): boolean {
+  const c = (conditions ?? "").toLowerCase();
+  if (!c) return false;
+  // "Snow showers" and "flurries" are frozen precipitation whatever the
+  // temperature — NWS writes "Snow Showers Likely" on 36°F spring days —
+  // so they are removed before the rain test rather than deferring to
+  // the temperature rule. The temperature rule is only for genuinely
+  // mixed wording ("Rain and snow", "Wintry mix").
+  const frozenStripped = c.replace(/snow\s*showers?/g, " ").replace(/flurr\w*/g, " ");
+  const mentionsRain = /rain|drizzle|thunder|shower/.test(frozenStripped);
+  if (!mentionsRain) return false;
+  const mentionsSnow = /snow|wintry|sleet|blizzard/.test(c);
+  if (!mentionsSnow) return true;
+  return tempHighF != null && tempHighF >= 34;
+}
+
 /** Convert a forecast strip day into a DailyWeather row the classifier
- *  understands. Rain is inferred from conditions when not provided
- *  numerically (cron forecast_json only stores snow_in). */
-function forecastDayToDailyWeather(d: ForecastDay): DailyWeather {
-  const condLower = (d.conditions_short ?? "").toLowerCase();
-  const looksRainy =
-    condLower.includes("rain") ||
-    condLower.includes("shower") ||
-    condLower.includes("drizzle") ||
-    condLower.includes("thunder");
+ *  understands. Rain comes from `rain_in` when the pipeline provides it,
+ *  otherwise it is inferred from the wording + precipitation chance. */
+export function forecastDayToDailyWeather(d: ForecastDay): DailyWeather {
   const precipChanceFrac =
     typeof d.precip_chance === "number" ? d.precip_chance / 100 : 0;
   // Rough rain inference: when forecast says "Rain"-ish and chance is
   // high, assume modest accumulation. Better than treating all rain as
   // zero — which would mask ice risk.
-  const rainGuess = looksRainy && precipChanceFrac >= 0.5 ? 0.2 : 0;
+  const rainGuess =
+    typeof d.rain_in === "number"
+      ? d.rain_in
+      : wordingLooksRainy(d.conditions_short, d.temp_high_f) && precipChanceFrac >= 0.5
+        ? 0.2
+        : 0;
   return {
     observed_date: d.date,
     temp_high_f: d.temp_high_f,
     temp_low_f: d.temp_low_f,
     snow_24h_in: d.snow_in,
     rain_24h_in: rainGuess,
-    precip_24h_in: (d.snow_in ?? 0) * 0.1 + rainGuess, // very rough SWE
+    precip_24h_in:
+      typeof d.precip_in === "number" ? d.precip_in : (d.snow_in ?? 0) * 0.1 + rainGuess, // very rough SWE
     wind_mph_avg: parseWindMph(d.wind_short),
   };
 }
@@ -425,10 +565,11 @@ function forecastDayToDailyWeather(d: ForecastDay): DailyWeather {
 export function classifyForecast(
   history: DailyWeather[],
   forecast: ForecastDay[],
+  ctx: SurfaceContext = {},
 ): Array<SurfaceResult | null> {
   const out: Array<SurfaceResult | null> = [];
-  // Drop today from the rolling base — we want each forecast day to
-  // become the new "today" in turn.
+  // Each forecast day becomes the new "today" in turn, with the window
+  // sliding forward by one day.
   let rolling: DailyWeather[] = history.slice();
   for (let i = 0; i < 3; i++) {
     const fd = forecast[i];
@@ -437,7 +578,7 @@ export function classifyForecast(
       continue;
     }
     rolling = [...rolling.slice(-6), forecastDayToDailyWeather(fd)];
-    const r = classifyToday(rolling);
+    const r = classifyToday(rolling, ctx);
     if (!r) {
       out.push(null);
       continue;
@@ -452,16 +593,113 @@ export function classifyForecast(
   return out;
 }
 
-/** All-in-one: today + 3-day. */
+// ---------- Dormancy + evidence ----------
+
+function toDate(v: string | Date | null | undefined): Date | null {
+  if (!v) return null;
+  const d = v instanceof Date ? v : new Date(v);
+  return Number.isFinite(d.getTime()) ? d : null;
+}
+
+/**
+ * Should we decline to classify? Closed / off-season mountains and
+ * stale inputs get a dormant report; the caller renders a season
+ * preview instead of a surface card.
+ */
+export function dormantReason(history: DailyWeather[], ctx: SurfaceContext): DormantSurfaceReport | null {
+  if (ctx.isOpen === false || (ctx.isOpen == null && ctx.offSeason === true)) {
+    return ctx.offSeason
+      ? {
+          dormant: true,
+          reason: "off-season",
+          headline: "Off-season",
+          message: "The surface forecast starts when the lifts spin. Until then the weather here is just weather.",
+        }
+      : {
+          dormant: true,
+          reason: "closed",
+          headline: "Closed",
+          message: "No lifts are running, so there is no skiable surface to call.",
+        };
+  }
+  // Open state unknown AND nothing says the mountain is operating (no
+  // season window, no reported base, no explicit snowpack flag): a
+  // confident class here would be the audit's headline bug re-created
+  // for every resort the scraper cannot see once summer ends. The
+  // weather alone cannot tell us lifts are spinning.
+  if (ctx.isOpen == null && !hasOperatingEvidence(ctx)) {
+    return {
+      dormant: true,
+      reason: "unconfirmed",
+      headline: "Waiting for the lifts",
+      message: "We cannot confirm this resort is running yet, so there is no surface call. Check the resort's own snow report for opening day.",
+    };
+  }
+  if (history.length === 0) {
+    return {
+      dormant: true,
+      reason: "no-data",
+      headline: "No recent weather",
+      message: "Daily weather has not synced for this resort yet, so there is nothing to classify.",
+    };
+  }
+  const now = ctx.now ?? new Date();
+  const newest =
+    toDate(ctx.lastObservedAt) ??
+    toDate(`${history[history.length - 1].observed_date}T23:59:59Z`);
+  if (newest && now.getTime() - newest.getTime() > STALE_AFTER_MS) {
+    return {
+      dormant: true,
+      reason: "stale",
+      headline: "Waiting for fresh weather",
+      message: "The newest weather reading is more than two days old, so a surface call would be a guess.",
+    };
+  }
+  return null;
+}
+
+/** "2027-01-20" → "Jan 20", matching the date style the resort page uses
+ *  everywhere else; an unparsable string is returned as-is. */
+function shortDate(isoDate: string): string {
+  const d = new Date(`${isoDate}T12:00:00Z`);
+  if (!Number.isFinite(d.getTime())) return isoDate;
+  return d.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" });
+}
+
+/** Plain-English list of the inputs a classification rests on. */
+export function describeInputs(f: SurfaceFeatures, ctx: SurfaceContext = {}): string[] {
+  const out: string[] = [];
+  out.push(`${f.window_days} day${f.window_days === 1 ? "" : "s"} of weather through ${shortDate(f.latest_observed_date)}`);
+  if (f.temp_high_today_f != null || f.temp_low_today_f != null) {
+    const hi = f.temp_high_today_f != null ? `${f.temp_high_today_f}°` : "—";
+    const lo = f.temp_low_today_f != null ? `${f.temp_low_today_f}°` : "—";
+    out.push(`today ${hi} / ${lo}F`);
+  }
+  out.push(`${ROUND1(f.snow_7d_in)}" new snow in 7 days`);
+  if (f.rain_5d_in >= RAIN_ICE_MIN_IN) out.push(`${ROUND2(f.rain_5d_in)}" rain in 5 days`);
+  if (f.melt_freeze_cycles_5d > 0) {
+    out.push(`${f.melt_freeze_cycles_5d} freeze-thaw cycle${f.melt_freeze_cycles_5d === 1 ? "" : "s"} in 5 days`);
+  }
+  if (f.wind_mph_avg_today != null) out.push(`wind ${Math.round(f.wind_mph_avg_today)} mph`);
+  if (ctx.baseDepthIn != null && ctx.baseDepthIn > 0) out.push(`${Math.round(ctx.baseDepthIn)}" base (resort report)`);
+  return out;
+}
+
+/** All-in-one: dormancy check → today + 3-day + evidence. */
 export function buildSurfaceReport(
   history: DailyWeather[],
   forecast: ForecastDay[],
-): SurfaceReport | null {
-  const today = classifyToday(history);
-  if (!today) return null;
+  ctx: SurfaceContext = {},
+): SurfaceReport {
+  const dormant = dormantReason(history, ctx);
+  if (dormant) return dormant;
+  const features = deriveFeatures(history)!;
   return {
-    today,
-    forecast: classifyForecast(history, forecast),
+    dormant: false,
+    today: classifyFromFeatures(features, ctx),
+    forecast: classifyForecast(history, forecast, ctx),
+    basedOn: describeInputs(features, ctx),
+    features,
   };
 }
 
