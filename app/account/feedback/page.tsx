@@ -63,9 +63,12 @@ export default async function FeedbackAdminPage() {
 
   return (
     <main className="min-h-dvh bg-wn-offwhite">
-      {/* Back to Account comes from the AppShell bar (lib/nav backLinkFor). */}
+      {/* Phones: back to Account comes from the AppShell bar (lib/nav backLinkFor),
+          which is md:hidden, so the header link is shown from md up only. */}
       <PageHeader
         title="Feedback"
+        back={{ href: "/account", label: "Account" }}
+        className="max-md:[&>div>a:first-child]:hidden"
         actions={
           <span className="rounded-full bg-wn-navy/10 px-3 py-1 text-xs font-semibold text-wn-navy tabular-nums">
             {unread} unread · {rows.length} total
@@ -80,11 +83,15 @@ export default async function FeedbackAdminPage() {
         )}
 
         {rows.length === 0 ? (
+          <>
+          {/* EmptyState renders its title as a <p>; keep the section heading. */}
+          <h2 className="sr-only">No feedback yet</h2>
           <EmptyState
             icon="list"
             title="No feedback yet"
             body="Submissions from the floating Feedback pill on the map will appear here."
           />
+          </>
         ) : (
           <div className="overflow-x-auto rounded-wn-md border border-wn-line bg-white shadow-wn-sm">
             <table className="w-full min-w-[720px] text-left text-sm">

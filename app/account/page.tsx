@@ -18,6 +18,7 @@ import DeleteAccount from "./DeleteAccount";
 import SignOutButtons from "./SignOutButtons";
 import { InstallRow } from "@/components/InstallPrompt";
 import Card from "@/components/ui/Card";
+import Icon, { type IconName } from "@/components/icons/Icon";
 import PageHeader from "@/components/ui/PageHeader";
 
 export const dynamic = "force-dynamic";
@@ -30,13 +31,13 @@ type ProfileRow = {
 const ROW_CLASS =
   "flex min-h-11 items-center justify-between py-3 text-sm text-wn-charcoal transition hover:text-wn-navy";
 
-function Row({ href, icon, label, hint }: { href: string; icon: string; label: string; hint?: string }) {
+function Row({ href, icon, label, hint }: { href: string; icon: IconName; label: string; hint?: string }) {
   return (
     <li>
       <Link href={href} className={ROW_CLASS}>
         <span className="min-w-0">
-          <span className="font-medium">
-            <span aria-hidden="true">{icon}</span> {label}
+          <span className="inline-flex items-center gap-2 font-medium">
+            <Icon name={icon} className="h-4 w-4 shrink-0 text-wn-navy" /> {label}
           </span>
           {hint && <span className="block text-xs text-wn-muted">{hint}</span>}
         </span>
@@ -94,22 +95,22 @@ export default async function AccountPage() {
           <section>
           <h2 className="mb-3 text-base font-bold text-wn-navy">Your stuff</h2>
           <ul className="divide-y divide-wn-line">
-            <Row href="/today" icon="☀️" label="Today" hint="Go / Wait / Skip for your favorites" />
+            <Row href="/today" icon="sun" label="Today" hint="Go / Wait / Skip for your favorites" />
             <Row
               href={goCity ? `/go?city=${goCity.code}` : "/go"}
-              icon="🏔️"
+              icon="mountain"
               label="Saturday"
               hint={goCity ? `Where to ride this Saturday from ${goCity.short}` : "Where to ride this Saturday"}
             />
-            <Row href="/favorites" icon="❤️" label="Favorites" />
-            <Row href="/trips" icon="🎿" label="My trips" />
-            <Row href="/account/digest" icon="📬" label="Email digest" hint="Daily or weekly snow email, plus the Thursday picks" />
+            <Row href="/favorites" icon="heart" label="Favorites" />
+            <Row href="/trips" icon="skier" label="My trips" />
+            <Row href="/account/digest" icon="bell" label="Email digest" hint="Daily or weekly snow email, plus the Thursday picks" />
             {/* Permanent install entry point for people who dismissed the
                 nudge. Renders nothing inside the installed app. */}
             <InstallRow />
             {/* Admin-only feedback inbox — only shown to the founder. */}
             {user.email === "saitarncare@gmail.com" && (
-              <Row href="/account/feedback" icon="💬" label="Feedback inbox" />
+              <Row href="/account/feedback" icon="list" label="Feedback inbox" />
             )}
           </ul>
           </section>

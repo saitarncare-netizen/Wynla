@@ -39,8 +39,8 @@ export default function MarkReviewedButton({ id }: { id: number }) {
 
   return (
     <div className="flex flex-col items-start gap-1">
-      {/* sm (36 px): a dense row in the desktop-only admin table. */}
-      <Button size="sm" onClick={mark} disabled={busy}>
+      {/* 44 px on phones (the table scrolls there); 36 px dense row from md. */}
+      <Button onClick={mark} disabled={busy} className="md:min-h-9 md:px-3">
         {busy ? "…" : "Mark reviewed"}
       </Button>
       {err && <span className="text-xs text-wn-danger">{err}</span>}

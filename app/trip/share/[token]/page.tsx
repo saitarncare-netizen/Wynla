@@ -226,7 +226,7 @@ export default async function SharedTripPage({
           </>
         }
         title={tripName}
-        meta={`Shared ${new Date(trip.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}`}
+        size="lg"
       >
         {startLabel && (
           <p className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-semibold text-white/95 backdrop-blur-sm">
@@ -234,6 +234,10 @@ export default async function SharedTripPage({
             <span>{endLabel ? `${startLabel} – ${endLabel}` : startLabel}</span>
           </p>
         )}
+        {/* Meta after the date pill, the order the hero had before PageHeader. */}
+        <p className="mt-3 text-sm text-white/70">
+          Shared {new Date(trip.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+        </p>
       </PageHeader>
 
       <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-10">

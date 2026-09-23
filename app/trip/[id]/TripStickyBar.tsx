@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { completeCurrentDay, undoLastCompletedDay, type TripProgress } from "@/lib/tripProgress";
 import Button from "@/components/ui/Button";
+import Icon from "@/components/icons/Icon";
 import TripShareButton from "./TripShareButton";
 
 type Props = {
@@ -122,11 +123,11 @@ export default function TripStickyBar({
               onClick={undo}
               disabled={busy != null}
               title={`Unmark day ${lastCompletedDay}`}
+              iconLeft={<Icon name="arrow-left" />}
             >
               {/* Label is screen-reader only below sm so the three 44 px
                   buttons fit a 375 px row without overflowing. */}
-              <span aria-hidden="true">↩</span>
-              <span className="max-sm:sr-only"> {busy === "undo" ? "Undoing…" : "Undo"}</span>
+              <span className="max-sm:sr-only">{busy === "undo" ? "Undoing…" : "Undo"}</span>
             </Button>
           )}
           {/* TripShareButton's controls are Button md / 44 px, the same

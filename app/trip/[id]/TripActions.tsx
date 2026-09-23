@@ -355,8 +355,9 @@ export default function TripActions({
                 onClick={undoLastDay}
                 disabled={busy != null}
                 title="Unmark the last completed day"
+                iconLeft={busy === "undo" ? undefined : <Icon name="arrow-left" />}
               >
-                {busy === "undo" ? "Undoing…" : `↩ Undo Day ${lastCompletedDay}`}
+                {busy === "undo" ? "Undoing…" : `Undo Day ${lastCompletedDay}`}
               </Button>
             )}
             {isActive && (
@@ -392,8 +393,9 @@ export default function TripActions({
                 onClick={undoLastDay}
                 disabled={busy != null}
                 title="Unmark the last completed day"
+                iconLeft={busy === "undo" ? undefined : <Icon name="arrow-left" />}
               >
-                {busy === "undo" ? "Undoing…" : `↩ Undo Day ${lastCompletedDay}`}
+                {busy === "undo" ? "Undoing…" : `Undo Day ${lastCompletedDay}`}
               </Button>
             )}
             <ConfirmButton

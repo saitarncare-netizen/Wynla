@@ -261,7 +261,11 @@ export default function TripShareButton({ tripId, tripName }: Props) {
           loading={busy === "create"}
           iconLeft={<Icon name={primaryIcon} />}
         >
-          <span className="max-sm:sr-only">{primaryLabel}</span>
+          {/* Idle label is icon-only on phones; short-lived outcomes stay
+              visible so clipboard copies are confirmed. */}
+          <span className={status === "copied" || status === "shared" || status === "stopped" ? undefined : "max-sm:sr-only"}>
+            {primaryLabel}
+          </span>
         </Button>
         {shareUrl && (
           <button

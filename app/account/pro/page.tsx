@@ -48,7 +48,14 @@ export default async function AccountProPage(props: {
   return (
     <main className="min-h-dvh bg-wn-offwhite">
       {/* Back to Account comes from the AppShell bar (lib/nav backLinkFor). */}
-      <PageHeader title="Wynla Pro" width="max-w-2xl" description="Manage your subscription." />
+      {/* Phones: back to Account comes from the AppShell bar (md:hidden). */}
+      <PageHeader
+        title="Wynla Pro"
+        width="max-w-2xl"
+        description="Manage your subscription."
+        back={{ href: "/account", label: "Account" }}
+        className="max-md:[&>div>a:first-child]:hidden"
+      />
       <div className="mx-auto max-w-2xl px-4 pb-10 pt-6 sm:px-6 sm:pb-16">
         {justSucceeded && (
           <Notice tone="success" className="mb-6">

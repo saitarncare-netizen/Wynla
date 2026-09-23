@@ -35,7 +35,9 @@ export function ClearCompareButton() {
   }
   return (
     <Button
-      variant="ghost"
+      variant="secondary"
+      // Destructive, so it stays muted beside Share and turns red on hover.
+      className="text-wn-muted hover:border-wn-danger hover:text-wn-danger"
       onClick={onClick}
       aria-label="Clear the compare list"
       iconLeft={<Icon name="close" />}

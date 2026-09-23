@@ -735,7 +735,14 @@ function DesktopCompareTable({ resorts, rows }: { resorts: CompareResort[]; rows
             <td className="border-t border-wn-line/60 bg-wn-offwhite px-4 py-3" />
             {resorts.map((r) => (
               <td key={r.id} className="border-t border-wn-line/60 px-4 py-3 align-top">
-                <Button href={`/resort/${r.slug}`} iconRight={<Icon name="arrow-right" />}>
+                {/* Wraps inside its column: 5 resorts at md leave ~76 px each. */}
+                <Button
+                  href={`/resort/${r.slug}`}
+                  size="sm"
+                  block
+                  className="whitespace-normal py-1.5 text-center text-xs"
+                  iconRight={<Icon name="arrow-right" />}
+                >
                   View full details
                 </Button>
               </td>

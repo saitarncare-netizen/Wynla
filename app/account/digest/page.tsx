@@ -64,9 +64,12 @@ export default async function AccountDigestPage({
 
   return (
     <main className="min-h-dvh bg-wn-offwhite">
-      {/* Back to Account comes from the AppShell bar (lib/nav backLinkFor). */}
+      {/* Phones: back to Account comes from the AppShell bar (lib/nav backLinkFor),
+          which is md:hidden, so the header link is shown from md up only. */}
       <PageHeader
         title="Email digest"
+        back={{ href: "/account", label: "Account" }}
+        className="max-md:[&>div>a:first-child]:hidden"
         width="max-w-2xl"
         description={
           <>

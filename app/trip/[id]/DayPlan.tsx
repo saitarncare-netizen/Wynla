@@ -156,7 +156,7 @@ export default function DayPlan({ tripId, day, initialPlans, nearby, completed }
     <div className={`mt-3 border-t border-dashed border-wn-line pt-3 ${completed ? "opacity-80" : ""}`}>
       {/* Attached places — always visible when present (the itinerary). */}
       {places.length > 0 && (
-        <ul className="mb-2 flex flex-wrap gap-1.5">
+        <ul className="mb-2 flex flex-wrap gap-x-1.5 gap-y-2">
           {places.map((p) => (
             <li
               key={`${p.kind}:${p.id}`}
@@ -166,7 +166,8 @@ export default function DayPlan({ tripId, day, initialPlans, nearby, completed }
                 href={mapsPlaceUrl(p.name, p.latitude, p.longitude)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:underline"
+                // Vertical-only hit area (~44 px); stays clear of the remove x.
+                className="relative before:absolute before:inset-x-0 before:-inset-y-3.5 before:content-[''] hover:underline"
                 title={`${p.name} — open in Google Maps`}
               >
                 <span aria-hidden="true">{p.kind === "restaurant" ? "🍽️ " : "🎯 "}</span>
@@ -176,7 +177,7 @@ export default function DayPlan({ tripId, day, initialPlans, nearby, completed }
                 type="button"
                 onClick={() => removePlace(p)}
                 aria-label={`Remove ${p.name} from this day`}
-                className="relative inline-flex h-6 w-6 items-center justify-center rounded-full text-wn-muted transition before:absolute before:-inset-2.5 before:content-[''] hover:bg-wn-navy/10 hover:text-wn-navy"
+                className="relative inline-flex h-6 w-6 items-center justify-center rounded-full text-wn-muted transition before:absolute before:inset-x-0 before:-inset-y-2.5 before:content-[''] hover:bg-wn-navy/10 hover:text-wn-navy"
               >
                 <Icon name="close" className="h-3.5 w-3.5" />
               </button>

@@ -160,6 +160,9 @@ export default function TripCalendarExport({
       <Button
         variant="secondary"
         onClick={handleExport}
+        // Outcome labels run to ~30 characters; let them wrap rather than
+        // overflow the hero (which clips) next to "All trips" at 320-375 px.
+        className="max-w-[60vw] whitespace-normal text-left sm:max-w-none"
         iconLeft={<Icon name={icon} />}
         aria-label="Add this trip to your calendar"
         title={

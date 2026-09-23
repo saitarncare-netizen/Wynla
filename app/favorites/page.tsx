@@ -61,7 +61,8 @@ export default async function FavoritesPage() {
         {rows.length === 0 ? (
           <EmptyState
             icon="mountain"
-            title="Find resorts you like, hit the heart, come back here to plan."
+            title="No favorites yet"
+            body="Find resorts you like, hit the heart, come back here to plan."
             action={<Button href="/">Browse the map</Button>}
           />
         ) : (
