@@ -99,7 +99,7 @@ export const GUIDES: Guide[] = [
           <R slug="killington">Killington</R>. Top-tier base passes add limited
           days at <R slug="alta">Alta</R>, <R slug="snowbird">Snowbird</R>,
           <R slug="jackson-hole"> Jackson Hole</R>, <R slug="big-sky">Big Sky</R>,
-          <R slug="aspen-snowmass"> Aspen Snowmass</R>, and{" "}
+          <R slug="snowmass"> Aspen Snowmass</R>, and{" "}
           <R slug="sugarbush">Sugarbush</R>.
         </p>
         <p>
@@ -158,33 +158,39 @@ export const GUIDES: Guide[] = [
           across many resorts, Epic.
         </p>
 
-        <h2>Pricing tiers (2026-27 early-bird estimates)</h2>
+        <h2>Pricing tiers (2026-27)</h2>
         <p>
           Both passes use a tiered price ladder. The cheapest options have
           blackouts or limited days, the most expensive options have none.
-          Final prices are confirmed in March each year; numbers here are
-          based on the early-bird structure published in spring 2026.
+          Prices launch in March at their lowest and step up through the
+          fall; the figures below are the adult prices published in
+          September 2026, and the{" "}
+          <Link href="/deals" className="font-semibold text-wn-navy underline-offset-2 hover:underline">
+            pass deals page
+          </Link>{" "}
+          carries the date they were last checked.
         </p>
         <ul>
           <li>
-            <strong>Epic Pass (full):</strong> ~$1,000 early-bird, no
-            blackouts, unlimited at every Vail-owned mountain, plus 5-7 days
-            at international partners like the Three Valleys.
+            <strong>Epic Pass (full):</strong> $1,145 (launched at $1,089),
+            no blackouts, unlimited at every Vail-owned mountain, plus 5-7
+            days at international partners like the Three Valleys.
           </li>
           <li>
-            <strong>Epic Local:</strong> ~$745 early-bird, blackouts at Vail
+            <strong>Epic Local:</strong> $849 (launched at $809), blackouts at Vail
             / Beaver Creek / Breckenridge during the December and February
             holiday weeks; otherwise unlimited.
           </li>
           <li>
-            <strong>Ikon Pass (full):</strong> ~$1,260 early-bird, no
-            blackouts at unlimited resorts, 5-7 days each at the headline
-            destinations (Jackson, Aspen, Big Sky, Alta/Snowbird).
+            <strong>Ikon Pass (full):</strong> $1,449 (launched at $1,349
+            renewal / $1,399 new), no blackouts at unlimited resorts, 5-7
+            days each at the headline destinations (Jackson, Aspen, Big Sky,
+            Alta/Snowbird).
           </li>
           <li>
-            <strong>Ikon Base:</strong> ~$895 early-bird, blackouts at the
-            unlimited resorts on peak holiday weeks plus a smaller number of
-            partner days.
+            <strong>Ikon Base:</strong> $1,019, blackouts at the unlimited
+            resorts on peak holiday weeks plus a smaller number of partner
+            days.
           </li>
         </ul>
         <p>
@@ -258,11 +264,17 @@ export const GUIDES: Guide[] = [
         <h2>The Indy Pass and Mountain Collective angle</h2>
         <p>
           If you ski five days or fewer, neither megapass pays off. The Indy
-          Pass (~$329, two days at each of ~100 independent resorts) is
-          better for variety hunters. The Mountain Collective (~$609, two
-          days at each of 24 destination resorts including Jackson, Alta,
-          Snowbird, Aspen, Banff, Chamonix) is the right buy if you&apos;re
-          taking one big trip a year and want a sampler approach.
+          Pass ($419 Base / $469 Indy+ for 2026-27, two days at each of
+          300+ independent resorts, and sold out for this season) is
+          better for variety hunters. The Mountain Collective ($729 as of
+          September 2026, two days at each of 27 destination resorts
+          including Jackson, Alta, Snowbird, Aspen, Banff, Chamonix) is the
+          right buy if you&apos;re taking one big trip a year and want a
+          sampler approach. Current prices for all four are on the{" "}
+          <Link href="/deals" className="font-semibold text-wn-navy underline-offset-2 hover:underline">
+            pass deals page
+          </Link>
+          .
         </p>
 
         <h2>Bottom line</h2>
@@ -570,7 +582,11 @@ export const GUIDES: Guide[] = [
           <li>Pass: Indy + day</li>
         </ul>
 
-        <h2>5. <R slug="cranor-ski-hill">Cranmore (NH)</R> region</h2>
+        {/* Cranmore is not in the resorts table yet (checked 2026-09-23 —
+            an earlier link pointed at cranor-ski-hill, a Colorado hill),
+            so the heading is plain text and the two Mount Washington Valley
+            neighbours that ARE in the database carry the links. */}
+        <h2>5. Cranmore (NH) region</h2>
         <p>
           Cranmore is the under-the-radar pick in North Conway. Small
           (~200 acres), in-town (you can walk from your hotel to the
@@ -578,8 +594,10 @@ export const GUIDES: Guide[] = [
           Coaster, the Soaring Eagle Zip, and the indoor aerial adventure
           park give non-skiing days something to do — which matters when
           you&apos;re stuck in town with a 5-year-old in 12°F weather.
-          Cranmore pairs well with a day trip to Attitash or Wildcat for
-          parents looking for bigger terrain.
+          Cranmore pairs well with a day trip to{" "}
+          <R slug="attitash">Attitash</R> or{" "}
+          <R slug="wildcat-mountain">Wildcat</R> for parents looking for
+          bigger terrain.
         </p>
         <ul>
           <li>Best for: in-town walkable family bases, mixed-interest groups</li>

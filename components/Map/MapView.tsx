@@ -5,6 +5,16 @@ import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { passColor, primaryPass, type Pass } from "@/lib/passColors";
 import { sizeTier, sizeTierRadius } from "@/lib/sizeTier";
+import {
+  US_CENTER,
+  US_ZOOM,
+  firstFramePadding,
+  initialCameraFor,
+  isValidCamera,
+  sanitizeInitialCamera,
+  type CameraOrigin,
+  type InitialCamera,
+} from "@/lib/mapCamera";
 import type { Resort } from "./MapPage";
 
 type DriveTime = {
@@ -29,14 +39,28 @@ export type TripRoutePoint = {
 type Props = {
   resorts: Resort[];
   originName: string;
+  /** Resolved drive-time origin. Read once at mount to pick the first
+   *  camera frame on phones (lib/mapCamera initialCameraFor); later
+   *  changes do not move the map. */
+  origin: CameraOrigin;
   driveTimeByResort: Map<number, Map<string, DriveTime>>;
   selectedId: number | null;
+  /** True while the trip planner panel is open. The planner's camera
+   *  moves pad the viewport for its panel; when it closes that padding
+   *  is reset so later camera moves are not offset into empty space. */
+  plannerOpen?: boolean;
   onResortClick: (id: number) => void;
-  /** Called once after Mapbox emits its 'load' event. Lets MapPage's
-   *  branded loading overlay fade out the moment tiles are ready. The
-   *  overlay also has its own 8s safety timeout in case the map fails
-   *  to load (e.g. missing NEXT_PUBLIC_MAPBOX_TOKEN, blocked network). */
+  /** Called once after Mapbox emits its 'load' event. MapPage uses it to
+   *  fade the branded splash and to unmount its "Loading map" pill. The
+   *  splash also has its own safety timeout in case the map never loads
+   *  (e.g. missing NEXT_PUBLIC_MAPBOX_TOKEN, blocked network); the pill
+   *  stays until this fires and softens its copy after 15s. */
   onMapLoaded?: () => void;
+  /** Called when the map cannot load at all: no NEXT_PUBLIC_MAPBOX_TOKEN,
+   *  the Mapbox constructor threw (no WebGL), or the token was rejected
+   *  (401/403) before `load`. MapPage swaps its "Loading map" pill for a
+   *  neutral "could not load" message instead of blaming the network. */
+  onMapError?: () => void;
   // Optional ordered list of points to draw as a route line + numbered
   // markers when the trip planner is open. First point is the origin.
   tripRoute?: TripRoutePoint[];
@@ -162,9 +186,9 @@ function resortToProperties(resort: Resort, dt: DriveTime | undefined) {
     size_tier: tier ?? "unknown",
     // Radius now interpolates on importance (smoother + brand-aware).
     // Old sizeTierRadius preserved here as a fallback for resorts
-    // with absolutely no data; importanceToRadius defaults to 9px in
-    // that case which still hits the 44×44 touch target with the
-    // existing clickTolerance: 22 from map init.
+    // with absolutely no data. The drawn circle is NOT the tap target:
+    // the map-level click handler queries a padded box around the tap
+    // (PIN_HIT_PAD_PX), so even a 9px pin gets a ~44px target.
     radius: importance > 0 ? importanceToRadius(importance) : sizeTierRadius(tier),
     importance,
     vertical_drop: resort.vertical_drop ?? -1,
@@ -172,12 +196,71 @@ function resortToProperties(resort: Resort, dt: DriveTime | undefined) {
   };
 }
 
+// Half-size of the square queried around a tap when looking for a pin or
+// cluster. Mapbox's per-layer click events hit-test the exact pixel, so
+// the smallest pins (9px radius) were ~21px targets; a 16px pad on each
+// side makes every pin at least a 32x32 + circle target (Apple's 44pt
+// guideline for the median pin) without drawing bigger circles.
+const PIN_HIT_PAD_PX = 16;
+
+// All four sides required so the visibility math below needs no null checks.
+type Padding = Required<mapboxgl.PaddingOptions>;
+const ZERO_PADDING: Padding = { top: 0, right: 0, bottom: 0, left: 0 };
+
+function isDesktopViewport(): boolean {
+  return window.matchMedia("(min-width: 768px)").matches;
+}
+
+// Viewport area covered by the ResortPanel: a 380px right rail on
+// desktop, a half-height bottom sheet on phones (ResortPanel snaps to
+// 50vh by default). Applied as map padding while a resort is open so
+// camera moves center on the visible part of the map, and reset to zero
+// on close so the padding does not leak into every later camera move.
+function resortPanelPadding(): Padding {
+  return isDesktopViewport()
+    ? { right: 380, top: 0, bottom: 0, left: 0 }
+    : { right: 0, top: 0, bottom: Math.round(window.innerHeight * 0.5), left: 0 };
+}
+
+// Same idea for the trip planner panel (wider rail, taller sheet).
+function plannerPanelPadding(): Padding {
+  return isDesktopViewport()
+    ? { right: 440, top: 0, bottom: 0, left: 0 }
+    : { bottom: 360, top: 0, left: 0, right: 0 };
+}
+
+function isZeroPadding(p: mapboxgl.PaddingOptions): boolean {
+  return !p.top && !p.right && !p.bottom && !p.left;
+}
+
+// Height of MapPage's floating header, published as --wn-header-h on the
+// page root so the visibility check below knows how much of the top of
+// the canvas is covered by pills and chip rows.
+function headerCoverPx(container: HTMLElement): number {
+  const raw = getComputedStyle(container).getPropertyValue("--wn-header-h");
+  const n = parseFloat(raw);
+  return Number.isFinite(n) && n > 0 ? n : 140;
+}
+
+// False when the map came out of the constructor on a transform it cannot
+// draw from: a NaN center or zoom, or Mapbox's own default camera (the
+// null island, [0, 0]) which is what it silently keeps when a constructor
+// `bounds` fit is rejected. Nothing we frame is ever centered there.
+function hasUsableCamera(map: mapboxgl.Map): boolean {
+  const c = map.getCenter();
+  const z = map.getZoom();
+  if (!Number.isFinite(c.lng) || !Number.isFinite(c.lat) || !Number.isFinite(z)) return false;
+  return Math.abs(c.lng) > 1e-6 || Math.abs(c.lat) > 1e-6;
+}
+
 export default function MapView({
   resorts,
   originName,
+  origin,
   driveTimeByResort,
   selectedId,
   recentlyViewedId,
+  plannerOpen = false,
   onResortClick,
   tripRoute,
   cameraTarget,
@@ -187,14 +270,20 @@ export default function MapView({
   userLocation,
   interactionDisabled = false,
   onMapLoaded,
+  onMapError,
   airportMarker,
 }: Props) {
-  // Keep a stable ref to the latest onMapLoaded so the once-fired load
-  // listener can call the freshest callback without re-binding.
+  // Keep stable refs to the latest onMapLoaded / onMapError so the
+  // once-registered listeners call the freshest callbacks without
+  // re-binding.
   const onMapLoadedRef = useRef(onMapLoaded);
   useEffect(() => {
     onMapLoadedRef.current = onMapLoaded;
   }, [onMapLoaded]);
+  const onMapErrorRef = useRef(onMapError);
+  useEffect(() => {
+    onMapErrorRef.current = onMapError;
+  }, [onMapError]);
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const tripMarkersRef = useRef<mapboxgl.Marker[]>([]);
@@ -220,6 +309,27 @@ export default function MapView({
   useEffect(() => {
     onResortClickRef.current = onResortClick;
   }, [onResortClick]);
+  // Latest props for effects that must NOT re-run when these change:
+  // the camera effect below is keyed on selectedId alone (a filter
+  // toggle used to re-center the map on the open resort because
+  // `resorts` is a new array on every filter change), and the origin is
+  // only read once when the map is created.
+  const resortsRef = useRef(resorts);
+  useEffect(() => {
+    resortsRef.current = resorts;
+  }, [resorts]);
+  const originRef = useRef(origin);
+  useEffect(() => {
+    originRef.current = origin;
+  }, [origin]);
+  const selectedIdRef = useRef(selectedId);
+  useEffect(() => {
+    selectedIdRef.current = selectedId;
+  }, [selectedId]);
+  const plannerOpenRef = useRef(plannerOpen);
+  useEffect(() => {
+    plannerOpenRef.current = plannerOpen;
+  }, [plannerOpen]);
 
   // Init map once
   useEffect(() => {
@@ -228,6 +338,7 @@ export default function MapView({
     const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
     if (!token) {
       console.error("Missing NEXT_PUBLIC_MAPBOX_TOKEN");
+      onMapErrorRef.current?.();
       return;
     }
     mapboxgl.accessToken = token;
@@ -238,51 +349,100 @@ export default function MapView({
     // view. Session-scoped so closing the tab clears it. Saved on
     // every map moveend below.
     const SAVED_VIEW_KEY = "wynla_map_view_v1";
-    let initialCenter: [number, number] = [-95, 40];
-    let initialZoom = 3.6;
+    let initial: InitialCamera = sanitizeInitialCamera(
+      initialCameraFor(originRef.current, isDesktopViewport()),
+    );
     try {
-      if (typeof window !== "undefined") {
-        const raw = window.sessionStorage.getItem(SAVED_VIEW_KEY);
-        if (raw) {
-          const parsed = JSON.parse(raw) as {
-            center?: [number, number];
-            zoom?: number;
-          };
-          if (
-            Array.isArray(parsed.center) &&
-            parsed.center.length === 2 &&
-            Number.isFinite(parsed.center[0]) &&
-            Number.isFinite(parsed.center[1]) &&
-            typeof parsed.zoom === "number" &&
-            Number.isFinite(parsed.zoom)
-          ) {
-            initialCenter = parsed.center;
-            initialZoom = parsed.zoom;
-          }
-        }
+      const raw = window.sessionStorage.getItem(SAVED_VIEW_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw) as { center?: unknown; zoom?: unknown };
+        // Only a camera Mapbox can actually use replaces the computed
+        // frame: finite center inside the projection, zoom in range. A
+        // corrupt entry must not take the whole map down with it.
+        const saved = { kind: "view", center: parsed.center, zoom: parsed.zoom };
+        if (isValidCamera(saved)) initial = saved;
       }
     } catch {
-      // Malformed JSON / sessionStorage disabled — fall through to defaults.
+      // Malformed JSON / sessionStorage disabled — keep the computed frame.
     }
 
-    const map = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: "mapbox://styles/mapbox/light-v11",
-      // Stage 33 — back to flat mercator. Users zooming out (especially
-      // after closing search) were seeing the globe view and reading it
-      // as a visual bug ("the map turned into a circle"). Flat is the
-      // expected look for a US-only trip-planning map.
-      projection: "mercator",
-      center: initialCenter,
-      zoom: initialZoom,
-      // 22 px halo around clicks/taps → effective 44×44 px touch target,
-      // even when the visible circle is only 12 px (small size tier).
-      clickTolerance: 22,
-      // Disable rotate/pitch — flat US map UX, prevents accidental gestures
-      pitchWithRotate: false,
-      dragRotate: false,
-    });
+    // Padding for the first-frame region fit (phones only; desktop gets a
+    // center + zoom): clear the measured header stack plus breathing room,
+    // clamped so Mapbox always keeps canvas to fit the region into. The
+    // var is set by MapPage before this chunk mounts; the container itself
+    // may still be mid-layout, which is why the clamp reads its size.
+    const container = mapContainer.current;
+    const fitPadding = firstFramePadding(
+      { width: container.clientWidth, height: container.clientHeight },
+      headerCoverPx(container),
+    );
+
+    let map: mapboxgl.Map;
+    try {
+      map = new mapboxgl.Map({
+        container: mapContainer.current,
+        style: "mapbox://styles/mapbox/light-v11",
+        // Stage 33 — back to flat mercator. Users zooming out (especially
+        // after closing search) were seeing the globe view and reading it
+        // as a visual bug ("the map turned into a circle"). Flat is the
+        // expected look for a US-only trip-planning map.
+        projection: "mercator",
+        // The first frame is set in the constructor (not fitBounds after
+        // load) so there is no visible jump from a US-wide view to the
+        // region. The bounds padding keeps the region clear of the floating
+        // header rows and the bottom pills on phones.
+        ...(initial.kind === "bounds"
+          ? {
+              bounds: initial.bounds,
+              fitBoundsOptions: { padding: fitPadding },
+            }
+          : { center: initial.center, zoom: initial.zoom }),
+        // Max pointer travel (px) between down and up for Mapbox to still
+        // emit `click` rather than treat it as a drag. It does NOT enlarge
+        // the hit area of pins; the padded queryRenderedFeatures in the
+        // click handler below does that.
+        clickTolerance: 22,
+        // Disable rotate/pitch — flat US map UX, prevents accidental gestures
+        pitchWithRotate: false,
+        dragRotate: false,
+      });
+    } catch (err) {
+      // Typically "Failed to initialize WebGL" on very old devices or
+      // hardware-acceleration-off browsers. Nothing downstream can run.
+      console.error("Mapbox init failed", err);
+      onMapErrorRef.current?.();
+      return;
+    }
     map.touchZoomRotate.disableRotation();
+
+    // Mapbox refuses a bounds fit it cannot honour (padding at or past the
+    // canvas size) with a console warning and keeps its default camera:
+    // [0, 0] zoom 0, the Gulf of Guinea, no US on screen and, on a tall
+    // canvas, nothing it wants to draw. The padding above is clamped so
+    // this should not happen; a degenerate camera is the one failure mode
+    // that leaves the map blank forever, so verify rather than trust it.
+    if (!hasUsableCamera(map)) {
+      console.warn("Mapbox first frame was unusable; falling back to the US view");
+      map.jumpTo({ center: US_CENTER, zoom: US_ZOOM, padding: ZERO_PADDING });
+    }
+
+    // A rejected token surfaces as 401/403 on the style request before
+    // `load` ever fires; treat that as fatal. Tile 404s and transient
+    // network errors are not (Mapbox retries and `load` still arrives).
+    // Registering any error listener stops Mapbox from logging errors
+    // itself, so everything else is re-logged here or a stuck map leaves
+    // no trail in the console.
+    let hardFailed = false;
+    map.on("error", (e) => {
+      const status = (e.error as { status?: number } | undefined)?.status;
+      if (!hardFailed && !map.loaded() && (status === 401 || status === 403)) {
+        hardFailed = true;
+        console.error("Mapbox rejected the access token", e.error);
+        onMapErrorRef.current?.();
+        return;
+      }
+      console.warn("Mapbox:", e.error ?? e);
+    });
 
     // Persist camera on every moveend so we can restore on next mount.
     map.on("moveend", () => {
@@ -586,32 +746,60 @@ export default function MapView({
         paint: sharedLabelPaint,
       });
 
-      // Cluster click → zoom in
-      map.on("click", LAYER_CLUSTERS, (e) => {
-        const features = map.queryRenderedFeatures(e.point, { layers: [LAYER_CLUSTERS] });
-        const clusterId = features[0]?.properties?.cluster_id as number | undefined;
-        const geom = features[0]?.geometry;
-        if (clusterId == null || !geom || geom.type !== "Point") return;
-        const src = map.getSource(SOURCE_ID) as mapboxgl.GeoJSONSource;
-        src.getClusterExpansionZoom(clusterId, (err, zoom) => {
-          if (err || zoom == null) return;
-          map.easeTo({
-            center: geom.coordinates as [number, number],
-            zoom,
+      // One map-level click handler for pins AND clusters. Per-layer
+      // `map.on("click", layerId)` hit-tests the exact pixel, which made
+      // small pins miss-prone on phones. Instead, query a padded box
+      // around the tap across the three interactive layers and act on the
+      // feature whose projected center is nearest. Empty-map taps still
+      // find nothing and do nothing.
+      map.on("click", (e) => {
+        // DOM markers (airport, numbered trip stops, the user dot) do not
+        // stop propagation, so a tap on one also reaches this handler.
+        // With the padded query that would select whatever pin sits
+        // under the marker; those markers handle their own clicks.
+        const target = e.originalEvent.target;
+        if (target instanceof Element && target.closest(".mapboxgl-marker")) return;
+        const { x, y } = e.point;
+        const hits = map.queryRenderedFeatures(
+          [
+            [x - PIN_HIT_PAD_PX, y - PIN_HIT_PAD_PX],
+            [x + PIN_HIT_PAD_PX, y + PIN_HIT_PAD_PX],
+          ],
+          { layers: [LAYER_FEATURED, LAYER_LISTED, LAYER_CLUSTERS] },
+        );
+        if (hits.length === 0) return;
+        let best: (typeof hits)[number] | null = null;
+        let bestDistance = Infinity;
+        for (const f of hits) {
+          if (f.geometry.type !== "Point") continue;
+          const p = map.project(f.geometry.coordinates as [number, number]);
+          const d = Math.hypot(p.x - x, p.y - y);
+          if (d < bestDistance) {
+            bestDistance = d;
+            best = f;
+          }
+        }
+        if (!best || best.geometry.type !== "Point") return;
+        const coords = best.geometry.coordinates as [number, number];
+        const clusterId = best.properties?.cluster_id as number | undefined;
+        if (clusterId != null) {
+          // Cluster → zoom to the level where it splits apart.
+          const src = map.getSource(SOURCE_ID) as mapboxgl.GeoJSONSource;
+          src.getClusterExpansionZoom(clusterId, (err, zoom) => {
+            if (err || zoom == null) return;
+            map.easeTo({ center: coords, zoom });
           });
-        });
+          return;
+        }
+        // Pin → notify parent (which opens the side panel / bottom sheet).
+        // Stage 4.1 used a Mapbox popup here; that's now ResortPanel.
+        const id = best.properties?.id;
+        if (typeof id === "number") onResortClickRef.current(id);
       });
 
-      // Pin click → notify parent (which opens the side panel / bottom sheet).
-      // Stage 4.1 used a Mapbox popup here; that's now handled by ResortPanel.
       const pinLayers = [LAYER_LISTED, LAYER_FEATURED];
       let hoveredFeatureId: number | null = null;
       pinLayers.forEach((layerId) => {
-        map.on("click", layerId, (e) => {
-          const f = e.features?.[0];
-          const id = f?.properties?.id;
-          if (typeof id === "number") onResortClickRef.current(id);
-        });
         // Hover state: track the feature under the cursor and toggle its
         // hover feature-state. Pin radius/stroke smoothly scale via the
         // paint expressions defined on each layer.
@@ -662,18 +850,59 @@ export default function MapView({
     // Flip mapReady once the map's "load" event fires — that's the
     // signal that style + initial sources are fully loaded and it's
     // safe to add/remove sources & layers from any downstream effect.
-    // Idempotent: only set once. If load already fired before we
-    // register (rare, but possible under StrictMode double-mount), we
-    // catch up via map.loaded(). Also fires the parent's onMapLoaded
-    // callback so the branded loading overlay can fade out.
-    const onLoad = () => {
+    // Also fires the parent's onMapLoaded callback so the splash and
+    // the "Loading map" pill go away. Idempotent, and also driven by the
+    // first `idle` (which Mapbox only fires once the map is fully loaded
+    // and nothing is pending), so a `load` that fired before the listener
+    // existed still ends the loading state instead of leaving the pill up
+    // over a finished map.
+    let loadNotified = false;
+    const notifyLoaded = () => {
+      if (loadNotified) return;
+      loadNotified = true;
       setMapReady(true);
       onMapLoadedRef.current?.();
     };
-    if (map.loaded()) onLoad();
-    else map.once("load", onLoad);
+    if (map.loaded()) notifyLoaded();
+    else map.once("load", notifyLoaded);
+    map.once("idle", notifyLoaded);
+
+    // mapbox-gl 3.x only listens to window `resize`; it never notices the
+    // container itself changing size. This chunk is dynamically imported
+    // and mounts into a container that can still be settling (dvh on
+    // phones as the browser chrome shows and hides, the first layout after
+    // hydration), and a map sized to a stale or 0x0 container (Mapbox then
+    // assumes 400x300) draws a strip of tiles in one corner and leaves the
+    // rest blank until the window itself is resized. Track the container.
+    const syncSize = () => {
+      const el = map.getContainer();
+      const canvas = map.getCanvas();
+      if (el.clientWidth === 0 || el.clientHeight === 0) return; // hidden: nothing to size to
+      if (canvas.clientWidth !== el.clientWidth || canvas.clientHeight !== el.clientHeight) {
+        map.resize();
+      }
+    };
+    const resizeObserver =
+      typeof ResizeObserver !== "undefined" ? new ResizeObserver(syncSize) : null;
+    resizeObserver?.observe(container);
+
+    // A hidden tab gets no animation frames, and Mapbox requests tiles and
+    // fires `load` from its frame loop, so a page opened in a background
+    // tab (or a PWA coming back from an OAuth redirect) sits half-loaded
+    // until something asks for a frame. Ask for one the moment the page is
+    // visible again, with the size re-checked first.
+    const onVisible = () => {
+      if (document.visibilityState !== "visible") return;
+      syncSize();
+      map.triggerRepaint();
+    };
+    document.addEventListener("visibilitychange", onVisible);
+    window.addEventListener("pageshow", onVisible);
 
     return () => {
+      resizeObserver?.disconnect();
+      document.removeEventListener("visibilitychange", onVisible);
+      window.removeEventListener("pageshow", onVisible);
       map.remove();
       mapRef.current = null;
     };
@@ -715,47 +944,72 @@ export default function MapView({
   // Sync the "selected" feature-state so the matching pin gets a navy halo.
   // Mapbox lets us toggle one boolean per feature without re-emitting the
   // whole GeoJSON, which is much cheaper than re-rendering 451 features.
-  // Also pan the map so the selected pin sits clear of the panel: on desktop
-  // the panel covers the right ~380 px, so we shift the camera left by half
-  // the panel width to keep the pin visually centered in the *visible* area.
   const lastSelectedRef = useRef<number | null>(null);
   useEffect(() => {
     const map = mapRef.current;
-    if (!map) return;
-    const apply = () => {
-      const prev = lastSelectedRef.current;
-      if (prev != null) {
-        map.setFeatureState({ source: SOURCE_ID, id: prev }, { selected: false });
-      }
-      if (selectedId != null) {
-        map.setFeatureState({ source: SOURCE_ID, id: selectedId }, { selected: true });
+    if (!map || !map.getSource(SOURCE_ID)) return;
+    const prev = lastSelectedRef.current;
+    if (prev != null) {
+      map.setFeatureState({ source: SOURCE_ID, id: prev }, { selected: false });
+    }
+    if (selectedId != null) {
+      map.setFeatureState({ source: SOURCE_ID, id: selectedId }, { selected: true });
+    }
+    lastSelectedRef.current = selectedId;
+  }, [selectedId, mapReady]);
 
-        // Find the feature in the source data + pan camera. Skip if the
-        // pin is already visible in the unobstructed area to avoid jarring
-        // motion when the user clicked on-screen.
-        const resort = resorts.find((r) => r.id === selectedId);
-        if (resort) {
-          const lng = Number(resort.longitude);
-          const lat = Number(resort.latitude);
-          if (Number.isFinite(lng) && Number.isFinite(lat)) {
-            const isDesktop = window.matchMedia("(min-width: 768px)").matches;
-            map.easeTo({
-              center: [lng, lat],
-              // Desktop: panel covers right 380 px → shift center left so pin
-              // ends up around 35% from left edge (visually centered in the
-              // ~1180 px visible area).
-              padding: isDesktop
-                ? { right: 380, top: 0, bottom: 0, left: 0 }
-                : { right: 0, top: 0, bottom: 380, left: 0 },
-              duration: 600,
-            });
-          }
-        }
+  // Camera for the selected pin. Keyed on selectedId ONLY (resorts via
+  // ref): the old effect also depended on `resorts`, a new array on every
+  // filter toggle, so changing a chip with a resort open snapped the map
+  // back to that pin. Two behaviors:
+  //   open  → if the pin is already in the part of the canvas not covered
+  //           by the header or the panel, leave the camera alone (the user
+  //           tapped it on-screen); otherwise ease to it with the panel
+  //           area as map padding so it centers in the VISIBLE region.
+  //   close → ease the padding back to zero. Padding passed to easeTo /
+  //           flyTo is persistent map state, so without this every later
+  //           cluster zoom or fly-to stayed offset by half the panel.
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !mapReady) return;
+    if (selectedId == null) {
+      if (!isZeroPadding(map.getPadding())) {
+        map.easeTo({ padding: ZERO_PADDING, duration: 300 });
       }
-      lastSelectedRef.current = selectedId;
-    };
-    if (map.getSource(SOURCE_ID)) apply();
-  }, [selectedId, resorts, mapReady]);
+      return;
+    }
+    const resort = resortsRef.current.find((r) => r.id === selectedId);
+    if (!resort) return;
+    const lng = Number(resort.longitude);
+    const lat = Number(resort.latitude);
+    if (!Number.isFinite(lng) || !Number.isFinite(lat)) return;
+
+    const padding = resortPanelPadding();
+    const container = map.getContainer();
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+    const p = map.project([lng, lat]);
+    // Keep a small margin so a pin hugging the panel edge still moves.
+    const margin = 24;
+    const alreadyVisible =
+      p.x >= padding.left + margin &&
+      p.x <= width - padding.right - margin &&
+      p.y >= headerCoverPx(container) + margin &&
+      p.y <= height - padding.bottom - margin;
+    if (alreadyVisible) return;
+    map.easeTo({ center: [lng, lat], padding, duration: 600 });
+  }, [selectedId, mapReady]);
+
+  // Planner closed → drop the padding its fly-to / fit-route moves left
+  // behind (same persistence issue as the resort panel above).
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !mapReady || plannerOpen) return;
+    if (selectedIdRef.current != null) return; // the panel owns padding now
+    if (!isZeroPadding(map.getPadding())) {
+      map.easeTo({ padding: ZERO_PADDING, duration: 300 });
+    }
+  }, [plannerOpen, mapReady]);
 
   // Round 7 polish — sync "recently_viewed" feature-state. Independent
   // of "selected" so the gold ring keeps the just-closed pin marked
@@ -1028,24 +1282,27 @@ export default function MapView({
     const map = mapRef.current;
     if (!map || !mapReady) return;
     if (!cameraTarget) return;
-    const apply = () => {
-      const isDesktop = window.matchMedia("(min-width: 768px)").matches;
-      map.flyTo({
-        center: [cameraTarget.lng, cameraTarget.lat],
-        // Stage 33 — dropped from zoom 9 → 7. After we removed the
-        // explicit +/- zoom controls (Stage 33 earlier), users had no
-        // visible way to zoom out of the deep auto-zoom; "screen
-        // freezes at this scale" reports came in. Zoom 7 keeps the
-        // regional context (neighboring resorts visible) so pinch-out
-        // is rarely needed.
-        zoom: 7,
-        padding: isDesktop
-          ? { right: 440, top: 0, bottom: 0, left: 0 }
-          : { bottom: 360, top: 0, left: 0, right: 0 },
-        duration: 700,
-      });
-    };
-    apply();
+    // Padding only when something actually covers the map: the planner
+    // rail/sheet, or the resort panel (search + recent-chip picks open it
+    // in the same render). An airport fly-to with nothing open must not
+    // leave 440px of padding behind, since padding persists.
+    const padding = plannerOpenRef.current
+      ? plannerPanelPadding()
+      : selectedIdRef.current != null
+        ? resortPanelPadding()
+        : ZERO_PADDING;
+    map.flyTo({
+      center: [cameraTarget.lng, cameraTarget.lat],
+      // Stage 33 — dropped from zoom 9 → 7. After we removed the
+      // explicit +/- zoom controls (Stage 33 earlier), users had no
+      // visible way to zoom out of the deep auto-zoom; "screen
+      // freezes at this scale" reports came in. Zoom 7 keeps the
+      // regional context (neighboring resorts visible) so pinch-out
+      // is rarely needed.
+      zoom: 7,
+      padding,
+      duration: 700,
+    });
   }, [cameraTarget, mapReady]);
 
   // "You are here" blue dot — Google Maps style. A DOM marker (rather

@@ -1,0 +1,668 @@
+{
+  "step": "05-difficulty-mix",
+  "table": "resorts",
+  "mode": "applied",
+  "taken_at": "2026-09-23T05:09:18.408Z",
+  "columns": [
+    "difficulty_pct_beginner",
+    "difficulty_pct_intermediate",
+    "difficulty_pct_advanced",
+    "difficulty_pct_expert",
+    "trails_beginner",
+    "trails_intermediate",
+    "trails_advanced",
+    "trails_expert"
+  ],
+  "rows": [
+    {
+      "id": 49,
+      "slug": "berkshire-east",
+      "before": {
+        "difficulty_pct_beginner": 29,
+        "difficulty_pct_intermediate": 35,
+        "difficulty_pct_advanced": 29,
+        "difficulty_pct_expert": 4,
+        "trails_beginner": 14,
+        "trails_intermediate": 16,
+        "trails_advanced": 14,
+        "trails_expert": 2
+      },
+      "after": {
+        "difficulty_pct_beginner": 28,
+        "difficulty_pct_intermediate": 42,
+        "difficulty_pct_advanced": 28,
+        "difficulty_pct_expert": 2
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/massachusetts/berkshire-east/ski-resort"
+    },
+    {
+      "id": 53,
+      "slug": "stratton-mountain",
+      "before": {
+        "difficulty_pct_beginner": 40,
+        "difficulty_pct_intermediate": 35,
+        "difficulty_pct_advanced": 17,
+        "difficulty_pct_expert": 11,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 41,
+        "difficulty_pct_intermediate": 31,
+        "difficulty_pct_advanced": 17,
+        "difficulty_pct_expert": 11
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/vermont/stratton-mountain/ski-resort"
+    },
+    {
+      "id": 57,
+      "slug": "okemo-mountain-resort",
+      "before": {
+        "difficulty_pct_beginner": 32,
+        "difficulty_pct_intermediate": 38,
+        "difficulty_pct_advanced": null,
+        "difficulty_pct_expert": null,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 33,
+        "difficulty_pct_intermediate": 38,
+        "difficulty_pct_advanced": 21,
+        "difficulty_pct_expert": 9
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/vermont/okemo-mountain-resort/ski-resort"
+    },
+    {
+      "id": 61,
+      "slug": "aspen-mountain",
+      "before": {
+        "difficulty_pct_beginner": 0,
+        "difficulty_pct_intermediate": 48,
+        "difficulty_pct_advanced": 26,
+        "difficulty_pct_expert": 26,
+        "trails_beginner": 0,
+        "trails_intermediate": 48,
+        "trails_advanced": 26,
+        "trails_expert": 26
+      },
+      "after": {
+        "difficulty_pct_beginner": 0,
+        "difficulty_pct_intermediate": 48,
+        "difficulty_pct_advanced": 26,
+        "difficulty_pct_expert": 26,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "source": "trails_* held percentages (sum 100, total_trails 76)"
+    },
+    {
+      "id": 62,
+      "slug": "aspen-highlands",
+      "before": {
+        "difficulty_pct_beginner": 0,
+        "difficulty_pct_intermediate": 21,
+        "difficulty_pct_advanced": 12,
+        "difficulty_pct_expert": 55,
+        "trails_beginner": 0,
+        "trails_intermediate": 23,
+        "trails_advanced": 12,
+        "trails_expert": 65
+      },
+      "after": {
+        "difficulty_pct_beginner": 0,
+        "difficulty_pct_intermediate": 23,
+        "difficulty_pct_advanced": 12,
+        "difficulty_pct_expert": 65,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "source": "trails_* held percentages (sum 100, total_trails 118)"
+    },
+    {
+      "id": 64,
+      "slug": "snowmass",
+      "before": {
+        "difficulty_pct_beginner": 6,
+        "difficulty_pct_intermediate": 50,
+        "difficulty_pct_advanced": 18,
+        "difficulty_pct_expert": 32,
+        "trails_beginner": 6,
+        "trails_intermediate": 47,
+        "trails_advanced": 17,
+        "trails_expert": 30
+      },
+      "after": {
+        "difficulty_pct_beginner": 6,
+        "difficulty_pct_intermediate": 47,
+        "difficulty_pct_advanced": 17,
+        "difficulty_pct_expert": 30,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "source": "trails_* held percentages (sum 100, total_trails 94)"
+    },
+    {
+      "id": 81,
+      "slug": "monarch-mountain",
+      "before": {
+        "difficulty_pct_beginner": 19,
+        "difficulty_pct_intermediate": 28,
+        "difficulty_pct_advanced": 37,
+        "difficulty_pct_expert": 9,
+        "trails_beginner": 15,
+        "trails_intermediate": 27,
+        "trails_advanced": 28,
+        "trails_expert": 7
+      },
+      "after": {
+        "difficulty_pct_beginner": 19,
+        "difficulty_pct_intermediate": 35,
+        "difficulty_pct_advanced": 36,
+        "difficulty_pct_expert": 9
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/colorado/monarch-mountain/ski-resort"
+    },
+    {
+      "id": 86,
+      "slug": "steamboat",
+      "before": {
+        "difficulty_pct_beginner": 14,
+        "difficulty_pct_intermediate": 42,
+        "difficulty_pct_advanced": 43,
+        "difficulty_pct_expert": 9,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 12,
+        "difficulty_pct_intermediate": 38,
+        "difficulty_pct_advanced": 41,
+        "difficulty_pct_expert": 9
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/colorado/steamboat/ski-resort"
+    },
+    {
+      "id": 108,
+      "slug": "jackson-hole",
+      "before": {
+        "difficulty_pct_beginner": 10,
+        "difficulty_pct_intermediate": 40,
+        "difficulty_pct_advanced": 38,
+        "difficulty_pct_expert": 18,
+        "trails_beginner": 13,
+        "trails_intermediate": 52,
+        "trails_advanced": null,
+        "trails_expert": 66
+      },
+      "after": {
+        "difficulty_pct_beginner": 4,
+        "difficulty_pct_intermediate": 40,
+        "difficulty_pct_advanced": 38,
+        "difficulty_pct_expert": 18
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/wyoming/jackson-hole/ski-resort"
+    },
+    {
+      "id": 155,
+      "slug": "palisades-tahoe",
+      "before": {
+        "difficulty_pct_beginner": 25,
+        "difficulty_pct_intermediate": 41,
+        "difficulty_pct_advanced": 32,
+        "difficulty_pct_expert": null,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 6,
+        "difficulty_pct_intermediate": 39,
+        "difficulty_pct_advanced": 33,
+        "difficulty_pct_expert": 23
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/california/palisades-tahoe/ski-resort"
+    },
+    {
+      "id": 157,
+      "slug": "heavenly-mountain-resort",
+      "before": {
+        "difficulty_pct_beginner": 20,
+        "difficulty_pct_intermediate": 45,
+        "difficulty_pct_advanced": 35,
+        "difficulty_pct_expert": 5,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 14,
+        "difficulty_pct_intermediate": 53,
+        "difficulty_pct_advanced": 27,
+        "difficulty_pct_expert": 5
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/california/heavenly-mountain-resort/ski-resort"
+    },
+    {
+      "id": 164,
+      "slug": "donner-ski-ranch",
+      "before": {
+        "difficulty_pct_beginner": 31,
+        "difficulty_pct_intermediate": 38,
+        "difficulty_pct_advanced": 23,
+        "difficulty_pct_expert": 0,
+        "trails_beginner": 16,
+        "trails_intermediate": 20,
+        "trails_advanced": 16,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 31,
+        "difficulty_pct_intermediate": 38,
+        "difficulty_pct_advanced": 21,
+        "difficulty_pct_expert": 10
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/california/donner-ski-ranch/ski-resort"
+    },
+    {
+      "id": 180,
+      "slug": "bear-mountain",
+      "before": {
+        "difficulty_pct_beginner": 27,
+        "difficulty_pct_intermediate": 42,
+        "difficulty_pct_advanced": 30,
+        "difficulty_pct_expert": 8,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 27,
+        "difficulty_pct_intermediate": 42,
+        "difficulty_pct_advanced": 23,
+        "difficulty_pct_expert": 8
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/california/bear-mountain/ski-resort"
+    },
+    {
+      "id": 184,
+      "slug": "mt-bachelor",
+      "before": {
+        "difficulty_pct_beginner": 15,
+        "difficulty_pct_intermediate": 35,
+        "difficulty_pct_advanced": 30,
+        "difficulty_pct_expert": 20,
+        "trails_beginner": 15,
+        "trails_intermediate": 35,
+        "trails_advanced": 30,
+        "trails_expert": 20
+      },
+      "after": {
+        "difficulty_pct_beginner": 15,
+        "difficulty_pct_intermediate": 35,
+        "difficulty_pct_advanced": 30,
+        "difficulty_pct_expert": 20,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "source": "trails_* held percentages (sum 100, total_trails 122)"
+    },
+    {
+      "id": 218,
+      "slug": "arizona-snowbowl",
+      "before": {
+        "difficulty_pct_beginner": 32,
+        "difficulty_pct_intermediate": 43,
+        "difficulty_pct_advanced": 21,
+        "difficulty_pct_expert": 11,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 27,
+        "difficulty_pct_intermediate": 39,
+        "difficulty_pct_advanced": 21,
+        "difficulty_pct_expert": 11
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/arizona/arizona-snowbowl/ski-resort"
+    },
+    {
+      "id": 221,
+      "slug": "sunday-river",
+      "before": {
+        "difficulty_pct_beginner": 31,
+        "difficulty_pct_intermediate": 34,
+        "difficulty_pct_advanced": 17,
+        "difficulty_pct_expert": 21,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 31,
+        "difficulty_pct_intermediate": 32,
+        "difficulty_pct_advanced": 16,
+        "difficulty_pct_expert": 21
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/maine/sunday-river/ski-resort"
+    },
+    {
+      "id": 223,
+      "slug": "saddleback",
+      "before": {
+        "difficulty_pct_beginner": 36,
+        "difficulty_pct_intermediate": 29,
+        "difficulty_pct_advanced": 26,
+        "difficulty_pct_expert": 0,
+        "trails_beginner": 23,
+        "trails_intermediate": 20,
+        "trails_advanced": 18,
+        "trails_expert": 7
+      },
+      "after": {
+        "difficulty_pct_beginner": 32,
+        "difficulty_pct_intermediate": 32,
+        "difficulty_pct_advanced": 25,
+        "difficulty_pct_expert": 10
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/maine/saddleback-inc/ski-resort"
+    },
+    {
+      "id": 225,
+      "slug": "mt-abram",
+      "before": {
+        "difficulty_pct_beginner": 20,
+        "difficulty_pct_intermediate": 48,
+        "difficulty_pct_advanced": 28,
+        "difficulty_pct_expert": 0,
+        "trails_beginner": 10,
+        "trails_intermediate": 21,
+        "trails_advanced": 13,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 19,
+        "difficulty_pct_intermediate": 41,
+        "difficulty_pct_advanced": 26,
+        "difficulty_pct_expert": 15
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/maine/mt-abram-ski-resort/ski-resort"
+    },
+    {
+      "id": 241,
+      "slug": "bretton-woods",
+      "before": {
+        "difficulty_pct_beginner": 25,
+        "difficulty_pct_intermediate": 29,
+        "difficulty_pct_advanced": 27,
+        "difficulty_pct_expert": null,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 25,
+        "difficulty_pct_intermediate": 40,
+        "difficulty_pct_advanced": 25,
+        "difficulty_pct_expert": 10
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/new-hampshire/bretton-woods/ski-resort"
+    },
+    {
+      "id": 254,
+      "slug": "killington",
+      "before": {
+        "difficulty_pct_beginner": 17,
+        "difficulty_pct_intermediate": 39,
+        "difficulty_pct_advanced": 39,
+        "difficulty_pct_expert": 14,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 17,
+        "difficulty_pct_intermediate": 39,
+        "difficulty_pct_advanced": 30,
+        "difficulty_pct_expert": 14
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/vermont/killington-resort/ski-resort"
+    },
+    {
+      "id": 255,
+      "slug": "pico-mountain",
+      "before": {
+        "difficulty_pct_beginner": 18,
+        "difficulty_pct_intermediate": 46,
+        "difficulty_pct_advanced": 36,
+        "difficulty_pct_expert": null,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 16,
+        "difficulty_pct_intermediate": 44,
+        "difficulty_pct_advanced": 37,
+        "difficulty_pct_expert": 4
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/vermont/pico-mountain-at-killington/ski-resort"
+    },
+    {
+      "id": 256,
+      "slug": "sugarbush",
+      "before": {
+        "difficulty_pct_beginner": 20,
+        "difficulty_pct_intermediate": 45,
+        "difficulty_pct_advanced": 26,
+        "difficulty_pct_expert": 0,
+        "trails_beginner": 24,
+        "trails_intermediate": 51,
+        "trails_advanced": 36,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 23,
+        "difficulty_pct_intermediate": 42,
+        "difficulty_pct_advanced": 27,
+        "difficulty_pct_expert": 7
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/vermont/sugarbush/ski-resort"
+    },
+    {
+      "id": 259,
+      "slug": "smugglers-notch",
+      "before": {
+        "difficulty_pct_beginner": 19,
+        "difficulty_pct_intermediate": 51,
+        "difficulty_pct_advanced": 26,
+        "difficulty_pct_expert": 0,
+        "trails_beginner": 15,
+        "trails_intermediate": 39,
+        "trails_advanced": 20,
+        "trails_expert": 5
+      },
+      "after": {
+        "difficulty_pct_beginner": 17,
+        "difficulty_pct_intermediate": 51,
+        "difficulty_pct_advanced": 27,
+        "difficulty_pct_expert": 5
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/vermont/smugglers-notch-resort/ski-resort"
+    },
+    {
+      "id": 260,
+      "slug": "bolton-valley",
+      "before": {
+        "difficulty_pct_beginner": 34,
+        "difficulty_pct_intermediate": 38,
+        "difficulty_pct_advanced": 17,
+        "difficulty_pct_expert": 6,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 34,
+        "difficulty_pct_intermediate": 38,
+        "difficulty_pct_advanced": 23,
+        "difficulty_pct_expert": 6
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/vermont/bolton-valley/ski-resort"
+    },
+    {
+      "id": 292,
+      "slug": "liberty-mountain",
+      "before": {
+        "difficulty_pct_beginner": 33,
+        "difficulty_pct_intermediate": 40,
+        "difficulty_pct_advanced": 14,
+        "difficulty_pct_expert": 16,
+        "trails_beginner": 6,
+        "trails_intermediate": 9,
+        "trails_advanced": 3,
+        "trails_expert": 4
+      },
+      "after": {
+        "difficulty_pct_beginner": 33,
+        "difficulty_pct_intermediate": 38,
+        "difficulty_pct_advanced": 14,
+        "difficulty_pct_expert": 14
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/pennsylvania/liberty/ski-resort"
+    },
+    {
+      "id": 315,
+      "slug": "mont-ripley",
+      "before": {
+        "difficulty_pct_beginner": 19,
+        "difficulty_pct_intermediate": 29,
+        "difficulty_pct_advanced": 42,
+        "difficulty_pct_expert": 7,
+        "trails_beginner": 5,
+        "trails_intermediate": 11,
+        "trails_advanced": 13,
+        "trails_expert": 2
+      },
+      "after": {
+        "difficulty_pct_beginner": 21,
+        "difficulty_pct_intermediate": 29,
+        "difficulty_pct_advanced": 42,
+        "difficulty_pct_expert": 8
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/michigan/mont-ripley/ski-resort"
+    },
+    {
+      "id": 349,
+      "slug": "lutsen-mountains",
+      "before": {
+        "difficulty_pct_beginner": 19,
+        "difficulty_pct_intermediate": 48,
+        "difficulty_pct_advanced": 26,
+        "difficulty_pct_expert": 10,
+        "trails_beginner": 18,
+        "trails_intermediate": 47,
+        "trails_advanced": 25,
+        "trails_expert": 10
+      },
+      "after": {
+        "difficulty_pct_beginner": 18,
+        "difficulty_pct_intermediate": 47,
+        "difficulty_pct_advanced": 25,
+        "difficulty_pct_expert": 10,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "source": "trails_* held percentages (sum 100, total_trails 95)"
+    },
+    {
+      "id": 393,
+      "slug": "snowshoe-mountain",
+      "before": {
+        "difficulty_pct_beginner": 30,
+        "difficulty_pct_intermediate": 33,
+        "difficulty_pct_advanced": 25,
+        "difficulty_pct_expert": 2,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 40,
+        "difficulty_pct_intermediate": 33,
+        "difficulty_pct_advanced": 25,
+        "difficulty_pct_expert": 2
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/west-virginia/snowshoe-mountain-resort/ski-resort"
+    },
+    {
+      "id": 460,
+      "slug": "hunt-hollow-club",
+      "before": {
+        "difficulty_pct_beginner": 32,
+        "difficulty_pct_intermediate": 21,
+        "difficulty_pct_advanced": 40,
+        "difficulty_pct_expert": null,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 32,
+        "difficulty_pct_intermediate": 21,
+        "difficulty_pct_advanced": 37,
+        "difficulty_pct_expert": 11
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/new-york/hunt-hollow-ski-club/ski-resort"
+    },
+    {
+      "id": 477,
+      "slug": "christie",
+      "before": {
+        "difficulty_pct_beginner": 40,
+        "difficulty_pct_intermediate": 25,
+        "difficulty_pct_advanced": 23,
+        "difficulty_pct_expert": 9,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 41,
+        "difficulty_pct_intermediate": 21,
+        "difficulty_pct_advanced": 31,
+        "difficulty_pct_expert": 7
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/wisconsin/christie-mountain/ski-resort"
+    }
+  ]
+}

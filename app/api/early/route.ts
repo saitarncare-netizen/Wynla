@@ -1,17 +1,20 @@
 // Inaugural Season 2026 — Founder Waitlist signup endpoint.
 //
-// POST /api/early { email: string }
+// POST /api/early { email: string, ref?: string }
 //   1. Validate the email (basic shape check; full RFC is overkill here).
 //   2. Insert into public.pro_waitlist via the service role
-//      (source = 'founder'). UNIQUE(email) handles duplicates — we treat
-//      "already on the list" as a success so refresh-and-resubmit
-//      doesn't feel like an error.
-//   3. Best-effort send a "you're in" confirmation email via Resend if
-//      RESEND_API_KEY is configured. If Resend isn't set up yet (e.g.
-//      domain not verified, key missing), the signup still succeeds —
-//      the email is a bonus, not a blocker.
+//      (source = 'founder' or 'founder:ref:<code>'). UNIQUE(email) handles
+//      duplicates — "already on the list" is a success so refresh-and-
+//      resubmit does not feel like an error.
+//   3. Send the "you're in" welcome email via Resend and WAIT for it. On
+//      serverless a promise left dangling after the response is not
+//      guaranteed to run, so fire-and-forget meant some welcomes never
+//      went out while the page said "check your inbox". The extra
+//      ~300 ms is worth an honest answer: the JSON says whether the mail
+//      was sent, and the form words its success message accordingly.
 //
-// Returns: { ok, count, alreadyOnList }
+// Returns: { ok, alreadyOnList, count, referralCode, referralCount,
+//            emailed, emailReason? }
 //
 // Why service role? RLS on pro_waitlist already allows public INSERT
 // (`waitlist_insert_open`) but SELECT is closed, and we want the count
@@ -20,6 +23,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { createHash } from "node:crypto";
 import {
   getResend,
   getResendFrom,
@@ -36,8 +40,13 @@ import { checkRateLimit, clientIp, sameOriginOk } from "@/lib/rateLimit";
 export const runtime = "nodejs";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const SITE_BASE = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://wynla.app").replace(/\/+$/, "");
 
 type PostBody = { email?: string; ref?: string };
+
+type EmailOutcome =
+  | { emailed: true }
+  | { emailed: false; emailReason: "not_configured" | "send_failed" | "already_on_list" };
 
 export async function POST(req: NextRequest) {
   let body: PostBody = {};
@@ -54,7 +63,7 @@ export async function POST(req: NextRequest) {
   const rl = checkRateLimit(`early:${clientIp(req)}`, { windowMs: 60_000, max: 6 });
   if (!rl.ok) {
     return NextResponse.json(
-      { error: "Too many signups — please wait a moment and try again." },
+      { error: "Too many signups from this connection. Please wait a moment and try again." },
       { status: 429, headers: { "Retry-After": String(rl.retryAfterSec) } },
     );
   }
@@ -64,6 +73,23 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(
       { error: "Please enter a valid email address." },
       { status: 400 },
+    );
+  }
+
+  // Second guard keyed by the address itself, so one connection cannot
+  // probe many addresses for "already on the list" quickly, and a
+  // rotating-IP script still hits a wall per target address. Hashed so
+  // the in-memory limiter never holds a raw email.
+  const emailKey = createHash("sha256").update(raw).digest("hex").slice(0, 16);
+  const rlEmail = checkRateLimit(`early:email:${emailKey}`, { windowMs: 60 * 60_000, max: 3 });
+  if (!rlEmail.ok) {
+    return NextResponse.json(
+      // No "check your inbox" here: earlier attempts may have returned
+      // emailed:false (Resend unconfigured or a failed send), and telling
+      // someone to look for a mail that never went out is the reason they
+      // are retrying in the first place.
+      { error: "That address was submitted a few times already. Your spot is saved. Try again in an hour." },
+      { status: 429, headers: { "Retry-After": String(rlEmail.retryAfterSec) } },
     );
   }
 
@@ -113,19 +139,21 @@ export async function POST(req: NextRequest) {
     .like("source", "founder%");
 
   // This member's own referral code + how many they've brought in, so the
-  // success screen can show their share link and progress.
+  // success screen can show their share link and the real count. There is
+  // no ranking or queue position behind it; the copy must not promise one.
   const myCode = referralCode(raw);
   const { count: myReferrals } = await sb
     .from("pro_waitlist")
     .select("id", { count: "exact", head: true })
     .eq("source", `${REFERRAL_SOURCE_PREFIX}${myCode}`);
 
-  // Best-effort welcome email. Wrapped so any Resend issue doesn't
-  // break the signup response.
-  if (!alreadyOnList) {
-    sendFounderWelcomeEmail(raw).catch((err) => {
-      console.error("[/api/early] founder welcome send failed", err);
-    });
+  // Welcome email, awaited (see header). A duplicate signup never gets a
+  // second mail: UNIQUE(email) caps every address at one welcome ever.
+  const email: EmailOutcome = alreadyOnList
+    ? { emailed: false, emailReason: "already_on_list" }
+    : await sendFounderWelcomeEmail(raw, `${SITE_BASE}/early?ref=${myCode}`);
+  if (!email.emailed && email.emailReason === "send_failed") {
+    console.error("[/api/early] founder welcome send failed for a new signup");
   }
 
   return NextResponse.json({
@@ -134,6 +162,7 @@ export async function POST(req: NextRequest) {
     count: count ?? null,
     referralCode: myCode,
     referralCount: myReferrals ?? 0,
+    ...email,
   });
 }
 
@@ -142,24 +171,28 @@ export async function POST(req: NextRequest) {
 // exact founder price; we just promise "a Founder Member rate that no one
 // will ever see again" so the number stays out of public archives.
 //
-// Uses the Resend SDK via the lazy client in lib/email/resendClient.ts.
-// Any failure (missing key, bad domain, API error) is swallowed here so
-// the /api/early caller surfaces it via console.error and the signup
-// response stays unaffected.
-async function sendFounderWelcomeEmail(toEmail: string): Promise<void> {
-  if (!isResendConfigured()) return;
+// Never throws: the signup has already succeeded by the time this runs,
+// and the caller reports the outcome in the JSON instead.
+async function sendFounderWelcomeEmail(toEmail: string, referralUrl: string): Promise<EmailOutcome> {
+  if (!isResendConfigured()) return { emailed: false, emailReason: "not_configured" };
 
-  const { subject, html, text } = founderWelcomeEmail();
-
-  const resend = getResend();
-  const { error } = await resend.emails.send({
-    from: getResendFrom(),
-    to: toEmail,
-    subject,
-    html,
-    text,
-  });
-  if (error) {
-    throw new Error(`Resend send failed: ${error.name ?? "?"} ${error.message ?? ""}`);
+  const { subject, html, text } = founderWelcomeEmail({ referralUrl });
+  try {
+    const resend = getResend();
+    const { error } = await resend.emails.send({
+      from: getResendFrom(),
+      to: toEmail,
+      subject,
+      html,
+      text,
+    });
+    if (error) {
+      console.error("[/api/early] Resend error", error.name ?? "?", error.message ?? "");
+      return { emailed: false, emailReason: "send_failed" };
+    }
+    return { emailed: true };
+  } catch (err) {
+    console.error("[/api/early] Resend threw", err);
+    return { emailed: false, emailReason: "send_failed" };
   }
 }

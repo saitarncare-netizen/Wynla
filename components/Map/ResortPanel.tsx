@@ -1,24 +1,28 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 // useEffect/useState used by the matrix-driven drive-time refinement;
 // useRef + the snap state below drive the mobile bottom-sheet drag.
 import Link from "next/link";
 import { passColor, passLabel, primaryPass } from "@/lib/passColors";
 import { formatDriveTime, type Origin } from "@/lib/origins";
 import { fetchMatrixDriveTime, type MatrixResult } from "@/lib/mapboxMatrix";
-import { parseSeasonDates } from "@/lib/seasonDates";
+import { resolveSeasonInfo, deriveResortStatus } from "@/lib/seasonDates";
 import { haversineMeters, estimateDriveSeconds } from "@/lib/distance";
 import FavoriteToggle from "@/components/auth/FavoriteToggle";
 import HeroImage from "@/components/HeroImage";
 import CompareToggle from "@/components/CompareToggle";
-import SeasonCountdown from "@/components/SeasonCountdown";
+import SeasonCountdown, { ResortStatusPill } from "@/components/SeasonCountdown";
 import { addRecent } from "@/lib/recentlyViewed";
 import type { Resort, DriveTime, WeatherSnapshot } from "./MapPage";
-import NearbyRestaurants from "@/components/NearbyRestaurants";
-import NearbyActivities from "@/components/NearbyActivities";
+import NearbyGroup from "@/components/NearbyGroup";
 import { fetchNearbyRestaurants, fetchNearbyActivities } from "@/lib/fetchNearby";
 import type { NearbyRow } from "@/lib/nearbyCategories";
+
+// Families that have per-product rules in lib/data/passAccess.json. Kept
+// local (not imported from lib/passAccess) so the map bundle does not pull
+// the dataset in; the dynamic import below loads it on first tap.
+const PASS_FAMILIES_WITH_RULES = new Set(["epic", "ikon", "indy", "mountain_collective"]);
 
 type Props = {
   resort: Resort;
@@ -75,6 +79,67 @@ export default function ResortPanel({
       });
     return () => ctrl.abort();
   }, [matrixKey, lat, lng, origin]);
+
+  // Pass chip detail: tapping / hovering a pass badge reveals a one-line
+  // per-product summary ("Ikon: unlimited · Ikon Base: 5 days, blackouts
+  // Dec 26-30, …"). The dataset behind it is ~500 KB of JSON, so it is
+  // loaded with a dynamic import on first use instead of riding in the
+  // map bundle; results are cached per resort + family for the session.
+  // `line` is undefined while loading, null when the family has no
+  // verified rows for this resort. `openedBy` records whether a hover or
+  // a tap opened it: a mouse click lands on a chip that hover already
+  // opened, so a click must only CLOSE a detail that a tap opened, or the
+  // first click on desktop would open and immediately hide the line.
+  type PassDetail = { id: number; family: string; line: string | null | undefined; openedBy: "hover" | "tap" };
+  const [passDetail, setPassDetail] = useState<PassDetail | null>(null);
+  const passSummaryCache = useRef(new Map<string, string | null>());
+  const loadPassSummary = useCallback(
+    async (family: string): Promise<string | null> => {
+      const key = `${resort.slug}|${family}`;
+      const cached = passSummaryCache.current.get(key);
+      if (cached !== undefined) return cached;
+      const mod = await import("@/lib/passAccess");
+      const line = mod.isPassFamily(family) ? mod.summaryLine(resort.slug, family) : null;
+      passSummaryCache.current.set(key, line);
+      return line;
+    },
+    [resort.slug],
+  );
+  const openPassDetail = useCallback(
+    (family: string, openedBy: "hover" | "tap") => {
+      const id = resort.id;
+      setPassDetail({ id, family, line: passSummaryCache.current.get(`${resort.slug}|${family}`), openedBy });
+      void loadPassSummary(family).then((line) => {
+        setPassDetail((cur) => (cur && cur.id === id && cur.family === family ? { ...cur, line } : cur));
+      });
+    },
+    [resort.id, resort.slug, loadPassSummary],
+  );
+  // Hover only counts for a real mouse: a finger's pointerenter is the
+  // start of a tap and the click handler owns that. There is no onFocus
+  // hook on purpose (Android Chrome focuses a button before click, which
+  // used to open and then toggle the line closed in one tap); keyboard
+  // users open it with Enter or Space, which fire click.
+  const hoverPassDetail = (family: string, pointerType: string) => {
+    if (pointerType !== "mouse") return;
+    if (passDetail && passDetail.id === resort.id && passDetail.family === family) return;
+    openPassDetail(family, "hover");
+  };
+  // Tap (touch, mouse click or Enter/Space): opens, or promotes a
+  // hover-opened line to "tap" so a click never hides what hover showed;
+  // a second tap on the same chip closes it.
+  const tapPassDetail = (family: string) => {
+    const same = passDetail !== null && passDetail.id === resort.id && passDetail.family === family;
+    if (same && passDetail.openedBy === "tap") {
+      setPassDetail(null);
+    } else if (same) {
+      setPassDetail({ ...passDetail, openedBy: "tap" });
+    } else {
+      openPassDetail(family, "tap");
+    }
+  };
+  const activePassDetail = passDetail && passDetail.id === resort.id ? passDetail : null;
+  const passDetailId = `pass-detail-${resort.id}`;
 
   // Record this resort in the localStorage "recently viewed" list so
   // the homepage strip can show it next time. We push the minimum
@@ -217,8 +282,11 @@ export default function ResortPanel({
           // mobile bottom sheet — slides up from bottom on open
           "inset-x-0 bottom-0 rounded-t-2xl",
           "animate-[slideUp_220ms_cubic-bezier(0.16,1,0.3,1)]",
-          // desktop right side panel — slides in from right
-          "md:inset-x-auto md:right-0 md:top-0 md:bottom-0 md:w-[380px] md:max-h-none md:rounded-none",
+          // desktop right side panel — slides in from right. Starts below
+          // the header (MapPage publishes its measured height as
+          // --wn-header-h) so Sign in / Deals / Guides / Lists stay
+          // reachable while a resort is open.
+          "md:inset-x-auto md:right-0 md:top-[var(--wn-header-h,64px)] md:bottom-0 md:w-[380px] md:max-h-none md:rounded-none",
           "md:animate-[slideLeft_220ms_cubic-bezier(0.16,1,0.3,1)]",
         ].join(" ")}
         style={{
@@ -301,33 +369,105 @@ export default function ResortPanel({
             which clipped everything below the fold). pan-y keeps the vertical
             scroll inside the panel instead of leaking to the Mapbox canvas. */}
         <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3" style={{ touchAction: "pan-y" }}>
-          {/* Pass badges row */}
+          {/* Pass badges row. Each multi-resort pass badge is a button:
+              tap (touch or click, Enter/Space from the keyboard) or mouse
+              hover shows the per-product summary line under the row; the
+              independent badge stays inert. The chip itself keeps its
+              size, only the line below appears. */}
           {resort.passes?.length > 0 && (
-            <div className="mb-3 flex flex-wrap gap-1.5">
-              {resort.passes.map((p) => (
-                <span
-                  key={p}
-                  className="inline-block rounded-md px-2 py-0.5 text-[11px] font-semibold text-white"
-                  style={{ backgroundColor: passColor(p) }}
+            <div className="mb-3">
+              <div className="flex flex-wrap gap-1.5">
+                {resort.passes.map((p) => {
+                  const fg = p === "ikon" ? "#1E2952" : "#FFFFFF";
+                  if (!PASS_FAMILIES_WITH_RULES.has(p)) {
+                    return (
+                      <span
+                        key={p}
+                        className="inline-block rounded-md px-2 py-0.5 text-[11px] font-semibold"
+                        style={{ backgroundColor: passColor(p), color: fg }}
+                      >
+                        {passLabel(p)}
+                      </span>
+                    );
+                  }
+                  const open = activePassDetail?.family === p;
+                  return (
+                    <button
+                      key={p}
+                      type="button"
+                      onClick={() => tapPassDetail(p)}
+                      onPointerEnter={(e) => hoverPassDetail(p, e.pointerType)}
+                      aria-expanded={open}
+                      aria-controls={activePassDetail ? passDetailId : undefined}
+                      title={`${passLabel(p)}: days and blackout dates here`}
+                      className={`inline-block rounded-md px-2 py-0.5 text-[11px] font-semibold transition ${
+                        open ? "ring-2 ring-wn-navy/40 ring-offset-1" : "hover:brightness-110"
+                      }`}
+                      style={{ backgroundColor: passColor(p), color: fg }}
+                    >
+                      {passLabel(p)}
+                    </button>
+                  );
+                })}
+              </div>
+              {activePassDetail && (
+                <p
+                  id={passDetailId}
+                  className="mt-1.5 text-[11px] leading-snug text-wn-charcoal/80"
+                  aria-live="polite"
                 >
-                  {passLabel(p)}
-                </span>
-              ))}
+                  {activePassDetail.line === undefined
+                    ? "Loading pass rules…"
+                    : activePassDetail.line ??
+                      `${passLabel(activePassDetail.family)} rules for this resort are not verified yet.`}{" "}
+                  <Link
+                    href={`/resort/${resort.slug}#pass-access`}
+                    className="whitespace-nowrap font-semibold text-wn-navy underline underline-offset-2"
+                  >
+                    Full rules →
+                  </Link>
+                </p>
+              )}
             </div>
           )}
 
-          {/* Season-status badge — small countdown sitting just above
-              the 3-stat grid. Hidden when both season fields are
-              unparseable (status "unknown") to keep the preview tight. */}
+          {/* Status row — every resort gets an open / closed / opens-on /
+              check-resort pill above the stats (the audit found 96% of
+              panels showed no status at all in September), plus the
+              season countdown whenever a season date could be parsed. */}
           {(() => {
-            const seasonInfo = parseSeasonDates(
-              resort.season_open_text,
-              resort.season_close_text,
+            // Fields are passed explicitly so the panel and the resort
+            // page derive the SAME status from the same inputs; if the
+            // map's Resort type ever drops one of these, tsc fails here
+            // instead of the panel silently losing a fallback.
+            const seasonInfo = resolveSeasonInfo({
+              season_open_text: resort.season_open_text,
+              season_close_text: resort.season_close_text,
+              typical_season_start: resort.typical_season_start,
+              typical_season_end: resort.typical_season_end,
+            });
+            const status = deriveResortStatus(
+              {
+                currently_open: resort.currently_open,
+                snow_report_status: resort.snow_report_status,
+                snow_report_updated_at: resort.snow_report_updated_at,
+                operating_status: resort.operating_status,
+                lifts_open_today: resort.lifts_open_today,
+                total_lifts: resort.total_lifts,
+                trails_open_today: resort.trails_open_today,
+                total_trails: resort.total_trails,
+                season_end_date: resort.season_end_date,
+              },
+              seasonInfo,
             );
-            if (seasonInfo.status === "unknown") return null;
+            // The pill already says "Opens ~Nov 22 · in 61 days" for an
+            // off-season resort with dates; the countdown adds value only
+            // for the in-season "N days left" reading.
+            const showCountdown = seasonInfo.status === "in-season" && seasonInfo.nextCloseDate != null;
             return (
-              <div className="mb-3">
-                <SeasonCountdown info={seasonInfo} variant="badge" />
+              <div className="mb-3 flex flex-wrap items-center gap-1.5">
+                <ResortStatusPill status={status} />
+                {showCountdown && <SeasonCountdown info={seasonInfo} variant="badge" />}
               </div>
             );
           })()}
@@ -390,7 +530,7 @@ export default function ResortPanel({
               map mount). Renders nothing while loading or empty. */}
           {/* key by resort.id so switching resorts remounts this (fresh
               empty state) — prevents resort A's nearby flashing under B. */}
-          <NearbyInPanel key={resort.id} resortId={resort.id} />
+          <NearbyInPanel key={resort.id} resortId={resort.id} slug={resort.slug} />
         </div>
 
         {/* Sticky footer CTA — pad past the iOS home indicator on notched phones */}
@@ -412,12 +552,25 @@ export default function ResortPanel({
 }
 // Round 9 (2026-06) — lazy-loads nearby_restaurants + nearby_activities
 // for the currently-open panel resort. Keeps the homepage SSR payload
-// from ballooning with rows the user may never click through to. The
-// compact variant of the shared NearbyGroup cards renders inside the
-// panel's scroll surface.
-function NearbyInPanel({ resortId }: { resortId: number }) {
-  const [restaurants, setRestaurants] = useState<NearbyRow[]>([]);
-  const [activities, setActivities] = useState<NearbyRow[]>([]);
+// from ballooning with rows the user may never click through to.
+//
+// Audit round 2 (resort-panel-detail-10): the panel used to render every
+// category strip (up to 18 strips × 8 cards inside a 50vh sheet). It
+// now shows ONE merged "Top picks nearby" strip — recommended places
+// first, then nearest — capped at 6, with a link into the full section
+// on the resort page for the rest.
+const TOP_PICKS_LIMIT = 6;
+
+function rankNearby(rows: NearbyRow[]): NearbyRow[] {
+  return [...rows].sort(
+    (a, b) =>
+      Number(!!b.is_recommended) - Number(!!a.is_recommended) ||
+      (a.distance_km ?? Number.POSITIVE_INFINITY) - (b.distance_km ?? Number.POSITIVE_INFINITY),
+  );
+}
+
+function NearbyInPanel({ resortId, slug }: { resortId: number; slug: string }) {
+  const [rows, setRows] = useState<NearbyRow[]>([]);
   useEffect(() => {
     let cancelled = false;
     (async () => {
@@ -426,18 +579,25 @@ function NearbyInPanel({ resortId }: { resortId: number }) {
         fetchNearbyActivities(resortId),
       ]);
       if (cancelled) return;
-      setRestaurants(r);
-      setActivities(a);
+      setRows(rankNearby([...r, ...a]));
     })();
     return () => {
       cancelled = true;
     };
   }, [resortId]);
-  if (restaurants.length === 0 && activities.length === 0) return null;
+  if (rows.length === 0) return null;
+  const picks = rows.slice(0, TOP_PICKS_LIMIT);
   return (
-    <div className="mt-4 border-t border-wn-charcoal/10 pt-3">
-      <NearbyRestaurants rows={restaurants} variant="compact" />
-      <NearbyActivities rows={activities} variant="compact" />
+    <div className="mt-4 border-t border-wn-charcoal/10 pt-1">
+      <NearbyGroup emoji="⭐" label="Top picks nearby" rows={picks} variant="compact" />
+      {rows.length > picks.length && (
+        <Link
+          href={`/resort/${slug}#around-the-resort`}
+          className="mt-1 inline-block text-[12px] font-semibold text-wn-navy underline-offset-2 hover:underline"
+        >
+          See all {rows.length} places nearby →
+        </Link>
+      )}
     </div>
   );
 }
@@ -480,7 +640,7 @@ function pickSlot3(resort: {
   snow_new_24h_in: number | null;
   trails_open_today: number | null;
   total_trails: number | null;
-  snow_report_status: string | null;
+  currently_open: boolean | null;
   vertical_drop: number | null;
 }): { emoji: string; label: string; value: string } {
   if (resort.snow_new_24h_in != null && resort.snow_new_24h_in > 0) {
@@ -490,8 +650,11 @@ function pickSlot3(resort: {
       value: `${resort.snow_new_24h_in}"`,
     };
   }
+  // trails_open_today is only written by a licensed snow-report feed, and
+  // currently_open is the verified open flag (snow_report_status is now
+  // just 'no_feed' | 'reported').
   if (
-    resort.snow_report_status === "open" &&
+    resort.currently_open === true &&
     resort.trails_open_today != null &&
     resort.total_trails != null &&
     resort.total_trails > 0

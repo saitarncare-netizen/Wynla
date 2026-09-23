@@ -1,0 +1,251 @@
+{
+  "step": "04-nordic-heli",
+  "table": "resorts",
+  "mode": "applied",
+  "taken_at": "2026-09-23T04:57:17.830Z",
+  "columns": [
+    "active"
+  ],
+  "rows": [
+    {
+      "id": 270,
+      "slug": "rikert-outdoor-center",
+      "before": {
+        "active": true
+      },
+      "after": {
+        "active": false
+      }
+    },
+    {
+      "id": 434,
+      "slug": "bethel-village-trails",
+      "before": {
+        "active": true
+      },
+      "after": {
+        "active": false
+      }
+    },
+    {
+      "id": 435,
+      "slug": "northern-maine-community-trails",
+      "before": {
+        "active": true
+      },
+      "after": {
+        "active": false
+      }
+    },
+    {
+      "id": 437,
+      "slug": "rangeley-lakes-trail-center",
+      "before": {
+        "active": true
+      },
+      "after": {
+        "active": false
+      }
+    },
+    {
+      "id": 445,
+      "slug": "maplelag",
+      "before": {
+        "active": true
+      },
+      "after": {
+        "active": false
+      }
+    },
+    {
+      "id": 446,
+      "slug": "loppet",
+      "before": {
+        "active": true
+      },
+      "after": {
+        "active": false
+      }
+    },
+    {
+      "id": 447,
+      "slug": "crosscut-sports-center",
+      "before": {
+        "active": true
+      },
+      "after": {
+        "active": false
+      }
+    },
+    {
+      "id": 448,
+      "slug": "dog-creek-lodge-nordic-center",
+      "before": {
+        "active": true
+      },
+      "after": {
+        "active": false
+      }
+    },
+    {
+      "id": 449,
+      "slug": "homestake-lodge",
+      "before": {
+        "active": true
+      },
+      "after": {
+        "active": false
+      }
+    },
+    {
+      "id": 450,
+      "slug": "loge-glacier",
+      "before": {
+        "active": true
+      },
+      "after": {
+        "active": false
+      }
+    },
+    {
+      "id": 453,
+      "slug": "franconia-village-xc-area",
+      "before": {
+        "active": true
+      },
+      "after": {
+        "active": false
+      }
+    },
+    {
+      "id": 454,
+      "slug": "great-glen-trails-outdoor-center",
+      "before": {
+        "active": true
+      },
+      "after": {
+        "active": false
+      }
+    },
+    {
+      "id": 455,
+      "slug": "jackson-xc",
+      "before": {
+        "active": true
+      },
+      "after": {
+        "active": false
+      }
+    },
+    {
+      "id": 456,
+      "slug": "high-point-xc-center",
+      "before": {
+        "active": true
+      },
+      "after": {
+        "active": false
+      }
+    },
+    {
+      "id": 457,
+      "slug": "enchanted-forest-xc",
+      "before": {
+        "active": true
+      },
+      "after": {
+        "active": false
+      }
+    },
+    {
+      "id": 459,
+      "slug": "garnet-hill-xc",
+      "before": {
+        "active": true
+      },
+      "after": {
+        "active": false
+      }
+    },
+    {
+      "id": 467,
+      "slug": "catamount-outdoor-family-center",
+      "before": {
+        "active": true
+      },
+      "after": {
+        "active": false
+      }
+    },
+    {
+      "id": 470,
+      "slug": "trapp-family-lodge",
+      "before": {
+        "active": true
+      },
+      "after": {
+        "active": false
+      }
+    },
+    {
+      "id": 471,
+      "slug": "woodstock-nordic-center",
+      "before": {
+        "active": true
+      },
+      "after": {
+        "active": false
+      }
+    },
+    {
+      "id": 473,
+      "slug": "north-cascade-heli",
+      "before": {
+        "active": true
+      },
+      "after": {
+        "active": false
+      }
+    },
+    {
+      "id": 474,
+      "slug": "plain-valley-trails",
+      "before": {
+        "active": true
+      },
+      "after": {
+        "active": false
+      }
+    },
+    {
+      "id": 479,
+      "slug": "minocqua-winter-park",
+      "before": {
+        "active": true
+      },
+      "after": {
+        "active": false
+      }
+    },
+    {
+      "id": 484,
+      "slug": "white-grass-touring",
+      "before": {
+        "active": true
+      },
+      "after": {
+        "active": false
+      }
+    },
+    {
+      "id": 485,
+      "slug": "turpin-meadow-ranch",
+      "before": {
+        "active": true
+      },
+      "after": {
+        "active": false
+      }
+    }
+  ]
+}

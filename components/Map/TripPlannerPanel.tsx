@@ -8,30 +8,61 @@ import { passColor, primaryPass } from "@/lib/passColors";
 import { haversineMeters, estimateDriveSeconds, estimateDriveMeters } from "@/lib/distance";
 import { expandStopsToDays, type Stop } from "@/lib/tripPlanner";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
-import { estimateTripCost, metersToMiles } from "@/lib/tripCost";
+import {
+  clampPartySize,
+  estimateTripCost,
+  metersToMiles,
+  MAX_PARTY_SIZE,
+  MIN_PARTY_SIZE,
+  type CostBreakdown,
+} from "@/lib/tripCost";
 import { getPreferences } from "@/lib/preferences";
 import { getTemplate } from "@/lib/tripTemplates";
-import { useProStatus } from "@/lib/proClient";
-import { FREE_LIMITS } from "@/lib/tierLimits";
-import UpsellModal from "@/components/UpsellModal";
 import ResortPicker from "./ResortPicker";
 import type { Resort } from "./MapPage";
 import type { TripRoutePoint } from "./MapView";
 
+// Longest trip the planner lets you build. Matches the live DB check
+// (trips.total_days BETWEEN 1 AND 14) so a save never fails on length.
+// handoff-docs/sql/2026-09-23-planner.sql has an optional block that
+// raises the constraint to 30 — bump this constant with it.
+export const MAX_TRIP_DAYS = 14;
+const DAY_PRESETS = [1, 2, 3, 5, 7, 10, 14];
+
 // localStorage key for the in-flight trip draft. Used to preserve the
 // user's stops + day choices across the magic-link login round-trip:
 // they tap Save → we stash the draft → bounce to /login → they click
-// the email link → /auth/callback exchanges the code → they land back
-// on the map with ?restore=1 → we hydrate from localStorage and clear
-// the key. 1-hour TTL guards against stale drafts from old sessions.
+// the email link (usually in a NEW tab, so sessionStorage is gone) →
+// /auth/callback exchanges the code → they land back on the map with
+// ?restore=1 → we hydrate from localStorage and clear the key. 1-hour
+// TTL guards against stale drafts from old sessions.
 const DRAFT_KEY = "wynla_pending_trip_draft";
 const DRAFT_TTL_MS = 60 * 60 * 1000;
+// sessionStorage mirror of the live draft. Written on every change so
+// a refresh, a back-navigation from /resort/[slug], or iOS evicting the
+// tab does not throw away a half-built trip. Per-tab by design: two
+// tabs planning two trips must not clobber each other.
+const SESSION_DRAFT_KEY = "wynla_planner_draft_v1";
+const SESSION_DRAFT_TTL_MS = 24 * 60 * 60 * 1000;
 
 type TripDraft = {
   stops: Stop[];
   draftName: string;
+  /** YYYY-MM-DD or empty when the user has not picked a date. */
+  startDate?: string;
+  partySize?: number;
+  /** Trip length the user chose. Restored so a draft opened from a URL
+      without ?days does not read "5 of 1 days planned". */
+  days?: number;
   savedAt: number;
 };
+
+// Mobile bottom-sheet footers sit inside the iPhone home-indicator
+// zone; without this padding the primary button's lower half is a
+// swipe-home gesture instead of a tap. Same value ResortPanel uses.
+const SAFE_AREA_FOOTER_STYLE = {
+  paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 0.75rem)",
+} as const;
 
 type Props = {
   open: boolean;
@@ -50,6 +81,9 @@ type Props = {
       pin clicks to this handler instead of opening ResortPanel. */
   onMapPickHandlerChange?: (handler: ((slug: string) => void) | null) => void;
   days: number;
+  /** Ordered one-slug-per-day route to seed from. When omitted the
+      panel reads ?route=a,b,b,c from the URL itself (share links and
+      trip templates use that form). */
   initialOrderedSlugs?: string[];
   isAuthed: boolean;
   onClose: () => void;
@@ -171,13 +205,145 @@ function suggestTripName(stops: Stop[], allResorts: Resort[], days: number): str
   return `${names.join(" + ")}${more} ${days}d`;
 }
 
+// Group a one-slug-per-day route (the ?route= / template shape) into
+// stops: consecutive repeats of a slug become one stop with N days.
+function stopsFromRoute(slugs: string[]): Stop[] {
+  const out: Stop[] = [];
+  for (const slug of slugs) {
+    const last = out[out.length - 1];
+    if (last && last.slug === slug) last.days += 1;
+    else out.push({ slug, days: 1 });
+  }
+  return out;
+}
+
+// Fit the stops into a shorter trip without losing picks: trim days
+// from the LAST stop backwards (each stop keeps at least one day), and
+// only drop whole stops when there are more stops than days. Returns
+// the same array when nothing needs to change so state stays stable.
+function clampStopsToDays(stops: Stop[], days: number): Stop[] {
+  const budget = Math.max(1, days);
+  const planned = stops.reduce((sum, s) => sum + s.days, 0);
+  if (planned <= budget) return stops;
+  const next = stops.map((s) => ({ ...s }));
+  let excess = planned - budget;
+  for (let i = next.length - 1; i >= 0 && excess > 0; i--) {
+    const trim = Math.min(excess, next[i].days - 1);
+    next[i].days -= trim;
+    excess -= trim;
+  }
+  // Every stop is at 1 day and there are still too many → drop the tail.
+  while (excess > 0 && next.length > 1) {
+    next.pop();
+    excess -= 1;
+  }
+  return next;
+}
+
+function isValidStop(value: unknown): value is Stop {
+  if (!value || typeof value !== "object") return false;
+  const v = value as Record<string, unknown>;
+  return typeof v.slug === "string" && v.slug.length > 0 && typeof v.days === "number" && v.days >= 1;
+}
+
+function parseDraft(raw: string | null, ttlMs: number): TripDraft | null {
+  if (!raw) return null;
+  try {
+    const draft = JSON.parse(raw) as Partial<TripDraft>;
+    const ageMs = Date.now() - (draft.savedAt ?? 0);
+    if (ageMs >= ttlMs) return null;
+    if (!Array.isArray(draft.stops)) return null;
+    const stops = draft.stops.filter(isValidStop).map((s) => ({ slug: s.slug, days: Math.floor(s.days) }));
+    if (stops.length === 0) return null;
+    return {
+      stops,
+      draftName: typeof draft.draftName === "string" ? draft.draftName : "",
+      startDate: typeof draft.startDate === "string" ? draft.startDate : "",
+      partySize: draft.partySize == null ? undefined : clampPartySize(draft.partySize),
+      days:
+        typeof draft.days === "number" && Number.isFinite(draft.days)
+          ? Math.min(MAX_TRIP_DAYS, Math.max(1, Math.floor(draft.days)))
+          : undefined,
+      savedAt: draft.savedAt ?? 0,
+    };
+  } catch {
+    // Bad JSON — treat as no draft.
+    return null;
+  }
+}
+
+function readStorage(storage: "local" | "session", key: string): string | null {
+  try {
+    if (typeof window === "undefined") return null;
+    const s = storage === "local" ? window.localStorage : window.sessionStorage;
+    return s.getItem(key);
+  } catch {
+    // Private browsing / blocked storage — behave as if empty.
+    return null;
+  }
+}
+
+function writeStorage(storage: "local" | "session", key: string, value: string | null) {
+  try {
+    if (typeof window === "undefined") return;
+    const s = storage === "local" ? window.localStorage : window.sessionStorage;
+    if (value === null) s.removeItem(key);
+    else s.setItem(key, value);
+  } catch {
+    // Quota / private mode — the draft just isn't preserved.
+  }
+}
+
+// PostgREST / Postgres codes for "that column does not exist". Seen
+// when trips.start_date has not been added yet (see the SQL file).
+function isMissingColumnError(err: { code?: string; message?: string } | null): boolean {
+  if (!err) return false;
+  if (err.code === "42703" || err.code === "PGRST204") return true;
+  return /start_date/.test(err.message ?? "") && /column|schema cache/i.test(err.message ?? "");
+}
+
+let warnedMissingStartDate = false;
+
+// Turn a Supabase insert error into copy a person can act on. The raw
+// Postgres text ("new row violates check constraint …") is kept out of
+// the UI; the constraint case gets its own sentence.
+function describeSaveError(err: { code?: string; message?: string } | null): string {
+  // 23514 is any check-constraint violation; only the trip-length one
+  // (trips_total_days_check) gets the length copy, so a different
+  // constraint firing does not send the user to shorten a fine trip.
+  if (err?.code === "23514" && /total_days/.test(err.message ?? "")) {
+    return `Trips can be 1 to ${MAX_TRIP_DAYS} days long. Shorten the trip and try again.`;
+  }
+  const detail = err?.message?.trim();
+  return detail
+    ? `Couldn't save your trip (${detail}). Check your connection and try again.`
+    : "Couldn't save your trip. Check your connection and try again.";
+}
+
+// Today's date as YYYY-MM-DD in the user's zone — the earliest date the
+// start-date picker offers.
+function todayIsoDate(): string {
+  const d = new Date();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${d.getFullYear()}-${m}-${day}`;
+}
+
+// MapPage's convention for the ?days param: absent means 1. Mirrored
+// here because the post-mount URL cleanup has to strip ?restore/?route
+// and set days in ONE history.replaceState — two replaces built from the same
+// stale searchParams would drop one of the edits.
+function daysParamValue(days: number): string | null {
+  return days > 1 ? String(days) : null;
+}
+
 export default function TripPlannerPanel({
   open,
   origin,
   candidates,
   allResorts,
   onMapPickHandlerChange,
-  days,
+  days: daysProp,
   initialOrderedSlugs,
   isAuthed,
   onClose,
@@ -200,20 +366,26 @@ export default function TripPlannerPanel({
   // createSupabaseBrowserClient uses @supabase/ssr's cookie-based
   // session, matching what the proxy + callback set up.
   const supabase = useMemo(() => createSupabaseBrowserClient(), []);
+  // The URL may carry any number (MapPage clamps to 30); the planner
+  // itself never plans past the DB limit.
+  const days = Math.min(MAX_TRIP_DAYS, Math.max(1, daysProp));
   const [stops, setStops] = useState<Stop[]>([]);
   const [pickerForIndex, setPickerForIndex] = useState<"new" | number | null>(null);
-  // Inline "How many days here?" confirm card. Set when the user picks
-  // a resort in the picker; we hold the slug + chosen day count here
-  // until they confirm or cancel. Confirm pushes a Stop; Cancel drops it.
+  // The resort the user has tapped in the picker but not yet added.
+  // Lives until they tap "Add stop" (pushes a Stop) or close the
+  // picker (drops it). Tapping other rows just swaps the slug.
   const [pendingStop, setPendingStop] = useState<{ slug: string; days: number } | null>(null);
   const [draftName, setDraftName] = useState<string>("");
+  // Optional planned first ski day (YYYY-MM-DD). Empty = undated.
+  const [startDate, setStartDate] = useState<string>("");
+  // Flips to false the first time an insert says trips.start_date does
+  // not exist, which hides the field for the rest of the session.
+  const [startDateSupported, setStartDateSupported] = useState(true);
+  // Party size for the cost estimate. Two is the most common ski-trip
+  // shape (couple / pair of friends sharing a room and a car).
+  const [partySize, setPartySize] = useState(2);
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
-  // Pro gate for trip save (free users get 2 saved trips). Modal opens
-  // when a free user hits the cap on save attempt; status loads in
-  // background via useProStatus().
-  const [showTripUpsell, setShowTripUpsell] = useState(false);
-  const { isPro, isLoading: proLoading } = useProStatus();
 
   // Stage-4 trip-order optimizer. After tapping "✨ Optimize order"
   // we stash a short inline message ("Reordered: saves ~N min") above
@@ -229,13 +401,18 @@ export default function TripPlannerPanel({
   const [templateNotice, setTemplateNotice] = useState<{ slug: string; title: string } | null>(null);
 
   // Stage 21 mobile wizard state. The mobile path renders one phase at a
-  // time (set days → pick stop → confirm days → repeat → review). Desktop
-  // ignores all of this and shows the legacy single-screen layout.
+  // time (set days → pick stops → review). Desktop ignores all of this
+  // and shows the single-screen layout.
   const [isMobile, setIsMobile] = useState(false);
   // daysLockedIn = the user has explicitly committed to a trip length
   // and is now picking stops. Reset to false on each fresh planner open
   // so a returning user always re-confirms their day count.
   const [daysLockedIn, setDaysLockedIn] = useState(false);
+  // Mobile: the user asked to see the review sheet before every day is
+  // planned (picker ×, "Review trip" on the between-stops sheet, or
+  // removing a stop from review). Cleared whenever the picker opens
+  // for a new stop so the wizard resumes its normal flow.
+  const [reviewEarly, setReviewEarly] = useState(false);
   useEffect(() => {
     if (typeof window === "undefined") return;
     const compute = () => {
@@ -256,81 +433,164 @@ export default function TripPlannerPanel({
   );
   const pickerResorts = candidates ?? allResorts;
 
-  const originLabel = origin.kind === "geo" ? "Your location" : origin.name;
+  // Trip templates link with ?from=geo for cities outside the origin
+  // list (Denver, SLC, …) and pass the city name as ?fromLabel= so the
+  // header and the saved trip say "Denver", not "Your location".
+  const fromLabelParam = searchParams.get("fromLabel")?.trim() ?? "";
+  const originLabel =
+    origin.kind === "geo" ? (fromLabelParam.slice(0, 40) || "Your location") : origin.name;
   const originLat = origin.lat;
   const originLng = origin.lon;
-  const contextKey = `${days}|${originLat.toFixed(5)}|${originLng.toFixed(5)}|${initialOrderedSlugs?.join(",") ?? ""}`;
-  // Render-phase reset when the inputs that produced the auto-pick
-  // change (origin moves, day count changes, share-link fires).
+
+  // Route seed: an explicit one-slug-per-day list from the prop or the
+  // ?route= param (share links, trip templates). This is the ONLY input
+  // that replaces the stops wholesale. The day count is deliberately not
+  // part of the key — changing trip length clamps stops instead of
+  // wiping them (see the lastDays block below).
+  const routeParam = searchParams.get("route");
+  const routeSlugs = useMemo(
+    () => initialOrderedSlugs ?? (routeParam ? routeParam.split(",").filter(Boolean) : []),
+    [initialOrderedSlugs, routeParam],
+  );
+  const contextKey = routeSlugs.join(",");
   const [seededFor, setSeededFor] = useState<string>("");
   if (seededFor !== contextKey) {
     setSeededFor(contextKey);
-    // Wizard-style: don't pre-pick anything. User starts blank and
-    // picks the first resort themselves. Only the share-link path
-    // (?route=…) seeds with explicit slugs. Draft restoration from
-    // localStorage happens in a separate effect below — it can't run
-    // here because it needs Date.now() (an impure call) for the TTL
-    // check, which violates render-phase purity.
-    const initialStops: Stop[] = [];
-    if (initialOrderedSlugs && initialOrderedSlugs.length > 0) {
-      for (const slug of initialOrderedSlugs) {
-        const last = initialStops[initialStops.length - 1];
-        if (last && last.slug === slug) last.days += 1;
-        else initialStops.push({ slug, days: 1 });
-      }
+    if (routeSlugs.length > 0) {
+      setStops(clampStopsToDays(stopsFromRoute(routeSlugs), MAX_TRIP_DAYS));
+      setPendingStop(null);
+      setPickerForIndex(null);
+      setDaysLockedIn(true);
     }
-    setStops(initialStops);
-    setDraftName("");
-    setPendingStop(null);
   }
 
-  // Draft hydration after a magic-link round-trip. Triggered when the
-  // URL carries ?restore=1 (set by saveTrip right before redirecting
-  // to /login). Reads the localStorage draft, applies it to state, and
-  // strips the restore flag so a refresh doesn't re-hydrate. One-shot
-  // per restore param value — guarded by a ref-style state token.
-  const restoreToken = searchParams.get("restore");
-  // Ref instead of state so we don't trigger a re-render or violate
-  // the no-setState-in-effect lint when we mark the restore as
-  // applied. Persists across re-renders within the same mount.
-  const restoreAppliedRef = useRef(false);
+  // Days-planned vs target. Stops are freeform — user may overrun or
+  // underrun; we just surface the discrepancy in the UI.
+  const daysPlanned = stops.reduce((sum, s) => sum + s.days, 0);
+  const remainingDays = Math.max(0, days - daysPlanned);
+
+  // A seeded route can be longer than the URL's ?days (a template link
+  // always carries a matching days=N, but a hand-edited share link may
+  // not). Grow the trip length to fit rather than showing "over target".
+  // The mount seed is handled by the hydration effect below (which also
+  // strips ?route); this only covers a route that changes while the
+  // planner is already mounted.
   useEffect(() => {
-    if (!open || restoreToken !== "1" || restoreAppliedRef.current) return;
-    restoreAppliedRef.current = true;
-    if (typeof window === "undefined") return;
-    try {
-      const raw = window.localStorage.getItem(DRAFT_KEY);
-      if (raw) {
-        const draft = JSON.parse(raw) as Partial<TripDraft>;
-        const ageMs = Date.now() - (draft.savedAt ?? 0);
-        if (
-          ageMs < DRAFT_TTL_MS &&
-          Array.isArray(draft.stops) &&
-          draft.stops.length > 0
-        ) {
-          // eslint-disable-next-line react-hooks/set-state-in-effect -- hydrating from external store (localStorage) is a documented valid use case.
-          setStops(draft.stops as Stop[]);
-          setDraftName(draft.draftName ?? "");
-          setPendingStop(null);
-        }
-      }
-      window.localStorage.removeItem(DRAFT_KEY);
-    } catch {
-      // Bad JSON or storage error — fall through.
-    }
-    const params = new URLSearchParams(searchParams.toString());
-    params.delete("restore");
-    const qs = params.toString();
-    router.replace(qs ? `?${qs}` : "?", { scroll: false });
+    if (!hydrated || routeSlugs.length === 0) return;
+    if (daysPlanned > days) onDaysChange?.(Math.min(MAX_TRIP_DAYS, daysPlanned));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open, restoreToken]);
+  }, [seededFor]);
+
+  // Trip length changed (header stepper / "Change trip length"): keep
+  // every stop and just trim day counts so the plan fits. Render-phase
+  // derived-state pattern, same as seededFor above.
+  const [lastDays, setLastDays] = useState(days);
+  if (lastDays !== days) {
+    setLastDays(days);
+    const clamped = clampStopsToDays(stops, days);
+    if (clamped !== stops) setStops(clamped);
+    if (pendingStop && pendingStop.days > Math.max(1, days - daysPlanned)) {
+      setPendingStop({ ...pendingStop, days: Math.max(1, days - daysPlanned) });
+    }
+  }
+
+  // One-shot draft hydration on mount. Two sources, in priority order:
+  //   1. ?restore=1 — back from the magic-link login; the draft was
+  //      stashed in localStorage by saveTrip (new tab, so sessionStorage
+  //      is empty).
+  //   2. sessionStorage — same tab came back from a refresh, a resort
+  //      page, or tab eviction. Skipped when the URL carries an explicit
+  //      ?route= (a share link or template must win over stale state).
+  // Afterwards the URL is cleaned in ONE history.replaceState: ?restore goes
+  // so a refresh does not re-hydrate, ?route goes so the next mount
+  // (back from /resort/[slug], refresh) hydrates the user's edits from
+  // sessionStorage instead of re-applying the original seed, and ?days
+  // is brought in line with the draft / seed.
+  // `hydrated` gates the persist effect below so the pre-hydration
+  // empty state never overwrites the stored draft; `draftHydrated`
+  // tells the template effect not to re-seed over a restored draft.
+  const [hydrated, setHydrated] = useState(false);
+  const draftHydrated = useRef(false);
+  useEffect(() => {
+    if (hydrated) return;
+    const restoring = searchParams.get("restore") === "1";
+    let draft: TripDraft | null = null;
+    if (restoring) {
+      draft = parseDraft(readStorage("local", DRAFT_KEY), DRAFT_TTL_MS);
+      writeStorage("local", DRAFT_KEY, null);
+    } else if (routeSlugs.length === 0) {
+      draft = parseDraft(readStorage("session", SESSION_DRAFT_KEY), SESSION_DRAFT_TTL_MS);
+    }
+    // Trip length to land on: the draft's own length grown to fit its
+    // stops, or the seeded route's length. 0 = leave the URL alone.
+    let targetDays = 0;
+    if (draft) {
+      draftHydrated.current = true;
+      const draftStops = clampStopsToDays(draft.stops, MAX_TRIP_DAYS);
+      const draftPlanned = draftStops.reduce((sum, s) => sum + s.days, 0);
+      targetDays = Math.min(MAX_TRIP_DAYS, Math.max(draft.days ?? 0, draftPlanned));
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- hydrating from external storage is the documented exception.
+      setStops(draftStops);
+      setDraftName(draft.draftName);
+      setStartDate(draft.startDate ?? "");
+      setPartySize(draft.partySize ?? 2);
+      setPendingStop(null);
+      // The user already chose a length before they left; land them on
+      // the stops they had, not on "How long is your trip?" again.
+      setDaysLockedIn(true);
+      // They tapped Save from the review sheet (the only place it
+      // lives), so put them back on review even if days remain unplanned.
+      if (restoring) setReviewEarly(true);
+    } else if (routeSlugs.length > 0 && daysPlanned > days) {
+      targetDays = Math.min(MAX_TRIP_DAYS, daysPlanned);
+    }
+    setHydrated(true);
+
+    const params = new URLSearchParams(searchParams.toString());
+    let changed = false;
+    if (restoring) {
+      params.delete("restore");
+      changed = true;
+    }
+    if (routeParam !== null) {
+      params.delete("route");
+      changed = true;
+    }
+    if (targetDays >= 1 && targetDays !== days) {
+      const value = daysParamValue(targetDays);
+      if (value === null) params.delete("days");
+      else params.set("days", value);
+      changed = true;
+    }
+    if (changed) {
+      const qs = params.toString();
+      // History API, not router.replace: Next syncs useSearchParams with
+      // it and it skips the server re-render of the force-dynamic homepage.
+      window.history.replaceState(null, "", qs ? `?${qs}` : window.location.pathname);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Mirror the live draft into sessionStorage on every change.
+  useEffect(() => {
+    if (!hydrated) return;
+    if (stops.length === 0) {
+      writeStorage("session", SESSION_DRAFT_KEY, null);
+      return;
+    }
+    const draft: TripDraft = { stops, draftName, startDate, partySize, days, savedAt: Date.now() };
+    writeStorage("session", SESSION_DRAFT_KEY, JSON.stringify(draft));
+  }, [hydrated, stops, draftName, startDate, partySize, days]);
 
   // Stage-4 template hydration. Fires once per ?template=<slug> token
-  // when the planner is open. Seeds stops from the template definition,
-  // updates the day total via the parent's onDaysChange (so the URL
-  // ?days param matches), jumps the wizard straight to "review", and
-  // pops a dismissable banner. URL flag is preserved so refresh keeps
-  // the template applied — the dismiss action strips it.
+  // when the planner is open. The template page also passes the route
+  // and day count in the URL, so the route seed above already has the
+  // stops; this effect adds the title, the banner and (as a safety net
+  // for hand-written links) the stops + day total. The URL flag is
+  // preserved so refresh keeps the banner — the dismiss action strips
+  // it. When the hydration effect restored a draft (refresh, back from
+  // a resort page, or back from login) the user's edits to that
+  // template must survive, so only the banner is applied.
   useEffect(() => {
     if (!open || !templateSlug || templateApplied.current) return;
     const tpl = getTemplate(templateSlug);
@@ -341,27 +601,39 @@ export default function TripPlannerPanel({
       const params = new URLSearchParams(searchParams.toString());
       params.delete("template");
       const qs = params.toString();
-      router.replace(qs ? `?${qs}` : "?", { scroll: false });
+      // History API, not router.replace: Next syncs useSearchParams with
+      // it and it skips the server re-render of the force-dynamic homepage.
+      window.history.replaceState(null, "", qs ? `?${qs}` : window.location.pathname);
       return;
     }
     templateApplied.current = true;
-    // Seed stops from the template's resort + day arrays.
     // eslint-disable-next-line react-hooks/set-state-in-effect -- one-shot hydration from URL, same pattern as restore above.
-    setStops(
-      tpl.resortSlugs.map((slug, i) => ({
-        slug,
-        days: Math.max(1, tpl.daysPerResort[i] ?? 1),
-      })),
-    );
+    setTemplateNotice({ slug: tpl.slug, title: tpl.title });
+    // A restored draft already holds the user's version of this
+    // template — banner only.
+    if (draftHydrated.current) return;
     setDraftName(tpl.title);
     setDaysLockedIn(true);
     setPendingStop(null);
     setPickerForIndex(null);
-    setTemplateNotice({ slug: tpl.slug, title: tpl.title });
-    // Push the template's total day count back up to MapPage so the
-    // URL ?days param matches. Without this the budget tracker still
-    // shows whatever days was when the planner opened.
-    const totalDays = tpl.daysPerResort.reduce((a, b) => a + b, 0);
+    // With ?route= the render-phase seed owns the stops and the
+    // hydration effect owns the day total (it strips ?route and grows
+    // ?days in one replace). Setting days here as well would issue a
+    // second replace from the same stale params and undo that cleanup.
+    if (routeSlugs.length > 0) return;
+    setStops(
+      clampStopsToDays(
+        tpl.resortSlugs.map((slug, i) => ({
+          slug,
+          days: Math.max(1, tpl.daysPerResort[i] ?? 1),
+        })),
+        MAX_TRIP_DAYS,
+      ),
+    );
+    const totalDays = Math.min(
+      MAX_TRIP_DAYS,
+      tpl.daysPerResort.reduce((a, b) => a + b, 0),
+    );
     if (totalDays > 0 && totalDays !== days) {
       onDaysChange?.(totalDays);
     }
@@ -375,12 +647,14 @@ export default function TripPlannerPanel({
     const params = new URLSearchParams(searchParams.toString());
     params.delete("template");
     const qs = params.toString();
-    router.replace(qs ? `?${qs}` : "?", { scroll: false });
+    // History API, not router.replace: Next syncs useSearchParams with
+    // it and it skips the server re-render of the force-dynamic homepage.
+    window.history.replaceState(null, "", qs ? `?${qs}` : window.location.pathname);
   }
 
   // Render-phase reset for pendingStop on panel close. Avoids the
   // setState-in-effect lint while still guaranteeing the in-flight
-  // confirm card disappears when the user closes the planner.
+  // pick disappears when the user closes the planner.
   const [lastOpen, setLastOpen] = useState(open);
   if (lastOpen !== open) {
     setLastOpen(open);
@@ -393,11 +667,6 @@ export default function TripPlannerPanel({
       setDaysLockedIn(stops.length > 0);
     }
   }
-
-  // Days-planned vs target. Stops are freeform — user may overrun or
-  // underrun; we just surface the discrepancy in the UI.
-  const daysPlanned = stops.reduce((sum, s) => sum + s.days, 0);
-  const remainingDays = Math.max(0, days - daysPlanned);
 
   // Build per-stop legs for display (origin → stop1 → stop2 → … → home).
   const legs = useMemo(() => {
@@ -497,8 +766,9 @@ export default function TripPlannerPanel({
     return estimateTripCost(slugs, daysArr, passesBySlug, totalRoundTripMiles, userPasses, {
       ticketPriceMin: minBySlug,
       ticketPriceMax: maxBySlug,
+      partySize,
     });
-  }, [stops, candidateBySlug, totalRoundTripMiles, userPasses]);
+  }, [stops, candidateBySlug, totalRoundTripMiles, userPasses, partySize]);
 
   // Stage-4 optimize-order handler. Runs nearest-neighbor TSP locally
   // (no API call), updates the stops state, and sets an inline notice
@@ -560,10 +830,13 @@ export default function TripPlannerPanel({
     return ids;
   }, [stops, pendingStop, candidateBySlug]);
   const idsKey = planResortIds.join(",");
+  // Gated on `open`: the draft is hydrated from storage even while the
+  // planner is closed, and the map must not show trip pins for a sheet
+  // the user cannot see.
   useEffect(() => {
-    onTripResortIds?.(planResortIds);
+    onTripResortIds?.(open ? planResortIds : []);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [idsKey]);
+  }, [idsKey, open]);
 
   // Single source of truth for the trip route line + numbered markers
   // on the map. Emits origin + each stop's resort point in order, plus
@@ -610,15 +883,13 @@ export default function TripPlannerPanel({
     ? tripRoutePoints.map((p) => `${p.kind}:${p.lat.toFixed(4)},${p.lng.toFixed(4)}`).join("|")
     : "";
   useEffect(() => {
-    onTripRoute?.(tripRoutePoints);
+    onTripRoute?.(open ? tripRoutePoints : null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [routeKey]);
+  }, [routeKey, open]);
 
   useEffect(() => {
     if (open) return;
-    onTripResortIds?.([]);
     onPreviewLeg?.(null);
-    onTripRoute?.(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
@@ -671,20 +942,29 @@ export default function TripPlannerPanel({
     return { lat: Number(r.latitude), lng: Number(r.longitude), label: r.name };
   }, [pickerForIndex, stops, candidateBySlug, originLat, originLng, originLabel]);
 
+  // Open the picker for the next stop. Also leaves any early-review
+  // detour so the wizard flows normally after the pick.
+  function openNewStopPicker() {
+    setReviewEarly(false);
+    setPickerForIndex("new");
+  }
+
   function handlePicked(slug: string) {
     if (pickerForIndex == null) return;
     const targetIndex = pickerForIndex;
     onPreviewLeg?.(null);
 
     if (targetIndex === "new") {
-      // Stage 21.3 — preview-confirm flow. The picker stays open with
-      // pendingStop set so the user can keep tapping different rows
-      // (each updates the dashed preview leg on the map). A sticky
-      // "Confirm [Resort]" bar inside the picker advances to the
-      // confirm-days phase. Reverts the Stage 21.1 "close on tap"
-      // behavior — that broke the "let me see more candidates"
-      // affordance the user explicitly asked for.
-      setPendingStop({ slug, days: Math.max(1, Math.min(remainingDays || 1, 1)) });
+      // Preview-first flow: the picker stays open with pendingStop set
+      // so the user can keep tapping different rows (each updates the
+      // dashed preview leg on the map). The picker's sticky footer
+      // carries the day stepper and the "Add stop" button, so one tap
+      // commits. Day count defaults to whatever is left in the trip
+      // (a 3-day trip's first pick is a 3-day basecamp until the user
+      // says otherwise); a count the user already dialed in survives a
+      // swap to another row.
+      const fallback = Math.max(1, remainingDays);
+      setPendingStop((prev) => ({ slug, days: prev?.days ?? fallback }));
     } else {
       // Swap-resort flow: still in-place + closes the picker (single
       // explicit change, no confirm step).
@@ -709,23 +989,26 @@ export default function TripPlannerPanel({
     }
   }
 
+  // Cap for the stop being added: total days minus every confirmed
+  // stop's days. The pendingStop itself isn't in `stops` yet, so
+  // daysPlanned excludes it correctly.
+  const pendingDaysCap = Math.max(1, days - daysPlanned);
+
   function adjustPendingDays(delta: number) {
     setPendingStop((prev) => {
       if (!prev) return prev;
-      // Cap at days that remain in the trip budget — total days minus
-      // every already-confirmed stop's days. The pendingStop itself
-      // isn't in `stops` yet, so daysPlanned excludes it correctly.
-      const cap = Math.max(1, days - daysPlanned);
-      const next = Math.max(1, Math.min(cap, prev.days + delta));
+      const next = Math.max(1, Math.min(pendingDaysCap, prev.days + delta));
       return { ...prev, days: next };
     });
   }
 
   function confirmPendingStop() {
     if (!pendingStop) return;
-    const committed = { slug: pendingStop.slug, days: pendingStop.days };
+    const committed = { slug: pendingStop.slug, days: Math.min(pendingStop.days, pendingDaysCap) };
     setStops((prev) => [...prev, committed]);
     setPendingStop(null);
+    setReviewEarly(false);
+    onPreviewLeg?.(null);
     // Stage 21.4 wizard auto-advance: if there are still days left to
     // plan, immediately re-open the picker for the next stop so the
     // user doesn't get dumped on the bare map. If this commit fills
@@ -769,83 +1052,73 @@ export default function TripPlannerPanel({
 
   function removeStop(idx: number) {
     setStops((prev) => prev.filter((_, i) => i !== idx));
+    // Removing from the review sheet reopens days to plan; stay on the
+    // review sheet (with an "Add next stop" button) instead of dropping
+    // the user onto the between-stops sheet.
+    setReviewEarly(true);
   }
 
   // Mobile wizard phase derivation. Order matters: set-days gates
-  // everything until the user commits to a trip length; pick comes
-  // before confirm because we don't render the planner sheet at all
-  // during pick (the picker overlay takes its place); review is the
-  // terminal "all days planned" state.
-  type WizardPhase = "set-days" | "pick" | "confirm" | "review";
+  // everything until the user commits to a trip length; pick covers
+  // both "picker open" (the overlay replaces the sheet) and "picker
+  // closed with days left" (a slim between-stops sheet); review is the
+  // terminal "all days planned" state, or an early look the user asked
+  // for once at least one stop exists.
+  type WizardPhase = "set-days" | "pick" | "review";
+  const showReviewEarly = reviewEarly && stops.length > 0;
   const wizardPhase: WizardPhase = !daysLockedIn
     ? "set-days"
     : pickerForIndex !== null
       ? "pick"
-      : pendingStop
-        ? "confirm"
-        : remainingDays > 0
-          ? "pick"
-          : "review";
+      : remainingDays > 0 && !showReviewEarly
+        ? "pick"
+        : "review";
 
-  // Wizard "Continue" from set-days → lock in trip length + open the
-  // picker so the user lands directly on stop 1. Existing
-  // confirmPendingStop already keeps the picker open after each
-  // confirm when remainingDays > 0, so we only need to seed the very
-  // first transition.
+  // Wizard "Continue" from set-days → lock in trip length. Opens the
+  // picker only when there is something left to plan; a fully planned
+  // trip (draft restore, template, back from "Change trip length")
+  // falls through to review.
   function lockInDays() {
     setDaysLockedIn(true);
-    if (isMobile && pickerForIndex === null && !pendingStop) {
-      setPickerForIndex("new");
+    if (isMobile && pickerForIndex === null && !pendingStop && remainingDays > 0) {
+      openNewStopPicker();
     }
   }
 
-  // Stage 21.3 preview-confirm: user has selected a candidate (the
-  // dashed leg is showing on the map). They tap "Confirm [Resort]" in
-  // the picker footer → we close the picker, which transitions the
-  // wizard from `pick` to `confirm-days` (planner sheet appears with
-  // the day-count stepper).
-  function confirmPreviewPick() {
-    if (!pendingStop) return;
-    setPickerForIndex(null);
-    onPreviewLeg?.(null);
-  }
-  // Wizard "Change trip length" from review → reset to set-days. We
-  // keep stops as-is so the user doesn't lose their picks.
+  // Wizard "Change trip length" from review → back to set-days. Stops
+  // are kept; a shorter length trims day counts (see lastDays above).
   function unlockDays() {
     setDaysLockedIn(false);
   }
 
+  // Picker × on mobile behaves as "back": to the review sheet when the
+  // trip already has stops, to the between-stops sheet otherwise.
+  function closePicker() {
+    setPickerForIndex(null);
+    setPendingStop(null);
+    onPreviewLeg?.(null);
+    if (stops.length > 0) setReviewEarly(true);
+  }
+
   async function saveTrip() {
     if (stops.length === 0) return;
-    // Hold the save until Pro status resolves — otherwise a Pro user
-    // saving their 3rd+ trip in the first ~200ms after mount would be
-    // mis-gated as free. proClient.ts resolves quickly on warm cache.
-    if (proLoading) {
-      setSaveError("Loading account status… try again in a moment.");
-      return;
-    }
     setSaving(true);
     setSaveError(null);
     const { data: userRes } = await supabase.auth.getUser();
     if (!userRes.user) {
       setSaving(false);
       // Stash the in-flight draft so the user's stops + name aren't
-      // lost on the magic-link round-trip. The seededFor block above
-      // hydrates from this when the user returns with ?restore=1.
-      try {
-        if (typeof window !== "undefined") {
-          const draft: TripDraft = {
-            stops,
-            draftName,
-            // eslint-disable-next-line react-hooks/purity -- event handler, not render
-            savedAt: Date.now(),
-          };
-          window.localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
-        }
-      } catch {
-        // localStorage can throw in private browsing / quota-full —
-        // safe to continue, the user just won't get draft preserved.
-      }
+      // lost on the magic-link round-trip. The hydration effect above
+      // reads this when the user returns with ?restore=1.
+      const draft: TripDraft = {
+        stops,
+        draftName,
+        startDate,
+        partySize,
+        days,
+        savedAt: Date.now(),
+      };
+      writeStorage("local", DRAFT_KEY, JSON.stringify(draft));
       // Clear map overlays before bouncing to login so the route line
       // and pin highlights don't linger when the user comes back.
       onTripResortIds?.([]);
@@ -861,53 +1134,36 @@ export default function TripPlannerPanel({
       router.push(`/login?next=${encodeURIComponent(returnTo)}`);
       return;
     }
-    // Pro gate: free users get FREE_LIMITS.savedTrips saved trips. Count
-    // existing trips before the insert; if the user is over the cap, show
-    // the upsell instead of writing the row.
-    //
-    // Fail-closed: if the count query errors (network blip, RLS hiccup,
-    // anything), we treat it as "at cap" and route to the upsell rather
-    // than letting the insert through. A free user racing two saves in
-    // two tabs is still a hole — that needs a Postgres trigger to fully
-    // close, tracked in lib/tierLimits.ts comment.
-    if (!isPro) {
-      const { count: tripCountRaw, error: countErr } = await supabase
-        .from("trips")
-        .select("id", { count: "exact", head: true })
-        .eq("user_id", userRes.user.id);
-      if (countErr) {
-        setSaving(false);
-        setShowTripUpsell(true);
-        return;
-      }
-      const tripCount = tripCountRaw ?? 0;
-      if (tripCount >= FREE_LIMITS.savedTrips) {
-        setSaving(false);
-        setShowTripUpsell(true);
-        return;
-      }
-    }
     const finalName =
       draftName.trim() || suggestTripName(stops, allResorts, daysPlanned);
     const { resort_slugs, days_per_resort } = expandStopsToDays(stops);
-    const { data, error } = await supabase
-      .from("trips")
-      .insert({
-        user_id: userRes.user.id,
-        name: finalName,
-        origin_lat: origin.lat,
-        origin_lng: origin.lon,
-        origin_label: originLabel,
-        resort_slugs,
-        days_per_resort,
-        lodging_mode: "roadtrip", // legacy column, kept for compat
-        total_days: daysPlanned,
-      })
-      .select("id")
-      .single();
+    const basePayload = {
+      user_id: userRes.user.id,
+      name: finalName,
+      origin_lat: origin.lat,
+      origin_lng: origin.lon,
+      origin_label: originLabel,
+      resort_slugs,
+      days_per_resort,
+      lodging_mode: "roadtrip", // legacy column, kept for compat
+      total_days: daysPlanned,
+    };
+    const withDate = startDateSupported && startDate ? { ...basePayload, start_date: startDate } : basePayload;
+    let result = await supabase.from("trips").insert(withDate).select("id").single();
+    if (result.error && "start_date" in withDate && isMissingColumnError(result.error)) {
+      // The start_date column has not been added yet (see the SQL
+      // file). Save the trip without it and hide the field; the trip
+      // still works, the calendar export just anchors to today.
+      if (!warnedMissingStartDate) {
+        warnedMissingStartDate = true;
+        console.warn("[trip planner] trips.start_date is missing; saving without a start date.");
+      }
+      setStartDateSupported(false);
+      result = await supabase.from("trips").insert(basePayload).select("id").single();
+    }
     setSaving(false);
-    if (error || !data) {
-      setSaveError(error?.message ?? "Couldn't save trip.");
+    if (result.error || !result.data) {
+      setSaveError(describeSaveError(result.error));
       return;
     }
     // Clear all map overlays before navigating away so the saved-trip
@@ -915,22 +1171,32 @@ export default function TripPlannerPanel({
     onTripResortIds?.([]);
     onPreviewLeg?.(null);
     onTripRoute?.(null);
-    // Successful save — drop any preserved draft.
-    try {
-      if (typeof window !== "undefined") window.localStorage.removeItem(DRAFT_KEY);
-    } catch {}
-    router.push(`/trip/${data.id}`);
+    // Successful save — drop every preserved draft.
+    writeStorage("local", DRAFT_KEY, null);
+    writeStorage("session", SESSION_DRAFT_KEY, null);
+    router.push(`/trip/${result.data.id}`);
   }
 
   if (!open) return null;
 
   const pickedSlugs = stops.map((s) => s.slug);
   const namePlaceholder = suggestTripName(stops, allResorts, daysPlanned) || "My ski trip";
+  const saveLabel = saving
+    ? "Saving…"
+    : saveError
+      ? "Try again"
+      : isAuthed
+        ? "Save trip"
+        : "Sign in to save";
 
-  // Mobile wizard hides the planner sheet entirely during the pick
-  // phase — the picker overlay (z-61) takes its place, so stacking
-  // two sheets at once is avoided. Desktop keeps both visible.
-  const hidePlannerSheet = isMobile && wizardPhase === "pick";
+  // Mobile wizard hides the planner sheet only while the picker
+  // overlay (z-61) is up, so two sheets never stack. With the picker
+  // closed and days still unplanned, a slim between-stops sheet
+  // renders instead — there is always something to tap.
+  const hidePlannerSheet = isMobile && wizardPhase === "pick" && pickerForIndex !== null;
+  const stopsSummary = stops
+    .map((s) => `${candidateBySlug.get(s.slug)?.name ?? s.slug} (${s.days}d)`)
+    .join(" → ");
 
   return (
     <>
@@ -943,13 +1209,12 @@ export default function TripPlannerPanel({
         aria-label="Trip planner"
         className={[
           "fixed z-40 flex flex-col bg-white shadow-2xl",
-          // Mobile: capped at ~80vh on the review phase so users can
+          // Mobile: capped at ~80dvh on the review phase so users can
           // actually scroll the trip-name field + stops list + cost
           // estimator without bumping into the bottom of the sheet.
-          // Other phases stay at 55vh so the map above stays usable
-          // during set-days / confirm-days. Hidden during pick phase
-          // (picker overlay shows in its place). Desktop: full-height
-          // right rail.
+          // Other phases stay at 55dvh so the map above stays usable.
+          // dvh (not vh) so the iOS toolbar never hides the footer.
+          // Desktop: full-height right rail.
           "inset-x-0 bottom-0 rounded-t-2xl",
           wizardPhase === "review" ? "max-h-[80dvh]" : "max-h-[55dvh]",
           hidePlannerSheet ? "hidden md:flex" : "",
@@ -983,7 +1248,7 @@ export default function TripPlannerPanel({
                   How long is your trip?
                 </h2>
                 <p className="mt-1 text-[11px] leading-tight text-white/70">
-                  Pick the total ski days. You can change this later.
+                  Pick the total ski days (up to {MAX_TRIP_DAYS}). You can change this later without losing your stops.
                 </p>
               </header>
               <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-4" style={{ touchAction: "pan-y" }}>
@@ -1006,8 +1271,8 @@ export default function TripPlannerPanel({
                     </div>
                     <button
                       type="button"
-                      onClick={() => onDaysChange?.(Math.min(30, days + 1))}
-                      disabled={days >= 30}
+                      onClick={() => onDaysChange?.(Math.min(MAX_TRIP_DAYS, days + 1))}
+                      disabled={days >= MAX_TRIP_DAYS}
                       className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-white text-2xl font-bold text-wn-navy shadow-sm transition active:scale-95 disabled:opacity-30"
                       aria-label="More days"
                     >
@@ -1015,7 +1280,7 @@ export default function TripPlannerPanel({
                     </button>
                   </div>
                   <div className="mt-3 flex flex-wrap justify-center gap-1.5">
-                    {[1, 2, 3, 5, 7, 10, 14].map((n) => {
+                    {DAY_PRESETS.map((n) => {
                       const active = n === days;
                       return (
                         <button
@@ -1036,122 +1301,91 @@ export default function TripPlannerPanel({
                     })}
                   </div>
                 </div>
+                {stops.length > 0 && (
+                  <p className="mt-3 text-[11px] leading-snug text-wn-charcoal/60">
+                    Keeping your {stops.length} stop{stops.length === 1 ? "" : "s"}: {stopsSummary}.
+                    {daysPlanned > days ? " Fewer days trims the last stops." : ""}
+                  </p>
+                )}
               </div>
-              <footer className="shrink-0 border-t border-wn-charcoal/10 bg-white p-3">
+              <footer
+                className="shrink-0 border-t border-wn-charcoal/10 bg-white p-3"
+                style={SAFE_AREA_FOOTER_STYLE}
+              >
                 <button
                   type="button"
                   onClick={lockInDays}
                   className="flex w-full items-center justify-center gap-2 rounded-lg bg-wn-navy px-4 py-3 text-sm font-semibold text-white transition hover:bg-wn-navy/90 active:scale-[0.98]"
                 >
-                  Continue → Pick stop 1
+                  {stops.length === 0
+                    ? "Continue → Pick stop 1"
+                    : remainingDays > 0
+                      ? `Continue → Pick stop ${stops.length + 1}`
+                      : "Continue → Review trip"}
                 </button>
               </footer>
             </>
           )}
 
-          {/* Phase 3: How many days at this resort? — pendingStop confirm. */}
-          {wizardPhase === "confirm" && pendingStop && (() => {
-            const r = candidateBySlug.get(pendingStop.slug);
-            const name = r?.name ?? pendingStop.slug;
-            const stateLabel = r?.state ?? "";
-            const stopNumber = stops.length + 1;
-            // Find the leg from previous cursor to this resort for drive time hint.
-            const prev = stops[stops.length - 1];
-            const prevR = prev ? candidateBySlug.get(prev.slug) : null;
-            const fromLat = prevR ? Number(prevR.latitude) : originLat;
-            const fromLng = prevR ? Number(prevR.longitude) : originLng;
-            const fromLabel = prevR?.name ?? originLabel;
-            const driveSec = r
-              ? estimateDriveSeconds(
-                  haversineMeters(fromLat, fromLng, Number(r.latitude), Number(r.longitude)),
-                )
-              : 0;
-            const cap = Math.max(1, days - daysPlanned);
-            return (
-              <>
-                <header className="relative shrink-0 border-b border-wn-charcoal/10 bg-wn-navy px-4 py-4 text-white">
-                  <button
-                    type="button"
-                    onClick={onClose}
-                    aria-label="Close"
-                    className="absolute right-3 top-3 inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20"
-                  >
-                    <span aria-hidden="true" className="text-lg leading-none">×</span>
-                  </button>
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-white/60">
-                    Stop {stopNumber} of {days}
-                  </p>
-                  <h2 className="mt-0.5 text-lg font-extrabold tracking-tight">
-                    {name}
-                    {stateLabel && <span className="ml-2 text-sm font-medium text-white/70">{stateLabel}</span>}
-                  </h2>
-                  <p className="mt-1 text-[11px] leading-tight text-white/70">
-                    From {fromLabel} · ≈ {formatDriveTime(driveSec)} drive
-                  </p>
-                </header>
-                <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-4" style={{ touchAction: "pan-y" }}>
-                  <p className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
-                    How many days at {name}?
-                  </p>
-                  <div className="flex items-center gap-2 rounded-xl border border-wn-charcoal/15 bg-wn-offwhite p-3">
+          {/* Phase 2b: between stops — picker closed, days still unplanned. */}
+          {wizardPhase === "pick" && pickerForIndex === null && (
+            <>
+              <header className="relative shrink-0 border-b border-wn-charcoal/10 bg-wn-navy px-4 py-4 text-white">
+                <button
+                  type="button"
+                  onClick={onClose}
+                  aria-label="Close"
+                  className="absolute right-3 top-3 inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20"
+                >
+                  <span aria-hidden="true" className="text-lg leading-none">×</span>
+                </button>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-white/60">
+                  Trip planner · {daysPlanned} of {days} days planned
+                </p>
+                <h2 className="mt-0.5 text-lg font-extrabold tracking-tight">
+                  {remainingDays} day{remainingDays === 1 ? "" : "s"} left to plan
+                </h2>
+                <p className="mt-1 text-[11px] leading-tight text-white/70">
+                  {stops.length === 0
+                    ? `Pick your first resort. From ${originLabel}.`
+                    : `So far: ${stopsSummary}.`}
+                </p>
+              </header>
+              <footer
+                className="shrink-0 border-t border-wn-charcoal/10 bg-white p-3"
+                style={SAFE_AREA_FOOTER_STYLE}
+              >
+                <button
+                  type="button"
+                  onClick={openNewStopPicker}
+                  className="flex w-full items-center justify-center gap-2 rounded-lg bg-wn-navy px-4 py-3 text-sm font-semibold text-white transition hover:bg-wn-navy/90 active:scale-[0.98]"
+                >
+                  <span aria-hidden="true">+</span>
+                  {stops.length === 0 ? "Add first stop" : "Add next stop"}
+                </button>
+                <div className="mt-2 flex items-center justify-center gap-4 text-[12px] font-semibold text-wn-charcoal/65">
+                  {stops.length > 0 && (
                     <button
                       type="button"
-                      onClick={() => adjustPendingDays(-1)}
-                      disabled={pendingStop.days <= 1}
-                      className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-white text-2xl font-bold text-wn-navy shadow-sm transition active:scale-95 disabled:opacity-30"
-                      aria-label="Fewer days"
+                      onClick={() => setReviewEarly(true)}
+                      className="underline-offset-2 hover:text-wn-navy hover:underline"
                     >
-                      −
+                      Review trip
                     </button>
-                    <div className="flex flex-1 items-baseline justify-center gap-1.5">
-                      <span className="text-3xl font-extrabold tracking-tight text-wn-navy">
-                        {pendingStop.days}
-                      </span>
-                      <span className="text-xs font-semibold uppercase tracking-wide text-wn-charcoal/60">
-                        day{pendingStop.days === 1 ? "" : "s"}
-                      </span>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => adjustPendingDays(1)}
-                      disabled={pendingStop.days >= cap}
-                      className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-white text-2xl font-bold text-wn-navy shadow-sm transition active:scale-95 disabled:opacity-30"
-                      aria-label="More days"
-                    >
-                      +
-                    </button>
-                  </div>
-                  <p className="mt-2 text-[11px] text-wn-charcoal/55">
-                    {cap - pendingStop.days > 0
-                      ? `${cap - pendingStop.days} day${cap - pendingStop.days === 1 ? "" : "s"} left to plan after this stop.`
-                      : "This fills the rest of your trip."}
-                  </p>
+                  )}
                   <button
                     type="button"
-                    onClick={() => {
-                      cancelPendingStop();
-                      // Re-open picker so the user can choose a different resort.
-                      setPickerForIndex("new");
-                    }}
-                    className="mt-4 text-[12px] font-semibold text-wn-charcoal/65 underline-offset-2 hover:text-wn-navy hover:underline"
+                    onClick={unlockDays}
+                    className="underline-offset-2 hover:text-wn-navy hover:underline"
                   >
-                    ← Pick a different resort
+                    Change trip length
                   </button>
                 </div>
-                <footer className="shrink-0 border-t border-wn-charcoal/10 bg-white p-3">
-                  <button
-                    type="button"
-                    onClick={confirmPendingStop}
-                    className="flex w-full items-center justify-center gap-2 rounded-lg bg-wn-navy px-4 py-3 text-sm font-semibold text-white transition hover:bg-wn-navy/90 active:scale-[0.98]"
-                  >
-                    ✓ Confirm stop {stopNumber}
-                  </button>
-                </footer>
-              </>
-            );
-          })()}
+              </footer>
+            </>
+          )}
 
-          {/* Phase 4: Review — all days planned, ready to save. */}
+          {/* Phase 3: Review — ready to save (or an early look). */}
           {wizardPhase === "review" && (
             <>
               <header className="relative shrink-0 border-b border-wn-charcoal/10 bg-wn-navy px-4 py-4 text-white">
@@ -1164,33 +1398,23 @@ export default function TripPlannerPanel({
                   <span aria-hidden="true" className="text-lg leading-none">×</span>
                 </button>
                 <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-white/60">
-                  Trip ready · review
+                  {remainingDays === 0 ? "Trip ready · review" : "Trip planner · review"}
                 </p>
                 <h2 className="mt-0.5 text-lg font-extrabold tracking-tight">
                   {days}-day trip from {originLabel}
                 </h2>
                 <p className="mt-1 text-[11px] leading-tight text-white/70">
-                  ✓ All {days} days planned · {stops.length} stop{stops.length === 1 ? "" : "s"} · ≈ {formatDriveTime(totalDriveSeconds)} total drive
+                  {remainingDays === 0
+                    ? `✓ All ${days} days planned`
+                    : `${daysPlanned} of ${days} days planned`}
+                  {" · "}
+                  {stops.length} stop{stops.length === 1 ? "" : "s"} · ≈ {formatDriveTime(totalDriveSeconds)} total drive
                 </p>
               </header>
               <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-4" style={{ touchAction: "pan-y" }}>
                 {/* Stage-4 template-loaded banner (mobile review). */}
                 {templateNotice && (
-                  <div className="mb-3 flex items-start gap-2 rounded-lg border border-wn-navy/25 bg-wn-navy/5 px-3 py-2">
-                    <span className="text-base leading-none" aria-hidden="true">✨</span>
-                    <div className="flex-1 text-[12px] leading-snug text-wn-navy">
-                      <span className="font-bold">Template loaded:</span> {templateNotice.title}.
-                      Customize and save when ready.
-                    </div>
-                    <button
-                      type="button"
-                      onClick={dismissTemplateNotice}
-                      aria-label="Dismiss template notice"
-                      className="ml-1 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-wn-navy/65 transition hover:bg-wn-navy/10 hover:text-wn-navy"
-                    >
-                      <span aria-hidden="true">×</span>
-                    </button>
-                  </div>
+                  <TemplateNotice title={templateNotice.title} onDismiss={dismissTemplateNotice} />
                 )}
                 {/* Round 5 polish — trip-name input moved to TOP of the
                     review panel. Was buried under stops + cost so users
@@ -1212,6 +1436,9 @@ export default function TripPlannerPanel({
                     className="w-full rounded-md border border-wn-charcoal/20 bg-white px-3 py-2 text-sm font-medium text-wn-charcoal placeholder:text-wn-charcoal/35 focus:border-wn-navy focus:outline-none focus:ring-2 focus:ring-wn-navy/20"
                   />
                 </div>
+                {startDateSupported && (
+                  <StartDateField id="trip-start-mobile" value={startDate} onChange={setStartDate} />
+                )}
                 <ol className="flex flex-col gap-2">
                   {stops.map((stop, i) => {
                     const r = candidateBySlug.get(stop.slug);
@@ -1259,6 +1486,20 @@ export default function TripPlannerPanel({
                   })}
                 </ol>
 
+                {remainingDays > 0 && (
+                  <button
+                    type="button"
+                    onClick={openNewStopPicker}
+                    className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-lg border-2 border-dashed border-wn-navy/40 bg-wn-navy/5 px-3 py-2.5 text-sm font-semibold text-wn-navy transition hover:border-wn-navy hover:bg-wn-navy/10 active:scale-[0.99]"
+                  >
+                    <span aria-hidden="true">+</span>
+                    <span>Add next stop</span>
+                    <span className="text-[11px] font-normal text-wn-navy/65">
+                      ({remainingDays} day{remainingDays === 1 ? "" : "s"} left)
+                    </span>
+                  </button>
+                )}
+
                 {/* Stage-4 optimize order button (mobile review). */}
                 <button
                   type="button"
@@ -1284,44 +1525,12 @@ export default function TripPlannerPanel({
 
                 {/* Stage-4 cost estimator (mobile review). */}
                 {costBreakdown && (
-                  <div className="mt-3 rounded-lg border border-wn-charcoal/10 bg-white p-3">
-                    <div className="mb-1 flex items-baseline justify-between">
-                      <div className="text-[10px] font-bold uppercase tracking-[0.15em] text-wn-charcoal/55">
-                        Estimated trip cost
-                      </div>
-                      <div className="text-[10px] text-wn-charcoal/45">per person</div>
-                    </div>
-                    <div className="mb-2 text-base font-extrabold tracking-tight text-wn-navy">
-                      ${costBreakdown.totalLow.toLocaleString()}–${costBreakdown.totalHigh.toLocaleString()}
-                    </div>
-                    {costBreakdown.passCoversAll && (
-                      <p className="mb-2 rounded-md bg-emerald-50 px-2 py-1 text-[11px] font-semibold text-emerald-800">
-                        ✓ Your pass covers all stops — lift tickets $0
-                      </p>
-                    )}
-                    <dl className="grid grid-cols-3 gap-2 text-center">
-                      <CostTile
-                        label="Lift tickets"
-                        value={`$${costBreakdown.liftTickets.toLocaleString()}`}
-                      />
-                      <CostTile
-                        label={`Lodging (${costBreakdown.totalDays}n)`}
-                        value={`$${costBreakdown.lodging.toLocaleString()}`}
-                      />
-                      <CostTile
-                        label={`Driving (${totalRoundTripMiles}mi)`}
-                        value={`$${costBreakdown.driving.toLocaleString()}`}
-                      />
-                    </dl>
-                    <p className="mt-2 text-[10px] leading-tight text-wn-charcoal/50">
-                      Estimate. Real prices vary by date, hotel, and demand.
-                    </p>
-                  </div>
+                  <CostEstimateCard
+                    breakdown={costBreakdown}
+                    miles={totalRoundTripMiles}
+                    onPartySizeChange={setPartySize}
+                  />
                 )}
-
-                {/* Trip-name input moved to the TOP of the review (above
-                    the stops list) — Round 5 polish. The old position
-                    here was redundant. */}
 
                 <button
                   type="button"
@@ -1331,28 +1540,35 @@ export default function TripPlannerPanel({
                   ← Change trip length
                 </button>
               </div>
-              <footer className="shrink-0 border-t border-wn-charcoal/10 bg-white p-3">
-                {saveError && <p className="mb-2 text-[11px] text-red-700">{saveError}</p>}
+              <footer
+                className="shrink-0 border-t border-wn-charcoal/10 bg-white p-3"
+                style={SAFE_AREA_FOOTER_STYLE}
+              >
+                {saveError && (
+                  <p role="alert" className="mb-2 text-[11px] leading-snug text-red-700">
+                    {saveError}
+                  </p>
+                )}
                 <button
                   type="button"
                   onClick={saveTrip}
                   disabled={stops.length === 0 || saving}
                   className="flex w-full items-center justify-center gap-2 rounded-lg bg-wn-navy px-4 py-3 text-sm font-semibold text-white transition hover:bg-wn-navy/90 disabled:opacity-60"
                 >
-                  {saving ? "Saving…" : isAuthed ? "Save trip" : "Sign in to save"}
+                  {saveLabel}
                   <span aria-hidden="true">→</span>
                 </button>
                 <p className="mt-1.5 text-center text-[10px] text-wn-charcoal/55">
                   {isAuthed
                     ? "Saved trips appear under My trips."
-                    : "We use a magic link, no password."}
+                    : "We use a magic link, no password. Your plan is kept while you sign in."}
                 </p>
               </footer>
             </>
           )}
         </div>
 
-        {/* ---- DESKTOP LAYOUT — existing single-screen view ---- */}
+        {/* ---- DESKTOP LAYOUT — single-screen view ---- */}
         <div className="hidden flex-1 flex-col md:flex">
 
         <header className="shrink-0 border-b border-wn-charcoal/10 bg-wn-navy px-4 py-4 text-white">
@@ -1407,8 +1623,8 @@ export default function TripPlannerPanel({
                 </div>
                 <button
                   type="button"
-                  onClick={() => onDaysChange(Math.min(30, days + 1))}
-                  disabled={days >= 30}
+                  onClick={() => onDaysChange(Math.min(MAX_TRIP_DAYS, days + 1))}
+                  disabled={days >= MAX_TRIP_DAYS}
                   className="inline-flex h-9 w-9 items-center justify-center rounded-md bg-white/10 text-lg font-bold text-white transition hover:bg-white/20 disabled:opacity-30"
                   aria-label="More days"
                 >
@@ -1417,7 +1633,7 @@ export default function TripPlannerPanel({
               </div>
               {/* Preset chips — common trip lengths (1d through 14d). */}
               <div className="mt-1.5 flex flex-wrap gap-1">
-                {[1, 2, 3, 5, 7, 10, 14].map((n) => {
+                {DAY_PRESETS.map((n) => {
                   const active = n === days;
                   return (
                     <button
@@ -1443,28 +1659,14 @@ export default function TripPlannerPanel({
           <p className="mt-3 text-[11px] leading-tight text-white/70">
             {stops.length === 0
               ? "Tap Add stop below to pick your first resort. The map will fly to it once selected."
-              : "Tap +/− to change how many days you stay at each stop. Add another stop when ready."}
+              : "Tap +/− to change how many days you stay at each stop. Changing the trip length keeps your stops."}
           </p>
         </header>
 
         <div className="flex-1 overflow-y-auto px-4 py-4">
           {/* Stage-4 template-loaded banner (desktop). */}
           {templateNotice && (
-            <div className="mb-3 flex items-start gap-2 rounded-lg border border-wn-navy/25 bg-wn-navy/5 px-3 py-2">
-              <span className="text-base leading-none" aria-hidden="true">✨</span>
-              <div className="flex-1 text-[12px] leading-snug text-wn-navy">
-                <span className="font-bold">Template loaded:</span> {templateNotice.title}.
-                Customize and save when ready.
-              </div>
-              <button
-                type="button"
-                onClick={dismissTemplateNotice}
-                aria-label="Dismiss template notice"
-                className="ml-1 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-wn-navy/65 transition hover:bg-wn-navy/10 hover:text-wn-navy"
-              >
-                <span aria-hidden="true">×</span>
-              </button>
-            </div>
+            <TemplateNotice title={templateNotice.title} onDismiss={dismissTemplateNotice} />
           )}
           {/* Days-planned tracker */}
           <div className="mb-3 flex items-baseline justify-between">
@@ -1515,6 +1717,9 @@ export default function TripPlannerPanel({
                       aria-hidden="true"
                     />
                     {r ? (
+                      // The draft is mirrored to sessionStorage, so
+                      // reading the resort page and coming back keeps
+                      // the plan intact.
                       <Link
                         href={`/resort/${r.slug}`}
                         className="text-sm font-bold text-wn-navy hover:underline"
@@ -1576,11 +1781,11 @@ export default function TripPlannerPanel({
               );
             })}
 
-            {/* Inline "How many days here?" confirm card. Renders only
-                while the user is mid-pick — between selecting a resort
-                in the picker and either confirming (push stop) or
-                cancelling (drop). Stops the wizard from silently
-                appending a 1-day stop the user didn't actively choose. */}
+            {/* Inline "How many days here?" card. Mirrors the picker's
+                sticky footer for users who prefer the right rail. Renders
+                only while a resort is selected in the picker but not yet
+                added, so the wizard never silently appends a stop the
+                user didn't actively choose. */}
             {pendingStop && (() => {
               const r = candidateBySlug.get(pendingStop.slug);
               const name = r?.name ?? pendingStop.slug;
@@ -1590,7 +1795,7 @@ export default function TripPlannerPanel({
                   aria-live="polite"
                 >
                   <div className="mb-1 text-[10px] font-semibold uppercase tracking-[0.15em] text-wn-navy">
-                    Confirm stop {stops.length + 1}
+                    Stop {stops.length + 1}
                   </div>
                   <div className="text-sm font-bold text-wn-navy">
                     How many days at {name}?
@@ -1612,7 +1817,7 @@ export default function TripPlannerPanel({
                       <button
                         type="button"
                         onClick={() => adjustPendingDays(1)}
-                        disabled={pendingStop.days >= Math.max(1, days - daysPlanned)}
+                        disabled={pendingStop.days >= pendingDaysCap}
                         className="inline-flex h-7 w-7 items-center justify-center rounded text-wn-navy hover:bg-wn-navy/10 disabled:opacity-30"
                         aria-label="More days"
                       >
@@ -1626,7 +1831,7 @@ export default function TripPlannerPanel({
                       onClick={confirmPendingStop}
                       className="flex-1 rounded-md bg-wn-navy px-3 py-2 text-sm font-semibold text-white transition hover:bg-wn-navy/90 active:scale-[0.98]"
                     >
-                      ✓ Confirm
+                      + Add stop
                     </button>
                     <button
                       type="button"
@@ -1641,7 +1846,7 @@ export default function TripPlannerPanel({
             })()}
 
             {/* Add stop button — only when:
-                  - no pending-stop confirm card is open AND
+                  - no pending pick is in flight AND
                   - there are still days left to plan (remainingDays > 0)
                 Once daysPlanned >= days the button hides and a green
                 "All days planned — ready to save" card takes its place
@@ -1651,7 +1856,7 @@ export default function TripPlannerPanel({
               <li>
                 <button
                   type="button"
-                  onClick={() => setPickerForIndex("new")}
+                  onClick={openNewStopPicker}
                   className="flex w-full items-center justify-center gap-1.5 rounded-lg border-2 border-dashed border-wn-navy/40 bg-wn-navy/5 px-3 py-3 text-sm font-semibold text-wn-navy transition hover:border-wn-navy hover:bg-wn-navy/10 active:scale-[0.99]"
                 >
                   <span aria-hidden="true">+</span>
@@ -1760,39 +1965,11 @@ export default function TripPlannerPanel({
               least one stop so the layout doesn't shift on a blank
               planner. */}
           {stops.length > 0 && costBreakdown && (
-            <div className="mt-3 rounded-lg border border-wn-charcoal/10 bg-white p-3">
-              <div className="mb-1 flex items-baseline justify-between">
-                <div className="text-[10px] font-bold uppercase tracking-[0.15em] text-wn-charcoal/55">
-                  Estimated trip cost
-                </div>
-                <div className="text-[10px] text-wn-charcoal/45">per person</div>
-              </div>
-              <div className="mb-2 text-base font-extrabold tracking-tight text-wn-navy">
-                ${costBreakdown.totalLow.toLocaleString()}–${costBreakdown.totalHigh.toLocaleString()}
-              </div>
-              {costBreakdown.passCoversAll && (
-                <p className="mb-2 rounded-md bg-emerald-50 px-2 py-1 text-[11px] font-semibold text-emerald-800">
-                  ✓ Your pass covers all stops — lift tickets $0
-                </p>
-              )}
-              <dl className="grid grid-cols-3 gap-2 text-center">
-                <CostTile
-                  label="Lift tickets"
-                  value={`$${costBreakdown.liftTickets.toLocaleString()}`}
-                />
-                <CostTile
-                  label={`Lodging (${costBreakdown.totalDays} night${costBreakdown.totalDays === 1 ? "" : "s"})`}
-                  value={`$${costBreakdown.lodging.toLocaleString()}`}
-                />
-                <CostTile
-                  label={`Driving (${totalRoundTripMiles.toLocaleString()} mi)`}
-                  value={`$${costBreakdown.driving.toLocaleString()}`}
-                />
-              </dl>
-              <p className="mt-2 text-[10px] leading-tight text-wn-charcoal/50">
-                Estimate. Real prices vary by date, hotel, and demand.
-              </p>
-            </div>
+            <CostEstimateCard
+              breakdown={costBreakdown}
+              miles={totalRoundTripMiles}
+              onPartySizeChange={setPartySize}
+            />
           )}
 
           {stops.length > 0 && (
@@ -1815,25 +1992,34 @@ export default function TripPlannerPanel({
               <p className="mt-1 text-[10px] text-wn-charcoal/55">
                 Leave blank to use the suggested name above.
               </p>
+              {startDateSupported && (
+                <div className="mt-3">
+                  <StartDateField id="trip-start-desktop" value={startDate} onChange={setStartDate} />
+                </div>
+              )}
             </div>
           )}
         </div>
 
         <footer className="shrink-0 border-t border-wn-charcoal/10 bg-white p-3">
-          {saveError && <p className="mb-2 text-[11px] text-red-700">{saveError}</p>}
+          {saveError && (
+            <p role="alert" className="mb-2 text-[11px] leading-snug text-red-700">
+              {saveError}
+            </p>
+          )}
           <button
             type="button"
             onClick={saveTrip}
             disabled={stops.length === 0 || saving}
             className="flex w-full items-center justify-center gap-2 rounded-lg bg-wn-navy px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-wn-navy/90 disabled:opacity-60"
           >
-            {saving ? "Saving…" : isAuthed ? "Save this trip" : "Sign in to save trip"}
+            {saving ? "Saving…" : saveError ? "Try again" : isAuthed ? "Save this trip" : "Sign in to save trip"}
             <span aria-hidden="true">→</span>
           </button>
           <p className="mt-1.5 text-center text-[10px] text-wn-charcoal/55">
             {isAuthed
               ? 'Saved trips show up under "My trips" — you can start one anytime.'
-              : "We use a magic link, no password."}
+              : "We use a magic link, no password. Your plan is kept while you sign in."}
           </p>
         </footer>
         </div>{/* end desktop layout wrapper */}
@@ -1861,13 +2047,12 @@ export default function TripPlannerPanel({
               ? candidateBySlug.get(pendingStop.slug)?.name ?? pendingStop.slug
               : null
           }
+          pendingDays={pendingStop?.days}
+          pendingDaysMax={pendingDaysCap}
+          onPendingDaysChange={adjustPendingDays}
           onSelect={handlePicked}
-          onConfirmPending={confirmPreviewPick}
-          onClose={() => {
-            setPickerForIndex(null);
-            setPendingStop(null);
-            onPreviewLeg?.(null);
-          }}
+          onConfirmPending={confirmPendingStop}
+          onClose={closePicker}
           onHover={(slug) => {
             // Stage 19.8: hover only draws the gold preview line.
             // Camera is left alone so the trip-overview view (set by
@@ -1890,13 +2075,167 @@ export default function TripPlannerPanel({
           }}
         />
       )}
-      <UpsellModal
-        open={showTripUpsell}
-        onClose={() => setShowTripUpsell(false)}
-        gate="savedTrips"
-        detail={`You've already saved ${FREE_LIMITS.savedTrips} trips on the free tier. Pro lets you save unlimited trips, export to PDF + calendar, and access trip templates.`}
-      />
     </>
+  );
+}
+
+// "Template loaded" banner shared by the mobile review and desktop list.
+function TemplateNotice({ title, onDismiss }: { title: string; onDismiss: () => void }) {
+  return (
+    <div className="mb-3 flex items-start gap-2 rounded-lg border border-wn-navy/25 bg-wn-navy/5 px-3 py-2">
+      <span className="text-base leading-none" aria-hidden="true">✨</span>
+      <div className="flex-1 text-[12px] leading-snug text-wn-navy">
+        <span className="font-bold">Template loaded:</span> {title}.
+        Customize and save when ready.
+      </div>
+      <button
+        type="button"
+        onClick={onDismiss}
+        aria-label="Dismiss template notice"
+        className="ml-1 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-wn-navy/65 transition hover:bg-wn-navy/10 hover:text-wn-navy"
+      >
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+  );
+}
+
+// Optional planned first ski day. Native date input: iOS shows its
+// wheel picker, desktop its calendar popover, both without extra code.
+function StartDateField({
+  id,
+  value,
+  onChange,
+}: {
+  id: string;
+  value: string;
+  onChange: (next: string) => void;
+}) {
+  return (
+    <div className="mb-3">
+      <label
+        htmlFor={id}
+        className="mb-1 block text-[10px] font-bold uppercase tracking-[0.15em] text-wn-charcoal/55"
+      >
+        Trip start date <span className="font-normal normal-case tracking-normal">(optional)</span>
+      </label>
+      <div className="flex items-center gap-2">
+        <input
+          id={id}
+          type="date"
+          value={value}
+          min={todayIsoDate()}
+          onChange={(e) => onChange(e.target.value)}
+          // 16px keeps iOS Safari from zooming the page on focus.
+          style={{ fontSize: "16px" }}
+          className="flex-1 rounded-md border border-wn-charcoal/20 bg-white px-3 py-1.5 font-medium text-wn-charcoal focus:border-wn-navy focus:outline-none focus:ring-2 focus:ring-wn-navy/20"
+        />
+        {value && (
+          <button
+            type="button"
+            onClick={() => onChange("")}
+            className="text-[11px] font-semibold text-wn-charcoal/60 underline-offset-2 hover:text-wn-navy hover:underline"
+          >
+            Clear
+          </button>
+        )}
+      </div>
+      <p className="mt-1 text-[10px] text-wn-charcoal/55">
+        Day 1 of the trip. Used for the calendar export; you can add it later.
+      </p>
+    </div>
+  );
+}
+
+// Cost estimate card shared by the mobile review and the desktop rail.
+// Every number says what it covers: the group total is headline, the
+// per-person split is underneath, and each tile names its unit
+// (people × days, rooms × nights, cars × miles).
+function CostEstimateCard({
+  breakdown,
+  miles,
+  onPartySizeChange,
+}: {
+  breakdown: CostBreakdown;
+  miles: number;
+  onPartySizeChange: (next: number) => void;
+}) {
+  const { partySize, nights, rooms, cars, totalDays } = breakdown;
+  const people = `${partySize} ${partySize === 1 ? "person" : "people"}`;
+  return (
+    <div className="mt-3 rounded-lg border border-wn-charcoal/10 bg-white p-3">
+      <div className="mb-1 flex items-center justify-between gap-2">
+        <div className="text-[10px] font-bold uppercase tracking-[0.15em] text-wn-charcoal/55">
+          Estimated trip cost
+        </div>
+        <div
+          role="group"
+          aria-label="Number of people"
+          className="flex items-center gap-1 rounded-md border border-wn-charcoal/15 bg-wn-offwhite px-1 py-0.5"
+        >
+          <button
+            type="button"
+            onClick={() => onPartySizeChange(Math.max(MIN_PARTY_SIZE, partySize - 1))}
+            disabled={partySize <= MIN_PARTY_SIZE}
+            className="inline-flex h-6 w-6 items-center justify-center rounded text-wn-charcoal hover:bg-wn-charcoal/10 disabled:opacity-30"
+            aria-label="Fewer people"
+          >
+            −
+          </button>
+          <span className="min-w-[4.25rem] text-center text-[11px] font-semibold text-wn-navy">
+            {people}
+          </span>
+          <button
+            type="button"
+            onClick={() => onPartySizeChange(Math.min(MAX_PARTY_SIZE, partySize + 1))}
+            disabled={partySize >= MAX_PARTY_SIZE}
+            className="inline-flex h-6 w-6 items-center justify-center rounded text-wn-charcoal hover:bg-wn-charcoal/10 disabled:opacity-30"
+            aria-label="More people"
+          >
+            +
+          </button>
+        </div>
+      </div>
+      <div className="text-base font-extrabold tracking-tight text-wn-navy">
+        ${breakdown.totalLow.toLocaleString()}–${breakdown.totalHigh.toLocaleString()}
+        <span className="ml-1 text-[11px] font-semibold text-wn-charcoal/55">total for {people}</span>
+      </div>
+      <div className="mb-2 text-[11px] text-wn-charcoal/60">
+        ≈ ${breakdown.perPersonLow.toLocaleString()}–${breakdown.perPersonHigh.toLocaleString()} per person
+      </div>
+      {breakdown.passCoversAll && (
+        <p className="mb-2 rounded-md bg-emerald-50 px-2 py-1 text-[11px] font-semibold text-emerald-800">
+          {partySize === 1
+            ? "✓ Your pass covers all stops — lift tickets $0"
+            : `✓ Your pass covers your lift tickets — the other ${partySize - 1 === 1 ? "person pays" : `${partySize - 1} pay`} walk-up`}
+        </p>
+      )}
+      <dl className="grid grid-cols-3 gap-2 text-center">
+        <CostTile
+          label={
+            breakdown.passCoversAll && partySize > 1
+              ? `Lift tickets (${partySize - 1} without a pass × ${totalDays} day${totalDays === 1 ? "" : "s"})`
+              : `Lift tickets (${partySize} × ${totalDays} day${totalDays === 1 ? "" : "s"})`
+          }
+          value={`$${breakdown.liftTickets.toLocaleString()}`}
+        />
+        <CostTile
+          label={
+            nights === 0
+              ? "Lodging (day trip, 0 nights)"
+              : `Lodging (${rooms} room${rooms === 1 ? "" : "s"} × ${nights} night${nights === 1 ? "" : "s"})`
+          }
+          value={`$${breakdown.lodging.toLocaleString()}`}
+        />
+        <CostTile
+          label={`Driving (${cars} car${cars === 1 ? "" : "s"}, ${miles.toLocaleString()} mi)`}
+          value={`$${breakdown.driving.toLocaleString()}`}
+        />
+      </dl>
+      <p className="mt-2 text-[10px] leading-tight text-wn-charcoal/50">
+        Rough estimate: walk-up ticket prices, $80–300 a night for lodging, IRS mileage for driving. Real prices vary by date, hotel, and demand.
+      </p>
+    </div>
   );
 }
 

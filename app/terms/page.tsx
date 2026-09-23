@@ -10,7 +10,8 @@
 // ---------------------------------------------------------------------------
 // NEXT_PUBLIC_OPERATOR_NAME     Legal operator name (sole-prop registration
 //                               in Thailand). Until set, the page shows
-//                               "[Operator name pending registration]".
+//                               the product name "Wynla" — never a
+//                               bracketed placeholder (audit content-seo-3).
 // NEXT_PUBLIC_OPERATOR_ADDRESS  Operator business address. Defaults to
 //                               "Bangkok, Thailand".
 // NEXT_PUBLIC_CONTACT_EMAIL     Public contact mailbox. Defaults to
@@ -29,11 +30,10 @@ export const metadata: Metadata = {
   alternates: { canonical: "/terms" },
 };
 
-const LAST_UPDATED = "May 23, 2026";
+const LAST_UPDATED = "September 23, 2026";
 
-const OPERATOR_NAME =
-  process.env.NEXT_PUBLIC_OPERATOR_NAME ??
-  "[Operator name pending registration]";
+// `||` rather than `??` so an empty string in Vercel env also falls back.
+const OPERATOR_NAME = process.env.NEXT_PUBLIC_OPERATOR_NAME || "Wynla";
 const OPERATOR_ADDRESS =
   process.env.NEXT_PUBLIC_OPERATOR_ADDRESS ?? "Bangkok, Thailand";
 const CONTACT_EMAIL =
@@ -300,12 +300,12 @@ export default function TermsPage() {
 
         <Section title="External links">
           <p>
-            Wynla links out to third-party sites (Booking.com, Airbnb,
-            ticket vendors, resort sites, weather services). We
-            don&apos;t control those sites, and we&apos;re not
-            responsible for what happens once you click through. Some
-            booking links use affiliate tracking, which may earn Wynla a
-            small commission at no extra cost to you.
+            Wynla links out to third-party sites (Booking.com, Vrbo,
+            Airbnb, ticket vendors, pass operators, resort sites, weather
+            services). We don&apos;t control those sites, and we&apos;re
+            not responsible for what happens once you click through. The
+            Booking.com and Vrbo links are affiliate links, which may earn
+            Wynla a small commission at no extra cost to you.
           </p>
         </Section>
 

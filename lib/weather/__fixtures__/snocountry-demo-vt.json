@@ -1,0 +1,60 @@
+{
+ "apiVersion": "1.10",
+ "totalItems": 3,
+ "items": [
+  {
+   "id": "802002",
+   "resortName": "Bolton Valley Resort",
+   "state": "VT",
+   "reportDateTime": "2026-04-12 14:17:06",
+   "resortStatus": "8",
+   "operatingStatus": "Open for Events/Activities",
+   "primarySurfaceCondition": "",
+   "newSnowMin": "",
+   "newSnowMax": "",
+   "snowLast48Hours": "",
+   "avgBaseDepthMin": "",
+   "avgBaseDepthMax": "",
+   "openDownHillTrails": "",
+   "openDownHillLifts": "",
+   "maxOpenDownHillTrails": "71",
+   "maxOpenDownHillLifts": "6"
+  },
+  {
+   "id": "802003",
+   "resortName": "Bromley Mountain Resort",
+   "state": "VT",
+   "reportDateTime": "2026-04-04 15:29:01",
+   "resortStatus": "8",
+   "operatingStatus": "Open for Events/Activities",
+   "primarySurfaceCondition": "",
+   "newSnowMin": "",
+   "newSnowMax": "",
+   "snowLast48Hours": "",
+   "avgBaseDepthMin": "",
+   "avgBaseDepthMax": "",
+   "openDownHillTrails": "",
+   "openDownHillLifts": "",
+   "maxOpenDownHillTrails": "47",
+   "maxOpenDownHillLifts": "9"
+  },
+  {
+   "id": "802004",
+   "resortName": "Burke Mountain Resort",
+   "state": "VT",
+   "reportDateTime": "2026-04-12 14:16:33",
+   "resortStatus": "8",
+   "operatingStatus": "Open for Events/Activities",
+   "primarySurfaceCondition": "",
+   "newSnowMin": "",
+   "newSnowMax": "",
+   "snowLast48Hours": "",
+   "avgBaseDepthMin": "",
+   "avgBaseDepthMax": "",
+   "openDownHillTrails": "",
+   "openDownHillLifts": "",
+   "maxOpenDownHillTrails": "55",
+   "maxOpenDownHillLifts": "4"
+  }
+ ]
+}

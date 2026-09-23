@@ -12,6 +12,7 @@
 // (each resort gets a column, each metric a row) — the canonical
 // "compare table" UX.
 import Link from "next/link";
+import type { Metadata } from "next";
 import { supabase } from "@/lib/supabase";
 import { passColor, passLabel, primaryPass } from "@/lib/passColors";
 import { getDifficultyMix, type DifficultyMix } from "@/lib/difficulty";
@@ -19,6 +20,49 @@ import { COMPARE_MAX } from "@/lib/compareList";
 import ClearCompareButton from "./CompareActions";
 
 export const dynamic = "force-dynamic";
+
+// Title/description name the resorts being compared so a shared link
+// reads well in chat previews, but the page is NOINDEX: every ?ids=
+// permutation is a distinct URL with near-duplicate content, and the
+// compare list is personal state (audit finding content-seo-7).
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<{ ids?: string | string[] }>;
+}): Promise<Metadata> {
+  const ids = parseIds((await searchParams).ids);
+  const base: Metadata = {
+    robots: { index: false, follow: false },
+  };
+  if (ids.length === 0) {
+    return {
+      ...base,
+      title: "Compare resorts",
+      description: "Pick resorts from the map to compare them side by side.",
+    };
+  }
+  const { data } = await supabase
+    .from("resorts")
+    .select("id, name")
+    .in("id", ids)
+    .eq("active", true);
+  const byId = new Map((data ?? []).map((r) => [r.id as number, r.name as string]));
+  const names = ids.map((id) => byId.get(id)).filter((n): n is string => Boolean(n));
+  if (names.length === 0) {
+    return { ...base, title: "Compare resorts", description: "Side-by-side resort comparison." };
+  }
+  const joined = names.join(" vs ");
+  return {
+    ...base,
+    title: `${joined} — compare`,
+    description: `Vertical, acres, lifts, snowfall, terrain mix and drive times for ${joined}, side by side.`,
+    openGraph: {
+      title: `${joined} — compare · Wynla`,
+      description: `Vertical, acres, lifts, snowfall, terrain mix and drive times for ${joined}, side by side.`,
+      images: [{ url: "/og-home.png", width: 1200, height: 630, alt: "Wynla — US ski resort map" }],
+    },
+  };
+}
 
 // Matches the columns we read from `resorts` below. We pull the
 // superset that the metric rows need — Supabase returns nulls for
@@ -99,10 +143,7 @@ export default async function ComparePage({
 
   if (ids.length === 0) {
     return (
-      <main
-        className="min-h-dvh bg-wn-offwhite px-4 py-12 sm:px-6"
-        style={{ paddingTop: "calc(env(safe-area-inset-top, 0px) + 3rem)" }}
-      >
+      <main className="min-h-dvh bg-wn-offwhite px-4 py-12 sm:px-6">
         <div className="mx-auto max-w-2xl">
           <Link
             href="/"
@@ -193,10 +234,7 @@ export default async function ComparePage({
 
   if (resorts.length === 0) {
     return (
-      <main
-        className="min-h-dvh bg-wn-offwhite px-4 py-12 sm:px-6"
-        style={{ paddingTop: "calc(env(safe-area-inset-top, 0px) + 3rem)" }}
-      >
+      <main className="min-h-dvh bg-wn-offwhite px-4 py-12 sm:px-6">
         <div className="mx-auto max-w-2xl">
           <Link
             href="/"
@@ -213,16 +251,10 @@ export default async function ComparePage({
     );
   }
 
+  // iOS safe-area padding for the "← Map" link comes from the #main-content
+  // rule in globals.css (shared by every non-map route).
   return (
-    <main
-      className="min-h-dvh bg-wn-offwhite"
-      // iOS safe-area padding so the "← Map" link + title don't slide
-      // under the status bar (clock / battery). Without this, Saitarn's
-      // 2026-05-23 screenshot showed the "21:09" status bar overlapping
-      // "← Map" on the iPhone PWA. env(safe-area-inset-top) is 0 on
-      // desktop so this is free for non-mobile.
-      style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}
-    >
+    <main className="min-h-dvh bg-wn-offwhite">
       <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-10">
         <div className="mb-3 flex items-center justify-between gap-2">
           <Link

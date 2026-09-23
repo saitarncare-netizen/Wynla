@@ -14,6 +14,7 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { ORIGINS } from "@/lib/origins";
 import ProfileForm from "./ProfileForm";
 import DeleteAccount from "./DeleteAccount";
+import { InstallRow } from "@/components/InstallPrompt";
 
 export const dynamic = "force-dynamic";
 
@@ -102,6 +103,9 @@ export default async function AccountPage() {
                 <span className="text-wn-charcoal/50">→</span>
               </Link>
             </li>
+            {/* Permanent install entry point for people who dismissed the
+                nudge. Renders nothing inside the installed app. */}
+            <InstallRow />
             {/* Admin-only feedback inbox — only shown to the founder. */}
             {user.email === "saitarncare@gmail.com" && (
               <li>

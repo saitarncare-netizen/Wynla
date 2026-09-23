@@ -8,7 +8,7 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { passColor, primaryPass, passLabel } from "@/lib/passColors";
 import { haversineMeters, estimateDriveSeconds } from "@/lib/distance";
 import { formatDriveTime } from "@/lib/origins";
-import TripActions from "./TripActions";
+import TripActions, { StartDateBadge } from "./TripActions";
 import TripNameEditor from "./TripNameEditor";
 import TripShareButton from "./TripShareButton";
 import TripCalendarExport from "@/components/TripCalendarExport";
@@ -35,6 +35,9 @@ type Trip = {
   created_at: string;
   /** jsonb; undefined until the day-plans DDL has run (feature-detected). */
   day_plans?: unknown;
+  /** date (YYYY-MM-DD); undefined until the start_date DDL has run
+      (feature-detected), null when the user has not set one. */
+  start_date?: string | null;
 };
 
 type ResortRow = {
@@ -221,6 +224,19 @@ export default async function TripPage({
   const currentDay = trip.current_day ?? 0;
   const completedSet = new Set(trip.completed_days);
   const tripFinished = isActive && completedSet.size >= trip.total_days;
+  const lastCompletedDay = completedSet.size > 0 ? Math.max(...completedSet) : null;
+
+  // Trip dates. The column is feature-detected off select("*"): before
+  // the DDL runs the key is absent and the date UI stays hidden. The
+  // calendar export prefers the planned start date, then the day the
+  // user actually started; with neither it anchors to today on the
+  // user's clock (null here — the client decides, not this UTC server).
+  const startDateEnabled = "start_date" in trip;
+  const startDate =
+    typeof trip.start_date === "string" && /^\d{4}-\d{2}-\d{2}$/.test(trip.start_date)
+      ? trip.start_date
+      : null;
+  const calendarAnchorIso = startDate ?? trip.started_at ?? null;
 
   // Google Maps multi-waypoint URL. Round-trip from origin → resorts in
   // order → back to origin. Dedupes consecutive repeats (basecamp mode
@@ -305,13 +321,7 @@ export default async function TripPage({
               <TripCalendarExport
                 tripName={trip.name ?? fallbackName}
                 originLabel={trip.origin_label ?? "Home"}
-                // No explicit trip start date in the schema yet —
-                // anchor day 1 to today so the calendar export is at
-                // least useful for active / upcoming trips. Users can
-                // shift dates in their own calendar once imported.
-                startDateIso={
-                  trip.started_at ?? new Date().toISOString()
-                }
+                startDateIso={calendarAnchorIso}
                 days={expandedSlugs.map((slug, i) => {
                   const r = bySlug.get(slug);
                   return {
@@ -323,7 +333,7 @@ export default async function TripPage({
                   };
                 })}
               />
-              <TripShareButton tripId={String(trip.id)} />
+              <TripShareButton tripId={String(trip.id)} tripName={trip.name ?? fallbackName} />
             </div>
           </div>
 
@@ -340,8 +350,14 @@ export default async function TripPage({
             fallbackName={fallbackName}
           />
 
-          {/* Trip-status badge */}
-          <div className="mt-3 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[11px] font-semibold text-white/95 backdrop-blur-sm">
+          {/* Trip-status badge + planned dates */}
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+          {startDate && (
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[11px] font-semibold text-white/95 backdrop-blur-sm">
+              📅 <StartDateBadge isoDate={startDate} />
+            </div>
+          )}
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[11px] font-semibold text-white/95 backdrop-blur-sm">
             {tripFinished ? (
               <>🎉 <span>Trip complete</span></>
             ) : isActive ? (
@@ -350,8 +366,9 @@ export default async function TripPage({
                 <span>Day {currentDay} of {expandedSlugs.length} · {progressPct}% done</span>
               </>
             ) : (
-              <>📅 <span>Not started yet</span></>
+              <>🎿 <span>Not started yet</span></>
             )}
+          </div>
           </div>
         </div>
       </header>
@@ -504,8 +521,11 @@ export default async function TripPage({
             isActive={isActive}
             tripFinished={tripFinished}
             currentDay={currentDay}
+            lastCompletedDay={lastCompletedDay}
             totalDays={expandedSlugs.length}
             googleMapsUrl={googleMapsUrl}
+            startDate={startDate}
+            startDateEnabled={startDateEnabled}
           />
         </section>
       </div>

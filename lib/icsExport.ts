@@ -90,6 +90,25 @@ function addDays(base: Date, n: number): Date {
 }
 
 /**
+ * Parse a trip start value into a local-time Date. A bare calendar date
+ * ("2027-02-14", the shape of trips.start_date) is built from its parts
+ * so it lands on that calendar day in the user's zone — `new Date()` on
+ * that string would read it as UTC midnight, which is the evening of
+ * the 13th anywhere in the US. Full ISO timestamps (started_at, "now")
+ * go through the normal parser. Invalid input falls back to today so
+ * the export always produces a usable calendar.
+ */
+export function parseStartDate(value: string): Date {
+  const dateOnly = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value.trim());
+  if (dateOnly) {
+    const [, y, m, d] = dateOnly;
+    return new Date(Number(y), Number(m) - 1, Number(d));
+  }
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? new Date() : parsed;
+}
+
+/**
  * Build the .ics file content. Returns a string ready to be served as
  * "text/calendar" or wrapped in a Blob for client-side download.
  */

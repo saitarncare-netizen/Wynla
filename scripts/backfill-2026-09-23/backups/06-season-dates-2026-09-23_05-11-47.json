@@ -1,0 +1,65 @@
+{
+  "step": "06-season-dates",
+  "table": "resorts",
+  "mode": "applied",
+  "taken_at": "2026-09-23T05:11:47.509Z",
+  "columns": [
+    "season_open_text",
+    "season_close_text",
+    "typical_season_start",
+    "typical_season_end"
+  ],
+  "rows": [
+    {
+      "id": 115,
+      "slug": "sleeping-giant",
+      "before": {
+        "season_open_text": "November 27, 2026",
+        "season_close_text": "March 14, 2027",
+        "typical_season_start": "Late November",
+        "typical_season_end": "Mid-March"
+      },
+      "after": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "source": "closed resort — restored pre-step values"
+    },
+    {
+      "id": 161,
+      "slug": "homewood-mountain-resort",
+      "before": {
+        "season_open_text": "December 26, 2026",
+        "season_close_text": "March 14, 2027",
+        "typical_season_start": "Late December",
+        "typical_season_end": "Mid-March"
+      },
+      "after": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "source": "closed resort — restored pre-step values"
+    },
+    {
+      "id": 328,
+      "slug": "apple-mountain",
+      "before": {
+        "season_open_text": "December 13, 2026",
+        "season_close_text": "March 14, 2027",
+        "typical_season_start": "Mid-December",
+        "typical_season_end": "Mid-March"
+      },
+      "after": {
+        "season_open_text": null,
+        "season_close_text": null,
+        "typical_season_start": null,
+        "typical_season_end": null
+      },
+      "source": "closed resort — restored pre-step values"
+    }
+  ]
+}

@@ -1,0 +1,605 @@
+{
+  "step": "05-difficulty-mix",
+  "table": "resorts",
+  "mode": "applied",
+  "taken_at": "2026-09-23T05:13:05.401Z",
+  "columns": [
+    "difficulty_pct_beginner",
+    "difficulty_pct_intermediate",
+    "difficulty_pct_advanced",
+    "difficulty_pct_expert",
+    "trails_beginner",
+    "trails_intermediate",
+    "trails_advanced",
+    "trails_expert"
+  ],
+  "rows": [
+    {
+      "id": 44,
+      "slug": "big-boulder",
+      "before": {
+        "difficulty_pct_beginner": 38,
+        "difficulty_pct_intermediate": 19,
+        "difficulty_pct_advanced": 44,
+        "difficulty_pct_expert": null,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_expert": 0
+      },
+      "source": "other three buckets sum to ~100; missing bucket is 0"
+    },
+    {
+      "id": 59,
+      "slug": "cannon-mountain",
+      "before": {
+        "difficulty_pct_beginner": null,
+        "difficulty_pct_intermediate": 50,
+        "difficulty_pct_advanced": 34,
+        "difficulty_pct_expert": 0,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 14,
+        "difficulty_pct_intermediate": 52
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/new-hampshire/cannon-mountain/ski-resort"
+    },
+    {
+      "id": 92,
+      "slug": "alta",
+      "before": {
+        "difficulty_pct_beginner": 15,
+        "difficulty_pct_intermediate": 30,
+        "difficulty_pct_advanced": 55,
+        "difficulty_pct_expert": null,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_expert": 0
+      },
+      "source": "other three buckets sum to ~100; missing bucket is 0"
+    },
+    {
+      "id": 93,
+      "slug": "beaver-mountain",
+      "before": {
+        "difficulty_pct_beginner": 35,
+        "difficulty_pct_intermediate": 40,
+        "difficulty_pct_advanced": 25,
+        "difficulty_pct_expert": null,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_expert": 0
+      },
+      "source": "other three buckets sum to ~100; missing bucket is 0"
+    },
+    {
+      "id": 103,
+      "slug": "soldier-hollow",
+      "before": {
+        "difficulty_pct_beginner": 44,
+        "difficulty_pct_intermediate": 25,
+        "difficulty_pct_advanced": 31,
+        "difficulty_pct_expert": null,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_expert": 0
+      },
+      "source": "other three buckets sum to ~100; missing bucket is 0"
+    },
+    {
+      "id": 104,
+      "slug": "solitude",
+      "before": {
+        "difficulty_pct_beginner": 10,
+        "difficulty_pct_intermediate": 40,
+        "difficulty_pct_advanced": 50,
+        "difficulty_pct_expert": null,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_expert": 0
+      },
+      "source": "other three buckets sum to ~100; missing bucket is 0"
+    },
+    {
+      "id": 114,
+      "slug": "antelope-butte",
+      "before": {
+        "difficulty_pct_beginner": 21,
+        "difficulty_pct_intermediate": 50,
+        "difficulty_pct_advanced": 29,
+        "difficulty_pct_expert": null,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_expert": 0
+      },
+      "source": "other three buckets sum to ~100; missing bucket is 0"
+    },
+    {
+      "id": 117,
+      "slug": "beartooth-basin",
+      "before": {
+        "difficulty_pct_beginner": 0,
+        "difficulty_pct_intermediate": 40,
+        "difficulty_pct_advanced": 60,
+        "difficulty_pct_expert": null,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_expert": 0
+      },
+      "source": "other three buckets sum to ~100; missing bucket is 0"
+    },
+    {
+      "id": 132,
+      "slug": "bear-paw",
+      "before": {
+        "difficulty_pct_beginner": 30,
+        "difficulty_pct_intermediate": 60,
+        "difficulty_pct_advanced": 10,
+        "difficulty_pct_expert": null,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_expert": 0
+      },
+      "source": "other three buckets sum to ~100; missing bucket is 0"
+    },
+    {
+      "id": 156,
+      "slug": "alpine-meadows",
+      "before": {
+        "difficulty_pct_beginner": 25,
+        "difficulty_pct_intermediate": 40,
+        "difficulty_pct_advanced": 35,
+        "difficulty_pct_expert": null,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_expert": 0
+      },
+      "source": "other three buckets sum to ~100; missing bucket is 0"
+    },
+    {
+      "id": 169,
+      "slug": "lee-canyon",
+      "before": {
+        "difficulty_pct_beginner": 15,
+        "difficulty_pct_intermediate": 45,
+        "difficulty_pct_advanced": 40,
+        "difficulty_pct_expert": null,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_expert": 0
+      },
+      "source": "other three buckets sum to ~100; missing bucket is 0"
+    },
+    {
+      "id": 197,
+      "slug": "stevens-pass",
+      "before": {
+        "difficulty_pct_beginner": 11,
+        "difficulty_pct_intermediate": 54,
+        "difficulty_pct_advanced": 35,
+        "difficulty_pct_expert": null,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_expert": 0
+      },
+      "source": "other three buckets sum to ~100; missing bucket is 0"
+    },
+    {
+      "id": 228,
+      "slug": "camden-snow-bowl",
+      "before": {
+        "difficulty_pct_beginner": 20,
+        "difficulty_pct_intermediate": 60,
+        "difficulty_pct_advanced": 10,
+        "difficulty_pct_expert": 0,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_intermediate": 70
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/maine/camden-snow-bowl/ski-resort"
+    },
+    {
+      "id": 230,
+      "slug": "big-rock",
+      "before": {
+        "difficulty_pct_beginner": 19,
+        "difficulty_pct_intermediate": 59,
+        "difficulty_pct_advanced": 20,
+        "difficulty_pct_expert": null,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_expert": 0
+      },
+      "source": "other three buckets sum to ~100; missing bucket is 0"
+    },
+    {
+      "id": 231,
+      "slug": "big-squaw-mountain",
+      "before": {
+        "difficulty_pct_beginner": 37,
+        "difficulty_pct_intermediate": 37,
+        "difficulty_pct_advanced": 26,
+        "difficulty_pct_expert": null,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_expert": 0
+      },
+      "source": "other three buckets sum to ~100; missing bucket is 0"
+    },
+    {
+      "id": 237,
+      "slug": "attitash",
+      "before": {
+        "difficulty_pct_beginner": 22,
+        "difficulty_pct_intermediate": 47,
+        "difficulty_pct_advanced": 28,
+        "difficulty_pct_expert": null,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_intermediate": 49,
+        "difficulty_pct_advanced": 29,
+        "difficulty_pct_expert": 0
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/new-hampshire/attitash/ski-resort"
+    },
+    {
+      "id": 245,
+      "slug": "gunstock-mountain-resort",
+      "before": {
+        "difficulty_pct_beginner": 13,
+        "difficulty_pct_intermediate": 62,
+        "difficulty_pct_advanced": 26,
+        "difficulty_pct_expert": null,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_expert": 0
+      },
+      "source": "other three buckets sum to ~100; missing bucket is 0"
+    },
+    {
+      "id": 253,
+      "slug": "campton-mountain",
+      "before": {
+        "difficulty_pct_beginner": 47,
+        "difficulty_pct_intermediate": 38,
+        "difficulty_pct_advanced": 15,
+        "difficulty_pct_expert": null,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_expert": 0
+      },
+      "source": "other three buckets sum to ~100; missing bucket is 0"
+    },
+    {
+      "id": 274,
+      "slug": "holimont",
+      "before": {
+        "difficulty_pct_beginner": 20,
+        "difficulty_pct_intermediate": 30,
+        "difficulty_pct_advanced": 42,
+        "difficulty_pct_expert": 0,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 29,
+        "difficulty_pct_intermediate": 29
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/new-york/holimont-ski-area/ski-resort"
+    },
+    {
+      "id": 291,
+      "slug": "maple-ski-ridge",
+      "before": {
+        "difficulty_pct_beginner": 21,
+        "difficulty_pct_intermediate": 58,
+        "difficulty_pct_advanced": 21,
+        "difficulty_pct_expert": null,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_expert": 0
+      },
+      "source": "other three buckets sum to ~100; missing bucket is 0"
+    },
+    {
+      "id": 300,
+      "slug": "bear-creek-mountain-resort",
+      "before": {
+        "difficulty_pct_beginner": 30,
+        "difficulty_pct_intermediate": 40,
+        "difficulty_pct_advanced": 30,
+        "difficulty_pct_expert": null,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_expert": 0
+      },
+      "source": "other three buckets sum to ~100; missing bucket is 0"
+    },
+    {
+      "id": 311,
+      "slug": "big-powderhorn-mountain",
+      "before": {
+        "difficulty_pct_beginner": 27,
+        "difficulty_pct_intermediate": 41,
+        "difficulty_pct_advanced": 32,
+        "difficulty_pct_expert": null,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_expert": 0
+      },
+      "source": "other three buckets sum to ~100; missing bucket is 0"
+    },
+    {
+      "id": 319,
+      "slug": "shanty-creek",
+      "before": {
+        "difficulty_pct_beginner": 29,
+        "difficulty_pct_intermediate": 28,
+        "difficulty_pct_advanced": 35,
+        "difficulty_pct_expert": 0,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_intermediate": 26,
+        "difficulty_pct_advanced": 45
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/michigan/shanty-creek/ski-resort"
+    },
+    {
+      "id": 322,
+      "slug": "caberfae-peaks",
+      "before": {
+        "difficulty_pct_beginner": 35,
+        "difficulty_pct_intermediate": 35,
+        "difficulty_pct_advanced": 35,
+        "difficulty_pct_expert": 0,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 26,
+        "difficulty_pct_intermediate": 37,
+        "difficulty_pct_advanced": 37
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/michigan/caberfae-peaks-ski-golf-resort/ski-resort"
+    },
+    {
+      "id": 325,
+      "slug": "pine-knob",
+      "before": {
+        "difficulty_pct_beginner": 20,
+        "difficulty_pct_intermediate": 50,
+        "difficulty_pct_advanced": 30,
+        "difficulty_pct_expert": null,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_expert": 0
+      },
+      "source": "other three buckets sum to ~100; missing bucket is 0"
+    },
+    {
+      "id": 328,
+      "slug": "apple-mountain",
+      "before": {
+        "difficulty_pct_beginner": 40,
+        "difficulty_pct_intermediate": 40,
+        "difficulty_pct_advanced": 20,
+        "difficulty_pct_expert": null,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_expert": 0
+      },
+      "source": "other three buckets sum to ~100; missing bucket is 0"
+    },
+    {
+      "id": 341,
+      "slug": "alpine-valley-wi",
+      "before": {
+        "difficulty_pct_beginner": 33,
+        "difficulty_pct_intermediate": 38,
+        "difficulty_pct_advanced": 29,
+        "difficulty_pct_expert": null,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_expert": 0
+      },
+      "source": "other three buckets sum to ~100; missing bucket is 0"
+    },
+    {
+      "id": 352,
+      "slug": "welch-village",
+      "before": {
+        "difficulty_pct_beginner": 34,
+        "difficulty_pct_intermediate": 33,
+        "difficulty_pct_advanced": 33,
+        "difficulty_pct_expert": null,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_expert": 0
+      },
+      "source": "other three buckets sum to ~100; missing bucket is 0"
+    },
+    {
+      "id": 354,
+      "slug": "hyland-hills",
+      "before": {
+        "difficulty_pct_beginner": 25,
+        "difficulty_pct_intermediate": 34,
+        "difficulty_pct_advanced": 35,
+        "difficulty_pct_expert": 0,
+        "trails_beginner": 3,
+        "trails_intermediate": 4,
+        "trails_advanced": 4,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 27,
+        "difficulty_pct_intermediate": 36,
+        "difficulty_pct_advanced": 36
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/minnesota/hyland-ski-snowboard-area/ski-resort"
+    },
+    {
+      "id": 377,
+      "slug": "mad-river-mountain",
+      "before": {
+        "difficulty_pct_beginner": 41,
+        "difficulty_pct_intermediate": 47,
+        "difficulty_pct_advanced": 12,
+        "difficulty_pct_expert": null,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_expert": 0
+      },
+      "source": "other three buckets sum to ~100; missing bucket is 0"
+    },
+    {
+      "id": 379,
+      "slug": "hidden-valley-mo",
+      "before": {
+        "difficulty_pct_beginner": 27,
+        "difficulty_pct_intermediate": 46,
+        "difficulty_pct_advanced": 14,
+        "difficulty_pct_expert": 3,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 31,
+        "difficulty_pct_advanced": 23,
+        "difficulty_pct_expert": 0
+      },
+      "source": "OnTheSnow https://www.onthesnow.com/missouri/hidden-valley-ski-area/ski-resort"
+    },
+    {
+      "id": 382,
+      "slug": "huff-hills",
+      "before": {
+        "difficulty_pct_beginner": 60,
+        "difficulty_pct_intermediate": 27,
+        "difficulty_pct_advanced": 13,
+        "difficulty_pct_expert": null,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_expert": 0
+      },
+      "source": "other three buckets sum to ~100; missing bucket is 0"
+    }
+  ]
+}

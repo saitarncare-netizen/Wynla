@@ -50,12 +50,17 @@ export default function GuidesIndexPage() {
           >
             ← Map
           </Link>
-          <Link
-            href="/lists"
-            className="hidden text-xs font-semibold text-white/85 underline-offset-4 hover:underline sm:inline"
+          <nav
+            aria-label="More content"
+            className="hidden items-center gap-4 text-xs font-semibold text-white/85 sm:flex"
           >
-            Curated lists
-          </Link>
+            <Link href="/lists" className="underline-offset-4 hover:underline">
+              Curated lists
+            </Link>
+            <Link href="/trip-templates" className="underline-offset-4 hover:underline">
+              Trip ideas
+            </Link>
+          </nav>
         </div>
 
         <div className="relative z-10 mx-auto max-w-5xl px-4 pb-12 pt-6 sm:px-6 sm:pb-14 sm:pt-10">
@@ -101,18 +106,27 @@ export default function GuidesIndexPage() {
         </div>
 
         <section className="rounded-2xl border border-wn-charcoal/10 bg-white p-6 text-center shadow-sm">
-          <h3 className="text-lg font-bold text-wn-navy">
+          <h2 className="text-lg font-bold text-wn-navy">
             Ready to plan?
-          </h3>
+          </h2>
           <p className="mt-1 text-sm text-wn-charcoal/70">
-            Use the map to build a multi-stop trip across passes and regions.
+            Use the map to build a multi-stop trip across passes and regions,
+            or start from a pre-made itinerary.
           </p>
-          <Link
-            href="/?plan=1"
-            className="mt-4 inline-flex items-center gap-1 rounded-md bg-wn-navy px-4 py-2 text-sm font-semibold text-white transition hover:bg-wn-navy/90"
-          >
-            Plan a trip →
-          </Link>
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
+            <Link
+              href="/?plan=1"
+              className="inline-flex items-center gap-1 rounded-md bg-wn-navy px-4 py-2 text-sm font-semibold text-white transition hover:bg-wn-navy/90"
+            >
+              Plan a trip →
+            </Link>
+            <Link
+              href="/trip-templates"
+              className="inline-flex items-center gap-1 rounded-md border border-wn-navy/30 px-4 py-2 text-sm font-semibold text-wn-navy transition hover:border-wn-navy hover:bg-wn-navy/5"
+            >
+              Browse trip templates
+            </Link>
+          </div>
         </section>
       </div>
     </main>

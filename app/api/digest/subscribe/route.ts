@@ -1,16 +1,15 @@
-// Stage 32 — opt-in / opt-out endpoint for digest_subscriptions.
+// Opt-in / opt-out endpoint for digest_subscriptions (session-authed).
 //
-// POST: upsert a digest_subscriptions row for the currently authenticated user.
+// POST: upsert the current user's row.
 //       Body: { frequency?: 'daily' | 'weekly', threshold_in?: number }
-//       Frequency defaults to 'daily'. We pull the email from auth.users
-//       (server-side) rather than trusting the client to send it.
+//       Frequency defaults to 'daily'. The email comes from auth.users
+//       (server-side) rather than from the client.
 //
-// DELETE: soft-disable the user's row (enabled=false). We keep the row so
-//         a future analytics pass can see how often users opt back in.
+// DELETE: soft-disable the row (enabled=false). The row is kept so opting
+//         back in preserves the user's cadence and threshold.
 //
-// Subscription UI is intentionally not bundled here — another agent owns
-// app/account/pro/page.tsx, and the digest preferences widget belongs in
-// app/account/digest/page.tsx (see TODO at the bottom of this file).
+// The preferences UI is app/account/digest; the no-session one-click
+// path used by email links is app/api/digest/unsubscribe.
 
 import { NextRequest, NextResponse } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
@@ -71,7 +70,8 @@ export async function DELETE() {
   if (!u.user?.id) {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   }
-  // Soft-disable so we retain analytics on opt-out churn.
+  // Soft-disable: the row keeps the user's cadence and threshold for a
+  // later opt-in, and the one-click email path does the same.
   const { error } = await supabase
     .from("digest_subscriptions")
     .update({ enabled: false })
@@ -81,10 +81,3 @@ export async function DELETE() {
   }
   return NextResponse.json({ ok: true });
 }
-
-// TODO(ui): build the user-facing digest preferences page at
-// `app/account/digest/page.tsx`. It should:
-//   - fetch the user's current digest_subscriptions row on mount
-//   - render a frequency picker (daily / weekly) and an "Unsubscribe" button
-//   - POST here on save, DELETE here on unsubscribe
-// Skipping in this stage because another agent owns app/account/pro/page.tsx.

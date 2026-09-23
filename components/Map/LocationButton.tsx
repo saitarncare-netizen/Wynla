@@ -25,6 +25,9 @@ function isIosSafari(): boolean {
 // always visible, mobile-discoverable, and handles the iOS permission
 // prompt directly. Sits at bottom-right of the map; on desktop it
 // stacks above the pass-color legend (which is hidden on mobile).
+// Bottom stack: bottom-10 on phones leaves the lowest 40px to Mapbox's
+// attribution control (a terms requirement); md:bottom-28 clears the
+// legend, which now sits at bottom-10 for the same reason.
 export default function LocationButton({ isUsingGeo, onUseMyLocation }: Props) {
   const [requesting, setRequesting] = useState(false);
   const [error, setError] = useState<ErrorState>(null);
@@ -69,7 +72,7 @@ export default function LocationButton({ isUsingGeo, onUseMyLocation }: Props) {
 
   return (
     <div
-      className="pointer-events-none absolute bottom-3 right-3 z-20 flex flex-col items-end gap-1 sm:bottom-4 sm:right-4 md:bottom-24"
+      className="pointer-events-none absolute bottom-10 right-3 z-20 flex flex-col items-end gap-1 sm:right-4 md:bottom-28"
       style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
     >
       <style>{`

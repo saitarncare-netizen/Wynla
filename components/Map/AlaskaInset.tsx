@@ -39,6 +39,11 @@ export default function AlaskaInset({ resorts }: Props) {
 
   useEffect(() => {
     if (!container.current || mapRef.current) return;
+    // The wrapper is display:none below md. MapPage already skips
+    // mounting the inset there; this guard keeps a second (billable)
+    // Mapbox instance from booting for an invisible box even if the
+    // component is ever rendered unconditionally again.
+    if (!window.matchMedia("(min-width: 768px)").matches) return;
     const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
     if (!token) return;
     mapboxgl.accessToken = token;
@@ -118,18 +123,14 @@ export default function AlaskaInset({ resorts }: Props) {
     <div
       // Hidden on mobile — phone users have limited screen real estate
       // and the Alaska resorts are surfaced via region/size filters too.
-      className="pointer-events-auto absolute bottom-3 left-3 z-10 hidden overflow-hidden rounded-md border border-wn-charcoal/20 bg-white/95 shadow-md backdrop-blur-sm md:block sm:bottom-4 sm:left-4"
-      style={{
-        width: "var(--ak-w, 200px)",
-        height: "var(--ak-h, 150px)",
-      }}
+      // bottom-10 leaves the lowest 40px to the Mapbox wordmark, which
+      // its terms require visible; the Feedback pill sits to the right.
+      className="pointer-events-auto absolute bottom-10 left-4 z-10 hidden overflow-hidden rounded-md border border-wn-charcoal/20 bg-white/95 shadow-md backdrop-blur-sm md:block"
+      // 200px wide: FeedbackButton's desktop left offset (228px) is
+      // derived from this width plus the left-4 gutter and a 12px gap.
+      style={{ width: 200, height: 150 }}
     >
-      <style>{`
-        @media (max-width: 640px) {
-          [data-ak-inset] { --ak-w: 120px !important; --ak-h: 90px !important; }
-        }
-      `}</style>
-      <div data-ak-inset className="relative h-full w-full">
+      <div className="relative h-full w-full">
         <div ref={container} className="h-full w-full" />
         <div className="pointer-events-none absolute left-1.5 top-1 text-[9px] font-bold tracking-wider text-wn-navy/80">
           ALASKA · {akResorts.length}
