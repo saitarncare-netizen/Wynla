@@ -36,6 +36,12 @@ import {
 import { ESTIMATE_MARK, findOrigin, originLabel, type CityOrigin } from "@/lib/origins";
 import { passColor, passShort, passLabel } from "@/lib/passColors";
 import { textOn } from "@/lib/contrast";
+import { HIT_AREA_44 } from "@/lib/hitArea";
+import Icon from "@/components/icons/Icon";
+import Button from "@/components/ui/Button";
+import Card from "@/components/ui/Card";
+import Chip from "@/components/ui/Chip";
+import PageHeader from "@/components/ui/PageHeader";
 import { loadNearData, NEAR_DATA_REVALIDATE_SECONDS } from "./data";
 
 // Literal on purpose: Next reads the segment config statically and
@@ -113,51 +119,33 @@ export default async function NearCityPage({ params }: { params: Promise<{ city:
 
       {/* Hero — same navy treatment as the state directory so the SEO
           landing pages read as one family. */}
-      <header
-        className="relative w-full overflow-hidden"
-        style={{ background: "linear-gradient(135deg, #1E2952 0%, #141A3A 60%, #0B1028 100%)" }}
+      <PageHeader
+        tone="navy"
+        size="lg"
+        eyebrow={`${originLabel(city)} · Within ${NEAR_MAX_HOURS} hours`}
+        title={`Ski resorts near ${name}`}
+        description={`${data.rows.length} resorts · Sorted by drive time`}
       >
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 opacity-10"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle at 20% 30%, rgba(255,255,255,0.4) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(255,255,255,0.3) 0%, transparent 50%)",
-          }}
-        />
-        <div className="relative z-10 mx-auto flex max-w-5xl items-center justify-between px-4 py-3 sm:px-6">
-          <Link
-            href={`/?from=${city.code}`}
-            className="inline-flex min-h-11 items-center gap-1 rounded-md bg-white/95 px-3 text-xs font-semibold text-wn-navy shadow-sm backdrop-blur-sm transition hover:bg-white"
-          >
-            ← Map
-          </Link>
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+          <Button variant="gold" href={cta.href} iconRight={<Icon name="arrow-right" />}>
+            {cta.label}
+          </Button>
           <Link
             href="/go"
-            className="inline-flex min-h-11 items-center text-xs font-semibold text-white/85 underline-offset-4 hover:underline"
+            className="inline-flex min-h-11 items-center text-sm font-semibold text-white/85 underline-offset-4 hover:underline"
           >
             Saturday picks
           </Link>
+          {cta.isGo && (
+            <Link
+              href={`/?from=${city.code}`}
+              className="inline-flex min-h-11 items-center text-sm font-semibold text-white/85 underline-offset-4 hover:underline"
+            >
+              Open the map from {name}
+            </Link>
+          )}
         </div>
-
-        <div className="relative z-10 mx-auto max-w-5xl px-4 pb-10 pt-4 sm:px-6 sm:pb-14 sm:pt-8">
-          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-white/65">
-            {originLabel(city)} · Within {NEAR_MAX_HOURS} hours
-          </p>
-          <h1 className="text-4xl font-extrabold leading-[0.95] tracking-tight text-white sm:text-6xl">
-            Ski resorts near {name}
-          </h1>
-          <p className="mt-3 text-base text-white/85 sm:text-lg">
-            {data.rows.length} resorts · Sorted by drive time
-          </p>
-          <Link
-            href={cta.href}
-            className="mt-5 inline-flex min-h-11 items-center gap-1 rounded-md bg-wn-gold px-4 text-sm font-semibold text-wn-navy transition hover:bg-wn-gold/90"
-          >
-            {cta.label} →
-          </Link>
-        </div>
-      </header>
+      </PageHeader>
 
       <div
         className="mx-auto max-w-5xl space-y-10 px-4 py-8 sm:px-6 sm:py-12"
@@ -165,8 +153,8 @@ export default async function NearCityPage({ params }: { params: Promise<{ city:
       >
         {/* How the numbers are made. Stated up front so nobody reads an
             estimate as a road route (every drive-time surface carries ≈). */}
-        <section className="rounded-2xl border border-wn-charcoal/10 bg-white p-4 text-sm leading-relaxed text-wn-charcoal/80 sm:p-5">
-          <h2 className="text-sm font-bold uppercase tracking-wide text-wn-charcoal/60">How this list is built</h2>
+        <Card className="text-sm leading-relaxed text-wn-charcoal/80">
+          <h2 className="text-sm font-bold uppercase tracking-wide text-wn-muted">How this list is built</h2>
           <p className="mt-2">
             Drive times start from downtown {name} ({formatCoords(city)}).{" "}
             {city.cached && data.driveSource === "cache"
@@ -175,19 +163,19 @@ export default async function NearCityPage({ params }: { params: Promise<{ city:
             Opening status comes from each resort&apos;s own report when it is fresh, otherwise from its announced or projected season dates. Snow is the NOHRSC 24 h analysis (Measured) and only appears while a resort is running.
             {loadedAt ? ` Data loaded ${loadedAt}, refreshed every ${Math.round(NEAR_DATA_REVALIDATE_SECONDS / 60)} minutes.` : ""}
           </p>
-        </section>
+        </Card>
 
         {groups.map((group) => (
           <section key={group.key} aria-labelledby={`band-${group.key}`}>
             <div className="mb-3 flex items-baseline justify-between gap-3">
-              <h2 id={`band-${group.key}`} className="text-lg font-bold text-wn-navy sm:text-xl">
+              <h2 id={`band-${group.key}`} className="text-lg font-bold text-wn-navy sm:text-wn-xl">
                 {group.label}
               </h2>
-              <span className="text-xs font-semibold text-wn-charcoal/55">
+              <span className="text-xs font-semibold text-wn-muted">
                 {group.rows.length} resort{group.rows.length === 1 ? "" : "s"}
               </span>
             </div>
-            <ol className="divide-y divide-wn-charcoal/10 overflow-hidden rounded-2xl border border-wn-charcoal/10 bg-white shadow-sm">
+            <ol className="divide-y divide-wn-line overflow-hidden rounded-wn-md border border-wn-line bg-white shadow-wn-sm">
               {group.rows.map((r) => (
                 <li key={r.id}>
                   <ResortRow row={r} />
@@ -198,52 +186,45 @@ export default async function NearCityPage({ params }: { params: Promise<{ city:
         ))}
 
         {anyEstimated && (
-          <p className="text-xs text-wn-charcoal/60">
+          <p className="text-xs text-wn-muted">
             {ESTIMATE_MARK} Estimated from straight-line distance; the resort page and the map upgrade a tapped resort to an exact route.
           </p>
         )}
 
         {/* The Saturday answer. */}
-        <section className="rounded-2xl border border-wn-charcoal/10 bg-white p-6 text-center shadow-sm">
+        <Card padding="lg" className="text-center">
           <h2 className="text-lg font-bold text-wn-navy">
             {cta.isGo ? `Which of these should you ride this Saturday?` : `Plan a trip from ${name}`}
           </h2>
-          <p className="mt-1 text-sm text-wn-charcoal/70">
+          <p className="mt-1 text-sm text-wn-muted">
             {cta.isGo
               ? "Pick your pass and Wynla ranks the three best mountains by forecast snow, the surface you will ski, drive time, wind and crowds."
               : "The map filters every resort by drive time from this city, pass and size, and the planner strings a multi-stop trip together."}
           </p>
-          <Link
-            href={cta.href}
-            className="mt-4 inline-flex min-h-11 items-center gap-1 rounded-md bg-wn-navy px-4 text-sm font-semibold text-white transition hover:bg-wn-navy/90"
-          >
-            {cta.label} →
-          </Link>
-        </section>
+          <Button href={cta.href} className="mt-4" iconRight={<Icon name="arrow-right" />}>
+            {cta.label}
+          </Button>
+        </Card>
 
         {/* Other cities: the crawl path between the 29 pages, and the
             way a rider in a city we did not guess finds theirs. */}
         <section>
-          <h2 className="mb-2 text-sm font-bold uppercase tracking-wide text-wn-charcoal/60">Other cities</h2>
-          <div className="flex flex-wrap gap-1.5">
+          <h2 className="mb-2 text-sm font-bold uppercase tracking-wide text-wn-muted">Other cities</h2>
+          <div className="flex flex-wrap gap-2">
             {nearAllCityCodes()
               .filter((code) => code !== city.code)
               .map((code) => findOrigin(code))
               .filter((c): c is CityOrigin => c !== null)
               .sort((a, b) => nearCityName(a).localeCompare(nearCityName(b)))
               .map((c) => (
-                <Link
-                  key={c.code}
-                  href={nearPath(c.code)}
-                  className="inline-flex min-h-11 items-center rounded-full border border-wn-charcoal/15 bg-white px-3 text-xs font-medium text-wn-charcoal transition hover:border-wn-navy hover:text-wn-navy"
-                >
+                <Chip key={c.code} href={nearPath(c.code)} className={HIT_AREA_44}>
                   {nearCityName(c)}
-                </Link>
+                </Chip>
               ))}
           </div>
         </section>
 
-        <p className="text-xs text-wn-charcoal/55">
+        <p className="text-xs text-wn-muted">
           Bands: {DRIVE_BANDS.map((b) => b.label.toLowerCase()).join(", ")}. Resorts past {NEAR_MAX_HOURS} hours are on the{" "}
           <Link href={`/?from=${city.code}`} className="font-semibold text-wn-navy underline-offset-2 hover:underline">
             map
@@ -266,26 +247,26 @@ function ResortRow({ row }: { row: NearRow }) {
     >
       <div className="w-[4.5rem] shrink-0 pt-0.5 sm:w-24">
         <div className="text-sm font-bold tabular-nums text-wn-navy sm:text-base">{drive}</div>
-        <div className="text-[10px] uppercase tracking-wide text-wn-charcoal/50">
+        <div className="text-eyebrow uppercase text-wn-muted">
           {row.drive.estimated ? "estimated" : "road route"}
         </div>
       </div>
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
           <h3 className="text-sm font-bold leading-tight text-wn-navy group-hover:underline sm:text-base">{row.name}</h3>
-          <span className="text-[11px] text-wn-charcoal/60">{row.state}</span>
+          <span className="text-xs text-wn-muted">{row.state}</span>
           {row.passes.map((p) => (
             <span
               key={p}
               title={passLabel(p)}
-              className="rounded px-1.5 py-0.5 text-[11px] font-bold"
+              className="rounded-wn-sm px-1.5 py-0.5 text-eyebrow font-bold"
               style={{ backgroundColor: passColor(p), color: textOn(passColor(p)) }}
             >
               {passShort(p)}
             </span>
           ))}
         </div>
-        <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-wn-charcoal/70">
+        <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-wn-muted">
           <ResortStatusPill
             status={
               row.openProjected && row.status.kind === "opens"

@@ -396,9 +396,9 @@ export default function FiltersDrawer({
               type="button"
               onClick={onClose}
               aria-label="Close filters"
-              className="inline-flex h-11 items-center gap-1.5 rounded-full bg-wn-offwhite px-3 text-sm font-semibold text-wn-charcoal transition hover:bg-wn-charcoal/10 md:h-11 md:w-11 md:justify-center md:gap-0 md:px-0 md:text-xl"
+              className="inline-flex h-11 items-center gap-1.5 rounded-full bg-wn-offwhite px-3 text-sm font-semibold text-wn-charcoal transition hover:bg-wn-charcoal/10 md:h-11 md:w-11 md:justify-center md:gap-0 md:px-0 md:text-wn-xl"
             >
-              <span aria-hidden="true" className="text-lg leading-none md:text-xl">×</span>
+              <span aria-hidden="true" className="text-lg leading-none md:text-wn-xl">×</span>
               <span className="md:hidden">Close</span>
             </button>
           </div>

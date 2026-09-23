@@ -11,6 +11,8 @@
 import Link from "next/link";
 import { useState } from "react";
 import type { GoState } from "@/lib/saturday/url";
+import Button from "@/components/ui/Button";
+import Card from "@/components/ui/Card";
 
 type Props = {
   signedIn: boolean;
@@ -66,9 +68,9 @@ export default function ThursdayOptIn({ signedIn, optedIn, state, returnPath, su
   }
 
   return (
-    <section className="rounded-2xl border border-wn-charcoal/10 bg-white p-4 shadow-sm sm:p-5">
+    <Card>
       <h2 className="text-base font-bold text-wn-navy">Get this every Thursday</h2>
-      <p className="mt-1 text-sm text-wn-charcoal/70">
+      <p className="mt-1 text-sm text-wn-muted">
         The same three picks for {summary}, in your inbox Thursday morning, in time to plan. One email a week, with
         its own unsubscribe link; it is separate from the{" "}
         <Link href="/account/digest" className="underline">
@@ -78,50 +80,35 @@ export default function ThursdayOptIn({ signedIn, optedIn, state, returnPath, su
       </p>
       <div className="mt-3 flex flex-wrap items-center gap-3">
         {!signedIn ? (
-          <Link
-            href={`/login?next=${encodeURIComponent(returnPath)}`}
-            className="inline-flex min-h-11 items-center rounded-lg bg-wn-navy px-4 text-sm font-semibold text-white hover:bg-wn-navy/90"
-          >
-            Sign in to get the email
-          </Link>
+          <Button href={`/login?next=${encodeURIComponent(returnPath)}`}>Sign in to get the email</Button>
         ) : needsCity ? (
-          <p className="text-sm text-wn-charcoal/70">Pick a city above to get the email (a location cannot be saved).</p>
+          <p className="text-sm text-wn-muted">Pick a city above to get the email (a location cannot be saved).</p>
         ) : (
           <>
-            <button
-              type="button"
-              onClick={subscribe}
-              disabled={status === "saving"}
-              className="inline-flex min-h-11 items-center rounded-lg bg-wn-navy px-4 text-sm font-semibold text-white hover:bg-wn-navy/90 disabled:opacity-60"
-            >
+            <Button onClick={subscribe} disabled={status === "saving"}>
               {status === "saving" ? "Saving…" : onList ? "Update to this city and pass" : "Email me this every Thursday"}
-            </button>
+            </Button>
             {onList && (
-              <button
-                type="button"
-                onClick={stop}
-                disabled={status === "saving"}
-                className="inline-flex min-h-11 items-center rounded-lg border border-wn-charcoal/20 bg-white px-4 text-sm font-semibold text-wn-navy hover:border-wn-navy disabled:opacity-60"
-              >
+              <Button variant="secondary" onClick={stop} disabled={status === "saving"}>
                 Stop the Thursday email
-              </button>
+              </Button>
             )}
           </>
         )}
         {status === "saved" && (
-          <span className="text-xs font-semibold text-emerald-700">Saved: {summary}, every Thursday.</span>
+          <span className="text-xs font-semibold text-wn-success">Saved: {summary}, every Thursday.</span>
         )}
-        {status === "stopped" && <span className="text-xs text-wn-charcoal/70">Stopped. No more Thursday emails.</span>}
+        {status === "stopped" && <span className="text-xs text-wn-muted">Stopped. No more Thursday emails.</span>}
         {status === "idle" && signedIn && optedIn && !needsCity && (
-          <span className="text-xs text-wn-charcoal/60">You are on the list.</span>
+          <span className="text-xs text-wn-muted">You are on the list.</span>
         )}
         {status === "coming_soon" && (
-          <span className="text-xs text-amber-800">
+          <span className="text-xs text-wn-warning">
             Your city is saved. The Thursday email is not switched on yet; it starts once the pass setting goes live.
           </span>
         )}
-        {status === "error" && <span className="text-xs text-red-700">{error ?? "Could not save"}</span>}
+        {status === "error" && <span className="text-xs text-wn-danger">{error ?? "Could not save"}</span>}
       </div>
-    </section>
+    </Card>
   );
 }

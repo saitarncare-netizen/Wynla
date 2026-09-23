@@ -78,8 +78,11 @@ export function RowThumb({
   const showImage = !!src && !failed;
   return (
     <div
-      className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg"
-      style={{ background: `linear-gradient(135deg, ${color} 0%, #1E2952 100%)` }}
+      className="relative h-14 w-14 shrink-0 overflow-hidden rounded-wn-sm"
+      // The pass colour only tints the top-left corner; by the centre,
+      // where the white fallback initial sits, the tile is navy, so the
+      // initial never lands white-on-Ikon-yellow.
+      style={{ background: `linear-gradient(135deg, ${color} 0%, var(--color-wn-navy) 55%)` }}
       aria-hidden={showImage ? undefined : true}
     >
       {showImage ? (
@@ -142,7 +145,7 @@ export function BlackoutNote({ slug, dateISO }: { slug: string; dateISO: string 
   if (blocked.full.length > 0) parts.push(`Blackout today on ${blocked.full.join(", ")}`);
   if (blocked.dayAccess.length > 0) parts.push(`No 9 am to 3 pm access today on ${blocked.dayAccess.join(", ")}`);
   return (
-    <p className="mt-1 rounded-md bg-amber-50 px-2 py-1 text-[11px] font-medium text-amber-900">
+    <p className="mt-1 rounded-wn-sm bg-wn-warning-bg px-2 py-1 text-xs font-medium text-wn-warning">
       {parts.join(" · ")} · Reported · check which pass you hold
     </p>
   );

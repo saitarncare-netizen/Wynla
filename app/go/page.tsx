@@ -9,7 +9,6 @@
 // (pure). The auth read is per request and stays outside the cache.
 
 import type { Metadata } from "next";
-import Link from "next/link";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { isMissingSchemaError } from "@/lib/cronRun";
 import { PASS_FAMILIES, productsFor, type PassFamily } from "@/lib/passAccess";
@@ -28,6 +27,9 @@ import { rankInputsFrom } from "@/lib/saturday/load";
 import { parsePassProduct, passChoiceLabel } from "@/lib/saturday/passProduct";
 import { rankForSaturday, type RankResult } from "@/lib/saturday/rank";
 import { goPath, goQuery, goUrl, parseGoParams, type GoState } from "@/lib/saturday/url";
+import Card from "@/components/ui/Card";
+import Notice from "@/components/ui/Notice";
+import PageHeader from "@/components/ui/PageHeader";
 import GoForm from "./GoForm";
 import ShareButton from "./ShareButton";
 import ThursdayOptIn from "./ThursdayOptIn";
@@ -143,20 +145,15 @@ export default async function GoPage({ searchParams }: { searchParams: SearchPar
 
   return (
     <main className="min-h-dvh bg-wn-offwhite pb-[max(2rem,env(safe-area-inset-bottom))]">
-      <section className="bg-wn-navy px-4 pb-8 pt-6 text-white sm:px-6 sm:pt-10">
-        <div className="mx-auto max-w-3xl">
-          <Link href="/" className="inline-flex min-h-11 items-center text-xs font-semibold text-white/70 hover:text-white">
-            ← Map
-          </Link>
-          <h1 className="mt-3 text-2xl font-extrabold leading-tight sm:text-4xl">Where to ride {dateLong}</h1>
-          <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/80 sm:text-base">
-            Your pass, your city, the three best mountains for the day, and how the snow will feel. No sign-in.
-          </p>
-        </div>
-      </section>
+      <PageHeader
+        tone="navy"
+        width="max-w-3xl"
+        title={`Where to ride ${dateLong}`}
+        description="Your pass, your city, the three best mountains for the day, and how the snow will feel. No sign-in."
+      />
 
       <div className="mx-auto -mt-4 max-w-3xl space-y-5 px-4 sm:px-6">
-        <section className="rounded-2xl border border-wn-charcoal/10 bg-white p-4 shadow-sm sm:p-5">
+        <Card className="relative z-10">
           <GoForm
             state={state}
             cities={cityOptions()}
@@ -164,27 +161,26 @@ export default async function GoPage({ searchParams }: { searchParams: SearchPar
             productsByFamily={productsByFamily}
             unknownCity={unknownCity}
           />
-        </section>
+        </Card>
 
         {!origin && (
-          <section className="rounded-2xl border border-wn-charcoal/10 bg-white p-5 text-sm text-wn-charcoal/75 shadow-sm">
+          <Card className="text-sm text-wn-muted">
             {unknownCity
               ? "That city is not on the launch list yet. Pick one above or use your location."
               : "Pick a city to see this Saturday's picks."}
-          </section>
+          </Card>
         )}
 
         {origin && loadError && (
-          <section className="rounded-2xl border border-red-200 bg-white p-5 text-sm text-wn-charcoal/75 shadow-sm">
-            <p className="font-semibold text-red-900">The picks could not be loaded right now.</p>
-            <p className="mt-1">Refresh in a moment. The map and resort pages still work.</p>
-          </section>
+          <Notice tone="danger" title="The picks could not be loaded right now.">
+            Refresh in a moment. The map and resort pages still work.
+          </Notice>
         )}
 
         {origin && result && (
           <>
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <div className="text-sm text-wn-charcoal/75">
+              <div className="text-sm text-wn-muted">
                 <span className="font-semibold text-wn-charcoal">{summary}</span> · within {state.max} h ·{" "}
                 {result.horizonDays === 0
                   ? "today"
@@ -209,40 +205,40 @@ export default async function GoPage({ searchParams }: { searchParams: SearchPar
                   ))}
                 </div>
                 {result.runnersUp.length > 0 && (
-                  <section className="rounded-2xl border border-wn-charcoal/10 bg-white px-4 py-2 shadow-sm sm:px-5">
-                    <h2 className="pt-2 text-[11px] font-bold uppercase tracking-wide text-wn-charcoal/55">Runners-up</h2>
-                    <ul className="divide-y divide-wn-charcoal/10">
+                  <Card padding="none" className="px-4 py-2 sm:px-5">
+                    <h2 className="pt-2 text-eyebrow font-bold uppercase text-wn-muted">Runners-up</h2>
+                    <ul className="divide-y divide-wn-line">
                       {result.runnersUp.map((p) => (
                         <RunnerUpRow key={p.resort.id} pick={p} />
                       ))}
                     </ul>
-                  </section>
+                  </Card>
                 )}
               </>
             )}
 
             {result.mode === "no-picks" && (
-              <section className="rounded-2xl border border-wn-charcoal/10 bg-white p-4 shadow-sm sm:p-5">
+              <Card>
                 <h2 className="text-base font-bold text-wn-navy">Nothing fits {passText} on {dateLong}</h2>
-                <p className="mt-1 text-sm text-wn-charcoal/75">
+                <p className="mt-1 text-sm text-wn-muted">
                   Mountains within {state.max} h are running, but each one is ruled out for that day. Try the other
                   weekend day, another product, or a wider radius.
                 </p>
                 <div className="mt-3">
                   <ExcludedList items={result.excluded.slice(0, 12)} />
                 </div>
-              </section>
+              </Card>
             )}
 
             {result.mode === "off-season" && (
               <>
-                <section className="rounded-2xl border border-wn-charcoal/10 bg-white p-4 shadow-sm sm:p-5">
+                <Card>
                   <h2 className="text-base font-bold text-wn-navy">
                     {result.seasonPhase === "after"
                       ? `The season is over within ${state.max} h of ${fromText}`
                       : `The season has not started within ${state.max} h of ${fromText}`}
                   </h2>
-                  <p className="mt-1 text-sm text-wn-charcoal/75">
+                  <p className="mt-1 text-sm text-wn-muted">
                     No picks until lifts spin: a surface call on a closed mountain would be a guess.{" "}
                     {result.seasonPhase === "after"
                       ? result.countdown.length > 0
@@ -250,7 +246,7 @@ export default async function GoPage({ searchParams }: { searchParams: SearchPar
                         : "Next season's opening dates are not announced yet."
                       : `These are the first mountains ${state.pass ? `on the ${passLabel(state.pass)}` : "within reach"} to open, by announced date.`}
                   </p>
-                </section>
+                </Card>
                 {result.countdown.length > 0 ? (
                   <div className="space-y-4">
                     {result.countdown.slice(0, 3).map((c) => (
@@ -258,21 +254,21 @@ export default async function GoPage({ searchParams }: { searchParams: SearchPar
                     ))}
                   </div>
                 ) : (
-                  <section className="rounded-2xl border border-wn-charcoal/10 bg-white p-5 text-sm text-wn-charcoal/75 shadow-sm">
+                  <Card className="text-sm text-wn-muted">
                     No opening dates published yet for resorts within reach. Check back in the autumn.
-                  </section>
+                  </Card>
                 )}
               </>
             )}
 
             {result.mode === "none" && (
-              <section className="rounded-2xl border border-wn-charcoal/10 bg-white p-5 text-sm text-wn-charcoal/75 shadow-sm">
+              <Card className="text-sm text-wn-muted">
                 No resort is within {state.max} h of {fromText}. Widen the drive radius above.
-              </section>
+              </Card>
             )}
 
             {result.mode === "picks" && result.excluded.length > 0 && (
-              <details className="rounded-2xl border border-wn-charcoal/10 bg-white p-4 shadow-sm sm:p-5">
+              <details className="rounded-wn-md border border-wn-line bg-white p-4 shadow-wn-sm sm:p-5">
                 <summary className="min-h-11 cursor-pointer list-none text-base font-bold text-wn-navy marker:content-none">
                   Also within reach, but not on {dateLong} ({result.excluded.length})
                 </summary>
@@ -286,7 +282,7 @@ export default async function GoPage({ searchParams }: { searchParams: SearchPar
               <WhyThese result={result} title={result.mode === "picks" ? "Why these three" : "How the picks are chosen"} />
             )}
 
-            <section className="rounded-2xl border border-wn-charcoal/10 bg-white p-4 text-xs leading-relaxed text-wn-charcoal/70 shadow-sm sm:p-5">
+            <Card className="text-xs leading-relaxed text-wn-muted">
               <h2 className="text-sm font-bold text-wn-navy">About the confidence</h2>
               <p className="mt-1">
                 Confidence reflects how far out the day is and how fresh the data is, not how good a pick looks. Two
@@ -294,7 +290,7 @@ export default async function GoPage({ searchParams }: { searchParams: SearchPar
                 weather, not a resort report; crowds are estimates. Every number here names its source and time. Check
                 the resort&rsquo;s own report and your pass&rsquo;s blackout dates before you drive.
               </p>
-            </section>
+            </Card>
 
             <ThursdayOptIn
               signedIn={viewer.signedIn}

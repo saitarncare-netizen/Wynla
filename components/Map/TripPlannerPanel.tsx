@@ -1272,13 +1272,13 @@ export default function TripPlannerPanel({
                       type="button"
                       onClick={() => onDaysChange?.(Math.max(1, days - 1))}
                       disabled={days <= 1}
-                      className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-white text-2xl font-bold text-wn-navy shadow-sm transition active:scale-95 disabled:opacity-30"
+                      className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-white text-wn-2xl font-bold text-wn-navy shadow-sm transition active:scale-95 disabled:opacity-30"
                       aria-label="Fewer days"
                     >
                       −
                     </button>
                     <div className="flex flex-1 items-baseline justify-center gap-1.5">
-                      <span className="text-3xl font-extrabold tracking-tight text-wn-navy">{days}</span>
+                      <span className="text-wn-3xl font-extrabold tracking-tight text-wn-navy">{days}</span>
                       <span className="text-xs font-semibold uppercase tracking-wide text-wn-charcoal/60">
                         {days === 1 ? "day" : "days"}
                       </span>
@@ -1287,7 +1287,7 @@ export default function TripPlannerPanel({
                       type="button"
                       onClick={() => onDaysChange?.(Math.min(MAX_TRIP_DAYS, days + 1))}
                       disabled={days >= MAX_TRIP_DAYS}
-                      className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-white text-2xl font-bold text-wn-navy shadow-sm transition active:scale-95 disabled:opacity-30"
+                      className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-white text-wn-2xl font-bold text-wn-navy shadow-sm transition active:scale-95 disabled:opacity-30"
                       aria-label="More days"
                     >
                       +
@@ -1633,7 +1633,7 @@ export default function TripPlannerPanel({
                   −
                 </button>
                 <div className="flex flex-1 items-baseline justify-center gap-1.5">
-                  <span className="text-xl font-extrabold tracking-tight text-white">{days}</span>
+                  <span className="text-wn-xl font-extrabold tracking-tight text-white">{days}</span>
                   <span className="text-[11px] font-semibold uppercase tracking-wide text-white/70">
                     {days === 1 ? "day" : "days"} total
                   </span>
