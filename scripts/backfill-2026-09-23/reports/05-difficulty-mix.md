@@ -1,50 +1,27 @@
 # Step 5 — difficulty mix
 
-Report generated 2026-09-23T05:13:16.089Z (dry run). Applied runs: 05-difficulty-mix-2026-09-23_05-09-18.json (30 rows), 05-difficulty-mix-2026-09-23_05-13-05.json (32 rows)
+Report generated 2026-09-23T05:37:39.859Z (dry run). Applied runs: 05-difficulty-mix-2026-09-23_05-09-18.json (30 rows), 05-difficulty-mix-2026-09-23_05-13-05.json (32 rows), 05-difficulty-mix-2026-09-23_05-37-22.json (62 rows)
+
+Policy: a resort's own published split is normalised (scaled to 100, or a lone missing bucket filled), never replaced. That is arithmetic, not research, so it applies to independents too. OnTheSnow's mix is used only for pass resorts whose own split had fewer than three buckets or a sum outside 70-150. The first two applied runs had replaced 33 pass resorts with OnTheSnow's mix; the third run puts the normalised original values back (rows marked "replaces the OnTheSnow mix" below).
 
 | metric | count |
 |---|---|
-| active rows with any difficulty_pct | 345 |
-| partial or not summing to 98-102 at this run | 31 |
+| active rows with any difficulty_pct | 343 |
+| partial or not summing to 98-102 at this run (before this run's writes) | 1 |
+| rows corrected by this step (all runs, counted once) | 92 |
 | fixed: percentages that had been typed into trails_* counts | 5 |
-| fixed: lone missing bucket set to 0 (other three sum to ~100) | 24 |
-| fixed: pass resorts from OnTheSnow's published mix | 33 |
-| rows updated (all applied runs) | 62 |
+| fixed: own four buckets scaled to 100 | 54 |
+| fixed: lone missing bucket set to 0 (other three sum to ~100) | 25 |
+| fixed: lone missing bucket set to the remainder to 100 | 6 |
+| of which independents (own numbers normalised, no outside source) | 32 |
+| filled from OnTheSnow (pass resorts without a usable own split) | 1 |
+| rows whose OnTheSnow mix from the first run is replaced by their own normalised split | 32 |
+| rows updated (all applied runs) | 124 |
 | still proposed by this run | 0 |
-| left as is (non-pass, or no clean source) | 31 |
+| left as is (fewer than three own buckets and no clean source) | 1 |
 
 ## Left as is
-- mount-peter (NY, independent) [39, 33, 22, 0] sum=94 — OnTheSnow has [39, 33, 28, -]
-- sundance (UT, indy) [21, 32, 42, 9] sum=104 — OnTheSnow has [21, 32, 43, 9]
-- blacktail (MT, indy) [15, 65, 17, 0] sum=97 — OnTheSnow has [-, -, -, -]
-- lookout-pass (MT, indy) [14, 42, 40, 8] sum=104
-- lost-trail (MT, indy) [20, 50, 20, 0] sum=90 — OnTheSnow has [-, -, -, -]
-- maverick-mountain (MT, independent) [29, 39, 18, 18] sum=104 — OnTheSnow has [-, -, -, -]
-- yellowstone-club (MT, independent) [14, 40, 27, -] sum=81
-- pomerelle (ID, indy) [20, 48, 28, 0] sum=96 — OnTheSnow has [-, -, -, -]
-- hilltop-ski-area (AK, indy) [80, 10, 0, 0] sum=90 — OnTheSnow has [-, -, -, -]
-- skiland (AK, indy) [13, 50, 30, 0] sum=93
-- homewood-mountain-resort (CA, independent) [15, 40, 33, 15] sum=103 — OnTheSnow has [13, 46, 36, -]
-- diamond-peak (NV, independent) [8, 46, 36, 0] sum=90 — OnTheSnow has [8, 28, 33, 33]
-- dodge-ridge (CA, indy) [20, 40, 34, 0] sum=94 — OnTheSnow has [-, -, -, -]
-- white-pass (WA, indy) [32, 40, 20, 0] sum=92 — OnTheSnow has [-, -, -, -]
-- loup-loup (WA, indy) [27, 46, 27, 15] sum=115
-- echo-valley (WA, independent) [33, 40, 27, 14] sum=114
-- ski-santa-fe (NM, independent) [17, 31, 46, 0] sum=94 — OnTheSnow has [17, 31, 46, 6]
-- granite-gorge (NH, indy) [50, 33, 17, 15] sum=115
-- mcintyre-ski-area (NH, indy) [83, 10, 0, 0] sum=93
-- mad-river-glen (VT, indy) [20, 36, 33, -] sum=89 — OnTheSnow has [-, -, -, -]
-- middlebury-snow-bowl (VT, indy) [34, 26, 33, 10] sum=103
-- song-mountain (NY, independent) [36, 46, 13, 0] sum=95 — OnTheSnow has [-, -, -, -]
-- oak-mountain (NY, independent) [48, 27, 17, 0] sum=92 — OnTheSnow has [45, 27, 18, 9]
-- willard-mountain (NY, independent) [21, 40, 29, 0] sum=90 — OnTheSnow has [-, -, -, -]
-- mount-holly (MI, independent) [22, 38, 37, 0] sum=97 — OnTheSnow has [-, -, -, -]
 - alpine-valley-mi (MI, independent) [37, -, 33, -] sum=70
-- cannonsburg (MI, independent) [25, 50, 15, 0] sum=90 — OnTheSnow has [35, 50, 15, -]
-- snow-trails (OH, independent) [20, 53, 20, 0] sum=93 — OnTheSnow has [-, -, -, -]
-- winterplace-ski-resort (WV, indy) [39, 43, 24, 0] sum=106 — OnTheSnow has [-, -, -, -]
-- appalachian-ski-mountain (NC, independent) [25, 50, 33, 0] sum=108 — OnTheSnow has [33, 33, 33, -]
-- powder-ridge-mountain-park (CT, independent) [45, 37, 21, 0] sum=103 — OnTheSnow has [45, 40, 15, -]
 
 ## Changes (with source)
 | run | slug | column | before | after | source |
@@ -232,3 +209,199 @@ Report generated 2026-09-23T05:13:16.089Z (dry run). Applied runs: 05-difficulty
 | 2026-09-23T05:13 | hidden-valley-mo | difficulty_pct_advanced | 14 | 23 | OnTheSnow https://www.onthesnow.com/missouri/hidden-valley-ski-area/ski-resort |
 | 2026-09-23T05:13 | hidden-valley-mo | difficulty_pct_expert | 3 | 0 | OnTheSnow https://www.onthesnow.com/missouri/hidden-valley-ski-area/ski-resort |
 | 2026-09-23T05:13 | huff-hills | difficulty_pct_expert | NULL | 0 | other three buckets sum to ~100; missing bucket is 0 |
+| 2026-09-23T05:37 | mount-peter | difficulty_pct_beginner | 39 | 42 | own four buckets scaled from 94 to 100 |
+| 2026-09-23T05:37 | mount-peter | difficulty_pct_intermediate | 33 | 35 | own four buckets scaled from 94 to 100 |
+| 2026-09-23T05:37 | mount-peter | difficulty_pct_advanced | 22 | 23 | own four buckets scaled from 94 to 100 |
+| 2026-09-23T05:37 | berkshire-east | difficulty_pct_beginner | 28 | 30 | own four buckets scaled from 97 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | berkshire-east | difficulty_pct_intermediate | 42 | 36 | own four buckets scaled from 97 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | berkshire-east | difficulty_pct_advanced | 28 | 29 | own four buckets scaled from 97 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | berkshire-east | difficulty_pct_expert | 2 | 4 | own four buckets scaled from 97 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | stratton-mountain | difficulty_pct_beginner | 41 | 39 | own four buckets scaled from 103 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | stratton-mountain | difficulty_pct_intermediate | 31 | 34 | own four buckets scaled from 103 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | stratton-mountain | difficulty_pct_advanced | 17 | 16 | own four buckets scaled from 103 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | stratton-mountain | difficulty_pct_expert | 11 | 10 | own four buckets scaled from 103 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | cannon-mountain | difficulty_pct_beginner | 14 | 16 | missing bucket is the remainder to 100 (16) — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | cannon-mountain | difficulty_pct_intermediate | 52 | 50 | missing bucket is the remainder to 100 (16) — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | monarch-mountain | difficulty_pct_beginner | 19 | 20 | own four buckets scaled from 93 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | monarch-mountain | difficulty_pct_intermediate | 35 | 30 | own four buckets scaled from 93 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | monarch-mountain | difficulty_pct_advanced | 36 | 40 | own four buckets scaled from 93 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | steamboat | difficulty_pct_beginner | 12 | 13 | own four buckets scaled from 108 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | steamboat | difficulty_pct_intermediate | 38 | 39 | own four buckets scaled from 108 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | steamboat | difficulty_pct_advanced | 41 | 39 | own four buckets scaled from 108 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | steamboat | difficulty_pct_expert | 9 | 8 | own four buckets scaled from 108 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | sundance | difficulty_pct_beginner | 21 | 20 | own four buckets scaled from 104 to 100 |
+| 2026-09-23T05:37 | sundance | difficulty_pct_intermediate | 32 | 31 | own four buckets scaled from 104 to 100 |
+| 2026-09-23T05:37 | sundance | difficulty_pct_advanced | 42 | 40 | own four buckets scaled from 104 to 100 |
+| 2026-09-23T05:37 | sundance | difficulty_pct_expert | 9 | 8 | own four buckets scaled from 104 to 100 |
+| 2026-09-23T05:37 | jackson-hole | difficulty_pct_beginner | 4 | 9 | own four buckets scaled from 106 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | jackson-hole | difficulty_pct_intermediate | 40 | 37 | own four buckets scaled from 106 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | jackson-hole | difficulty_pct_advanced | 38 | 36 | own four buckets scaled from 106 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | jackson-hole | difficulty_pct_expert | 18 | 17 | own four buckets scaled from 106 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | blacktail | difficulty_pct_intermediate | 65 | 67 | own four buckets scaled from 97 to 100 |
+| 2026-09-23T05:37 | blacktail | difficulty_pct_advanced | 17 | 18 | own four buckets scaled from 97 to 100 |
+| 2026-09-23T05:37 | lookout-pass | difficulty_pct_beginner | 14 | 13 | own four buckets scaled from 104 to 100 |
+| 2026-09-23T05:37 | lookout-pass | difficulty_pct_intermediate | 42 | 40 | own four buckets scaled from 104 to 100 |
+| 2026-09-23T05:37 | lookout-pass | difficulty_pct_advanced | 40 | 38 | own four buckets scaled from 104 to 100 |
+| 2026-09-23T05:37 | lost-trail | difficulty_pct_beginner | 20 | 22 | own four buckets scaled from 90 to 100 |
+| 2026-09-23T05:37 | lost-trail | difficulty_pct_intermediate | 50 | 56 | own four buckets scaled from 90 to 100 |
+| 2026-09-23T05:37 | lost-trail | difficulty_pct_advanced | 20 | 22 | own four buckets scaled from 90 to 100 |
+| 2026-09-23T05:37 | maverick-mountain | difficulty_pct_beginner | 29 | 28 | own four buckets scaled from 104 to 100 |
+| 2026-09-23T05:37 | maverick-mountain | difficulty_pct_intermediate | 39 | 37 | own four buckets scaled from 104 to 100 |
+| 2026-09-23T05:37 | maverick-mountain | difficulty_pct_advanced | 18 | 17 | own four buckets scaled from 104 to 100 |
+| 2026-09-23T05:37 | maverick-mountain | difficulty_pct_expert | 18 | 17 | own four buckets scaled from 104 to 100 |
+| 2026-09-23T05:37 | yellowstone-club | difficulty_pct_expert | NULL | 19 | missing bucket is the remainder to 100 (19) |
+| 2026-09-23T05:37 | pomerelle | difficulty_pct_beginner | 20 | 21 | own four buckets scaled from 96 to 100 |
+| 2026-09-23T05:37 | pomerelle | difficulty_pct_intermediate | 48 | 50 | own four buckets scaled from 96 to 100 |
+| 2026-09-23T05:37 | pomerelle | difficulty_pct_advanced | 28 | 29 | own four buckets scaled from 96 to 100 |
+| 2026-09-23T05:37 | hilltop-ski-area | difficulty_pct_beginner | 80 | 89 | own four buckets scaled from 90 to 100 |
+| 2026-09-23T05:37 | hilltop-ski-area | difficulty_pct_intermediate | 10 | 11 | own four buckets scaled from 90 to 100 |
+| 2026-09-23T05:37 | skiland | difficulty_pct_beginner | 13 | 14 | own four buckets scaled from 93 to 100 |
+| 2026-09-23T05:37 | skiland | difficulty_pct_intermediate | 50 | 53 | own four buckets scaled from 93 to 100 |
+| 2026-09-23T05:37 | skiland | difficulty_pct_advanced | 30 | 32 | own four buckets scaled from 93 to 100 |
+| 2026-09-23T05:37 | palisades-tahoe | difficulty_pct_beginner | 6 | 25 | other three buckets sum to ~100; missing bucket is 0 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | palisades-tahoe | difficulty_pct_intermediate | 39 | 41 | other three buckets sum to ~100; missing bucket is 0 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | palisades-tahoe | difficulty_pct_advanced | 33 | 32 | other three buckets sum to ~100; missing bucket is 0 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | palisades-tahoe | difficulty_pct_expert | 23 | 0 | other three buckets sum to ~100; missing bucket is 0 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | heavenly-mountain-resort | difficulty_pct_beginner | 14 | 19 | own four buckets scaled from 105 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | heavenly-mountain-resort | difficulty_pct_intermediate | 53 | 43 | own four buckets scaled from 105 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | heavenly-mountain-resort | difficulty_pct_advanced | 27 | 33 | own four buckets scaled from 105 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | heavenly-mountain-resort | difficulty_pct_expert | 5 | 4 | own four buckets scaled from 105 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | homewood-mountain-resort | difficulty_pct_beginner | 15 | 14 | own four buckets scaled from 103 to 100 |
+| 2026-09-23T05:37 | homewood-mountain-resort | difficulty_pct_intermediate | 40 | 39 | own four buckets scaled from 103 to 100 |
+| 2026-09-23T05:37 | homewood-mountain-resort | difficulty_pct_advanced | 33 | 32 | own four buckets scaled from 103 to 100 |
+| 2026-09-23T05:37 | homewood-mountain-resort | difficulty_pct_expert | 15 | 14 | own four buckets scaled from 103 to 100 |
+| 2026-09-23T05:37 | donner-ski-ranch | difficulty_pct_beginner | 31 | 34 | own four buckets scaled from 92 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | donner-ski-ranch | difficulty_pct_intermediate | 38 | 41 | own four buckets scaled from 92 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | donner-ski-ranch | difficulty_pct_advanced | 21 | 25 | own four buckets scaled from 92 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | donner-ski-ranch | difficulty_pct_expert | 10 | 0 | own four buckets scaled from 92 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | diamond-peak | difficulty_pct_beginner | 8 | 9 | own four buckets scaled from 90 to 100 |
+| 2026-09-23T05:37 | diamond-peak | difficulty_pct_intermediate | 46 | 51 | own four buckets scaled from 90 to 100 |
+| 2026-09-23T05:37 | diamond-peak | difficulty_pct_advanced | 36 | 40 | own four buckets scaled from 90 to 100 |
+| 2026-09-23T05:37 | dodge-ridge | difficulty_pct_beginner | 20 | 21 | own four buckets scaled from 94 to 100 |
+| 2026-09-23T05:37 | dodge-ridge | difficulty_pct_intermediate | 40 | 43 | own four buckets scaled from 94 to 100 |
+| 2026-09-23T05:37 | dodge-ridge | difficulty_pct_advanced | 34 | 36 | own four buckets scaled from 94 to 100 |
+| 2026-09-23T05:37 | bear-mountain | difficulty_pct_beginner | 27 | 25 | own four buckets scaled from 107 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | bear-mountain | difficulty_pct_intermediate | 42 | 39 | own four buckets scaled from 107 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | bear-mountain | difficulty_pct_advanced | 23 | 28 | own four buckets scaled from 107 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | white-pass | difficulty_pct_beginner | 32 | 35 | own four buckets scaled from 92 to 100 |
+| 2026-09-23T05:37 | white-pass | difficulty_pct_intermediate | 40 | 43 | own four buckets scaled from 92 to 100 |
+| 2026-09-23T05:37 | white-pass | difficulty_pct_advanced | 20 | 21 | own four buckets scaled from 92 to 100 |
+| 2026-09-23T05:37 | loup-loup | difficulty_pct_beginner | 27 | 24 | own four buckets scaled from 115 to 100 |
+| 2026-09-23T05:37 | loup-loup | difficulty_pct_intermediate | 46 | 40 | own four buckets scaled from 115 to 100 |
+| 2026-09-23T05:37 | loup-loup | difficulty_pct_advanced | 27 | 23 | own four buckets scaled from 115 to 100 |
+| 2026-09-23T05:37 | loup-loup | difficulty_pct_expert | 15 | 13 | own four buckets scaled from 115 to 100 |
+| 2026-09-23T05:37 | echo-valley | difficulty_pct_beginner | 33 | 29 | own four buckets scaled from 114 to 100 |
+| 2026-09-23T05:37 | echo-valley | difficulty_pct_intermediate | 40 | 35 | own four buckets scaled from 114 to 100 |
+| 2026-09-23T05:37 | echo-valley | difficulty_pct_advanced | 27 | 23 | own four buckets scaled from 114 to 100 |
+| 2026-09-23T05:37 | echo-valley | difficulty_pct_expert | 14 | 12 | own four buckets scaled from 114 to 100 |
+| 2026-09-23T05:37 | ski-santa-fe | difficulty_pct_beginner | 17 | 18 | own four buckets scaled from 94 to 100 |
+| 2026-09-23T05:37 | ski-santa-fe | difficulty_pct_intermediate | 31 | 33 | own four buckets scaled from 94 to 100 |
+| 2026-09-23T05:37 | ski-santa-fe | difficulty_pct_advanced | 46 | 48 | own four buckets scaled from 94 to 100 |
+| 2026-09-23T05:37 | arizona-snowbowl | difficulty_pct_beginner | 27 | 30 | own four buckets scaled from 107 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | arizona-snowbowl | difficulty_pct_intermediate | 39 | 40 | own four buckets scaled from 107 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | arizona-snowbowl | difficulty_pct_advanced | 21 | 19 | own four buckets scaled from 107 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | arizona-snowbowl | difficulty_pct_expert | 11 | 10 | own four buckets scaled from 107 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | sunday-river | difficulty_pct_beginner | 31 | 30 | own four buckets scaled from 103 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | sunday-river | difficulty_pct_intermediate | 32 | 33 | own four buckets scaled from 103 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | sunday-river | difficulty_pct_advanced | 16 | 17 | own four buckets scaled from 103 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | sunday-river | difficulty_pct_expert | 21 | 20 | own four buckets scaled from 103 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | saddleback | difficulty_pct_beginner | 32 | 39 | own four buckets scaled from 91 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | saddleback | difficulty_pct_advanced | 25 | 28 | own four buckets scaled from 91 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | saddleback | difficulty_pct_expert | 10 | 0 | own four buckets scaled from 91 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | mt-abram | difficulty_pct_beginner | 19 | 21 | own four buckets scaled from 96 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | mt-abram | difficulty_pct_intermediate | 41 | 50 | own four buckets scaled from 96 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | mt-abram | difficulty_pct_advanced | 26 | 29 | own four buckets scaled from 96 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | mt-abram | difficulty_pct_expert | 15 | 0 | own four buckets scaled from 96 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | camden-snow-bowl | difficulty_pct_beginner | 20 | 22 | own four buckets scaled from 90 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | camden-snow-bowl | difficulty_pct_intermediate | 70 | 67 | own four buckets scaled from 90 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | camden-snow-bowl | difficulty_pct_advanced | 10 | 11 | own four buckets scaled from 90 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | attitash | difficulty_pct_intermediate | 49 | 47 | missing bucket is the remainder to 100 (3) — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | attitash | difficulty_pct_advanced | 29 | 28 | missing bucket is the remainder to 100 (3) — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | attitash | difficulty_pct_expert | 0 | 3 | missing bucket is the remainder to 100 (3) — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | bretton-woods | difficulty_pct_intermediate | 40 | 29 | missing bucket is the remainder to 100 (19) — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | bretton-woods | difficulty_pct_advanced | 25 | 27 | missing bucket is the remainder to 100 (19) — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | bretton-woods | difficulty_pct_expert | 10 | 19 | missing bucket is the remainder to 100 (19) — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | granite-gorge | difficulty_pct_beginner | 50 | 43 | own four buckets scaled from 115 to 100 |
+| 2026-09-23T05:37 | granite-gorge | difficulty_pct_intermediate | 33 | 28 | own four buckets scaled from 115 to 100 |
+| 2026-09-23T05:37 | granite-gorge | difficulty_pct_advanced | 17 | 15 | own four buckets scaled from 115 to 100 |
+| 2026-09-23T05:37 | granite-gorge | difficulty_pct_expert | 15 | 13 | own four buckets scaled from 115 to 100 |
+| 2026-09-23T05:37 | mcintyre-ski-area | difficulty_pct_beginner | 83 | 89 | own four buckets scaled from 93 to 100 |
+| 2026-09-23T05:37 | mcintyre-ski-area | difficulty_pct_intermediate | 10 | 11 | own four buckets scaled from 93 to 100 |
+| 2026-09-23T05:37 | killington | difficulty_pct_beginner | 17 | 15 | own four buckets scaled from 109 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | killington | difficulty_pct_intermediate | 39 | 36 | own four buckets scaled from 109 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | killington | difficulty_pct_advanced | 30 | 35 | own four buckets scaled from 109 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | killington | difficulty_pct_expert | 14 | 13 | own four buckets scaled from 109 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | pico-mountain | difficulty_pct_beginner | 16 | 18 | other three buckets sum to ~100; missing bucket is 0 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | pico-mountain | difficulty_pct_intermediate | 44 | 46 | other three buckets sum to ~100; missing bucket is 0 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | pico-mountain | difficulty_pct_advanced | 37 | 36 | other three buckets sum to ~100; missing bucket is 0 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | pico-mountain | difficulty_pct_expert | 4 | 0 | other three buckets sum to ~100; missing bucket is 0 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | sugarbush | difficulty_pct_beginner | 23 | 22 | own four buckets scaled from 91 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | sugarbush | difficulty_pct_intermediate | 42 | 49 | own four buckets scaled from 91 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | sugarbush | difficulty_pct_advanced | 27 | 28 | own four buckets scaled from 91 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | sugarbush | difficulty_pct_expert | 7 | 0 | own four buckets scaled from 91 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | smugglers-notch | difficulty_pct_beginner | 17 | 20 | own four buckets scaled from 96 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | smugglers-notch | difficulty_pct_intermediate | 51 | 53 | own four buckets scaled from 96 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | smugglers-notch | difficulty_pct_expert | 5 | 0 | own four buckets scaled from 96 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | bolton-valley | difficulty_pct_beginner | 34 | 35 | own four buckets scaled from 95 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | bolton-valley | difficulty_pct_intermediate | 38 | 40 | own four buckets scaled from 95 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | bolton-valley | difficulty_pct_advanced | 23 | 18 | own four buckets scaled from 95 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | mad-river-glen | difficulty_pct_expert | NULL | 11 | missing bucket is the remainder to 100 (11) |
+| 2026-09-23T05:37 | middlebury-snow-bowl | difficulty_pct_beginner | 34 | 33 | own four buckets scaled from 103 to 100 |
+| 2026-09-23T05:37 | middlebury-snow-bowl | difficulty_pct_intermediate | 26 | 25 | own four buckets scaled from 103 to 100 |
+| 2026-09-23T05:37 | middlebury-snow-bowl | difficulty_pct_advanced | 33 | 32 | own four buckets scaled from 103 to 100 |
+| 2026-09-23T05:37 | holimont | difficulty_pct_beginner | 29 | 22 | own four buckets scaled from 92 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | holimont | difficulty_pct_intermediate | 29 | 32 | own four buckets scaled from 92 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | holimont | difficulty_pct_advanced | 42 | 45 | own four buckets scaled from 92 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | song-mountain | difficulty_pct_beginner | 36 | 38 | own four buckets scaled from 95 to 100 |
+| 2026-09-23T05:37 | song-mountain | difficulty_pct_intermediate | 46 | 48 | own four buckets scaled from 95 to 100 |
+| 2026-09-23T05:37 | oak-mountain | difficulty_pct_beginner | 48 | 52 | own four buckets scaled from 92 to 100 |
+| 2026-09-23T05:37 | oak-mountain | difficulty_pct_intermediate | 27 | 29 | own four buckets scaled from 92 to 100 |
+| 2026-09-23T05:37 | oak-mountain | difficulty_pct_advanced | 17 | 19 | own four buckets scaled from 92 to 100 |
+| 2026-09-23T05:37 | willard-mountain | difficulty_pct_beginner | 21 | 23 | own four buckets scaled from 90 to 100 |
+| 2026-09-23T05:37 | willard-mountain | difficulty_pct_intermediate | 40 | 45 | own four buckets scaled from 90 to 100 |
+| 2026-09-23T05:37 | willard-mountain | difficulty_pct_advanced | 29 | 32 | own four buckets scaled from 90 to 100 |
+| 2026-09-23T05:37 | liberty-mountain | difficulty_pct_beginner | 33 | 32 | own four buckets scaled from 103 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | liberty-mountain | difficulty_pct_intermediate | 38 | 39 | own four buckets scaled from 103 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | liberty-mountain | difficulty_pct_advanced | 14 | 13 | own four buckets scaled from 103 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | liberty-mountain | difficulty_pct_expert | 14 | 15 | own four buckets scaled from 103 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | mont-ripley | difficulty_pct_beginner | 21 | 19 | own four buckets scaled from 97 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | mont-ripley | difficulty_pct_intermediate | 29 | 30 | own four buckets scaled from 97 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | mont-ripley | difficulty_pct_advanced | 42 | 43 | own four buckets scaled from 97 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | mont-ripley | difficulty_pct_expert | 8 | 7 | own four buckets scaled from 97 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | shanty-creek | difficulty_pct_beginner | 29 | 32 | own four buckets scaled from 92 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | shanty-creek | difficulty_pct_intermediate | 26 | 30 | own four buckets scaled from 92 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | shanty-creek | difficulty_pct_advanced | 45 | 38 | own four buckets scaled from 92 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | caberfae-peaks | difficulty_pct_beginner | 26 | 34 | own four buckets scaled from 105 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | caberfae-peaks | difficulty_pct_intermediate | 37 | 33 | own four buckets scaled from 105 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | caberfae-peaks | difficulty_pct_advanced | 37 | 33 | own four buckets scaled from 105 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | mount-holly | difficulty_pct_beginner | 22 | 23 | own four buckets scaled from 97 to 100 |
+| 2026-09-23T05:37 | mount-holly | difficulty_pct_intermediate | 38 | 39 | own four buckets scaled from 97 to 100 |
+| 2026-09-23T05:37 | mount-holly | difficulty_pct_advanced | 37 | 38 | own four buckets scaled from 97 to 100 |
+| 2026-09-23T05:37 | cannonsburg | difficulty_pct_beginner | 25 | 28 | own four buckets scaled from 90 to 100 |
+| 2026-09-23T05:37 | cannonsburg | difficulty_pct_intermediate | 50 | 55 | own four buckets scaled from 90 to 100 |
+| 2026-09-23T05:37 | cannonsburg | difficulty_pct_advanced | 15 | 16 | own four buckets scaled from 90 to 100 |
+| 2026-09-23T05:37 | hyland-hills | difficulty_pct_advanced | 36 | 37 | own four buckets scaled from 94 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | snow-trails | difficulty_pct_beginner | 20 | 21 | own four buckets scaled from 93 to 100 |
+| 2026-09-23T05:37 | snow-trails | difficulty_pct_intermediate | 53 | 57 | own four buckets scaled from 93 to 100 |
+| 2026-09-23T05:37 | snow-trails | difficulty_pct_advanced | 20 | 21 | own four buckets scaled from 93 to 100 |
+| 2026-09-23T05:37 | hidden-valley-mo | difficulty_pct_beginner | 31 | 30 | own four buckets scaled from 90 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | hidden-valley-mo | difficulty_pct_intermediate | 46 | 51 | own four buckets scaled from 90 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | hidden-valley-mo | difficulty_pct_advanced | 23 | 16 | own four buckets scaled from 90 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | hidden-valley-mo | difficulty_pct_expert | 0 | 3 | own four buckets scaled from 90 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | snowshoe-mountain | difficulty_pct_beginner | 40 | 33 | own four buckets scaled from 90 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | snowshoe-mountain | difficulty_pct_intermediate | 33 | 36 | own four buckets scaled from 90 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | snowshoe-mountain | difficulty_pct_advanced | 25 | 28 | own four buckets scaled from 90 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | winterplace-ski-resort | difficulty_pct_beginner | 39 | 37 | own four buckets scaled from 106 to 100 |
+| 2026-09-23T05:37 | winterplace-ski-resort | difficulty_pct_intermediate | 43 | 40 | own four buckets scaled from 106 to 100 |
+| 2026-09-23T05:37 | winterplace-ski-resort | difficulty_pct_advanced | 24 | 22 | own four buckets scaled from 106 to 100 |
+| 2026-09-23T05:37 | appalachian-ski-mountain | difficulty_pct_beginner | 25 | 23 | own four buckets scaled from 108 to 100 |
+| 2026-09-23T05:37 | appalachian-ski-mountain | difficulty_pct_intermediate | 50 | 46 | own four buckets scaled from 108 to 100 |
+| 2026-09-23T05:37 | appalachian-ski-mountain | difficulty_pct_advanced | 33 | 31 | own four buckets scaled from 108 to 100 |
+| 2026-09-23T05:37 | powder-ridge-mountain-park | difficulty_pct_beginner | 45 | 43 | own four buckets scaled from 103 to 100 |
+| 2026-09-23T05:37 | powder-ridge-mountain-park | difficulty_pct_intermediate | 37 | 36 | own four buckets scaled from 103 to 100 |
+| 2026-09-23T05:37 | powder-ridge-mountain-park | difficulty_pct_advanced | 21 | 20 | own four buckets scaled from 103 to 100 |
+| 2026-09-23T05:37 | hunt-hollow-club | difficulty_pct_advanced | 37 | 40 | missing bucket is the remainder to 100 (7) — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | hunt-hollow-club | difficulty_pct_expert | 11 | 7 | missing bucket is the remainder to 100 (7) — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | christie | difficulty_pct_intermediate | 21 | 26 | own four buckets scaled from 97 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | christie | difficulty_pct_advanced | 31 | 23 | own four buckets scaled from 97 to 100 — replaces the OnTheSnow mix written by the first run |
+| 2026-09-23T05:37 | christie | difficulty_pct_expert | 7 | 9 | own four buckets scaled from 97 to 100 — replaces the OnTheSnow mix written by the first run |

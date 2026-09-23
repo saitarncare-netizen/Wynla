@@ -17,6 +17,8 @@ type Props = {
  * `parseSeasonDates`, render either:
  *   - in-season → green-tinted pill "⛷️ Open until {date} · N days"
  *   - off-season w/ daysUntilOpen ≤ 365 → navy pill "❄️ Opens in N days · {date}"
+ *   - either of the above with a projected (third-party) date → the copy
+ *     says "projected" so a guess is never shown as an announcement
  *   - off-season (out of range) → small muted "Season info coming"
  *   - unknown → small muted "Season info coming"
  */
@@ -38,6 +40,7 @@ export default function SeasonCountdown({ info, variant = "badge", className }: 
         <span aria-hidden="true">⛷️</span>
         <span>
           Open until {formatShortDate(info.nextCloseDate)}
+          {info.closeProjected ? " (projected)" : ""}
           {days != null && days > 0 ? ` · ${days} day${days === 1 ? "" : "s"} left` : ""}
         </span>
       </span>
@@ -62,7 +65,8 @@ export default function SeasonCountdown({ info, variant = "badge", className }: 
       >
         <span aria-hidden="true">❄️</span>
         <span>
-          Opens in {info.daysUntilOpen} day{info.daysUntilOpen === 1 ? "" : "s"} · {formatShortDate(info.nextOpenDate)}
+          {info.openProjected ? "Projected to open in" : "Opens in"} {info.daysUntilOpen} day
+          {info.daysUntilOpen === 1 ? "" : "s"} · {formatShortDate(info.nextOpenDate)}
         </span>
       </span>
     );

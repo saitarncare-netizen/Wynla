@@ -130,7 +130,9 @@ export const LISTS: CuratedList[] = [
     intro:
       "The Ikon Pass shines at destination mountains — Jackson, Aspen, Big Sky, Mammoth. Pair those with the unlimited workhorses (Steamboat, Killington, Sugarbush) and you have a full-season plan.",
     resortSlugs: [
-      "aspen-snowmass",
+      // Snowmass stands in for the retired aspen-snowmass aggregate row
+      // (2026-09-23 backfill); /resort/aspen-snowmass redirects there.
+      "snowmass",
       "steamboat",
       "mammoth-mountain",
       "big-sky",

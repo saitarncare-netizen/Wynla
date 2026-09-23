@@ -861,8 +861,13 @@ function QuickStats({ resort }: { resort: Resort }) {
     let value = String(resort.total_lifts);
     if (t) {
       // Same reader as the map filters (lib/liftTypes) so the page and
-      // the "High-speed chair" filter can never disagree.
-      const { highSpeed: hs, gondola, tram } = liftCounts(t);
+      // the "High-speed chair" filter can never disagree. The curated
+      // high_speed_lifts column still wins when it is higher: 19 rows
+      // (Breckenridge, Jackson Hole, Stowe, ...) carry a legacy JSON that
+      // undercounts detachables, listed in
+      // scripts/backfill-2026-09-23/reports/01-lift-types.md.
+      const { highSpeed: jsonHs, gondola, tram } = liftCounts(t);
+      const hs = Math.max(jsonHs, resort.high_speed_lifts ?? 0);
       const parts: string[] = [];
       if (hs > 0) parts.push(`${hs} HS chair`);
       if (gondola > 0) parts.push(`${gondola} gondola`);

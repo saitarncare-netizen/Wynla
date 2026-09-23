@@ -99,7 +99,7 @@ export const GUIDES: Guide[] = [
           <R slug="killington">Killington</R>. Top-tier base passes add limited
           days at <R slug="alta">Alta</R>, <R slug="snowbird">Snowbird</R>,
           <R slug="jackson-hole"> Jackson Hole</R>, <R slug="big-sky">Big Sky</R>,
-          <R slug="aspen-snowmass"> Aspen Snowmass</R>, and{" "}
+          <R slug="snowmass"> Aspen Snowmass</R>, and{" "}
           <R slug="sugarbush">Sugarbush</R>.
         </p>
         <p>

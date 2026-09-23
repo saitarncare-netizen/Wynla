@@ -1,5 +1,14 @@
 import type { NextConfig } from "next";
 
+// Old resort slug -> the active row that replaced it (see
+// scripts/backfill-2026-09-23/reports/03-duplicates.md).
+const RETIRED_RESORT_SLUGS: Record<string, string> = {
+  "aspen-snowmass": "snowmass",
+  "tyrol-basin-and-snowboard": "tyrol-basin",
+  "sunburst-area": "sunburst",
+  "schuss-shanty-creek": "shanty-creek",
+};
+
 const nextConfig: NextConfig = {
   // Hero photos live in Supabase Storage; next/image proxies + optimizes
   // them (WebP/AVIF + immutable CDN caching — the Supabase public URLs
@@ -43,6 +52,15 @@ const nextConfig: NextConfig = {
         destination: "https://wynla.app/:path*",
         permanent: true,
       },
+      // Slugs retired by the 2026-09-23 data backfill (duplicate rows and
+      // the Aspen aggregate, now active=false so /resort/[slug] 404s).
+      // The aspen-snowmass row was tier=featured and Google-indexed, so
+      // each old URL 301s to the row that replaced it.
+      ...Object.entries(RETIRED_RESORT_SLUGS).map(([from, to]) => ({
+        source: `/resort/${from}`,
+        destination: `/resort/${to}`,
+        permanent: true,
+      })),
     ];
   },
   // Baseline security headers (the 2026-06-28 sweep found only HSTS

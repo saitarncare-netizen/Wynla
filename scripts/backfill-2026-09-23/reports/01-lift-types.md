@@ -1,6 +1,6 @@
 # Step 1 — lift_types canonical keys
 
-Report generated 2026-09-23T05:10:31.475Z (dry run). Applied runs: 01-lift-types-2026-09-23_04-53-00.json (39 rows)
+Report generated 2026-09-23T05:37:38.686Z (dry run). Applied runs: 01-lift-types-2026-09-23_04-53-00.json (39 rows)
 
 | metric | count |
 |---|---|
@@ -14,7 +14,9 @@ Report generated 2026-09-23T05:10:31.475Z (dry run). Applied runs: 01-lift-types
 
 Closure evidence: sleeping-giant — Cowboy State Daily 2026-02-10 (buyer HMH Capital plans a summer park, no ski operations; ski area closed since 2025-26) https://cowboystatedaily.com/2026/02/10/sleeping-giant-ski-area-near-cody-has-a-buyer-but-not-one-who-wants-a-ski-resort/ · apple-mountain — flagged defunct in its own lift_types JSON and in audit finding data-quality-9.
 
-Readers updated in the same change set: components/Map/MapPage.tsx (High-speed / No-surface filters now also count high_speed_eight + high_speed_triple and coerce with Number()), app/resort/[slug]/page.tsx (Lifts stat).
+Readers updated in the same change set: components/Map/MapPage.tsx (High-speed / No-surface filters now also count high_speed_eight + high_speed_triple and coerce with Number()), app/resort/[slug]/page.tsx (Lifts stat; it shows the higher of the JSON sum and the curated high_speed_lifts column because of the mismatches listed under Notes).
+
+Audit-trail note: in backups/01-lift-types-2026-09-23_04-53-00.json the `after` column for sunburst shows a full lift inventory plus high_speed_lifts=0; this step wrote lift_types=NULL for that row ({note, verified} only) and the inventory came from step 3, which merged it from the sunburst-area duplicate. The `before` column, which restore.mjs uses, is correct. Four rows (woodward-park-city, soda-springs, song-mountain, mount-ashwabay) ended this step with lift_types=NULL, not five.
 
 ## Notes
 - hunter-mountain: high_speed_lifts=3 but lift_types sums to 4 (left as is)

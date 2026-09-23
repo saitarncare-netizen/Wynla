@@ -18,6 +18,21 @@ describe("parseSeasonDates with backfilled 'Month D, YYYY' text", () => {
     expect(info.nextCloseDate?.toISOString().slice(0, 10)).toBe("2027-04-11");
   });
 
+  it("flags a '(projected)' qualifier without changing the parsed date", () => {
+    const info = parseSeasonDates(
+      "December 4, 2026 (projected)",
+      "March 28, 2027 (projected)",
+      new Date(Date.UTC(2026, 8, 23)),
+    );
+    expect(info.status).toBe("off-season");
+    expect(info.nextOpenDate?.toISOString().slice(0, 10)).toBe("2026-12-04");
+    expect(info.openProjected).toBe(true);
+    expect(info.closeProjected).toBe(true);
+    const announced = parseSeasonDates("November 13, 2026", "April 11, 2027 (projected)", new Date(Date.UTC(2026, 8, 23)));
+    expect(announced.openProjected).toBe(false);
+    expect(announced.closeProjected).toBe(true);
+  });
+
   it("still handles the qualifier form some older rows use", () => {
     const info = parseSeasonDates("Late November", "Early April", new Date(Date.UTC(2026, 8, 23)));
     expect(info.status).toBe("off-season");

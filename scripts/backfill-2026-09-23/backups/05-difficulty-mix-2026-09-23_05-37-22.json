@@ -1,0 +1,1268 @@
+{
+  "step": "05-difficulty-mix",
+  "table": "resorts",
+  "mode": "applied",
+  "taken_at": "2026-09-23T05:37:22.738Z",
+  "columns": [
+    "difficulty_pct_beginner",
+    "difficulty_pct_intermediate",
+    "difficulty_pct_advanced",
+    "difficulty_pct_expert",
+    "trails_beginner",
+    "trails_intermediate",
+    "trails_advanced",
+    "trails_expert"
+  ],
+  "rows": [
+    {
+      "id": 38,
+      "slug": "mount-peter",
+      "before": {
+        "difficulty_pct_beginner": 39,
+        "difficulty_pct_intermediate": 33,
+        "difficulty_pct_advanced": 22,
+        "difficulty_pct_expert": 0,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 42,
+        "difficulty_pct_intermediate": 35,
+        "difficulty_pct_advanced": 23
+      },
+      "source": "own four buckets scaled from 94 to 100"
+    },
+    {
+      "id": 49,
+      "slug": "berkshire-east",
+      "before": {
+        "difficulty_pct_beginner": 28,
+        "difficulty_pct_intermediate": 42,
+        "difficulty_pct_advanced": 28,
+        "difficulty_pct_expert": 2,
+        "trails_beginner": 14,
+        "trails_intermediate": 16,
+        "trails_advanced": 14,
+        "trails_expert": 2
+      },
+      "after": {
+        "difficulty_pct_beginner": 30,
+        "difficulty_pct_intermediate": 36,
+        "difficulty_pct_advanced": 29,
+        "difficulty_pct_expert": 4
+      },
+      "source": "own four buckets scaled from 97 to 100 — replaces the OnTheSnow mix written by the first run"
+    },
+    {
+      "id": 53,
+      "slug": "stratton-mountain",
+      "before": {
+        "difficulty_pct_beginner": 41,
+        "difficulty_pct_intermediate": 31,
+        "difficulty_pct_advanced": 17,
+        "difficulty_pct_expert": 11,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 39,
+        "difficulty_pct_intermediate": 34,
+        "difficulty_pct_advanced": 16,
+        "difficulty_pct_expert": 10
+      },
+      "source": "own four buckets scaled from 103 to 100 — replaces the OnTheSnow mix written by the first run"
+    },
+    {
+      "id": 59,
+      "slug": "cannon-mountain",
+      "before": {
+        "difficulty_pct_beginner": 14,
+        "difficulty_pct_intermediate": 52,
+        "difficulty_pct_advanced": 34,
+        "difficulty_pct_expert": 0,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 16,
+        "difficulty_pct_intermediate": 50
+      },
+      "source": "missing bucket is the remainder to 100 (16) — replaces the OnTheSnow mix written by the first run"
+    },
+    {
+      "id": 81,
+      "slug": "monarch-mountain",
+      "before": {
+        "difficulty_pct_beginner": 19,
+        "difficulty_pct_intermediate": 35,
+        "difficulty_pct_advanced": 36,
+        "difficulty_pct_expert": 9,
+        "trails_beginner": 15,
+        "trails_intermediate": 27,
+        "trails_advanced": 28,
+        "trails_expert": 7
+      },
+      "after": {
+        "difficulty_pct_beginner": 20,
+        "difficulty_pct_intermediate": 30,
+        "difficulty_pct_advanced": 40
+      },
+      "source": "own four buckets scaled from 93 to 100 — replaces the OnTheSnow mix written by the first run"
+    },
+    {
+      "id": 86,
+      "slug": "steamboat",
+      "before": {
+        "difficulty_pct_beginner": 12,
+        "difficulty_pct_intermediate": 38,
+        "difficulty_pct_advanced": 41,
+        "difficulty_pct_expert": 9,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 13,
+        "difficulty_pct_intermediate": 39,
+        "difficulty_pct_advanced": 39,
+        "difficulty_pct_expert": 8
+      },
+      "source": "own four buckets scaled from 108 to 100 — replaces the OnTheSnow mix written by the first run"
+    },
+    {
+      "id": 105,
+      "slug": "sundance",
+      "before": {
+        "difficulty_pct_beginner": 21,
+        "difficulty_pct_intermediate": 32,
+        "difficulty_pct_advanced": 42,
+        "difficulty_pct_expert": 9,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 20,
+        "difficulty_pct_intermediate": 31,
+        "difficulty_pct_advanced": 40,
+        "difficulty_pct_expert": 8
+      },
+      "source": "own four buckets scaled from 104 to 100"
+    },
+    {
+      "id": 108,
+      "slug": "jackson-hole",
+      "before": {
+        "difficulty_pct_beginner": 4,
+        "difficulty_pct_intermediate": 40,
+        "difficulty_pct_advanced": 38,
+        "difficulty_pct_expert": 18,
+        "trails_beginner": 13,
+        "trails_intermediate": 52,
+        "trails_advanced": null,
+        "trails_expert": 66
+      },
+      "after": {
+        "difficulty_pct_beginner": 9,
+        "difficulty_pct_intermediate": 37,
+        "difficulty_pct_advanced": 36,
+        "difficulty_pct_expert": 17
+      },
+      "source": "own four buckets scaled from 106 to 100 — replaces the OnTheSnow mix written by the first run"
+    },
+    {
+      "id": 123,
+      "slug": "blacktail",
+      "before": {
+        "difficulty_pct_beginner": 15,
+        "difficulty_pct_intermediate": 65,
+        "difficulty_pct_advanced": 17,
+        "difficulty_pct_expert": 0,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_intermediate": 67,
+        "difficulty_pct_advanced": 18
+      },
+      "source": "own four buckets scaled from 97 to 100"
+    },
+    {
+      "id": 125,
+      "slug": "lookout-pass",
+      "before": {
+        "difficulty_pct_beginner": 14,
+        "difficulty_pct_intermediate": 42,
+        "difficulty_pct_advanced": 40,
+        "difficulty_pct_expert": 8,
+        "trails_beginner": 7,
+        "trails_intermediate": 22,
+        "trails_advanced": 22,
+        "trails_expert": 1
+      },
+      "after": {
+        "difficulty_pct_beginner": 13,
+        "difficulty_pct_intermediate": 40,
+        "difficulty_pct_advanced": 38
+      },
+      "source": "own four buckets scaled from 104 to 100"
+    },
+    {
+      "id": 126,
+      "slug": "lost-trail",
+      "before": {
+        "difficulty_pct_beginner": 20,
+        "difficulty_pct_intermediate": 50,
+        "difficulty_pct_advanced": 20,
+        "difficulty_pct_expert": 0,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 22,
+        "difficulty_pct_intermediate": 56,
+        "difficulty_pct_advanced": 22
+      },
+      "source": "own four buckets scaled from 90 to 100"
+    },
+    {
+      "id": 127,
+      "slug": "maverick-mountain",
+      "before": {
+        "difficulty_pct_beginner": 29,
+        "difficulty_pct_intermediate": 39,
+        "difficulty_pct_advanced": 18,
+        "difficulty_pct_expert": 18,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 28,
+        "difficulty_pct_intermediate": 37,
+        "difficulty_pct_advanced": 17,
+        "difficulty_pct_expert": 17
+      },
+      "source": "own four buckets scaled from 104 to 100"
+    },
+    {
+      "id": 133,
+      "slug": "yellowstone-club",
+      "before": {
+        "difficulty_pct_beginner": 14,
+        "difficulty_pct_intermediate": 40,
+        "difficulty_pct_advanced": 27,
+        "difficulty_pct_expert": null,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_expert": 19
+      },
+      "source": "missing bucket is the remainder to 100 (19)"
+    },
+    {
+      "id": 143,
+      "slug": "pomerelle",
+      "before": {
+        "difficulty_pct_beginner": 20,
+        "difficulty_pct_intermediate": 48,
+        "difficulty_pct_advanced": 28,
+        "difficulty_pct_expert": 0,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 21,
+        "difficulty_pct_intermediate": 50,
+        "difficulty_pct_advanced": 29
+      },
+      "source": "own four buckets scaled from 96 to 100"
+    },
+    {
+      "id": 151,
+      "slug": "hilltop-ski-area",
+      "before": {
+        "difficulty_pct_beginner": 80,
+        "difficulty_pct_intermediate": 10,
+        "difficulty_pct_advanced": 0,
+        "difficulty_pct_expert": 0,
+        "trails_beginner": 10,
+        "trails_intermediate": 1,
+        "trails_advanced": 1,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 89,
+        "difficulty_pct_intermediate": 11
+      },
+      "source": "own four buckets scaled from 90 to 100"
+    },
+    {
+      "id": 154,
+      "slug": "skiland",
+      "before": {
+        "difficulty_pct_beginner": 13,
+        "difficulty_pct_intermediate": 50,
+        "difficulty_pct_advanced": 30,
+        "difficulty_pct_expert": 0,
+        "trails_beginner": 9,
+        "trails_intermediate": 23,
+        "trails_advanced": 14,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 14,
+        "difficulty_pct_intermediate": 53,
+        "difficulty_pct_advanced": 32
+      },
+      "source": "own four buckets scaled from 93 to 100"
+    },
+    {
+      "id": 155,
+      "slug": "palisades-tahoe",
+      "before": {
+        "difficulty_pct_beginner": 6,
+        "difficulty_pct_intermediate": 39,
+        "difficulty_pct_advanced": 33,
+        "difficulty_pct_expert": 23,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 25,
+        "difficulty_pct_intermediate": 41,
+        "difficulty_pct_advanced": 32,
+        "difficulty_pct_expert": 0
+      },
+      "source": "other three buckets sum to ~100; missing bucket is 0 — replaces the OnTheSnow mix written by the first run"
+    },
+    {
+      "id": 157,
+      "slug": "heavenly-mountain-resort",
+      "before": {
+        "difficulty_pct_beginner": 14,
+        "difficulty_pct_intermediate": 53,
+        "difficulty_pct_advanced": 27,
+        "difficulty_pct_expert": 5,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 19,
+        "difficulty_pct_intermediate": 43,
+        "difficulty_pct_advanced": 33,
+        "difficulty_pct_expert": 4
+      },
+      "source": "own four buckets scaled from 105 to 100 — replaces the OnTheSnow mix written by the first run"
+    },
+    {
+      "id": 161,
+      "slug": "homewood-mountain-resort",
+      "before": {
+        "difficulty_pct_beginner": 15,
+        "difficulty_pct_intermediate": 40,
+        "difficulty_pct_advanced": 33,
+        "difficulty_pct_expert": 15,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 14,
+        "difficulty_pct_intermediate": 39,
+        "difficulty_pct_advanced": 32,
+        "difficulty_pct_expert": 14
+      },
+      "source": "own four buckets scaled from 103 to 100"
+    },
+    {
+      "id": 164,
+      "slug": "donner-ski-ranch",
+      "before": {
+        "difficulty_pct_beginner": 31,
+        "difficulty_pct_intermediate": 38,
+        "difficulty_pct_advanced": 21,
+        "difficulty_pct_expert": 10,
+        "trails_beginner": 16,
+        "trails_intermediate": 20,
+        "trails_advanced": 16,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 34,
+        "difficulty_pct_intermediate": 41,
+        "difficulty_pct_advanced": 25,
+        "difficulty_pct_expert": 0
+      },
+      "source": "own four buckets scaled from 92 to 100 — replaces the OnTheSnow mix written by the first run"
+    },
+    {
+      "id": 167,
+      "slug": "diamond-peak",
+      "before": {
+        "difficulty_pct_beginner": 8,
+        "difficulty_pct_intermediate": 46,
+        "difficulty_pct_advanced": 36,
+        "difficulty_pct_expert": 0,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 9,
+        "difficulty_pct_intermediate": 51,
+        "difficulty_pct_advanced": 40
+      },
+      "source": "own four buckets scaled from 90 to 100"
+    },
+    {
+      "id": 174,
+      "slug": "dodge-ridge",
+      "before": {
+        "difficulty_pct_beginner": 20,
+        "difficulty_pct_intermediate": 40,
+        "difficulty_pct_advanced": 34,
+        "difficulty_pct_expert": 0,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 21,
+        "difficulty_pct_intermediate": 43,
+        "difficulty_pct_advanced": 36
+      },
+      "source": "own four buckets scaled from 94 to 100"
+    },
+    {
+      "id": 180,
+      "slug": "bear-mountain",
+      "before": {
+        "difficulty_pct_beginner": 27,
+        "difficulty_pct_intermediate": 42,
+        "difficulty_pct_advanced": 23,
+        "difficulty_pct_expert": 8,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 25,
+        "difficulty_pct_intermediate": 39,
+        "difficulty_pct_advanced": 28
+      },
+      "source": "own four buckets scaled from 107 to 100 — replaces the OnTheSnow mix written by the first run"
+    },
+    {
+      "id": 201,
+      "slug": "white-pass",
+      "before": {
+        "difficulty_pct_beginner": 32,
+        "difficulty_pct_intermediate": 40,
+        "difficulty_pct_advanced": 20,
+        "difficulty_pct_expert": 0,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 35,
+        "difficulty_pct_intermediate": 43,
+        "difficulty_pct_advanced": 21
+      },
+      "source": "own four buckets scaled from 92 to 100"
+    },
+    {
+      "id": 205,
+      "slug": "loup-loup",
+      "before": {
+        "difficulty_pct_beginner": 27,
+        "difficulty_pct_intermediate": 46,
+        "difficulty_pct_advanced": 27,
+        "difficulty_pct_expert": 15,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 24,
+        "difficulty_pct_intermediate": 40,
+        "difficulty_pct_advanced": 23,
+        "difficulty_pct_expert": 13
+      },
+      "source": "own four buckets scaled from 115 to 100"
+    },
+    {
+      "id": 209,
+      "slug": "echo-valley",
+      "before": {
+        "difficulty_pct_beginner": 33,
+        "difficulty_pct_intermediate": 40,
+        "difficulty_pct_advanced": 27,
+        "difficulty_pct_expert": 14,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 29,
+        "difficulty_pct_intermediate": 35,
+        "difficulty_pct_advanced": 23,
+        "difficulty_pct_expert": 12
+      },
+      "source": "own four buckets scaled from 114 to 100"
+    },
+    {
+      "id": 211,
+      "slug": "ski-santa-fe",
+      "before": {
+        "difficulty_pct_beginner": 17,
+        "difficulty_pct_intermediate": 31,
+        "difficulty_pct_advanced": 46,
+        "difficulty_pct_expert": 0,
+        "trails_beginner": 18,
+        "trails_intermediate": 35,
+        "trails_advanced": 35,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 18,
+        "difficulty_pct_intermediate": 33,
+        "difficulty_pct_advanced": 48
+      },
+      "source": "own four buckets scaled from 94 to 100"
+    },
+    {
+      "id": 218,
+      "slug": "arizona-snowbowl",
+      "before": {
+        "difficulty_pct_beginner": 27,
+        "difficulty_pct_intermediate": 39,
+        "difficulty_pct_advanced": 21,
+        "difficulty_pct_expert": 11,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 30,
+        "difficulty_pct_intermediate": 40,
+        "difficulty_pct_advanced": 19,
+        "difficulty_pct_expert": 10
+      },
+      "source": "own four buckets scaled from 107 to 100 — replaces the OnTheSnow mix written by the first run"
+    },
+    {
+      "id": 221,
+      "slug": "sunday-river",
+      "before": {
+        "difficulty_pct_beginner": 31,
+        "difficulty_pct_intermediate": 32,
+        "difficulty_pct_advanced": 16,
+        "difficulty_pct_expert": 21,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 30,
+        "difficulty_pct_intermediate": 33,
+        "difficulty_pct_advanced": 17,
+        "difficulty_pct_expert": 20
+      },
+      "source": "own four buckets scaled from 103 to 100 — replaces the OnTheSnow mix written by the first run"
+    },
+    {
+      "id": 223,
+      "slug": "saddleback",
+      "before": {
+        "difficulty_pct_beginner": 32,
+        "difficulty_pct_intermediate": 32,
+        "difficulty_pct_advanced": 25,
+        "difficulty_pct_expert": 10,
+        "trails_beginner": 23,
+        "trails_intermediate": 20,
+        "trails_advanced": 18,
+        "trails_expert": 7
+      },
+      "after": {
+        "difficulty_pct_beginner": 39,
+        "difficulty_pct_advanced": 28,
+        "difficulty_pct_expert": 0
+      },
+      "source": "own four buckets scaled from 91 to 100 — replaces the OnTheSnow mix written by the first run"
+    },
+    {
+      "id": 225,
+      "slug": "mt-abram",
+      "before": {
+        "difficulty_pct_beginner": 19,
+        "difficulty_pct_intermediate": 41,
+        "difficulty_pct_advanced": 26,
+        "difficulty_pct_expert": 15,
+        "trails_beginner": 10,
+        "trails_intermediate": 21,
+        "trails_advanced": 13,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 21,
+        "difficulty_pct_intermediate": 50,
+        "difficulty_pct_advanced": 29,
+        "difficulty_pct_expert": 0
+      },
+      "source": "own four buckets scaled from 96 to 100 — replaces the OnTheSnow mix written by the first run"
+    },
+    {
+      "id": 228,
+      "slug": "camden-snow-bowl",
+      "before": {
+        "difficulty_pct_beginner": 20,
+        "difficulty_pct_intermediate": 70,
+        "difficulty_pct_advanced": 10,
+        "difficulty_pct_expert": 0,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 22,
+        "difficulty_pct_intermediate": 67,
+        "difficulty_pct_advanced": 11
+      },
+      "source": "own four buckets scaled from 90 to 100 — replaces the OnTheSnow mix written by the first run"
+    },
+    {
+      "id": 237,
+      "slug": "attitash",
+      "before": {
+        "difficulty_pct_beginner": 22,
+        "difficulty_pct_intermediate": 49,
+        "difficulty_pct_advanced": 29,
+        "difficulty_pct_expert": 0,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_intermediate": 47,
+        "difficulty_pct_advanced": 28,
+        "difficulty_pct_expert": 3
+      },
+      "source": "missing bucket is the remainder to 100 (3) — replaces the OnTheSnow mix written by the first run"
+    },
+    {
+      "id": 241,
+      "slug": "bretton-woods",
+      "before": {
+        "difficulty_pct_beginner": 25,
+        "difficulty_pct_intermediate": 40,
+        "difficulty_pct_advanced": 25,
+        "difficulty_pct_expert": 10,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_intermediate": 29,
+        "difficulty_pct_advanced": 27,
+        "difficulty_pct_expert": 19
+      },
+      "source": "missing bucket is the remainder to 100 (19) — replaces the OnTheSnow mix written by the first run"
+    },
+    {
+      "id": 244,
+      "slug": "granite-gorge",
+      "before": {
+        "difficulty_pct_beginner": 50,
+        "difficulty_pct_intermediate": 33,
+        "difficulty_pct_advanced": 17,
+        "difficulty_pct_expert": 15,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 43,
+        "difficulty_pct_intermediate": 28,
+        "difficulty_pct_advanced": 15,
+        "difficulty_pct_expert": 13
+      },
+      "source": "own four buckets scaled from 115 to 100"
+    },
+    {
+      "id": 250,
+      "slug": "mcintyre-ski-area",
+      "before": {
+        "difficulty_pct_beginner": 83,
+        "difficulty_pct_intermediate": 10,
+        "difficulty_pct_advanced": 0,
+        "difficulty_pct_expert": 0,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 89,
+        "difficulty_pct_intermediate": 11
+      },
+      "source": "own four buckets scaled from 93 to 100"
+    },
+    {
+      "id": 254,
+      "slug": "killington",
+      "before": {
+        "difficulty_pct_beginner": 17,
+        "difficulty_pct_intermediate": 39,
+        "difficulty_pct_advanced": 30,
+        "difficulty_pct_expert": 14,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 15,
+        "difficulty_pct_intermediate": 36,
+        "difficulty_pct_advanced": 35,
+        "difficulty_pct_expert": 13
+      },
+      "source": "own four buckets scaled from 109 to 100 — replaces the OnTheSnow mix written by the first run"
+    },
+    {
+      "id": 255,
+      "slug": "pico-mountain",
+      "before": {
+        "difficulty_pct_beginner": 16,
+        "difficulty_pct_intermediate": 44,
+        "difficulty_pct_advanced": 37,
+        "difficulty_pct_expert": 4,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 18,
+        "difficulty_pct_intermediate": 46,
+        "difficulty_pct_advanced": 36,
+        "difficulty_pct_expert": 0
+      },
+      "source": "other three buckets sum to ~100; missing bucket is 0 — replaces the OnTheSnow mix written by the first run"
+    },
+    {
+      "id": 256,
+      "slug": "sugarbush",
+      "before": {
+        "difficulty_pct_beginner": 23,
+        "difficulty_pct_intermediate": 42,
+        "difficulty_pct_advanced": 27,
+        "difficulty_pct_expert": 7,
+        "trails_beginner": 24,
+        "trails_intermediate": 51,
+        "trails_advanced": 36,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 22,
+        "difficulty_pct_intermediate": 49,
+        "difficulty_pct_advanced": 28,
+        "difficulty_pct_expert": 0
+      },
+      "source": "own four buckets scaled from 91 to 100 — replaces the OnTheSnow mix written by the first run"
+    },
+    {
+      "id": 259,
+      "slug": "smugglers-notch",
+      "before": {
+        "difficulty_pct_beginner": 17,
+        "difficulty_pct_intermediate": 51,
+        "difficulty_pct_advanced": 27,
+        "difficulty_pct_expert": 5,
+        "trails_beginner": 15,
+        "trails_intermediate": 39,
+        "trails_advanced": 20,
+        "trails_expert": 5
+      },
+      "after": {
+        "difficulty_pct_beginner": 20,
+        "difficulty_pct_intermediate": 53,
+        "difficulty_pct_expert": 0
+      },
+      "source": "own four buckets scaled from 96 to 100 — replaces the OnTheSnow mix written by the first run"
+    },
+    {
+      "id": 260,
+      "slug": "bolton-valley",
+      "before": {
+        "difficulty_pct_beginner": 34,
+        "difficulty_pct_intermediate": 38,
+        "difficulty_pct_advanced": 23,
+        "difficulty_pct_expert": 6,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 35,
+        "difficulty_pct_intermediate": 40,
+        "difficulty_pct_advanced": 18
+      },
+      "source": "own four buckets scaled from 95 to 100 — replaces the OnTheSnow mix written by the first run"
+    },
+    {
+      "id": 261,
+      "slug": "mad-river-glen",
+      "before": {
+        "difficulty_pct_beginner": 20,
+        "difficulty_pct_intermediate": 36,
+        "difficulty_pct_advanced": 33,
+        "difficulty_pct_expert": null,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_expert": 11
+      },
+      "source": "missing bucket is the remainder to 100 (11)"
+    },
+    {
+      "id": 264,
+      "slug": "middlebury-snow-bowl",
+      "before": {
+        "difficulty_pct_beginner": 34,
+        "difficulty_pct_intermediate": 26,
+        "difficulty_pct_advanced": 33,
+        "difficulty_pct_expert": 10,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 33,
+        "difficulty_pct_intermediate": 25,
+        "difficulty_pct_advanced": 32
+      },
+      "source": "own four buckets scaled from 103 to 100"
+    },
+    {
+      "id": 274,
+      "slug": "holimont",
+      "before": {
+        "difficulty_pct_beginner": 29,
+        "difficulty_pct_intermediate": 29,
+        "difficulty_pct_advanced": 42,
+        "difficulty_pct_expert": 0,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 22,
+        "difficulty_pct_intermediate": 32,
+        "difficulty_pct_advanced": 45
+      },
+      "source": "own four buckets scaled from 92 to 100 — replaces the OnTheSnow mix written by the first run"
+    },
+    {
+      "id": 281,
+      "slug": "song-mountain",
+      "before": {
+        "difficulty_pct_beginner": 36,
+        "difficulty_pct_intermediate": 46,
+        "difficulty_pct_advanced": 13,
+        "difficulty_pct_expert": 0,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 38,
+        "difficulty_pct_intermediate": 48
+      },
+      "source": "own four buckets scaled from 95 to 100"
+    },
+    {
+      "id": 285,
+      "slug": "oak-mountain",
+      "before": {
+        "difficulty_pct_beginner": 48,
+        "difficulty_pct_intermediate": 27,
+        "difficulty_pct_advanced": 17,
+        "difficulty_pct_expert": 0,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 52,
+        "difficulty_pct_intermediate": 29,
+        "difficulty_pct_advanced": 19
+      },
+      "source": "own four buckets scaled from 92 to 100"
+    },
+    {
+      "id": 287,
+      "slug": "willard-mountain",
+      "before": {
+        "difficulty_pct_beginner": 21,
+        "difficulty_pct_intermediate": 40,
+        "difficulty_pct_advanced": 29,
+        "difficulty_pct_expert": 0,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 23,
+        "difficulty_pct_intermediate": 45,
+        "difficulty_pct_advanced": 32
+      },
+      "source": "own four buckets scaled from 90 to 100"
+    },
+    {
+      "id": 292,
+      "slug": "liberty-mountain",
+      "before": {
+        "difficulty_pct_beginner": 33,
+        "difficulty_pct_intermediate": 38,
+        "difficulty_pct_advanced": 14,
+        "difficulty_pct_expert": 14,
+        "trails_beginner": 6,
+        "trails_intermediate": 9,
+        "trails_advanced": 3,
+        "trails_expert": 4
+      },
+      "after": {
+        "difficulty_pct_beginner": 32,
+        "difficulty_pct_intermediate": 39,
+        "difficulty_pct_advanced": 13,
+        "difficulty_pct_expert": 15
+      },
+      "source": "own four buckets scaled from 103 to 100 — replaces the OnTheSnow mix written by the first run"
+    },
+    {
+      "id": 315,
+      "slug": "mont-ripley",
+      "before": {
+        "difficulty_pct_beginner": 21,
+        "difficulty_pct_intermediate": 29,
+        "difficulty_pct_advanced": 42,
+        "difficulty_pct_expert": 8,
+        "trails_beginner": 5,
+        "trails_intermediate": 11,
+        "trails_advanced": 13,
+        "trails_expert": 2
+      },
+      "after": {
+        "difficulty_pct_beginner": 19,
+        "difficulty_pct_intermediate": 30,
+        "difficulty_pct_advanced": 43,
+        "difficulty_pct_expert": 7
+      },
+      "source": "own four buckets scaled from 97 to 100 — replaces the OnTheSnow mix written by the first run"
+    },
+    {
+      "id": 319,
+      "slug": "shanty-creek",
+      "before": {
+        "difficulty_pct_beginner": 29,
+        "difficulty_pct_intermediate": 26,
+        "difficulty_pct_advanced": 45,
+        "difficulty_pct_expert": 0,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 32,
+        "difficulty_pct_intermediate": 30,
+        "difficulty_pct_advanced": 38
+      },
+      "source": "own four buckets scaled from 92 to 100 — replaces the OnTheSnow mix written by the first run"
+    },
+    {
+      "id": 322,
+      "slug": "caberfae-peaks",
+      "before": {
+        "difficulty_pct_beginner": 26,
+        "difficulty_pct_intermediate": 37,
+        "difficulty_pct_advanced": 37,
+        "difficulty_pct_expert": 0,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 34,
+        "difficulty_pct_intermediate": 33,
+        "difficulty_pct_advanced": 33
+      },
+      "source": "own four buckets scaled from 105 to 100 — replaces the OnTheSnow mix written by the first run"
+    },
+    {
+      "id": 324,
+      "slug": "mount-holly",
+      "before": {
+        "difficulty_pct_beginner": 22,
+        "difficulty_pct_intermediate": 38,
+        "difficulty_pct_advanced": 37,
+        "difficulty_pct_expert": 0,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 23,
+        "difficulty_pct_intermediate": 39,
+        "difficulty_pct_advanced": 38
+      },
+      "source": "own four buckets scaled from 97 to 100"
+    },
+    {
+      "id": 330,
+      "slug": "cannonsburg",
+      "before": {
+        "difficulty_pct_beginner": 25,
+        "difficulty_pct_intermediate": 50,
+        "difficulty_pct_advanced": 15,
+        "difficulty_pct_expert": 0,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 28,
+        "difficulty_pct_intermediate": 55,
+        "difficulty_pct_advanced": 16
+      },
+      "source": "own four buckets scaled from 90 to 100"
+    },
+    {
+      "id": 354,
+      "slug": "hyland-hills",
+      "before": {
+        "difficulty_pct_beginner": 27,
+        "difficulty_pct_intermediate": 36,
+        "difficulty_pct_advanced": 36,
+        "difficulty_pct_expert": 0,
+        "trails_beginner": 3,
+        "trails_intermediate": 4,
+        "trails_advanced": 4,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_advanced": 37
+      },
+      "source": "own four buckets scaled from 94 to 100 — replaces the OnTheSnow mix written by the first run"
+    },
+    {
+      "id": 378,
+      "slug": "snow-trails",
+      "before": {
+        "difficulty_pct_beginner": 20,
+        "difficulty_pct_intermediate": 53,
+        "difficulty_pct_advanced": 20,
+        "difficulty_pct_expert": 0,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 21,
+        "difficulty_pct_intermediate": 57,
+        "difficulty_pct_advanced": 21
+      },
+      "source": "own four buckets scaled from 93 to 100"
+    },
+    {
+      "id": 379,
+      "slug": "hidden-valley-mo",
+      "before": {
+        "difficulty_pct_beginner": 31,
+        "difficulty_pct_intermediate": 46,
+        "difficulty_pct_advanced": 23,
+        "difficulty_pct_expert": 0,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 30,
+        "difficulty_pct_intermediate": 51,
+        "difficulty_pct_advanced": 16,
+        "difficulty_pct_expert": 3
+      },
+      "source": "own four buckets scaled from 90 to 100 — replaces the OnTheSnow mix written by the first run"
+    },
+    {
+      "id": 393,
+      "slug": "snowshoe-mountain",
+      "before": {
+        "difficulty_pct_beginner": 40,
+        "difficulty_pct_intermediate": 33,
+        "difficulty_pct_advanced": 25,
+        "difficulty_pct_expert": 2,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 33,
+        "difficulty_pct_intermediate": 36,
+        "difficulty_pct_advanced": 28
+      },
+      "source": "own four buckets scaled from 90 to 100 — replaces the OnTheSnow mix written by the first run"
+    },
+    {
+      "id": 395,
+      "slug": "winterplace-ski-resort",
+      "before": {
+        "difficulty_pct_beginner": 39,
+        "difficulty_pct_intermediate": 43,
+        "difficulty_pct_advanced": 24,
+        "difficulty_pct_expert": 0,
+        "trails_beginner": 11,
+        "trails_intermediate": 10,
+        "trails_advanced": 7,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 37,
+        "difficulty_pct_intermediate": 40,
+        "difficulty_pct_advanced": 22
+      },
+      "source": "own four buckets scaled from 106 to 100"
+    },
+    {
+      "id": 397,
+      "slug": "appalachian-ski-mountain",
+      "before": {
+        "difficulty_pct_beginner": 25,
+        "difficulty_pct_intermediate": 50,
+        "difficulty_pct_advanced": 33,
+        "difficulty_pct_expert": 0,
+        "trails_beginner": 3,
+        "trails_intermediate": 6,
+        "trails_advanced": 4,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 23,
+        "difficulty_pct_intermediate": 46,
+        "difficulty_pct_advanced": 31
+      },
+      "source": "own four buckets scaled from 108 to 100"
+    },
+    {
+      "id": 404,
+      "slug": "powder-ridge-mountain-park",
+      "before": {
+        "difficulty_pct_beginner": 45,
+        "difficulty_pct_intermediate": 37,
+        "difficulty_pct_advanced": 21,
+        "difficulty_pct_expert": 0,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_beginner": 43,
+        "difficulty_pct_intermediate": 36,
+        "difficulty_pct_advanced": 20
+      },
+      "source": "own four buckets scaled from 103 to 100"
+    },
+    {
+      "id": 460,
+      "slug": "hunt-hollow-club",
+      "before": {
+        "difficulty_pct_beginner": 32,
+        "difficulty_pct_intermediate": 21,
+        "difficulty_pct_advanced": 37,
+        "difficulty_pct_expert": 11,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_advanced": 40,
+        "difficulty_pct_expert": 7
+      },
+      "source": "missing bucket is the remainder to 100 (7) — replaces the OnTheSnow mix written by the first run"
+    },
+    {
+      "id": 477,
+      "slug": "christie",
+      "before": {
+        "difficulty_pct_beginner": 41,
+        "difficulty_pct_intermediate": 21,
+        "difficulty_pct_advanced": 31,
+        "difficulty_pct_expert": 7,
+        "trails_beginner": null,
+        "trails_intermediate": null,
+        "trails_advanced": null,
+        "trails_expert": null
+      },
+      "after": {
+        "difficulty_pct_intermediate": 26,
+        "difficulty_pct_advanced": 23,
+        "difficulty_pct_expert": 9
+      },
+      "source": "own four buckets scaled from 97 to 100 — replaces the OnTheSnow mix written by the first run"
+    }
+  ]
+}

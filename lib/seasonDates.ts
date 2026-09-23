@@ -10,6 +10,8 @@
 //   Qualifier+Mo "Late November"   → day 25 of that month (Early=5, Mid=15)
 //   Bare month   "November"        → day 15 of that month
 //   Anything else → null for that side (status "unknown" if both null)
+//   A "(projected)" qualifier anywhere in the text is ignored by the date
+//   parser and surfaces as openProjected / closeProjected on the result.
 //
 // The window can WRAP year-end — ski resorts open in Nov and close in Apr.
 // If parsed `close` < `open` we treat it as "open → close of NEXT year"
@@ -39,7 +41,21 @@ export type SeasonInfo = {
   daysUntilClose: number | null;
   nextOpenDate: Date | null;
   nextCloseDate: Date | null;
+  /**
+   * True when the opening / closing text is a third-party projection
+   * rather than the operator's announcement. The 2026-09-23 backfill
+   * writes projected dates as "November 13, 2026 (projected)" so the
+   * countdown can say so instead of presenting a guess as a fact.
+   */
+  openProjected: boolean;
+  closeProjected: boolean;
 };
+
+const PROJECTED = /\bprojected\b/i;
+
+function isProjected(text: string | null): boolean {
+  return !!text && PROJECTED.test(text);
+}
 
 const MONTH_NAMES: Record<string, number> = {
   january: 0,
@@ -241,6 +257,8 @@ export function parseSeasonDates(
 
   const open = parseSingleSeasonText(openText, refYear, todayUTC);
   const close = parseSingleSeasonText(closeText, refYear, todayUTC);
+  const openProjected = isProjected(openText);
+  const closeProjected = isProjected(closeText);
 
   if (!open && !close) {
     return {
@@ -249,6 +267,8 @@ export function parseSeasonDates(
       daysUntilClose: null,
       nextOpenDate: null,
       nextCloseDate: null,
+      openProjected,
+      closeProjected,
     };
   }
 
@@ -263,6 +283,8 @@ export function parseSeasonDates(
         daysUntilClose: null,
         nextOpenDate: open,
         nextCloseDate: null,
+        openProjected,
+        closeProjected,
       };
     }
     return {
@@ -271,6 +293,8 @@ export function parseSeasonDates(
       daysUntilClose: null,
       nextOpenDate: open,
       nextCloseDate: null,
+      openProjected,
+      closeProjected,
     };
   }
   if (!open && close) {
@@ -282,6 +306,8 @@ export function parseSeasonDates(
         daysUntilClose: null,
         nextOpenDate: null,
         nextCloseDate: close,
+        openProjected,
+        closeProjected,
       };
     }
     return {
@@ -290,6 +316,8 @@ export function parseSeasonDates(
       daysUntilClose: days,
       nextOpenDate: null,
       nextCloseDate: close,
+      openProjected,
+      closeProjected,
     };
   }
 
@@ -334,6 +362,8 @@ export function parseSeasonDates(
         daysUntilClose: diffDays(closeD, todayUTC),
         nextOpenDate: openD,
         nextCloseDate: closeD,
+        openProjected,
+        closeProjected,
       };
     }
   }
@@ -350,6 +380,8 @@ export function parseSeasonDates(
       daysUntilClose: null,
       nextOpenDate: next.openD,
       nextCloseDate: next.closeD,
+      openProjected,
+      closeProjected,
     };
   }
 
@@ -360,6 +392,8 @@ export function parseSeasonDates(
     daysUntilClose: null,
     nextOpenDate: null,
     nextCloseDate: null,
+    openProjected,
+    closeProjected,
   };
 }
 

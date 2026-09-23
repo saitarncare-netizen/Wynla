@@ -1,6 +1,6 @@
 # Step 2 — vertical_drop backfill
 
-Report generated 2026-09-23T05:10:30.467Z (dry run). Applied runs: 02-vertical-drop-2026-09-23_05-09-12.json (129 rows)
+Report generated 2026-09-23T05:37:38.921Z (dry run). Applied runs: 02-vertical-drop-2026-09-23_05-09-12.json (129 rows)
 
 | metric | count |
 |---|---|
@@ -29,7 +29,7 @@ Report generated 2026-09-23T05:10:30.467Z (dry run). Applied runs: 02-vertical-d
 - eaton-mountain (ME, independent, lifts=2)
 - spruce-mountain-ski-area (ME, independent, lifts=3)
 - powderhouse-hill (ME, independent, lifts=1)
-- granite-gorge (NH, indy, lifts=4)
+- granite-gorge (NH, independent, lifts=4)
 - campton-mountain (NH, independent, lifts=2)
 - ascutney-outdoors (VT, independent, lifts=2)
 - cochrans-ski-area (VT, independent, lifts=3)
@@ -38,8 +38,8 @@ Report generated 2026-09-23T05:10:30.467Z (dry run). Applied runs: 02-vertical-d
 - victor-constant-ski-area (NY, independent, lifts=2)
 - eagle-rock-resort (PA, independent, lifts=3)
 - mystic-mountain (PA, independent, lifts=3)
-- indianhead-mountain (MI, indy, lifts=7)
-- blackjack-mountain (MI, indy, lifts=6)
+- indianhead-mountain (MI, independent, lifts=7)
+- blackjack-mountain (MI, independent, lifts=6)
 - alpine-valley-mi (MI, independent, lifts=9)
 - otsego-resort (MI, independent, lifts=5)
 - the-rock-snowpark (WI, independent, lifts=5)
