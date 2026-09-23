@@ -216,7 +216,13 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   // tiles are still on the wire, and a blank beige canvas with no cue
   // reads as "the site is broken".
   const [mapLoaded, setMapLoaded] = useState(false);
-  const [mapLoadSlow, setMapLoadSlow] = useState(false);
+  // "slow": no `load` after 15s, the wait is almost always the network.
+  // "failed": MapView reported a hard failure (missing token, rejected
+  // token, no WebGL) or 45s passed with nothing, so the copy must not
+  // blame the user's connection.
+  const [mapLoadState, setMapLoadState] = useState<"loading" | "slow" | "failed">(
+    "loading",
+  );
   // Header height as a CSS variable on the page root. The desktop
   // ResortPanel starts below it (so Sign in / Deals / Guides / Lists stay
   // reachable with a resort open) and MapView reads it to know how much
@@ -489,12 +495,24 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
     if (!splashVisible) return;
     hideSplashRespectingMin();
   }
+  function handleMapError() {
+    setMapLoadState("failed");
+  }
   // If the map has not loaded after 15s, soften the pill's copy so the
-  // user knows the wait is the network, not a tap they missed.
+  // user knows the wait is the network, not a tap they missed. After 45s
+  // stop promising and tell them to reload; a load that never arrives is
+  // not going to.
   useEffect(() => {
     if (mapLoaded) return;
-    const t = setTimeout(() => setMapLoadSlow(true), 15_000);
-    return () => clearTimeout(t);
+    const slow = setTimeout(
+      () => setMapLoadState((s) => (s === "loading" ? "slow" : s)),
+      15_000,
+    );
+    const ceiling = setTimeout(() => setMapLoadState("failed"), 45_000);
+    return () => {
+      clearTimeout(slow);
+      clearTimeout(ceiling);
+    };
   }, [mapLoaded]);
   useEffect(() => {
     const el = headerRef.current;
@@ -1336,18 +1354,16 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         {/* Mobile-only quick pass-filter chips. Doubles as the pass
             legend (chip color = pin color) which used to be desktop-only
             in the bottom-right legend card. Hidden on md+. */}
-        {/* The chip strip is a horizontal scroller, so the whole row
-            takes pointer events (a swipe on the gap between chips must
-            scroll the strip, not pan the map). */}
-        <div className="pointer-events-auto">
-          <MobileQuickFilters
-            passFilter={passFilter}
-            passCounts={passCounts}
-            onPassChange={(passes) =>
-              updateParam("pass", passes.length === 0 ? null : passes.join(","))
-            }
-          />
-        </div>
+        {/* MobileQuickFilters opts its chip strip back into pointer
+            events itself, sized to the chips, so the empty space right
+            of the last chip still pans the map. */}
+        <MobileQuickFilters
+          passFilter={passFilter}
+          passCounts={passCounts}
+          onPassChange={(passes) =>
+            updateParam("pass", passes.length === 0 ? null : passes.join(","))
+          }
+        />
         {/* Stage 33 — both the off-season banner and the recently-viewed
             chips hide when the user is actively searching or planning
             (searchOpen / plannerOpen). They're "ambient" UI for the
@@ -1387,7 +1403,15 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         <ProBenefitsCard hidden={searchOpen || plannerOpen} />
         {/* Inline filter pills row — desktop only. Mobile uses the
             single ☰ Filters button above + FiltersDrawer below. */}
-        <div className="pointer-events-auto hidden md:block">
+        {/* With a resort open the 380px panel (z-40) sits above the
+            header (z-10), so the row is padded away from it and the
+            pills' popovers never open underneath the panel. */}
+        <div
+          className={[
+            "pointer-events-auto hidden md:block",
+            selectedId != null ? "md:pr-[396px]" : "",
+          ].join(" ")}
+        >
           <FilterBar
             passFilter={passFilter}
             origin={origin}
@@ -1423,6 +1447,7 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         recentlyViewedId={recentlyViewedId}
         plannerOpen={plannerOpen}
         onMapLoaded={handleMapLoaded}
+        onMapError={handleMapError}
         // Stage 33 — freeze map interaction whenever a full-bleed
         // overlay is on screen. Without this, vertical scrolls inside
         // the filter drawer / search picker leak through to Mapbox's
@@ -1471,13 +1496,17 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
         >
           <div className="flex flex-col items-center gap-2 rounded-full border border-wn-charcoal/10 bg-white/95 px-4 py-2.5 shadow-lg backdrop-blur-sm">
             <span className="text-xs font-semibold text-wn-navy">
-              {mapLoadSlow
-                ? "Still loading the map. Check your connection."
-                : "Loading map"}
+              {mapLoadState === "failed"
+                ? "The map could not load. Reload the page to try again."
+                : mapLoadState === "slow"
+                  ? "Still loading the map. Check your connection."
+                  : "Loading map"}
             </span>
-            <span className="inline-flex h-1 w-24 overflow-hidden rounded-full bg-wn-navy/10">
-              <span className="h-full w-full origin-left animate-[wynla-map-loading_1.4s_ease-in-out_infinite] bg-wn-sky" />
-            </span>
+            {mapLoadState !== "failed" && (
+              <span className="inline-flex h-1 w-24 overflow-hidden rounded-full bg-wn-navy/10">
+                <span className="h-full w-full origin-left animate-[wynla-map-loading_1.4s_ease-in-out_infinite] bg-wn-sky" />
+              </span>
+            )}
           </div>
           <style>{`
             @keyframes wynla-map-loading {

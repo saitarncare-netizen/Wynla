@@ -31,8 +31,9 @@ const HOME_DATA_CACHE_TAG = "home-data";
 // Only the columns the map, filters, ResortPanel and trip planner read.
 // Everything else (attribution, ticket links, 48h/7d snow, season end
 // dates, ...) is rendered on /resort/[slug], which fetches its own row.
-// Measured 2026-09-23: 66 -> 53 columns cut the resorts JSON from 809 KB
-// to 622 KB raw for 425 active resorts.
+// Measured 2026-09-23 with scripts/measure-home-payload.mjs (re-run it
+// after editing this list): 66 -> 53 columns cut the resorts JSON from
+// 757 KB to 581 KB raw (60 -> 49 KB gzip) for 397 active resorts.
 const RESORT_COLUMNS =
   "id, slug, name, state, region, latitude, longitude, passes, tier, vertical_drop, total_trails, total_acres, website_url, has_night_skiing, difficulty_pct_beginner, difficulty_pct_intermediate, difficulty_pct_advanced, difficulty_pct_expert, trails_beginner, trails_intermediate, trails_advanced, trails_expert, has_terrain_park, terrain_park_count, total_lifts, high_speed_lifts, base_elevation_ft, summit_elevation_ft, annual_snowfall_in, season_open_text, season_close_text, snowmaking_pct, has_tubing, has_lessons, has_rentals, has_lodging_on_mountain, has_xc_skiing, has_backcountry_access, webcam_url, closest_airport_iata, hero_image_url, hero_image_alt, snow_base_depth_in, snow_new_24h_in, trails_open_today, lifts_open_today, snow_report_status, ticket_price_adult_min, ticket_price_adult_max, lift_types, currently_open, current_surface_class, has_adaptive_program";
 
@@ -40,7 +41,9 @@ const RESORT_COLUMNS =
 // on Supabase) even when no limit is requested. drive_time_cache holds
 // 4 origins x ~437 resorts = ~1,750 rows, so the old single select
 // silently dropped the tail and some resorts had no drive time for some
-// origins. Page through in 1,000-row windows with a deterministic order.
+// origins. Page through in windows with a deterministic order and stop on
+// the exact row count, not on a short page: if max-rows is ever lowered
+// below PAGE_SIZE a short first page would otherwise look like the end.
 const PAGE_SIZE = 1000;
 
 type DriveTimeRow = {
@@ -69,17 +72,27 @@ const getCachedResorts = unstable_cache(
 const getCachedDriveTimes = unstable_cache(
   async (): Promise<DriveTimeRows> => {
     const rows: DriveTimeRow[] = [];
-    for (let from = 0; ; from += PAGE_SIZE) {
-      const { data, error } = await supabase
+    let total: number | null = null;
+    while (total === null || rows.length < total) {
+      const from = rows.length;
+      const { data, error, count } = await supabase
         .from("drive_time_cache")
-        .select("resort_id, origin_name, duration_seconds, distance_meters")
+        .select("resort_id, origin_name, duration_seconds, distance_meters", {
+          count: "exact",
+        })
         .order("origin_name")
         .order("resort_id")
+        // Unique tiebreak: the (resort_id, origin_name) unique index has
+        // been partial before, so duplicates must not straddle a window.
+        .order("id")
         .range(from, from + PAGE_SIZE - 1);
       if (error) throw new Error(`drive_time_cache: ${error.message}`);
       const page = (data ?? []) as DriveTimeRow[];
+      // An empty page with rows still owed means the table shrank
+      // mid-read; stop rather than loop forever.
+      if (page.length === 0) break;
       rows.push(...page);
-      if (page.length < PAGE_SIZE) break;
+      total = count ?? rows.length;
     }
     // Compact per-origin tuples: the row objects repeat four keys per
     // entry, which is most of their serialized weight in the RSC payload.

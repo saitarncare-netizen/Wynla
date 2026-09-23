@@ -47,6 +47,11 @@ type Props = {
    *  (e.g. missing NEXT_PUBLIC_MAPBOX_TOKEN, blocked network); the pill
    *  stays until this fires and softens its copy after 15s. */
   onMapLoaded?: () => void;
+  /** Called when the map cannot load at all: no NEXT_PUBLIC_MAPBOX_TOKEN,
+   *  the Mapbox constructor threw (no WebGL), or the token was rejected
+   *  (401/403) before `load`. MapPage swaps its "Loading map" pill for a
+   *  neutral "could not load" message instead of blaming the network. */
+  onMapError?: () => void;
   // Optional ordered list of points to draw as a route line + numbered
   // markers when the trip planner is open. First point is the origin.
   tripRoute?: TripRoutePoint[];
@@ -245,14 +250,20 @@ export default function MapView({
   userLocation,
   interactionDisabled = false,
   onMapLoaded,
+  onMapError,
   airportMarker,
 }: Props) {
-  // Keep a stable ref to the latest onMapLoaded so the once-fired load
-  // listener can call the freshest callback without re-binding.
+  // Keep stable refs to the latest onMapLoaded / onMapError so the
+  // once-registered listeners call the freshest callbacks without
+  // re-binding.
   const onMapLoadedRef = useRef(onMapLoaded);
   useEffect(() => {
     onMapLoadedRef.current = onMapLoaded;
   }, [onMapLoaded]);
+  const onMapErrorRef = useRef(onMapError);
+  useEffect(() => {
+    onMapErrorRef.current = onMapError;
+  }, [onMapError]);
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const tripMarkersRef = useRef<mapboxgl.Marker[]>([]);
@@ -307,6 +318,7 @@ export default function MapView({
     const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
     if (!token) {
       console.error("Missing NEXT_PUBLIC_MAPBOX_TOKEN");
+      onMapErrorRef.current?.();
       return;
     }
     mapboxgl.accessToken = token;
@@ -340,34 +352,66 @@ export default function MapView({
       // Malformed JSON / sessionStorage disabled — keep the computed frame.
     }
 
-    const map = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: "mapbox://styles/mapbox/light-v11",
-      // Stage 33 — back to flat mercator. Users zooming out (especially
-      // after closing search) were seeing the globe view and reading it
-      // as a visual bug ("the map turned into a circle"). Flat is the
-      // expected look for a US-only trip-planning map.
-      projection: "mercator",
-      // The first frame is set in the constructor (not fitBounds after
-      // load) so there is no visible jump from a US-wide view to the
-      // region. The bounds padding keeps the region clear of the floating
-      // header rows and the bottom pills on phones.
-      ...(initial.kind === "bounds"
-        ? {
-            bounds: initial.bounds,
-            fitBoundsOptions: { padding: { top: 150, bottom: 90, left: 20, right: 20 } },
-          }
-        : { center: initial.center, zoom: initial.zoom }),
-      // Max pointer travel (px) between down and up for Mapbox to still
-      // emit `click` rather than treat it as a drag. It does NOT enlarge
-      // the hit area of pins; the padded queryRenderedFeatures in the
-      // click handler below does that.
-      clickTolerance: 22,
-      // Disable rotate/pitch — flat US map UX, prevents accidental gestures
-      pitchWithRotate: false,
-      dragRotate: false,
-    });
+    // Region padding for the first frame: clear the measured header stack
+    // (brand row + chips + recent strip + banner can pass 200px on phones)
+    // plus a little breathing room, never less than the 150px the layout
+    // was tuned for. The var is set by MapPage before this chunk mounts.
+    const headerPadPx = Math.max(150, headerCoverPx(mapContainer.current) + 12);
+
+    let map: mapboxgl.Map;
+    try {
+      map = new mapboxgl.Map({
+        container: mapContainer.current,
+        style: "mapbox://styles/mapbox/light-v11",
+        // Stage 33 — back to flat mercator. Users zooming out (especially
+        // after closing search) were seeing the globe view and reading it
+        // as a visual bug ("the map turned into a circle"). Flat is the
+        // expected look for a US-only trip-planning map.
+        projection: "mercator",
+        // The first frame is set in the constructor (not fitBounds after
+        // load) so there is no visible jump from a US-wide view to the
+        // region. The bounds padding keeps the region clear of the floating
+        // header rows and the bottom pills on phones.
+        ...(initial.kind === "bounds"
+          ? {
+              bounds: initial.bounds,
+              fitBoundsOptions: {
+                padding: { top: headerPadPx, bottom: 90, left: 20, right: 20 },
+              },
+            }
+          : { center: initial.center, zoom: initial.zoom }),
+        // Max pointer travel (px) between down and up for Mapbox to still
+        // emit `click` rather than treat it as a drag. It does NOT enlarge
+        // the hit area of pins; the padded queryRenderedFeatures in the
+        // click handler below does that.
+        clickTolerance: 22,
+        // Disable rotate/pitch — flat US map UX, prevents accidental gestures
+        pitchWithRotate: false,
+        dragRotate: false,
+      });
+    } catch (err) {
+      // Typically "Failed to initialize WebGL" on very old devices or
+      // hardware-acceleration-off browsers. Nothing downstream can run.
+      console.error("Mapbox init failed", err);
+      onMapErrorRef.current?.();
+      return;
+    }
     map.touchZoomRotate.disableRotation();
+
+    // A rejected token surfaces as 401/403 on the style request before
+    // `load` ever fires; treat that as fatal. Tile 404s and transient
+    // network errors are not (Mapbox retries and `load` still arrives),
+    // so they only reach the console.
+    let hardFailed = false;
+    map.on("error", (e) => {
+      if (hardFailed || map.loaded()) return;
+      const status = (e.error as { status?: number } | undefined)?.status;
+      if (status === 401 || status === 403) {
+        hardFailed = true;
+        console.error("Mapbox rejected the access token", e.error);
+        onMapErrorRef.current?.();
+      }
+    });
 
     // Persist camera on every moveend so we can restore on next mount.
     map.on("moveend", () => {
@@ -678,6 +722,12 @@ export default function MapView({
       // feature whose projected center is nearest. Empty-map taps still
       // find nothing and do nothing.
       map.on("click", (e) => {
+        // DOM markers (airport, numbered trip stops, the user dot) do not
+        // stop propagation, so a tap on one also reaches this handler.
+        // With the padded query that would select whatever pin sits
+        // under the marker; those markers handle their own clicks.
+        const target = e.originalEvent.target;
+        if (target instanceof Element && target.closest(".mapboxgl-marker")) return;
         const { x, y } = e.point;
         const hits = map.queryRenderedFeatures(
           [
