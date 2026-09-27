@@ -129,9 +129,9 @@ function withinTripWindow(anchor: string, totalDays: number, today: string): boo
 }
 
 /**
- * A trip that is plausibly under way today: started (someone marked a
- * day done — TripActions sets started_at on the first one, there is no
- * Start button), not every day done, and started no more than
+ * A trip that is plausibly under way today: started (started_at is set by
+ * the Start button or by the first day marked done), not every day done,
+ * and started no more than
  * total_days + TRIP_GRACE_DAYS days ago. The age limit matters because
  * people rarely tick the last day: without it last season's half-ticked
  * trip would count as "running" forever and swallow every save for its
@@ -144,14 +144,26 @@ export function isRunningNow(t: TripShape, today: string): boolean {
 
 /**
  * A trip that is behind the person: every day done, or started but gone
- * quiet past its window (see isRunningNow), or never started but dated
- * (start_date) entirely before today's window.
+ * quiet past its window (see isRunningNow), or dated (start_date) and
+ * today is past its dated window.
+ * A dated trip is never past unless finished while today is on or before
+ * its start date or inside its dated days (+ the grace), whatever
+ * started_at says: Start can be tapped weeks ahead and never moves
+ * started_at afterwards (startTrip), and a trip re-dated after an earlier
+ * run keeps that run's started_at (TripActions edits start_date alone).
+ * "+ Trip" refuses past trips (canSaveInto), so without this it would
+ * turn away next month's trip, or this trip on its own day 2. Only once
+ * the dated window is over does started_at get a say (a trip restarted
+ * recently but still carrying an old date is running, not past).
  */
 export function isPastTrip(t: TripShape & Pick<SaveTripRow, "start_date">, today: string): boolean {
   if (tripFinished(t)) return true;
-  if (t.started_at != null) return !isRunningNow(t, today);
   const start = tripStartDate(t);
-  return start != null && !withinTripWindow(start, t.total_days, today);
+  // A future start_date is inside the window too (negative elapsed days).
+  if (start != null && withinTripWindow(start, t.total_days, today)) return false;
+  if (t.started_at != null) return !isRunningNow(t, today);
+  // Dated, and its window (checked above) is over; undated plans are not past.
+  return start != null;
 }
 
 // ---------- Which trip, which day ----------
@@ -167,6 +179,8 @@ export function isPastTrip(t: TripShape & Pick<SaveTripRow, "start_date">, today
  *      half-ticked, or dated before today) or a stop already skied is the
  *      last resort, not the default.
  * `today` is the viewer's local YYYY-MM-DD.
+ * The button saves through pickSaveTarget, which turns that last resort
+ * away rather than writing into last season's trip.
  */
 export function pickTargetTrip<T extends SaveTripRow>(trips: T[], resortSlug: string, today: string): T | null {
   const withResort = trips.filter((t) => tripIncludesResort(t, resortSlug));
@@ -183,9 +197,36 @@ export function pickTargetTrip<T extends SaveTripRow>(trips: T[], resortSlug: st
     .sort((a, b) => tripStartDate(a)!.localeCompare(tripStartDate(b)!) || byUpdatedDesc(a, b));
   if (upcoming.length > 0) return upcoming[0];
 
-  const behind = (t: T) => Number(isPastTrip(t, today) || !hasOpenDayAt(t, resortSlug));
+  const behind = (t: T) => Number(!canSaveInto(t, resortSlug, today));
   const recent = [...withResort].sort((a, b) => behind(a) - behind(b) || byUpdatedDesc(a, b));
   return recent[0];
+}
+
+/**
+ * May a place from `resortSlug` still be saved into this trip? Not when
+ * the trip is behind the person (isPastTrip) or every day it has at this
+ * mountain is done: the place would land in a trip nobody opens again,
+ * and the card would then read "In trip" for it. A trip running now (with
+ * a day left here) or dated ahead always passes.
+ */
+export function canSaveInto(t: TripShape & Pick<SaveTripRow, "start_date">, resortSlug: string, today: string): boolean {
+  return !isPastTrip(t, today) && hasOpenDayAt(t, resortSlug);
+}
+
+/**
+ * The trip "+ Trip" saves into: pickTargetTrip over the trips that pass
+ * canSaveInto, so null when none here does. Null makes the button offer
+ * to plan a trip instead of quietly filling last season's. Filtering
+ * first (rather than checking pickTargetTrip's answer) only differs when
+ * the soonest upcoming trip has every day here ticked ahead of time; the
+ * next trip that can take the place is the better answer then.
+ */
+export function pickSaveTarget<T extends SaveTripRow>(trips: T[], resortSlug: string, today: string): T | null {
+  return pickTargetTrip(
+    trips.filter((t) => canSaveInto(t, resortSlug, today)),
+    resortSlug,
+    today,
+  );
 }
 
 /**
@@ -358,9 +399,16 @@ export function isMissingColumnError(err: { code?: string; message?: string } | 
   return /column/i.test(err.message ?? "") && /does not exist|schema cache/i.test(err.message ?? "");
 }
 
-/** Planner deep link that starts a 2-day trip at this mountain. */
+/**
+ * Planner deep link that adds this mountain to the trip being planned, or
+ * starts one with it. ?add=, not ?route=: a route seed replaces every
+ * stop of the draft in progress, and people reach a nearby card mid-plan
+ * (the map sheet, resort page and /go links use ?add= for the same
+ * reason). No ?days: the planner's appendStop sizes the trip from the
+ * draft plus this stop.
+ */
 export function planTripHref(resortSlug: string): string {
-  return `/?plan=1&route=${encodeURIComponent(resortSlug)}&days=2`;
+  return `/?plan=1&add=${encodeURIComponent(resortSlug)}`;
 }
 
 /** Sign-in link that comes back to `path` (pathname + search). Anything
