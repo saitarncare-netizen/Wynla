@@ -8,8 +8,11 @@ import {
   MAX_TRIP_DAYS,
   newStopDayCap,
   parseDraft,
+  planActionLabel,
   plannedDays,
+  plannerParamsKeptByClearAll,
   SESSION_DRAFT_TTL_MS,
+  sheetClosesForPlanner,
   stepStopDays,
   tripDaysFromParam,
 } from "./plannerDraft";
@@ -74,6 +77,62 @@ describe("draftSlugsKey", () => {
     expect(draftSlugsKey(raw, NOW)).toBe("vail,aspen-snowmass");
     expect(draftSlugsKey(raw, NOW + SESSION_DRAFT_TTL_MS)).toBe("");
     expect(draftSlugsKey(null, NOW)).toBe("");
+  });
+});
+
+describe("planActionLabel", () => {
+  it("says Plan trip when no trip is being planned", () => {
+    expect(planActionLabel([], "vail")).toEqual({ label: "Plan trip", inTrip: false });
+  });
+
+  it("says Add to trip when the resort would be a new stop", () => {
+    expect(planActionLabel(["aspen-snowmass"], "vail")).toEqual({ label: "Add to trip", inTrip: false });
+  });
+
+  it("says View trip when the resort is already a stop, wherever it sits", () => {
+    expect(planActionLabel(["vail"], "vail")).toEqual({ label: "View trip", inTrip: true });
+    expect(planActionLabel(["aspen-snowmass", "vail"], "vail")).toEqual({ label: "View trip", inTrip: true });
+  });
+
+  it("matches whole slugs only", () => {
+    // "vail" is not a stop just because "vail-pass" is.
+    expect(planActionLabel(["vail-pass"], "vail").inTrip).toBe(false);
+  });
+});
+
+describe("plannerParamsKeptByClearAll", () => {
+  const kept = (qs: string) => plannerParamsKeptByClearAll(new URLSearchParams(qs)).toString();
+
+  it("keeps the trip's origin while the planner is open", () => {
+    expect(
+      kept("pass=ikon&within=3&from=geo&fromLat=39.74&fromLng=-104.99&fromLabel=Denver&days=3&plan=1"),
+    ).toBe("days=3&plan=1&from=geo&fromLat=39.74&fromLng=-104.99&fromLabel=Denver");
+    expect(kept("pass=epic&from=BOS&plan=1")).toBe("plan=1&from=BOS");
+  });
+
+  it("drops the origin when the planner is closed, so it falls back to the stored choice", () => {
+    expect(kept("pass=ikon&from=geo&fromLat=39.74&fromLng=-104.99&days=2")).toBe("days=2");
+    expect(kept("from=BOS&plan=0")).toBe("");
+  });
+
+  it("keeps ?days and ?plan but no filter", () => {
+    expect(kept("pass=ikon,epic&size=large&night=1&within=2&days=4&plan=1")).toBe("days=4&plan=1");
+    expect(kept("pass=ikon")).toBe("");
+  });
+
+  it("skips empty origin params instead of writing them back blank", () => {
+    expect(kept("plan=1&from=&fromLabel=")).toBe("plan=1");
+  });
+});
+
+describe("sheetClosesForPlanner", () => {
+  it("closes an open resort sheet on phones only", () => {
+    expect(sheetClosesForPlanner(false, 12)).toBe(true);
+    // Desktop: the rail sits beside the planner.
+    expect(sheetClosesForPlanner(true, 12)).toBe(false);
+    // Nothing selected: nothing to close (id 0 is still a selection).
+    expect(sheetClosesForPlanner(false, null)).toBe(false);
+    expect(sheetClosesForPlanner(false, 0)).toBe(true);
   });
 });
 
