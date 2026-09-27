@@ -1593,23 +1593,28 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
               <SearchGlyph />
               <span className={HEADER_BTN_LABEL}>Search</span>
             </button>
-            {/* "Plan a trip" + "My trips" live in the AuthButton dropdown
-                for signed-in users. Anonymous visitors still need a
-                discoverable entry: opens the planner directly (?plan=1);
-                the planner asks for sign-in only at Save. Do not
-                reintroduce the /login redirect here. */}
-            {!isAuthed && (
-              <button
-                type="button"
-                onClick={() => updateParam("plan", "1")}
-                className={`${HEADER_BTN} !border-wn-navy !bg-wn-navy !text-white hover:!bg-wn-navy/90`}
-                title="Plan a multi-day ski trip"
-                aria-label="Plan a trip"
-              >
-                <Icon name="trips" className="h-5 w-5 sm:h-4 sm:w-4" />
-                <span className={HEADER_BTN_LABEL}>Plan</span>
-              </button>
-            )}
+            {/* "Plan a trip" — one gold entry for everyone, signed in or
+                not (2026-09-27: signed-in people had to find it inside
+                the avatar menu, so most never planned a trip). Opens the
+                planner in place (?plan=1), which resumes a draft in
+                progress; the planner asks for sign-in only at Save. Do
+                not reintroduce the /login redirect here. Phones keep the
+                44 px square with a short "Plan" label (the row must fit
+                at 360 px); sm+ spells it out as a pill. The avatar menu
+                keeps its own entry too. */}
+            <button
+              type="button"
+              onClick={() => updateParam("plan", "1")}
+              className={`${HEADER_BTN} whitespace-nowrap !border-wn-gold !bg-wn-gold !text-wn-navy hover:!bg-wn-gold/90 sm:!rounded-full`}
+              title="Plan a multi-day ski trip"
+              aria-label="Plan a trip"
+            >
+              <Icon name="trips" className="h-5 w-5 sm:h-4 sm:w-4" />
+              <span className={HEADER_BTN_LABEL}>
+                <span className="sm:hidden">Plan</span>
+                <span className="hidden sm:inline">Plan a trip</span>
+              </span>
+            </button>
             {/* "Where to ride Saturday" (/go). A header button on every
                 width: on phones it used to be the first pill of the
                 secondary row, which then rendered on every visit and
@@ -1910,12 +1915,17 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
           snap={sheetSnap}
           onSnapChange={setSheetSnap}
           onSheetHeightChange={setSheetHeight}
-          // Plan trip from the sheet: open the planner seeded with this
-          // resort (?route=<slug>, the share-link form the planner reads).
-          // The planner and the sheet are mutually exclusive on phones,
-          // so the sheet closes as the planner opens.
+          // Plan trip / Add to trip from the sheet: ?add=<slug> asks the
+          // planner to APPEND this resort to the trip in progress (or
+          // start one with it, or just show the trip when it is already a
+          // stop). It used to send ?route=<slug>, the share-link seed,
+          // which replaced the stops wholesale, so browsing a second
+          // mountain wiped the first. The sheet's label comes from the
+          // same draft (ActionBar, lib/plannerDraft). The planner and the
+          // sheet are mutually exclusive on phones, so the sheet closes
+          // as the planner opens.
           onPlanTrip={() => {
-            updateParams({ plan: "1", route: selectedResort.slug });
+            updateParams({ plan: "1", add: selectedResort.slug, route: null });
             openResort(null);
           }}
           onClose={() => openResort(null)}

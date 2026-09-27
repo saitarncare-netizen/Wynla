@@ -27,6 +27,7 @@ import type { Resort, WeatherSnapshot } from "./MapPage";
 import { directionsUrl } from "./ResortSheetMath";
 import { buildGlanceTiles, type GlanceTile } from "@/lib/glanceTiles";
 import { HIT_AREA_44_FROM_32 } from "@/lib/hitArea";
+import { usePlannerDraftSlugs } from "@/lib/plannerDraft";
 
 // Families that have per-product rules in lib/data/passAccess.json. Kept
 // local (not imported from lib/passAccess) so the map bundle does not pull
@@ -317,6 +318,13 @@ export function PassChips({ resort }: { resort: Resort }) {
  * of its place sheet in Sept 2025 so the main action never scrolls away.
  * Compare lives here on phones (the desktop rail keeps it in the hero,
  * RailControls), so the map's compare flow works on every width.
+ *
+ * The gold button follows the trip being planned in this tab (the
+ * planner's sessionStorage draft): "Plan trip" with no draft, "Add to
+ * trip" when this resort would be a new stop, "View trip" when it
+ * already is one. onPlanTrip is the same in all three (MapPage sends
+ * ?add=<slug>, which appends, starts or just opens the trip), so the
+ * label is a promise about what the tap does, never a different code path.
  */
 export function ActionBar({
   resort,
@@ -336,6 +344,9 @@ export function ActionBar({
 }) {
   const [shared, setShared] = useState<"idle" | "copied" | "failed">("idle");
   const canDirect = Number.isFinite(lat) && Number.isFinite(lng);
+  const draftSlugs = usePlannerDraftSlugs();
+  const inTrip = draftSlugs.includes(resort.slug);
+  const planLabel = draftSlugs.length === 0 ? "Plan trip" : inTrip ? "View trip" : "Add to trip";
 
   async function share() {
     const url = `${window.location.origin}/resort/${resort.slug}`;
@@ -371,8 +382,8 @@ export function ActionBar({
           onClick={onPlanTrip}
           className="inline-flex h-11 min-w-0 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-wn-gold px-3 text-sm font-bold text-wn-navy shadow-sm transition hover:bg-wn-gold/90 active:scale-[0.98]"
         >
-          <Icon name="trips" className="h-4 w-4" />
-          Plan trip
+          <Icon name={inTrip ? "check" : "trips"} className="h-4 w-4" />
+          {planLabel}
         </button>
         {canDirect && (
           <a
