@@ -110,3 +110,41 @@ describe("emailLinkRedirectTo round trip through the email template", () => {
     expect(emailLinkRedirectTo(ORIGIN, "/trips")).toMatch(/^https:\/\/wynla\.app\/auth\/confirm\?next=/);
   });
 });
+
+describe("emailLinkRedirectTo round trip when GoTrue escapes RedirectTo", () => {
+  // GoTrue renders the template with Go's html/template, which escapes
+  // {{ .RedirectTo }} inside the href with lowercase hex (every byte outside
+  // the RFC 3986 unreserved set).
+  const goEscape = (s: string) =>
+    s.replace(/[^A-Za-z0-9\-._~]/g, (c) => `%${c.charCodeAt(0).toString(16).padStart(2, "0")}`);
+  function viaEscapedTemplate(next: string): string {
+    const link = new URL(
+      `${ORIGIN}/auth/confirm?token_hash=abc&type=email&redirect_to=${goEscape(emailLinkRedirectTo(ORIGIN, next))}`,
+    );
+    return nextFromRedirectTo(link.searchParams.get("redirect_to"), ORIGIN);
+  }
+
+  it("lands on / for the link from a real 2026-09-26 sign-in email", () => {
+    const link = new URL(
+      "https://wynla.app/auth/confirm?token_hash=pkce_x&type=email&redirect_to=https%3a%2f%2fwynla.app%2fauth%2fconfirm%3fnext%3d%25252F",
+    );
+    expect(nextFromRedirectTo(link.searchParams.get("redirect_to"), ORIGIN)).toBe("/");
+  });
+
+  it("keeps paths and multi-param queries", () => {
+    expect(viaEscapedTemplate("/")).toBe("/");
+    expect(viaEscapedTemplate("/favorites")).toBe("/favorites");
+    expect(viaEscapedTemplate("/?plan=1&resort=vail")).toBe("/?plan=1&resort=vail");
+    expect(viaEscapedTemplate("/resort/vail?tab=snow&day=sat#lifts")).toBe(
+      "/resort/vail?tab=snow&day=sat#lifts",
+    );
+  });
+
+  it("still refuses foreign and protocol-relative destinations", () => {
+    expect(viaEscapedTemplate("https://evil.com/x")).toBe("/");
+    expect(viaEscapedTemplate("//evil.com")).toBe("/");
+    expect(
+      nextFromRedirectTo("https://wynla.app/auth/confirm?next=%25252F%25252Fevil.com", ORIGIN),
+    ).toBe("/");
+  });
+});
