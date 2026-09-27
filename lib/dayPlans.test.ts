@@ -3,6 +3,7 @@ import {
   MAX_PLACES_PER_DAY,
   parseDayPlans,
   placeKey,
+  placeKeysOutsideDay,
   unionPlaces,
   withDayPlan,
   type DayPlace,
@@ -63,5 +64,21 @@ describe("unionPlaces", () => {
   });
   it("ignores days with no plan", () => {
     expect(unionPlaces(plans, [3, 4])).toEqual([]);
+  });
+});
+
+describe("placeKeysOutsideDay", () => {
+  const plans = {
+    "1": { note: "leave at 7", places: [place(1), place(2, "activity")] },
+    "2": { places: [place(3)] },
+    "4": { places: [place(1)] },
+  };
+  it("lists the places saved on every other day, deduped", () => {
+    expect(placeKeysOutsideDay(plans, 2).sort()).toEqual(["activity:2", "restaurant:1"]);
+    expect(placeKeysOutsideDay(plans, 1).sort()).toEqual(["restaurant:1", "restaurant:3"]);
+  });
+  it("is everything for a day with no plan, and nothing for an empty trip", () => {
+    expect(placeKeysOutsideDay(plans, 3).sort()).toEqual(["activity:2", "restaurant:1", "restaurant:3"]);
+    expect(placeKeysOutsideDay({}, 1)).toEqual([]);
   });
 });

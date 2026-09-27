@@ -23,10 +23,11 @@ import TodayCard, { StartDateBadge, type TodayResortInfo } from "./TodayCard";
 import TripNameEditor from "./TripNameEditor";
 import TripStickyBar from "./TripStickyBar";
 import TripCalendarExport from "@/components/TripCalendarExport";
-import DayPlan, { type NearbyOption } from "./DayPlan";
+import DayPlan, { type NearbyOption, type TodayCardStay } from "./DayPlan";
 import DayResortSwap from "./DayResortSwap";
-import { parseDayPlans } from "@/lib/dayPlans";
+import { parseDayPlans, placeKeysOutsideDay } from "@/lib/dayPlans";
 import { tripToday } from "@/lib/tripToday";
+import { resortNameFromSlug } from "@/lib/tripLabels";
 
 export const dynamic = "force-dynamic";
 
@@ -319,6 +320,7 @@ export default async function TripPage({
   const heroPrimary = primaryPass(firstResortRow?.passes ?? []);
   const heroAccent = passColor(heroPrimary);
   const fallbackName = `${expandedSlugs.length}-day trip`;
+  const itineraryKey = expandedSlugs.join("|");
   const progressPct =
     isActive && today.totalDays > 0 ? Math.round((today.completedCount / today.totalDays) * 100) : 0;
 
@@ -373,7 +375,7 @@ export default async function TripPage({
                   const r = bySlug.get(slug);
                   return {
                     day: i + 1,
-                    resortName: r?.name ?? slug,
+                    resortName: r?.name ?? resortNameFromSlug(slug),
                     resortState: r?.state ?? "",
                     lat: r ? Number(r.latitude) : null,
                     lng: r ? Number(r.longitude) : null,
@@ -492,6 +494,14 @@ export default async function TripPage({
             // yesterday). Not the same as stayPut: a resort row that failed
             // to load also has a 0 s leg.
             const continuesStay = i > 0 && expandedSlugs[i - 1] === slug;
+            // The Today card lists places only while the trip is on and
+            // today is in this stay; the day card links there only then.
+            const todayCard: TodayCardStay =
+              isActive && today.stop?.days.includes(dayNum)
+                ? "now"
+                : today.state === "not_started"
+                  ? "after-start"
+                  : "not-now";
             const primary = primaryPass(r?.passes ?? []);
             const dot = passColor(primary);
             return (
@@ -529,7 +539,7 @@ export default async function TripPage({
                       <DayResortSwap
                         tripId={trip.id}
                         day={dayNum}
-                        currentName={r?.name ?? slug}
+                        currentName={r?.name ?? resortNameFromSlug(slug)}
                       />
                     )}
                   </div>
@@ -547,7 +557,9 @@ export default async function TripPage({
                         {r.name}
                       </Link>
                     ) : (
-                      <span className="text-base font-bold text-wn-muted">{slug}</span>
+                      // A slug the resorts table no longer knows (renamed or
+                      // merged since the trip was saved): "Mohawk", not "mohawk".
+                      <span className="text-base font-bold text-wn-muted">{resortNameFromSlug(slug)}</span>
                     )}
                     {r && (
                       <span className="text-xs text-wn-muted">{r.state}</span>
@@ -577,12 +589,21 @@ export default async function TripPage({
                       until the day_plans DDL has run (feature-detected). */}
                   {dayPlansEnabled && (
                     <DayPlan
+                      // DayPlan keeps its own copy of the plans across
+                      // router.refresh(). A resort swap changes the
+                      // itinerary AND moves places between days
+                      // (DayResortSwap), so remount every card on a new
+                      // itinerary to show the moved places; a place add
+                      // keeps the itinerary, so an open add list stays open.
+                      key={itineraryKey}
                       tripId={trip.id}
                       day={dayNum}
                       initialPlans={dayPlans}
                       nearby={r ? (nearbyByResortId.get(r.id) ?? []) : []}
+                      savedElsewhere={placeKeysOutsideDay(dayPlans, dayNum)}
                       completed={completed}
                       continuesStay={continuesStay}
+                      todayCard={todayCard}
                     />
                   )}
                 </div>
@@ -608,6 +629,7 @@ export default async function TripPage({
             lastCompletedDay={lastCompletedDay}
             totalDays={today.totalDays}
             googleMapsUrl={googleMapsUrl}
+            todayCardShowsDrive={isActive && todayResort != null}
             startDate={startDate}
             startDateEnabled={startDateEnabled}
           />
