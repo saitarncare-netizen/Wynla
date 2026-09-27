@@ -3,11 +3,16 @@ import { parseDayPlans, type DayPlace, type DayPlans } from "./dayPlans";
 import type { NearbyRow } from "./nearbyCategories";
 import {
   MAX_PLACES_PER_DAY,
+  TRIP_GRACE_DAYS,
   addPlaceToDay,
   addPlaceToStop,
   expandTripDays,
   findPlaceDay,
+  hasOpenDayAt,
+  hasSeveralTripsAt,
   isMissingColumnError,
+  isPastTrip,
+  isRunningNow,
   localTodayISO,
   pickTargetDay,
   pickTargetTrip,
@@ -16,6 +21,8 @@ import {
   signInHref,
   stopDaysFrom,
   toDayPlace,
+  tripIncludesResort,
+  tripLabel,
   tripStops,
   type SaveTripRow,
 } from "./saveToTrip";
@@ -125,9 +132,84 @@ describe("pickTargetTrip", () => {
   });
 
   it("picks the most recently started of two active trips", () => {
-    const older = trip({ id: "older", started_at: "2026-12-01T00:00:00Z", total_days: 3, days_per_resort: [3] });
+    const older = trip({ id: "older", started_at: "2026-12-07T00:00:00Z", total_days: 3, days_per_resort: [3] });
     const newer = trip({ id: "newer", started_at: "2026-12-08T00:00:00Z", total_days: 3, days_per_resort: [3] });
     expect(pickTargetTrip([older, newer], "vail", today)?.id).toBe("newer");
+  });
+
+  // Last season: marked day 1 done at Vail, never ticked the rest. Nobody
+  // ticks the last day, so this is the common shape, not an edge case.
+  const abandoned = trip({
+    id: "abandoned",
+    name: "Presidents Day",
+    resort_slugs: ["vail"],
+    days_per_resort: [3],
+    total_days: 3,
+    started_at: "2026-02-14T16:00:00Z",
+    current_day: 2,
+    completed_days: [1],
+    updated_at: "2026-02-14T16:00:00Z",
+  });
+
+  it("does not treat last season's half-ticked trip as running", () => {
+    const plan = trip({ id: "plan", updated_at: "2026-09-20T00:00:00Z" });
+    delete plan.start_date; // start_date is not live yet: the upcoming rule cannot help
+    expect(pickTargetTrip([abandoned, plan], "vail", today)?.id).toBe("plan");
+  });
+
+  it("ranks an abandoned trip below a plan even when it was edited more recently", () => {
+    const renamed = { ...abandoned, updated_at: "2026-12-01T00:00:00Z" };
+    const plan = trip({ id: "plan", updated_at: "2026-09-20T00:00:00Z" });
+    expect(pickTargetTrip([renamed, plan], "vail", today)?.id).toBe("plan");
+  });
+
+  it("still falls back to an abandoned trip when it is the only one here", () => {
+    expect(pickTargetTrip([abandoned], "vail", today)?.id).toBe("abandoned");
+  });
+
+  it("lets a trip that is still inside its window run, and not a day past the grace", () => {
+    // Started Dec 1, 3 days: running through Dec 1 + 3 + TRIP_GRACE_DAYS.
+    const t = trip({
+      id: "t",
+      days_per_resort: [3],
+      total_days: 3,
+      started_at: "2026-12-01T22:00:00Z",
+      current_day: 2,
+      completed_days: [1],
+      updated_at: "2026-08-01T00:00:00Z",
+    });
+    const plan = trip({ id: "plan", updated_at: "2026-09-20T00:00:00Z" });
+    const dec = (d: number) => `2026-12-${String(d).padStart(2, "0")}`;
+    const last = dec(1 + 3 + TRIP_GRACE_DAYS);
+    const after = dec(2 + 3 + TRIP_GRACE_DAYS);
+    expect(pickTargetTrip([t, plan], "vail", last)?.id).toBe("t");
+    expect(pickTargetTrip([t, plan], "vail", after)?.id).toBe("plan");
+  });
+
+  it("skips a running trip whose stop at this mountain is already skied", () => {
+    // Vail days 1-2 done, now in Aspen.
+    const running = trip({
+      id: "running",
+      resort_slugs: ["vail", "aspen"],
+      days_per_resort: [2, 2],
+      total_days: 4,
+      started_at: "2026-12-08T23:00:00Z",
+      current_day: 3,
+      completed_days: [1, 2],
+      updated_at: "2026-12-10T01:00:00Z",
+    });
+    const plan = trip({ id: "plan", updated_at: "2026-09-20T00:00:00Z" });
+    expect(pickTargetTrip([running, plan], "vail", today)?.id).toBe("plan");
+    // Aspen is still ahead on the running trip, so it keeps Aspen saves.
+    expect(pickTargetTrip([running, trip({ id: "a", resort_slugs: ["aspen"] })], "aspen", today)?.id).toBe("running");
+    // Alone, it is still the answer (the button never loses a target).
+    expect(pickTargetTrip([running], "vail", today)?.id).toBe("running");
+  });
+
+  it("ranks a trip dated before today below an undated plan", () => {
+    const lastSeason = trip({ id: "past", start_date: "2026-02-14", updated_at: "2026-12-01T00:00:00Z" });
+    const plan = trip({ id: "plan", updated_at: "2026-09-20T00:00:00Z" });
+    expect(pickTargetTrip([lastSeason, plan], "vail", today)?.id).toBe("plan");
   });
 
   it("picks the upcoming trip that starts soonest, today included", () => {
@@ -193,6 +275,80 @@ describe("pickTargetDay", () => {
 
   it("returns null when the trip does not include the resort", () => {
     expect(pickTargetDay(trip({ id: "t", ...route }), "stowe")).toBeNull();
+  });
+
+  it("with today, trusts current_day only while the trip is running now", () => {
+    // Day 1 and 3 ticked, focus on day 4 (Vail again); day 2 was skipped.
+    const base = { id: "t", ...route, current_day: 4, completed_days: [1, 3] };
+    const live = trip({ ...base, started_at: "2026-12-08T20:00:00Z" });
+    const stale = trip({ ...base, started_at: "2026-02-14T20:00:00Z" });
+    expect(pickTargetDay(live, "vail", "2026-12-10")).toBe(4);
+    // Abandoned last season: the stale focus is ignored, the first stop
+    // with an open day wins.
+    expect(pickTargetDay(stale, "vail", "2026-12-10")).toBe(1);
+    // Without today, any started unfinished trip counts (older callers).
+    expect(pickTargetDay(stale, "vail")).toBe(4);
+  });
+});
+
+describe("isRunningNow / isPastTrip", () => {
+  const today = "2026-12-10";
+  const started = (started_at: string | null, over: Partial<SaveTripRow> = {}) =>
+    trip({ id: "t", days_per_resort: [3], total_days: 3, started_at, completed_days: started_at ? [1] : [], ...over });
+
+  it("runs from the start through total_days + the grace", () => {
+    expect(isRunningNow(started("2026-12-10T01:00:00Z"), today)).toBe(true);
+    expect(isRunningNow(started("2026-12-05T01:00:00Z"), today)).toBe(true);
+    expect(isRunningNow(started("2026-12-04T01:00:00Z"), today)).toBe(false);
+  });
+
+  it("is not running when not started, finished, or started_at is not a date", () => {
+    expect(isRunningNow(started(null), today)).toBe(false);
+    expect(isRunningNow(started("2026-12-09T00:00:00Z", { completed_days: [1, 2, 3] }), today)).toBe(false);
+    expect(isRunningNow(started("garbage"), today)).toBe(false);
+  });
+
+  it("calls a trip past when finished, abandoned, or dated before today's window", () => {
+    expect(isPastTrip(started("2026-12-09T00:00:00Z", { completed_days: [1, 2, 3] }), today)).toBe(true);
+    expect(isPastTrip(started("2026-02-14T00:00:00Z"), today)).toBe(true);
+    expect(isPastTrip(started(null, { start_date: "2026-11-01" }), today)).toBe(true);
+  });
+
+  it("does not call a live, dated-ahead, dated-now or undated plan past", () => {
+    expect(isPastTrip(started("2026-12-09T00:00:00Z"), today)).toBe(false);
+    expect(isPastTrip(started(null, { start_date: "2026-12-20" }), today)).toBe(false);
+    expect(isPastTrip(started(null, { start_date: "2026-12-09" }), today)).toBe(false);
+    expect(isPastTrip(started(null), today)).toBe(false);
+  });
+});
+
+describe("tripIncludesResort / hasOpenDayAt / hasSeveralTripsAt / tripLabel", () => {
+  const t = trip({ id: "t", resort_slugs: ["vail", "aspen"], days_per_resort: [2, 1], total_days: 3 });
+
+  it("checks the expanded days", () => {
+    expect(tripIncludesResort(t, "aspen")).toBe(true);
+    expect(tripIncludesResort(t, "stowe")).toBe(false);
+    // Cut off by total_days: not part of the trip.
+    expect(tripIncludesResort({ ...t, total_days: 2 }, "aspen")).toBe(false);
+  });
+
+  it("knows whether a mountain still has a day to ski", () => {
+    expect(hasOpenDayAt(t, "vail")).toBe(true);
+    expect(hasOpenDayAt({ ...t, completed_days: [1] }, "vail")).toBe(true);
+    expect(hasOpenDayAt({ ...t, completed_days: [1, 2] }, "vail")).toBe(false);
+    expect(hasOpenDayAt(t, "stowe")).toBe(false);
+  });
+
+  it("counts the trips at a mountain", () => {
+    expect(hasSeveralTripsAt([t], "vail")).toBe(false);
+    expect(hasSeveralTripsAt([t, trip({ id: "u", resort_slugs: ["aspen"] })], "vail")).toBe(false);
+    expect(hasSeveralTripsAt([t, trip({ id: "u" })], "vail")).toBe(true);
+  });
+
+  it("labels a trip by name, else by length", () => {
+    expect(tripLabel({ name: "Ikon week", total_days: 5 })).toBe("Ikon week");
+    expect(tripLabel({ name: null, total_days: 5 })).toBe("5-day trip");
+    expect(tripLabel({ name: "  ", total_days: 2 })).toBe("2-day trip");
   });
 });
 

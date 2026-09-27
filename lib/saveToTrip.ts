@@ -87,8 +87,71 @@ function expandTrip(t: TripShape): string[] {
   return expandTripDays(t.resort_slugs, t.days_per_resort, t.total_days);
 }
 
-function isActive(t: TripShape): boolean {
-  return t.started_at != null && !tripFinished(t);
+/** Does any day of the trip take place at this mountain? */
+export function tripIncludesResort(t: TripShape, resortSlug: string): boolean {
+  return expandTrip(t).includes(resortSlug);
+}
+
+/** Does the trip still have a day at this mountain that is not done? */
+export function hasOpenDayAt(t: TripShape, resortSlug: string): boolean {
+  const done = new Set(t.completed_days ?? []);
+  return expandTrip(t).some((slug, i) => slug === resortSlug && !done.has(i + 1));
+}
+
+// ---------- Is it happening now? ----------
+
+/** Slack after a trip's last day before it counts as over. It also
+ *  absorbs the up-to-one-day gap between started_at's UTC date and the
+ *  viewer's local `today`. */
+export const TRIP_GRACE_DAYS = 2;
+
+const DAY_MS = 86_400_000;
+const LEADING_DATE = /^(\d{4})-(\d{2})-(\d{2})/;
+
+/** Whole calendar days from `fromIso`'s date (a YYYY-MM-DD or a full ISO
+ *  timestamp, read as its UTC date) to `today`; null if either is not a
+ *  date. */
+function daysFrom(fromIso: string, today: string): number | null {
+  const a = LEADING_DATE.exec(fromIso);
+  const b = LEADING_DATE.exec(today);
+  if (!a || !b) return null;
+  const from = Date.UTC(Number(a[1]), Number(a[2]) - 1, Number(a[3]));
+  const to = Date.UTC(Number(b[1]), Number(b[2]) - 1, Number(b[3]));
+  return Math.round((to - from) / DAY_MS);
+}
+
+/** Is `today` still inside the trip's run of days, counted from `anchor`
+ *  (its first day), plus the grace? */
+function withinTripWindow(anchor: string, totalDays: number, today: string): boolean {
+  const elapsed = daysFrom(anchor, today);
+  const length = Number.isFinite(totalDays) && totalDays >= 1 ? totalDays : 1;
+  return elapsed != null && elapsed <= length + TRIP_GRACE_DAYS;
+}
+
+/**
+ * A trip that is plausibly under way today: started (someone marked a
+ * day done — TripActions sets started_at on the first one, there is no
+ * Start button), not every day done, and started no more than
+ * total_days + TRIP_GRACE_DAYS days ago. The age limit matters because
+ * people rarely tick the last day: without it last season's half-ticked
+ * trip would count as "running" forever and swallow every save for its
+ * mountains.
+ */
+export function isRunningNow(t: TripShape, today: string): boolean {
+  if (t.started_at == null || tripFinished(t)) return false;
+  return withinTripWindow(t.started_at, t.total_days, today);
+}
+
+/**
+ * A trip that is behind the person: every day done, or started but gone
+ * quiet past its window (see isRunningNow), or never started but dated
+ * (start_date) entirely before today's window.
+ */
+export function isPastTrip(t: TripShape & Pick<SaveTripRow, "start_date">, today: string): boolean {
+  if (tripFinished(t)) return true;
+  if (t.started_at != null) return !isRunningNow(t, today);
+  const start = tripStartDate(t);
+  return start != null && !withinTripWindow(start, t.total_days, today);
 }
 
 // ---------- Which trip, which day ----------
@@ -96,30 +159,32 @@ function isActive(t: TripShape): boolean {
 /**
  * The trip a save from `resortSlug` goes into, or null when no trip
  * includes that mountain (the button then offers to plan one).
- *   1. a trip running now (started, not every day done)
- *   2. else the upcoming trip that starts soonest (start_date >= today)
- *   3. else the most recently edited trip, unfinished ones first — a
- *      finished trip from last season is the last resort, not the default.
+ *   1. the trip running now (isRunningNow) that still has a day to ski
+ *      at this mountain — one that already left it does not count;
+ *   2. else the upcoming trip that starts soonest (start_date >= today);
+ *   3. else the most recently edited trip, with the ones where this
+ *      mountain is still ahead first — a past trip (finished, abandoned
+ *      half-ticked, or dated before today) or a stop already skied is the
+ *      last resort, not the default.
  * `today` is the viewer's local YYYY-MM-DD.
  */
 export function pickTargetTrip<T extends SaveTripRow>(trips: T[], resortSlug: string, today: string): T | null {
-  const withResort = trips.filter((t) => expandTrip(t).includes(resortSlug));
+  const withResort = trips.filter((t) => tripIncludesResort(t, resortSlug));
   if (withResort.length === 0) return null;
   const byUpdatedDesc = (a: T, b: T) => (b.updated_at ?? "").localeCompare(a.updated_at ?? "");
 
-  const active = withResort
-    .filter(isActive)
+  const running = withResort
+    .filter((t) => isRunningNow(t, today) && hasOpenDayAt(t, resortSlug))
     .sort((a, b) => (b.started_at ?? "").localeCompare(a.started_at ?? "") || byUpdatedDesc(a, b));
-  if (active.length > 0) return active[0];
+  if (running.length > 0) return running[0];
 
   const upcoming = withResort
     .filter((t) => !tripFinished(t) && (tripStartDate(t) ?? "") >= today)
     .sort((a, b) => tripStartDate(a)!.localeCompare(tripStartDate(b)!) || byUpdatedDesc(a, b));
   if (upcoming.length > 0) return upcoming[0];
 
-  const recent = [...withResort].sort(
-    (a, b) => Number(tripFinished(a)) - Number(tripFinished(b)) || byUpdatedDesc(a, b),
-  );
+  const behind = (t: T) => Number(isPastTrip(t, today) || !hasOpenDayAt(t, resortSlug));
+  const recent = [...withResort].sort((a, b) => behind(a) - behind(b) || byUpdatedDesc(a, b));
   return recent[0];
 }
 
@@ -130,11 +195,15 @@ export function pickTargetTrip<T extends SaveTripRow>(trips: T[], resortSlug: st
  *     has a day to ski
  *   - else the first day at this mountain at all
  * Null when the trip does not include the mountain.
+ * With `today`, "running" means isRunningNow, so an abandoned trip's
+ * stale current_day is not trusted; without it, any started trip that
+ * is not finished counts.
  */
-export function pickTargetDay(trip: TripShape, resortSlug: string): number | null {
+export function pickTargetDay(trip: TripShape, resortSlug: string, today?: string): number | null {
   const days = expandTrip(trip);
   const cur = trip.current_day;
-  if (isActive(trip) && cur != null && cur >= 1 && days[cur - 1] === resortSlug) return cur;
+  const running = today != null ? isRunningNow(trip, today) : trip.started_at != null && !tripFinished(trip);
+  if (running && cur != null && cur >= 1 && days[cur - 1] === resortSlug) return cur;
   const done = new Set(trip.completed_days ?? []);
   const stops = tripStops(days).filter((s) => s.slug === resortSlug);
   const open = stops.find((s) => s.days.some((d) => !done.has(d)));
@@ -153,6 +222,21 @@ export function stopDaysFrom(trip: TripShape, day: number): number[] {
   if (!stop) return [day];
   const done = new Set(trip.completed_days ?? []);
   return [day, ...stop.days.filter((d) => d !== day && !done.has(d))];
+}
+
+/** What the UI calls a trip: its name, else "<N>-day trip" (as /trips
+ *  titles an unnamed one). */
+export function tripLabel(t: Pick<SaveTripRow, "name" | "total_days">): string {
+  const name = t.name?.trim();
+  return name ? name : `${t.total_days}-day trip`;
+}
+
+/** True when the person has more than one trip at this mountain, so a
+ *  confirmation must name the trip it saved into. */
+export function hasSeveralTripsAt(trips: TripShape[], resortSlug: string): boolean {
+  let n = 0;
+  for (const t of trips) if (tripIncludesResort(t, resortSlug) && ++n > 1) return true;
+  return false;
 }
 
 // ---------- Editing day_plans ----------

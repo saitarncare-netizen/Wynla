@@ -220,11 +220,37 @@ describe("SaveToTripButton", () => {
   it("saves into today's day of a running trip", async () => {
     fake.db.user = { id: "u1" };
     fake.db.trips = [
-      vailTrip({ days_per_resort: [3], total_days: 3, started_at: "2026-12-09T00:00:00Z", current_day: 2, completed_days: [1] }),
+      // Started today, whenever the suite runs: "running" has a time limit.
+      vailTrip({ days_per_resort: [3], total_days: 3, started_at: new Date().toISOString(), current_day: 2, completed_days: [1] }),
     ];
     await renderButtons();
     await tap("Add Moe's BBQ to trip");
     expect(screen.getByText("Saved · Day 2")).toBeTruthy();
+    // Only one trip at Vail: the line does not need to name it.
+    expect(screen.queryByText(/^in /)).toBeNull();
+  });
+
+  it("does not save into last season's half-ticked trip, and names the trip it used", async () => {
+    fake.db.user = { id: "u1" };
+    fake.db.trips = [
+      vailTrip({
+        id: "old",
+        name: "Presidents Day",
+        days_per_resort: [3],
+        total_days: 3,
+        started_at: "2025-02-14T16:00:00Z",
+        current_day: 2,
+        completed_days: [1],
+        updated_at: "2025-02-14T16:00:00Z",
+      }),
+      vailTrip({ id: "new", name: "Vail + Aspen 5d" }),
+    ];
+    await renderButtons();
+    await tap("Add Moe's BBQ to trip");
+    expect(fake.db.updates.map((u) => u.id)).toEqual(["new"]);
+    expect(screen.getByText("Saved · Day 1")).toBeTruthy();
+    // Two trips include Vail, so the visible line says which one.
+    expect(screen.getByText("in Vail + Aspen 5d").className).toContain("truncate");
   });
 
   it("merges into the row as it is now, not as it was when the page loaded", async () => {
@@ -245,9 +271,28 @@ describe("SaveToTripButton", () => {
     fake.db.trips = [vailTrip({ day_plans: { "2": { places: [SAVED_PLACE] } } })];
     await renderButtons();
     await tap("In trip: Moe's BBQ, day 2 of Ikon week");
-    expect(screen.getByText("Ikon week · Day 2")).toBeTruthy();
+    expect(screen.getByTitle("Ikon week · Day 2").textContent).toBe("Day 2 · Ikon week");
     await tap("Remove Moe's BBQ from your trip");
     expect(fake.db.trips[0].day_plans).toEqual({});
+  });
+
+  it("keeps Day N whole and truncates only a long trip name on the In trip line", async () => {
+    fake.db.user = { id: "u1" };
+    fake.db.trips = [vailTrip({ name: "Vail + Aspen 5d", day_plans: { "2": { places: [SAVED_PLACE] } } })];
+    await renderButtons();
+    await tap("In trip: Moe's BBQ, day 2 of Vail + Aspen 5d");
+    const day = screen.getByText("Day 2");
+    expect(day.className).toContain("shrink-0");
+    expect(day.className).not.toContain("truncate");
+    expect(screen.getByText("· Vail + Aspen 5d").className).toContain("truncate");
+  });
+
+  it("labels an unnamed trip by its length", async () => {
+    fake.db.user = { id: "u1" };
+    fake.db.trips = [vailTrip({ name: null })];
+    await renderButtons();
+    await tap("Add Moe's BBQ to trip");
+    expect(screen.getByRole("status").textContent).toBe("Saved Moe's BBQ to 2-day trip, day 1.");
   });
 
   it("treats an update that matched no row as a failure", async () => {

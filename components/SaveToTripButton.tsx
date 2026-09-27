@@ -7,10 +7,12 @@
 // and tap Directions to each.
 //
 // Where a save lands is decided in lib/saveToTrip.ts: the trip running
-// now, else the next upcoming one, else the last edited — whichever
-// includes this mountain — under the first open day of that mountain's
-// stop. Places belong to the stop; the trip view shows them on every day
-// of it.
+// now (started within its own length + 2 days, with a day left here),
+// else the next upcoming one, else the last edited with this mountain
+// still ahead — whichever includes this mountain — under the first open
+// day of that mountain's stop. Places belong to the stop; the trip view
+// shows them on every day of it. With two trips at a mountain the saved
+// line names the trip, since the rule cannot be right every time.
 //
 // Data. The signed-in user's trips load ONCE per page into a module-level
 // store shared by every card (refreshed when it is over a minute old), so
@@ -35,6 +37,7 @@ import type { NearbyRow } from "@/lib/nearbyCategories";
 import {
   addPlaceToStop,
   findPlaceDay,
+  hasSeveralTripsAt,
   isMissingColumnError,
   localTodayISO,
   pickTargetDay,
@@ -44,6 +47,7 @@ import {
   signInHref,
   stopDaysFrom,
   toDayPlace,
+  tripLabel,
   type SaveTripRow,
 } from "@/lib/saveToTrip";
 import { HIT_AREA_44 } from "@/lib/hitArea";
@@ -163,23 +167,24 @@ const FRESH_COLUMNS =
   "id, name, resort_slugs, days_per_resort, total_days, current_day, completed_days, started_at, day_plans";
 
 type AddOutcome =
-  | { status: "added" | "already" | "full"; day: number; tripName: string | null }
+  | { status: "added" | "already" | "full"; day: number; tripName: string }
   | { status: "gone" | "error" };
 
-async function writeAdd(tripId: string, place: DayPlace, resortSlug: string): Promise<AddOutcome> {
+async function writeAdd(tripId: string, place: DayPlace, resortSlug: string, today: string): Promise<AddOutcome> {
   const sb = createSupabaseBrowserClient();
   const { data, error } = await sb.from("trips").select(FRESH_COLUMNS).eq("id", tripId).maybeSingle();
   if (error || !data) return { status: "error" };
   const fresh = data as unknown as SaveTripRow;
   // The day is recomputed from the fresh row: the trip may have been
-  // re-routed or advanced since the list loaded.
-  const day = pickTargetDay(fresh, resortSlug);
+  // re-routed or advanced since the list loaded. `today` keeps an
+  // abandoned trip's stale current_day from deciding it.
+  const day = pickTargetDay(fresh, resortSlug, today);
   if (day == null) return { status: "gone" };
   const current = parseDayPlans(fresh.day_plans);
   const res = addPlaceToStop(current, stopDaysFrom(fresh, day), place);
   if (res.status !== "added") {
     patchTripPlans(tripId, current);
-    return { status: res.status, day: res.day, tripName: fresh.name };
+    return { status: res.status, day: res.day, tripName: tripLabel(fresh) };
   }
   // .select("id") turns the RLS 0-row case (signed out in another tab)
   // into a visible error instead of a silent fake success.
@@ -190,7 +195,7 @@ async function writeAdd(tripId: string, place: DayPlace, resortSlug: string): Pr
     .select("id");
   if (upErr || !updated || updated.length === 0) return { status: "error" };
   patchTripPlans(tripId, res.dayPlans);
-  return { status: "added", day: res.day, tripName: fresh.name };
+  return { status: "added", day: res.day, tripName: tripLabel(fresh) };
 }
 
 async function writeRemove(tripId: string, place: DayPlace): Promise<boolean> {
@@ -224,9 +229,9 @@ type View =
   | { kind: "none" }
   | { kind: "signin"; href: string }
   | { kind: "no-trip" }
-  | { kind: "saved"; day: number; tripId: string; tripName: string | null }
-  | { kind: "in-trip"; day: number; tripId: string; tripName: string | null }
-  | { kind: "full"; day: number; tripId: string }
+  | { kind: "saved"; day: number; tripId: string; tripName: string }
+  | { kind: "in-trip"; day: number; tripId: string; tripName: string }
+  | { kind: "full"; day: number; tripId: string; tripName: string }
   | { kind: "removed" }
   | { kind: "error"; text: string };
 
@@ -304,8 +309,15 @@ export default function SaveToTripButton({ row, resortSlug, resortName, actionCl
     const trip = pickTargetTrip(snap.trips, resortSlug, snap.today);
     if (!trip) return null;
     const day = findPlaceDay(parseDayPlans(trip.day_plans), place.kind, place.id);
-    return day == null ? null : { day, tripId: trip.id, tripName: trip.name };
+    return day == null ? null : { day, tripId: trip.id, tripName: tripLabel(trip) };
   }, [place, snap, resortSlug]);
+
+  // With two trips at this mountain (say last season's and this one's),
+  // "Saved · Day 2" alone does not say which, so the line names the trip.
+  const severalTrips = useMemo(
+    () => snap?.status === "ready" && hasSeveralTripsAt(snap.trips, resortSlug),
+    [snap, resortSlug],
+  );
 
   if (!place) return null;
   // Before the day_plans column exists there is nowhere to save to.
@@ -353,22 +365,23 @@ export default function SaveToTripButton({ row, resortSlug, resortName, actionCl
         return;
       }
       const tripId = target.id;
-      const res = await serialized(() => writeAdd(tripId, p, resortSlug));
+      const today = s.today;
+      const res = await serialized(() => writeAdd(tripId, p, resortSlug, today));
       switch (res.status) {
         case "added":
           show(
             { kind: "saved", day: res.day, tripId, tripName: res.tripName },
-            `Saved ${p.name} to ${res.tripName ?? "your trip"}, day ${res.day}.`,
+            `Saved ${p.name} to ${res.tripName}, day ${res.day}.`,
           );
           break;
         case "already":
           show(
             { kind: "in-trip", day: res.day, tripId, tripName: res.tripName },
-            `${p.name} is already in ${res.tripName ?? "your trip"}, day ${res.day}.`,
+            `${p.name} is already in ${res.tripName}, day ${res.day}.`,
           );
           break;
         case "full":
-          show({ kind: "full", day: res.day, tripId }, `Day ${res.day} is full.`);
+          show({ kind: "full", day: res.day, tripId, tripName: res.tripName }, `Day ${res.day} of ${res.tripName} is full.`);
           break;
         case "gone":
           // The trip no longer includes this mountain: refresh the list so
@@ -420,7 +433,6 @@ export default function SaveToTripButton({ row, resortSlug, resortName, actionCl
   }
 
   const inTrip = saved != null;
-  const tripLabel = (name: string | null) => name ?? "your trip";
   const expandable = view.kind === "signin" || view.kind === "no-trip" || view.kind === "in-trip" || inTrip;
 
   return (
@@ -437,10 +449,10 @@ export default function SaveToTripButton({ row, resortSlug, resortName, actionCl
           busy
             ? `Saving ${place.name} to trip`
             : saved
-              ? `In trip: ${place.name}, day ${saved.day} of ${tripLabel(saved.tripName)}`
+              ? `In trip: ${place.name}, day ${saved.day} of ${saved.tripName}`
               : `Add ${place.name} to trip`
         }
-        title={saved ? `In ${tripLabel(saved.tripName)} · Day ${saved.day}` : `Save ${place.name} to your trip`}
+        title={saved ? `In ${saved.tripName} · Day ${saved.day}` : `Save ${place.name} to your trip`}
         className={`${actionClassName} ${inTrip ? SAVED_LOOK : IDLE_LOOK}`}
       >
         {busy ? (
@@ -488,15 +500,20 @@ export default function SaveToTripButton({ row, resortSlug, resortName, actionCl
               </Link>
             </div>
           ) : (
+            // "Day N" is the fact the person needs, so it never truncates;
+            // only a trip name does ("Vail + Aspen 5d" is wider than what a
+            // 180 px card leaves beside Remove / Undo).
             <div className="flex min-h-9 items-center justify-between gap-1 text-xs">
               {view.kind === "saved" && (
                 <>
-                  <span
-                    className="inline-flex min-w-0 items-center gap-1 font-semibold text-wn-success"
-                    title={`Saved to ${tripLabel(view.tripName)} · Day ${view.day}`}
-                  >
-                    <Icon name="check" className="h-3.5 w-3.5 shrink-0" />
-                    <span className="truncate">Saved · Day {view.day}</span>
+                  <span className="flex min-w-0 flex-col" title={`Saved to ${view.tripName} · Day ${view.day}`}>
+                    <span className="inline-flex items-center gap-1 whitespace-nowrap font-semibold text-wn-success">
+                      <Icon name="check" className="h-3.5 w-3.5 shrink-0" />
+                      Saved · Day {view.day}
+                    </span>
+                    {/* Two text-xs rows still fit the line's 36 px, so
+                        naming the trip does not shift the card. */}
+                    {severalTrips && <span className="truncate text-wn-muted">in {view.tripName}</span>}
                   </span>
                   <button type="button" disabled={busy} onClick={() => void remove(place, view.tripId)} className={LINE_ACTION}>
                     Undo
@@ -505,8 +522,9 @@ export default function SaveToTripButton({ row, resortSlug, resortName, actionCl
               )}
               {view.kind === "in-trip" && (
                 <>
-                  <span className="min-w-0 truncate font-semibold text-wn-muted" title={`${tripLabel(view.tripName)} · Day ${view.day}`}>
-                    {view.tripName ? `${view.tripName} · ` : ""}Day {view.day}
+                  <span className="flex min-w-0 font-semibold text-wn-muted" title={`${view.tripName} · Day ${view.day}`}>
+                    <span className="shrink-0 whitespace-nowrap">Day {view.day}</span>{" "}
+                    <span className="ml-1 min-w-0 truncate">· {view.tripName}</span>
                   </span>
                   <button
                     type="button"
@@ -521,8 +539,10 @@ export default function SaveToTripButton({ row, resortSlug, resortName, actionCl
               )}
               {view.kind === "full" && (
                 <>
-                  <span className="min-w-0 font-semibold text-wn-warning">Day {view.day} is full</span>
-                  <Link href={`/trip/${view.tripId}`} className={LINE_ACTION}>
+                  <span className="min-w-0 font-semibold text-wn-warning" title={`${view.tripName} · Day ${view.day} is full`}>
+                    Day {view.day} is full
+                  </span>
+                  <Link href={`/trip/${view.tripId}`} title={`Open ${view.tripName}`} className={LINE_ACTION}>
                     Open trip
                   </Link>
                 </>
