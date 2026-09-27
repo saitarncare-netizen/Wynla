@@ -11,12 +11,14 @@ import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import {
   appendStop,
   daysParamValue,
+  daysToCoverPlan,
   DRAFT_KEY,
   DRAFT_TTL_MS,
   fitTripDays,
   MAX_TRIP_DAYS,
   newStopDayCap,
   parseDraft,
+  plannedDays,
   readStorage,
   SESSION_DRAFT_KEY,
   SESSION_DRAFT_TTL_MS,
@@ -309,10 +311,18 @@ export default function TripPlannerPanel({
   // not exist, which hides the field for the rest of the session.
   const [startDateSupported, setStartDateSupported] = useState(true);
   const [saving, setSaving] = useState(false);
+  // The insert succeeded and router.push is on its way to /trip/[id]. The
+  // dynamic trip page can take a second or more on a phone, and `stops`
+  // is still filled until it lands, so Save stays locked ("Saved,
+  // opening…") for the whole navigation instead of offering a second
+  // insert. Never cleared: the planner unmounts when the trip page opens.
+  const [saved, setSaved] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
   // Synchronous twin of `saving`: the post-sign-in auto-save and a tap on
   // Save can land in the same frame, before `saving` re-renders the
-  // button disabled, and each would insert its own trips row.
+  // button disabled, and each would insert its own trips row. Released
+  // only when the save did NOT open the trip (error, or the guest was
+  // sent to sign in); after a successful insert it stays held.
   const savingRef = useRef(false);
   // Set by the hydration effect when the restored login stash says the
   // person had tapped Save; consumed (cleared first) by the auto-save
@@ -382,8 +392,9 @@ export default function TripPlannerPanel({
   // that replaces the stops wholesale; "Plan trip / Add to trip" on a
   // resort sheet uses ?add= instead (see below) so browsing another
   // mountain never wipes a trip in progress. The day count is deliberately not
-  // part of the key — changing trip length clamps stops instead of
-  // wiping them (see the lastDays block below).
+  // part of the key: a seed longer than ?days grows the trip (see the
+  // grow-back effect below), and only the planner's own length controls
+  // trim stops (changeTripLength).
   const routeParam = searchParams.get("route");
   const routeSlugs = useMemo(
     () => initialOrderedSlugs ?? (routeParam ? routeParam.split(",").filter(Boolean) : []),
@@ -406,30 +417,12 @@ export default function TripPlannerPanel({
   const daysPlanned = stops.reduce((sum, s) => sum + s.days, 0);
   const remainingDays = Math.max(0, days - daysPlanned);
 
-  // A seeded route can be longer than the URL's ?days (a template link
-  // always carries a matching days=N, but a hand-edited share link may
-  // not). Grow the trip length to fit rather than showing "over target".
-  // The mount seed is handled by the hydration effect below (which also
-  // strips ?route); this only covers a route that changes while the
-  // planner is already mounted.
-  useEffect(() => {
-    if (!hydrated || routeSlugs.length === 0) return;
-    if (daysPlanned > days) onDaysChange?.(Math.min(MAX_TRIP_DAYS, daysPlanned));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [seededFor]);
-
-  // Trip length changed (header stepper / "Change trip length"): keep
-  // every stop and just trim day counts so the plan fits. Render-phase
-  // derived-state pattern, same as seededFor above.
-  const [lastDays, setLastDays] = useState(days);
-  if (lastDays !== days) {
-    setLastDays(days);
-    const clamped = clampStopsToDays(stops, days);
-    if (clamped !== stops) setStops(clamped);
-    if (pendingStop && pendingStop.days > Math.max(1, days - daysPlanned)) {
-      setPendingStop({ ...pendingStop, days: Math.max(1, days - daysPlanned) });
-    }
-  }
+  // Trip length vs stops: only the planner's own length controls trim
+  // stops (changeTripLength). Any other drop in ?days (a back press to an
+  // older URL, a hand-edited link) is undone by the grow-back effect
+  // below, so a trip collected from resort sheets while the planner is
+  // closed never loses a stop. (A render-phase clamp on every ?days change
+  // used to live here; it ran with the planner closed and cut stops.)
 
   // One-shot draft hydration on mount. Two sources, in priority order:
   //   1. ?restore=1 — back from sign-in; the draft was stashed in
@@ -514,16 +507,42 @@ export default function TripPlannerPanel({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Mirror the live draft into sessionStorage on every change.
+  // Mirror the live draft into sessionStorage on every change. Stops once
+  // the trip is saved: insertTrip has cleared the draft, and an edit or a
+  // ?days write during the navigation to /trip/[id] must not bring it
+  // back (the sheets would offer "Add to trip" for a trip already saved).
   useEffect(() => {
-    if (!hydrated) return;
+    if (!hydrated || saved) return;
     if (stops.length === 0) {
       writeStorage("session", SESSION_DRAFT_KEY, null);
       return;
     }
     const draft: TripDraft = { stops, draftName, startDate, days, savedAt: Date.now() };
     writeStorage("session", SESSION_DRAFT_KEY, JSON.stringify(draft));
-  }, [hydrated, stops, draftName, startDate, days]);
+  }, [hydrated, saved, stops, draftName, startDate, days]);
+
+  // Grow-back: ?days fell under the planned total without the planner's
+  // own length controls (a back press to an older history entry, a
+  // hand-edited link, a ?route= seed longer than ?days; Clear all keeps
+  // ?days, see MapPage clearAll). Open or closed — the planner stays
+  // mounted while the person collects mountains from resort sheets — the
+  // trip length is raised back to the plan instead of cutting stops, the
+  // same thing hydration does at mount. Reads and writes the LIVE URL,
+  // not the searchParams snapshot, which an earlier replaceState in the
+  // same commit (hydration, the ?add= cleanup) may have outdated; and
+  // writes only when that URL is actually short, so it never fights a
+  // ?days update that is already on its way.
+  useEffect(() => {
+    if (!hydrated || daysPlanned <= days) return;
+    const liveParams = new URLSearchParams(window.location.search);
+    const target = daysToCoverPlan(liveParams.get("days"), daysPlanned);
+    if (target === null) return;
+    const value = daysParamValue(target);
+    if (value === null) liveParams.delete("days");
+    else liveParams.set("days", value);
+    const qs = liveParams.toString();
+    window.history.replaceState(customHistoryState(window.history.state), "", qs ? `?${qs}` : window.location.pathname);
+  }, [hydrated, daysPlanned, days]);
 
   // "Add to trip" / "Plan trip" from a resort sheet: ?plan=1&add=<slug>.
   // Appends the resort to whatever is being planned (the hydrated draft)
@@ -1002,8 +1021,9 @@ export default function TripPlannerPanel({
   // to the 14-day cap, − on a fully planned trip shrinks it, so a 1-day
   // seed from a resort sheet becomes a weekend in one tap instead of a
   // detour through "Change trip length". Stops and days are computed from
-  // this render's values and set together; MapPage applies ?days after
-  // the stops update, and the lastDays clamp then finds nothing to trim.
+  // this render's values and set together; MapPage writes ?days to the
+  // URL at once, so the grow-back effect finds it already long enough
+  // while useSearchParams catches up.
   function adjustStopDays(idx: number, delta: 1 | -1) {
     const next = stepStopDays(stops, idx, delta, days);
     if (next.stops === stops) return;
@@ -1050,8 +1070,26 @@ export default function TripPlannerPanel({
     }
   }
 
+  // The planner's own trip-length controls: the set-days stepper and its
+  // presets (phone) and the header stepper (desktop). Shortening the trip
+  // here is a deliberate choice, so this is the ONE place stops are
+  // trimmed to fit (clampStopsToDays: days come off the last stops first,
+  // a stop is dropped only when there are more stops than days). Every
+  // other drop in ?days grows back instead (grow-back effect above).
+  // setStops runs in the click, ahead of the ?days write (a transition in
+  // Next's history sync), so the grow-back effect never sees a short trip.
+  function changeTripLength(next: number) {
+    const n = Math.min(MAX_TRIP_DAYS, Math.max(1, next));
+    if (n === days) return;
+    const clamped = clampStopsToDays(stops, n);
+    if (clamped !== stops) setStops(clamped);
+    const room = Math.max(1, n - plannedDays(clamped));
+    if (pendingStop && pendingStop.days > room) setPendingStop({ ...pendingStop, days: room });
+    onDaysChange?.(n);
+  }
+
   // Wizard "Change trip length" from review → back to set-days. Stops
-  // are kept; a shorter length trims day counts (see lastDays above).
+  // are kept; a shorter length trims day counts (changeTripLength).
   function unlockDays() {
     setDaysLockedIn(false);
   }
@@ -1087,23 +1125,38 @@ export default function TripPlannerPanel({
 
   // `auto` = the post-sign-in finish (see the auto-save effect): same
   // insert, but a missing session never bounces to /login again.
+  // The guard is held from the first tap until the trip page replaces the
+  // planner: insertTrip reports whether it opened the saved trip, and
+  // only a save that did not (error, no session, guest sent to sign in)
+  // releases savingRef and re-enables the button.
   async function saveTrip({ auto = false }: { auto?: boolean } = {}) {
     if (stops.length === 0 || savingRef.current) return;
     savingRef.current = true;
+    let openingTrip = false;
     try {
-      await insertTrip(auto);
+      openingTrip = await insertTrip(auto);
+    } catch (err) {
+      // A thrown fetch (offline mid-save) must not leave Save stuck on
+      // "Saving…".
+      console.error("[trip planner] save failed", err);
+      setSaveError(describeSaveError(null));
     } finally {
-      savingRef.current = false;
+      if (!openingTrip) {
+        savingRef.current = false;
+        setSaving(false);
+      }
     }
   }
 
-  async function insertTrip(auto: boolean) {
+  // Resolves true only when the trip was inserted and the planner is
+  // navigating to it.
+  async function insertTrip(auto: boolean): Promise<boolean> {
     setSaving(true);
     setSaveError(null);
     const { data: userRes } = await supabase.auth.getUser();
     if (!userRes.user) {
       setSaving(false);
-      if (auto) return;
+      if (auto) return false;
       // Stash the in-flight draft so the user's stops + name aren't
       // lost on the sign-in round-trip. The hydration effect above
       // reads this when the user returns with ?restore=1, and
@@ -1131,7 +1184,9 @@ export default function TripPlannerPanel({
       returnParams.set("restore", "1");
       const returnTo = `${window.location.pathname}?${returnParams.toString()}`;
       router.push(`/login?next=${encodeURIComponent(returnTo)}`);
-      return;
+      // Nothing was inserted, so a second tap only re-stashes the same
+      // draft: release the guard (saveTrip's finally).
+      return false;
     }
     const finalName =
       draftName.trim() || suggestTripName(stops, allResorts, daysPlanned);
@@ -1160,33 +1215,42 @@ export default function TripPlannerPanel({
       setStartDateSupported(false);
       result = await supabase.from("trips").insert(basePayload).select("id").single();
     }
-    setSaving(false);
     if (result.error || !result.data) {
+      setSaving(false);
       setSaveError(describeSaveError(result.error));
-      return;
+      return false;
     }
+    // Saved. `saving` and savingRef stay held (see saveTrip) and `saved`
+    // switches the button to "Saved, opening…" until the trip page
+    // replaces the planner, so a tap during the navigation cannot insert
+    // the same trip a second time.
+    setSaved(true);
     // Clear all map overlays before navigating away so the saved-trip
     // pins don't stay visually highlighted on the main map.
     onTripResortIds?.([]);
     onPreviewLeg?.(null);
     onTripRoute?.(null);
-    // Successful save — drop every preserved draft.
+    // Successful save — drop every preserved draft. The persist effect
+    // skips once `saved` is set, so the session copy is not written back.
     writeStorage("local", DRAFT_KEY, null);
     writeStorage("session", SESSION_DRAFT_KEY, null);
     router.push(`/trip/${result.data.id}`);
+    return true;
   }
 
   if (!open) return null;
 
   const pickedSlugs = stops.map((s) => s.slug);
   const namePlaceholder = suggestTripName(stops, allResorts, daysPlanned) || "My ski trip";
-  const saveLabel = saving
-    ? "Saving…"
-    : saveError
-      ? "Try again"
-      : isAuthed
-        ? "Save trip"
-        : "Sign in to save";
+  const saveLabel = saved
+    ? "Saved, opening…"
+    : saving
+      ? "Saving…"
+      : saveError
+        ? "Try again"
+        : isAuthed
+          ? "Save trip"
+          : "Sign in to save";
 
   // Mobile wizard hides the planner sheet only while the picker
   // overlay (z-61) is up, so two sheets never stack. With the picker
@@ -1251,7 +1315,7 @@ export default function TripPlannerPanel({
                   <div className="flex items-center gap-2">
                     <button
                       type="button"
-                      onClick={() => onDaysChange?.(Math.max(1, days - 1))}
+                      onClick={() => changeTripLength(days - 1)}
                       disabled={days <= 1}
                       className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-white text-wn-2xl font-bold text-wn-navy shadow-sm transition active:scale-95 disabled:opacity-30"
                       aria-label="Fewer days"
@@ -1266,7 +1330,7 @@ export default function TripPlannerPanel({
                     </div>
                     <button
                       type="button"
-                      onClick={() => onDaysChange?.(Math.min(MAX_TRIP_DAYS, days + 1))}
+                      onClick={() => changeTripLength(days + 1)}
                       disabled={days >= MAX_TRIP_DAYS}
                       className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-white text-wn-2xl font-bold text-wn-navy shadow-sm transition active:scale-95 disabled:opacity-30"
                       aria-label="More days"
@@ -1281,7 +1345,7 @@ export default function TripPlannerPanel({
                         <button
                           key={n}
                           type="button"
-                          onClick={() => onDaysChange?.(n)}
+                          onClick={() => changeTripLength(n)}
                           aria-pressed={active}
                           className={[
                             "inline-flex h-9 items-center rounded-full px-3 text-xs font-semibold transition",
@@ -1299,7 +1363,9 @@ export default function TripPlannerPanel({
                 {stops.length > 0 && (
                   <p className="mt-3 text-[11px] leading-snug text-wn-charcoal/60">
                     Keeping your {stops.length} stop{stops.length === 1 ? "" : "s"}: {stopsSummary}.
-                    {daysPlanned > days ? " Fewer days trims the last stops." : ""}
+                    {/* The plan never sits above the trip length any more
+                        (grow-back effect), so warn whenever − would trim. */}
+                    {daysPlanned >= days && days > 1 ? " Fewer days trims the last stops." : ""}
                   </p>
                 )}
               </div>
@@ -1550,7 +1616,7 @@ export default function TripPlannerPanel({
                 <button
                   type="button"
                   onClick={() => void saveTrip()}
-                  disabled={stops.length === 0 || saving}
+                  disabled={stops.length === 0 || saving || saved}
                   className="flex w-full items-center justify-center gap-2 rounded-lg bg-wn-navy px-4 py-3 text-sm font-semibold text-white transition hover:bg-wn-navy/90 disabled:opacity-60"
                 >
                   {saveLabel}
@@ -1597,7 +1663,7 @@ export default function TripPlannerPanel({
               >
                 <button
                   type="button"
-                  onClick={() => onDaysChange(Math.max(1, days - 1))}
+                  onClick={() => changeTripLength(days - 1)}
                   disabled={days <= 1}
                   className="inline-flex h-9 w-9 items-center justify-center rounded-md bg-white/10 text-lg font-bold text-white transition hover:bg-white/20 disabled:opacity-30"
                   aria-label="Fewer days"
@@ -1612,7 +1678,7 @@ export default function TripPlannerPanel({
                 </div>
                 <button
                   type="button"
-                  onClick={() => onDaysChange(Math.min(MAX_TRIP_DAYS, days + 1))}
+                  onClick={() => changeTripLength(days + 1)}
                   disabled={days >= MAX_TRIP_DAYS}
                   className="inline-flex h-9 w-9 items-center justify-center rounded-md bg-white/10 text-lg font-bold text-white transition hover:bg-white/20 disabled:opacity-30"
                   aria-label="More days"
@@ -1628,7 +1694,7 @@ export default function TripPlannerPanel({
                     <button
                       key={n}
                       type="button"
-                      onClick={() => onDaysChange(n)}
+                      onClick={() => changeTripLength(n)}
                       aria-pressed={active}
                       className={[
                         "inline-flex h-7 items-center rounded-full px-2.5 text-[11px] font-semibold transition",
@@ -1969,10 +2035,18 @@ export default function TripPlannerPanel({
           <button
             type="button"
             onClick={() => void saveTrip()}
-            disabled={stops.length === 0 || saving}
+            disabled={stops.length === 0 || saving || saved}
             className="flex w-full items-center justify-center gap-2 rounded-lg bg-wn-navy px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-wn-navy/90 disabled:opacity-60"
           >
-            {saving ? "Saving…" : saveError ? "Try again" : isAuthed ? "Save this trip" : "Sign in to save trip"}
+            {saved
+              ? "Saved, opening…"
+              : saving
+                ? "Saving…"
+                : saveError
+                  ? "Try again"
+                  : isAuthed
+                    ? "Save this trip"
+                    : "Sign in to save trip"}
             <span aria-hidden="true">→</span>
           </button>
           <p className="mt-1.5 text-center text-xs text-wn-muted">

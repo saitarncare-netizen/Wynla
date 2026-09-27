@@ -836,12 +836,16 @@ export default async function ResortPage({
             pin the user just visited (Saitarn 2026-05-23). */}
         <div className="relative z-10 mx-auto flex max-w-5xl items-center justify-end px-4 py-4 sm:px-6">
           <div className="flex items-center gap-2">
-            {/* Opens the planner with this resort as day 1, so the page
-                is a doorway into a trip rather than a dead end (audit
-                trip-planner-46-entry). Icon-only on the narrowest phones;
-                the label shows from sm. */}
+            {/* Opens the planner with this resort added to the trip in
+                progress (or starting one with it), so the page is a
+                doorway into a trip rather than a dead end (audit
+                trip-planner-46-entry). ?add=, not ?route=: a route seed
+                replaces every stop, and people reach this page from a
+                resort sheet mid-plan. No ?days — the planner sets the
+                length from the draft plus this stop. Icon-only on the
+                narrowest phones; the label shows from sm. */}
             <Link
-              href={`/?plan=1&route=${encodeURIComponent(resort.slug)}&days=1`}
+              href={`/?plan=1&add=${encodeURIComponent(resort.slug)}`}
               aria-label={`Plan a trip to ${resort.name}`}
               title="Plan a trip here"
               className="inline-flex h-11 items-center justify-center gap-1 rounded-full bg-white/95 px-3 text-xs font-semibold text-wn-charcoal shadow-wn-md backdrop-blur-sm transition hover:text-wn-navy active:scale-95 motion-reduce:transition-none sm:px-3.5"

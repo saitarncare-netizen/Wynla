@@ -164,6 +164,22 @@ export function daysParamValue(days: number): string | null {
   return days > 1 ? String(days) : null;
 }
 
+/**
+ * Trip length to put back in ?days when the URL fell under the planned
+ * total by some route other than the planner's own length controls (Clear
+ * all, a back press to an older URL, a route seed longer than ?days), or
+ * null when the URL already covers the plan. The plan wins: only a person
+ * shortening the trip inside the planner trims stops.
+ */
+export function daysToCoverPlan(
+  rawDaysParam: string | null,
+  planned: number,
+  maxDays: number = MAX_TRIP_DAYS,
+): number | null {
+  const target = Math.min(maxDays, planned);
+  return tripDaysFromParam(rawDaysParam) < target ? target : null;
+}
+
 /** Most days a new stop can take: whatever the 14-day cap leaves (the
     trip grows to fit, see confirm), never less than one. */
 export function newStopDayCap(planned: number, maxDays: number = MAX_TRIP_DAYS): number {

@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   appendStop,
   daysParamValue,
+  daysToCoverPlan,
   draftSlugsKey,
   fitTripDays,
   MAX_TRIP_DAYS,
@@ -172,6 +173,28 @@ describe("day helpers", () => {
     expect(fitTripDays(7, 5)).toBe(7);
     expect(fitTripDays(0, 0)).toBe(1);
     expect(fitTripDays(3, 20)).toBe(MAX_TRIP_DAYS);
+  });
+
+  it("raises a ?days that fell under the plan instead of cutting stops", () => {
+    // Vail + Aspen collected from two sheets (2 days), then ?days dropped
+    // (back press to an older URL): the trip goes back to 2 days.
+    expect(daysToCoverPlan(null, 2)).toBe(2);
+    expect(daysToCoverPlan("1", 2)).toBe(2);
+    expect(daysToCoverPlan("junk", 3)).toBe(3);
+  });
+
+  it("leaves ?days alone when it already covers the plan", () => {
+    expect(daysToCoverPlan("2", 2)).toBeNull();
+    expect(daysToCoverPlan("5", 3)).toBeNull();
+    expect(daysToCoverPlan(null, 1)).toBeNull();
+    expect(daysToCoverPlan(null, 0)).toBeNull();
+  });
+
+  it("never asks for more than the day cap", () => {
+    expect(daysToCoverPlan("3", 20)).toBe(MAX_TRIP_DAYS);
+    // Already at the cap: no write, so a plan past the cap cannot loop.
+    expect(daysToCoverPlan(String(MAX_TRIP_DAYS), 20)).toBeNull();
+    expect(daysToCoverPlan("30", 20)).toBeNull();
   });
 
   it("parses and writes ?days the way MapPage does", () => {

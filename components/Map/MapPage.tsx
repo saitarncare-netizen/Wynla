@@ -1293,10 +1293,17 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   // resolveOriginWithFallback re-reads the stored choice once ?from= is
   // gone, which keeps "Drive time from Denver" after a Clear all. The
   // Fly to airport is a camera jump, not a filter either, so it stays
-  // in the URL and the plane marker does not vanish on Clear all.
+  // in the URL and the plane marker does not vanish on Clear all. The
+  // trip being planned is not a filter: ?days is its length (it grows as
+  // mountains are added from resort sheets) and ?plan keeps the planner
+  // open when Clear all is tapped in the Filters drawer the planner
+  // opened. Dropping ?days used to shorten the trip and cut stops.
   function clearAll() {
     const next = new URLSearchParams();
     if (airportFilter) next.set("airport", airportFilter);
+    const daysParam = searchParams.get("days");
+    if (daysParam) next.set("days", daysParam);
+    if (plannerOpen) next.set("plan", "1");
     writeQuery(next);
   }
 
@@ -1305,8 +1312,10 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   // picker's Filters badge and the desktop chip strip, so the number a
   // user sees always matches the chips they can remove (audit
   // map-core-17: the strip used to omit every drawer-only filter while
-  // the badge counted them). Origin and the Fly to airport are not
-  // filters and are deliberately absent.
+  // the badge counted them). Origin, the Fly to airport and the trip
+  // length (?days, owned by the planner) are not filters and are
+  // deliberately absent: a "Weekend · 2 days" chip counted in the
+  // Filters badge and removing it cut stops off the trip in progress.
   const activeChips: ActiveFilterChip[] = [];
   for (const p of passFilter) {
     activeChips.push({
@@ -1325,13 +1334,6 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
       // the "≈" whenever the origin's times are estimates.
       label: driveFilterLabel(withinHours, origin, originIsEstimate),
       onRemove: () => updateParam("within", null),
-    });
-  }
-  if (days > 1) {
-    activeChips.push({
-      key: "trip",
-      label: `${days >= 4 ? "Big trip" : "Weekend"} · ${days} days`,
-      onRemove: () => updateParam("days", null),
     });
   }
   if (sizeFilter) {

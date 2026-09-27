@@ -140,8 +140,13 @@ export default async function GoPage({ searchParams }: { searchParams: SearchPar
   const shareUrl = goUrl(state, SITE_URL);
   const returnPath = goPath(state);
   const dateLong = formatTargetDate(targetDate);
+  // ?add= appends the mountain to a trip already being planned in this
+  // tab (or starts one with it); ?route= would replace every stop. The
+  // planner sets ?days from the draft plus this stop, so none is sent.
   const planHref = (slug: string) =>
-    origin ? `/?plan=1&route=${encodeURIComponent(slug)}&days=1&${plannerOriginParams(origin)}` : `/?plan=1&route=${encodeURIComponent(slug)}`;
+    origin
+      ? `/?plan=1&add=${encodeURIComponent(slug)}&${plannerOriginParams(origin)}`
+      : `/?plan=1&add=${encodeURIComponent(slug)}`;
 
   return (
     <main className="min-h-dvh bg-wn-offwhite pb-[max(2rem,env(safe-area-inset-bottom))]">
