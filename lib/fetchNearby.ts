@@ -5,7 +5,9 @@
 //
 // Returns top N rows per category sorted by distance ascending. The
 // component decides how many to render; this function just normalizes
-// the column types.
+// the column types and tags each row with its table (`kind`), because
+// the map sheet merges both tables into one strip and ids repeat across
+// them — "+ Trip" saves a place as kind:id.
 
 import { supabase } from "@/lib/supabase";
 import type { NearbyRow } from "./nearbyCategories";
@@ -24,7 +26,7 @@ export async function fetchNearbyRestaurants(resortId: number): Promise<NearbyRo
     .order("distance_km", { ascending: true })
     .limit(60);
   if (error) return [];
-  return (data ?? []) as NearbyRow[];
+  return ((data ?? []) as NearbyRow[]).map((r) => ({ ...r, kind: "restaurant" as const }));
 }
 
 export async function fetchNearbyActivities(resortId: number): Promise<NearbyRow[]> {
@@ -38,5 +40,5 @@ export async function fetchNearbyActivities(resortId: number): Promise<NearbyRow
     .order("distance_km", { ascending: true })
     .limit(60);
   if (error) return [];
-  return (data ?? []) as NearbyRow[];
+  return ((data ?? []) as NearbyRow[]).map((r) => ({ ...r, kind: "activity" as const }));
 }
