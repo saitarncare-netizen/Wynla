@@ -180,11 +180,13 @@ export default function TripActions({
 
       {googleMapsUrl && (
         <p className="mb-3 text-sm text-wn-charcoal">
-          Every stop in order, as one route. For each day&apos;s drive, use{" "}
+          {/* "the Today card at the top of this page", not a bare "Today":
+              the phone tab bar's Today tab is a different screen. */}
+          Every stop in order, as one route. For each day&apos;s drive, use the{" "}
           <a href="#today" className="font-semibold text-wn-navy underline underline-offset-2">
-            Today
-          </a>{" "}
-          at the top.
+            Today card at the top of this page
+          </a>
+          .
         </p>
       )}
       <div className="flex flex-wrap gap-2">

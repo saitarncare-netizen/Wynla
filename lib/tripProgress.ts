@@ -1,6 +1,6 @@
 // Pure helpers for saved trips: list ordering for /trips and the
-// day-progress transitions trip mode applies (Start trip, Finish day,
-// Undo, Restart). Kept out of the page modules so they can be unit-tested
+// day-progress transitions trip mode applies (Start trip, Undo start,
+// Finish day, Undo, Restart). Kept out of the page modules so they can be unit-tested
 // and so the Today card, the sticky bar and the Trip controls panel
 // agree on what each tap means. The browser writes live in one client
 // hook (useTripProgress in app/trip/[id]/TodayCard.tsx).
@@ -63,9 +63,21 @@ export function startTrip(prior: TripProgress, nowISO: string): ProgressUpdate |
   return { started_at: nowISO, current_day: 1, completed_days: [] };
 }
 
-/** Back to "not started": every finished day is cleared. */
+/** Back to "not started": every finished day is cleared. Only for the
+ *  explicit "Restart trip" buttons; "Undo start" goes through undoStart. */
 export function restartTrip(): ProgressUpdate {
   return { started_at: null, current_day: null, completed_days: [] };
+}
+
+/** Take back an accidental Start tap: back to "not started", but only
+ *  while the trip is started and no day is finished yet. Null otherwise,
+ *  the reverse of startTrip's guard: a page rendered right after Start and
+ *  left open (a laptop tab, a second phone) still shows "Undo start" after
+ *  days were finished elsewhere, and that stale tap must never wipe them. */
+export function undoStart(prior: TripProgress): ProgressUpdate | null {
+  if (!prior.started_at) return null;
+  if ((prior.completed_days ?? []).length > 0) return null;
+  return restartTrip();
 }
 
 /** The day the trip is on: current_day clamped to 1..totalDays, moved

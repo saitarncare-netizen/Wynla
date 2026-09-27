@@ -14,9 +14,9 @@
 // CTA follows the design guide (gold only on navy, one per screen).
 //
 // useTripProgress is the ONE client path for progress writes (Start,
-// Finish, Undo, Restart); the sticky bar and the Trip controls panel call
-// it too, so the three never disagree and every write gets the same
-// read-then-write + .select("id") treatment.
+// Undo start, Finish, Undo, Restart); the sticky bar and the Trip controls
+// panel call it too, so the three never disagree. Every write but the
+// explicit Restart is read-then-write, and every write gets .select("id").
 
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore, useTransition } from "react";
 import { useRouter } from "next/navigation";
@@ -26,6 +26,7 @@ import {
   restartTrip,
   startTrip,
   undoLastCompletedDay,
+  undoStart,
   type ProgressUpdate,
   type TripProgress,
 } from "@/lib/tripProgress";
@@ -97,7 +98,9 @@ export function StartDateBadge({ isoDate }: { isoDate: string }) {
 
 // ---------- Shared progress writes ----------
 
-export type ProgressAction = "start" | "finish" | "undo" | "restart";
+/** "unstart" is the guarded "Undo start" (refuses once a day is finished);
+ *  "restart" is the explicit "Restart trip" and clears everything. */
+export type ProgressAction = "start" | "unstart" | "finish" | "undo" | "restart";
 
 // One progress write per trip at a time, across every mounted control.
 // The Today card and the sticky bar both show Finish; without a shared
@@ -141,7 +144,10 @@ export function useTripProgress(tripId: string, totalDays: number) {
   // state already moved on (another tab, the other button): then there
   // is nothing to write and the page just resyncs. .select("id") turns
   // the RLS 0-row case (session expired) into a visible error instead of
-  // a silent fake success.
+  // a silent fake success. Only "restart" skips the read: it is the
+  // explicit "Restart trip" tap, and its result is the same whatever the
+  // row holds. "Undo start" is "unstart", which reads first so a stale
+  // page never clears days finished on another device.
   async function run(action: ProgressAction, day = 0): Promise<void> {
     if (inflight.has(tripId)) return;
     setInflight(tripId, action);
@@ -162,9 +168,11 @@ export function useTripProgress(tripId: string, totalDays: number) {
         update =
           action === "start"
             ? startTrip(prior, now)
-            : action === "finish"
-              ? finishDay(prior, day, totalDays, now)
-              : undoLastCompletedDay(prior);
+            : action === "unstart"
+              ? undoStart(prior)
+              : action === "finish"
+                ? finishDay(prior, day, totalDays, now)
+                : undoLastCompletedDay(prior);
       }
       if (update) {
         const { data, error: writeErr } = await supabase
@@ -405,7 +413,9 @@ export default function TodayCard({ tripId, today, resorts, startDate, drive, pl
               ) : (
                 // Nothing finished yet: the only thing to undo is the
                 // Start tap itself (an accidental start the night before).
-                <Button variant="ghost" onClick={() => run("restart")} loading={running === "restart"} disabled={busy}>
+                // "unstart", not "restart": it re-reads the row and does
+                // nothing if days were finished since this page rendered.
+                <Button variant="ghost" onClick={() => run("unstart")} loading={running === "unstart"} disabled={busy}>
                   Undo start
                 </Button>
               )}

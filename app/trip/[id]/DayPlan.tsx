@@ -47,8 +47,8 @@ type Props = {
   /** Muted styling for completed days. */
   completed?: boolean;
   /** Day 2+ of a multi-night stay: places saved on any day of the stay
-   *  already show every day in Today, so say so instead of inviting the
-   *  rider to re-add them. */
+   *  already show every day in the Today card, so say so instead of
+   *  inviting the rider to re-add them. */
   continuesStay?: boolean;
 };
 
@@ -110,7 +110,7 @@ export default function DayPlan({ tripId, day, initialPlans, nearby, completed, 
       setSaveState("idle");
       // Re-render the server page so the Today card's place list matches.
       // Client state here survives a refresh; notes skip it (typing would
-      // re-run the page's queries every 800 ms for text Today never shows).
+      // re-run the page's queries every 800 ms for text the card never shows).
       if (refreshToday) router.refresh();
     }
   }
@@ -205,9 +205,17 @@ export default function DayPlan({ tripId, day, initialPlans, nearby, completed, 
   return (
     <div className={`mt-3 border-t border-dashed border-wn-line pt-3 ${completed ? "opacity-80" : ""}`}>
       {continuesStay && (
+        // "the Today card at the top of this page", never a bare "Today":
+        // the phone tab bar has a Today tab (/today, My mountains today)
+        // that does not show trip places.
         <p className="mb-2 flex items-start gap-1.5 text-xs text-wn-muted">
           <Icon name="info" className="mt-0.5 h-3.5 w-3.5 shrink-0" />
-          Places saved for this stay show every day in Today
+          <span>
+            Places saved for this stay show every day in the{" "}
+            <a href="#today" className="font-semibold text-wn-navy underline underline-offset-2">
+              Today card at the top of this page
+            </a>
+          </span>
         </p>
       )}
       {/* Attached places — always visible when present (the itinerary). */}

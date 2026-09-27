@@ -8,6 +8,7 @@ import {
   startTrip,
   tripFinished,
   undoLastCompletedDay,
+  undoStart,
 } from "./tripProgress";
 
 const base = { started_at: null, total_days: 3, completed_days: [] as number[] };
@@ -111,6 +112,24 @@ describe("startTrip", () => {
 describe("restartTrip", () => {
   it("clears progress and the start", () => {
     expect(restartTrip()).toEqual({ started_at: null, current_day: null, completed_days: [] });
+  });
+});
+
+describe("undoStart", () => {
+  it("takes back a Start tap while no day is finished", () => {
+    expect(undoStart({ started_at: "s", current_day: 1, completed_days: [] })).toEqual({
+      started_at: null,
+      current_day: null,
+      completed_days: [],
+    });
+    expect(undoStart({ started_at: "s", current_day: 1, completed_days: null })).toEqual(restartTrip());
+  });
+  it("never wipes finished days: a stale page left open after Start must resync instead", () => {
+    expect(undoStart({ started_at: "s", current_day: 3, completed_days: [1, 2] })).toBeNull();
+    expect(undoStart({ started_at: "s", current_day: 1, completed_days: [1] })).toBeNull();
+  });
+  it("is a no-op on a trip that is not started (already undone elsewhere)", () => {
+    expect(undoStart({ started_at: null, current_day: null, completed_days: [] })).toBeNull();
   });
 });
 

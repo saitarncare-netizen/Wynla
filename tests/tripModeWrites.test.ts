@@ -7,7 +7,9 @@
 //     both finishes day 2 ONCE (one shared in-flight lock per trip), so
 //     day 3 is never skipped unseen;
 //   * a write RLS silently drops (0 rows, e.g. an expired session) is shown
-//     as an error instead of refreshing as if it had saved.
+//     as an error instead of refreshing as if it had saved;
+//   * "Undo start" on a page left open since Start re-reads the row, so it
+//     never clears days finished on another device.
 // .ts with createElement because the tests/ glob only picks up .ts files.
 
 import { createElement as h, Fragment } from "react";
@@ -127,6 +129,29 @@ describe("trip mode writes", () => {
     expect(db.writes).toHaveLength(1);
     expect(refresh).not.toHaveBeenCalled();
     expect((await findAllByText(/Couldn't save/)).length).toBeGreaterThan(0);
+  });
+
+  it("Undo start on a fresh start returns the trip to not started", async () => {
+    db.row = { started_at: "s", current_day: 1, completed_days: [] };
+    const { getByText } = render(page());
+    await act(async () => {
+      fireEvent.click(getByText("Undo start"));
+    });
+    expect(db.writes).toEqual([{ started_at: null, current_day: null, completed_days: [] }]);
+    expect(refresh).toHaveBeenCalledTimes(1);
+  });
+
+  it("a stale Undo start never wipes days finished elsewhere", async () => {
+    // Rendered right after Start, left open; days 1-2 were finished on
+    // another device since.
+    db.row = { started_at: "s", current_day: 1, completed_days: [] };
+    const { getByText } = render(page());
+    db.row = { started_at: "s", current_day: 3, completed_days: [1, 2] };
+    await act(async () => {
+      fireEvent.click(getByText("Undo start"));
+    });
+    expect(db.writes).toEqual([]);
+    expect(refresh).toHaveBeenCalledTimes(1);
   });
 
   it("starts a not-started trip on day 1", async () => {
