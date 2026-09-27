@@ -6,6 +6,7 @@ import {
   TRIP_GRACE_DAYS,
   addPlaceToDay,
   addPlaceToStop,
+  canSaveInto,
   expandTripDays,
   findPlaceDay,
   hasOpenDayAt,
@@ -14,6 +15,7 @@ import {
   isPastTrip,
   isRunningNow,
   localTodayISO,
+  pickSaveTarget,
   pickTargetDay,
   pickTargetTrip,
   planTripHref,
@@ -320,6 +322,97 @@ describe("isRunningNow / isPastTrip", () => {
     expect(isPastTrip(started(null, { start_date: "2026-12-09" }), today)).toBe(false);
     expect(isPastTrip(started(null), today)).toBe(false);
   });
+
+  it("trusts a start date today or later over an old started_at, unless finished", () => {
+    // Start tapped weeks ahead, or the trip re-dated after last season's run.
+    expect(isPastTrip(started("2026-02-14T00:00:00Z", { start_date: "2026-12-20" }), today)).toBe(false);
+    expect(isPastTrip(started("2026-11-01T00:00:00Z", { start_date: today }), today)).toBe(false);
+    expect(isPastTrip(started("2026-02-14T00:00:00Z", { start_date: "2026-12-20", completed_days: [1, 2, 3] }), today)).toBe(
+      true,
+    );
+    // Dated before today, the old started_at still decides.
+    expect(isPastTrip(started("2026-02-14T00:00:00Z", { start_date: "2026-02-14" }), today)).toBe(true);
+  });
+});
+
+describe("canSaveInto / pickSaveTarget", () => {
+  const today = "2026-12-10";
+  const lastSeason = trip({
+    id: "last",
+    name: "Presidents Day",
+    days_per_resort: [3],
+    total_days: 3,
+    started_at: "2026-02-14T16:00:00Z",
+    current_day: 2,
+    completed_days: [1],
+    updated_at: "2026-12-01T00:00:00Z",
+  });
+  const finished = trip({ id: "finished", started_at: "2026-12-08T00:00:00Z", completed_days: [1] });
+  const datedBefore = trip({ id: "dated", start_date: "2026-11-01" });
+  // Running now, Vail (days 1-2) already skied, in Aspen today.
+  const pastVail = trip({
+    id: "moved-on",
+    resort_slugs: ["vail", "aspen"],
+    days_per_resort: [2, 2],
+    total_days: 4,
+    started_at: "2026-12-08T23:00:00Z",
+    current_day: 3,
+    completed_days: [1, 2],
+  });
+
+  it("refuses a trip behind the person or with no day left here", () => {
+    expect(canSaveInto(lastSeason, "vail", today)).toBe(false);
+    expect(canSaveInto(finished, "vail", today)).toBe(false);
+    expect(canSaveInto(datedBefore, "vail", today)).toBe(false);
+    expect(canSaveInto(pastVail, "vail", today)).toBe(false);
+    expect(canSaveInto(trip({ id: "x", resort_slugs: ["aspen"] }), "vail", today)).toBe(false);
+  });
+
+  it("accepts a running, upcoming or undated trip with a day left here", () => {
+    expect(canSaveInto(pastVail, "aspen", today)).toBe(true);
+    expect(canSaveInto(trip({ id: "up", start_date: "2026-12-20" }), "vail", today)).toBe(true);
+    expect(canSaveInto(trip({ id: "plan" }), "vail", today)).toBe(true);
+  });
+
+  it("returns null instead of falling back to last season's trip", () => {
+    // pickTargetTrip's last resort, which the button must not write into.
+    expect(pickTargetTrip([lastSeason], "vail", today)?.id).toBe("last");
+    expect(pickSaveTarget([lastSeason], "vail", today)).toBeNull();
+    expect(pickSaveTarget([lastSeason, finished, datedBefore, pastVail], "vail", today)).toBeNull();
+    expect(pickSaveTarget([], "vail", today)).toBeNull();
+  });
+
+  it("picks exactly what pickTargetTrip picks among trips that can take the place", () => {
+    const running = { ...pastVail, id: "running" };
+    const upcoming = trip({ id: "up", start_date: "2026-12-20" });
+    const plan = trip({ id: "plan", updated_at: "2026-09-20T00:00:00Z" });
+    expect(pickSaveTarget([lastSeason, running, upcoming], "aspen", today)?.id).toBe("running");
+    expect(pickSaveTarget([lastSeason, upcoming, plan], "vail", today)?.id).toBe("up");
+    expect(pickSaveTarget([lastSeason, plan], "vail", today)?.id).toBe("plan");
+  });
+
+  it("keeps an upcoming trip whose Start was tapped long ago", () => {
+    const redated = trip({ id: "redated", start_date: "2026-12-20", started_at: "2026-02-14T16:00:00Z" });
+    expect(pickSaveTarget([redated], "vail", today)?.id).toBe("redated");
+  });
+
+  it("passes over an upcoming trip whose days here were all ticked ahead", () => {
+    const ticked = trip({ id: "ticked", start_date: "2026-12-12", started_at: "2026-12-10T00:00:00Z", completed_days: [1] });
+    const plan = trip({ id: "plan" });
+    // Finished (its one day is done): pickTargetTrip would skip it too.
+    expect(pickSaveTarget([ticked, plan], "vail", today)?.id).toBe("plan");
+    const twoStops = trip({
+      id: "two",
+      resort_slugs: ["vail", "aspen"],
+      days_per_resort: [1, 1],
+      total_days: 2,
+      start_date: "2026-12-12",
+      started_at: "2026-12-10T00:00:00Z",
+      completed_days: [1],
+    });
+    expect(pickTargetTrip([twoStops, plan], "vail", today)?.id).toBe("two");
+    expect(pickSaveTarget([twoStops, plan], "vail", today)?.id).toBe("plan");
+  });
 });
 
 describe("tripIncludesResort / hasOpenDayAt / hasSeveralTripsAt / tripLabel", () => {
@@ -543,9 +636,11 @@ describe("small helpers", () => {
     expect(isMissingColumnError(null)).toBe(false);
   });
 
-  it("builds the plan-a-trip deep link", () => {
-    expect(planTripHref("vail")).toBe("/?plan=1&route=vail&days=2");
-    expect(planTripHref("a b&c")).toBe("/?plan=1&route=a%20b%26c&days=2");
+  it("builds the plan-a-trip deep link as an append, never a route seed", () => {
+    // ?route= would replace every stop of a trip being planned.
+    expect(planTripHref("vail")).toBe("/?plan=1&add=vail");
+    expect(planTripHref("a b&c")).toBe("/?plan=1&add=a%20b%26c");
+    expect(planTripHref("vail")).not.toMatch(/route=|days=/);
   });
 
   it("builds a sign-in link back to a same-site path only", () => {

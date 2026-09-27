@@ -10,14 +10,20 @@
 // now (started within its own length + 2 days, with a day left here),
 // else the next upcoming one, else the last edited with this mountain
 // still ahead — whichever includes this mountain — under the first open
-// day of that mountain's stop. Places belong to the stop; the trip view
+// day of that mountain's stop. A trip that is behind the person, or has
+// skied every day here, is never saved into: the button offers to plan a
+// trip instead (pickSaveTarget). Places belong to the stop; the trip view
 // shows them on every day of it. With two trips at a mountain the saved
 // line names the trip, since the rule cannot be right every time.
 //
 // Data. The signed-in user's trips load ONCE per page into a module-level
 // store shared by every card (refreshed when it is over a minute old), so
 // a strip of twenty cards costs one query and can still show "In trip" on
-// places saved earlier. A tap re-checks
+// places saved earlier. The store is dropped once the last card leaves
+// the screen (coming back from the trip page, where places can be
+// removed, loads fresh) and whenever Supabase reports another account
+// (or none), so one person's trips never show — or get written — under
+// the next person's session. A tap re-checks
 // the store (refetching when it is stale or has no trip for this
 // mountain, since the person may have just signed in or planned one),
 // then writes read-merge-write against a fresh copy of the row — same
@@ -37,11 +43,12 @@ import type { NearbyRow } from "@/lib/nearbyCategories";
 import {
   addPlaceToStop,
   findPlaceDay,
+  hasOpenDayAt,
   hasSeveralTripsAt,
   isMissingColumnError,
   localTodayISO,
+  pickSaveTarget,
   pickTargetDay,
-  pickTargetTrip,
   planTripHref,
   removePlaceFromTrip,
   signInHref,
@@ -56,10 +63,18 @@ import Icon from "@/components/icons/Icon";
 // ---------- Shared trips store (one per page) ----------
 
 type TripsSnapshot =
-  | { status: "signed-out"; loadedAt: number }
-  | { status: "error"; loadedAt: number }
+  | { status: "signed-out"; userId: null; loadedAt: number }
+  | {
+      status: "error";
+      /** The account it failed for; absent when it failed before the
+       *  session was read. */
+      userId?: string;
+      loadedAt: number;
+    }
   | {
       status: "ready";
+      /** The account these trips belong to (see accountChanged). */
+      userId: string;
       trips: SaveTripRow[];
       /** False until the trips.day_plans DDL has run: nothing to save into. */
       dayPlansSupported: boolean;
@@ -84,28 +99,105 @@ const LIST_SELECTS = [
 
 let snapshot: TripsSnapshot | null = null;
 let inflight: Promise<TripsSnapshot> | null = null;
+/** The account the load in flight reads for, once its getSession returns. */
+let loadingUserId: string | null | undefined;
+/** Bumped when the account changes (accountChanged): a load or write that
+ *  started under an earlier generation keeps its result out of the store. */
+let generation = 0;
 const listeners = new Set<() => void>();
 
+function notify() {
+  for (const l of listeners) l();
+}
 function setSnapshot(next: TripsSnapshot) {
   snapshot = next;
-  for (const l of listeners) l();
+  notify();
 }
 function subscribe(l: () => void) {
   listeners.add(l);
   return () => {
     listeners.delete(l);
+    scheduleRelease();
   };
 }
 const getSnapshot = () => snapshot;
 const getServerSnapshot = () => null;
 
-async function fetchTrips(): Promise<TripsSnapshot> {
+// Lifetime: the list is only kept while a card shows it. Without this,
+// coming back from the trip page (where places can be removed) inside the
+// one-minute window would still paint "In trip" from the old list. The
+// drop waits one task and checks again: when the map sheet switches
+// resort, React unmounts the old cards and subscribes the new ones in the
+// same commit, and dropping in between would flash every card back to
+// "+ Trip" until a refetch. It also waits for loads and writes in flight
+// (each calls back here when it settles), since a load landing after the
+// drop would quietly fill the store again.
+let pendingWrites = 0;
+let releaseTimer: ReturnType<typeof setTimeout> | null = null;
+function scheduleRelease() {
+  if (listeners.size > 0 || releaseTimer != null) return;
+  releaseTimer = setTimeout(() => {
+    releaseTimer = null;
+    if (listeners.size === 0 && inflight == null && pendingWrites === 0) snapshot = null;
+  }, 0);
+}
+
+// Account changes. The store outlives a client-side sign-out / sign-in
+// (the module stays loaded), so without this the next person on the phone
+// would see the previous account's "In trip" marks and a tap would aim at
+// that account's trip ids.
+let authWatched = false;
+
+/** Listen once per page (browser only, from the first load) for the
+ *  account Supabase holds. Never unsubscribed: the store lives as long
+ *  as the page. A client without auth events (some tests mock one) just
+ *  means no reset. */
+function watchAuth() {
+  if (authWatched || typeof window === "undefined") return;
+  authWatched = true;
+  try {
+    const { auth } = createSupabaseBrowserClient();
+    if (typeof auth?.onAuthStateChange !== "function") return;
+    auth.onAuthStateChange((_event, session) => accountChanged(session?.user.id ?? null));
+  } catch {
+    // No client at all (missing env in a test): the store still works.
+  }
+}
+
+/**
+ * Supabase now holds `userId` (null = signed out). Events for the account
+ * already in the store — INITIAL_SESSION, TOKEN_REFRESHED, the SIGNED_IN
+ * repeated when a tab regains focus — change nothing. Any other account,
+ * or none, empties the store and tells the cards at once; the generation
+ * bump keeps a load or write still in flight for the old account out.
+ */
+function accountChanged(userId: string | null) {
+  const differs = (known: string | null | undefined) => known !== undefined && known !== userId;
+  if (!differs(snapshot?.userId) && !(inflight && differs(loadingUserId))) return;
+  generation++;
+  snapshot = null;
+  inflight = null;
+  loadingUserId = undefined;
+  notify();
+  // Reload for the cards on screen so the new account's own "In trip"
+  // marks show. Deferred out of the callback: the SDK holds its session
+  // lock while it notifies, and a query issued inside it would wait on
+  // that same lock for its access token (see GuestFavoritesSync).
+  if (listeners.size > 0) {
+    setTimeout(() => {
+      if (listeners.size > 0) void loadTrips(STALE_AFTER_MS);
+    }, 0);
+  }
+}
+
+async function fetchTrips(onSession: (userId: string | null) => void): Promise<TripsSnapshot> {
   const sb = createSupabaseBrowserClient();
   // getSession reads the local cookie (no network); RLS still limits the
   // query to the owner, so a stale session can only see fewer rows.
   const { data: auth } = await sb.auth.getSession();
   const user = auth.session?.user;
-  if (!user) return { status: "signed-out", loadedAt: Date.now() };
+  onSession(user?.id ?? null);
+  if (!user) return { status: "signed-out", userId: null, loadedAt: Date.now() };
   for (const columns of LIST_SELECTS) {
     const { data, error } = await sb
       .from("trips")
@@ -116,6 +208,7 @@ async function fetchTrips(): Promise<TripsSnapshot> {
     if (!error) {
       return {
         status: "ready",
+        userId: user.id,
         trips: (data ?? []) as unknown as SaveTripRow[],
         dayPlansSupported: columns.includes("day_plans"),
         today: localTodayISO(new Date()),
@@ -124,42 +217,63 @@ async function fetchTrips(): Promise<TripsSnapshot> {
     }
     if (!isMissingColumnError(error)) break;
   }
-  return { status: "error", loadedAt: Date.now() };
+  return { status: "error", userId: user.id, loadedAt: Date.now() };
 }
 
 /** The cached list when it is fresh enough, else one shared fetch. */
 function loadTrips(maxAgeMs = Number.POSITIVE_INFINITY): Promise<TripsSnapshot> {
+  watchAuth();
   if (inflight) return inflight;
   if (snapshot && snapshot.status !== "error" && Date.now() - snapshot.loadedAt <= maxAgeMs) {
     return Promise.resolve(snapshot);
   }
-  const p: Promise<TripsSnapshot> = fetchTrips()
+  const gen = generation;
+  const p: Promise<TripsSnapshot> = fetchTrips((userId) => {
+    if (gen === generation) loadingUserId = userId;
+  })
     .catch((): TripsSnapshot => ({ status: "error", loadedAt: Date.now() }))
     .then((s) => {
+      // Read for an account that has since signed out or switched: keep
+      // it out of the store and answer with the current account's list
+      // (accountChanged already cleared `inflight`, so this joins or
+      // starts that load rather than returning this one).
+      if (gen !== generation) return loadTrips();
       setSnapshot(s);
       return s;
     })
     .finally(() => {
-      if (inflight === p) inflight = null;
+      if (inflight === p) {
+        inflight = null;
+        loadingUserId = undefined;
+      }
+      scheduleRelease();
     });
   inflight = p;
   return p;
 }
 
-/** Keep every card's "In trip" state in step after a write. */
-function patchTripPlans(tripId: string, dayPlans: unknown) {
-  if (snapshot?.status !== "ready") return;
+/** Keep every card's "In trip" state in step after a write, unless the
+ *  account changed while it ran (the store is someone else's now). */
+function patchTripPlans(gen: number, tripId: string, dayPlans: unknown) {
+  if (gen !== generation || snapshot?.status !== "ready") return;
   setSnapshot({
     ...snapshot,
     trips: snapshot.trips.map((t) => (t.id === tripId ? { ...t, day_plans: dayPlans } : t)),
   });
 }
 
-// One write at a time across every card on the page (see header).
+// One write at a time across every card on the page (see header). The
+// count lets scheduleRelease wait for them.
 let writeChain: Promise<unknown> = Promise.resolve();
 function serialized<T>(task: () => Promise<T>): Promise<T> {
+  pendingWrites++;
   const run = writeChain.then(task, task);
   writeChain = run.catch(() => undefined);
+  const settle = () => {
+    pendingWrites--;
+    scheduleRelease();
+  };
+  void run.then(settle, settle);
   return run;
 }
 
@@ -171,19 +285,30 @@ type AddOutcome =
   | { status: "gone" | "error" };
 
 async function writeAdd(tripId: string, place: DayPlace, resortSlug: string, today: string): Promise<AddOutcome> {
+  const gen = generation;
   const sb = createSupabaseBrowserClient();
   const { data, error } = await sb.from("trips").select(FRESH_COLUMNS).eq("id", tripId).maybeSingle();
-  if (error || !data) return { status: "error" };
+  if (error) return { status: "error" };
+  // No row: deleted since the list loaded, or no longer this session's to
+  // see (RLS). Not a network failure, so not "try again": "gone" reloads
+  // the list, and the next tap picks from what is really there.
+  if (!data) return { status: "gone" };
   const fresh = data as unknown as SaveTripRow;
   // The day is recomputed from the fresh row: the trip may have been
   // re-routed or advanced since the list loaded. `today` keeps an
   // abandoned trip's stale current_day from deciding it.
   const day = pickTargetDay(fresh, resortSlug, today);
-  if (day == null) return { status: "gone" };
+  // Every day here ticked done since the list loaded (another tab, the
+  // Today card): the list's canSaveInto no longer holds, so this is
+  // "gone" too rather than a save into a stop already skied. Only the
+  // open-day half is re-checked: the past-trip half needs start_date,
+  // which this read leaves out, and finishing a trip closes its days here
+  // anyway.
+  if (day == null || !hasOpenDayAt(fresh, resortSlug)) return { status: "gone" };
   const current = parseDayPlans(fresh.day_plans);
   const res = addPlaceToStop(current, stopDaysFrom(fresh, day), place);
   if (res.status !== "added") {
-    patchTripPlans(tripId, current);
+    patchTripPlans(gen, tripId, current);
     return { status: res.status, day: res.day, tripName: tripLabel(fresh) };
   }
   // .select("id") turns the RLS 0-row case (signed out in another tab)
@@ -194,14 +319,20 @@ async function writeAdd(tripId: string, place: DayPlace, resortSlug: string, tod
     .eq("id", tripId)
     .select("id");
   if (upErr || !updated || updated.length === 0) return { status: "error" };
-  patchTripPlans(tripId, res.dayPlans);
+  patchTripPlans(gen, tripId, res.dayPlans);
   return { status: "added", day: res.day, tripName: tripLabel(fresh) };
 }
 
-async function writeRemove(tripId: string, place: DayPlace): Promise<boolean> {
+type RemoveOutcome = "removed" | "gone" | "error";
+
+async function writeRemove(tripId: string, place: DayPlace): Promise<RemoveOutcome> {
+  const gen = generation;
   const sb = createSupabaseBrowserClient();
   const { data, error } = await sb.from("trips").select("day_plans").eq("id", tripId).maybeSingle();
-  if (error || !data) return false;
+  if (error) return "error";
+  // No row: the trip was deleted (or is no longer visible to this
+  // session), as in writeAdd. The caller reloads the list.
+  if (!data) return "gone";
   const { dayPlans, day } = removePlaceFromTrip(
     parseDayPlans((data as { day_plans?: unknown }).day_plans),
     place.kind,
@@ -213,10 +344,10 @@ async function writeRemove(tripId: string, place: DayPlace): Promise<boolean> {
       .update({ day_plans: dayPlans })
       .eq("id", tripId)
       .select("id");
-    if (upErr || !updated || updated.length === 0) return false;
+    if (upErr || !updated || updated.length === 0) return "error";
   }
-  patchTripPlans(tripId, dayPlans);
-  return true;
+  patchTripPlans(gen, tripId, dayPlans);
+  return "removed";
 }
 
 function currentPath(): string {
@@ -271,9 +402,10 @@ export default function SaveToTripButton({ row, resortSlug, resortName, actionCl
 
   // Warm the shared store so saved places show "In trip" on first paint
   // after hydration. Every card calls this; only the first one fetches.
-  // The age limit matters after client-side navigation: coming back from
-  // the trip page (where places can be removed) must not show a stale
-  // "In trip".
+  // Coming back from the trip page (where places can be removed) starts
+  // from an empty store, since it was dropped when the last card left
+  // (scheduleRelease); the age limit covers cards mounted into a strip
+  // that stayed on screen.
   useEffect(() => {
     void loadTrips(STALE_AFTER_MS);
   }, []);
@@ -303,10 +435,12 @@ export default function SaveToTripButton({ row, resortSlug, resortName, actionCl
     return () => document.removeEventListener("click", onClick);
   }, [open]);
 
-  // Is this place already in the trip a tap would save into?
+  // Is this place already in the trip a tap would save into? A place kept
+  // only in last season's trip is not "In trip": a tap would offer to plan
+  // one, and the check mark would promise otherwise.
   const saved = useMemo(() => {
     if (!place || snap?.status !== "ready") return null;
-    const trip = pickTargetTrip(snap.trips, resortSlug, snap.today);
+    const trip = pickSaveTarget(snap.trips, resortSlug, snap.today);
     if (!trip) return null;
     const day = findPlaceDay(parseDayPlans(trip.day_plans), place.kind, place.id);
     return day == null ? null : { day, tripId: trip.id, tripName: tripLabel(trip) };
@@ -344,13 +478,17 @@ export default function SaveToTripButton({ row, resortSlug, resortName, actionCl
     try {
       const tappedAt = Date.now();
       let s = await loadTrips(STALE_AFTER_MS);
-      let target = s.status === "ready" ? pickTargetTrip(s.trips, resortSlug, s.today) : null;
+      // pickSaveTarget, not pickTargetTrip: when every trip here is behind
+      // the person (finished, abandoned, dated before today) or has
+      // skied all its days here, nothing is written and the popover
+      // offers to plan a trip — never a silent save into last season's.
+      let target = s.status === "ready" ? pickSaveTarget(s.trips, resortSlug, s.today) : null;
       // "No trip" and "signed out" are exactly the answers that go stale
       // when someone follows our own Sign in / Plan a trip links, so they
       // are re-checked against the server before being shown.
       if (!target && s.loadedAt < tappedAt) {
         s = await loadTrips(0);
-        target = s.status === "ready" ? pickTargetTrip(s.trips, resortSlug, s.today) : null;
+        target = s.status === "ready" ? pickSaveTarget(s.trips, resortSlug, s.today) : null;
       }
       if (s.status === "signed-out") {
         show({ kind: "signin", href: signInHref(currentPath()) }, "Sign in to save places to a trip.");
@@ -384,8 +522,9 @@ export default function SaveToTripButton({ row, resortSlug, resortName, actionCl
           show({ kind: "full", day: res.day, tripId, tripName: res.tripName }, `Day ${res.day} of ${res.tripName} is full.`);
           break;
         case "gone":
-          // The trip no longer includes this mountain: refresh the list so
-          // the next tap picks again from what is really there.
+          // The trip was deleted, or no longer has a day to ski here:
+          // refresh the list so the next tap picks again from what is
+          // really there.
           void loadTrips(0);
           show({ kind: "error", text: "Your trip changed. Tap again." }, "Your trip changed. Tap again.");
           break;
@@ -400,9 +539,18 @@ export default function SaveToTripButton({ row, resortSlug, resortName, actionCl
   async function remove(p: DayPlace, tripId: string) {
     setBusy(true);
     try {
-      const ok = await serialized(() => writeRemove(tripId, p));
-      if (ok) show({ kind: "removed" }, `Removed ${p.name} from your trip.`);
-      else show({ kind: "error", text: "Couldn't remove it. Try again." }, "Couldn't remove it.");
+      const res = await serialized(() => writeRemove(tripId, p));
+      if (res === "removed") {
+        show({ kind: "removed" }, `Removed ${p.name} from your trip.`);
+      } else if (res === "gone") {
+        // The trip is not there to remove from any more. Reload so the
+        // card shows what is really saved; "Try again" would only fail
+        // the same way.
+        void loadTrips(0);
+        show({ kind: "error", text: "Your trip changed." }, "Your trip changed.");
+      } else {
+        show({ kind: "error", text: "Couldn't remove it. Try again." }, "Couldn't remove it.");
+      }
     } finally {
       setBusy(false);
       // The Undo / Remove button just unmounted; keep focus on the card.
