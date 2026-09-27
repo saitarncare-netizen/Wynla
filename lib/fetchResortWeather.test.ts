@@ -10,11 +10,11 @@ const db = vi.hoisted(() => ({
 }));
 vi.mock("@/lib/supabase", () => ({ supabase: { from: (t: string) => db.from(t) } }));
 
-import { extrasFromRow, fetchResortWeather, forecastTimeZone, snowNextDays } from "./fetchResortWeather";
+import { extrasFromRow, fetchResortWeather, forecastTimeZone, snowNextDays, todayWind } from "./fetchResortWeather";
 
 const { from, query } = db;
 
-function day(date: string, snow_in: number | null): ForecastDay {
+function day(date: string, snow_in: number | null, wind: Partial<ForecastDay> = {}): ForecastDay {
   return {
     date,
     weekday: "Mon",
@@ -25,15 +25,16 @@ function day(date: string, snow_in: number | null): ForecastDay {
     precip_chance: 60,
     wind_short: null,
     wind_dir_short: null,
+    ...wind,
   };
 }
 
 // 2026-12-10 03:00 UTC is still Dec 9 in Denver (UTC-7).
 const NOW = new Date("2026-12-10T03:00:00Z");
 const STRIP = [
-  day("2026-12-08", 9),
-  day("2026-12-09", 2),
-  day("2026-12-10", 4.25),
+  day("2026-12-08", 9, { wind_short: "40 mph", gust_mph: 60 }),
+  day("2026-12-09", 2, { wind_short: "14 mph", gust_mph: 31 }),
+  day("2026-12-10", 4.25, { wind_short: "9 mph", gust_mph: 17 }),
   day("2026-12-11", 0),
   day("2026-12-12", 6),
 ];
@@ -64,6 +65,24 @@ describe("snowNextDays", () => {
   });
 });
 
+describe("todayWind", () => {
+  it("reads today's day in the forecast's zone, not the first day or the sync-time reading", () => {
+    expect(todayWind(STRIP, NOW, "America/Denver")).toEqual({ windMph: 14, gustMph: 31 }); // Dec 9
+    expect(todayWind(STRIP, NOW, "UTC")).toEqual({ windMph: 9, gustMph: 17 }); // Dec 10
+  });
+
+  it("falls back to a gust phrase in legacy text and reads a range as its midpoint", () => {
+    const legacy = [day("2026-12-10", 1, { wind_short: "10 to 15 mph, with gusts as high as 35 mph" })];
+    expect(todayWind(legacy, NOW, "UTC")).toEqual({ windMph: 12.5, gustMph: 35 });
+  });
+
+  it("has no wind when the strip has no day for today or the day has no figure", () => {
+    expect(todayWind(STRIP, new Date("2026-12-20T15:00:00Z"), "UTC")).toEqual({ windMph: null, gustMph: null });
+    expect(todayWind(STRIP, new Date("2026-12-11T15:00:00Z"), "UTC")).toEqual({ windMph: null, gustMph: null });
+    expect(todayWind([], NOW, "UTC")).toEqual({ windMph: null, gustMph: null });
+  });
+});
+
 describe("forecastTimeZone", () => {
   it("prefers the NWS zone, then Open-Meteo, and has none for v1 arrays", () => {
     const v2 = (nws: string | null, om: string | null) => ({
@@ -84,37 +103,33 @@ describe("forecastTimeZone", () => {
 });
 
 describe("extrasFromRow", () => {
-  it("reads the v2 strip in its own zone and coerces numeric strings", () => {
+  it("reads the v2 strip in its own zone, takes today's forecast wind and coerces numeric strings", () => {
     const extras = extrasFromRow(
       {
         forecast_json: { v: 2, days: STRIP, sources: { nws: { time_zone: "America/Denver" }, open_meteo: null } },
         temp_low_f: "12",
-        wind_mph_avg: 14,
-        wind_mph_gust: "31",
         fetched_at: "2026-12-09T12:00:00Z",
       },
       NOW,
       "UTC",
     );
-    expect(extras).toEqual({ snowNext3In: 6.3, lowF: 12, windMph: 14, gustMph: 31, fetchedAt: "2026-12-09T12:00:00Z" });
+    expect(extras).toEqual({
+      snowNext3In: 6.3,
+      lowF: 12,
+      todayWindMph: 14,
+      todayGustMph: 31,
+      fetchedAt: "2026-12-09T12:00:00Z",
+    });
   });
 
   it("uses the caller's zone for a legacy v1 array and tolerates empty columns", () => {
-    const extras = extrasFromRow(
-      { forecast_json: STRIP, temp_low_f: null, wind_mph_avg: "", wind_mph_gust: null, fetched_at: null },
-      NOW,
-      "America/Denver",
-    );
-    expect(extras).toEqual({ snowNext3In: 6.3, lowF: null, windMph: null, gustMph: null, fetchedAt: null });
+    const extras = extrasFromRow({ forecast_json: STRIP, temp_low_f: "", fetched_at: null }, NOW, "America/Denver");
+    expect(extras).toEqual({ snowNext3In: 6.3, lowF: null, todayWindMph: 14, todayGustMph: 31, fetchedAt: null });
   });
 
-  it("has no 3-day figure when the row has no forecast", () => {
-    const extras = extrasFromRow(
-      { forecast_json: null, temp_low_f: 5, wind_mph_avg: null, wind_mph_gust: null, fetched_at: null },
-      NOW,
-    );
-    expect(extras.snowNext3In).toBeNull();
-    expect(extras.lowF).toBe(5);
+  it("has no 3-day figure and no wind when the row has no forecast", () => {
+    const extras = extrasFromRow({ forecast_json: null, temp_low_f: 5, fetched_at: null }, NOW);
+    expect(extras).toEqual({ snowNext3In: null, lowF: 5, todayWindMph: null, todayGustMph: null, fetchedAt: null });
   });
 });
 
@@ -128,14 +143,16 @@ describe("fetchResortWeather", () => {
 
   it("reads one weather_cache row by resort id", async () => {
     query.maybeSingle.mockResolvedValue({
-      data: { forecast_json: STRIP, temp_low_f: 8, wind_mph_avg: 10, wind_mph_gust: 20, fetched_at: "2026-12-09T12:00:00Z" },
+      data: { forecast_json: STRIP, temp_low_f: 8, fetched_at: "2026-12-09T12:00:00Z" },
       error: null,
     });
     const extras = await fetchResortWeather(42, { timeZone: "America/Denver", now: NOW });
     expect(from).toHaveBeenCalledWith("weather_cache");
-    expect(query.select).toHaveBeenCalledWith("forecast_json, temp_low_f, wind_mph_avg, wind_mph_gust, fetched_at");
+    // No wind_mph_avg / wind_mph_gust: those are the sync-time reading,
+    // and the sheet's wind is today's forecast from the strip.
+    expect(query.select).toHaveBeenCalledWith("forecast_json, temp_low_f, fetched_at");
     expect(query.eq).toHaveBeenCalledWith("resort_id", 42);
-    expect(extras).toMatchObject({ snowNext3In: 6.3, lowF: 8, windMph: 10, gustMph: 20 });
+    expect(extras).toMatchObject({ snowNext3In: 6.3, lowF: 8, todayWindMph: 14, todayGustMph: 31 });
   });
 
   it("returns null on a read error or a missing row", async () => {

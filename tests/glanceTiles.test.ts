@@ -116,7 +116,7 @@ describe("buildGlanceTiles", () => {
 
 describe("buildSheetTiles", () => {
   const NO_REPORT = { snow_new_24h_in: null, snow_base_depth_in: null, snow_report_status: null, snow_report_updated_at: null };
-  const EXTRAS = { snowNext3In: 7.6, lowF: 12, windMph: 14, gustMph: 31, fetchedAt: "2026-01-15T13:00:00Z" };
+  const EXTRAS = { snowNext3In: 7.6, lowF: 12, todayWindMph: 14, todayGustMph: 31, fetchedAt: "2026-01-15T13:00:00Z" };
 
   function sheet(over: Partial<SheetGlanceInput> = {}): SheetGlanceInput {
     return { ...input(), extras: EXTRAS, ...over };
@@ -126,12 +126,14 @@ describe("buildSheetTiles", () => {
     expect(buildSheetTiles(sheet()).map((t) => t.key)).toEqual(["snow", "temp", "base", "surface"]);
   });
 
-  it("shows high and low as one value with the condition and wind on the detail line", () => {
+  it("shows high and low as one value with the condition and today's forecast wind on the detail line", () => {
     const today = buildSheetTiles(sheet())[1];
     expect(today).toMatchObject({
       label: "High / low today",
       value: "28° / 15°F",
-      detail: "Cloudy · wind 14 mph, gusts 31",
+      // The day's forecast peaks, worded as peaks: every number on this
+      // tile is today's forecast, so the one "Forecast" source is true.
+      detail: "Cloudy · wind up to 14 mph, gusts 31",
       source: "Forecast · 1h ago",
     });
   });
@@ -140,10 +142,12 @@ describe("buildSheetTiles", () => {
     const calm = buildSheetTiles(
       sheet({
         weather: { temp_high_f: 30, conditions_short: "Sunny", fetched_at: "2026-01-15T14:00:00Z" },
-        extras: { ...EXTRAS, windMph: 8.4, gustMph: 18 },
+        extras: { ...EXTRAS, todayWindMph: 8.4, todayGustMph: 18 },
       }),
     )[1];
-    expect(calm).toMatchObject({ value: "30° / 12°F", detail: "Sunny · wind 8 mph" });
+    expect(calm).toMatchObject({ value: "30° / 12°F", detail: "Sunny · wind up to 8 mph" });
+    const noWind = buildSheetTiles(sheet({ extras: { ...EXTRAS, todayWindMph: null, todayGustMph: 40 } }))[1];
+    expect(noWind.detail).toBe("Cloudy");
   });
 
   it("keeps a high-only reading honest while the low is unknown", () => {

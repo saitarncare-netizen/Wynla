@@ -1,19 +1,28 @@
 // Per-resort weather extras for the map's resort sheet, fetched lazily
 // when a sheet opens (same pattern as lib/fetchNearby.ts). The homepage
 // payload carries one small weather row per resort (high, low,
-// conditions, fetched_at); the forecast strip, wind and gusts would add
-// ~20 KB per resort to it, so they come here for the ONE resort the
-// person is looking at instead.
+// conditions, fetched_at); the forecast strip behind the next-3-days
+// snow total and today's wind would add ~20 KB per resort to it, so it
+// comes here for the ONE resort the person is looking at instead.
 //
-// The pure pieces (next-days sum, time-zone pick, row → extras) are
-// exported separately and unit-tested in lib/fetchResortWeather.test.ts;
-// only fetchResortWeather touches the network.
+// Wind comes from TODAY's day in the forecast strip, never from
+// weather_cache.wind_mph_avg / wind_mph_gust. Those two columns hold the
+// live reading at sync time (lib/weather/merge pickCurrentWind), and the
+// only sync is the 11:00 UTC cron (4-7 AM in the US), so at 3 PM they
+// would show a pre-dawn summit reading under a "Forecast" label and hide
+// the afternoon gusts the forecast expects.
+//
+// The pure pieces (next-days sum, today's wind, time-zone pick, row →
+// extras) are exported separately and unit-tested in
+// lib/fetchResortWeather.test.ts; only fetchResortWeather touches the
+// network.
 
 import { supabase } from "@/lib/supabase";
 import { forecastDaysFrom, isForecastJsonV2, type ForecastDay } from "@/lib/weather/forecastJson";
 import { localDate } from "@/lib/weather/time";
+import { parseWindFromText } from "@/lib/windHold";
 
-const COLUMNS = "forecast_json, temp_low_f, wind_mph_avg, wind_mph_gust, fetched_at";
+const COLUMNS = "forecast_json, temp_low_f, fetched_at";
 
 /** Days summed for the sheet's "Snow next 3 days" tile. */
 export const NEXT_SNOW_DAYS = 3;
@@ -23,9 +32,12 @@ export type ResortWeatherExtras = {
    *  decimal), or null when the forecast no longer covers the window. */
   snowNext3In: number | null;
   lowF: number | null;
-  /** Wind at the time of the sync (station or model "current"). */
-  windMph: number | null;
-  gustMph: number | null;
+  /** Today's forecast peak sustained wind (mph), from the resort-local
+   *  day's wind_short in the strip; null when the strip has no day for
+   *  today or the day has no wind figure. */
+  todayWindMph: number | null;
+  /** Today's forecast peak gust (mph), same day. */
+  todayGustMph: number | null;
   /** When the weather sync wrote the row, for the tile's age. */
   fetchedAt: string | null;
 };
@@ -35,8 +47,6 @@ export type ResortWeatherExtras = {
 export type WeatherExtrasRow = {
   forecast_json: unknown;
   temp_low_f: number | string | null;
-  wind_mph_avg: number | string | null;
-  wind_mph_gust: number | string | null;
   fetched_at: string | null;
 };
 
@@ -75,6 +85,27 @@ export function snowNextDays(
   return Math.round(sum * 10) / 10;
 }
 
+/**
+ * Today's forecast wind from the day strip: the resort-local day whose
+ * date is today in `timeZone` (so a row synced yesterday still answers
+ * for today, not for the day it was written). Sustained is the day's
+ * peak (merge.ts writes wind_short from the daily max; a legacy NWS
+ * range like "10 to 15 mph" reads as its midpoint, the same parse the
+ * resort page's strip uses); the gust is the v2 gust_mph field, else a
+ * "gusts …" phrase in the text. Both null when there is no day for today.
+ */
+export function todayWind(
+  days: ForecastDay[],
+  now: Date,
+  timeZone?: string | null,
+): { windMph: number | null; gustMph: number | null } {
+  const today = localDate(now, timeZone);
+  const day = days.find((d) => d?.date === today);
+  if (!day) return { windMph: null, gustMph: null };
+  const parsed = parseWindFromText(day.wind_short);
+  return { windMph: parsed.sustained ?? null, gustMph: toNumber(day.gust_mph) ?? parsed.gust ?? null };
+}
+
 /** The zone the refresh job dated the strip in (NWS point first, then
  *  Open-Meteo, the same order refreshResort resolves it). v1 rows carry
  *  no zone; the caller's fallback is used for those. */
@@ -90,11 +121,13 @@ export function extrasFromRow(
   fallbackTimeZone?: string | null,
 ): ResortWeatherExtras {
   const timeZone = forecastTimeZone(row.forecast_json) ?? fallbackTimeZone ?? null;
+  const days = forecastDaysFrom(row.forecast_json);
+  const wind = todayWind(days, now, timeZone);
   return {
-    snowNext3In: snowNextDays(forecastDaysFrom(row.forecast_json), now, timeZone),
+    snowNext3In: snowNextDays(days, now, timeZone),
     lowF: toNumber(row.temp_low_f),
-    windMph: toNumber(row.wind_mph_avg),
-    gustMph: toNumber(row.wind_mph_gust),
+    todayWindMph: wind.windMph,
+    todayGustMph: wind.gustMph,
     fetchedAt: row.fetched_at ?? null,
   };
 }

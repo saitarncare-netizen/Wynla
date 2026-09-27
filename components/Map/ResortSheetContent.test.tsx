@@ -100,7 +100,7 @@ const WEATHER = {
   conditions_short: "Slight chance snow showers",
   fetched_at: new Date().toISOString(),
 };
-const EXTRAS: ResortWeatherExtras = { snowNext3In: 7.6, lowF: 22, windMph: 12, gustMph: 30, fetchedAt: null };
+const EXTRAS: ResortWeatherExtras = { snowNext3In: 7.6, lowF: 22, todayWindMph: 12, todayGustMph: 30, fetchedAt: null };
 
 beforeEach(() => {
   net.weather.clear();
@@ -123,7 +123,7 @@ describe("ConditionsGlance", () => {
 
     await act(async () => net.weather.get(1)!(EXTRAS));
     expect(screen.getByText('8"')).toBeTruthy();
-    expect(screen.getByText("Slight chance snow showers · wind 12 mph, gusts 30")).toBeTruthy();
+    expect(screen.getByText("Slight chance snow showers · wind up to 12 mph, gusts 30")).toBeTruthy();
   });
 
   it("never shows the previous resort's answer on the next pin", async () => {
@@ -174,12 +174,18 @@ describe("MountainFacts", () => {
 });
 
 describe("FullPageButton", () => {
-  it("links to the resort page as a full-width 44 px button", () => {
+  it("links to the resort page as a full-width 44 px navy-outline button", () => {
     render(<FullPageButton slug="test-peak" />);
     const link = screen.getByRole("link", { name: "See full mountain page" });
     expect(link.getAttribute("href")).toBe("/resort/test-peak");
     expect(link.className).toContain("min-h-11");
     expect(link.className).toContain("w-full");
+    // A navy edge with no hover needed (phones): not the faint
+    // border-wn-line of "secondary", and never the gold of Plan trip.
+    const classes = link.className.split(/\s+/);
+    expect(classes).toContain("border-wn-navy");
+    expect(classes).not.toContain("border-wn-line");
+    expect(link.className).not.toContain("wn-gold");
   });
 });
 

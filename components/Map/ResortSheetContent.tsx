@@ -204,9 +204,10 @@ export function StatRow({ tiles }: { tiles: Tile[] }) {
 
 /**
  * The conditions tiles plus the lazy per-resort weather read (next 3
- * days of snow, wind, the low as a fallback). Fetched when a resort
- * opens, like NearbyInPanel; a result is tagged with its resort id so a
- * slow answer for the previous pin is never shown on the next one.
+ * days of snow, today's forecast wind, the low as a fallback). Fetched
+ * when a resort opens, like NearbyInPanel; a result is tagged with its
+ * resort id so a slow answer for the previous pin is never shown on the
+ * next one.
  */
 export function ConditionsGlance({
   resort,
@@ -297,11 +298,13 @@ export function MountainFacts({ resort }: { resort: Resort }) {
 }
 
 /** The one way from the sheet to the full resort page: a full-width
- *  44 px outline button (Button "secondary", navy text). Not gold on
- *  purpose: gold is reserved for Plan trip in the action bar. */
+ *  44 px navy-outline button (Button "outline"). Not "secondary": its
+ *  #e5e5e5 edge is ~1.3:1 on the white sheet and only turns navy on
+ *  hover, which a phone never has, so it read as loose navy text. Not
+ *  gold either: gold is reserved for Plan trip in the action bar. */
 export function FullPageButton({ slug }: { slug: string }) {
   return (
-    <Button href={`/resort/${slug}`} variant="secondary" block iconRight={<Icon name="arrow-right" />}>
+    <Button href={`/resort/${slug}`} variant="outline" block iconRight={<Icon name="arrow-right" />}>
       See full mountain page
     </Button>
   );

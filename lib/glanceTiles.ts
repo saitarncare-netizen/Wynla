@@ -86,8 +86,10 @@ export type GlanceInput = {
 export type GlanceExtras = {
   snowNext3In: number | null;
   lowF: number | null;
-  windMph: number | null;
-  gustMph: number | null;
+  /** Today's FORECAST peak sustained wind / peak gust (the strip's day
+   *  for today), never the sync-time reading in weather_cache. */
+  todayWindMph: number | null;
+  todayGustMph: number | null;
   fetchedAt: string | null;
 };
 
@@ -230,24 +232,32 @@ function highTile(weather: GlanceWeather | null, ctx: Ctx): GlanceTile {
  *  figure is the useful one and the line stays short. */
 export const GUSTY_MPH = 25;
 
+/** Today's forecast wind for the detail line. The figures are the day's
+ *  peaks, so the words say "up to" rather than reading as a current
+ *  measurement. */
 function windText(windMph: number | null, gustMph: number | null): string | null {
   if (windMph == null) return null;
-  const avg = Math.round(windMph);
+  const peak = Math.round(windMph);
   const gust = gustMph != null ? Math.round(gustMph) : null;
-  return gust != null && gust >= GUSTY_MPH && gust > avg ? `wind ${avg} mph, gusts ${gust}` : `wind ${avg} mph`;
+  return gust != null && gust >= GUSTY_MPH && gust > peak ? `wind up to ${peak} mph, gusts ${gust}` : `wind up to ${peak} mph`;
 }
 
 // The sheet's weather tile: high and low as one value ("28° / 15°F",
 // the weather-app convention, with the label spelling it out), and the
-// condition plus wind on the detail line. The low comes from the map
-// payload, falling back to the lazy per-resort read when the payload
-// has none.
+// condition plus today's forecast wind on the detail line. Every number
+// on the tile is today's forecast, so one "Forecast · age" source line
+// is true for all of them: the wind is the strip's day for today (lazy
+// read), not weather_cache's sync-time reading, which is a pre-dawn
+// observation by the afternoon. The low comes from the map payload,
+// falling back to the lazy per-resort read when the payload has none.
 function todayTile(weather: GlanceWeather | null, extras: GlanceExtras | null | undefined, ctx: Ctx): GlanceTile {
   const high = weather?.temp_high_f ?? null;
   const low = weather?.temp_low_f ?? extras?.lowF ?? null;
   const both = high != null && low != null;
   const detail =
-    high != null ? join([weather?.conditions_short ?? null, windText(extras?.windMph ?? null, extras?.gustMph ?? null)]) : "";
+    high != null
+      ? join([weather?.conditions_short ?? null, windText(extras?.todayWindMph ?? null, extras?.todayGustMph ?? null)])
+      : "";
   return {
     key: "temp",
     label: both ? "High / low today" : "High today",

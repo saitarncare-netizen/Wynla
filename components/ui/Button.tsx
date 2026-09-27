@@ -3,6 +3,11 @@
 //
 //   variant  primary   navy fill, white text (default action)
 //            secondary white fill, line border, navy text
+//            outline   white fill, navy border, navy text: a secondary
+//                      action that must read as a button with no hover
+//                      (phones), e.g. the map sheet's full-page link.
+//                      The navy edge is 14:1 on white; secondary's
+//                      #e5e5e5 line is ~1.3:1.
 //            ghost     no fill, navy text (inline / toolbar actions)
 //            danger    danger fill, white text (destructive, confirm first)
 //            gold      gold fill, navy text — ONLY on a navy surface, one
@@ -20,7 +25,7 @@ import type { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactNode } from "reac
 import Icon from "@/components/icons/Icon";
 import { cx } from "./cx";
 
-export type ButtonVariant = "primary" | "secondary" | "ghost" | "danger" | "gold";
+export type ButtonVariant = "primary" | "secondary" | "outline" | "ghost" | "danger" | "gold";
 export type ButtonSize = "md" | "sm";
 
 const BASE =
@@ -30,6 +35,7 @@ const VARIANT: Record<ButtonVariant, string> = {
   primary: "bg-wn-navy text-white hover:bg-wn-navy/90 shadow-wn-sm",
   secondary:
     "border border-wn-line bg-white text-wn-navy hover:border-wn-navy hover:bg-wn-offwhite",
+  outline: "border border-wn-navy bg-white text-wn-navy hover:bg-wn-navy/5",
   ghost: "bg-transparent text-wn-navy hover:bg-wn-navy/5",
   danger: "bg-wn-danger text-white hover:bg-wn-danger/90 shadow-wn-sm",
   gold: "bg-wn-gold text-wn-navy hover:bg-wn-gold/90 shadow-wn-sm",
