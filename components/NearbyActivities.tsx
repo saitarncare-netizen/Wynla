@@ -4,6 +4,10 @@
 // canonical list of categories. Renders nothing when no rows are
 // available so the section stays out of the way on resort pages that
 // don't have curated nearby data yet.
+//
+// `saveToTrip` (optional) adds a "+ Trip" button to every card; rows are
+// stamped kind "activity" here because server-fetched rows arrive
+// without it (see NearbyRow.kind).
 
 import {
   ACTIVITY_CATEGORIES,
@@ -16,20 +20,22 @@ import NearbyGroup from "./NearbyGroup";
 type Props = {
   rows: NearbyRow[];
   variant?: "full" | "compact";
+  /** Resort the cards belong to; enables the "+ Trip" button. */
+  saveToTrip?: { resortSlug: string; resortName: string };
 };
 
 function isActivityCategory(c: string): c is ActivityCategory {
   return c in ACTIVITY_CATEGORIES;
 }
 
-export default function NearbyActivities({ rows, variant = "full" }: Props) {
+export default function NearbyActivities({ rows, variant = "full", saveToTrip }: Props) {
   if (!rows || rows.length === 0) return null;
 
   const byCategory = new Map<ActivityCategory, NearbyRow[]>();
   for (const r of rows) {
     if (!isActivityCategory(r.category)) continue;
     if (!byCategory.has(r.category)) byCategory.set(r.category, []);
-    byCategory.get(r.category)!.push(r);
+    byCategory.get(r.category)!.push({ ...r, kind: r.kind ?? "activity" });
   }
   if (byCategory.size === 0) return null;
 
@@ -67,6 +73,7 @@ export default function NearbyActivities({ rows, variant = "full" }: Props) {
             label={meta.label}
             rows={byCategory.get(cat)!}
             variant={variant}
+            saveToTrip={saveToTrip}
           />
         );
       })}

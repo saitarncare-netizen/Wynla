@@ -5,6 +5,10 @@
 // the canonical RESTAURANT_ORDER, then renders one strip per group.
 // Renders nothing when no rows are available (off-season, missing
 // data, low-traffic location).
+//
+// `saveToTrip` (optional) adds a "+ Trip" button to every card; rows are
+// stamped kind "restaurant" here because server-fetched rows arrive
+// without it (see NearbyRow.kind).
 
 import {
   RESTAURANT_CATEGORIES,
@@ -17,13 +21,15 @@ import NearbyGroup from "./NearbyGroup";
 type Props = {
   rows: NearbyRow[];
   variant?: "full" | "compact";
+  /** Resort the cards belong to; enables the "+ Trip" button. */
+  saveToTrip?: { resortSlug: string; resortName: string };
 };
 
 function isRestaurantCategory(c: string): c is RestaurantCategory {
   return c in RESTAURANT_CATEGORIES;
 }
 
-export default function NearbyRestaurants({ rows, variant = "full" }: Props) {
+export default function NearbyRestaurants({ rows, variant = "full", saveToTrip }: Props) {
   if (!rows || rows.length === 0) return null;
 
   // Bucket rows by category (only buckets we know about).
@@ -31,7 +37,7 @@ export default function NearbyRestaurants({ rows, variant = "full" }: Props) {
   for (const r of rows) {
     if (!isRestaurantCategory(r.category)) continue;
     if (!byCategory.has(r.category)) byCategory.set(r.category, []);
-    byCategory.get(r.category)!.push(r);
+    byCategory.get(r.category)!.push({ ...r, kind: r.kind ?? "restaurant" });
   }
   if (byCategory.size === 0) return null;
 
@@ -72,6 +78,7 @@ export default function NearbyRestaurants({ rows, variant = "full" }: Props) {
             blurb={meta.blurb}
             rows={byCategory.get(cat)!}
             variant={variant}
+            saveToTrip={saveToTrip}
           />
         );
       })}
