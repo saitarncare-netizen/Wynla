@@ -2,7 +2,9 @@
 // resort with a Go / Wait / Skip / Unknown verdict, a one-line reason
 // and every number labelled with its source and time; a powder banner
 // when any favorite crosses 6 in; the next trip; and a footer that says
-// how old the data is. Auth-guarded (redirects to /login?next=/today).
+// how old the data is. Signed out, it shows what the call is and how to
+// get one (GuestToday) instead of redirecting to /login from a tab bar
+// item.
 //
 // Server component: the verdicts are computed once here from the same
 // rows the resort panel reads (app/today/data.ts), so a phone renders
@@ -11,12 +13,12 @@
 
 import type { Metadata } from "next";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { passColor, primaryPass } from "@/lib/passColors";
 import { formatStampInZone } from "@/lib/sunTimes";
 import { isPowderDay, POWDER_IN } from "@/lib/goWaitSkip";
 import { localDate } from "@/lib/weather/time";
+import { pluralize, tripRouteLabel } from "@/lib/tripLabels";
 import { loadNextTrip, loadTodayRows, type NextTrip, type TodayRow } from "./data";
 import { BlackoutNote, LocalDate, RowThumb, UpdatedAgo } from "./ClientBits";
 import VerdictPill from "./VerdictPill";
@@ -26,13 +28,15 @@ import Card from "@/components/ui/Card";
 import EmptyState from "@/components/ui/EmptyState";
 import Notice from "@/components/ui/Notice";
 import PageHeader from "@/components/ui/PageHeader";
+import GuestIntroCard from "@/components/GuestIntroCard";
 
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Today",
   description: "Go, wait or skip: this morning's call for every mountain you saved.",
-  // Personal, signed-in only: nothing here for a crawler.
+  // Personal: the signed-in page is per user and the signed-out one is
+  // only an explainer, so nothing here for a crawler.
   robots: { index: false, follow: false },
 };
 
@@ -41,7 +45,7 @@ export default async function TodayPage() {
   const { data: userData } = await supabase.auth.getUser();
   const user = userData.user;
   if (!user) {
-    redirect("/login?next=/today");
+    return <GuestToday />;
   }
 
   const now = new Date();
@@ -129,6 +133,60 @@ export default async function TodayPage() {
 }
 
 // ---------- Pieces ----------
+
+// Signed-out /today. The call needs a saved list, and a guest's hearts
+// live on the device (lib/guestFavorites) where this server page cannot
+// read them; they move into the account on sign-in. So the page says
+// what the call is and the two steps that unlock it, with the map as
+// the thing to do right now. The Saturday pick needs no account, so it
+// is offered as the useful answer for someone who is not ready to sign
+// in.
+function GuestToday() {
+  return (
+    <main className="min-h-dvh bg-wn-offwhite pb-10">
+      {/* Title only, like the guest /trips header: the card below does the
+          explaining, so the header does not say it a third time. */}
+      <PageHeader width="max-w-2xl" title="Today" />
+      <div className="mx-auto mt-5 max-w-2xl px-4 sm:px-6">
+        <GuestIntroCard
+          headingId="today-guest-title"
+          icon="sun"
+          title="Go, Wait or Skip, every morning"
+          body="One call for each mountain you save, with the reason behind it."
+          steps={[
+            {
+              icon: "heart",
+              text: (
+                <>
+                  Save mountains with <span aria-hidden="true">♡</span>
+                  <span className="sr-only">the heart</span> on the map.
+                </>
+              ),
+            },
+            { icon: "user", text: "Sign in to get your daily call." },
+          ]}
+          primary={{ href: "/", label: "Browse the map" }}
+          secondary={{ href: "/login?next=/today", label: "Sign in" }}
+        />
+        <Card href="/go" className="mt-4">
+          <div className="flex items-center gap-3">
+            <span
+              className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-wn-navy/5 text-wn-navy"
+              aria-hidden="true"
+            >
+              <Icon name="compass" className="h-5 w-5" />
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-bold text-wn-navy">Where to ride this Saturday</p>
+              <p className="mt-0.5 text-xs text-wn-muted">Picks for your pass from your city. No account needed.</p>
+            </div>
+            <Icon name="chevron-right" className="h-4 w-4 shrink-0 text-wn-subtle" />
+          </div>
+        </Card>
+      </div>
+    </main>
+  );
+}
 
 function PowderBanner({ rows }: { rows: TodayRow[] }) {
   const parts = rows.map((r) => {
@@ -231,10 +289,7 @@ function NextTripCard({ trip }: { trip: NextTrip | null }) {
         <Link href={`/trip/${trip.id}`} className="mt-1 block rounded-wn-sm transition hover:bg-wn-offwhite">
           <p className="text-base font-bold text-wn-navy">{trip.name ?? `${trip.total_days}-day trip`}</p>
           {trip.stopNames.length > 0 && (
-            <p className="truncate text-sm font-semibold text-wn-charcoal/80">
-              {trip.stopNames.slice(0, 3).join(" → ")}
-              {trip.stopNames.length > 3 ? ` +${trip.stopNames.length - 3}` : ""}
-            </p>
+            <p className="truncate text-sm font-semibold text-wn-charcoal/80">{tripRouteLabel(trip.stopNames)}</p>
           )}
           <p className="mt-0.5 text-xs text-wn-muted">
             {trip.start_date
@@ -243,7 +298,7 @@ function NextTripCard({ trip }: { trip: NextTrip | null }) {
                 ? "In progress"
                 : "No date set"}
             {" · "}
-            {trip.total_days} days
+            {pluralize(trip.total_days, "day")}
             {trip.lodging_mode ? ` · ${trip.lodging_mode === "basecamp" ? "Basecamp" : "Road trip"}` : ""}
           </p>
         </Link>
