@@ -46,6 +46,9 @@ next-env.d.ts
 
 # scratch files Claude Code creates during multi-step work
 .tmp-*
+# photo-candidate scratch folders from the hero pipeline (already covered
+# by .tmp-*, listed explicitly so nobody removes the glob by accident)
+.tmp-photo-candidates/
 
 # Claude Code local config + scratch handoff docs (not part of the app)
 .claude/

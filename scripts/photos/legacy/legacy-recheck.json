@@ -1,0 +1,2878 @@
+{
+  "generatedAt": "2026-09-23T18:12:27.665Z",
+  "rules": {
+    "farKm": 25,
+    "nearKm": 8
+  },
+  "tally": {
+    "mismatch": 9,
+    "unclear": 8,
+    "match": 146
+  },
+  "denylisted": 12,
+  "results": [
+    {
+      "slug": "49-degrees-north",
+      "name": "49 Degrees North Mountain Resort",
+      "state": "WA",
+      "object": "49-degrees-north.jpg",
+      "title": "File:Sugar_Mountain_summit.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Sugar_Mountain_summit.jpg",
+      "verdict": "mismatch",
+      "reasons": [
+        "names Snow Summit",
+        "names Summit Ski Area",
+        "camera 3198.9 km away"
+      ],
+      "author": "Patrick Reynolds",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "Patrick Reynolds / CC BY-SA 4.0",
+      "dbCredit": null,
+      "denied": true
+    },
+    {
+      "slug": "blue-mountain-resort",
+      "name": "Blue Mountain Resort",
+      "state": "PA",
+      "object": "blue-mountain-resort.jpg",
+      "title": "File:Blue_Mountain_Resort.JPG",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Blue_Mountain_Resort.JPG",
+      "verdict": "mismatch",
+      "reasons": [
+        "title or description names this resort",
+        "mentions canada"
+      ],
+      "author": "Chensiyuan at English Wikipedia",
+      "licence": "CC BY-SA 3.0",
+      "dbAttribution": "Chensiyuan at English Wikipedia / CC BY-SA 3.0",
+      "dbCredit": null,
+      "denied": true
+    },
+    {
+      "slug": "great-divide",
+      "name": "Great Divide",
+      "state": "MT",
+      "object": "great-divide.jpg",
+      "title": "File:The_Great_Divide.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:The_Great_Divide.jpg",
+      "verdict": "mismatch",
+      "reasons": [
+        "title or description names this resort",
+        "mentions alberta"
+      ],
+      "author": "5of7",
+      "licence": "CC BY-SA 2.0",
+      "dbAttribution": "5of7 / CC BY-SA 2.0",
+      "dbCredit": null,
+      "denied": true
+    },
+    {
+      "slug": "gunstock-mountain-resort",
+      "name": "Gunstock Mountain Resort",
+      "state": "NH",
+      "object": "gunstock-mountain-resort-c5e1b069.jpg",
+      "title": "File:Panorama-1-21-18-Summit.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Panorama-1-21-18-Summit.jpg",
+      "verdict": "mismatch",
+      "reasons": [
+        "only a category names this resort",
+        "names Snow Summit",
+        "names Summit Ski Area"
+      ],
+      "author": "Clapus",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "Clapus / CC BY-SA 4.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Panorama-1-21-18-Summit.jpg",
+      "denied": false
+    },
+    {
+      "slug": "homestead-resort",
+      "name": "The Homestead",
+      "state": "MI",
+      "object": "homestead-resort.jpg",
+      "title": "File:Homestead-8.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Homestead-8.jpg",
+      "verdict": "mismatch",
+      "reasons": [
+        "title or description names this resort",
+        "names The Omni Homestead Resort",
+        "camera 924.9 km away"
+      ],
+      "author": "The Ninjaneer",
+      "licence": "CC0",
+      "dbAttribution": "The Ninjaneer / CC0",
+      "dbCredit": null,
+      "denied": true
+    },
+    {
+      "slug": "labrador-mountain",
+      "name": "Labrador Mountain",
+      "state": "NY",
+      "object": "labrador-mountain.jpg",
+      "title": "File:Marble_Mountain_Ski_resort.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Marble_Mountain_Ski_resort.jpg",
+      "verdict": "mismatch",
+      "reasons": [
+        "only a category names this resort",
+        "mentions canada"
+      ],
+      "author": "DunDooey",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "DunDooey / CC BY-SA 4.0",
+      "dbCredit": null,
+      "denied": true
+    },
+    {
+      "slug": "mt-baldy",
+      "name": "Mt. Baldy Ski Resort",
+      "state": "CA",
+      "object": "mt-baldy.jpg",
+      "title": "File:On_a_high_slope_at_Mt._Baldy_Ski_Resort_in_British_Columbia,_Canada,_raw_and_ragged_mountain_stone_is_exposed_by_a_robust_wind.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:On_a_high_slope_at_Mt._Baldy_Ski_Resort_in_British_Columbia,_Canada,_raw_and_ragged_mountain_stone_is_exposed_by_a_robust_wind.jpg",
+      "verdict": "mismatch",
+      "reasons": [
+        "title or description names this resort",
+        "names Ragged Mountain",
+        "mentions british columbia"
+      ],
+      "author": "Brent Sisson",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "Brent Sisson / CC BY-SA 4.0",
+      "dbCredit": null,
+      "denied": true
+    },
+    {
+      "slug": "shawnee-peak",
+      "name": "Pleasant Mountain",
+      "state": "ME",
+      "object": "shawnee-peak.jpg",
+      "title": "File:Shawnee_Peak_Stevage.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Shawnee_Peak_Stevage.jpg",
+      "verdict": "mismatch",
+      "reasons": [
+        "only a category names this resort",
+        "names Shawnee Mountain Ski Area"
+      ],
+      "author": "Stevage",
+      "licence": "CC BY-SA 3.0",
+      "dbAttribution": "Stevage / CC BY-SA 3.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "silver-mountain",
+      "name": "Silver Mountain",
+      "state": "ID",
+      "object": "silver-mountain.jpg",
+      "title": "File:Aspen_Mountain_ski_area_aspen_trees_FIS_chair.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Aspen_Mountain_ski_area_aspen_trees_FIS_chair.jpg",
+      "verdict": "mismatch",
+      "reasons": [
+        "title or description names this resort",
+        "camera 1187.2 km away"
+      ],
+      "author": "Wolfgang Moroder",
+      "licence": "CC BY-SA 3.0",
+      "dbAttribution": "This Photo was taken by Wolfgang Moroder.  \n\nFeel free to use my photos, but ple / CC BY-SA 3.0",
+      "dbCredit": null,
+      "denied": true
+    },
+    {
+      "slug": "big-boulder",
+      "name": "Big Boulder",
+      "state": "PA",
+      "object": "big-boulder.jpg",
+      "title": "File:Skier_at_Big_White.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Skier_at_Big_White.jpg",
+      "verdict": "unclear",
+      "reasons": [],
+      "author": "Mikeh0303 at en.wikipedia",
+      "licence": "CC BY 2.5",
+      "dbAttribution": "Mikeh0303 at en.wikipedia / CC BY 2.5",
+      "dbCredit": null,
+      "denied": true
+    },
+    {
+      "slug": "palisades-tahoe",
+      "name": "Palisades Tahoe",
+      "state": "CA",
+      "object": "palisades-tahoe.jpg",
+      "title": "File:Squaw_Valley_Ski_Resort_(3142951947).jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Squaw_Valley_Ski_Resort_(3142951947).jpg",
+      "verdict": "unclear",
+      "reasons": [
+        "only a category names this resort"
+      ],
+      "author": "Rennett Stowe from USA",
+      "licence": "CC BY 2.0",
+      "dbAttribution": "Rennett Stowe from USA / CC BY 2.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "powderhouse-hill",
+      "name": "Powderhouse Hill",
+      "state": "ME",
+      "object": "powderhouse-hill.jpg",
+      "title": "File:Powderhousehilll.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Powderhousehilll.jpg",
+      "verdict": "unclear",
+      "reasons": [],
+      "author": "Bubblecuffer at English Wikipedia",
+      "licence": "CC BY-SA 3.0",
+      "dbAttribution": "Powderhouse Hill / CC BY-SA 3.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "ragged-mountain",
+      "name": "Ragged Mountain",
+      "state": "NH",
+      "object": "ragged-mountain.jpg",
+      "title": "File:Summit6pack-2002-0330c.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Summit6pack-2002-0330c.jpg",
+      "verdict": "unclear",
+      "reasons": [],
+      "author": "Jrclark at English Wikipedia",
+      "licence": "CC BY 3.0",
+      "dbAttribution": "CC BY 3.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "stratton-mountain",
+      "name": "Stratton Mountain",
+      "state": "VT",
+      "object": "stratton-mountain-a78ba3df.jpg",
+      "title": "File:Valley vista (3075768972).jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Valley_vista_(3075768972).jpg",
+      "verdict": "unclear",
+      "reasons": [
+        "only a category names this resort"
+      ],
+      "author": "Rudi Riet from Washington, DC, United States",
+      "licence": "CC BY-SA 2.0",
+      "dbAttribution": "Rudi Riet from Washington, DC, United States / CC BY-SA 2.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Valley_vista_(3075768972).jpg",
+      "denied": false
+    },
+    {
+      "slug": "sugarloaf",
+      "name": "Sugarloaf",
+      "state": "ME",
+      "object": "sugarloaf-40c04a59.jpg",
+      "title": "File:Sugarloaf10-07 003.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Sugarloaf10-07_003.jpg",
+      "verdict": "unclear",
+      "reasons": [
+        "only a category names this resort"
+      ],
+      "author": "Bubblecuffer",
+      "licence": "Public domain",
+      "dbAttribution": "Bubblecuffer / Public domain",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Sugarloaf10-07_003.jpg",
+      "denied": false
+    },
+    {
+      "slug": "the-omni-homestead-resort",
+      "name": "The Omni Homestead Resort",
+      "state": "VA",
+      "object": "the-omni-homestead-resort-a702cf7e.jpg",
+      "title": "File:The Homestead Resort in Winter.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:The_Homestead_Resort_in_Winter.jpg",
+      "verdict": "unclear",
+      "reasons": [],
+      "author": "The Ninjaneer",
+      "licence": "CC0",
+      "dbAttribution": "The Ninjaneer / CC0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:The_Homestead_Resort_in_Winter.jpg",
+      "denied": false
+    },
+    {
+      "slug": "winter-park",
+      "name": "Winter Park Resort",
+      "state": "CO",
+      "object": "winter-park-6c94fbe7.jpg",
+      "title": "File:Winter park base.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Winter_park_base.jpg",
+      "verdict": "unclear",
+      "reasons": [],
+      "author": "Cemeyer2",
+      "licence": "CC BY 3.0",
+      "dbAttribution": "Cemeyer2 / CC BY 3.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Winter_park_base.jpg",
+      "denied": false
+    },
+    {
+      "slug": "afton-alps",
+      "name": "Afton Alps",
+      "state": "MN",
+      "object": "afton-alps-dad7cbf7.jpg",
+      "title": "File:Afton Alps, January 2014, Highlands run from top.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Afton_Alps,_January_2014,_Highlands_run_from_top.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Collin Knopp-Schwyn",
+      "licence": "CC BY 4.0",
+      "dbAttribution": "Collin Knopp-Schwyn / CC BY 4.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Afton_Alps,_January_2014,_Highlands_run_from_top.jpg",
+      "denied": false
+    },
+    {
+      "slug": "alpine-meadows",
+      "name": "Alpine Meadows",
+      "state": "CA",
+      "object": "alpine-meadows-9499c72d.jpg",
+      "title": "File:Alpine Meadows - entrance to The Chute that Seldoms Slides.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Alpine_Meadows_-_entrance_to_The_Chute_that_Seldoms_Slides.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Tfcallahan1 at English Wikipedia",
+      "licence": "CC BY-SA 3.0",
+      "dbAttribution": "Tfcallahan1 at English Wikipedia / CC BY-SA 3.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Alpine_Meadows_-_entrance_to_The_Chute_that_Seldoms_Slides.jpg",
+      "denied": false
+    },
+    {
+      "slug": "alta",
+      "name": "Alta Ski Area",
+      "state": "UT",
+      "object": "alta.jpg",
+      "title": "File:Alta_Little_Cottonwood_Canyon.JPG",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Alta_Little_Cottonwood_Canyon.JPG",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "names Little Ski Hill",
+        "camera 0.8 km away"
+      ],
+      "author": "Baileypalblue",
+      "licence": "Public domain",
+      "dbAttribution": "Baileypalblue / Public domain",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "anthony-lakes",
+      "name": "Anthony Lakes Mountain Resort",
+      "state": "OR",
+      "object": "anthony-lakes.jpg",
+      "title": "File:AnthonyLakes.JPG",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:AnthonyLakes.JPG",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Snowsnapper",
+      "licence": "Public domain",
+      "dbAttribution": "Snowsnapper / Public domain",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "appalachian-ski-mountain",
+      "name": "Appalachian Ski Mountain",
+      "state": "NC",
+      "object": "appalachian-ski-mountain.jpg",
+      "title": "File:The_Appalachian.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:The_Appalachian.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "NHRHS2010",
+      "licence": "CC BY-SA 3.0",
+      "dbAttribution": "NHRHS2010 / CC BY-SA 3.0",
+      "dbCredit": null,
+      "denied": true
+    },
+    {
+      "slug": "arapahoe-basin",
+      "name": "Arapahoe Basin",
+      "state": "CO",
+      "object": "arapahoe-basin-31e1a1a1.jpg",
+      "title": "File:Arapahoe Basin Montezuma Bowl.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Arapahoe_Basin_Montezuma_Bowl.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "camera 2.2 km away"
+      ],
+      "author": "Runningonbrains",
+      "licence": "CC BY 4.0",
+      "dbAttribution": "Runningonbrains / CC BY 4.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Arapahoe_Basin_Montezuma_Bowl.jpg",
+      "denied": false
+    },
+    {
+      "slug": "arizona-snowbowl",
+      "name": "Arizona Snowbowl",
+      "state": "AZ",
+      "object": "arizona-snowbowl-e1dbf41b.jpg",
+      "title": "File:Snowbowl Skilift, 2008.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Snowbowl_Skilift,_2008.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Frederick Dennstedt from los angeles, usa",
+      "licence": "CC BY-SA 2.0",
+      "dbAttribution": "Frederick Dennstedt from los angeles, usa / CC BY-SA 2.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Snowbowl_Skilift,_2008.jpg",
+      "denied": false
+    },
+    {
+      "slug": "aspen-highlands",
+      "name": "Aspen Highlands",
+      "state": "CO",
+      "object": "aspen-highlands.jpg",
+      "title": "File:Aspen_Highlands_spring_skiing.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Aspen_Highlands_spring_skiing.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "names Spring Mountain",
+        "camera 3.7 km away"
+      ],
+      "author": "Wolfgang Moroder",
+      "licence": "CC BY-SA 3.0",
+      "dbAttribution": "This Photo was taken by Wolfgang Moroder.  \n\nFeel free to use my photos, but ple / CC BY-SA 3.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "aspen-mountain",
+      "name": "Aspen Mountain",
+      "state": "CO",
+      "object": "aspen-mountain-fb30c92b.jpg",
+      "title": "File:Aspen Mountain Silver Queen Gondola over Silver dip run.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Aspen_Mountain_Silver_Queen_Gondola_over_Silver_dip_run.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "names Silver Mountain",
+        "camera 2.7 km away"
+      ],
+      "author": "Wolfgang Moroder",
+      "licence": "CC BY-SA 3.0",
+      "dbAttribution": "Wolfgang Moroder / CC BY-SA 3.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Aspen_Mountain_Silver_Queen_Gondola_over_Silver_dip_run.jpg",
+      "denied": false
+    },
+    {
+      "slug": "bear-mountain",
+      "name": "Bear Mountain",
+      "state": "CA",
+      "object": "bear-mountain-2209c3c3.jpg",
+      "title": "File:Bear Mountain Early Season (4116150660) (2).jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Bear_Mountain_Early_Season_(4116150660)_(2).jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "camera 0.3 km away"
+      ],
+      "author": "John Murphy",
+      "licence": "CC BY-SA 2.0",
+      "dbAttribution": "John Murphy / CC BY-SA 2.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Bear_Mountain_Early_Season_(4116150660)_(2).jpg",
+      "denied": false
+    },
+    {
+      "slug": "bear-valley-mountain",
+      "name": "Bear Valley Mountain Resort",
+      "state": "CA",
+      "object": "bear-valley-mountain.jpg",
+      "title": "File:Ebbetts_Pass_Scenic_Byway_-_Downhill_Skiing_-_NARA_-_7718122.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Ebbetts_Pass_Scenic_Byway_-_Downhill_Skiing_-_NARA_-_7718122.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": null,
+      "licence": "Public domain",
+      "dbAttribution": "Unknown authorUnknown author or not provided / Public domain",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "beaver-creek",
+      "name": "Beaver Creek Resort",
+      "state": "CO",
+      "object": "beaver-creek.jpg",
+      "title": "File:Mount_Powell_from_Beaver_Creek_Ski_Resort.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Mount_Powell_from_Beaver_Creek_Ski_Resort.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "camera 1 km away"
+      ],
+      "author": "Joe Lin",
+      "licence": "CC BY 2.0",
+      "dbAttribution": "Joe Lin / CC BY 2.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "big-powderhorn-mountain",
+      "name": "Big Powderhorn Mountain",
+      "state": "MI",
+      "object": "big-powderhorn-mountain.jpg",
+      "title": "File:Big_Powderhorn_Mountain_-_view_from_Dynamite_Trail.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Big_Powderhorn_Mountain_-_view_from_Dynamite_Trail.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Jhansonxi",
+      "licence": "CC BY-SA 3.0",
+      "dbAttribution": "Jhansonxi / CC BY-SA 3.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "big-sky",
+      "name": "Big Sky Resort",
+      "state": "MT",
+      "object": "big-sky.jpg",
+      "title": "File:On_the_Lift_at_Big_Sky_Resort_-_panoramio.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:On_the_Lift_at_Big_Sky_Resort_-_panoramio.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "camera 1 km away"
+      ],
+      "author": "A-Reck",
+      "licence": "CC BY-SA 3.0",
+      "dbAttribution": "A-Reck / CC BY-SA 3.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "blacktail",
+      "name": "Blacktail Mountain Ski Area",
+      "state": "MT",
+      "object": "blacktail.jpg",
+      "title": "File:Blacktail_Mountain.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Blacktail_Mountain.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Katie Brady",
+      "licence": "CC BY-SA 2.0",
+      "dbAttribution": "Katie Brady / CC BY-SA 2.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "bogus-basin",
+      "name": "Bogus Basin",
+      "state": "ID",
+      "object": "bogus-basin.jpg",
+      "title": "File:Bogus_Basin_ski_area_(2017).jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Bogus_Basin_ski_area_(2017).jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "camera 0.5 km away"
+      ],
+      "author": "cifraser1",
+      "licence": "CC BY 2.0",
+      "dbAttribution": "cifraser1 / CC BY 2.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "bolton-valley",
+      "name": "Bolton Valley",
+      "state": "VT",
+      "object": "bolton-valley.jpg",
+      "title": "File:BoltonValleyLodge.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:BoltonValleyLodge.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Gopats92",
+      "licence": "Public domain",
+      "dbAttribution": "Gopats92 / Public domain",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "boreal-mountain-resort",
+      "name": "Boreal Mountain Resort",
+      "state": "CA",
+      "object": "boreal-mountain-resort.jpg",
+      "title": "File:Ski_lodge_in_Boreal.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Ski_lodge_in_Boreal.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Brocken Inaglory",
+      "licence": "CC BY-SA 3.0",
+      "dbAttribution": "Brocken Inaglory / CC BY-SA 3.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "bousquet-mountain",
+      "name": "Bousquet Mountain",
+      "state": "MA",
+      "object": "bousquet-mountain.jpg",
+      "title": "File:Bousquet_Ski_Area.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Bousquet_Ski_Area.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "camera 0.8 km away"
+      ],
+      "author": "P. S. F. Freitas",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "P. S. F. Freitas / CC BY-SA 4.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "boyne-mountain",
+      "name": "Boyne Mountain Resort",
+      "state": "MI",
+      "object": "boyne-mountain-5b50ccf3.jpg",
+      "title": "File:Boyne Mountain.JPG",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Boyne_Mountain.JPG",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "American Eagle",
+      "licence": "CC BY-SA 3.0",
+      "dbAttribution": "American Eagle / CC BY-SA 3.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Boyne_Mountain.JPG",
+      "denied": false
+    },
+    {
+      "slug": "breckenridge",
+      "name": "Breckenridge Ski Resort",
+      "state": "CO",
+      "object": "breckenridge.jpg",
+      "title": "File:Breckenridge_Ski_Resort_from_town.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Breckenridge_Ski_Resort_from_town.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Jasen Miller from Colorado Springs, USA",
+      "licence": "CC BY 2.0",
+      "dbAttribution": "Jasen Miller from Colorado Springs, USA / CC BY 2.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "bretton-woods",
+      "name": "Bretton Woods",
+      "state": "NH",
+      "object": "bretton-woods.jpg",
+      "title": "File:Bretton_Woods_Resort.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Bretton_Woods_Resort.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Storylanding",
+      "licence": "CC0",
+      "dbAttribution": "Storylanding / CC0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "brian-head",
+      "name": "Brian Head Resort",
+      "state": "UT",
+      "object": "brian-head-85de4591.jpg",
+      "title": "File:Brianhead - panoramio.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Brianhead_-_panoramio.jpg",
+      "verdict": "match",
+      "reasons": [
+        "only a category names this resort",
+        "camera 2.4 km away"
+      ],
+      "author": "Panaram \"Jade\"",
+      "licence": "CC BY-SA 3.0",
+      "dbAttribution": "Panaram \"Jade\" / CC BY-SA 3.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Brianhead_-_panoramio.jpg",
+      "denied": false
+    },
+    {
+      "slug": "bridger-bowl",
+      "name": "Bridger Bowl Ski Area",
+      "state": "MT",
+      "object": "bridger-bowl.jpg",
+      "title": "File:Bridger_Bowl.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Bridger_Bowl.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Richard Barley",
+      "licence": "CC BY 2.0",
+      "dbAttribution": "Richard Barley / CC BY 2.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "brighton",
+      "name": "Brighton Resort",
+      "state": "UT",
+      "object": "brighton.jpg",
+      "title": "File:Usa_Utah_Brighton_Peaks.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Usa_Utah_Brighton_Peaks.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Darkbowmen",
+      "licence": "CC BY-SA 2.5",
+      "dbAttribution": "CC BY-SA 2.5",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "bristol-mountain",
+      "name": "Bristol Mountain",
+      "state": "NY",
+      "object": "bristol-mountain.jpg",
+      "title": "File:Aerial_view_of_Bristol_Mountain_Ski_Resort_trails.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Aerial_view_of_Bristol_Mountain_Ski_Resort_trails.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "names Snow Trails"
+      ],
+      "author": "meg colombo from Finger Lakes, NY, USA",
+      "licence": "CC BY 2.0",
+      "dbAttribution": "meg colombo from Finger Lakes, NY, USA / CC BY 2.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "bromley-mountain",
+      "name": "Bromley Mountain",
+      "state": "VT",
+      "object": "bromley-mountain.jpg",
+      "title": "File:Bromley_Mountain_aerial.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Bromley_Mountain_aerial.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "camera 1.9 km away"
+      ],
+      "author": "Jared C. Benedict",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "Jared C. Benedict / CC BY-SA 4.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "burke-mountain",
+      "name": "Burke Mountain",
+      "state": "VT",
+      "object": "burke-mountain-355796c2.jpg",
+      "title": "File:Burke 3899w.JPG",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Burke_3899w.JPG",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Patrick McCaffrey",
+      "licence": "CC BY-SA 3.0",
+      "dbAttribution": "Patrick McCaffrey / CC BY-SA 3.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Burke_3899w.JPG",
+      "denied": false
+    },
+    {
+      "slug": "buttermilk",
+      "name": "Buttermilk",
+      "state": "CO",
+      "object": "buttermilk-3e225ed4.jpg",
+      "title": "File:Buttermilk in Winter.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Buttermilk_in_Winter.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Werdna",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "Werdna / CC BY-SA 4.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Buttermilk_in_Winter.jpg",
+      "denied": false
+    },
+    {
+      "slug": "camelback-mountain-resort",
+      "name": "Camelback Mountain Resort",
+      "state": "PA",
+      "object": "camelback-mountain-resort.jpg",
+      "title": "File:Camelback_Resort_in_Winter.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Camelback_Resort_in_Winter.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "EXIF month 9 (May-Oct)"
+      ],
+      "author": "Almondpiano",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "Almondpiano / CC BY-SA 4.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "cannon-mountain",
+      "name": "Cannon Mountain",
+      "state": "NH",
+      "object": "cannon-mountain.jpg",
+      "title": "File:Mt._Layfayette_from_Cannon_Mountain_Ski.JPG",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Mt._Layfayette_from_Cannon_Mountain_Ski.JPG",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Ericshawwhite",
+      "licence": "CC BY-SA 3.0",
+      "dbAttribution": "Ericshawwhite / CC BY-SA 3.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "cataloochee-ski-area",
+      "name": "Cataloochee Ski Area",
+      "state": "NC",
+      "object": "cataloochee-ski-area.jpg",
+      "title": "File:Catchaira.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Catchaira.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Tamparitus",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "Tamparitus / CC BY-SA 4.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "cooper-spur-area",
+      "name": "Cooper Spur Ski Area",
+      "state": "OR",
+      "object": "cooper-spur-area.jpg",
+      "title": "File:CooperSpur.JPG",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:CooperSpur.JPG",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Snowsnapper",
+      "licence": "Public domain",
+      "dbAttribution": "Snowsnapper / Public domain",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "copper-mountain",
+      "name": "Copper Mountain",
+      "state": "CO",
+      "object": "copper-mountain.jpg",
+      "title": "File:Copper_Mountain_-_4419380965.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Copper_Mountain_-_4419380965.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "SparkFunElectronics",
+      "licence": "CC BY 2.0",
+      "dbAttribution": "SparkFunElectronics / CC BY 2.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "crested-butte",
+      "name": "Crested Butte Mountain Resort",
+      "state": "CO",
+      "object": "crested-butte.jpg",
+      "title": "File:Silver_Queen_Chair,_CBMR.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Silver_Queen_Chair,_CBMR.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "names Silver Mountain"
+      ],
+      "author": "Peter from Wellesley",
+      "licence": "CC BY 2.0",
+      "dbAttribution": "Peter from Wellesley / CC BY 2.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "crotched-mountain",
+      "name": "Crotched Mountain",
+      "state": "NH",
+      "object": "crotched-mountain.jpg",
+      "title": "File:Crotched_Mountain_NH.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Crotched_Mountain_NH.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "names Snow Summit",
+        "names Summit Ski Area"
+      ],
+      "author": "Pretzel4",
+      "licence": "CC0",
+      "dbAttribution": "Pretzel4 / CC0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "crystal-mountain",
+      "name": "Crystal Mountain",
+      "state": "WA",
+      "object": "crystal-mountain.jpg",
+      "title": "File:Crystal_Mountain_WA.JPG",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Crystal_Mountain_WA.JPG",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "ZhengZhou",
+      "licence": "CC BY-SA 3.0",
+      "dbAttribution": "ZhengZhou / CC BY-SA 3.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "crystal-mountain-mi",
+      "name": "Crystal Mountain (MI)",
+      "state": "MI",
+      "object": "crystal-mountain-mi.jpg",
+      "title": "File:Crystal_Mountain_-_Cheers_Chair.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Crystal_Mountain_-_Cheers_Chair.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "names Snow Trails"
+      ],
+      "author": "Jhansonxi",
+      "licence": "CC BY-SA 3.0",
+      "dbAttribution": "Jhansonxi / CC BY-SA 3.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "cuchara",
+      "name": "Cuchara",
+      "state": "CO",
+      "object": "cuchara-bbc83f50.jpg",
+      "title": "File:Skiers at Cuchara Mountain Park.JPG",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Skiers_at_Cuchara_Mountain_Park.JPG",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "names Cannon Mountain",
+        "camera 0.4 km away"
+      ],
+      "author": "Jeffrey Beall",
+      "licence": "CC BY 4.0",
+      "dbAttribution": "Jeffrey Beall / CC BY 4.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Skiers_at_Cuchara_Mountain_Park.JPG",
+      "denied": false
+    },
+    {
+      "slug": "deer-valley",
+      "name": "Deer Valley Resort",
+      "state": "UT",
+      "object": "deer-valley-5ef4671e.jpg",
+      "title": "File:Skiing at Deer Valley Utah photo Ramey Logan.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Skiing_at_Deer_Valley_Utah_photo_Ramey_Logan.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Don Ramey Logan",
+      "licence": "CC BY 4.0",
+      "dbAttribution": "Don Ramey Logan / CC BY 4.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Skiing_at_Deer_Valley_Utah_photo_Ramey_Logan.jpg",
+      "denied": false
+    },
+    {
+      "slug": "eaglecrest-ski-area",
+      "name": "Eaglecrest Ski Area",
+      "state": "AK",
+      "object": "eaglecrest-ski-area.jpg",
+      "title": "File:Eaglecrest_Ski_Area,_untracked_snow.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Eaglecrest_Ski_Area,_untracked_snow.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "camera 10.5 km away"
+      ],
+      "author": "Jsayre64",
+      "licence": "CC BY-SA 3.0",
+      "dbAttribution": "Jsayre64 / CC BY-SA 3.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "eldora",
+      "name": "Eldora Mountain Resort",
+      "state": "CO",
+      "object": "eldora-f708fe55.jpg",
+      "title": "File:Eldora Mountain Ski Resort at Top of International.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Eldora_Mountain_Ski_Resort_at_Top_of_International.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "camera 0.5 km away"
+      ],
+      "author": "KamenG",
+      "licence": "CC BY-SA 3.0",
+      "dbAttribution": "KamenG / CC BY-SA 3.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Eldora_Mountain_Ski_Resort_at_Top_of_International.jpg",
+      "denied": false
+    },
+    {
+      "slug": "ferguson-ridge",
+      "name": "Ferguson Ridge Ski Area",
+      "state": "OR",
+      "object": "ferguson-ridge-1460a04e.jpg",
+      "title": "File:Ferguson ridge ski area.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Ferguson_ridge_ski_area.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Buckjoe",
+      "licence": "CC BY-SA 3.0",
+      "dbAttribution": "Buckjoe / CC BY-SA 3.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Ferguson_ridge_ski_area.jpg",
+      "denied": false
+    },
+    {
+      "slug": "gore-mountain",
+      "name": "Gore Mountain",
+      "state": "NY",
+      "object": "gore-mountain.jpg",
+      "title": "File:Ski_003.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Ski_003.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "names Snow Summit",
+        "names Summit Ski Area"
+      ],
+      "author": "Ian Taylor Iant333",
+      "licence": "Public domain",
+      "dbAttribution": "Ian Taylor Iant333 / Public domain",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "grand-targhee",
+      "name": "Grand Targhee Resort",
+      "state": "WY",
+      "object": "grand-targhee.jpg",
+      "title": "File:Grand_Targhee_Ski_Resort,_February_2021.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Grand_Targhee_Ski_Resort,_February_2021.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Richardmouser",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "Richardmouser / CC BY-SA 4.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "granite-peak",
+      "name": "Granite Peak Ski Area",
+      "state": "WI",
+      "object": "granite-peak.jpg",
+      "title": "File:Granite_Peak_Ski_Area.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Granite_Peak_Ski_Area.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Connie Ma from United States of America",
+      "licence": "CC BY-SA 2.0",
+      "dbAttribution": "Connie Ma from United States of America / CC BY-SA 2.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "greek-peak",
+      "name": "Greek Peak",
+      "state": "NY",
+      "object": "greek-peak.jpg",
+      "title": "File:Greek_Peak_Ski_Resort_2026.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Greek_Peak_Ski_Resort_2026.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Douglas Camin",
+      "licence": "CC0",
+      "dbAttribution": "Douglas Camin / CC0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "heavenly-mountain-resort",
+      "name": "Heavenly Mountain Resort",
+      "state": "CA",
+      "object": "heavenly-mountain-resort.jpg",
+      "title": "File:Welcome_to_California_sign,_Heavenly_resort,_Lake_Tahoe.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Welcome_to_California_sign,_Heavenly_resort,_Lake_Tahoe.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "JMatazzoni (WMF)",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "JMatazzoni (WMF) / CC BY-SA 4.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "holiday-mountain",
+      "name": "Holiday Mountain",
+      "state": "NY",
+      "object": "holiday-mountain.jpg",
+      "title": "File:Holiday_Mountain_Ski_Monticello_Catskills.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Holiday_Mountain_Ski_Monticello_Catskills.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "EgorovaSvetlana",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "EgorovaSvetlana / CC BY-SA 4.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "homewood-mountain-resort",
+      "name": "Homewood Mountain Resort",
+      "state": "CA",
+      "object": "homewood-mountain-resort.jpg",
+      "title": "File:Lake_Tahoe_in_winter_seen_from_Homewood,_California.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Lake_Tahoe_in_winter_seen_from_Homewood,_California.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "User:JGonera (WMF)",
+      "licence": "CC BY-SA 3.0",
+      "dbAttribution": "User:JGonera (WMF) / CC BY-SA 3.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "hoodoo",
+      "name": "Hoodoo",
+      "state": "OR",
+      "object": "hoodoo.jpg",
+      "title": "File:Hoodoo-Ski-Area-Central-Oregon-Resort-Lodge.JPG",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Hoodoo-Ski-Area-Central-Oregon-Resort-Lodge.JPG",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "camera 0.2 km away"
+      ],
+      "author": "SkiHoodoo",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "SkiHoodoo / CC BY-SA 4.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "howelsen-hill",
+      "name": "Howelsen Hill Ski Area",
+      "state": "CO",
+      "object": "howelsen-hill.jpg",
+      "title": "File:Howelsen_Hill_01.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Howelsen_Hill_01.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "sherrymain from USA",
+      "licence": "CC BY-SA 2.0",
+      "dbAttribution": "sherrymain from USA / CC BY-SA 2.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "hunter-mountain",
+      "name": "Hunter Mountain",
+      "state": "NY",
+      "object": "hunter-mountain.jpg",
+      "title": "File:Hunter_Mountain_ski_area.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Hunter_Mountain_ski_area.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Ryssby at the English-language Wikipedia",
+      "licence": "CC BY-SA 3.0",
+      "dbAttribution": "Ryssby at English Wikipedia (Robert Swanson) / CC BY-SA 3.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "indianhead-mountain",
+      "name": "Indianhead Mountain",
+      "state": "MI",
+      "object": "indianhead-mountain.jpg",
+      "title": "File:Indianhead-skilift-1.JPG",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Indianhead-skilift-1.JPG",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Rickdrew at English Wikipedia",
+      "licence": "CC BY 3.0",
+      "dbAttribution": "Rickdrew at English Wikipedia / CC BY 3.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "jack-frost-mountain",
+      "name": "Jack Frost Mountain",
+      "state": "PA",
+      "object": "jack-frost-mountain-5b6154ef.jpg",
+      "title": "File:JackFrost2.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:JackFrost2.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "camera 0.4 km away"
+      ],
+      "author": "Booedhappied",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "Booedhappied / CC BY-SA 4.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:JackFrost2.jpg",
+      "denied": false
+    },
+    {
+      "slug": "jackson-hole",
+      "name": "Jackson Hole Mountain Resort",
+      "state": "WY",
+      "object": "jackson-hole.jpg",
+      "title": "File:Corbet's_Couloir_jackson_hole.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Corbet%27s_Couloir_jackson_hole.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Enricokamasa",
+      "licence": "Public domain",
+      "dbAttribution": "Wikimedia Commons",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "jay-peak",
+      "name": "Jay Peak",
+      "state": "VT",
+      "object": "jay-peak.jpg",
+      "title": "File:Jay_Peak.JPG",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Jay_Peak.JPG",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Hanumanix at English Wikipedia",
+      "licence": "Public domain",
+      "dbAttribution": "Hanumanix at English Wikipedia / Public domain",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "june-mountain",
+      "name": "June Mountain",
+      "state": "CA",
+      "object": "june-mountain.jpg",
+      "title": "File:June_Mountain_skiing.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:June_Mountain_skiing.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Eric T Gunther",
+      "licence": "CC BY-SA 3.0",
+      "dbAttribution": "Eric T Gunther / CC BY-SA 3.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "keystone",
+      "name": "Keystone Resort",
+      "state": "CO",
+      "object": "keystone.jpg",
+      "title": "File:Breckenridge_Ski_Resort.JPG",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Breckenridge_Ski_Resort.JPG",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "names Arapahoe Basin",
+        "names Breckenridge Ski Resort"
+      ],
+      "author": "Davepark",
+      "licence": "CC BY-SA 3.0",
+      "dbAttribution": "Davepark / CC BY-SA 3.0",
+      "dbCredit": null,
+      "denied": true
+    },
+    {
+      "slug": "killington",
+      "name": "Killington",
+      "state": "VT",
+      "object": "killington.jpg",
+      "title": "File:Express_gondola_K-1_Killington_Ski_Area.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Express_gondola_K-1_Killington_Ski_Area.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "EgorovaSvetlana",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "Wikimedia Commons",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "kirkwood-mountain-resort",
+      "name": "Kirkwood Mountain Resort",
+      "state": "CA",
+      "object": "kirkwood-mountain-resort.jpg",
+      "title": "File:Great_Pow_Line_near_Kirkwood_Hwy_88_california_-_panoramio.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Great_Pow_Line_near_Kirkwood_Hwy_88_california_-_panoramio.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "camera 2.4 km away"
+      ],
+      "author": "skeight976",
+      "licence": "CC BY 3.0",
+      "dbAttribution": "skeight976 / CC BY 3.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "laurel-mountain",
+      "name": "Laurel Mountain",
+      "state": "PA",
+      "object": "laurel-mountain-310da3db.jpg",
+      "title": "File:Laurel Mountain Views.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Laurel_Mountain_Views.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "LValleyGirl26",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "LValleyGirl26 / CC BY-SA 4.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Laurel_Mountain_Views.jpg",
+      "denied": false
+    },
+    {
+      "slug": "liberty-mountain",
+      "name": "Liberty Mountain",
+      "state": "PA",
+      "object": "liberty-mountain.jpg",
+      "title": "File:Liberty_Mountain_Resort_front.JPG",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Liberty_Mountain_Resort_front.JPG",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "names Alpine Valley Ski Area (MI)",
+        "names Alpine Valley Ski Area (OH)",
+        "names Alpine Valley Resort (WI)",
+        "camera 6 km away"
+      ],
+      "author": "Baileypalblue",
+      "licence": "Public domain",
+      "dbAttribution": "Baileypalblue / Public domain",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "loup-loup",
+      "name": "Loup Loup Ski Bowl",
+      "state": "WA",
+      "object": "loup-loup-b454b182.jpg",
+      "title": "File:Loup Loup Ski Bowl (5 February 2025) 3.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Loup_Loup_Ski_Bowl_(5_February_2025)_3.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "camera 2.8 km away"
+      ],
+      "author": "Buidhe",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "Buidhe / CC BY-SA 4.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Loup_Loup_Ski_Bowl_(5_February_2025)_3.jpg",
+      "denied": false
+    },
+    {
+      "slug": "loveland",
+      "name": "Loveland Ski Area",
+      "state": "CO",
+      "object": "loveland-282ba378.jpg",
+      "title": "File:Loveland.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Loveland.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "DebateLord at English Wikipedia",
+      "licence": "Public domain",
+      "dbAttribution": "DebateLord at English Wikipedia / Public domain",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Loveland.jpg",
+      "denied": false
+    },
+    {
+      "slug": "lutsen-mountains",
+      "name": "Lutsen Mountains",
+      "state": "MN",
+      "object": "lutsen-mountains.jpg",
+      "title": "File:Lutsen_Mountains_Ski_Hill,_Minnesota_in_Winter_(46676752794).jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Lutsen_Mountains_Ski_Hill,_Minnesota_in_Winter_(46676752794).jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "camera 1.2 km away"
+      ],
+      "author": "Tony Webster from Minneapolis, Minnesota, United States",
+      "licence": "CC BY 2.0",
+      "dbAttribution": "Wikimedia Commons",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "mad-river-glen",
+      "name": "Mad River Glen",
+      "state": "VT",
+      "object": "mad-river-glen.jpg",
+      "title": "File:Mad_River_Glen,_single_chair-2005-0118a.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Mad_River_Glen,_single_chair-2005-0118a.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "camera 0.4 km away"
+      ],
+      "author": "Jrclark at English Wikipedia",
+      "licence": "CC BY-SA 3.0",
+      "dbAttribution": "Jrclark (talk) / CC BY-SA 3.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "magic-mountain",
+      "name": "Magic Mountain",
+      "state": "VT",
+      "object": "magic-mountain.jpg",
+      "title": "File:Magic_Mountain_aerial.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Magic_Mountain_aerial.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "camera 1.7 km away"
+      ],
+      "author": "Jared C. Benedict",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "Jared C. Benedict / CC BY-SA 4.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "mammoth-mountain",
+      "name": "Mammoth Mountain Ski Area",
+      "state": "CA",
+      "object": "mammoth-mountain.jpg",
+      "title": "File:Mammoth_Mountain_Eagle_Express.JPG",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Mammoth_Mountain_Eagle_Express.JPG",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Karissa Kunihira",
+      "licence": "CC BY 3.0",
+      "dbAttribution": "Karissa Kunihira / CC BY 3.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "marquette-mountain",
+      "name": "Marquette Mountain",
+      "state": "MI",
+      "object": "marquette-mountain.jpg",
+      "title": "File:Marquette-ski1.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Marquette-ski1.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Rickdrew at English Wikipedia",
+      "licence": "CC BY-SA 3.0",
+      "dbAttribution": "Rickdrew at English Wikipedia / CC BY-SA 3.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "mission-ridge",
+      "name": "Mission Ridge Ski & Board Resort",
+      "state": "WA",
+      "object": "mission-ridge-c7939be4.jpg",
+      "title": "File:Mission Ridge Ski Area in April (81010).jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Mission_Ridge_Ski_Area_in_April_(81010).jpg",
+      "verdict": "match",
+      "reasons": [
+        "camera 0.5 km away"
+      ],
+      "author": "Buidhe",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "Buidhe / CC BY-SA 4.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Mission_Ridge_Ski_Area_in_April_(81010).jpg",
+      "denied": false
+    },
+    {
+      "slug": "mohawk-mountain-ski-area",
+      "name": "Mohawk Mountain Ski Area",
+      "state": "CT",
+      "object": "mohawk-mountain-ski-area.jpg",
+      "title": "File:MohawkMountain.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:MohawkMountain.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "camera 0.2 km away"
+      ],
+      "author": "Jrclark at English Wikipedia",
+      "licence": "CC BY-SA 3.0",
+      "dbAttribution": "Jrclark (talk) / CC BY-SA 3.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "monarch-mountain",
+      "name": "Monarch Mountain",
+      "state": "CO",
+      "object": "monarch-mountain.jpg",
+      "title": "File:Monarch_Ski_Resort.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Monarch_Ski_Resort.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "EpicV27",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "EpicV27 / CC BY-SA 4.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "mont-ripley",
+      "name": "Mont Ripley",
+      "state": "MI",
+      "object": "mont-ripley.jpg",
+      "title": "File:Mont_Ripley_in_Winter.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Mont_Ripley_in_Winter.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Chris857",
+      "licence": "CC BY-SA 3.0",
+      "dbAttribution": "Chris857 / CC BY-SA 3.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "montage-mountain",
+      "name": "Montage Mountain",
+      "state": "PA",
+      "object": "montage-mountain.jpg",
+      "title": "File:Montage.mountain.ski.1.JPG",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Montage.mountain.ski.1.JPG",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Ekem",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "Ekem / CC BY-SA 4.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "montana-snowbowl",
+      "name": "Montana Snowbowl",
+      "state": "MT",
+      "object": "montana-snowbowl.jpg",
+      "title": "File:Snowbowl's_Bowl.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Snowbowl%27s_Bowl.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Evan Lovely",
+      "licence": "CC BY-SA 2.0",
+      "dbAttribution": "Evan Lovely / CC BY-SA 2.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "mount-snow",
+      "name": "Mount Snow",
+      "state": "VT",
+      "object": "mount-snow.jpg",
+      "title": "File:Freefall_(3256829416).jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Freefall_(3256829416).jpg",
+      "verdict": "match",
+      "reasons": [
+        "camera 0.2 km away"
+      ],
+      "author": "William J Sisti from Morristown, NJ, USA",
+      "licence": "CC BY-SA 2.0",
+      "dbAttribution": "William J Sisti from Morristown, NJ, USA / CC BY-SA 2.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "mount-southington",
+      "name": "Mount Southington Ski Area",
+      "state": "CT",
+      "object": "mount-southington-c37f0fa9.jpg",
+      "title": "File:Mount Southington Ski Area at night.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Mount_Southington_Ski_Area_at_night.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "names Snow Trails",
+        "camera 0.1 km away"
+      ],
+      "author": "Morrowlong",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "Morrowlong / CC BY-SA 4.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Mount_Southington_Ski_Area_at_night.jpg",
+      "denied": false
+    },
+    {
+      "slug": "mountain-creek",
+      "name": "Mountain Creek",
+      "state": "NJ",
+      "object": "mountain-creek-4dc637c8.jpg",
+      "title": "File:The Appalachian.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:The_Appalachian.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "names Appalachian Ski Mountain"
+      ],
+      "author": "NHRHS2010",
+      "licence": "CC BY-SA 3.0",
+      "dbAttribution": "NHRHS2010 / CC BY-SA 3.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:The_Appalachian.jpg",
+      "denied": false
+    },
+    {
+      "slug": "mountain-high",
+      "name": "Mountain High",
+      "state": "CA",
+      "object": "mountain-high-0db2d6a5.jpg",
+      "title": "File:Mountain High.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Mountain_High.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Mike Gonzalez (TheCoffee)",
+      "licence": "CC BY-SA 3.0",
+      "dbAttribution": "Mike Gonzalez (TheCoffee) / CC BY-SA 3.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Mountain_High.jpg",
+      "denied": false
+    },
+    {
+      "slug": "mt-bachelor",
+      "name": "Mt. Bachelor",
+      "state": "OR",
+      "object": "mt-bachelor-a3b35232.jpg",
+      "title": "File:Mt. Bachelor, Oregon, early morning - Flickr - Bonnie Moreland (free images).jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Mt._Bachelor,_Oregon,_early_morning_-_Flickr_-_Bonnie_Moreland_(free_images).jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "names Cascade Mountain",
+        "names Snow Summit",
+        "names Summit Ski Area",
+        "camera 0.1 km away"
+      ],
+      "author": "Bonnie Moreland from Oregon, United States",
+      "licence": "Public domain",
+      "dbAttribution": "Bonnie Moreland from Oregon, United States / Public domain",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Mt._Bachelor,_Oregon,_early_morning_-_Flickr_-_Bonnie_Moreland_(free_images).jpg",
+      "denied": false
+    },
+    {
+      "slug": "mt-baker-ski-area",
+      "name": "Mt. Baker Ski Area",
+      "state": "WA",
+      "object": "mt-baker-ski-area-cee7b53f.jpg",
+      "title": "File:Mt Baker Ski Area Chair 5 and Gabl's run.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Mt_Baker_Ski_Area_Chair_5_and_Gabl%27s_run.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "names Diamond Peak",
+        "camera 1.3 km away"
+      ],
+      "author": "SherpardH1239a",
+      "licence": "CC0",
+      "dbAttribution": "SherpardH1239a / CC0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Mt_Baker_Ski_Area_Chair_5_and_Gabl%27s_run.jpg",
+      "denied": false
+    },
+    {
+      "slug": "mt-brighton",
+      "name": "Mt. Brighton",
+      "state": "MI",
+      "object": "mt-brighton.jpg",
+      "title": "File:Mt._Brighton_Ski_Hill.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Mt._Brighton_Ski_Hill.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Codepro at English Wikipedia",
+      "licence": "CC BY-SA 2.5",
+      "dbAttribution": "Codepro at English Wikipedia / CC BY-SA 2.5",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "mt-eyak",
+      "name": "Mt Eyak",
+      "state": "AK",
+      "object": "mt-eyak.jpg",
+      "title": "File:Mt_Eyak.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Mt_Eyak.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Troy Tirrell",
+      "licence": "Attribution",
+      "dbAttribution": "Troy Tirrell / Attribution",
+      "dbCredit": null,
+      "denied": true
+    },
+    {
+      "slug": "mt-la-crosse",
+      "name": "Mt La Crosse",
+      "state": "WI",
+      "object": "mt-la-crosse.jpg",
+      "title": "File:Mt._La_Crosse.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Mt._La_Crosse.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "camera 0.6 km away"
+      ],
+      "author": "Wikideas1",
+      "licence": "CC0",
+      "dbAttribution": "Wikideas1 / CC0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "mt-lemmon-ski-valley",
+      "name": "Mt. Lemmon Ski Valley",
+      "state": "AZ",
+      "object": "mt-lemmon-ski-valley-02162d4c.jpg",
+      "title": "File:Mount Lemmon Ski Valley.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Mount_Lemmon_Ski_Valley.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Philcomanforterie",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "Philcomanforterie / CC BY-SA 4.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Mount_Lemmon_Ski_Valley.jpg",
+      "denied": false
+    },
+    {
+      "slug": "mt-rose-ski-tahoe",
+      "name": "Mt. Rose Ski Tahoe",
+      "state": "NV",
+      "object": "mt-rose-ski-tahoe-47ab000a.jpg",
+      "title": "File:Mount Rose Ski Tahoe - panoramio.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Mount_Rose_Ski_Tahoe_-_panoramio.jpg",
+      "verdict": "match",
+      "reasons": [
+        "camera 0.5 km away"
+      ],
+      "author": "Patrick Nouhailler's…",
+      "licence": "CC BY-SA 3.0",
+      "dbAttribution": "Patrick Nouhailler's… / CC BY-SA 3.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Mount_Rose_Ski_Tahoe_-_panoramio.jpg",
+      "denied": false
+    },
+    {
+      "slug": "mt-shasta-ski-park",
+      "name": "Mt. Shasta Ski Park",
+      "state": "CA",
+      "object": "mt-shasta-ski-park.jpg",
+      "title": "File:Mt_shasta_ski_park.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Mt_shasta_ski_park.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Digitalskipark",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "Digitalskipark / CC BY-SA 4.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "mt-spokane",
+      "name": "Mt. Spokane Ski and Snowboard Park",
+      "state": "WA",
+      "object": "mt-spokane-3a2228e9.jpg",
+      "title": "File:Inversion (39556027941).jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Inversion_(39556027941).jpg",
+      "verdict": "match",
+      "reasons": [
+        "camera 0.9 km away"
+      ],
+      "author": "John Holm from Leadville, CO, USA",
+      "licence": "CC BY 2.0",
+      "dbAttribution": "John Holm from Leadville, CO, USA / CC BY 2.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Inversion_(39556027941).jpg",
+      "denied": false
+    },
+    {
+      "slug": "nashoba-valley-ski-area",
+      "name": "Nashoba Valley Ski Area",
+      "state": "MA",
+      "object": "nashoba-valley-ski-area.jpg",
+      "title": "File:Nashoba_Valley_Ski_Area,_Westford_MA.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Nashoba_Valley_Ski_Area,_Westford_MA.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "John Phelan",
+      "licence": "CC BY-SA 3.0",
+      "dbAttribution": "John Phelan / CC BY-SA 3.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "northeast-slopes",
+      "name": "Northeast Slopes",
+      "state": "VT",
+      "object": "northeast-slopes.jpg",
+      "title": "File:Northeast_slopes_ski_area_aerial.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Northeast_slopes_ski_area_aerial.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "camera 13.7 km away"
+      ],
+      "author": "Redjar",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "Redjar / CC BY-SA 4.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "northstar-california",
+      "name": "Northstar California",
+      "state": "CA",
+      "object": "northstar-california.jpg",
+      "title": "File:Northstar_California_East_Ridge_2019.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Northstar_California_East_Ridge_2019.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "names Snow Summit",
+        "names Summit Ski Area",
+        "camera 4 km away"
+      ],
+      "author": "Leijurv",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "Leijurv / CC BY-SA 4.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "nubs-nob",
+      "name": "Nub's Nob",
+      "state": "MI",
+      "object": "nubs-nob.jpg",
+      "title": "File:NubsNob.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:NubsNob.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Mr Swordfish2",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "Mr Swordfish2 / CC BY-SA 4.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "okemo-mountain-resort",
+      "name": "Okemo Mountain Resort",
+      "state": "VT",
+      "object": "okemo-mountain-resort.jpg",
+      "title": "File:Okemo-2005-0316a.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Okemo-2005-0316a.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Jrclark at English Wikipedia",
+      "licence": "CC BY-SA 3.0",
+      "dbAttribution": "Jrclark (talk) / CC BY-SA 3.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "otis-ridge",
+      "name": "Otis Ridge",
+      "state": "MA",
+      "object": "otis-ridge-fa515bcb.jpg",
+      "title": "File:Evening at Otis Ridge.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Evening_at_Otis_Ridge.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "MConradWard",
+      "licence": "CC0",
+      "dbAttribution": "MConradWard / CC0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Evening_at_Otis_Ridge.jpg",
+      "denied": false
+    },
+    {
+      "slug": "park-city",
+      "name": "Park City Mountain Resort",
+      "state": "UT",
+      "object": "park-city.jpg",
+      "title": "File:Eagle_Race_Arena_at_Park_City_Resort.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Eagle_Race_Arena_at_Park_City_Resort.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "camera 0.4 km away"
+      ],
+      "author": "Rudi Riet from Washington, DC, United States",
+      "licence": "CC BY-SA 2.0",
+      "dbAttribution": "Rudi Riet from Washington, DC, United States / CC BY-SA 2.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "perfect-north",
+      "name": "Perfect North Slopes",
+      "state": "IN",
+      "object": "perfect-north.jpg",
+      "title": "File:Perfect_North_Slopes-_III_(3245557441).jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Perfect_North_Slopes-_III_(3245557441).jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "camera 4.7 km away"
+      ],
+      "author": "Serge Melki",
+      "licence": "CC BY 2.0",
+      "dbAttribution": "Serge Melki / CC BY 2.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "plattekill-mountain",
+      "name": "Plattekill Mountain",
+      "state": "NY",
+      "object": "plattekill-mountain.jpg",
+      "title": "File:Fullsizeoutput_41a.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Fullsizeoutput_41a.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Rosst7200",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "Rosst7200 / CC BY-SA 4.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "powder-mountain",
+      "name": "Powder Mountain",
+      "state": "UT",
+      "object": "powder-mountain.jpg",
+      "title": "File:Powder_Mountain_Paradise_Lift.JPG",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Powder_Mountain_Paradise_Lift.JPG",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "camera 1.4 km away"
+      ],
+      "author": "Baileypalblue",
+      "licence": "Public domain",
+      "dbAttribution": "Baileypalblue / Public domain",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "powder-ridge-mountain-park",
+      "name": "Powder Ridge Mountain Park & Resort",
+      "state": "CT",
+      "object": "powder-ridge-mountain-park.jpg",
+      "title": "File:Powder_Ridge_Park._Looking_down_the_Middlefield_slope.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Powder_Ridge_Park._Looking_down_the_Middlefield_slope.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "camera 2.7 km away"
+      ],
+      "author": "Morrowlong",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "Morrowlong / CC BY-SA 4.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "red-lodge",
+      "name": "Red Lodge Mountain",
+      "state": "MT",
+      "object": "red-lodge.jpg",
+      "title": "File:Red_Lodge_Palisades.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Red_Lodge_Palisades.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Elkman",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "Elkman / CC BY-SA 4.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "roundtop-mountain-resort",
+      "name": "Roundtop Mountain Resort",
+      "state": "PA",
+      "object": "roundtop-mountain-resort-18aeb5a7.jpg",
+      "title": "File:2008 03 02 - Ski Roundtop 2.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:2008_03_02_-_Ski_Roundtop_2.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "camera 2.7 km away"
+      ],
+      "author": "Andrew Bossi",
+      "licence": "CC BY-SA 2.5",
+      "dbAttribution": "Andrew Bossi / CC BY-SA 2.5",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:2008_03_02_-_Ski_Roundtop_2.jpg",
+      "denied": false
+    },
+    {
+      "slug": "saddleback",
+      "name": "Saddleback",
+      "state": "ME",
+      "object": "saddleback.jpg",
+      "title": "File:Saddleback_2009_Kennebago_Top_Terminal.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Saddleback_2009_Kennebago_Top_Terminal.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Bubblecuffer",
+      "licence": "Public domain",
+      "dbAttribution": "Bubblecuffer / Public domain",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "saskadena-six-area",
+      "name": "Saskadena Six Ski Area",
+      "state": "VT",
+      "object": "saskadena-six-area-786273e9.jpg",
+      "title": "File:Suicide Six ski resort aerial.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Suicide_Six_ski_resort_aerial.jpg",
+      "verdict": "match",
+      "reasons": [
+        "camera 0.3 km away"
+      ],
+      "author": "Jared C. Benedict",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "Jared C. Benedict / CC BY-SA 4.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Suicide_Six_ski_resort_aerial.jpg",
+      "denied": false
+    },
+    {
+      "slug": "seven-springs",
+      "name": "Seven Springs Mountain Resort",
+      "state": "PA",
+      "object": "seven-springs-64e01c33.jpg",
+      "title": "File:Drone Shot.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Drone_Shot.jpg",
+      "verdict": "match",
+      "reasons": [
+        "only a category names this resort",
+        "camera 0.9 km away"
+      ],
+      "author": "LValleyGirl26",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "LValleyGirl26 / CC BY-SA 4.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Drone_Shot.jpg",
+      "denied": false
+    },
+    {
+      "slug": "shawnee-mountain",
+      "name": "Shawnee Mountain Ski Area",
+      "state": "PA",
+      "object": "shawnee-mountain.jpg",
+      "title": "File:Partek_Ski_Lift_at_Shawnee_Mountain,_PA.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Partek_Ski_Lift_at_Shawnee_Mountain,_PA.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Trolley8",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "Trolley8 / CC BY-SA 4.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "sierra-at-tahoe",
+      "name": "Sierra-at-Tahoe",
+      "state": "CA",
+      "object": "sierra-at-tahoe-12138e01.jpg",
+      "title": "File:Sierra-at-Tahoe 2.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Sierra-at-Tahoe_2.jpg",
+      "verdict": "match",
+      "reasons": [
+        "camera 0.2 km away"
+      ],
+      "author": "LittleT889",
+      "licence": "CC BY 4.0",
+      "dbAttribution": "LittleT889 / CC BY 4.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Sierra-at-Tahoe_2.jpg",
+      "denied": false
+    },
+    {
+      "slug": "silverton-mountain",
+      "name": "Silverton Mountain",
+      "state": "CO",
+      "object": "silverton-mountain.jpg",
+      "title": "File:Dropping_In_Silverton_Mountain.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Dropping_In_Silverton_Mountain.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "names Little Ski Hill"
+      ],
+      "author": "Zach Dischner",
+      "licence": "CC BY 2.0",
+      "dbAttribution": "Zach Dischner / CC BY 2.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "ski-apache",
+      "name": "Ski Apache",
+      "state": "NM",
+      "object": "ski-apache.jpg",
+      "title": "File:The_Slopes_at_Ski_Apache_(49630170923).jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:The_Slopes_at_Ski_Apache_(49630170923).jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Jonathan Cutrer from San Angelo, Texas, United States",
+      "licence": "CC BY 2.0",
+      "dbAttribution": "Jonathan Cutrer from San Angelo, Texas, United States / CC BY 2.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "ski-butternut",
+      "name": "Ski Butternut",
+      "state": "MA",
+      "object": "ski-butternut.jpg",
+      "title": "File:Butternut_Ski_Area_and_Tubing_Center_Great_Barrington.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Butternut_Ski_Area_and_Tubing_Center_Great_Barrington.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "EgorovaSvetlana",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "EgorovaSvetlana / CC BY-SA 4.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "ski-sundown",
+      "name": "Ski Sundown",
+      "state": "CT",
+      "object": "ski-sundown-e978ff18.jpg",
+      "title": "File:MountainView-WebsiteHomepage.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:MountainView-WebsiteHomepage.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Ski Sundown Ski Area",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "Ski Sundown Ski Area / CC BY-SA 4.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:MountainView-WebsiteHomepage.jpg",
+      "denied": false
+    },
+    {
+      "slug": "snow-summit",
+      "name": "Snow Summit",
+      "state": "CA",
+      "object": "snow-summit.jpg",
+      "title": "File:Snow_Summit_-_panoramio.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Snow_Summit_-_panoramio.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "camera 1.1 km away"
+      ],
+      "author": "kallahar",
+      "licence": "CC BY 3.0",
+      "dbAttribution": "kallahar / CC BY 3.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "snowbasin",
+      "name": "Snowbasin",
+      "state": "UT",
+      "object": "snowbasin.jpg",
+      "title": "File:Snowbasin_-_panoramio.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Snowbasin_-_panoramio.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Kinney",
+      "licence": "CC BY 3.0",
+      "dbAttribution": "Kinney / CC BY 3.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "snowbird",
+      "name": "Snowbird",
+      "state": "UT",
+      "object": "snowbird.jpg",
+      "title": "File:Snowbird_Tram_at_Hidden_Peak.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Snowbird_Tram_at_Hidden_Peak.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "names Hidden Valley (PA)",
+        "names Hidden Valley Ski Resort (MO)"
+      ],
+      "author": "VeggieGarden",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "VeggieGarden / CC BY-SA 4.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "snowmass",
+      "name": "Snowmass",
+      "state": "CO",
+      "object": "snowmass-9fed3f74.jpg",
+      "title": "File:Snowmass gondola and Ski area.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Snowmass_gondola_and_Ski_area.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "camera 2.2 km away"
+      ],
+      "author": "Wolfgang Moroder",
+      "licence": "CC BY-SA 3.0",
+      "dbAttribution": "Wolfgang Moroder / CC BY-SA 3.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Snowmass_gondola_and_Ski_area.jpg",
+      "denied": false
+    },
+    {
+      "slug": "snowshoe-mountain",
+      "name": "Snowshoe Mountain",
+      "state": "WV",
+      "object": "snowshoe-mountain-596cb9be.jpg",
+      "title": "File:Top of Snowshoe Western Territory.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Top_of_Snowshoe_Western_Territory.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "camera 1 km away"
+      ],
+      "author": "VermontPowderKing",
+      "licence": "CC BY 4.0",
+      "dbAttribution": "VermontPowderKing / CC BY 4.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Top_of_Snowshoe_Western_Territory.jpg",
+      "denied": false
+    },
+    {
+      "slug": "snowy-range",
+      "name": "Snowy Range Ski Area",
+      "state": "WY",
+      "object": "snowy-range-964f40d4.jpg",
+      "title": "File:Snowy Range Ski Area.JPG",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Snowy_Range_Ski_Area.JPG",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "camera 1.6 km away"
+      ],
+      "author": "Jeffrey Beall",
+      "licence": "CC BY 3.0",
+      "dbAttribution": "Jeffrey Beall / CC BY 3.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Snowy_Range_Ski_Area.JPG",
+      "denied": false
+    },
+    {
+      "slug": "solitude",
+      "name": "Solitude Mountain Resort",
+      "state": "UT",
+      "object": "solitude-eb3b1b41.jpg",
+      "title": "File:Solitude Mountain Resort Summit Chair.JPG",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Solitude_Mountain_Resort_Summit_Chair.JPG",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "names Snow Summit",
+        "names Summit Ski Area",
+        "camera 0.6 km away"
+      ],
+      "author": "Baileypalblue",
+      "licence": "Public domain",
+      "dbAttribution": "Baileypalblue / Public domain",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Solitude_Mountain_Resort_Summit_Chair.JPG",
+      "denied": false
+    },
+    {
+      "slug": "spirit-mountain",
+      "name": "Spirit Mountain",
+      "state": "MN",
+      "object": "spirit-mountain.jpg",
+      "title": "File:Spirit_Mountain_ski_area_aerial.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Spirit_Mountain_ski_area_aerial.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Midnightcomm",
+      "licence": "CC BY-SA 3.0",
+      "dbAttribution": "Midnightcomm / CC BY-SA 3.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "steamboat",
+      "name": "Steamboat Ski Resort",
+      "state": "CO",
+      "object": "steamboat.jpg",
+      "title": "File:Steamboat_springs_ski_resort.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Steamboat_springs_ski_resort.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "CarTick at English Wikipedia",
+      "licence": "CC BY-SA 3.0",
+      "dbAttribution": "CarTick at English Wikipedia / CC BY-SA 3.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "stevens-pass",
+      "name": "Stevens Pass",
+      "state": "WA",
+      "object": "stevens-pass-52a18b23.jpg",
+      "title": "File:View of Stevens Pass resort from the top of Kehr's Chair (30 January 2025).jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:View_of_Stevens_Pass_resort_from_the_top_of_Kehr%27s_Chair_(30_January_2025).jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "camera 0.7 km away"
+      ],
+      "author": "Buidhe",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "Buidhe / CC BY-SA 4.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:View_of_Stevens_Pass_resort_from_the_top_of_Kehr%27s_Chair_(30_January_2025).jpg",
+      "denied": false
+    },
+    {
+      "slug": "stowe-mountain-resort",
+      "name": "Stowe Mountain Resort",
+      "state": "VT",
+      "object": "stowe-mountain-resort-2aea3d6d.jpg",
+      "title": "File:Stowe VT Moguls 2021.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Stowe_VT_Moguls_2021.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Vermont",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "Vermont / CC BY-SA 4.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Stowe_VT_Moguls_2021.jpg",
+      "denied": false
+    },
+    {
+      "slug": "sugar-bowl-resort",
+      "name": "Sugar Bowl Resort",
+      "state": "CA",
+      "object": "sugar-bowl-resort-e40ba764.jpg",
+      "title": "File:Sugar Bowl Ski Resort 17 2012-12-20.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Sugar_Bowl_Ski_Resort_17_2012-12-20.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "camera 0.8 km away"
+      ],
+      "author": "FASTILY",
+      "licence": "CC BY-SA 3.0",
+      "dbAttribution": "FASTILY / CC BY-SA 3.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Sugar_Bowl_Ski_Resort_17_2012-12-20.jpg",
+      "denied": false
+    },
+    {
+      "slug": "sun-valley",
+      "name": "Sun Valley Resort",
+      "state": "ID",
+      "object": "sun-valley-5ad87f8d.jpg",
+      "title": "File:Warm Springs Run.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Warm_Springs_Run.jpg",
+      "verdict": "match",
+      "reasons": [
+        "only a category names this resort",
+        "camera 3.9 km away"
+      ],
+      "author": "Rickmouser45",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "Rickmouser45 / CC BY-SA 4.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Warm_Springs_Run.jpg",
+      "denied": false
+    },
+    {
+      "slug": "sundance",
+      "name": "Sundance Mountain Resort",
+      "state": "UT",
+      "object": "sundance-133f980a.jpg",
+      "title": "File:The Slopes (12097505736).jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:The_Slopes_(12097505736).jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "PunkToad from oakland, us",
+      "licence": "CC BY 2.0",
+      "dbAttribution": "PunkToad from oakland, us / CC BY 2.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:The_Slopes_(12097505736).jpg",
+      "denied": false
+    },
+    {
+      "slug": "sunday-river",
+      "name": "Sunday River",
+      "state": "ME",
+      "object": "sunday-river-ba913d0d.jpg",
+      "title": "File:Broadway042619.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Broadway042619.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Tv.Rule",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "Tv.Rule / CC BY-SA 4.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Broadway042619.jpg",
+      "denied": false
+    },
+    {
+      "slug": "taos-ski-valley",
+      "name": "Taos Ski Valley",
+      "state": "NM",
+      "object": "taos-ski-valley.jpg",
+      "title": "File:Taos_Ski_Valley,_New_Mexico_(7334020844).jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Taos_Ski_Valley,_New_Mexico_(7334020844).jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Murray Foubister",
+      "licence": "CC BY-SA 2.0",
+      "dbAttribution": "Murray Foubister / CC BY-SA 2.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "tenney-mountain",
+      "name": "Tenney Mountain",
+      "state": "NH",
+      "object": "tenney-mountain-2cae9d40.jpg",
+      "title": "File:Hornet Double at Tenney Mountain.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Hornet_Double_at_Tenney_Mountain.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "names Snow Trails"
+      ],
+      "author": "MConradWard",
+      "licence": "CC BY 4.0",
+      "dbAttribution": "MConradWard / CC BY 4.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Hornet_Double_at_Tenney_Mountain.jpg",
+      "denied": false
+    },
+    {
+      "slug": "the-summit-at-snoqualmie",
+      "name": "The Summit at Snoqualmie",
+      "state": "WA",
+      "object": "the-summit-at-snoqualmie-adc5b35b.jpg",
+      "title": "File:Alpental upper mountain 21.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Alpental_upper_mountain_21.jpg",
+      "verdict": "match",
+      "reasons": [
+        "camera 2.6 km away"
+      ],
+      "author": "Buidhe",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "Buidhe / CC BY-SA 4.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Alpental_upper_mountain_21.jpg",
+      "denied": false
+    },
+    {
+      "slug": "timber-ridge",
+      "name": "Timber Ridge Ski Area",
+      "state": "MI",
+      "object": "timber-ridge.jpg",
+      "title": "File:Timber_ridge.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Timber_ridge.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": null,
+      "licence": "FAL",
+      "dbAttribution": "Unknown authorUnknown author / FAL",
+      "dbCredit": null,
+      "denied": true
+    },
+    {
+      "slug": "timberline-lodge",
+      "name": "Timberline Lodge Ski Area",
+      "state": "OR",
+      "object": "timberline-lodge.jpg",
+      "title": "File:Timberline_Lodge_to_Palmer_ski_tour_(8_May_2025)_(30462).jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Timberline_Lodge_to_Palmer_ski_tour_(8_May_2025)_(30462).jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "camera 0.7 km away"
+      ],
+      "author": "Buidhe",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "Buidhe / CC BY-SA 4.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "vail",
+      "name": "Vail Ski Resort",
+      "state": "CO",
+      "object": "vail-c8d930dc.jpg",
+      "title": "File:Powder Day Vail Colorado USA.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Powder_Day_Vail_Colorado_USA.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "names Powder Mountain",
+        "names Powder Ridge Mountain Park & Resort"
+      ],
+      "author": "Flickr user: Brendan Gray London, UK https://www.flickr.com/photos/grayskull/",
+      "licence": "CC BY-SA 2.0",
+      "dbAttribution": "Flickr user: Brendan Gray London, UK https://www.flickr.com/photos/grayskull/ / CC BY-SA 2.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Powder_Day_Vail_Colorado_USA.jpg",
+      "denied": false
+    },
+    {
+      "slug": "wachusett-mountain",
+      "name": "Wachusett Mountain",
+      "state": "MA",
+      "object": "wachusett-mountain.jpg",
+      "title": "File:Wachusett_Mountain_Center.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Wachusett_Mountain_Center.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "ROxBo at English Wikipedia",
+      "licence": "Public domain",
+      "dbAttribution": "ROxBo at English Wikipedia / Public domain",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "warner-canyon",
+      "name": "Warner Canyon Ski Area",
+      "state": "OR",
+      "object": "warner-canyon.jpg",
+      "title": "File:WarnerCanyon.JPG",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:WarnerCanyon.JPG",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Snowsnapper",
+      "licence": "Public domain",
+      "dbAttribution": "Snowsnapper / Public domain",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "waterville-valley",
+      "name": "Waterville Valley",
+      "state": "NH",
+      "object": "waterville-valley-6924388b.jpg",
+      "title": "File:Waterville Valley Ski Resort 1.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Waterville_Valley_Ski_Resort_1.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "MConradWard",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "MConradWard / CC BY-SA 4.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Waterville_Valley_Ski_Resort_1.jpg",
+      "denied": false
+    },
+    {
+      "slug": "welch-village",
+      "name": "Welch Village",
+      "state": "MN",
+      "object": "welch-village.jpg",
+      "title": "File:Welch_Village_NYE_2020.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Welch_Village_NYE_2020.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "camera 0.4 km away"
+      ],
+      "author": "Darth Stabro",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "Darth Stabro / CC BY-SA 4.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "west-mountain",
+      "name": "West Mountain",
+      "state": "NY",
+      "object": "west-mountain-14979177.jpg",
+      "title": "File:Base area pic.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Base_area_pic.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Division18",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "Division18 / CC BY-SA 4.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Base_area_pic.jpg",
+      "denied": false
+    },
+    {
+      "slug": "white-pass",
+      "name": "White Pass Ski Area",
+      "state": "WA",
+      "object": "white-pass.jpg",
+      "title": "File:White_Pass_Ski_Area.JPG",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:White_Pass_Ski_Area.JPG",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Goleh",
+      "licence": "Public domain",
+      "dbAttribution": "Goleh / Public domain",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "whiteface-mountain",
+      "name": "Whiteface Mountain",
+      "state": "NY",
+      "object": "whiteface-mountain-5d472e21.jpg",
+      "title": "File:Little whiteface view.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Little_whiteface_view.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "names Little Ski Hill",
+        "names Snow Summit",
+        "names Summit Ski Area",
+        "camera 1.7 km away"
+      ],
+      "author": "Akrabbim",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "Akrabbim / CC BY-SA 4.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Little_whiteface_view.jpg",
+      "denied": false
+    },
+    {
+      "slug": "whitefish",
+      "name": "Whitefish Mountain Resort",
+      "state": "MT",
+      "object": "whitefish.jpg",
+      "title": "File:WhitefishMountainResortAerialView.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:WhitefishMountainResortAerialView.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "camera 1.6 km away"
+      ],
+      "author": "Donnie Clapp for Whitefish Mountain Resort",
+      "licence": "CC BY-SA 4.0",
+      "dbAttribution": "Donnie Clapp for Whitefish Mountain Resort / CC BY-SA 4.0",
+      "dbCredit": null,
+      "denied": false
+    },
+    {
+      "slug": "whitetail-resort",
+      "name": "Whitetail Resort",
+      "state": "PA",
+      "object": "whitetail-resort-e282961a.jpg",
+      "title": "File:Whitetail base area PA 2026-01-21 12-53-54 1.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Whitetail_base_area_PA_2026-01-21_12-53-54_1.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "camera 21 km away"
+      ],
+      "author": "G. Edward Johnson",
+      "licence": "CC BY 4.0",
+      "dbAttribution": "G. Edward Johnson / CC BY 4.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Whitetail_base_area_PA_2026-01-21_12-53-54_1.jpg",
+      "denied": false
+    },
+    {
+      "slug": "wildcat-mountain",
+      "name": "Wildcat Mountain",
+      "state": "NH",
+      "object": "wildcat-mountain-1b6cc3b9.jpg",
+      "title": "File:Wildcat Mountain - Last day of 2010 - panoramio.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Wildcat_Mountain_-_Last_day_of_2010_-_panoramio.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "camera 1.2 km away"
+      ],
+      "author": "matt.a",
+      "licence": "CC BY 3.0",
+      "dbAttribution": "matt.a / CC BY 3.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Wildcat_Mountain_-_Last_day_of_2010_-_panoramio.jpg",
+      "denied": false
+    },
+    {
+      "slug": "willamette-pass",
+      "name": "Willamette Pass Resort",
+      "state": "OR",
+      "object": "willamette-pass-23146443.jpg",
+      "title": "File:WillamettePass.JPG",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:WillamettePass.JPG",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "names Snow Summit",
+        "names Summit Ski Area"
+      ],
+      "author": "Snowsnapper",
+      "licence": "Public domain",
+      "dbAttribution": "Snowsnapper / Public domain",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:WillamettePass.JPG",
+      "denied": false
+    },
+    {
+      "slug": "wilmot-mountain",
+      "name": "Wilmot Mountain",
+      "state": "WI",
+      "object": "wilmot-mountain-b5ff3e80.jpg",
+      "title": "File:Pano-2-18-wilmot-packed.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Pano-2-18-wilmot-packed.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort"
+      ],
+      "author": "Rickdrew at en.wikipedia",
+      "licence": "CC BY-SA 3.0",
+      "dbAttribution": "Rickdrew at en.wikipedia / CC BY-SA 3.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Pano-2-18-wilmot-packed.jpg",
+      "denied": false
+    },
+    {
+      "slug": "wintergreen-resort",
+      "name": "Wintergreen Resort",
+      "state": "VA",
+      "object": "wintergreen-resort-f3a7e496.jpg",
+      "title": "File:Wintergreen, VA.JPG",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Wintergreen,_VA.JPG",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "camera 1.7 km away"
+      ],
+      "author": "Mojo Hand",
+      "licence": "CC BY-SA 3.0",
+      "dbAttribution": "Mojo Hand / CC BY-SA 3.0",
+      "dbCredit": "https://commons.wikimedia.org/wiki/File:Wintergreen,_VA.JPG",
+      "denied": false
+    },
+    {
+      "slug": "woods-valley",
+      "name": "Woods Valley",
+      "state": "NY",
+      "object": "woods-valley.jpg",
+      "title": "File:Woods_Valley_View_of_Delta_Lake,_NY_-_panoramio.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Woods_Valley_View_of_Delta_Lake,_NY_-_panoramio.jpg",
+      "verdict": "match",
+      "reasons": [
+        "title or description names this resort",
+        "camera 6.4 km away"
+      ],
+      "author": "Russell Lovrin",
+      "licence": "CC BY 3.0",
+      "dbAttribution": "Russell Lovrin / CC BY 3.0",
+      "dbCredit": null,
+      "denied": false
+    }
+  ]
+}

@@ -87,6 +87,13 @@ const nextConfig: NextConfig = {
         hostname: SUPABASE_HOSTNAME,
         pathname: "/storage/v1/object/public/resort-heroes/**",
       },
+      // Branded terrain cards (scripts/photos/2-terrain-cards.mjs), the
+      // hero fallback for resorts with no vetted photo (lib/heroSource.ts).
+      {
+        protocol: "https",
+        hostname: SUPABASE_HOSTNAME,
+        pathname: "/storage/v1/object/public/resort-cards/**",
+      },
     ],
     // Next 16 snaps any requested quality to this list (default [75]) —
     // without registering 70 here, HeroImage's quality={70} is silently

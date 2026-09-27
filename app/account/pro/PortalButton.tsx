@@ -6,6 +6,7 @@
 "use client";
 
 import { useState } from "react";
+import Button from "@/components/ui/Button";
 
 export default function PortalButton() {
   const [loading, setLoading] = useState(false);
@@ -31,16 +32,11 @@ export default function PortalButton() {
 
   return (
     <div className="flex flex-col gap-1">
-      <button
-        type="button"
-        onClick={onClick}
-        disabled={loading}
-        className="rounded-md bg-wn-navy px-4 py-2 text-sm font-semibold text-white transition hover:bg-wn-navy/90 disabled:opacity-60"
-      >
+      <Button onClick={onClick} disabled={loading}>
         {loading ? "Opening…" : "Manage payment method"}
-      </button>
+      </Button>
       {error && (
-        <p className="text-xs text-red-700" role="alert">
+        <p className="text-xs text-wn-danger" role="alert">
           {error}
         </p>
       )}

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   makeUnsubscribeToken,
+  parseUnsubscribeList,
   unsubscribeUrl,
   verifyUnsubscribeToken,
 } from "@/lib/digestUnsubscribe";
@@ -34,5 +35,17 @@ describe("digest unsubscribe tokens", () => {
     const t = makeUnsubscribeToken(7, SECRET);
     const url = unsubscribeUrl("https://wynla.app/", t);
     expect(url).toBe(`https://wynla.app/api/digest/unsubscribe?token=${encodeURIComponent(t)}`);
+  });
+
+  it("scopes the Thursday picks link to its own list and leaves the digest link unchanged", () => {
+    const t = makeUnsubscribeToken(7, SECRET);
+    expect(unsubscribeUrl("https://wynla.app", t, "thursday")).toBe(
+      `https://wynla.app/api/digest/unsubscribe?token=${encodeURIComponent(t)}&list=thursday`,
+    );
+    expect(unsubscribeUrl("https://wynla.app", t, "digest")).toBe(unsubscribeUrl("https://wynla.app", t));
+    expect(parseUnsubscribeList("thursday")).toBe("thursday");
+    expect(parseUnsubscribeList("digest")).toBe("digest");
+    expect(parseUnsubscribeList("anything-else")).toBe("digest");
+    expect(parseUnsubscribeList(null)).toBe("digest");
   });
 });

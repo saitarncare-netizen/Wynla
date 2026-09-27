@@ -21,6 +21,10 @@
 // successful signup we optimistically bump it from the API response.
 
 import { useState, useSyncExternalStore } from "react";
+import Button from "@/components/ui/Button";
+import Field from "@/components/ui/Field";
+import Input from "@/components/ui/Input";
+import Notice from "@/components/ui/Notice";
 
 // ?ref=<code> reader — validated with the SAME rule the server uses
 // (lib/referral sanitizeRef) so the "invited by a Founder" banner never
@@ -130,11 +134,8 @@ export default function EarlySignupForm({
 
     return (
       <div className="space-y-3">
-        <div className="rounded-xl border border-emerald-500/30 bg-emerald-50 p-5 text-emerald-900">
-          <div className="text-base font-bold">
-            {status.alreadyOnList ? "You're already in." : "You're in."}
-          </div>
-          <p className="mt-1 text-sm">
+        <Notice tone="success" title={status.alreadyOnList ? "You're already in." : "You're in."} className="px-5 py-4">
+          <p className="text-sm">
             {status.alreadyOnList
               ? "Your email is already on the Founder list. We'll write to you the morning Wynla opens for the inaugural season (November 2026)."
               : status.emailed
@@ -142,41 +143,35 @@ export default function EarlySignupForm({
                 : "You're now a Founder Member: your founder rate is locked when Wynla moves to paid plans for Season 2. The welcome email could not be sent just now; your spot is saved either way."}
           </p>
           {count != null && (
-            <p className="mt-3 text-xs text-emerald-900/70">
-              You&apos;re one of {count.toLocaleString()} Founders.
+            <p className="mt-3 text-xs">
+              You&apos;re one of <span className="tabular-nums">{count.toLocaleString()}</span> Founders.
             </p>
           )}
-        </div>
+        </Notice>
 
         {/* Referral share card — turn this Founder into an inviter. */}
         {shareUrl && (
-          <div className="rounded-xl border border-wn-gold/40 bg-wn-gold/10 p-5">
-            <div className="text-sm font-bold text-wn-navy">
-              Invite friends
-            </div>
-            <p className="mt-1 text-xs leading-relaxed text-wn-charcoal/75">
-              Anyone who joins with your link gets the same Founder rate, and
-              we count them next to your name. Share it anywhere.
+          <div className="rounded-wn-md border border-wn-gold/50 bg-wn-gold/10 p-5">
+            <p className="text-sm font-bold text-wn-navy">Invite friends</p>
+            <p className="mt-1 text-xs leading-relaxed text-wn-muted">
+              Anyone who joins with your link gets the same Founder rate, and we count them next to your name. Share it
+              anywhere.
             </p>
             <div className="mt-3 flex flex-col gap-2 sm:flex-row">
-              <input
+              <Input
                 readOnly
                 value={shareUrl}
                 aria-label="Your referral link"
                 onFocus={(e) => e.currentTarget.select()}
-                className="h-10 flex-1 select-all rounded-md border border-wn-charcoal/20 bg-white px-3 text-xs text-wn-charcoal focus:border-wn-navy focus:outline-none focus:ring-2 focus:ring-wn-navy/20"
+                className="select-all"
               />
-              <button
-                type="button"
-                onClick={copy}
-                className="inline-flex h-10 items-center justify-center rounded-md bg-wn-navy px-4 text-xs font-bold text-white transition hover:bg-wn-navy/90 active:scale-[0.98]"
-              >
+              <Button onClick={copy} className="sm:shrink-0">
                 {copied ? "Copied" : "Copy link"}
-              </button>
+              </Button>
             </div>
             {status.referralCount > 0 && (
               <p className="mt-3 text-xs font-semibold text-wn-navy">
-                {status.referralCount.toLocaleString()} friend
+                <span className="tabular-nums">{status.referralCount.toLocaleString()}</span> friend
                 {status.referralCount === 1 ? "" : "s"} joined through your link so far.
               </p>
             )}
@@ -188,40 +183,32 @@ export default function EarlySignupForm({
 
   return (
     <form onSubmit={onSubmit} noValidate className="space-y-2">
-      <div className="flex flex-col gap-2 sm:flex-row">
-        <input
-          type="email"
-          autoComplete="email"
-          inputMode="email"
-          spellCheck={false}
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="you@example.com"
-          aria-label="Email address"
-          className="h-12 flex-1 rounded-md border border-wn-charcoal/20 bg-white px-4 text-sm text-wn-charcoal shadow-sm placeholder:text-wn-charcoal/40 focus:border-wn-navy focus:outline-none focus:ring-2 focus:ring-wn-navy/20"
-        />
-        <button
-          type="submit"
-          disabled={status.kind === "loading"}
-          className="inline-flex h-12 items-center justify-center rounded-md bg-wn-navy px-6 text-sm font-bold text-white shadow-sm transition hover:bg-wn-navy/90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          {status.kind === "loading" ? "Joining…" : "Join the Founders"}
-        </button>
-      </div>
-      {status.kind === "error" && (
-        <p role="alert" className="text-xs text-red-700">
-          {status.message}
-        </p>
-      )}
-      {ref && (
-        <p className="text-[11px] font-medium text-wn-navy/70">
-          You were invited by a Founder. You get the same Founder rate.
-        </p>
-      )}
-      <p className="text-[11px] text-wn-charcoal/55">
-        One email when we open. No spam, no sharing.
-      </p>
+      <Field
+        label="Email address"
+        hideLabel
+        hint="One email when we open. No spam, no sharing."
+        error={status.kind === "error" ? status.message : undefined}
+      >
+        {(a11y) => (
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <Input
+              {...a11y}
+              type="email"
+              autoComplete="email"
+              inputMode="email"
+              spellCheck={false}
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@example.com"
+            />
+            <Button type="submit" loading={status.kind === "loading"} className="sm:shrink-0">
+              {status.kind === "loading" ? "Joining" : "Join the Founders"}
+            </Button>
+          </div>
+        )}
+      </Field>
+      {ref && <p className="text-xs font-medium text-wn-navy">You were invited by a Founder. You get the same Founder rate.</p>}
     </form>
   );
 }

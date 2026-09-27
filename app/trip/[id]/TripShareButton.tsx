@@ -21,6 +21,9 @@
 
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+import Button from "@/components/ui/Button";
+import Input from "@/components/ui/Input";
+import Icon from "@/components/icons/Icon";
 
 // Whether the device has a native share sheet. Read through
 // useSyncExternalStore so the server render (no navigator) and the
@@ -233,97 +236,99 @@ export default function TripShareButton({ tripId, tripName }: Props) {
     busy === "create"
       ? "Creating link…"
       : status === "copied"
-        ? "✓ Link copied"
+        ? "Link copied"
         : status === "shared"
-          ? "✓ Shared"
+          ? "Shared"
           : status === "stopped"
             ? "Sharing stopped"
             : shareUrl
               ? canNativeShare
-                ? "🔗 Share trip"
-                : "🔗 Copy link"
-              : "🔗 Share trip";
+                ? "Share trip"
+                : "Copy link"
+              : "Share trip";
+  const primaryIcon = status === "stopped" ? "close" : status === "copied" || status === "shared" ? "check" : "share";
 
   return (
     <div className="flex flex-col items-end gap-1">
       <div className="flex items-center gap-1">
-        <button
-          type="button"
+        {/* Icon-only below sm (the label stays for screen readers) so
+            the sticky bar's 44 px buttons fit a 375 px row; the icon
+            still flips to a check / spinner as feedback. */}
+        <Button
+          variant="secondary"
           onClick={handlePrimary}
           disabled={busy != null}
-          className="rounded-lg border border-wn-charcoal/20 bg-white px-3 py-1.5 text-xs font-semibold text-wn-charcoal transition hover:border-wn-navy hover:text-wn-navy disabled:opacity-60"
+          loading={busy === "create"}
+          iconLeft={<Icon name={primaryIcon} />}
         >
-          {primaryLabel}
-        </button>
+          {/* Idle label is icon-only on phones; short-lived outcomes stay
+              visible so clipboard copies are confirmed. */}
+          <span className={status === "copied" || status === "shared" || status === "stopped" ? undefined : "max-sm:sr-only"}>
+            {primaryLabel}
+          </span>
+        </Button>
         {shareUrl && (
           <button
             type="button"
             onClick={() => setPanelOpen((v) => !v)}
             aria-expanded={panelOpen}
             aria-label={panelOpen ? "Hide link options" : "Show link options"}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-wn-charcoal/20 bg-white text-xs font-bold text-wn-charcoal transition hover:border-wn-navy hover:text-wn-navy"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-wn-sm border border-wn-line bg-white text-wn-navy transition hover:border-wn-navy"
           >
-            {panelOpen ? "▴" : "▾"}
+            <Icon name="chevron-down" className={`h-4 w-4 transition-transform ${panelOpen ? "rotate-180" : ""}`} />
           </button>
         )}
       </div>
 
       {shareUrl && panelOpen && (
-        <div className="w-[min(88vw,320px)] rounded-lg border border-wn-charcoal/15 bg-white p-2 text-left shadow-md">
-          <label htmlFor={`share-url-${tripId}`} className="mb-1 block text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
+        <div className="w-[min(88vw,320px)] rounded-wn-sm border border-wn-line bg-white p-2 text-left shadow-wn-md">
+          <label htmlFor={`share-url-${tripId}`} className="mb-1 block text-eyebrow font-semibold uppercase text-wn-muted">
             Anyone with this link can view the trip
           </label>
-          <input
+          <Input
             id={`share-url-${tripId}`}
             type="text"
             readOnly
             value={shareUrl}
             onFocus={(e) => e.currentTarget.select()}
-            className="w-full rounded-md border border-wn-charcoal/20 bg-wn-offwhite px-2 py-1 text-[11px] text-wn-charcoal"
           />
           <div className="mt-1.5 flex flex-wrap gap-1.5">
-            <button
-              type="button"
+            <Button
               onClick={() => copyLink(shareUrl)}
-              className="rounded-md bg-wn-navy px-2.5 py-1 text-[11px] font-semibold text-white transition hover:bg-wn-navy/90"
+              iconLeft={status === "copied" ? <Icon name="check" /> : undefined}
             >
-              {status === "copied" ? "✓ Copied" : "Copy link"}
-            </button>
+              {status === "copied" ? "Copied" : "Copy link"}
+            </Button>
             {canNativeShare && (
-              <button
-                type="button"
-                onClick={() => shareLink(shareUrl)}
-                className="rounded-md border border-wn-charcoal/20 bg-white px-2.5 py-1 text-[11px] font-semibold text-wn-charcoal transition hover:border-wn-navy hover:text-wn-navy"
-              >
+              <Button variant="secondary" onClick={() => shareLink(shareUrl)}>
                 Share…
-              </button>
+              </Button>
             )}
-            <button
-              type="button"
+            <Button
+              variant="secondary"
               onClick={handleRenew}
               disabled={busy != null}
               title="Replace the link — the old one stops working"
-              className="rounded-md border border-wn-charcoal/20 bg-white px-2.5 py-1 text-[11px] font-semibold text-wn-charcoal transition hover:border-wn-navy hover:text-wn-navy disabled:opacity-60"
+              iconLeft={busy !== "renew" && status === "renewed" ? <Icon name="check" /> : undefined}
             >
-              {busy === "renew" ? "Renewing…" : status === "renewed" ? "✓ New link" : "New link"}
-            </button>
-            <button
-              type="button"
+              {busy === "renew" ? "Renewing…" : "New link"}
+            </Button>
+            <Button
+              variant="secondary"
               onClick={handleStop}
               disabled={busy != null}
-              className="rounded-md border border-wn-charcoal/20 bg-white px-2.5 py-1 text-[11px] font-semibold text-wn-charcoal transition hover:border-red-400 hover:text-red-700 disabled:opacity-60"
             >
               {busy === "stop" ? "Stopping…" : "Stop sharing"}
-            </button>
+            </Button>
           </div>
           {status === "copy-failed" && (
-            <p className="mt-1 text-[10px] text-amber-800">
+            <p className="mt-1 text-xs text-wn-warning">
               Couldn&apos;t copy automatically — select the link above and copy it.
             </p>
           )}
         </div>
       )}
-      {error && <span className="max-w-[280px] text-right text-[10px] text-red-700">{error}</span>}
+      {error && <span className="max-w-[280px] text-right text-xs text-wn-danger">{error}</span>}
     </div>
   );
 }

@@ -1,30 +1,74 @@
-# Wynla — Session Protocol
+# Wynla: session protocol
 
-This file defines how every Claude Code session works. Read this
-along with CURRENT_STATUS.md when starting a session.
+How a Claude Code session on this repo runs. Read with `CURRENT_STATUS.md`.
+Last updated 2026-09-23.
 
-## At Start of Every Session
-1. Read wynla-handoff/CURRENT_STATUS.md
-2. Read wynla-handoff/STAGE_4_5_6_PLANS.md if working on Stage 4-6
-3. Summarize current state to user in 5-7 lines
-4. Wait for user confirmation before proceeding with task
+## Roles
 
-## At End of Every Session
-Update wynla-handoff/CURRENT_STATUS.md:
-- Last Session Result: what we did
-- Next Action: single concrete step for next session
-- Recent Decisions: append new decisions with date (keep last 10)
-- Don't Do: append any new anti-patterns learned
-- Data Stats Snapshot: update if numbers changed
+- Saitarn decides direction (CEO). Claude does the work (Ops) and only
+  escalates what it cannot do: dashboard clicks in Supabase, Vercel,
+  GitHub secrets, Resend, keys.
+- Strategy questions ("what do you think") get a discussion, not code.
+  Code happens on an explicit instruction ("ทำเลย", "build this").
+- Thai in chat, English in code, commits and docs.
 
-Then: git add -A && git commit -m "session: <one-line summary>"
+## Start of a session
 
-## When User Drags CURRENT_STATUS.md to Chat (other Claude)
-The other Claude (in claude.ai chat) will use it as context.
-That Claude handles strategy/review/decisions.
-You (Claude Code) handle execution/file edits/scraping.
+1. Read `handoff-docs/CURRENT_STATUS.md` (what is live, what is pending,
+   the founder checklist) and the package doc for the area you touch.
+2. `git -C C:/Users/saita/ridewise status` and `git branch --list` to see
+   which branches and worktrees exist. Do not assume `main` is the base.
+3. Summarise the state in five to seven lines, list the plan, get one
+   confirmation, then run the whole batch.
 
-## Decision Source of Truth
-- Strategic decisions: discussed in chat with the other Claude
-- Implementation decisions: made by you with user confirmation
-- ALL decisions land in CURRENT_STATUS.md "Recent Decisions" section
+## Never-stop mode
+
+Once a batch is confirmed, run it to the end: no "what next?" pauses
+between steps. Collect everything only Saitarn can do (SQL to run, env
+vars, dashboard toggles) and hand it over as one list at the end. If work
+is still in flight when a turn ends, schedule the next wake-up
+(`ScheduleWakeup`, prompt `<<autonomous-loop-dynamic>>`) so idle time does
+not stall the loop.
+
+## Worktrees (one per package)
+
+Every package gets its own worktree and branch off the current base
+branch (today `feat/season-1-round2-clean`):
+
+```
+git -C C:/Users/saita/ridewise worktree add C:/Users/saita/ridewise-worktrees/<pkg> -b wf/<pkg> <base>
+cd C:/Users/saita/ridewise-worktrees/<pkg>
+cmd /c mklink /J node_modules C:\Users\saita\ridewise\node_modules
+```
+
+- The junction shares one `node_modules`; `npm install <dep>` from any
+  worktree lands in it. Commit `package.json` and `package-lock.json`
+  with the code that needs the dependency.
+- Do not run `next build` or `next dev` in a package worktree; the shared
+  `.next` cache and the junction make two builds collide. Use
+  `npx tsc --noEmit`, `npm run lint` (0 errors) and `npm test`.
+- Stay inside your file scope. If you must touch a file another package
+  owns, say so in the integration notes instead of editing it.
+- Database rules: no DDL, no row writes unless the brief says so, feature
+  detect tables and columns that the pending SQL may not have created.
+- Never print secrets. `.env.local` holds keys; reading it is fine,
+  echoing it is not.
+
+## Commits and PRs
+
+- One coherent commit per logical chunk, message explains why, ends with
+  `Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>`.
+- Package branches are not pushed by the package agent; the integrator
+  merges them into the base branch, runs the checks, and pushes.
+- PRs go to `main` from the base branch. The description lists what
+  shipped, the SQL to run, the env vars, and the founder checklist; it
+  ends with `🤖 Generated with [Claude Code](https://claude.com/claude-code)`.
+- Merging a PR needs Saitarn's GitHub session in Chrome; Claude prepares
+  the PR and asks for the click.
+
+## End of a session
+
+Update `handoff-docs/CURRENT_STATUS.md`: what shipped, what is pending,
+the founder checklist, and anything learned for "Do not". Keep it to
+today's truth; move history into the package docs rather than piling it
+up here.

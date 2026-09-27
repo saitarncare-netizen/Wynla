@@ -11,10 +11,13 @@
 // search archives, creates a small dose of mystery, and makes the
 // welcome email feel like an actual reward for being early.
 
-import Link from "next/link";
 import type { Metadata } from "next";
 import { createClient } from "@supabase/supabase-js";
 import EarlySignupForm from "./EarlySignupForm";
+import Card from "@/components/ui/Card";
+import PageHeader from "@/components/ui/PageHeader";
+import Section from "@/components/ui/Section";
+import Icon from "@/components/icons/Icon";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -59,115 +62,83 @@ export default async function EarlyPage() {
   const count = await fetchFounderCount();
 
   return (
-    <main
-      id="main-content"
-      className="min-h-dvh bg-wn-offwhite px-4 py-10 sm:px-6 sm:py-16"
-    >
-      <div className="mx-auto max-w-2xl">
-        <Link
-          href="/"
-          className="text-xs font-semibold text-wn-charcoal/60 hover:text-wn-navy"
-        >
-          ← Back to map
-        </Link>
-
-        {/* HERO */}
-        <header className="mt-6 sm:mt-8">
-          <span className="inline-flex items-center rounded bg-wn-gold/95 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-wn-navy">
-            Inaugural Season · Nov 2026
+    <main className="min-h-dvh bg-wn-offwhite">
+      <PageHeader
+        width="max-w-2xl"
+        eyebrow={
+          <span className="inline-flex items-center rounded-wn-sm bg-wn-gold px-2 py-1 text-eyebrow font-bold uppercase text-wn-navy">
+            Inaugural season · Nov 2026
           </span>
-          <h1 className="mt-4 text-3xl font-extrabold leading-tight text-wn-navy sm:text-5xl">
-            Free for the whole inaugural season.
-          </h1>
-          <p className="mt-3 text-base text-wn-charcoal/75 sm:text-lg">
-            Wynla is the ski and snowboard trip planner built for the
-            2026–27 season — one beautiful map of every US resort, with
-            weather, drive time, and a first-of-its-kind
-            <strong> snow surface forecast</strong> that tells you what
-            the snow will actually feel like under your edges.
-          </p>
-        </header>
+        }
+        title="Free for the whole inaugural season."
+        description={
+          <>
+            Wynla is the ski and snowboard trip planner built for the 2026–27 season — one beautiful map of every US
+            resort, with weather, drive time, and a first-of-its-kind <strong>snow surface forecast</strong> that tells
+            you what the snow will actually feel like under your edges.
+          </>
+        }
+      />
 
+      <div className="mx-auto max-w-2xl space-y-8 px-4 pb-12 pt-6 sm:px-6 sm:pb-16">
         {/* FOUNDER PITCH */}
-        <section className="mt-8 rounded-2xl border border-wn-charcoal/10 bg-white p-5 shadow-sm sm:p-7">
-          <div className="space-y-3 text-sm text-wn-charcoal/85 sm:text-base">
+        <Card padding="lg">
+          <div className="space-y-3 text-sm text-wn-charcoal sm:text-base">
             <p>
-              <strong className="text-wn-navy">
-                The inaugural season (Nov 2026 – Apr 2027) is free for everyone.
-              </strong>{" "}
-              No credit card, no trial countdown. Wynla&apos;s Founder
-              Season is about putting the product in the hands of real
-              skiers and snowboarders, and listening hard.
+              <strong className="text-wn-navy">The inaugural season (Nov 2026 – Apr 2027) is free for everyone.</strong>{" "}
+              No credit card, no trial countdown. Wynla&apos;s Founder Season is about putting the product in the hands
+              of real skiers and snowboarders, and listening hard.
             </p>
             <p>
-              <strong className="text-wn-navy">Founder Members</strong>{" "}
-              — anyone on this list before launch — receive something
-              the public never will: a{" "}
-              <em>special founder rate, locked forever</em>, when Wynla
-              moves to paid plans for Season 2. The exact rate is
-              disclosed in your welcome email and stays out of public
-              view.
+              <strong className="text-wn-navy">Founder Members</strong> — anyone on this list before launch — receive
+              something the public never will: a <em>special founder rate, locked forever</em>, when Wynla moves to
+              paid plans for Season 2. The exact rate is disclosed in your welcome email and stays out of public view.
             </p>
             <p>
-              No commitment. Skip the season if it&apos;s not for you.
-              Founder Members get the first look at every new feature
-              and the lowest price Wynla will ever offer.
+              No commitment. Skip the season if it&apos;s not for you. Founder Members get the first look at every new
+              feature and the lowest price Wynla will ever offer.
             </p>
           </div>
-        </section>
+        </Card>
 
         {/* SIGNUP FORM */}
-        <section className="mt-8">
+        <section aria-label="Join the Founder list">
           <EarlySignupForm initialCount={count} />
           {count != null && count > 0 && (
-            <p className="mt-3 text-center text-xs text-wn-charcoal/55">
-              <span className="font-bold text-wn-navy">
-                {count.toLocaleString()}
-              </span>{" "}
-              Founder{count === 1 ? "" : "s"} already in.
+            <p className="mt-3 text-center text-xs text-wn-muted">
+              <span className="font-bold tabular-nums text-wn-navy">{count.toLocaleString()}</span> Founder
+              {count === 1 ? "" : "s"} already in (measured when this page loaded).
             </p>
           )}
         </section>
 
         {/* WHAT YOU'LL GET */}
-        <section className="mt-10">
-          <h2 className="text-base font-bold text-wn-navy">
-            What Founder Members unlock when Wynla opens
-          </h2>
-          <ul className="mt-3 space-y-2 text-sm text-wn-charcoal/80">
+        <Section title="What Founder Members unlock when Wynla opens">
+          <ul className="space-y-2 text-sm text-wn-charcoal">
             <Bullet>
-              <strong>Free, full access</strong> to every US ski resort
-              on the map for the inaugural season — favorites, alerts,
-              trip planner, every filter.
+              <strong>Free, full access</strong> to every US ski resort on the map for the inaugural season —
+              favorites, alerts, trip planner, every filter.
             </Bullet>
             <Bullet>
-              <strong>Snow Surface Forecast</strong> for every resort
-              on the map — powder, packed powder, machine-groomed,
-              icy, and the four other US-standard surface classes,
-              with a 3-day outlook.
+              <strong>Snow Surface Forecast</strong> for every resort on the map — powder, packed powder,
+              machine-groomed, icy, and the four other US-standard surface classes, with a 3-day outlook.
             </Bullet>
             <Bullet>
-              <strong>Founder rate locked forever</strong> when paid
-              plans launch for Season 2 — disclosed in the welcome
-              email, never on the public site.
+              <strong>Founder rate locked forever</strong> when paid plans launch for Season 2 — disclosed in the
+              welcome email, never on the public site.
             </Bullet>
             <Bullet>
-              <strong>First-look access</strong>{" "}to new features as
-              we ship them. You&apos;ll see the snow forecast,
-              multi-pass optimizer, and trip exports before anyone
-              else.
+              <strong>First-look access</strong> to new features as we ship them. You&apos;ll see the snow forecast,
+              multi-pass optimizer, and trip exports before anyone else.
             </Bullet>
           </ul>
-        </section>
+        </Section>
 
         {/* TRUST FOOTER */}
-        <footer className="mt-12 text-xs text-wn-charcoal/55">
-          <p>
-            Wynla is built by skiers and snowboarders, for skiers and
-            snowboarders. No ads. No data sales. A planning tool
-            we&apos;d use ourselves — and now you can too.
-          </p>
-        </footer>
+        <p className="text-xs text-wn-muted">
+          Wynla is built by skiers and snowboarders, for skiers and snowboarders. No ads. No data sales. A planning
+          tool we&apos;d use ourselves — and now you can too.
+        </p>
       </div>
     </main>
   );
@@ -178,9 +149,9 @@ function Bullet({ children }: { children: React.ReactNode }) {
     <li className="flex gap-2.5">
       <span
         aria-hidden="true"
-        className="mt-0.5 inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-wn-gold/30 text-[10px] font-bold text-wn-navy"
+        className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-wn-gold/30 text-wn-navy"
       >
-        ✓
+        <Icon name="check" className="h-3.5 w-3.5" strokeWidth={2.5} />
       </span>
       <span>{children}</span>
     </li>

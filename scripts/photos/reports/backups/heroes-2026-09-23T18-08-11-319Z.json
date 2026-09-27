@@ -1,0 +1,533 @@
+[
+ {
+  "slug": "sun-valley",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "ski-sundown",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "sierra-at-tahoe",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "mount-southington",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "wintergreen-resort",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "snowshoe-mountain",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "saskadena-six-area",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "ferguson-ridge",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "snowmass",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "sugar-bowl-resort",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "sundance",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "mt-bachelor",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "mt-lemmon-ski-valley",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "mountain-high",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "solitude",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "buttermilk",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "snowy-range",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "alpine-meadows",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "afton-alps",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "vail",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "willamette-pass",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "brian-head",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "arapahoe-basin",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "burke-mountain",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "bear-mountain",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "whitetail-resort",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "seven-springs",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "winter-park",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "otis-ridge",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "roundtop-mountain-resort",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "whiteface-mountain",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "wilmot-mountain",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "mt-spokane",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "wildcat-mountain",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "mt-rose-ski-tahoe",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "sunday-river",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "sugarloaf",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "arizona-snowbowl",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "the-summit-at-snoqualmie",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "gunstock-mountain-resort",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "stratton-mountain",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "loup-loup",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "the-omni-homestead-resort",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "mission-ridge",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "eldora",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "waterville-valley",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "boyne-mountain",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "loveland",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "jack-frost-mountain",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "laurel-mountain",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "tenney-mountain",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "mountain-creek",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "west-mountain",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "mt-baker-ski-area",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "stevens-pass",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "stowe-mountain-resort",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "deer-valley",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "aspen-mountain",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "cuchara",
+  "hero_image_url": null,
+  "hero_image_source": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": null
+ }
+]

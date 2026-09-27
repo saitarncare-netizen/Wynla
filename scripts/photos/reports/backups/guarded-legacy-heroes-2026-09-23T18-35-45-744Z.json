@@ -1,0 +1,834 @@
+[
+ {
+  "slug": "silverton-mountain",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/silverton-mountain.jpg",
+  "hero_image_attribution": "Zach Dischner / CC BY 2.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Silverton Mountain — CO ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "mt-shasta-ski-park",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/mt-shasta-ski-park.jpg",
+  "hero_image_attribution": "Digitalskipark / CC BY-SA 4.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Mt. Shasta Ski Park — CA ski resort in winter",
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "alta",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/alta.jpg",
+  "hero_image_attribution": "Baileypalblue / Public domain",
+  "hero_image_credit": null,
+  "hero_image_alt": "Alta Ski Area — UT ski resort in winter",
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "howelsen-hill",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/howelsen-hill.jpg",
+  "hero_image_attribution": "sherrymain from USA / CC BY-SA 2.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Howelsen Hill Ski Area — CO ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "homewood-mountain-resort",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/homewood-mountain-resort.jpg",
+  "hero_image_attribution": "User:JGonera (WMF) / CC BY-SA 3.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Homewood Mountain Resort — CA ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "snowbasin",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/snowbasin.jpg",
+  "hero_image_attribution": "Kinney / CC BY 3.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Snowbasin — UT ski resort in winter",
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "jackson-hole",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/jackson-hole.jpg",
+  "hero_image_attribution": "Wikimedia Commons",
+  "hero_image_credit": null,
+  "hero_image_alt": "Jackson Hole Mountain Resort — WY ski resort in winter",
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "ski-apache",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/ski-apache.jpg",
+  "hero_image_attribution": "Jonathan Cutrer from San Angelo, Texas, United States / CC BY 2.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Ski Apache — NM ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "49-degrees-north",
+  "hero_image_url": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": false
+ },
+ {
+  "slug": "blacktail",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/blacktail.jpg",
+  "hero_image_attribution": "Katie Brady / CC BY-SA 2.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Blacktail Mountain Ski Area — MT ski resort in winter",
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "bridger-bowl",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/bridger-bowl.jpg",
+  "hero_image_attribution": "Richard Barley / CC BY 2.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Bridger Bowl Ski Area — MT ski resort in winter",
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "whitefish",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/whitefish.jpg",
+  "hero_image_attribution": "Donnie Clapp for Whitefish Mountain Resort / CC BY-SA 4.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Whitefish Mountain Resort — MT ski resort in winter",
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "bear-valley-mountain",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/bear-valley-mountain.jpg",
+  "hero_image_attribution": "Unknown authorUnknown author or not provided / Public domain",
+  "hero_image_credit": null,
+  "hero_image_alt": "Bear Valley Mountain Resort — CA ski resort in winter",
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "boreal-mountain-resort",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/boreal-mountain-resort.jpg",
+  "hero_image_attribution": "Brocken Inaglory / CC BY-SA 3.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Boreal Mountain Resort — CA ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "bretton-woods",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/bretton-woods.jpg",
+  "hero_image_attribution": "Storylanding / CC0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Bretton Woods — NH ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "montana-snowbowl",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/montana-snowbowl.jpg",
+  "hero_image_attribution": "Evan Lovely / CC BY-SA 2.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Montana Snowbowl — MT ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "hunter-mountain",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/hunter-mountain.jpg",
+  "hero_image_attribution": "Ryssby at English Wikipedia (Robert Swanson) / CC BY-SA 3.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Hunter Mountain — NY ski resort in winter",
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "snowbird",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/snowbird.jpg",
+  "hero_image_attribution": "VeggieGarden / CC BY-SA 4.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Snowbird — UT ski resort in winter",
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "mt-brighton",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/mt-brighton.jpg",
+  "hero_image_attribution": "Codepro at English Wikipedia / CC BY-SA 2.5",
+  "hero_image_credit": null,
+  "hero_image_alt": "Mt. Brighton — MI ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "nashoba-valley-ski-area",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/nashoba-valley-ski-area.jpg",
+  "hero_image_attribution": "John Phelan / CC BY-SA 3.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Nashoba Valley Ski Area — MA ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "mont-ripley",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/mont-ripley.jpg",
+  "hero_image_attribution": "Chris857 / CC BY-SA 3.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Mont Ripley — MI ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "heavenly-mountain-resort",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/heavenly-mountain-resort.jpg",
+  "hero_image_attribution": "JMatazzoni (WMF) / CC BY-SA 4.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Heavenly Mountain Resort — CA ski resort in winter",
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "bogus-basin",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/bogus-basin.jpg",
+  "hero_image_attribution": "cifraser1 / CC BY 2.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Bogus Basin — ID ski resort in winter",
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "eaglecrest-ski-area",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/eaglecrest-ski-area.jpg",
+  "hero_image_attribution": "Jsayre64 / CC BY-SA 3.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Eaglecrest Ski Area — AK ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "granite-peak",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/granite-peak.jpg",
+  "hero_image_attribution": "Connie Ma from United States of America / CC BY-SA 2.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Granite Peak Ski Area — WI ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "shawnee-mountain",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/shawnee-mountain.jpg",
+  "hero_image_attribution": "Trolley8 / CC BY-SA 4.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Shawnee Mountain Ski Area — PA ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "palisades-tahoe",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/palisades-tahoe.jpg",
+  "hero_image_attribution": "Rennett Stowe from USA / CC BY 2.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Palisades Tahoe — CA ski resort in winter",
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "snow-summit",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/snow-summit.jpg",
+  "hero_image_attribution": "kallahar / CC BY 3.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Snow Summit — CA ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "keystone",
+  "hero_image_url": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": false
+ },
+ {
+  "slug": "liberty-mountain",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/liberty-mountain.jpg",
+  "hero_image_attribution": "Baileypalblue / Public domain",
+  "hero_image_credit": null,
+  "hero_image_alt": "Liberty Mountain — PA ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "camelback-mountain-resort",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/camelback-mountain-resort.jpg",
+  "hero_image_attribution": "Almondpiano / CC BY-SA 4.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Camelback Mountain Resort — PA ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "silver-mountain",
+  "hero_image_url": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": false
+ },
+ {
+  "slug": "wachusett-mountain",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/wachusett-mountain.jpg",
+  "hero_image_attribution": "ROxBo at English Wikipedia / Public domain",
+  "hero_image_credit": null,
+  "hero_image_alt": "Wachusett Mountain — MA ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "ski-butternut",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/ski-butternut.jpg",
+  "hero_image_attribution": "EgorovaSvetlana / CC BY-SA 4.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Ski Butternut — MA ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "kirkwood-mountain-resort",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/kirkwood-mountain-resort.jpg",
+  "hero_image_attribution": "skeight976 / CC BY 3.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Kirkwood Mountain Resort — CA ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "steamboat",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/steamboat.jpg",
+  "hero_image_attribution": "CarTick at English Wikipedia / CC BY-SA 3.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Steamboat Ski Resort — CO ski resort in winter",
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "bolton-valley",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/bolton-valley.jpg",
+  "hero_image_attribution": "Gopats92 / Public domain",
+  "hero_image_credit": null,
+  "hero_image_alt": "Bolton Valley — VT ski resort in winter",
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "marquette-mountain",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/marquette-mountain.jpg",
+  "hero_image_attribution": "Rickdrew at English Wikipedia / CC BY-SA 3.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Marquette Mountain — MI ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "big-sky",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/big-sky.jpg",
+  "hero_image_attribution": "A-Reck / CC BY-SA 3.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Big Sky Resort — MT ski resort in winter",
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "lutsen-mountains",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/lutsen-mountains.jpg",
+  "hero_image_attribution": "Wikimedia Commons",
+  "hero_image_credit": null,
+  "hero_image_alt": "Lutsen Mountains — MN ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "mohawk-mountain-ski-area",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/mohawk-mountain-ski-area.jpg",
+  "hero_image_attribution": "Jrclark (talk) / CC BY-SA 3.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Mohawk Mountain Ski Area — CT ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "anthony-lakes",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/anthony-lakes.jpg",
+  "hero_image_attribution": "Snowsnapper / Public domain",
+  "hero_image_credit": null,
+  "hero_image_alt": "Anthony Lakes Mountain Resort — OR ski resort in winter",
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "park-city",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/park-city.jpg",
+  "hero_image_attribution": "Rudi Riet from Washington, DC, United States / CC BY-SA 2.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Park City Mountain Resort — UT ski resort in winter",
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "mount-snow",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/mount-snow.jpg",
+  "hero_image_attribution": "William J Sisti from Morristown, NJ, USA / CC BY-SA 2.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Mount Snow — VT ski resort in winter",
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "woods-valley",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/woods-valley.jpg",
+  "hero_image_attribution": "Russell Lovrin / CC BY 3.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Woods Valley — NY ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "okemo-mountain-resort",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/okemo-mountain-resort.jpg",
+  "hero_image_attribution": "Jrclark (talk) / CC BY-SA 3.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Okemo Mountain Resort — VT ski resort in winter",
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "northeast-slopes",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/northeast-slopes.jpg",
+  "hero_image_attribution": "Redjar / CC BY-SA 4.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Northeast Slopes — VT ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "perfect-north",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/perfect-north.jpg",
+  "hero_image_attribution": "Serge Melki / CC BY 2.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Perfect North Slopes — IN ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "northstar-california",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/northstar-california.jpg",
+  "hero_image_attribution": "Leijurv / CC BY-SA 4.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Northstar California — CA ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "crotched-mountain",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/crotched-mountain.jpg",
+  "hero_image_attribution": "Pretzel4 / CC0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Crotched Mountain — NH ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "mt-baldy",
+  "hero_image_url": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": false
+ },
+ {
+  "slug": "montage-mountain",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/montage-mountain.jpg",
+  "hero_image_attribution": "Ekem / CC BY-SA 4.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Montage Mountain — PA ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "crystal-mountain",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/crystal-mountain.jpg",
+  "hero_image_attribution": "ZhengZhou / CC BY-SA 3.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Crystal Mountain — WA ski resort in winter",
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "cannon-mountain",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/cannon-mountain.jpg",
+  "hero_image_attribution": "Ericshawwhite / CC BY-SA 3.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Cannon Mountain — NH ski resort in winter",
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "white-pass",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/white-pass.jpg",
+  "hero_image_attribution": "Goleh / Public domain",
+  "hero_image_credit": null,
+  "hero_image_alt": "White Pass Ski Area — WA ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "mammoth-mountain",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/mammoth-mountain.jpg",
+  "hero_image_attribution": "Karissa Kunihira / CC BY 3.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Mammoth Mountain Ski Area — CA ski resort in winter",
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "mad-river-glen",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/mad-river-glen.jpg",
+  "hero_image_attribution": "Jrclark (talk) / CC BY-SA 3.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Mad River Glen — VT ski resort in winter",
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "magic-mountain",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/magic-mountain.jpg",
+  "hero_image_attribution": "Jared C. Benedict / CC BY-SA 4.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Magic Mountain — VT ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "saddleback",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/saddleback.jpg",
+  "hero_image_attribution": "Bubblecuffer / Public domain",
+  "hero_image_credit": null,
+  "hero_image_alt": "Saddleback — ME ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "blue-mountain-resort",
+  "hero_image_url": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": false
+ },
+ {
+  "slug": "appalachian-ski-mountain",
+  "hero_image_url": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": false
+ },
+ {
+  "slug": "warner-canyon",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/warner-canyon.jpg",
+  "hero_image_attribution": "Snowsnapper / Public domain",
+  "hero_image_credit": null,
+  "hero_image_alt": "Warner Canyon Ski Area — OR ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "beaver-creek",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/beaver-creek.jpg",
+  "hero_image_attribution": "Joe Lin / CC BY 2.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Beaver Creek Resort — CO ski resort in winter",
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "grand-targhee",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/grand-targhee.jpg",
+  "hero_image_attribution": "Richardmouser / CC BY-SA 4.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Grand Targhee Resort — WY ski resort in winter",
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "plattekill-mountain",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/plattekill-mountain.jpg",
+  "hero_image_attribution": "Rosst7200 / CC BY-SA 4.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Plattekill Mountain — NY ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "june-mountain",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/june-mountain.jpg",
+  "hero_image_attribution": "Eric T Gunther / CC BY-SA 3.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "June Mountain — CA ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "breckenridge",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/breckenridge.jpg",
+  "hero_image_attribution": "Jasen Miller from Colorado Springs, USA / CC BY 2.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Breckenridge Ski Resort — CO ski resort in winter",
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "bromley-mountain",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/bromley-mountain.jpg",
+  "hero_image_attribution": "Jared C. Benedict / CC BY-SA 4.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Bromley Mountain — VT ski resort in winter",
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "powder-mountain",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/powder-mountain.jpg",
+  "hero_image_attribution": "Baileypalblue / Public domain",
+  "hero_image_credit": null,
+  "hero_image_alt": "Powder Mountain — UT ski resort in winter",
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "mt-eyak",
+  "hero_image_url": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": false
+ },
+ {
+  "slug": "big-powderhorn-mountain",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/big-powderhorn-mountain.jpg",
+  "hero_image_attribution": "Jhansonxi / CC BY-SA 3.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Big Powderhorn Mountain — MI ski resort in winter",
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "killington",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/killington.jpg",
+  "hero_image_attribution": "Wikimedia Commons",
+  "hero_image_credit": null,
+  "hero_image_alt": "Killington Ski Resort — VT ski resort in winter",
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "big-boulder",
+  "hero_image_url": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": false
+ },
+ {
+  "slug": "red-lodge",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/red-lodge.jpg",
+  "hero_image_attribution": "Elkman / CC BY-SA 4.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Red Lodge Mountain — MT ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "crested-butte",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/crested-butte.jpg",
+  "hero_image_attribution": "Peter from Wellesley / CC BY 2.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Crested Butte Mountain Resort — CO ski resort in winter",
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "timber-ridge",
+  "hero_image_url": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": false
+ },
+ {
+  "slug": "taos-ski-valley",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/taos-ski-valley.jpg",
+  "hero_image_attribution": "Murray Foubister / CC BY-SA 2.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Taos Ski Valley — NM ski resort in winter",
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "brighton",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/brighton.jpg",
+  "hero_image_attribution": "CC BY-SA 2.5",
+  "hero_image_credit": null,
+  "hero_image_alt": "Brighton Resort — UT ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "nubs-nob",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/nubs-nob.jpg",
+  "hero_image_attribution": "Mr Swordfish2 / CC BY-SA 4.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Nub's Nob — MI ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "cooper-spur-area",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/cooper-spur-area.jpg",
+  "hero_image_attribution": "Snowsnapper / Public domain",
+  "hero_image_credit": null,
+  "hero_image_alt": "Cooper Spur Ski Area — OR ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "holiday-mountain",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/holiday-mountain.jpg",
+  "hero_image_attribution": "EgorovaSvetlana / CC BY-SA 4.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Holiday Mountain — NY ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "spirit-mountain",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/spirit-mountain.jpg",
+  "hero_image_attribution": "Midnightcomm / CC BY-SA 3.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Spirit Mountain — MN ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "great-divide",
+  "hero_image_url": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": false
+ },
+ {
+  "slug": "indianhead-mountain",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/indianhead-mountain.jpg",
+  "hero_image_attribution": "Rickdrew at English Wikipedia / CC BY 3.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Indianhead Mountain — MI ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "homestead-resort",
+  "hero_image_url": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": false
+ },
+ {
+  "slug": "welch-village",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/welch-village.jpg",
+  "hero_image_attribution": "Darth Stabro / CC BY-SA 4.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Welch Village — MN ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "powderhouse-hill",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/powderhouse-hill.jpg",
+  "hero_image_attribution": "Powderhouse Hill / CC BY-SA 3.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Powderhouse Hill — ME ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "ragged-mountain",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/ragged-mountain.jpg",
+  "hero_image_attribution": "CC BY 3.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Ragged Mountain — NH ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "monarch-mountain",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/monarch-mountain.jpg",
+  "hero_image_attribution": "EpicV27 / CC BY-SA 4.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Monarch Mountain — CO ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "bousquet-mountain",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/bousquet-mountain.jpg",
+  "hero_image_attribution": "P. S. F. Freitas / CC BY-SA 4.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Bousquet Mountain — MA ski resort in winter",
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "jay-peak",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/jay-peak.jpg",
+  "hero_image_attribution": "Hanumanix at English Wikipedia / Public domain",
+  "hero_image_credit": null,
+  "hero_image_alt": "Jay Peak — VT ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "mt-la-crosse",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/mt-la-crosse.jpg",
+  "hero_image_attribution": "Wikideas1 / CC0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Mt La Crosse — WI ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "labrador-mountain",
+  "hero_image_url": null,
+  "hero_image_attribution": null,
+  "hero_image_credit": null,
+  "hero_image_alt": null,
+  "hero_image_verified_winter": false
+ },
+ {
+  "slug": "greek-peak",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/greek-peak.jpg",
+  "hero_image_attribution": "Douglas Camin / CC0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Greek Peak — NY ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "aspen-highlands",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/aspen-highlands.jpg",
+  "hero_image_attribution": "This Photo was taken by Wolfgang Moroder.  \n\nFeel free to use my photos, but ple / CC BY-SA 3.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Aspen Highlands — CO ski resort in winter",
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "bristol-mountain",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/bristol-mountain.jpg",
+  "hero_image_attribution": "meg colombo from Finger Lakes, NY, USA / CC BY 2.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Bristol Mountain — NY ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "copper-mountain",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/copper-mountain.jpg",
+  "hero_image_attribution": "SparkFunElectronics / CC BY 2.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Copper Mountain — CO ski resort in winter",
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "cataloochee-ski-area",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/cataloochee-ski-area.jpg",
+  "hero_image_attribution": "Tamparitus / CC BY-SA 4.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Cataloochee Ski Area — NC ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "timberline-lodge",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/timberline-lodge.jpg",
+  "hero_image_attribution": "Buidhe / CC BY-SA 4.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Timberline Lodge Ski Area — OR ski resort in winter",
+  "hero_image_verified_winter": true
+ },
+ {
+  "slug": "gore-mountain",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/gore-mountain.jpg",
+  "hero_image_attribution": "Ian Taylor Iant333 / Public domain",
+  "hero_image_credit": null,
+  "hero_image_alt": "Gore Mountain — NY ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "hoodoo",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/hoodoo.jpg",
+  "hero_image_attribution": "SkiHoodoo / CC BY-SA 4.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Hoodoo — OR ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "crystal-mountain-mi",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/crystal-mountain-mi.jpg",
+  "hero_image_attribution": "Jhansonxi / CC BY-SA 3.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Crystal Mountain (MI) — MI ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "powder-ridge-mountain-park",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/powder-ridge-mountain-park.jpg",
+  "hero_image_attribution": "Morrowlong / CC BY-SA 4.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Powder Ridge Mountain Park & Resort — CT ski resort in winter",
+  "hero_image_verified_winter": null
+ },
+ {
+  "slug": "shawnee-peak",
+  "hero_image_url": "https://yhmzkeeaiknsotydaucs.supabase.co/storage/v1/object/public/resort-heroes/shawnee-peak.jpg",
+  "hero_image_attribution": "Stevage / CC BY-SA 3.0",
+  "hero_image_credit": null,
+  "hero_image_alt": "Pleasant Mountain — ME ski resort in winter",
+  "hero_image_verified_winter": null
+ }
+]

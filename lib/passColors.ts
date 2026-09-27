@@ -4,6 +4,8 @@
 //   Epic Pass:           Vail Resorts orange
 //   Indy Pass:           red, post-2023 rebrand
 //   Independent:         neutral gray
+import { textOn } from "@/lib/contrast";
+
 export const PASS_COLORS = {
   mountain_collective: "#1E3A8A",
   ikon: "#F2C200",
@@ -65,11 +67,12 @@ export function primaryPass(passes: string[] | null | undefined): Pass {
 }
 
 // Pass badge styling (HTML string for use inside Mapbox popups, where we
-// can't use Tailwind classes). Solid bg + white text, WCAG AA contrast.
-// Ikon yellow gets dark text since white-on-yellow fails WCAG.
+// can't use Tailwind classes). Text colour comes from lib/contrast
+// textOn: navy on Ikon yellow and Epic orange (white fails WCAG AA
+// there), white on the darker passes.
 export function passBadgeHtml(pass: string): string {
   const bg = passColor(pass);
-  const fg = pass === "ikon" ? "#1E2952" : "#FFFFFF";
+  const fg = textOn(bg);
   return `
     <span style="
       display: inline-block;

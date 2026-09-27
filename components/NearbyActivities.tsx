@@ -42,14 +42,17 @@ export default function NearbyActivities({ rows, variant = "full" }: Props) {
   }
 
   const isCompact = variant === "compact";
+  // The full variant sits inside the resort page's "Around the resort"
+  // section (an h2), so it is an h3 there; compact keeps its h2.
+  const Heading = isCompact ? "h2" : "h3";
   return (
     <div className={isCompact ? "mt-4" : "mt-8"}>
       <header className={isCompact ? "mb-1" : "mb-3"}>
-        <h2 className={isCompact ? "text-base font-extrabold text-wn-navy" : "text-xl font-extrabold text-wn-navy"}>
-          🎟 Off-mountain
-        </h2>
+        <Heading className={isCompact ? "text-base font-extrabold text-wn-navy" : "text-lg font-extrabold text-wn-navy"}>
+          <span aria-hidden="true">🎟</span> Off-mountain
+        </Heading>
         {!isCompact && (
-          <p className="text-xs text-wn-charcoal/60">
+          <p className="text-xs text-wn-muted">
             Things to do near the resort beyond skiing — sourced from
             OpenStreetMap.
           </p>

@@ -3,6 +3,7 @@ import {
   type SeasonInfo,
   formatShortDate,
 } from "@/lib/seasonDates";
+import Icon from "@/components/icons/Icon";
 
 type Variant = "badge" | "hero";
 
@@ -38,12 +39,12 @@ export default function SeasonCountdown({ info, variant = "badge", className }: 
         className={[
           "inline-flex items-center gap-1.5 rounded-full font-semibold",
           isHero
-            ? "bg-emerald-600/90 px-3 py-1.5 text-sm text-white shadow-sm"
-            : "bg-emerald-50 px-2 py-1 text-[11px] text-emerald-800 ring-1 ring-emerald-200",
+            ? "bg-wn-success px-3 py-1.5 text-sm text-white shadow-wn-sm"
+            : "bg-wn-success-bg px-2 py-1 text-xs text-wn-success ring-1 ring-wn-success/25",
           className ?? "",
         ].join(" ")}
       >
-        <span aria-hidden="true">⛷️</span>
+        <Icon name="skier" className="h-3.5 w-3.5 shrink-0" />
         <span>
           Season runs to {approx}{formatShortDate(info.nextCloseDate)}
           {info.closeProjected ? " (projected)" : ""}
@@ -64,12 +65,12 @@ export default function SeasonCountdown({ info, variant = "badge", className }: 
         className={[
           "inline-flex items-center gap-1.5 rounded-full font-semibold",
           isHero
-            ? "bg-wn-navy px-3 py-1.5 text-sm text-white shadow-sm"
-            : "bg-wn-navy/95 px-2 py-1 text-[11px] text-white",
+            ? "bg-wn-navy px-3 py-1.5 text-sm text-white shadow-wn-sm"
+            : "bg-wn-navy/95 px-2 py-1 text-xs text-white",
           className ?? "",
         ].join(" ")}
       >
-        <span aria-hidden="true">❄️</span>
+        <Icon name="snowflake" className="h-3.5 w-3.5 shrink-0" />
         <span>
           {info.openProjected ? "Projected to open in" : "Opens in"} {info.daysUntilOpen} day
           {info.daysUntilOpen === 1 ? "" : "s"} · {approx}
@@ -83,7 +84,7 @@ export default function SeasonCountdown({ info, variant = "badge", className }: 
   return (
     <span
       className={[
-        "inline-flex items-center gap-1 rounded-full bg-wn-charcoal/5 px-2 py-1 text-[11px] font-medium text-wn-charcoal/60",
+        "inline-flex items-center gap-1 rounded-full bg-wn-charcoal/5 px-2 py-1 text-xs font-medium text-wn-muted",
         className ?? "",
       ].join(" ")}
     >
@@ -93,11 +94,11 @@ export default function SeasonCountdown({ info, variant = "badge", className }: 
 }
 
 const TONE_CLASS: Record<ResortStatus["tone"], { pill: string; dot: string }> = {
-  green: { pill: "bg-emerald-50 text-emerald-800 ring-1 ring-emerald-200", dot: "bg-emerald-500" },
-  amber: { pill: "bg-amber-50 text-amber-800 ring-1 ring-amber-200", dot: "bg-amber-500" },
-  red: { pill: "bg-red-50 text-red-800 ring-1 ring-red-200", dot: "bg-red-500" },
+  green: { pill: "bg-wn-success-bg text-wn-success ring-1 ring-wn-success/25", dot: "bg-wn-success" },
+  amber: { pill: "bg-wn-warning-bg text-wn-warning ring-1 ring-wn-warning/25", dot: "bg-wn-warning" },
+  red: { pill: "bg-wn-danger-bg text-wn-danger ring-1 ring-wn-danger/25", dot: "bg-wn-danger" },
   navy: { pill: "bg-wn-navy text-white", dot: "bg-wn-sky" },
-  muted: { pill: "bg-wn-charcoal/5 text-wn-charcoal/70 ring-1 ring-wn-charcoal/10", dot: "bg-wn-charcoal/40" },
+  muted: { pill: "bg-wn-charcoal/5 text-wn-muted ring-1 ring-wn-line", dot: "bg-wn-subtle" },
 };
 
 /**
@@ -120,7 +121,7 @@ export function ResortStatusPill({
     <span
       className={[
         "inline-flex max-w-full items-center gap-1.5 rounded-full font-semibold",
-        size === "md" ? "px-3 py-1.5 text-sm" : "px-2 py-1 text-[11px]",
+        size === "md" ? "px-3 py-1.5 text-sm" : "px-2 py-1 text-xs",
         tone.pill,
         className ?? "",
       ].join(" ")}

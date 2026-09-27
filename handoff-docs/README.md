@@ -1,144 +1,38 @@
-# Wynla — Project Handoff Document
+# handoff-docs
 
-**For: Cursor AI / Any AI Assistant working on this project**
-**From: Claude (planning phase)**
-**Last Updated: May 2026**
+Context for people and agents working on Wynla. Start with the two live
+files, then dip into the rest only when a task needs them.
 
----
+## Read first (kept current)
 
-## 🎯 What This Folder Contains
+| File | What it is |
+|---|---|
+| `CURRENT_STATUS.md` | What is live on wynla.app, what is pending, the founder checklist, the round ledger. Rewritten 2026-09-23. |
+| `SESSION_PROTOCOL.md` | How a session runs: never-stop batches, worktree + branch rules, PR creation, what to verify before finishing. |
+| `DB_SCHEMA_LIVE_2026-09-23.md` | The live Supabase schema as of 2026-09-23. |
+| `sql/` | Pending migrations, in the order to run them (`2026-09-23-ALL-season-1.sql`, then `2026-09-23-ALL-round-2.sql`). |
+| `DATA_BACKFILL_2026-09-23.md` | The September data backfill: what was fixed, coverage, how to re-run. |
+| `*_2026-09-23.md` (AUTH, DATA_PIPELINE, GO, INSTALL, PASS_DATA, PREDICTION_LEDGER) | Per-feature notes from Season 1 rounds 1 and 2: what shipped, the env vars and Supabase settings each needs. |
+| `RESEND_SETUP.md` | Transactional email setup. |
 
-This folder is the **complete context** for the Wynla project. Read these files in order:
+The root `README.md` has how to run, check, deploy and which env vars
+exist.
 
-1. **README.md** (this file) — Quick overview
-2. **PRODUCT_SPEC.md** — What we're building and why
-3. **TECHNICAL_SPEC.md** — How to build it
-4. **DATABASE_SCHEMA.md** — Data structure
-5. **DESIGN_GUIDE.md** — UI/UX principles
-6. **DEVELOPMENT_ROADMAP.md** — Step-by-step build order
-7. **BUSINESS_CONTEXT.md** — Business model and strategy
+## Planning documents (May 2026, historical)
 
----
+`PRODUCT_SPEC.md`, `TECHNICAL_SPEC.md`, `DATABASE_SCHEMA.md`,
+`DESIGN_GUIDE.md`, `DEVELOPMENT_ROADMAP.md`, `BUSINESS_CONTEXT.md`,
+`QUICK_START.md`, `STAGE_4_5_6_PLANS.md` and `MASTER_PROMPT_FOR_CLAUDE_CODE.md` were
+written before the first line of code, for a Cursor-based build that never
+happened in that shape. They still explain the original intent (map-first,
+pass-aware, generous free tier, no scraped trail maps, no ski-vs-snowboard
+judgements) but the stack details, folder layout and roadmap in them are
+superseded by the code and by `CURRENT_STATUS.md`. Do not take a number or
+a schema from them; take it from the live schema file or the database.
 
-## 🚀 Quick Start for AI Assistants
+## Conventions
 
-You are helping build **Wynla** — a map-based ski/snowboard trip planning web app for the US market.
-
-**Founder profile:**
-- Age 24, snowboard enthusiast
-- Limited coding background (HTML/CSS/JS basics being learned)
-- Time commitment: full days during the week
-- Budget: $100-500/month
-- Goal: Build a real business, possibly exit in 4-5 years
-
-**Key principles when assisting:**
-1. **Explain everything simply** — assume founder is non-technical
-2. **Build incrementally** — small wins, ship often
-3. **Use modern, simple tech** — Next.js, Supabase, Mapbox, Vercel
-4. **Avoid over-engineering** — MVP first, polish later
-5. **Show, don't tell** — code examples > theory
-
----
-
-## 🎿 The Product in One Sentence
-
-> "Wynla is a one-stop web app that helps NYC-area skiers and snowboarders plan their weekend trips by combining map, weather forecast, ski pass info, and resort details — all in one place."
-
----
-
-## 📍 Current State
-
-- ✅ Product vision defined
-- ✅ Market research completed
-- ✅ Tech stack chosen
-- ✅ Service accounts created (GitHub, Vercel, Supabase, Mapbox)
-- ✅ Tools installed (Node.js, Git, Cursor)
-- ⏳ Database schema (next step)
-- ⏳ Resort data collection (next step)
-- ⏳ MVP build (next step)
-
----
-
-## 📁 Folder Structure (when project starts)
-
-```
-wynla/
-├── handoff-docs/          # This folder (planning docs)
-├── src/
-│   ├── app/               # Next.js pages
-│   ├── components/        # React components
-│   ├── lib/               # Utilities
-│   └── styles/            # CSS
-├── public/                # Static assets
-├── data/
-│   └── resorts.json       # Resort database
-├── package.json
-└── README.md
-```
-
----
-
-## 🗣️ Communication with Founder
-
-**Founder's primary language:** Thai (but understands English technical terms)
-**Preferred style:**
-- Clear, structured explanations
-- Show what's happening at each step
-- Ask before making major decisions
-- Use emojis sparingly to make sections scannable
-- Don't assume technical knowledge
-
-**Founder's working style:**
-- Likes to understand "why" before "how"
-- Wants to learn while building
-- Asks good strategic questions
-- Sometimes wants to skip steps — gently push back if it matters
-
----
-
-## ⚠️ Important Constraints
-
-1. **No real-time scraping of resort websites** (legal risk)
-2. **No reproducing copyrighted trail maps** (link out instead)
-3. **No assumptions about which resort is "better" for ski vs snowboard** (show features, let user decide)
-4. **No native mobile app initially** (web-first, PWA later)
-5. **Free tier must be generous** (avoid OpenSnow's mistake)
-
----
-
-## 🎯 First Build Goals (MVP)
-
-1. Map showing 30 NE US ski resorts
-2. Filter by: Pass, Distance, Skill level, Features
-3. Resort detail page with weather forecast
-4. Embedded browser to view resort website
-5. Drive time integration with Google Maps
-6. Affiliate links for booking (Booking.com, etc.)
-
----
-
-## 🚫 Out of Scope for MVP
-
-- AI recommendations (use filters instead)
-- Trail tracking during skiing
-- Social features
-- Mobile native app
-- Multi-language support
-- Real-time trail status
-- User accounts (Phase 2)
-
----
-
-## 📞 Next Action for AI Assistant
-
-When founder opens this in Cursor and asks for help:
-
-1. **First:** Read all .md files in this folder
-2. **Then:** Acknowledge what you understand
-3. **Then:** Ask: "Which task should we start with? Database setup, project initialization, or something else?"
-
-**Recommended starting task: Initialize Next.js project + Supabase connection**
-
----
-
-*This document was prepared by Claude during the planning phase. All decisions and recommendations herein are starting points — adapt based on real user feedback and execution learnings.*
+- Dates in file names are the day the snapshot was taken, US format
+  YYYY-MM-DD.
+- A file that is no longer true gets a one-line "superseded by" note at
+  the top rather than being deleted, so old links keep resolving.

@@ -1,16 +1,16 @@
 // Compare-list localStorage helper. Backs Feature 1: the floating
 // "Compare X" button + the /compare side-by-side page. Keeps state
 // purely client-side — no DB, no auth requirement — so anonymous
-// users can stack up to 4 resorts and inspect them as a group.
+// users can stack up to COMPARE_MAX resorts and inspect them as a group.
 //
 // All functions are SSR-safe via `typeof window` guards: during the
 // initial server render the list reads as empty, then re-syncs on
 // hydration when the first effect runs.
 
 const KEY = "wynla_compare_v1";
-// Pro tier ceiling; free users hit a soft cap from FREE_LIMITS.compare
-// (lib/tierLimits.ts) and see UpsellModal before reaching this hard one.
-// Anything above 5 makes the /compare page UX-hostile regardless of tier.
+// Hard ceiling for everyone: above five columns the /compare page stops
+// being readable on any screen. Mirrors FREE_LIMITS.compare in
+// lib/tierLimits.ts; there is no tier gate below it in Season 1.
 export const COMPARE_MAX = 5;
 
 /** Custom event name dispatched whenever the list mutates. Components

@@ -1,647 +1,446 @@
-# Wynla — Design Guide
+# Wynla design guide
 
----
+Rewritten 2026-09-23 for the Season 1 round 3 design package. This is the
+human-readable half of the system; the machine half is `app/globals.css`
+(`@theme` tokens) and `components/ui/*` (primitives). When the two
+disagree, the code is right and this file needs an edit.
 
-## 0. Brand Story & Identity
+The old guide described a product that never shipped (ski-blue #2563EB,
+Inter, Lucide, gray palette; audit finding design-system-28). Everything
+below is what the app actually uses.
 
-### The Name: Wynla (วิน-ลา / WIN-luh)
+## 1. Principles
 
-**Wyn** (Old English) = joy, delight, pleasure
-**la** = elegant suffix that adds flow
+1. **Show, don't decide.** Numbers, not verdicts. Every user-visible
+   number is labelled with how we know it (Measured / Forecast /
+   Estimated / Reported) and when (see section 8).
+2. **One of each.** One button, one card, one chip, one input, one icon
+   language, one muted colour, one H1 scale. If a page needs a second
+   version of something, the primitive grows a prop; the page does not
+   grow a class string.
+3. **Phone first, 44 px.** Design at 375 px. Every tap target is at least
+   44 px on phones (36 px is allowed for chips and desktop-only dense
+   rows). Inputs are 16 px on phones so iOS never zooms.
+4. **Honest chrome.** Emoji live in copy (editorial personality), never
+   as a button glyph, a tab icon or a status dot. Chrome uses the
+   monoline `Icon` set.
+5. **Respect the person's settings.** `prefers-reduced-motion` kills
+   every animation globally (`app/globals.css`); keyboard focus is
+   always visible; muted text never drops below 4.5:1.
 
-**Meaning:** *"The joy of the journey, planned right."*
+## 2. Tokens (`app/globals.css`)
 
-### Brand Pillars
+### Colour
 
-1. **Plan with confidence** — Smart tools, no guessing
-2. **Discover with joy** — Make planning feel exciting
-3. **Ride your way** — No prescribed "best" — your call
+| Token | Value | Use |
+| --- | --- | --- |
+| `wn-navy` | `#1E2952` | Primary fill, headings, links, focus ring |
+| `wn-sky` | `#5BAFE6` | Brand accent on navy surfaces only. **Never text on white** (2.4:1). |
+| `wn-gold` | `#F5C443` | The one gold: primary CTA on a navy surface, badges on navy. **Never text on white** (1.6:1). |
+| `wn-gold-halo` | `#CEA846` | Gold mixed with 18 % navy for the light map style (pin rings, route line). Replaces the ad-hoc `#D4A84B`. |
+| `wn-offwhite` | `#FAFAF7` | Page background |
+| `wn-charcoal` | `#2A2A2A` | Body text |
+| `wn-muted` | `#5C5C5B` | Secondary text. 6.4:1 on off-white, 6.7:1 on white. Replaces every `text-wn-charcoal/45..75`. |
+| `wn-subtle` | `#767675` | Decorative text and icons only (4.2:1). Replaces `text-wn-charcoal/35..40`. |
+| `wn-line` | `#E5E5E5` | Borders and dividers. Replaces `border-wn-charcoal/10..20`. |
+| `wn-navy-deep` | `#0F1530` | The dark end of every navy gradient (was `#0B1028`, `#141A3A`, `#0F1530`). |
+| `wn-focus` / `wn-focus-on-dark` | navy / gold | Focus ring colour on light / dark surfaces |
+| `wn-success` `-bg` | `#1B7F4B` / `#ECFDF3` | Confirmations |
+| `wn-danger` `-bg` | `#B42318` / `#FEF3F2` | Errors, sold out |
+| `wn-warning` `-bg` | `#B54708` / `#FFFAEB` | Caution notices |
+| `wn-info` `-bg` | `#0F6ABF` / `#EFF6FF` | Neutral notices |
 
-### Brand Personality
+Utilities: `text-wn-muted`, `bg-wn-line`, `border-wn-line`,
+`bg-wn-success-bg`, `text-wn-danger`, `bg-wn-navy/5` (tints via `/NN`
+are fine for **backgrounds**, never for text).
 
-- **Premium** but approachable (like AllTrails meets Linear)
-- **Smart** but not nerdy
-- **Confident** but not arrogant
-- **Joyful** but not silly
+Where the second gold still lives (owners migrate to `wn-gold-halo` /
+`#CEA846`): `components/Map/MapView.tsx` (5 literals), `components/Map/
+MapPage.tsx:1790`, `app/go/og/route.tsx`, `lib/ogCard.tsx`,
+`lib/emailTemplates.ts`, `lib/email/templates/thursdayPicks.ts`. Email and
+OG code cannot read CSS variables, so they keep a literal; the literal
+should be `#CEA846` with a comment pointing here.
 
-### Tone of Voice
+Pass colours stay in `lib/passColors.ts` (Epic `#F37021`, Ikon `#F2C200`,
+Indy `#DC2626`, Mountain Collective `#1E3A8A`, independent `#6B7280`).
+Ikon yellow is close to the brand gold on purpose (Ikon's brand); do not
+use gold next to an Ikon badge for decoration.
 
-- ✅ Clear, direct, helpful
-- ✅ Warm but professional
-- ❌ Avoid bro-speak ("Crush it!")
-- ❌ Avoid corporate-speak ("Synergize")
+Text on a pass colour (badges, rank dots, pass-coloured heroes) takes its
+colour from `textOn(bg)` in `lib/contrast.ts`, never a hardcoded white:
+white is 1.7:1 on Ikon yellow and 2.9:1 on Epic orange, so those get navy
+(8.7:1 / 4.8:1); Indy, Mountain Collective and independent keep white.
+`PageHeader accent` runs the accent through `accentOnNavy()` so the white
+title and the 70 % white eyebrow stay above 4.5:1 for any list colour.
+`text-wn-subtle` (4.35:1 on off-white) is for icons and decoration only;
+placeholders, footnotes and error references use `text-wn-muted`.
 
-### Tagline Options
+### Type scale
 
-- **"Plan smart. Ride better."** (primary)
-- **"The joy of the journey, planned right."** (extended)
-- **"Where every adventure begins."** (aspirational)
+Six body steps with fixed line heights, plus display steps for hero
+titles. `text-eyebrow` (11 px, 0.08em tracking) is the only size below
+12 px and is only for uppercase labels. `text-[9px]`, `text-[10px]`,
+`text-[11px]`, `text-[13px]` are not allowed.
 
----
+The four small steps are Tailwind's own utilities (same sizes). Every
+step above 18 px is a Wynla utility with a `wn-` prefix. Tailwind's
+`text-xl` .. `text-6xl` are deliberately left at Tailwind's defaults
+(20 / 24 / 30 / 36 / 48 / 60 px) so files that have not migrated yet do
+not change size under their owners; new and migrated code uses only the
+`text-wn-*` steps.
 
-## 1. Design Philosophy
+| Utility | Size / line | Use |
+| --- | --- | --- |
+| `text-eyebrow` | 11 / 16 | Uppercase labels above titles, stat labels |
+| `text-xs` | 12 / 16 | Captions, timestamps, footnotes, tab bar labels |
+| `text-sm` | 14 / 20 | Body in cards, buttons, labels |
+| `text-base` | 16 / 24 | Article body, inputs on phones |
+| `text-lg` | 18 / 28 | Section titles (`Section`), card titles |
+| `text-wn-xl` | 22 / 28 | Large card titles, login H1, stat values from `sm` |
+| `text-wn-2xl` | 28 / 34 | Page H1 on phones, article H2 |
+| `text-wn-3xl` | 32 / 38 | Prices, hero numbers |
+| `text-wn-4xl` | 40 / 44 | Page H1 from `sm` |
+| `text-wn-5xl` | 48 / 52 | Directory H1 (`PageHeader size="lg"`) from `lg` |
 
-### Core Principle: **"Show, don't decide"**
+Class mapping for files that migrate (the size changes are intended;
+check each at 375 px):
 
-We give users information. They make decisions.
+| Legacy utility | Tailwind size | Replace with | New size |
+| --- | --- | --- | --- |
+| `text-xl` | 20 px | `text-wn-xl` | 22 px |
+| `text-2xl` | 24 px | `text-wn-2xl` | 28 px |
+| `text-3xl` | 30 px | `text-wn-3xl` | 32 px |
+| `text-4xl` | 36 px | `text-wn-4xl` | 40 px |
+| `text-5xl` | 48 px | `text-wn-5xl` | 48 px (line height 52) |
+| `text-6xl` | 60 px | `text-wn-5xl`, or keep `text-6xl` for the resort hero only | 48 px |
 
-We don't:
-- Tell users which mountain is "best"
-- Use AI to suggest where to go
-- Add visual ratings or scores
-- Imply "good" or "bad" conditions
+Keep the breakpoint prefix: `sm:text-3xl` becomes `sm:text-wn-3xl`. A
+page H1 should become the `PageHeader` title instead of a mapped class.
 
-We do:
-- Show clear, accurate data
-- Make filtering effortless
-- Link out for live verification
-- Trust user intelligence
+H1 = `PageHeader`: 28 px on phones, 40 px from `sm`, 48 px on `lg` for
+directories. H2 = `Section` title, 18 px bold navy. H3 = 16 px bold navy.
+Eyebrow = `text-eyebrow font-semibold uppercase text-wn-muted` (the token
+carries the tracking; do not add `tracking-*`).
 
----
+Font: Geist (`--font-sans`), Geist Mono for codes and numbers where
+alignment matters (`tabular-nums` on every number column).
 
-## 2. Visual Identity
+### Radius, shadow, spacing
 
-### Brand Personality
+| Token | Value | Legacy equivalents |
+| --- | --- | --- |
+| `rounded-wn-sm` | 8 px | `rounded-md`, `rounded-lg` (buttons, inputs, chips that are not pills) |
+| `rounded-wn-md` | 12 px | `rounded-xl` (cards) |
+| `rounded-wn-lg` | 16 px | `rounded-2xl` (sheets, marketing cards) |
+| `rounded-full` | pill | chips, avatars |
+| `shadow-wn-sm` | resting card | `shadow-sm` |
+| `shadow-wn-md` | hover / floating | `shadow-md`, `shadow-lg` |
 
-- **Confident** — but not arrogant
-- **Helpful** — like a friend who knows mountains
-- **Clean** — no clutter, no ads
-- **Trustworthy** — honest about what we know and don't
+Spacing rhythm: 4 px base. Inside a card 16 px (20 px from `sm`).
+Between blocks on a page 32 px (`space-y-8`), 48 px between major
+sections on desktop. Page gutter 16 px (`px-4`), 24 px from `sm`.
+Content widths: `max-w-2xl` (forms, /early), `max-w-3xl` (articles,
+legal), `max-w-5xl` (directories), `max-w-6xl` (compare, shell).
 
-### Avoid:
-- Overly playful (this is a planning tool)
-- Stock photography clichés (people jumping with skis)
-- Generic mountain illustrations
-- "Dynamic" gradients and effects
+### Layout variables (`:root`)
 
-### Embrace:
-- Real photography (nature, atmosphere)
-- Generous white space
-- Strong typography
-- Functional iconography
+| Variable | Value | Use |
+| --- | --- | --- |
+| `--wn-shell-h` | 3.5rem | AppShell bar height. Pages' `min-h` is reduced by it automatically; sticky things use `top: calc(var(--wn-shell-h) + env(safe-area-inset-top))`. |
+| `--wn-bottom-stack` | safe-area inset, or the tab bar height while it shows | Floating pills / toasts: `bottom: calc(var(--wn-bottom-stack) + 12px)`. |
+| `--wn-tab-bar-h` | 3.5rem + inset | Set only while the phone tab bar is visible (`html[data-tab-bar="1"]`). |
 
----
+`--wn-header-h` is NOT a shell token: it belongs to the map. MapPage sets
+it on its own root after measuring its floating header, and MapView /
+ResortPanel depend on it being unset before that (fallbacks 140 px /
+64 px). Never define it on `:root` or read it outside `components/Map`.
 
-## 3. Color Palette
+### Focus
 
-### Primary Colors
+Global `:focus-visible` rule: 2 px navy outline, 2 px offset. Add the
+`on-dark` class to a navy surface and the outline turns gold. Do not
+write `focus:outline-none` without a replacement ring; `Input` already
+carries `focus:ring-2 focus:ring-wn-navy/25`.
 
-```css
-/* Snow & Sky */
---wn-white: #FFFFFF;
---wn-off-white: #F8FAFC;
---wn-light-gray: #E2E8F0;
---wn-mid-gray: #94A3B8;
---wn-dark-gray: #334155;
---wn-black: #0F172A;
+## 3. Primitives (`components/ui`)
 
-/* Brand */
---wn-primary: #2563EB;        /* Ski blue */
---wn-primary-dark: #1E40AF;
---wn-primary-light: #DBEAFE;
+All primitives are hook-free (except `Field`, which uses `useId`) and
+work in server and client components.
 
-/* Semantic (use sparingly) */
---wn-success: #059669;        /* Trail open */
---wn-warning: #D97706;        /* Caution */
---wn-info: #0891B2;          /* Weather */
-
-/* Pass Colors (verified against each pass's official brand — locked Stage 1) */
---wn-epic: #F37021;                /* Epic Pass orange — Vail Resorts brand */
---wn-ikon: #F2C200;                /* Ikon Pass yellow — updated 2026-05-05 (was #000000 black; black blended with map UI; yellow more distinctive + matches Ikon's brand accent) */
---wn-indy: #DC2626;                /* Indy Pass red — 2023 rebrand */
---wn-mountain-collective: #1E3A8A; /* Mountain Collective navy */
---wn-independent: #6B7280;         /* Independent / no pass — gray */
-```
-
-### Usage Rules
-
-- **Backgrounds:** mostly white/off-white
-- **Text:** dark gray (--wn-dark-gray) for body, black for headers
-- **Primary action buttons:** ski blue
-- **Avoid red/green for conditions** (don't imply judgment)
-
----
-
-## 4. Typography
-
-### Font Stack
-
-```css
-/* Headers */
-font-family: 'Inter', system-ui, sans-serif;
-font-weight: 700;
-
-/* Body */
-font-family: 'Inter', system-ui, sans-serif;
-font-weight: 400;
-
-/* Mono (data) */
-font-family: 'JetBrains Mono', monospace;
-```
-
-### Type Scale
-
-```css
-/* Display (hero) */
---text-display: 3.5rem;      /* 56px */
-font-weight: 800;
-
-/* H1 */
---text-h1: 2.25rem;          /* 36px */
-font-weight: 700;
-
-/* H2 */
---text-h2: 1.875rem;         /* 30px */
-font-weight: 700;
-
-/* H3 */
---text-h3: 1.5rem;           /* 24px */
-font-weight: 600;
-
-/* Body */
---text-body: 1rem;           /* 16px */
-font-weight: 400;
-line-height: 1.6;
-
-/* Small */
---text-small: 0.875rem;      /* 14px */
-
-/* Caption */
---text-caption: 0.75rem;     /* 12px */
-```
-
-### Rules
-
-- Maximum line length: 65 characters for readability
-- Line height: 1.6 for body, 1.2 for headers
-- Never use thin weights below 400 (hard to read)
-- Always have hierarchy (H1 > H2 > H3 > body)
-
----
-
-## 5. Spacing System
-
-Base unit: **4px**
-
-```css
---space-1: 0.25rem;   /* 4px */
---space-2: 0.5rem;    /* 8px */
---space-3: 0.75rem;   /* 12px */
---space-4: 1rem;      /* 16px */
---space-6: 1.5rem;    /* 24px */
---space-8: 2rem;      /* 32px */
---space-12: 3rem;     /* 48px */
---space-16: 4rem;     /* 64px */
---space-24: 6rem;     /* 96px */
-```
-
-### Usage
-
-- Card padding: `--space-6` (24px)
-- Section spacing: `--space-12` (48px)
-- Between elements: `--space-4` (16px)
-- Tight grouping: `--space-2` (8px)
-
----
-
-## 6. Components
-
-### Buttons
+### Button
 
 ```tsx
-// Primary action
-<button className="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700">
-  View Resort
-</button>
-
-// Secondary
-<button className="bg-white border border-gray-300 text-gray-700 px-6 py-3 rounded-lg font-medium hover:bg-gray-50">
-  Compare
-</button>
-
-// Tertiary (link-style)
-<button className="text-blue-600 font-medium hover:underline">
-  Learn more →
-</button>
+import Button from "@/components/ui/Button";
+<Button>Plan a trip</Button>                         // primary, 44 px
+<Button variant="secondary" size="sm" href="/guides">Guides</Button>
+<Button variant="ghost" onClick={...}>Resend code</Button>
+<Button variant="danger" onClick={...}>Delete account</Button>
+<Button variant="gold">Find my Saturday</Button>     // only on navy, one per screen
+<Button loading block type="submit">Sign in</Button> // spinner, aria-busy, disabled
+<Button iconLeft={<Icon name="map" />} iconRight={<Icon name="arrow-right" />}>...</Button>
 ```
 
-### Cards
+`href` renders a `next/link` (external `https://` / `mailto:` render an
+`<a>`), so a navigation and an action look identical. `buttonClasses()`
+is exported for the rare case where a third-party element needs the look.
+
+### Card
 
 ```tsx
-<div className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-md transition-shadow">
-  {/* Content */}
-</div>
+<Card>…</Card>                                  // 12 px radius, line border, sm shadow, 16/20 px padding
+<Card href="/resort/vail" accent={passColor}>   // link card: hover lift, `group` for arrow nudges
+<Card padding="lg" className="text-center">     // marketing / CTA cards
+<Card padding="none">                            // image tops, tables
 ```
 
-### Pills / Tags / Badges
+### Chip
 
 ```tsx
-// Pass badge
-<span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-  Ikon Pass
-</span>
-
-// Feature tag
-<span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-700">
-  Terrain Park
-</span>
+<Chip href="/state/co">Colorado</Chip>                       // route chip
+<Chip selected onClick={toggle} dot={passColor}>Ikon</Chip>  // toggle, aria-pressed
+<Chip tone="dark">Best for: powder</Chip>                    // on a navy hero
 ```
 
-### Forms
+36 px tall pill. Keep 8 px between chips.
+
+### Input, Textarea, Field
 
 ```tsx
-// Input
-<input
-  type="text"
-  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-  placeholder="Search resorts..."
-/>
-
-// Select
-<select className="w-full px-4 py-2 border border-gray-300 rounded-lg">
-  <option>Any pass</option>
-</select>
-
-// Checkbox
-<label className="flex items-center gap-2">
-  <input type="checkbox" className="rounded text-blue-600" />
-  <span>Has terrain park</span>
-</label>
+<Field label="Email" hint="One email, no spam." error={error}>
+  {(a11y) => <Input {...a11y} type="email" autoComplete="email" />}
+</Field>
+<Input font="code" inputMode="numeric" autoComplete="one-time-code" />
 ```
 
----
+`Field` generates the id, `aria-describedby` (hint + error) and
+`aria-invalid`; the error has `role="alert"`. Placeholder text is never
+the label: use `hideLabel` to keep the label for screen readers.
 
-## 7. Layout Patterns
-
-### Map Page (Home)
-
-```
-┌─────────────────────────────────────────┐
-│  Logo      Filter Bar       Profile     │  Header (60px)
-├─────────────────────────────────────────┤
-│  ┌──────────────┐                       │
-│  │              │                       │
-│  │   Filters    │                       │
-│  │  (sidebar)   │     Map Area          │
-│  │              │                       │
-│  │ Pass: ___    │                       │
-│  │ Distance: __ │                       │
-│  │ Skill: ____  │                       │
-│  │ Features: __ │                       │
-│  │              │                       │
-│  └──────────────┘                       │
-└─────────────────────────────────────────┘
-```
-
-### Mobile Layout
-
-```
-┌──────────────┐
-│  Logo  Menu  │
-├──────────────┤
-│              │
-│    Map       │
-│              │
-├──────────────┤
-│  Filter Btn  │
-└──────────────┘
-```
-
-### Resort Detail Page
-
-```
-┌─────────────────────────────────────────┐
-│  ← Back          [Hero Image]           │
-│                                         │
-│  Hunter Mountain          [Ikon Badge]  │
-│  Catskills, NY • 2h 15m drive           │
-├─────────────────────────────────────────┤
-│  📅 Weather Forecast                    │
-│  ┌────┬────┬────┬────┐                  │
-│  │ Today │Tom │+2 │+3                   │
-│  └────┴────┴────┴────┘                  │
-├─────────────────────────────────────────┤
-│  🏔️ Mountain Stats                      │
-│  Vertical: 1,600 ft | 67 trails        │
-│  • Beginner: 20  | Intermediate: 27    │
-│  • Advanced: 15  | Expert: 5            │
-├─────────────────────────────────────────┤
-│  🎿 Features                            │
-│  ✓ Terrain Park (4)                     │
-│  ✓ Glades                               │
-│  ✓ Snowmaking 100%                      │
-├─────────────────────────────────────────┤
-│  🌐 [Visit Resort Website]              │
-│  🗺️ [Open in Google Maps]               │
-│  🎟️ [Book Lift Ticket]                   │
-└─────────────────────────────────────────┘
-```
-
----
-
-## 8. Iconography
-
-### Style
-
-- **Line icons**, 2px stroke
-- 24x24 base size
-- Use [Lucide Icons](https://lucide.dev) (free, well-designed)
-
-### Specific Icons
-
-```
-🗺️ Map          → MapIcon
-🎿 Ski/Snow     → MountainIcon (Lucide)
-☁️ Weather       → CloudIcon
-🌡️ Temperature   → ThermometerIcon
-💨 Wind         → WindIcon
-🚗 Drive        → CarIcon
-🎫 Pass         → TicketIcon
-⏱️ Hours        → ClockIcon
-📍 Location     → MapPinIcon
-```
-
-### Don't Use
-
-- ❌ Emoji directly (inconsistent rendering)
-- ❌ Filled icons (looks heavy)
-- ❌ Multi-color icons
-- ❌ Custom illustration (until Phase 3)
-
----
-
-## 9. Map Style
-
-### Mapbox Style
-
-Use: `mapbox://styles/mapbox/outdoors-v12`
-
-This provides:
-- Topographic detail
-- Trail visibility on resort terrain
-- Natural color palette
-- Mountain emphasis
-
-### Custom Pin Design
-
-```
-   ▼
-  ◉ <- Resort circle
-     [Pass Color]
-     
-On hover/click: expand with name
-```
-
-### Pin Colors by Pass
-
-- **Epic:** Orange `#F37021` (Vail Resorts brand)
-- **Ikon:** Yellow `#F2C200` (updated 2026-05-05 — was `#000000` black; black blended with map UI)
-- **Indy:** Red `#DC2626` (2023 rebrand)
-- **Mountain Collective:** Navy `#1E3A8A`
-- **Independent / no pass:** Gray `#6B7280`
-
-For multi-pass resorts (e.g. Snowbasin = Epic + Ikon + MC), render the pin
-as a multi-segment ring or use the resort's primary pass (per `passes[0]` in DB).
-Decide rendering approach during Stage 4.1.
-
-### Pin Size by Resort Size Tier
-
-Resorts are tiered by `vertical_drop` so the map naturally surfaces big
-mountains as more visible (Aspen / Killington / Big Sky outweigh local hills).
-
-| Tier   | Vertical drop      | Pin diameter | Filter-chip / list icon                | Touch target | Hover scale |
-|--------|--------------------|--------------|----------------------------------------|--------------|-------------|
-| Small  | < 1,000 ft         | 12 px        | `<Mountain>` Lucide icon @ 12 px       | 44×44 px box | 1.3×        |
-| Medium | 1,000 – 2,500 ft   | 16 px        | `<Mountain>` Lucide icon @ 16 px       | 44×44 px box | 1.25×       |
-| Large  | > 2,500 ft         | 20 px        | `<MountainSnow>` Lucide icon @ 20 px   | 44×44 px box | 1.2×        |
-| —      | NULL vertical drop | 12 px        | em-dash "—" @ 12 px (matches "no info" pattern) | 44×44 px box | 1.3×        |
-
-The 3 indicators (Small / Medium / Large) reuse Lucide's `Mountain` glyph
-at increasing sizes for filter chips, list views, and pin tooltips. Large
-swaps to `MountainSnow` for a subtle "summit" cue. NULL gets the em-dash
-treatment per the "NULL > guess" / "show '—' when missing" pattern in §6.
-
-Rules:
-- Touch target stays **44×44 px** at all tiers (Mobile-First Rule §13.4) —
-  invisible padding around the visible pin handles the hit area.
-- Use pin **size** (not color) for tier so it doesn't conflict with pass
-  color or the §3 "no red/green semantic" rule.
-- NULL vertical drop → render as Small AND keep visible in all filters
-  (per "NULL > guess" principle; never hide a resort because we don't have stats).
-- Featured tier (independent of size) gets a **subtle ring** added around the
-  pin (decoration, not size) to mark curated standouts.
-
----
-
-## 10. Imagery Guidelines
-
-### Hero Images
-
-**Sources (legal, free):**
-- Unsplash (https://unsplash.com)
-- Pexels (https://pexels.com)
-- Pixabay (https://pixabay.com)
-
-**Style:**
-- Real mountains (not stock photo skiing)
-- Natural light
-- Atmospheric, not action-packed
-- Wide aspect ratio (16:9 or 21:9)
-
-### Avoid:
-- Smiling families on perfect powder days
-- Heavy filters
-- Sunset/sunrise overload
-- Generic "skiing" stock photos
-
-### Image Treatment
-
-```css
-.hero-image {
-  width: 100%;
-  height: 320px;
-  object-fit: cover;
-  filter: brightness(0.9);     /* Slight darken for text overlay */
-}
-```
-
----
-
-## 11. Animations
-
-### Principles
-
-- **Subtle** — never distracting
-- **Functional** — only when adds clarity
-- **Fast** — 200-300ms
-- **Respectful** — respect prefers-reduced-motion
-
-### Common Animations
-
-```css
-/* Hover lift */
-.card:hover {
-  transform: translateY(-2px);
-  transition: transform 200ms ease;
-}
-
-/* Fade in */
-.fade-in {
-  animation: fadeIn 300ms ease-out;
-}
-
-/* Pin pop */
-.pin-active {
-  transform: scale(1.2);
-  transition: transform 200ms ease-out;
-}
-```
-
-### Avoid
-
-- Bouncing animations
-- Spinning loaders longer than 1 sec
-- Auto-playing carousels
-- Parallax scrolling
-
----
-
-## 12. Loading States
-
-### Loading Skeleton (preferred over spinner)
+### Section
 
 ```tsx
-<div className="animate-pulse">
-  <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-  <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-</div>
+<Section title="Sources" description="…" action={<Button size="sm" variant="ghost">See all</Button>} card>
 ```
 
-### Empty States
+One H2 style. `level="h3"` when nested. `card` wraps the body in a Card.
+Give it an `id` and it labels itself for the landmark list.
 
-When no resorts match filter:
+### PageHeader
 
-```
-   🏔️
-   
-   No resorts match your filters.
-   
-   [Clear filters]
-```
-
----
-
-## 13. Mobile Responsiveness
-
-### Breakpoints (Tailwind defaults)
-
-```
-sm: 640px    /* Mobile landscape */
-md: 768px    /* Tablet */
-lg: 1024px   /* Desktop */
-xl: 1280px   /* Large desktop */
+```tsx
+<PageHeader eyebrow="Legal" title="Privacy policy" meta="Last updated …" description="…" />
+<PageHeader tone="navy" size="lg" eyebrow="Editorial" title="Wynla guides" actions={<Button variant="secondary" size="sm" href="/lists">Lists</Button>} />
+<PageHeader tone="navy" accent={list.accent} …>{chips}</PageHeader>
 ```
 
-### Mobile-First Rules
+The header never renders "← Map": the AppShell bar owns back navigation.
+`back` exists for a nested page whose parent `lib/nav.ts` cannot guess.
 
-1. Design for 375px width first (iPhone)
-2. Filter sidebar becomes bottom sheet
-3. Detail page becomes single column
-4. Buttons are min 44px tall (touch target)
-5. Text minimum 16px (prevent zoom)
+### EmptyState, Notice, Skeleton
 
----
+```tsx
+<EmptyState icon="list" title="No trips yet" body="…" action={<Button href="/">Open the map</Button>} />
+<EmptyState tone="bare" …>          // full-page (404, error)
+<Notice tone="danger">That code didn't work.</Notice>   // role=alert
+<Notice tone="success" title="You're in.">…</Notice>     // role=status
 
-## 14. Accessibility
+// app/<route>/loading.tsx
+<SkeletonPage label="Loading trips">
+  <SkeletonHero /> | <SkeletonPlainHeader />
+  <SkeletonStats count={4} />
+  <SkeletonCard lines={3} accent />
+</SkeletonPage>
+```
 
-### Must Have:
+Skeletons match the page they stand in for (same widths and paddings)
+so the real page lands without a jump. One `role="status"` per page.
 
-- [ ] Color contrast 4.5:1 minimum
-- [ ] All interactive elements keyboard accessible
-- [ ] Alt text on all images
-- [ ] ARIA labels on icon-only buttons
-- [ ] Focus indicators visible
-- [ ] Form labels associated correctly
+## 4. Icons (`components/icons/Icon`)
 
-### Test With:
+24×24 monoline, 1.5 px stroke, `currentColor`. 44 glyphs; names are
+Lucide-compatible so a library swap later is a rename.
 
-- Keyboard only (no mouse)
-- Screen reader (VoiceOver on Mac)
-- Lighthouse accessibility audit
-- Color blindness simulator
+```tsx
+<Icon name="arrow-right" className="h-4 w-4" />
+<Icon name="alert" title="Warning" />   // role=img when it is the label
+```
 
----
+Replacements for the emoji-as-chrome the audit counted:
 
-## 15. Tone of Voice
+| Emoji | Icon | | Emoji | Icon |
+| --- | --- | --- | --- | --- |
+| 🗺️ | `map` | | 🔍 | `search` |
+| 📍 | `pin` | | ☰ | `filter` / `menu` |
+| 🏔️ ⛷️ | `mountain` / `skier` | | 🔔 | `bell` |
+| ❄️ 🌨️ | `snowflake` / `snow-cloud` | | 🎟️ | `ticket` |
+| ☀️ ☁️ 💨 🌡️ | `sun` `cloud` `wind` `thermometer` | | 📖 ⭐ | `book` / `star` |
+| ✈️ 🚗 | `plane` / `car` | | ✨ | `sparkle` |
+| ✓ ✗ × ✕ | `check` / `close` | | ▾ ↗ → | `chevron-down` `external` `arrow-right` |
+| 🟢 🔴 🟡 | status text + `wn-success` / `wn-danger` / `wn-warning` colour, never a dot emoji | | 👤 ⚙️ | `user` / `settings` |
 
-### Examples
+Editorial emoji in copy ("Ride well, ride safe", a guide's intro) are
+fine. Emoji inside an accessible name ("✨ Optimize order") are not.
 
-**Page titles:**
-- ✅ "Find your mountain"
-- ❌ "Welcome to Wynla!"
+## 5. Shell (`components/AppShell.tsx`, `components/AppTabBar.tsx`, `components/Footer.tsx`)
 
-**Empty states:**
-- ✅ "No mountains match your filters. Try fewer constraints."
-- ❌ "Oops! Something went wrong! 😅"
+- **Top bar** on every route except `/`: designer lockup, desktop links
+  Map · Today · Saturday · Guides · Trips, Account avatar or Sign in.
+  Phones get back link · lockup · one action (Sign in, or the Saturday
+  pick when signed in); the link row is hidden because the tab bar has it.
+- **Tab bar** (phones): Map · Today · Trips · Account. Hidden on flow
+  routes (`/login`, `/auth/*`, `/get`, `/trip/share/*`) and while a map
+  sheet is open.
+- Both read `lib/nav.ts`: one list of items, one `match()` per item, one
+  `backLinkFor()`. A route is active in exactly one place (tested).
+- **Sign-in state** is resolved in the browser (`getSession`, no network)
+  because reading the auth cookie in the root layout would make all ~480
+  ISR pages dynamic. Pass `initialUser` to `<AppShell>` from a route
+  group layout if a section already has the user on the server.
+- **Footer**: mark, all content hubs, legal, contact, install. 12 px
+  muted, never smaller.
+- **Map header** (`components/Map/MapPage.tsx`, sheet package): replace
+  the text "Wynla" pill with `<BrandMark variant="lockup" size="sm" />`
+  (or `variant="mark"` where only the glyph fits). `components/
+  BrandMark.tsx` uses the trimmed PNGs from `scripts/gen-brand-shell-
+  assets.mjs` with explicit dimensions (no CLS).
 
-**Errors:**
-- ✅ "Couldn't load weather. Try again in a moment."
-- ❌ "ERROR: Failed to fetch from API endpoint"
+## 6. Do / don't
 
-**Buttons:**
-- ✅ "View resort"
-- ❌ "Click here for more info"
+- Do use `Button` for anything clickable that is not inline prose. Don't
+  write `rounded-md bg-wn-navy px-4 py-2 text-sm font-semibold text-white`
+  again.
+- Do use `text-wn-muted` for secondary text. Don't use `text-wn-charcoal/NN`.
+- Do use `border-wn-line`. Don't use `border-wn-charcoal/10|15|20`.
+- Do use `text-eyebrow` for uppercase labels. Don't use `text-[10px]
+  tracking-[0.18em]`.
+- Do use `Notice` for inline status. Don't hand-roll `bg-red-50 text-red-800`.
+- Do use `Card accent={...}` for the coloured top bar. Don't add a
+  `h-1.5` div in every card.
+- Do use `var(--color-wn-navy)` / `var(--color-wn-navy-deep)` in inline
+  gradients. Don't paste `#1E2952` (37 places, code-health-16).
+- Do label numbers: "Measured 6:00 am", "Forecast for Sat", "Estimated",
+  "Reported by the resort, checked Sep 23". Don't show a bare number.
+- Do write sentence case. Don't use exclamation marks or Title Case
+  headings.
+- Don't put gold or sky as text on white. Don't use gold outside the one
+  primary CTA per navy surface.
+- Don't add a "← Map" link to a page: the shell has it.
 
-**Disclaimers:**
-- ✅ "Always check the resort site for live trail status."
-- ❌ "We are not responsible for any inaccuracies in our data."
+## 7. Loading and empty states
 
----
+- Every data route has `loading.tsx` (resort, trips, trip, go, today,
+  guides, guides/[slug], lists, lists/[slug], state, favorites, compare).
+  Match the page's skeleton to its layout; a nested route inherits the
+  parent's file, so give it its own when the layouts differ (an article
+  under a card index).
+- `SkeletonPage` keeps `<main>` as the landmark (`aria-busy`) and puts
+  `role="status"` on a visually hidden label, so the page announces
+  "Loading" once without losing the main landmark.
+- Client-side waits inside a page use `Skeleton` pieces sized like the
+  content they replace, never a spinner alone.
+- Empty results use `EmptyState` with one CTA. Copy pattern: what is
+  empty, why (if known), the one next step. No "Oops".
 
-## 16. Don't Do These
+## 8. Numbers and honesty
 
-- ❌ Auto-playing video backgrounds
-- ❌ Pop-up email signup forms
-- ❌ Cookie consent walls (unless required)
-- ❌ Chat bots / customer service widgets
-- ❌ Social media floating buttons
-- ❌ "As seen on..." badges
-- ❌ Testimonial carousels
-- ❌ FOMO countdowns ("Sale ends in 2h!")
-- ❌ Hamburger menu on desktop
+Every user-visible number carries a source word and a time:
 
----
+| Word | Meaning | Example |
+| --- | --- | --- |
+| Measured | an instrument or station reading | "Base 42 in · Measured 6:00 am" |
+| Forecast | a model output for a future time | "6 in · Forecast for Sat" |
+| Estimated | derived by Wynla (drive time, straight-line miles, averages) | "4 h 20 · Estimated" |
+| Reported | a figure a resort or operator published, copied by hand | "$1,449 · Reported, checked Sep 23" |
 
-## 17. Reference Designs
+Use `tabular-nums` on any column of numbers. Never round a Reported
+figure; never show a Forecast without its date.
 
-### Inspirations to Look At:
+## 9. Migration checklist (pages other packages own)
 
-- **Linear.app** — clean, focused UI
-- **Stripe** — typography and spacing
-- **Apple Maps** — map interaction patterns
-- **AllTrails** — outdoor app design done right
-- **Notion** — content density
+Work file by file; each step is a find-and-replace with a visual check
+at 375 px.
 
-### What NOT to Look At:
+1. Delete the page's own `<header>` back link ("← Map", "← Wynla",
+   white pill, ghost pill). `AppShell` provides it. Keep only in-page
+   actions (Compare / Favorite toggles).
+2. Replace the hero `<header style={{ background: "linear-gradient(… #1E2952 … #0B1028)" }}>` with
+   `<PageHeader tone="navy" …>`; keep grain layers as `children` if
+   wanted.
+3. Replace `<h1 className="text-3xl … sm:text-5xl">` with the
+   `PageHeader` title. One H1 scale.
+4. `text-wn-charcoal/45..75` → `text-wn-muted`; `/35..40` → `text-wn-subtle`.
+5. `border-wn-charcoal/10..20` → `border-wn-line`;
+   `divide-wn-charcoal/10` → `divide-wn-line`.
+6. `text-[9px]`, `text-[10px]`, `text-[11px]` → `text-eyebrow` for
+   uppercase labels, `text-xs` otherwise; `text-[13px]` → `text-sm`.
+7. Any `<button>` / `<Link>` / `<a>` with `bg-wn-navy` or a border →
+   `<Button>` (`variant`, `size`, `href`). Height h-9/10/12 → md (44) or
+   sm (36).
+8. `rounded-xl border border-wn-charcoal/10 bg-white … shadow-sm` → `<Card>`.
+9. Pass chips / filter pills → `<Chip>`; pass badges stay on
+   `lib/passColors.ts` but use `text-eyebrow` and `rounded-wn-sm`.
+10. Inputs → `<Input>` inside `<Field>` (label, hint, error wired).
+11. `bg-red-50 text-red-800` / `bg-emerald-50 …` → `<Notice tone>`.
+12. Emoji used as a glyph in a button, tab, badge or status → `<Icon>`
+    (table in section 4). Emoji inside an `aria-label` → remove.
+13. Inline `#1E2952` → `var(--color-wn-navy)`; `#0B1028` / `#0F1530` /
+    `#141A3A` → `var(--color-wn-navy-deep)`; `#D4A84B` → `#CEA846` /
+    `var(--color-wn-gold-halo)`.
+14. Floating elements at the bottom of the screen → `bottom:
+    calc(var(--wn-bottom-stack) + 12px)`.
+15. Add `loading.tsx` if the route fetches (already done for the twelve
+    routes in section 7).
+16. `text-xl` .. `text-6xl` → `text-wn-*` per the class mapping in
+    section 2 (keep breakpoint prefixes). Text on a pass colour →
+    `color: textOn(bg)` from `lib/contrast.ts`.
+17. Run `npx tsc --noEmit`, `npm run lint`, `npm test`; check 375 px and
+    the installed-app safe area.
 
-- Marketing-heavy SaaS landing pages
-- Crypto/Web3 sites (overdesigned)
-- Stock-photo heavy travel sites
-- Old ski resort websites (cluttered)
+Package owners and their files at the time of writing: map + sheet
+(`components/Map/*`, `components/*Resort*`), resort page
+(`app/resort/[slug]/page.tsx`), trips / trip / favorites / account /
+compare (`app/trips`, `app/trip`, `app/favorites`, `app/account`,
+`app/compare`), go / today (`app/go`, `app/today`), pro / early upsell
+(`app/pro`, `components/Pro*`, `components/UpsellModal.tsx`).
 
----
+Files still on Tailwind's `text-xl` .. `text-6xl` (73 uses on
+2026-09-23; migrate with the section 2 mapping when the owner next
+touches the file):
 
-## 18. Implementation Notes for Cursor
+- map + sheet: `components/Map/FiltersDrawer.tsx`, `MapPage.tsx`,
+  `ResortPanel.tsx`, `ResortPicker.tsx`, `ResortReviews.tsx`,
+  `TripPlannerPanel.tsx`; `components/NearbyActivities.tsx`,
+  `NearbyRestaurants.tsx`, `OnboardingCard.tsx`, `PlanYourTrip.tsx`,
+  `PowderDayScore.tsx`, `SimilarResorts.tsx`, `SnowSurfaceForecast.tsx`,
+  `WhereToStay.tsx`, `auth/FavoriteToggle.tsx`
+- resort page: `app/resort/[slug]/page.tsx`
+- trips / trip / favorites / account / compare: `app/trips/page.tsx`,
+  `app/trip/[id]/page.tsx`, `app/trip/[id]/TripNameEditor.tsx`,
+  `app/trip/share/[token]/page.tsx`, `app/favorites/page.tsx`,
+  `app/account/page.tsx`, `app/account/digest/page.tsx`,
+  `app/account/feedback/page.tsx`, `app/account/pro/page.tsx`,
+  `app/compare/page.tsx`
+- go / today: `app/go/page.tsx`, `app/today/page.tsx`
+- pro / upsell: `app/pro/page.tsx`, `components/UpsellModal.tsx`
 
-When generating code:
+White text on a pass colour also still appears in files other packages
+own: `app/trip/[id]/page.tsx` (pass badges), and `app/favorites/page.tsx`
+/ `app/compare/page.tsx` (their badges special-case Ikon only, so Epic
+orange is still white at 2.9:1). Switch those to `textOn()`. The resort
+hero (`app/resort/[slug]/page.tsx`) starts its gradient at the raw pass
+colour under a white title; use `accentOnNavy()` there.
 
-1. Use Tailwind utility classes (no custom CSS unless necessary)
-2. Use Lucide React for icons: `import { Mountain } from 'lucide-react'`
-3. Follow the spacing scale strictly
-4. Always make it mobile-responsive
-5. Default to white backgrounds with gray borders
-6. Test with both light data (1 resort) and heavy data (30 resorts)
+## 10. Before / after (this package's files)
 
----
+Counted with a script over the 20 files this package owns (login,
+guides, lists, state, deals, early, data-sources, privacy, terms, get,
+not-found, error, global-error, trip-templates, layout, AppTabBar):
 
-*This is a living document. As we get user feedback, we'll refine these guidelines.*
+| Metric | Before | After |
+| --- | --- | --- |
+| Distinct button-like class strings | 22 | 1 (the rest are `<Button>`) |
+| Distinct font-size utilities | 13 (incl. `[10px]` `[11px]` `[13px]`) | 8 (scale only) |
+| `text-wn-charcoal/NN` uses | 101 | 0 |
+| Hardcoded navy / deep-navy hex | 20 | 5 (`layout.tsx` themeColor and `global-error.tsx` inline styles, which cannot read CSS) |
+| Emoji used as chrome | 18 | 0 |
+| Route-level `loading.tsx` | 0 | 12 |

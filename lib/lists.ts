@@ -16,6 +16,11 @@ export type CuratedList = {
   publishedAt: string;
   // Optional accent for hero gradient — defaults to wn-navy.
   accent?: string;
+  /** Internal follow-on links (a /near/[city] list, the /go Saturday
+   *  picks) the list page renders under the resorts when present. Only
+   *  set where the list is really a "from <city>" list, so the link is
+   *  the reader's next step and not a footer. */
+  related?: Array<{ href: string; label: string }>;
 };
 
 export const LISTS: CuratedList[] = [
@@ -53,6 +58,10 @@ export const LISTS: CuratedList[] = [
     ],
     publishedAt: "2026-05-14",
     accent: "#15803D",
+    related: [
+      { href: "/near/boston", label: "Every resort within 6 hours of Boston, sorted by drive time" },
+      { href: "/go?city=boston", label: "Which one this Saturday, with your pass" },
+    ],
   },
   {
     slug: "best-for-beginners",
@@ -193,6 +202,10 @@ export const LISTS: CuratedList[] = [
     ],
     publishedAt: "2026-05-14",
     accent: "#0369A1",
+    related: [
+      { href: "/near/nyc", label: "Every resort within 6 hours of NYC, sorted by drive time" },
+      { href: "/go?city=nyc", label: "Which one this Saturday, with your pass" },
+    ],
   },
 ];
 

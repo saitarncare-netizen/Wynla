@@ -9,6 +9,10 @@ import { useMemo, useState, useSyncExternalStore, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import ConfirmButton from "@/components/ConfirmButton";
+import Button from "@/components/ui/Button";
+import Card from "@/components/ui/Card";
+import Notice from "@/components/ui/Notice";
+import Icon from "@/components/icons/Icon";
 
 type Props = {
   tripId: string;
@@ -260,18 +264,18 @@ export default function TripActions({
   const dateDirty = dateDraft !== (startDate ?? "");
 
   return (
-    <div className="rounded-xl border border-wn-charcoal/10 bg-white p-4">
+    <Card>
       {error && (
-        <p className="mb-3 rounded-md border border-red-200 bg-red-50 p-2 text-[11px] text-red-800">
+        <Notice tone="danger" className="mb-3">
           {error}
-        </p>
+        </Notice>
       )}
 
       {dateSupported && (
-        <div className="mb-4 border-b border-wn-charcoal/10 pb-4">
+        <div className="mb-4 border-b border-wn-line pb-4">
           <label
             htmlFor="trip-start-date"
-            className="mb-1 block text-[10px] font-bold uppercase tracking-[0.15em] text-wn-charcoal/55"
+            className="mb-1 block text-eyebrow font-bold uppercase text-wn-muted"
           >
             Trip start date <span className="font-normal normal-case tracking-normal">(day 1)</span>
           </label>
@@ -285,31 +289,25 @@ export default function TripActions({
               disabled={busy != null}
               // 16px keeps iOS Safari from zooming the page on focus.
               style={{ fontSize: "16px" }}
-              className="rounded-md border border-wn-charcoal/20 bg-white px-3 py-1.5 font-medium text-wn-charcoal focus:border-wn-navy focus:outline-none focus:ring-2 focus:ring-wn-navy/20 disabled:opacity-60"
+              className="min-h-11 rounded-wn-sm border border-wn-line bg-white px-3 font-medium text-wn-charcoal hover:border-wn-subtle focus:border-wn-navy focus:outline-none focus:ring-2 focus:ring-wn-navy/25 disabled:opacity-60"
             />
             {dateDirty && dateDraft && (
-              <button
-                type="button"
-                onClick={() => saveStartDate(dateDraft)}
-                disabled={busy != null}
-                className="rounded-lg bg-wn-navy px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-wn-navy/90 disabled:opacity-60"
-              >
+              <Button onClick={() => saveStartDate(dateDraft)} disabled={busy != null}>
                 {busy === "date" ? "Saving…" : "Save date"}
-              </button>
+              </Button>
             )}
             {startDate && (
-              <button
-                type="button"
-                onClick={() => saveStartDate(null)}
-                disabled={busy != null}
-                className="rounded-lg border border-wn-charcoal/20 bg-white px-3 py-1.5 text-xs font-semibold text-wn-charcoal transition hover:border-wn-charcoal/40 disabled:opacity-60"
-              >
+              <Button variant="secondary" onClick={() => saveStartDate(null)} disabled={busy != null}>
                 Clear date
-              </button>
+              </Button>
             )}
-            {dateSaved && <span className="text-[11px] font-semibold text-emerald-700">✓ Saved</span>}
+            {dateSaved && (
+              <span className="inline-flex items-center gap-1 text-xs font-semibold text-wn-success">
+                <Icon name="check" className="h-3.5 w-3.5" /> Saved
+              </span>
+            )}
           </div>
-          <p className="mt-1 text-[11px] text-wn-charcoal/55">
+          <p className="mt-1 text-xs text-wn-muted">
             {startDate
               ? "Used for the calendar export and the countdown on this page."
               : "Optional. Without it, the calendar export starts from today."}
@@ -319,7 +317,7 @@ export default function TripActions({
 
       {!tripFinished && (
         <>
-          <p className="mb-3 text-sm text-wn-charcoal/80">
+          <p className="mb-3 text-sm text-wn-charcoal">
             {isActive ? (
               <>
                 <strong className="text-wn-navy">Today is Day {displayDay} of {totalDays}.</strong>
@@ -334,43 +332,38 @@ export default function TripActions({
           </p>
           <div className="flex flex-wrap gap-2">
             {googleMapsUrl && (
-              <a
+              <Button
                 href={googleMapsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-lg bg-wn-navy px-4 py-2 text-sm font-semibold text-white transition hover:bg-wn-navy/90"
+                iconLeft={<Icon name="map" />}
               >
-                🗺️ Open in Google Maps
-              </a>
+                Open in Google Maps
+              </Button>
             )}
-            <button
-              type="button"
+            <Button
+              variant="secondary"
               onClick={markTodayComplete}
               disabled={busy != null}
-              className="rounded-lg border border-wn-charcoal/20 bg-white px-4 py-2 text-sm font-semibold text-wn-charcoal transition hover:border-wn-navy hover:text-wn-navy disabled:opacity-60"
+              iconLeft={busy === "advance" ? undefined : <Icon name="check" />}
             >
-              {busy === "advance" ? "Saving…" : "✓ Mark Day " + displayDay + " complete"}
-            </button>
+              {busy === "advance" ? "Saving…" : "Mark Day " + displayDay + " complete"}
+            </Button>
             {isActive && lastCompletedDay != null && (
-              <button
-                type="button"
+              <Button
+                variant="secondary"
                 onClick={undoLastDay}
                 disabled={busy != null}
                 title="Unmark the last completed day"
-                className="rounded-lg border border-wn-charcoal/20 bg-white px-4 py-2 text-sm font-semibold text-wn-charcoal transition hover:border-wn-navy hover:text-wn-navy disabled:opacity-60"
+                iconLeft={busy === "undo" ? undefined : <Icon name="arrow-left" />}
               >
-                {busy === "undo" ? "Undoing…" : `↩ Undo Day ${lastCompletedDay}`}
-              </button>
+                {busy === "undo" ? "Undoing…" : `Undo Day ${lastCompletedDay}`}
+              </Button>
             )}
             {isActive && (
-              <button
-                type="button"
-                onClick={restart}
-                disabled={busy != null}
-                className="rounded-lg border border-wn-charcoal/20 bg-white px-4 py-2 text-sm font-semibold text-wn-charcoal transition hover:border-wn-charcoal/40 disabled:opacity-60"
-              >
+              <Button variant="secondary" onClick={restart} disabled={busy != null}>
                 Restart trip
-              </button>
+              </Button>
             )}
             <ConfirmButton
               onConfirm={deleteTrip}
@@ -378,8 +371,8 @@ export default function TripActions({
               busyLabel={busy === "delete" ? "Deleting…" : "…"}
               label="Delete"
               confirmLabel="Tap again to confirm"
-              className="ml-auto rounded-lg border border-wn-charcoal/20 bg-white px-4 py-2 text-sm font-semibold text-wn-charcoal transition hover:border-red-400 hover:text-red-700 disabled:opacity-60"
-              armedClassName="ml-auto rounded-lg border border-red-400 bg-red-50 px-4 py-2 text-sm font-semibold text-red-700"
+              variant="secondary"
+              className="ml-auto"
             />
           </div>
         </>
@@ -387,28 +380,23 @@ export default function TripActions({
 
       {tripFinished && (
         <>
-          <p className="mb-3 text-sm text-wn-charcoal/80">
+          <p className="mb-3 text-sm text-wn-charcoal">
             🎉 Trip complete! All {totalDays} days marked done.
           </p>
           <div className="flex flex-wrap gap-2">
-            <button
-              type="button"
-              onClick={restart}
-              disabled={busy != null}
-              className="rounded-lg bg-wn-navy px-4 py-2 text-sm font-semibold text-white transition hover:bg-wn-navy/90 disabled:opacity-60"
-            >
+            <Button onClick={restart} disabled={busy != null}>
               {busy === "restart" ? "Resetting…" : "Run it again"}
-            </button>
+            </Button>
             {lastCompletedDay != null && (
-              <button
-                type="button"
+              <Button
+                variant="secondary"
                 onClick={undoLastDay}
                 disabled={busy != null}
                 title="Unmark the last completed day"
-                className="rounded-lg border border-wn-charcoal/20 bg-white px-4 py-2 text-sm font-semibold text-wn-charcoal transition hover:border-wn-navy hover:text-wn-navy disabled:opacity-60"
+                iconLeft={busy === "undo" ? undefined : <Icon name="arrow-left" />}
               >
-                {busy === "undo" ? "Undoing…" : `↩ Undo Day ${lastCompletedDay}`}
-              </button>
+                {busy === "undo" ? "Undoing…" : `Undo Day ${lastCompletedDay}`}
+              </Button>
             )}
             <ConfirmButton
               onConfirm={deleteTrip}
@@ -416,12 +404,11 @@ export default function TripActions({
               busyLabel={busy === "delete" ? "Deleting…" : "…"}
               label="Delete"
               confirmLabel="Tap again to confirm"
-              className="rounded-lg border border-wn-charcoal/20 bg-white px-4 py-2 text-sm font-semibold text-wn-charcoal transition hover:border-red-400 hover:text-red-700 disabled:opacity-60"
-              armedClassName="rounded-lg border border-red-400 bg-red-50 px-4 py-2 text-sm font-semibold text-red-700"
+              variant="secondary"
             />
           </div>
         </>
       )}
-    </div>
+    </Card>
   );
 }

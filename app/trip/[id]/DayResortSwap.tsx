@@ -12,10 +12,12 @@
 // representation the rest of the app already handles), then swap that
 // day's slug. total_days is unchanged.
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { parseDayPlans, withDayPlan } from "@/lib/dayPlans";
+import { useFocusTrap } from "@/lib/useFocusTrap";
+import Input from "@/components/ui/Input";
 
 type SlimResort = { slug: string; name: string; state: string };
 
@@ -46,10 +48,38 @@ export default function DayResortSwap({ tripId, day, currentName }: Props) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const popoverRef = useRef<HTMLDivElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+  const ids = useId();
+  const popoverId = `${ids}-popover`;
+  const errorId = `${ids}-error`;
+  const listId = `${ids}-list`;
+
+  const close = useCallback(() => setOpen(false), []);
+
+  // Popover, not a modal: the rest of the trip page stays usable, so no
+  // inert / scroll lock / Tab wrap. Escape closes, focus lands in the
+  // search box on open and returns to the Change button on close
+  // (audit a11y-23).
+  useFocusTrap(popoverRef, open, {
+    initialFocusRef: inputRef,
+    onEscape: close,
+    modal: false,
+  });
+
+  // Click or tap outside the popover closes it.
+  useEffect(() => {
+    if (!open) return;
+    function onPointerDown(e: PointerEvent) {
+      if (rootRef.current && !rootRef.current.contains(e.target as Node)) close();
+    }
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => document.removeEventListener("pointerdown", onPointerDown);
+  }, [open, close]);
 
   // Lazy-load the slim resort list the first time the picker opens
-  // (~425 rows × 3 fields — small, and only for users actively editing).
+  // (~400 rows × 3 fields — small, and only for users actively editing).
   useEffect(() => {
     if (!open || options !== null) return;
     let cancelled = false;
@@ -62,7 +92,7 @@ export default function DayResortSwap({ tripId, day, currentName }: Props) {
         .order("name");
       if (cancelled) return;
       if (err || !data) {
-        setError("Couldn't load resorts — try again.");
+        setError("Could not load resorts. Try again.");
         return;
       }
       setOptions(data as SlimResort[]);
@@ -71,10 +101,6 @@ export default function DayResortSwap({ tripId, day, currentName }: Props) {
       cancelled = true;
     };
   }, [open, options]);
-
-  useEffect(() => {
-    if (open) inputRef.current?.focus();
-  }, [open]);
 
   const filtered = useMemo(() => {
     if (!options) return [];
@@ -109,14 +135,14 @@ export default function DayResortSwap({ tripId, day, currentName }: Props) {
       }>();
     if (readErr || !fresh) {
       setBusy(false);
-      setError("Couldn't change the resort — try again.");
+      setError("Could not change the resort. Try again.");
       return;
     }
     const freshExpanded = expandSlugs(fresh.resort_slugs, fresh.days_per_resort);
     if (day < 1 || day > freshExpanded.length) {
       // Trip shape changed under us (another tab shortened it).
       setBusy(false);
-      setError("This trip changed — reload the page and try again.");
+      setError("This trip changed. Reload the page and try again.");
       return;
     }
     const nextSlugs = [...freshExpanded];
@@ -147,7 +173,7 @@ export default function DayResortSwap({ tripId, day, currentName }: Props) {
       .select("id");
     setBusy(false);
     if (err || !updated || updated.length === 0) {
-      setError("Couldn't change the resort — try again.");
+      setError("Could not change the resort. Try again.");
       return;
     }
     setOpen(false);
@@ -156,34 +182,50 @@ export default function DayResortSwap({ tripId, day, currentName }: Props) {
   }
 
   return (
-    <div className="relative">
+    <div className="relative" ref={rootRef}>
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
-        title={`Change the resort for day ${day} (currently ${currentName})`}
-        className="inline-flex items-center gap-1 rounded-md px-1.5 py-1 text-[10px] font-bold text-wn-charcoal/45 transition hover:bg-wn-navy/5 hover:text-wn-navy"
+        aria-haspopup="dialog"
+        aria-controls={open ? popoverId : undefined}
+        className="inline-flex min-h-11 touch-manipulation items-center gap-1 rounded-wn-sm px-2 text-xs font-bold text-wn-muted transition hover:bg-wn-navy/5 hover:text-wn-navy"
       >
-        <span aria-hidden="true">⇄</span> Change
+        <span aria-hidden="true">⇄</span>
+        <span>Change</span>
+        <span className="sr-only"> the resort for day {day}, currently {currentName}</span>
       </button>
 
       {open && (
-        <div className="absolute right-0 z-20 mt-1 w-72 rounded-xl border border-wn-charcoal/15 bg-white p-2 shadow-xl">
-          <input
+        <div
+          id={popoverId}
+          ref={popoverRef}
+          role="dialog"
+          aria-label={`Change the resort for day ${day}`}
+          className="absolute right-0 z-20 mt-1 w-72 max-w-[calc(100vw-2rem)] rounded-wn-md border border-wn-line bg-white p-2 font-normal normal-case tracking-normal shadow-wn-md"
+        >
+          <Input
             ref={inputRef}
+            type="search"
+            enterKeyHint="search"
+            autoComplete="off"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search resorts…"
+            placeholder="Search resorts"
             aria-label={`Search a new resort for day ${day}`}
-            style={{ fontSize: "16px" }}
-            className="mb-1.5 w-full rounded-md border border-wn-charcoal/20 px-2.5 py-1.5 text-[13px] focus:border-wn-navy focus:outline-none focus:ring-2 focus:ring-wn-navy/15"
+            aria-controls={listId}
+            aria-describedby={error ? errorId : undefined}
+            invalid={Boolean(error)}
+            className="mb-1.5"
           />
           {error && (
-            <p className="mb-1 px-1 text-[11px] text-red-600">{error}</p>
+            <p id={errorId} role="alert" className="mb-1 px-1 text-xs text-wn-danger">
+              {error}
+            </p>
           )}
-          <ul className="max-h-52 overflow-y-auto">
+          <ul id={listId} className="max-h-60 overflow-y-auto" aria-busy={busy || (open && options === null)}>
             {options === null && !error && (
-              <li className="px-2 py-2 text-[12px] text-wn-charcoal/50">Loading…</li>
+              <li className="px-2 py-2 text-xs text-wn-muted" role="status">Loading…</li>
             )}
             {filtered.map((r) => (
               <li key={r.slug}>
@@ -191,15 +233,15 @@ export default function DayResortSwap({ tripId, day, currentName }: Props) {
                   type="button"
                   disabled={busy}
                   onClick={() => pick(r.slug)}
-                  className="flex w-full items-baseline justify-between gap-2 rounded-md px-2 py-1.5 text-left transition hover:bg-wn-navy/5 disabled:opacity-50"
+                  className="flex min-h-11 w-full touch-manipulation items-baseline justify-between gap-2 rounded-wn-sm px-2 py-1.5 text-left transition hover:bg-wn-navy/5 disabled:opacity-50"
                 >
-                  <span className="truncate text-[12px] font-semibold text-wn-charcoal">{r.name}</span>
-                  <span className="shrink-0 text-[10px] text-wn-charcoal/45">{r.state}</span>
+                  <span className="truncate text-sm font-semibold text-wn-charcoal">{r.name}</span>
+                  <span className="shrink-0 text-xs text-wn-muted">{r.state}</span>
                 </button>
               </li>
             ))}
             {options !== null && filtered.length === 0 && (
-              <li className="px-2 py-2 text-[12px] text-wn-charcoal/50">No match.</li>
+              <li className="px-2 py-2 text-xs text-wn-muted" role="status">No match.</li>
             )}
           </ul>
         </div>

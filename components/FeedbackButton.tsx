@@ -1,16 +1,16 @@
 "use client";
 
-// Floating "💬 Feedback" pill — mirror of LocationButton's
-// bottom-right anchor, but anchored bottom-LEFT. Tap opens a modal with
-// a textarea (required, 5-5000 chars) + optional email and POSTs to
-// /api/feedback. Designed for the Inaugural / Founder Season where
-// every signal from real users is load-bearing.
+// Floating "Feedback" pill — mirror of LocationButton's bottom-right
+// anchor, but anchored bottom-LEFT. Tap opens a modal with a textarea
+// (required, 5-5000 chars) + optional email and POSTs to /api/feedback.
+// Designed for the Inaugural / Founder Season where every signal from
+// real users is load-bearing.
 //
 // Touch propagation is stopped at both React + native DOM layers so
 // Mapbox underneath doesn't swallow the touches as map gestures while
 // the modal is open (same pattern as FiltersDrawer / RecentlyViewedStrip).
 
-import { useEffect, useRef, useState } from "react";
+import { useId, useRef, useState } from "react";
 import { useFocusTrap } from "@/lib/useFocusTrap";
 
 type SendState =
@@ -19,6 +19,9 @@ type SendState =
   | { kind: "success" }
   | { kind: "error"; message: string };
 
+const MIN_CHARS = 5;
+const MAX_CHARS = 5000;
+
 export default function FeedbackButton() {
   const [open, setOpen] = useState(false);
   const [body, setBody] = useState("");
@@ -26,27 +29,12 @@ export default function FeedbackButton() {
   const [state, setState] = useState<SendState>({ kind: "idle" });
   const dialogRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  // Trap focus inside the dialog (was Escape-only — keyboard could tab out).
-  useFocusTrap(dialogRef, open, textareaRef);
-
-  // ESC closes the modal — keyboard parity with the X button.
-  // closeModal is declared above the effect so it can be a stable
-  // reference in the dep list without exhaustive-deps warnings.
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setOpen(false);
-        setTimeout(() => {
-          setState({ kind: "idle" });
-          setBody("");
-          setEmail("");
-        }, 250);
-      }
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [open]);
+  const ids = useId();
+  const titleId = `${ids}-title`;
+  const bodyId = `${ids}-body`;
+  const bodyHintId = `${ids}-body-hint`;
+  const emailId = `${ids}-email`;
+  const errorId = `${ids}-error`;
 
   function closeModal() {
     setOpen(false);
@@ -59,14 +47,24 @@ export default function FeedbackButton() {
     }, 250);
   }
 
+  // Focus trap + Escape + body scroll lock + inert background + focus
+  // return to the pill, all from the shared hook.
+  useFocusTrap(dialogRef, open, {
+    initialFocusRef: textareaRef,
+    onEscape: closeModal,
+  });
+
+  const trimmedLength = body.trim().length;
+  const tooShort = trimmedLength < MIN_CHARS;
+
   async function submit() {
     const trimmed = body.trim();
-    if (trimmed.length < 5) {
-      setState({ kind: "error", message: "Feedback must be at least 5 characters." });
+    if (trimmed.length < MIN_CHARS) {
+      setState({ kind: "error", message: `Feedback must be at least ${MIN_CHARS} characters.` });
       return;
     }
-    if (trimmed.length > 5000) {
-      setState({ kind: "error", message: "Feedback is too long (max 5000 chars)." });
+    if (trimmed.length > MAX_CHARS) {
+      setState({ kind: "error", message: `Feedback is too long (max ${MAX_CHARS} characters).` });
       return;
     }
     setState({ kind: "sending" });
@@ -84,13 +82,13 @@ export default function FeedbackButton() {
         const data = (await res.json().catch(() => ({}))) as { error?: string };
         setState({
           kind: "error",
-          message: data.error ?? "Couldn't send feedback. Try again?",
+          message: data.error ?? "Could not send feedback. Try again.",
         });
         return;
       }
       setState({ kind: "success" });
     } catch {
-      setState({ kind: "error", message: "Network error — try again?" });
+      setState({ kind: "error", message: "Network error. Try again." });
     }
   }
 
@@ -104,24 +102,36 @@ export default function FeedbackButton() {
 
   return (
     <>
-      {/* Floating button — bottom-left mirror of LocationButton.
+      {/* Floating pill — bottom-left mirror of LocationButton.
           pointer-events-none on the wrapper, pointer-events-auto on the
           inner button so the rest of the area stays click-through.
-          Bottom stack (shared with LocationButton / CompareFloatingButton
-          / AlaskaInset): bottom-10 keeps the lowest 40px free for the
-          Mapbox wordmark + attribution, which its terms require visible.
+          The vertical anchor is the shared --wn-bottom-stack variable
+          (set by the map shell) so this pill, the location pill, the
+          compare pill and the Alaska inset move together when the tab
+          bar, an install nudge or the Mapbox attribution changes the
+          band they share. The 40px fallback keeps the lowest 40px free
+          for the Mapbox wordmark, which its terms require visible.
+          On phones this pill is the left end of MapPage's bottom pill row:
+          the row reserves PHONE_ROW.feedbackSlot for it on the left
+          (components/Map/ResortSheetMath.ts), rides the same anchor and
+          safe-area inset, and hides with it while a resort sheet is at
+          half or full (data-sheet-snap on the map root). At peek both
+          float on the sheet's shoulder.
           On desktop the pill sits to the RIGHT of the 200px Alaska inset
           (left-4 + 200px + gap) instead of on top of it. */}
       <div
-        className="pointer-events-none absolute bottom-10 left-3 z-20 flex flex-col items-start gap-1 sm:left-4 md:left-[228px]"
-        style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
+        className="pointer-events-none absolute left-3 z-20 flex flex-col items-start gap-1 sm:left-4 md:left-[228px] [[data-sheet-snap=full]_&]:hidden [[data-sheet-snap=half]_&]:hidden"
+        style={{
+          bottom: "var(--wn-bottom-stack, 40px)",
+          paddingBottom: "env(safe-area-inset-bottom, 0px)",
+        }}
       >
         <button
           type="button"
           onClick={() => setOpen(true)}
-          aria-label="Send feedback"
-          title="Send feedback"
-          className="pointer-events-auto inline-flex items-center gap-2 rounded-full border border-wn-charcoal/15 bg-white/95 px-4 py-2.5 text-xs font-semibold text-wn-charcoal shadow-lg backdrop-blur-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95"
+          aria-haspopup="dialog"
+          aria-expanded={open}
+          className="pointer-events-auto inline-flex min-h-[44px] touch-manipulation items-center gap-2 rounded-full border border-wn-charcoal/15 bg-white/95 px-4 text-xs font-semibold text-wn-charcoal shadow-lg backdrop-blur-sm transition hover:border-wn-navy hover:text-wn-navy active:scale-95"
         >
           <span aria-hidden="true">💬</span>
           <span>Feedback</span>
@@ -130,30 +140,31 @@ export default function FeedbackButton() {
 
       {open && (
         <div
-          className="fixed inset-0 z-[80] flex items-end justify-center px-4 pb-4 sm:items-center sm:pb-0"
+          ref={dialogRef}
+          tabIndex={-1}
+          className="fixed inset-0 z-[80] flex items-end justify-center px-4 pb-4 outline-none sm:items-center sm:pb-0"
           role="dialog"
           aria-modal="true"
-          aria-label="Send feedback"
+          aria-labelledby={titleId}
           onTouchStart={stopTouchBubble}
           onTouchMove={stopTouchBubble}
           onTouchEnd={stopTouchBubble}
         >
+          {/* Click-to-close backdrop. tabIndex -1 keeps it out of the Tab
+              order; the labelled × button is the keyboard close path. */}
           <button
             type="button"
-            aria-label="Close"
+            aria-hidden="true"
+            tabIndex={-1}
             onClick={closeModal}
             className="absolute inset-0 cursor-default bg-wn-charcoal/40 backdrop-blur-sm"
           />
-          <div
-            ref={dialogRef}
-            tabIndex={-1}
-            className="relative z-10 w-full max-w-md rounded-2xl border border-wn-charcoal/10 bg-white p-5 shadow-2xl"
-          >
+          <div className="relative z-10 w-full max-w-md rounded-2xl border border-wn-charcoal/10 bg-white p-5 shadow-2xl">
             <button
               type="button"
               onClick={closeModal}
               aria-label="Close feedback"
-              className="absolute right-3 top-3 inline-flex h-8 w-8 items-center justify-center rounded-full bg-wn-offwhite text-wn-charcoal transition hover:bg-wn-charcoal/10"
+              className="absolute right-2 top-2 inline-flex h-11 w-11 touch-manipulation items-center justify-center rounded-full bg-wn-offwhite text-wn-charcoal transition hover:bg-wn-charcoal/10"
             >
               <span aria-hidden="true" className="text-lg leading-none">
                 ×
@@ -161,58 +172,99 @@ export default function FeedbackButton() {
             </button>
 
             {state.kind === "success" ? (
-              <div className="py-2">
-                <h3 className="mb-1 text-lg font-bold text-wn-navy">Thanks!</h3>
+              <div className="py-2" role="status">
+                <h2 id={titleId} className="mb-1 text-lg font-bold text-wn-navy">
+                  Thanks
+                </h2>
                 <p className="mb-4 text-sm leading-relaxed text-wn-charcoal/75">
-                  We read every one. If you left an email we&apos;ll follow up
-                  when there&apos;s news.
+                  We read every one. If you left an email we will follow up
+                  when there is news.
                 </p>
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="rounded-lg bg-wn-navy px-4 py-2 text-sm font-semibold text-white transition hover:bg-wn-navy/90"
+                  className="min-h-[44px] rounded-lg bg-wn-navy px-4 text-sm font-semibold text-white transition hover:bg-wn-navy/90"
                 >
                   Close
                 </button>
               </div>
             ) : (
-              <>
-                <h3 className="mb-1 text-lg font-bold text-wn-navy">
+              <form
+                noValidate
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  void submit();
+                }}
+              >
+                <h2 id={titleId} className="mb-1 text-lg font-bold text-wn-navy">
                   Send feedback
-                </h3>
+                </h2>
                 <p className="mb-3 text-xs leading-relaxed text-wn-charcoal/65">
-                  Founder Season — your input shapes Wynla.
+                  Founder Season: your input shapes Wynla.
                 </p>
-                <label className="mb-2 block text-[11px] font-semibold uppercase tracking-wide text-wn-charcoal/60">
-                  What&apos;s on your mind?
+                <label
+                  htmlFor={bodyId}
+                  className="mb-2 block text-[11px] font-semibold uppercase tracking-wide text-wn-charcoal/65"
+                >
+                  What is on your mind?
                 </label>
                 <textarea
+                  id={bodyId}
                   ref={textareaRef}
                   value={body}
                   onChange={(e) => setBody(e.target.value)}
                   rows={5}
-                  maxLength={5000}
-                  placeholder="Bug, feature idea, resort missing, copy that confused you — anything."
+                  maxLength={MAX_CHARS}
+                  required
+                  aria-required="true"
+                  aria-invalid={state.kind === "error" ? true : undefined}
+                  aria-describedby={
+                    state.kind === "error" ? `${bodyHintId} ${errorId}` : bodyHintId
+                  }
+                  placeholder="Bug, feature idea, resort missing, copy that confused you: anything."
                   style={{ fontSize: "16px" }}
-                  className="mb-2 w-full rounded-lg border border-wn-charcoal/20 bg-white px-3 py-2 font-medium text-wn-charcoal placeholder:text-wn-charcoal/40 focus:border-wn-navy focus:outline-none focus:ring-2 focus:ring-wn-navy/20"
+                  className="mb-1 w-full rounded-lg border border-wn-charcoal/20 bg-white px-3 py-2 font-medium text-wn-charcoal placeholder:text-wn-charcoal/40 focus:border-wn-navy focus:outline-none focus:ring-2 focus:ring-wn-navy/20"
                 />
-                <div className="mb-3 flex justify-end text-[10px] text-wn-charcoal/45">
-                  {body.length} / 5000
+                {/* Visible reason for the disabled Send button (a11y-35):
+                    the counter says how many more characters are needed. */}
+                <div
+                  id={bodyHintId}
+                  className="mb-3 flex justify-between gap-2 text-[11px] text-wn-charcoal/65"
+                >
+                  <span>
+                    {tooShort
+                      ? `At least ${MIN_CHARS} characters to send`
+                      : "Ready to send"}
+                  </span>
+                  <span>
+                    {body.length} / {MAX_CHARS}
+                  </span>
                 </div>
-                <label className="mb-1 block text-[11px] font-semibold uppercase tracking-wide text-wn-charcoal/60">
+                <label
+                  htmlFor={emailId}
+                  className="mb-1 block text-[11px] font-semibold uppercase tracking-wide text-wn-charcoal/65"
+                >
                   Email (optional)
                 </label>
                 <input
+                  id={emailId}
                   type="email"
+                  inputMode="email"
+                  autoComplete="email"
+                  autoCapitalize="none"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="you@email.com — only if you want us to reply"
+                  placeholder="you@email.com, only if you want a reply"
                   style={{ fontSize: "16px" }}
-                  className="mb-4 w-full rounded-lg border border-wn-charcoal/20 bg-white px-3 py-2 font-medium text-wn-charcoal placeholder:text-wn-charcoal/40 focus:border-wn-navy focus:outline-none focus:ring-2 focus:ring-wn-navy/20"
+                  className="mb-4 min-h-[44px] w-full rounded-lg border border-wn-charcoal/20 bg-white px-3 py-2 font-medium text-wn-charcoal placeholder:text-wn-charcoal/40 focus:border-wn-navy focus:outline-none focus:ring-2 focus:ring-wn-navy/20"
                 />
 
                 {state.kind === "error" && (
-                  <div className="mb-3 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-800">
+                  <div
+                    id={errorId}
+                    role="alert"
+                    className="mb-3 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-800"
+                  >
                     {state.message}
                   </div>
                 )}
@@ -221,20 +273,20 @@ export default function FeedbackButton() {
                   <button
                     type="button"
                     onClick={closeModal}
-                    className="rounded-lg border border-wn-charcoal/20 bg-white px-3 py-2 text-sm font-semibold text-wn-charcoal transition hover:border-wn-charcoal/40"
+                    className="min-h-[44px] rounded-lg border border-wn-charcoal/20 bg-white px-3 text-sm font-semibold text-wn-charcoal transition hover:border-wn-charcoal/40"
                   >
                     Cancel
                   </button>
                   <button
-                    type="button"
-                    onClick={submit}
-                    disabled={state.kind === "sending" || body.trim().length < 5}
-                    className="rounded-lg bg-wn-navy px-4 py-2 text-sm font-semibold text-white transition hover:bg-wn-navy/90 disabled:cursor-not-allowed disabled:opacity-50"
+                    type="submit"
+                    disabled={state.kind === "sending" || tooShort}
+                    aria-describedby={bodyHintId}
+                    className="min-h-[44px] rounded-lg bg-wn-navy px-4 text-sm font-semibold text-white transition hover:bg-wn-navy/90 disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     {state.kind === "sending" ? "Sending…" : "Send feedback"}
                   </button>
                 </div>
-              </>
+              </form>
             )}
           </div>
         </div>

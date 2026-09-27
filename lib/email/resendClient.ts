@@ -67,3 +67,52 @@ export async function sendOpsEmail(opts: {
     clearTimeout(timer);
   }
 }
+
+/**
+ * Subscriber email (digests, Thursday picks): HTML + text plus the RFC
+ * 8058 one-click unsubscribe headers Gmail and Yahoo require from bulk
+ * senders. Raw REST with a hard timeout, like sendOpsEmail, so a slow
+ * Resend cannot stall a cron near its deadline. `from` defaults to the
+ * digest sender so replies and bounces land in the same place.
+ */
+export async function sendListEmail(opts: {
+  to: string;
+  subject: string;
+  html: string;
+  text: string;
+  unsubscribeUrl: string;
+  from?: string;
+}): Promise<{ ok: boolean; error?: string; id?: string }> {
+  const key = process.env.RESEND_API_KEY;
+  if (!key) return { ok: false, error: "RESEND_API_KEY not configured" };
+  const ac = new AbortController();
+  const timer = setTimeout(() => ac.abort(), 15_000);
+  try {
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        from: opts.from ?? process.env.RESEND_FROM_EMAIL ?? "Wynla <digest@wynla.app>",
+        to: [opts.to],
+        subject: opts.subject,
+        html: opts.html,
+        text: opts.text,
+        headers: {
+          "List-Unsubscribe": `<${opts.unsubscribeUrl}>`,
+          "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+        },
+      }),
+      signal: ac.signal,
+    });
+    if (!res.ok) {
+      const body = await res.text().catch(() => "");
+      return { ok: false, error: `${res.status} ${body.slice(0, 200)}` };
+    }
+    const j = (await res.json().catch(() => ({}))) as { id?: string };
+    return { ok: true, id: j.id };
+  } catch (e) {
+    return { ok: false, error: String((e as Error)?.message ?? e).slice(0, 200) };
+  } finally {
+    clearTimeout(timer);
+  }
+}

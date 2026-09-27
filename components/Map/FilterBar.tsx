@@ -1,147 +1,80 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { ORIGINS, type Origin } from "@/lib/origins";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
+import {
+  driveFilterLabel,
+  originOptionLabel,
+  originsForPicker,
+  type Origin,
+} from "@/lib/origins";
 import { PASS_COLORS, PASS_KEYS, PASS_LABELS } from "@/lib/passColors";
 import { SIZE_TIER_LABELS, type SizeTier } from "@/lib/sizeTier";
+
+/** One removable chip in the active-filter strip. MapPage builds the
+ *  list (it owns every filter's URL state) and this bar only renders
+ *  it, so the strip and the ☰ badge can never disagree. */
+export type ActiveFilterChip = {
+  key: string;
+  label: string;
+  onRemove: () => void;
+};
 
 type Props = {
   passFilter: string[];
   origin: Origin;
+  /** True when drive times from this origin are Haversine estimates
+   *  (geo origin, or a city without drive_time_cache rows). */
+  originIsEstimate: boolean;
   withinHours: number;
-  days: number;
   sizeFilter: SizeTier | null;
   nightOnly: boolean;
   passCounts: Record<string, number>;
   hiddenByNullSize: number;
   filteredCount: number;
   totalCount: number;
+  activeChips: ActiveFilterChip[];
   onPassChange: (passes: string[]) => void;
   onFromCity: (code: string) => void;
   onFromGeo: (lat: number, lng: number) => void;
   onWithinChange: (w: string | null) => void;
-  onDaysChange: (d: number) => void;
   onSizeChange: (s: SizeTier | null) => void;
   onNightChange: (v: boolean) => void;
   onClearAll: () => void;
 };
 
-// Trip-type presets — pure trip length. The drive cap is now its own
-// independent filter ("≤ Xh") so a Weekend trip with willingness to
-// drive 10h on day 1 is expressible. Anytime = no trip-length filter
-// at all (single day, no cap). Day/Weekend/Big differ only in days.
-type TripKind = "anytime" | "day" | "weekend" | "big";
-const TRIP_PRESETS: { kind: TripKind; emoji: string; label: string; defaultDays: number }[] = [
-  { kind: "anytime", emoji: "",   label: "Anytime",  defaultDays: 1 },
-  { kind: "day",     emoji: "🚗", label: "Day trip", defaultDays: 1 },
-  { kind: "weekend", emoji: "🏕️", label: "Weekend",  defaultDays: 2 },
-  { kind: "big",     emoji: "🎿", label: "Big trip", defaultDays: 5 },
-];
-
-function tripKindFor(days: number, hasDayTripFlag: boolean): TripKind {
-  if (days >= 4) return "big";
-  if (days >= 2) return "weekend";
-  if (hasDayTripFlag) return "day";
-  return "anytime";
-}
-
 // Drive-time presets for the new standalone Drive-time dropdown.
 const DRIVE_TIME_PRESETS = [0, 3, 5, 8, 12];
-
-type ActiveChip = {
-  key: string;
-  label: string;
-  onRemove: () => void;
-};
 
 export default function FilterBar({
   passFilter,
   origin,
+  originIsEstimate,
   withinHours,
-  days,
   sizeFilter,
   nightOnly,
   passCounts,
   hiddenByNullSize,
   filteredCount,
   totalCount,
+  activeChips,
   onPassChange,
   onFromCity,
   onFromGeo,
   onWithinChange,
-  onDaysChange,
   onSizeChange,
   onNightChange,
   onClearAll,
 }: Props) {
   const totalPass = Object.values(passCounts).reduce((a, b) => a + b, 0);
-
-  // Build active-chip strip from current filter state. Chips render in a
-  // stable order so the strip doesn't shuffle as users add/remove.
   const driveActive = withinHours > 0;
-  const tripKind = tripKindFor(days, false);
-  const tripPreset = TRIP_PRESETS.find((p) => p.kind === tripKind) ?? TRIP_PRESETS[0];
-  const tripActive = tripKind !== "anytime";
-  const isMultiDay = days >= 2;
 
-  const activeChips: ActiveChip[] = [];
-  if (passFilter.length > 0) {
-    const labels = passFilter
-      .map((p) => PASS_LABELS[p as keyof typeof PASS_LABELS] ?? p)
-      .join(" + ");
-    activeChips.push({
-      key: "pass",
-      label: `Pass: ${labels}`,
-      onRemove: () => onPassChange([]),
-    });
-  }
-  // Computed once and reused for the chip strip + the dropdown label.
-  const fromShort = origin.kind === "geo" ? "here" : origin.short;
-  if (driveActive) {
-    activeChips.push({
-      key: "drive",
-      label: `≤ ${withinHours}h drive from ${fromShort}`,
-      onRemove: () => onWithinChange(null),
-    });
-  }
-  if (tripActive) {
-    const dayPart = isMultiDay ? ` · ${days} days` : "";
-    activeChips.push({
-      key: "trip",
-      label: `${tripPreset.label}${dayPart}`,
-      onRemove: () => onDaysChange(1),
-    });
-  }
-  if (sizeFilter) {
-    activeChips.push({
-      key: "size",
-      label: `Size: ${SIZE_TIER_LABELS[sizeFilter]}`,
-      onRemove: () => onSizeChange(null),
-    });
-  }
-  if (nightOnly) {
-    activeChips.push({
-      key: "night",
-      label: "🌙 Night skiing",
-      onRemove: () => onNightChange(false),
-    });
-  }
-
-
-  // Trip dropdown label = From + trip-length preset. Drive cap is
-  // surfaced through its own dropdown.
-  const fromLabel = origin.kind === "geo" ? "📍 From here" : `From ${origin.short}`;
-  const tripLabelTail = tripActive
-    ? `${tripPreset.label}${isMultiDay ? ` ${days}d` : ""}`
-    : "Anytime";
-  const tripLabel = `${fromLabel} · ${tripLabelTail}`;
   // Always include the from-city in the drive chip label — Saitarn
   // 2026-05-23 feedback: bare "Any drive" / "≤ 5h drive" read ambiguously
   // (drive from where?). Including "from NYC" / "from Boston" makes the
-  // reference point explicit at a glance.
-  const driveLabel = driveActive
-    ? `≤ ${withinHours}h drive from ${fromShort}`
-    : `Any drive from ${fromShort}`;
+  // reference point explicit at a glance. driveFilterLabel adds the "≈"
+  // for origins whose drive times are estimates rather than cached road
+  // routes; the active-filter chip in MapPage uses the same formatter.
+  const driveLabel = driveFilterLabel(withinHours, origin, originIsEstimate);
 
   // Pass dropdown label — multi-select aware. "All passes" when empty,
   // single label when one selected, "Ikon + Epic" when multiple.
@@ -174,6 +107,7 @@ export default function FilterBar({
           />
           <FromDropdown
             origin={origin}
+            originIsEstimate={originIsEstimate}
             onFromCity={onFromCity}
             onFromGeo={onFromGeo}
           />
@@ -203,10 +137,14 @@ export default function FilterBar({
           </button>
         </div>
 
+        {/* Not a live region on purpose: MapView already announces the
+            count once per change, and two announcers would double up. */}
         <div className="shrink-0 text-xs font-medium text-wn-charcoal/70 sm:text-right">
+          <span className="sr-only">Showing </span>
           {filteredCount} / {totalCount}
+          <span className="sr-only"> resorts</span>
           {sizeFilter !== null && hiddenByNullSize > 0 && (
-            <span className="ml-1 italic text-wn-charcoal/55">
+            <span className="ml-1 italic text-wn-charcoal/65">
               · {hiddenByNullSize} unknown size hidden
             </span>
           )}
@@ -261,7 +199,8 @@ function PassDropdown({
   label: string;
   onPassChange: (passes: string[]) => void;
 }) {
-  const { open, setOpen, ref } = useDropdown();
+  const { open, setOpen, close, ref, triggerRef, panelId } = useDropdown("menu");
+  const hintId = `${panelId}-hint`;
   // For the button-color dot, show the first selected pass's color
   // when exactly one is active. With multi-select we drop the dot
   // entirely — the label "Ikon + Epic" already conveys the state.
@@ -280,6 +219,7 @@ function PassDropdown({
   return (
     <div className="relative shrink-0" ref={ref}>
       <button
+        ref={triggerRef}
         type="button"
         onClick={() => setOpen((v) => !v)}
         className={`inline-flex min-h-[36px] items-center gap-1.5 whitespace-nowrap rounded-md border px-3 py-1.5 text-xs font-semibold transition-colors duration-200 ${
@@ -289,6 +229,7 @@ function PassDropdown({
         }`}
         aria-haspopup="menu"
         aria-expanded={open}
+        aria-controls={open ? panelId : undefined}
       >
         {activeColor && (
           <span
@@ -297,43 +238,50 @@ function PassDropdown({
             aria-hidden="true"
           />
         )}
+        {/* The visible text stays the accessible name's tail (WCAG 2.5.3);
+            the sr-only prefix says which filter this is. */}
+        <span className="sr-only">Pass: </span>
         <span>{label}</span>
         <span aria-hidden="true" className="opacity-70">▾</span>
       </button>
       {open && (
-        <div
-          role="menu"
-          className="absolute left-0 mt-1 w-64 rounded-lg border border-wn-charcoal/15 bg-white p-2 shadow-lg z-30"
-        >
+        <div className="absolute left-0 mt-1 w-64 rounded-lg border border-wn-charcoal/15 bg-white p-2 shadow-lg z-30">
+          {/* The hint sits outside the menu element: a menu may only
+              contain menu items, groups and separators, so a paragraph
+              inside it would be read as a stray item. The menu points at
+              it with aria-describedby instead. */}
+          <p id={hintId} className="mb-1 px-2 text-[11px] text-wn-charcoal/65">
+            Pick more than one if you own more than one pass.
+          </p>
+          <div id={panelId} role="menu" aria-label="Pass" aria-describedby={hintId}>
           <DropdownRow
+            role="menuitemradio"
             active={passFilter.length === 0}
             onClick={() => {
               onPassChange([]);
-              setOpen(false);
+              close();
             }}
           >
             <span className="font-semibold">All passes</span>
-            <span className="ml-auto text-wn-charcoal/55">{totalPass}</span>
+            <span className="ml-auto text-wn-charcoal/65">{totalPass}</span>
           </DropdownRow>
-          <div className="my-1 h-px bg-wn-charcoal/10" />
-          <p className="mb-1 px-2 text-[10px] text-wn-charcoal/55">
-            Tap to toggle. Pick multiple if you own more than one pass.
-          </p>
+          <div role="separator" className="my-1 h-px bg-wn-charcoal/10" />
           {PASS_KEYS.map((key) => {
             const count = passCounts[key] ?? 0;
             const isActive = passFilter.includes(key);
             return (
               <DropdownRow
                 key={key}
+                role="menuitemcheckbox"
                 active={isActive}
                 onClick={() => togglePass(key)}
               >
                 {/* Checkbox indicator — square, fills navy on active */}
                 <span
-                  className={`flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-sm border ${
+                  className={`flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-sm border-2 ${
                     isActive
                       ? "border-wn-navy bg-wn-navy text-white"
-                      : "border-wn-charcoal/30 bg-white"
+                      : "border-wn-charcoal/60 bg-white"
                   }`}
                   aria-hidden="true"
                 >
@@ -349,10 +297,11 @@ function PassDropdown({
                   aria-hidden="true"
                 />
                 <span>{PASS_LABELS[key]}</span>
-                <span className="ml-auto text-wn-charcoal/55">{count}</span>
+                <span className="ml-auto text-wn-charcoal/65">{count}</span>
               </DropdownRow>
             );
           })}
+          </div>
         </div>
       )}
     </div>
@@ -360,19 +309,23 @@ function PassDropdown({
 }
 
 /* -------------------------------------------------------------------------- */
-/* From dropdown — geolocation primary, 4-city fallback                       */
+/* From dropdown — geolocation, ZIP, or any city in lib/origins            */
 /* -------------------------------------------------------------------------- */
 
 function FromDropdown({
   origin,
+  originIsEstimate,
   onFromCity,
   onFromGeo,
 }: {
   origin: Origin;
+  originIsEstimate: boolean;
   onFromCity: (code: string) => void;
   onFromGeo: (lat: number, lng: number) => void;
 }) {
-  const { open, setOpen, ref } = useDropdown();
+  const { open, setOpen, close, ref, triggerRef, panelId } = useDropdown("dialog");
+  const zipErrorId = `${panelId}-zip-error`;
+  const zipHintId = `${panelId}-zip-hint`;
   const [requestingGeo, setRequestingGeo] = useState(false);
   const [geoError, setGeoError] = useState<string | null>(null);
   // ZIP-code fallback. Browser geolocation on desktop is IP-based and
@@ -415,7 +368,7 @@ function FromDropdown({
       onFromGeo(lat, lng);
       setResolvingZip(false);
       setZipInput("");
-      setOpen(false);
+      close();
     } catch {
       setResolvingZip(false);
       setZipError("Network error — try again.");
@@ -433,7 +386,7 @@ function FromDropdown({
       (pos) => {
         onFromGeo(pos.coords.latitude, pos.coords.longitude);
         setRequestingGeo(false);
-        setOpen(false);
+        close();
       },
       (err) => {
         setRequestingGeo(false);
@@ -450,6 +403,7 @@ function FromDropdown({
   return (
     <div className="relative shrink-0" ref={ref}>
       <button
+        ref={triggerRef}
         type="button"
         onClick={() => setOpen((v) => !v)}
         className={`inline-flex min-h-[36px] items-center gap-1.5 whitespace-nowrap rounded-md border px-3 py-1.5 text-xs font-semibold transition-colors duration-200 ${
@@ -457,21 +411,28 @@ function FromDropdown({
             ? "border-wn-navy bg-wn-navy text-white"
             : "border-wn-charcoal/20 bg-white text-wn-charcoal hover:border-wn-charcoal/40"
         }`}
-        aria-haspopup="menu"
+        aria-haspopup="dialog"
         aria-expanded={open}
+        aria-controls={open ? panelId : undefined}
       >
+        <span className="sr-only">Drive origin: </span>
         <span>{buttonLabel}</span>
         <span aria-hidden="true" className="opacity-70">▾</span>
       </button>
       {open && (
+        // A dialog, not a menu: it holds a text input and a select,
+        // which are not valid menu children (audit a11y-5).
         <div
-          role="menu"
+          id={panelId}
+          role="dialog"
+          aria-label="Where you drive from"
           className="absolute left-0 mt-1 w-64 rounded-lg border border-wn-charcoal/15 bg-white p-3 shadow-lg z-30"
         >
           <button
             type="button"
             onClick={handleUseHere}
             disabled={requestingGeo}
+            aria-pressed={isGeo}
             className={`mb-2 flex w-full items-center gap-2 rounded-md border px-2.5 py-1.5 text-xs font-semibold transition-colors disabled:opacity-60 ${
               isGeo
                 ? "border-wn-navy bg-wn-navy text-white"
@@ -483,17 +444,23 @@ function FromDropdown({
             {isGeo && <span className="ml-auto text-[10px] text-white/75">live</span>}
           </button>
           {geoError && (
-            <p className="mb-2 text-[10px] leading-tight text-wn-charcoal/60">{geoError}</p>
+            <p role="alert" className="mb-2 text-[11px] leading-tight text-wn-charcoal/75">{geoError}</p>
           )}
-          <div className="mb-1 mt-1 text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
+          <label
+            htmlFor={`${panelId}-zip`}
+            className="mb-1 mt-1 block text-[11px] font-semibold uppercase tracking-wide text-wn-charcoal/65"
+          >
             Or use a US ZIP code
-          </div>
-          <div className="mb-2 flex gap-1">
+          </label>
+          <div className="mb-1 flex gap-1">
             <input
+              id={`${panelId}-zip`}
               type="text"
               inputMode="numeric"
               pattern="\d{5}"
               maxLength={5}
+              enterKeyHint="go"
+              autoComplete="postal-code"
               placeholder="e.g. 80424"
               value={zipInput}
               onChange={(e) => {
@@ -506,43 +473,58 @@ function FromDropdown({
                 if (e.key === "Enter") handleZipSubmit();
               }}
               disabled={resolvingZip}
+              aria-invalid={zipError ? true : undefined}
+              aria-describedby={zipError ? `${zipHintId} ${zipErrorId}` : zipHintId}
               className="min-w-0 flex-1 rounded-md border border-wn-charcoal/20 bg-white px-2 py-1.5 text-xs font-medium text-wn-charcoal placeholder:text-wn-charcoal/40 hover:border-wn-charcoal/40 focus:outline-none focus:ring-2 focus:ring-wn-sky disabled:opacity-60"
-              aria-label="ZIP code"
             />
             <button
               type="button"
               onClick={handleZipSubmit}
               disabled={resolvingZip || zipInput.length !== 5}
+              aria-describedby={zipHintId}
               className="rounded-md bg-wn-navy px-2.5 py-1.5 text-xs font-semibold text-white transition hover:bg-wn-navy/90 disabled:opacity-50"
             >
               {resolvingZip ? "…" : "Use"}
             </button>
           </div>
+          {/* Says why Use is disabled until five digits are typed. */}
+          <p id={zipHintId} className="mb-2 text-[11px] leading-tight text-wn-charcoal/65">
+            Five digits, then Use.
+          </p>
           {zipError && (
-            <p className="mb-2 text-[10px] leading-tight text-wn-charcoal/60">{zipError}</p>
+            <p id={zipErrorId} role="alert" className="mb-2 text-[11px] leading-tight text-wn-charcoal/75">{zipError}</p>
           )}
 
-          <div className="mb-1 mt-1 text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
+          <label
+            htmlFor={`${panelId}-city`}
+            className="mb-1 mt-1 block text-[11px] font-semibold uppercase tracking-wide text-wn-charcoal/65"
+          >
             Or pick a city
-          </div>
+          </label>
           <select
+            id={`${panelId}-city`}
             value={origin.kind === "city" ? origin.code : ""}
             onChange={(e) => {
+              if (!e.target.value) return;
               onFromCity(e.target.value);
-              setOpen(false);
+              close();
             }}
             className="w-full rounded-md border border-wn-charcoal/20 bg-white px-2 py-1.5 text-xs font-medium text-wn-charcoal hover:border-wn-charcoal/40 focus:outline-none focus:ring-2 focus:ring-wn-sky"
-            aria-label="From city"
           >
             {origin.kind === "geo" && (
               <option value="" disabled>— pick a city —</option>
             )}
-            {ORIGINS.map((o) => (
+            {originsForPicker().map((o) => (
               <option key={o.code} value={o.code}>
-                {o.name}
+                {originOptionLabel(o)}
               </option>
             ))}
           </select>
+          <p className="mt-2 text-[11px] leading-tight text-wn-charcoal/65">
+            {originIsEstimate
+              ? "Drive times from this origin are estimates (≈). Open a resort for an exact route."
+              : "Drive times from this city are cached road routes."}
+          </p>
         </div>
       )}
     </div>
@@ -553,31 +535,105 @@ function FromDropdown({
 /* Shared dropdown helpers                                                    */
 /* -------------------------------------------------------------------------- */
 
-// Minimal click-outside + ESC-to-close hook. No library dep — the state is
-// owned by the parent dropdown component. Reused by both pass + trip menus.
-function useDropdown() {
+const FOCUSABLE_IN_PANEL =
+  'button:not([disabled]),input:not([disabled]),select:not([disabled]),[tabindex]:not([tabindex="-1"])';
+
+// Dropdown state + keyboard behaviour shared by the four desktop pills
+// (audit a11y-5 / map-core-39). No library dep.
+//
+//   - opening moves focus to the first control in the panel
+//   - "menu" kind: ArrowUp / ArrowDown / Home / End walk the menu items
+//     (the "dialog" kind holds inputs and a select, so arrows are theirs)
+//   - Escape closes and puts focus back on the pill
+//   - choosing an item calls close(), which also returns focus
+//   - clicking outside or tabbing away closes WITHOUT stealing focus
+//     back, so the thing the user moved to keeps it
+function useDropdown(kind: "menu" | "dialog") {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement | null>(null);
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
+  const restoreOnClose = useRef(false);
+  const panelId = useId();
+
+  const close = useCallback(() => {
+    restoreOnClose.current = true;
+    setOpen(false);
+  }, []);
 
   useEffect(() => {
-    if (!open) return;
-    function onMouseDown(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        setOpen(false);
+    const root = ref.current;
+    if (!open) {
+      if (restoreOnClose.current) {
+        restoreOnClose.current = false;
+        triggerRef.current?.focus();
       }
+      return;
+    }
+    if (!root) return;
+    const t = window.setTimeout(() => {
+      const panel = document.getElementById(panelId);
+      panel?.querySelector<HTMLElement>(FOCUSABLE_IN_PANEL)?.focus();
+    }, 0);
+    function onMouseDown(e: MouseEvent) {
+      if (root && !root.contains(e.target as Node)) setOpen(false);
+    }
+    function onFocusOut(e: FocusEvent) {
+      const next = e.relatedTarget as Node | null;
+      if (next && root && !root.contains(next)) setOpen(false);
     }
     function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === "Escape") {
+        e.stopPropagation();
+        close();
+        return;
+      }
+      if (kind !== "menu") return;
+      if (!["ArrowDown", "ArrowUp", "Home", "End"].includes(e.key)) return;
+      const items = Array.from(
+        document.getElementById(panelId)?.querySelectorAll<HTMLElement>('[role^="menuitem"]') ?? [],
+      );
+      if (items.length === 0) return;
+      e.preventDefault();
+      const i = items.indexOf(document.activeElement as HTMLElement);
+      const next =
+        e.key === "Home"
+          ? 0
+          : e.key === "End"
+            ? items.length - 1
+            : e.key === "ArrowDown"
+              ? (i + 1) % items.length
+              : (i - 1 + items.length) % items.length;
+      items[next].focus();
     }
     window.addEventListener("mousedown", onMouseDown);
-    window.addEventListener("keydown", onKey);
+    root.addEventListener("focusout", onFocusOut);
+    root.addEventListener("keydown", onKey);
     return () => {
+      window.clearTimeout(t);
       window.removeEventListener("mousedown", onMouseDown);
-      window.removeEventListener("keydown", onKey);
+      root.removeEventListener("focusout", onFocusOut);
+      root.removeEventListener("keydown", onKey);
     };
-  }, [open]);
+  }, [open, kind, panelId, close]);
 
-  return { open, setOpen, ref };
+  return { open, setOpen, close, ref, triggerRef, panelId };
+}
+
+// Arrow keys move between the radios of the enclosing radiogroup and
+// select the one they land on, like native radios. Wraps at both ends.
+function onRadioKey(e: React.KeyboardEvent<HTMLButtonElement>) {
+  const forward = e.key === "ArrowRight" || e.key === "ArrowDown";
+  const backward = e.key === "ArrowLeft" || e.key === "ArrowUp";
+  if (!forward && !backward) return;
+  const group = e.currentTarget.closest('[role="radiogroup"]');
+  if (!group) return;
+  const radios = Array.from(group.querySelectorAll<HTMLButtonElement>('[role="radio"]'));
+  const i = radios.indexOf(e.currentTarget);
+  if (i < 0) return;
+  e.preventDefault();
+  const next = radios[(i + (forward ? 1 : -1) + radios.length) % radios.length];
+  next.focus();
+  next.click();
 }
 
 /* -------------------------------------------------------------------------- */
@@ -595,7 +651,7 @@ function DriveTimeDropdown({
   active: boolean;
   onWithinChange: (w: string | null) => void;
 }) {
-  const { open, setOpen, ref } = useDropdown();
+  const { open, setOpen, close, ref, triggerRef, panelId } = useDropdown("dialog");
   const [customHours, setCustomHours] = useState<string>(
     withinHours > 0 ? String(withinHours) : "",
   );
@@ -609,16 +665,17 @@ function DriveTimeDropdown({
     const n = Number(customHours);
     if (Number.isFinite(n) && n > 0 && n <= 24) {
       onWithinChange(String(Math.round(n)));
-      setOpen(false);
+      close();
     } else if (customHours.trim() === "") {
       onWithinChange(null);
-      setOpen(false);
+      close();
     }
   }
 
   return (
     <div className="relative shrink-0" ref={ref}>
       <button
+        ref={triggerRef}
         type="button"
         onClick={() => setOpen((v) => !v)}
         className={`inline-flex min-h-[36px] items-center gap-1.5 whitespace-nowrap rounded-md border px-3 py-1.5 text-xs font-semibold transition-colors duration-200 ${
@@ -626,35 +683,50 @@ function DriveTimeDropdown({
             ? "border-wn-navy bg-wn-navy text-white"
             : "border-wn-charcoal/20 bg-white text-wn-charcoal hover:border-wn-charcoal/40"
         }`}
-        aria-haspopup="menu"
+        aria-haspopup="dialog"
         aria-expanded={open}
+        aria-controls={open ? panelId : undefined}
       >
         <span aria-hidden="true">⏱️</span>
+        <span className="sr-only">Drive time: </span>
         <span>{label}</span>
         <span aria-hidden="true" className="opacity-70">▾</span>
       </button>
       {open && (
         <div
-          role="menu"
+          id={panelId}
+          role="dialog"
+          aria-label="Maximum drive time"
           className="absolute left-0 mt-1 w-64 rounded-lg border border-wn-charcoal/15 bg-white p-3 shadow-lg z-30"
         >
-          <div className="mb-2 text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
+          <div
+            id={`${panelId}-presets-label`}
+            className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-wn-charcoal/65"
+          >
             Max drive on day 1
           </div>
-          <div className="grid grid-cols-3 gap-1">
+          <div
+            className="grid grid-cols-3 gap-1"
+            role="radiogroup"
+            aria-labelledby={`${panelId}-presets-label`}
+          >
             {DRIVE_TIME_PRESETS.map((h) => {
               const presetActive = withinHours === h && !(h === 0 && !active);
               const isAny = h === 0;
+              const checked = presetActive || (isAny && !active);
               return (
                 <button
                   key={h}
                   type="button"
+                  role="radio"
+                  aria-checked={checked}
+                  onKeyDown={onRadioKey}
                   onClick={() => {
                     onWithinChange(isAny ? null : String(h));
-                    setOpen(false);
+                    close();
                   }}
                   className={`rounded-md border px-2 py-1.5 text-xs font-semibold transition-colors ${
-                    presetActive || (isAny && !active)
+                    checked
                       ? "border-wn-navy bg-wn-navy text-white"
                       : "border-wn-charcoal/15 bg-white text-wn-charcoal hover:border-wn-charcoal/40"
                   }`}
@@ -665,11 +737,17 @@ function DriveTimeDropdown({
             })}
           </div>
           <div className="mt-3 flex items-center gap-2">
-            <span className="text-[10px] font-semibold uppercase tracking-wide text-wn-charcoal/55">
+            <label
+              htmlFor={`${panelId}-custom`}
+              className="text-[11px] font-semibold uppercase tracking-wide text-wn-charcoal/65"
+            >
               Custom
-            </span>
+            </label>
             <input
+              id={`${panelId}-custom`}
               type="number"
+              inputMode="numeric"
+              enterKeyHint="done"
               min={1}
               max={24}
               step={1}
@@ -682,10 +760,10 @@ function DriveTimeDropdown({
                   commitCustom();
                 }
               }}
+              aria-describedby={`${panelId}-custom-unit`}
               className="w-16 rounded-md border border-wn-charcoal/20 bg-white px-2 py-1 text-xs font-medium text-wn-charcoal focus:border-wn-navy focus:outline-none focus:ring-2 focus:ring-wn-navy/20"
-              aria-label="Custom max drive hours"
             />
-            <span className="text-[10px] text-wn-charcoal/55">hrs</span>
+            <span id={`${panelId}-custom-unit`} className="text-[11px] text-wn-charcoal/65">hours, 1 to 24</span>
             <button
               type="button"
               onClick={commitCustom}
@@ -694,7 +772,7 @@ function DriveTimeDropdown({
               Apply
             </button>
           </div>
-          <p className="mt-2 text-[10px] leading-tight text-wn-charcoal/55">
+          <p className="mt-2 text-[11px] leading-tight text-wn-charcoal/65">
             Hides resorts the drive time can&apos;t reach within this cap. Doesn&apos;t affect manual picks in the trip planner.
           </p>
         </div>
@@ -714,11 +792,12 @@ function SizeDropdown({
   sizeFilter: SizeTier | null;
   onSizeChange: (s: SizeTier | null) => void;
 }) {
-  const { open, setOpen, ref } = useDropdown();
+  const { open, setOpen, close, ref, triggerRef, panelId } = useDropdown("menu");
   const label = sizeFilter ? `Size: ${SIZE_TIER_LABELS[sizeFilter]}` : "Any size";
   return (
     <div className="relative shrink-0" ref={ref}>
       <button
+        ref={triggerRef}
         type="button"
         onClick={() => setOpen((v) => !v)}
         className={`inline-flex min-h-[36px] items-center gap-1.5 whitespace-nowrap rounded-md border px-3 py-1.5 text-xs font-semibold transition-colors duration-200 ${
@@ -728,21 +807,26 @@ function SizeDropdown({
         }`}
         aria-haspopup="menu"
         aria-expanded={open}
+        aria-controls={open ? panelId : undefined}
       >
         <span aria-hidden="true">⛰️</span>
+        <span className="sr-only">Resort size: </span>
         <span>{label}</span>
         <span aria-hidden="true" className="opacity-70">▾</span>
       </button>
       {open && (
         <div
+          id={panelId}
           role="menu"
+          aria-label="Resort size"
           className="absolute left-0 mt-1 w-44 rounded-lg border border-wn-charcoal/15 bg-white p-1 shadow-lg z-30"
         >
           <DropdownRow
+            role="menuitemradio"
             active={sizeFilter === null}
             onClick={() => {
               onSizeChange(null);
-              setOpen(false);
+              close();
             }}
           >
             <span className="font-semibold">Any size</span>
@@ -750,10 +834,11 @@ function SizeDropdown({
           {(["small", "medium", "large"] as const).map((tier) => (
             <DropdownRow
               key={tier}
+              role="menuitemradio"
               active={sizeFilter === tier}
               onClick={() => {
                 onSizeChange(sizeFilter === tier ? null : tier);
-                setOpen(false);
+                close();
               }}
             >
               <span>{SIZE_TIER_LABELS[tier]}</span>
@@ -769,16 +854,20 @@ function DropdownRow({
   active,
   onClick,
   children,
+  role = "menuitemradio",
 }: {
   active: boolean;
   onClick: () => void;
   children: React.ReactNode;
+  /** menuitemradio for single-select rows, menuitemcheckbox for the
+   *  multi-select pass toggles (audit a11y-5). */
+  role?: "menuitemradio" | "menuitemcheckbox";
 }) {
   return (
     <button
       type="button"
       onClick={onClick}
-      role="menuitemradio"
+      role={role}
       aria-checked={active}
       className={`flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-xs transition-colors ${
         active
