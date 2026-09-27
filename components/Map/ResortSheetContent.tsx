@@ -1,20 +1,25 @@
 "use client";
 
 // Content pieces shared by the phone resort sheet and the desktop rail
-// (both live in ResortPanel.tsx): hero header, 4-tile stat row, pass
-// chips with per-product rules, docked action bar and the compact
-// "Top picks nearby" strip. Every number carries its source label
-// (Measured / Forecast / Reported / Estimated) and, when the row has a
-// stamp, its age; nothing here claims more than the columns hold.
+// (both live in ResortPanel.tsx): hero header, 2x2 conditions tiles,
+// "The mountain" facts (difficulty mix, elevations, trails, lifts), the
+// full-page button, pass chips with per-product rules, docked action bar
+// and the compact "Top picks nearby" strip. Every condition number
+// carries its source label (Measured / Forecast / Reported / Estimated)
+// and, when the row has a stamp, its age; nothing here claims more than
+// the columns hold.
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { passColor, passLabel } from "@/lib/passColors";
 import { textOn } from "@/lib/contrast";
 import { SURFACE_GLOSSARY, type SurfaceCode } from "@/lib/snowSurface";
 import type { ResortStatus } from "@/lib/seasonDates";
+import { getDifficultyMix } from "@/lib/difficulty";
+import { timeZoneForResort } from "@/lib/sunTimes";
 import SurfaceIcon from "@/components/icons/SurfaceIcon";
 import Icon from "@/components/icons/Icon";
+import Button from "@/components/ui/Button";
 import HeroImage from "@/components/HeroImage";
 import { heroSourceFor } from "@/lib/heroSource";
 import FavoriteToggle from "@/components/auth/FavoriteToggle";
@@ -22,10 +27,12 @@ import CompareToggle from "@/components/CompareToggle";
 import { ResortStatusPill } from "@/components/SeasonCountdown";
 import NearbyGroup from "@/components/NearbyGroup";
 import { fetchNearbyRestaurants, fetchNearbyActivities } from "@/lib/fetchNearby";
+import { fetchResortWeather, type ResortWeatherExtras } from "@/lib/fetchResortWeather";
 import type { NearbyRow } from "@/lib/nearbyCategories";
 import type { Resort, WeatherSnapshot } from "./MapPage";
+import DifficultyBar from "./DifficultyBar";
 import { directionsUrl } from "./ResortSheetMath";
-import { buildGlanceTiles, type GlanceTile } from "@/lib/glanceTiles";
+import { buildMountainFacts, buildSheetTiles, type GlanceTile } from "@/lib/glanceTiles";
 import { HIT_AREA_44_FROM_32 } from "@/lib/hitArea";
 
 // Families that have per-product rules in lib/data/passAccess.json. Kept
@@ -132,69 +139,171 @@ export function pickKeyStat(resort: {
 type Tile = GlanceTile & { icon?: React.ReactNode };
 
 /**
- * The same four tiles as the resort page's at-a-glance strip: new snow /
- * base (or status) / surface / high. Built by lib/glanceTiles so the
- * labels and the source words (Measured / Reported / Forecast) are
- * identical on the map and the page; the map only adds the surface icon.
+ * The sheet's 2x2 conditions: new snow / high-low today / base depth (or
+ * status) / surface (or snow next 3 days). Built by lib/glanceTiles so
+ * the labels and the source words (Measured / Reported / Forecast) match
+ * the resort page's strip; the map only adds the surface icon. `extras`
+ * is the lazy per-resort read: undefined while it is in flight (the
+ * next-3-days tile says so), null when it failed.
  */
 export function buildStatTiles(
   resort: Resort,
   weather: WeatherSnapshot | null,
   status: ResortStatus,
-  now: Date = new Date(),
+  opts: { extras?: ResortWeatherExtras | null; openProjected?: boolean; now?: Date } = {},
 ): Tile[] {
   // Surface class: written by the daily forecast run, null while the
   // surface model is dormant (closed / off-season / no evidence). The
   // map row carries no confidence, so the tile says Forecast + age only.
   const code = resort.current_surface_class as SurfaceCode | null;
   const glossary = code ? SURFACE_GLOSSARY[code] : undefined;
-  const tiles: Tile[] = buildGlanceTiles({
+  const tiles: Tile[] = buildSheetTiles({
     resort,
     weather,
     status,
     surface: glossary ? { kind: "active", label: glossary.label } : null,
-    statusWhenNoBase: true,
-    now,
+    openProjected: opts.openProjected,
+    extras: opts.extras,
+    now: opts.now,
   });
   if (glossary && code) {
     const surface = tiles.find((t) => t.key === "surface");
-    if (surface) surface.icon = <SurfaceIcon code={code} className="h-4 w-4 text-wn-navy" />;
+    if (surface) surface.icon = <SurfaceIcon code={code} className="h-4 w-4 shrink-0 text-wn-navy" />;
   }
   return tiles;
 }
 
 export function StatRow({ tiles }: { tiles: Tile[] }) {
-  // Label and source lines are load-bearing (they say which numbers are
-  // measured and which are forecast), so they sit at 11 px and 75 %
-  // charcoal: about 5.9:1 on the tinted tile, AA for small text.
+  // Two columns, so each tile gets ~170 px on a 390 px phone (the old
+  // four-up row gave ~69 px and cut values to "Opens…" / "Slight chan…").
+  // Nothing truncates: a long status or condition wraps to a second line
+  // instead of losing its meaning. Label and source lines are load-bearing
+  // (they say which numbers are measured and which are forecast), so they
+  // use wn-muted: about 6.2:1 on the tinted tile, AA for small text.
   return (
-    <dl className="grid grid-cols-4 gap-1.5" aria-label="Conditions at a glance">
+    <dl className="grid grid-cols-2 gap-2" aria-label="Conditions at a glance">
       {tiles.map((t) => (
-        <div key={t.key} className="min-w-0 rounded-xl bg-wn-navy/5 px-2 py-2">
-          {/* Sentence case and allowed to wrap: at 375 px a tile is ~67 px
-              wide, and a truncated "New sno…" would hide what the number
-              is. */}
-          <dt className="text-[11px] font-semibold leading-tight text-wn-charcoal/75">{t.label}</dt>
+        <div key={t.key} className="min-w-0 rounded-wn-sm bg-wn-navy/5 px-3 py-2">
+          <dt className="text-eyebrow font-semibold uppercase text-wn-muted">{t.label}</dt>
           <dd
             className={[
-              "mt-0.5 flex items-center gap-1 truncate text-[17px] font-extrabold leading-tight tracking-tight tabular-nums",
-              t.accent ? "text-wn-sky" : "text-wn-navy",
+              "mt-0.5 flex items-center gap-1.5 text-lg font-extrabold leading-tight tracking-tight tabular-nums",
+              t.accent ? "text-wn-info" : "text-wn-navy",
             ].join(" ")}
           >
             {t.icon}
-            <span className="truncate">{t.value}</span>
+            <span className="min-w-0 break-words">{t.value}</span>
           </dd>
-          {t.detail && (
-            <dd className="truncate text-[11px] font-medium leading-tight text-wn-charcoal/80" title={t.detail}>
-              {t.detail}
-            </dd>
-          )}
-          <dd className="line-clamp-2 text-[11px] leading-tight text-wn-charcoal/75" title={t.source}>
-            {t.source}
-          </dd>
+          {t.detail && <dd className="mt-0.5 text-xs font-medium text-wn-charcoal">{t.detail}</dd>}
+          <dd className="text-xs text-wn-muted">{t.source}</dd>
         </div>
       ))}
     </dl>
+  );
+}
+
+/**
+ * The conditions tiles plus the lazy per-resort weather read (next 3
+ * days of snow, wind, the low as a fallback). Fetched when a resort
+ * opens, like NearbyInPanel; a result is tagged with its resort id so a
+ * slow answer for the previous pin is never shown on the next one.
+ */
+export function ConditionsGlance({
+  resort,
+  weather,
+  status,
+  openProjected,
+}: {
+  resort: Resort;
+  weather: WeatherSnapshot | null;
+  status: ResortStatus;
+  /** SeasonInfo.openProjected for this resort (lib/seasonDates). */
+  openProjected: boolean;
+}) {
+  type Loaded = { id: number; extras: ResortWeatherExtras | null };
+  const [loaded, setLoaded] = useState<Loaded | null>(null);
+  // Legacy v1 forecast rows carry no zone; the resort's own zone decides
+  // which forecast day is "today" for those.
+  const timeZone =
+    timeZoneForResort({
+      slug: resort.slug,
+      state: resort.state,
+      latitude: resort.latitude,
+      longitude: resort.longitude,
+    }) ?? null;
+  useEffect(() => {
+    let cancelled = false;
+    const id = resort.id;
+    fetchResortWeather(id, { timeZone }).then(
+      (extras) => {
+        if (!cancelled) setLoaded({ id, extras });
+      },
+      () => {
+        if (!cancelled) setLoaded({ id, extras: null });
+      },
+    );
+    return () => {
+      cancelled = true;
+    };
+  }, [resort.id, timeZone]);
+  const extras = loaded?.id === resort.id ? loaded.extras : undefined;
+  const tiles = useMemo(
+    () => buildStatTiles(resort, weather, status, { extras, openProjected }),
+    [resort, weather, status, extras, openProjected],
+  );
+  return <StatRow tiles={tiles} />;
+}
+
+// ---------- The mountain ----------
+
+/**
+ * What kind of mountain this is, at a glance: the difficulty mix bar
+ * (nothing when the mix is unverified, lib/difficulty) and one wrapped
+ * line of facts from the resort row (lib/glanceTiles buildMountainFacts).
+ * Renders nothing when the row has neither.
+ */
+export function MountainFacts({ resort }: { resort: Resort }) {
+  const mix = getDifficultyMix(resort);
+  const facts = buildMountainFacts(resort);
+  if (!mix && facts.length === 0) return null;
+  const headingId = `mountain-facts-${resort.id}`;
+  return (
+    <section aria-labelledby={headingId} className="space-y-2">
+      <h3 id={headingId} className="text-sm font-bold text-wn-navy">
+        The mountain
+      </h3>
+      {mix && <DifficultyBar mix={mix} size="compact" />}
+      {facts.length > 0 && (
+        // Inline items, each kept whole, with the separator dot glued to
+        // the item before it: a wrapped line never starts with "·" and
+        // never splits "11,570 ft".
+        <ul className="text-sm leading-6 text-wn-charcoal">
+          {facts.map((f, i) => (
+            <li key={f.key} className="inline">
+              <span className="whitespace-nowrap">
+                {f.text}
+                {i < facts.length - 1 && (
+                  <span aria-hidden="true" className="text-wn-subtle">
+                    {" ·"}
+                  </span>
+                )}
+              </span>{" "}
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  );
+}
+
+/** The one way from the sheet to the full resort page: a full-width
+ *  44 px outline button (Button "secondary", navy text). Not gold on
+ *  purpose: gold is reserved for Plan trip in the action bar. */
+export function FullPageButton({ slug }: { slug: string }) {
+  return (
+    <Button href={`/resort/${slug}`} variant="secondary" block iconRight={<Icon name="arrow-right" />}>
+      See full mountain page
+    </Button>
   );
 }
 
@@ -470,8 +579,10 @@ export function RailControls({ resortId, onClose }: { resortId: number; onClose:
 // Round 9 (2026-06) — lazy-loads nearby_restaurants + nearby_activities
 // for the open resort so the homepage SSR payload stays small. Audit
 // round 2 (resort-panel-detail-10): ONE merged "Top picks nearby" strip
-// (recommended first, then nearest) capped at 6, with a link to the full
-// section on the resort page.
+// (recommended first, then nearest) capped at 6. The "See all N places
+// nearby" link under it was removed on the founder's call (2026-09-27):
+// the full list lives on the resort page, which the sheet's "See full
+// mountain page" button already opens.
 const TOP_PICKS_LIMIT = 6;
 
 function rankNearby(rows: NearbyRow[]): NearbyRow[] {
@@ -482,7 +593,7 @@ function rankNearby(rows: NearbyRow[]): NearbyRow[] {
   );
 }
 
-export function NearbyInPanel({ resortId, slug }: { resortId: number; slug: string }) {
+export function NearbyInPanel({ resortId }: { resortId: number }) {
   const [rows, setRows] = useState<NearbyRow[]>([]);
   useEffect(() => {
     let cancelled = false;
@@ -500,14 +611,6 @@ export function NearbyInPanel({ resortId, slug }: { resortId: number; slug: stri
   return (
     <div className="border-t border-wn-charcoal/10 pt-1">
       <NearbyGroup emoji="⭐" label="Top picks nearby" rows={picks} variant="compact" />
-      {rows.length > picks.length && (
-        <Link
-          href={`/resort/${slug}#around-the-resort`}
-          className="mt-1 inline-block text-[12px] font-semibold text-wn-navy underline-offset-2 hover:underline"
-        >
-          See all {rows.length} places nearby →
-        </Link>
-      )}
     </div>
   );
 }
