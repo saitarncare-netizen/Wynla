@@ -1,6 +1,11 @@
-// /trip/[id] — single saved trip view with day-by-day itinerary, the
-// "Start trip" button, and per-day check-in. RLS makes this implicitly
-// owner-only — a different user requesting this id gets a 404.
+// /trip/[id] — one saved trip in trip mode. Top to bottom: the hero
+// (name, dates, progress), the Today card (Start trip / Navigate to
+// today's mountain / its saved places with directions / Finish day N,
+// lib/tripToday.ts), the day-by-day timeline with per-day notes and
+// places, and Trip controls (start date, whole route, undo, restart,
+// delete). A sticky bar keeps the next step and Share within reach on a
+// phone. RLS makes this implicitly owner-only — a different user
+// requesting this id gets a 404.
 
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
@@ -12,13 +17,17 @@ import Notice from "@/components/ui/Notice";
 import Icon from "@/components/icons/Icon";
 import { haversineMeters, estimateDriveSeconds } from "@/lib/distance";
 import { formatDriveTime } from "@/lib/origins";
-import TripActions, { StartDateBadge } from "./TripActions";
+import { directionsUrl } from "@/components/Map/ResortSheetMath";
+import TripActions from "./TripActions";
+import TodayCard, { StartDateBadge, type TodayResortInfo } from "./TodayCard";
 import TripNameEditor from "./TripNameEditor";
 import TripStickyBar from "./TripStickyBar";
 import TripCalendarExport from "@/components/TripCalendarExport";
-import DayPlan, { type NearbyOption } from "./DayPlan";
+import DayPlan, { type NearbyOption, type TodayCardStay } from "./DayPlan";
 import DayResortSwap from "./DayResortSwap";
-import { parseDayPlans } from "@/lib/dayPlans";
+import { parseDayPlans, placeKeysOutsideDay } from "@/lib/dayPlans";
+import { tripToday } from "@/lib/tripToday";
+import { resortNameFromSlug } from "@/lib/tripLabels";
 
 export const dynamic = "force-dynamic";
 
@@ -117,7 +126,10 @@ export default async function TripPage({
   // Itinerary v2 — day plans. Feature-enabled only once the day_plans
   // column exists (select * returns it). Nearby options are fetched per
   // unique resort (recommended-first, capped) and attached to each day
-  // card so the user can one-tap places onto their day.
+  // card so the user can one-tap places onto their day. Caps are 20
+  // restaurants + 12 activities per mountain: in trip mode this list is
+  // where the rider picks tonight's dinner, and 10 + 8 left whole
+  // categories (cafes, ski shops) out of dense resort towns.
   const dayPlansEnabled = "day_plans" in trip && trip.day_plans !== undefined;
   const dayPlans = dayPlansEnabled ? parseDayPlans(trip.day_plans) : {};
   const nearbyByResortId = new Map<number, NearbyOption[]>();
@@ -130,6 +142,8 @@ export default async function TripPage({
     // round-trips are trivial.
     const NEARBY_COLS =
       "id, resort_id, name, category, latitude, longitude, website_url, is_recommended, distance_km";
+    const NEARBY_RESTAURANT_CAP = 20;
+    const NEARBY_ACTIVITY_CAP = 12;
     const perResort = await Promise.all(
       resortIds.map((rid) =>
         Promise.all([
@@ -139,14 +153,14 @@ export default async function TripPage({
             .eq("resort_id", rid)
             .order("is_recommended", { ascending: false })
             .order("distance_km", { ascending: true })
-            .limit(10),
+            .limit(NEARBY_RESTAURANT_CAP),
           supabase
             .from("nearby_activities")
             .select(NEARBY_COLS)
             .eq("resort_id", rid)
             .order("is_recommended", { ascending: false })
             .order("distance_km", { ascending: true })
-            .limit(8),
+            .limit(NEARBY_ACTIVITY_CAP),
         ]),
       ),
     );
@@ -179,8 +193,8 @@ export default async function TripPage({
         nearbyByResortId.set(row.resort_id, list);
       }
     };
-    push(restRes.data as NearbyRowDb[] | null, "restaurant", 10);
-    push(actRes.data as NearbyRowDb[] | null, "activity", 8);
+    push(restRes.data as NearbyRowDb[] | null, "restaurant", NEARBY_RESTAURANT_CAP);
+    push(actRes.data as NearbyRowDb[] | null, "activity", NEARBY_ACTIVITY_CAP);
   }
 
   // Build legs from origin → r1 → r2 → … using Haversine estimates.
@@ -222,11 +236,40 @@ export default async function TripPage({
   const totalDriveSeconds =
     legs.reduce((s, l) => s + l.driveSeconds, 0) + homeLegSeconds;
 
-  const isActive = trip.started_at != null;
-  const currentDay = trip.current_day ?? 0;
-  const completedSet = new Set(trip.completed_days);
-  const tripFinished = isActive && completedSet.size >= trip.total_days;
-  const lastCompletedDay = completedSet.size > 0 ? Math.max(...completedSet) : null;
+  // Trip mode. One model drives the Today card, the sticky bar, the hero
+  // badge and the day-card highlights so they can never disagree about
+  // which day it is (lib/tripToday.ts).
+  const today = tripToday({
+    daySlugs: expandedSlugs,
+    currentDay: trip.current_day,
+    completedDays: trip.completed_days,
+    startedAt: trip.started_at,
+    totalDays: trip.total_days,
+    dayPlans,
+  });
+  const isActive = today.state === "active";
+  const tripFinished = today.state === "complete";
+  const currentDay = today.day;
+  const completedSet = new Set(trip.completed_days ?? []);
+  const lastCompletedDay = today.lastCompletedDay;
+
+  // Resort details the Today card and the sticky bar need: today's and
+  // tomorrow's mountains only.
+  const todayResorts: Record<string, TodayResortInfo> = {};
+  for (const slug of [today.slug, today.nextDay?.slug]) {
+    const r = slug ? bySlug.get(slug) : undefined;
+    if (r) {
+      todayResorts[r.slug] = {
+        name: r.name,
+        state: r.state,
+        lat: Number(r.latitude),
+        lng: Number(r.longitude),
+      };
+    }
+  }
+  const todayResort = today.slug ? todayResorts[today.slug] : undefined;
+  const todayLeg = legs[today.day - 1];
+  const todayResortRow = today.slug ? bySlug.get(today.slug) : undefined;
 
   // Trip dates. The column is feature-detected off select("*"): before
   // the DDL runs the key is absent and the date UI stays hidden. The
@@ -277,10 +320,9 @@ export default async function TripPage({
   const heroPrimary = primaryPass(firstResortRow?.passes ?? []);
   const heroAccent = passColor(heroPrimary);
   const fallbackName = `${expandedSlugs.length}-day trip`;
-  const completedCount = completedSet.size;
-  const progressPct = isActive
-    ? Math.round((completedCount / expandedSlugs.length) * 100)
-    : 0;
+  const itineraryKey = expandedSlugs.join("|");
+  const progressPct =
+    isActive && today.totalDays > 0 ? Math.round((today.completedCount / today.totalDays) * 100) : 0;
 
   return (
     <main className="min-h-dvh bg-wn-offwhite">
@@ -333,7 +375,7 @@ export default async function TripPage({
                   const r = bySlug.get(slug);
                   return {
                     day: i + 1,
-                    resortName: r?.name ?? slug,
+                    resortName: r?.name ?? resortNameFromSlug(slug),
                     resortState: r?.state ?? "",
                     lat: r ? Number(r.latitude) : null,
                     lng: r ? Number(r.longitude) : null,
@@ -388,6 +430,29 @@ export default async function TripPage({
       {/* pb-28 keeps the last card and the controls clear of the sticky
           action bar. */}
       <div className="mx-auto max-w-3xl px-4 py-6 pb-28 sm:px-6 sm:py-8 sm:pb-28">
+        {/* Trip mode first: on the mountain the rider needs today's
+            directions and places, not the summary. */}
+        <TodayCard
+          tripId={trip.id}
+          today={today}
+          resorts={todayResorts}
+          startDate={startDate}
+          drive={
+            todayLeg && todayLeg.driveSeconds > 0
+              ? {
+                  seconds: todayLeg.driveSeconds,
+                  // Day 1's leg starts at the origin, whose timeline
+                  // fallback label ("Start") reads oddly in a sentence.
+                  fromLabel: today.day === 1 ? (trip.origin_label ?? "home") : todayLeg.fromLabel,
+                }
+              : null
+          }
+          placesEnabled={dayPlansEnabled}
+          canAddPlaces={
+            todayResortRow != null && (nearbyByResortId.get(todayResortRow.id) ?? []).length > 0
+          }
+        />
+
         {/* Trip summary tiles — replaces the old terse "total drive"
             line. Three stats so the page has visual weight without an
             image. */}
@@ -425,6 +490,18 @@ export default async function TripPage({
             const isCurrent = isActive && currentDay === dayNum;
             const isFuture = isActive && dayNum > currentDay && !completed;
             const stayPut = leg.driveSeconds === 0 && i > 0;
+            // Day 2+ of a multi-night stay at one mountain (same slug as
+            // yesterday). Not the same as stayPut: a resort row that failed
+            // to load also has a 0 s leg.
+            const continuesStay = i > 0 && expandedSlugs[i - 1] === slug;
+            // The Today card lists places only while the trip is on and
+            // today is in this stay; the day card links there only then.
+            const todayCard: TodayCardStay =
+              isActive && today.stop?.days.includes(dayNum)
+                ? "now"
+                : today.state === "not_started"
+                  ? "after-start"
+                  : "not-now";
             const primary = primaryPass(r?.passes ?? []);
             const dot = passColor(primary);
             return (
@@ -434,6 +511,9 @@ export default async function TripPage({
                   durationSeconds={leg.driveSeconds}
                 />
                 <div
+                  // Anchor for the Today card's "Add places" link (the
+                  // global [id] scroll-margin keeps it clear of the top bar).
+                  id={`day-${dayNum}`}
                   className={`rounded-wn-md border bg-white p-4 transition ${
                     isCurrent
                       ? "border-wn-navy ring-2 ring-wn-navy/20"
@@ -459,7 +539,7 @@ export default async function TripPage({
                       <DayResortSwap
                         tripId={trip.id}
                         day={dayNum}
-                        currentName={r?.name ?? slug}
+                        currentName={r?.name ?? resortNameFromSlug(slug)}
                       />
                     )}
                   </div>
@@ -477,7 +557,9 @@ export default async function TripPage({
                         {r.name}
                       </Link>
                     ) : (
-                      <span className="text-base font-bold text-wn-muted">{slug}</span>
+                      // A slug the resorts table no longer knows (renamed or
+                      // merged since the trip was saved): "Mohawk", not "mohawk".
+                      <span className="text-base font-bold text-wn-muted">{resortNameFromSlug(slug)}</span>
                     )}
                     {r && (
                       <span className="text-xs text-wn-muted">{r.state}</span>
@@ -507,11 +589,21 @@ export default async function TripPage({
                       until the day_plans DDL has run (feature-detected). */}
                   {dayPlansEnabled && (
                     <DayPlan
+                      // DayPlan keeps its own copy of the plans across
+                      // router.refresh(). A resort swap changes the
+                      // itinerary AND moves places between days
+                      // (DayResortSwap), so remount every card on a new
+                      // itinerary to show the moved places; a place add
+                      // keeps the itinerary, so an open add list stays open.
+                      key={itineraryKey}
                       tripId={trip.id}
                       day={dayNum}
                       initialPlans={dayPlans}
                       nearby={r ? (nearbyByResortId.get(r.id) ?? []) : []}
+                      savedElsewhere={placeKeysOutsideDay(dayPlans, dayNum)}
                       completed={completed}
+                      continuesStay={continuesStay}
+                      todayCard={todayCard}
                     />
                   )}
                 </div>
@@ -526,35 +618,39 @@ export default async function TripPage({
           </li>
         </ol>
 
-        {/* Action panel — moved to the bottom so the page reads as
-            "here's your trip" first, "do something with it" second.
-            The previous layout put Start-trip right under the title
-            and users were tapping it expecting "view details". */}
+        {/* Housekeeping at the bottom: the day-to-day actions live in
+            the Today card at the top and the sticky bar. */}
         <section className="mt-8">
           <h2 className="mb-2 text-eyebrow font-bold uppercase text-wn-muted">Trip controls</h2>
           <TripActions
             tripId={trip.id}
             isActive={isActive}
             tripFinished={tripFinished}
-            currentDay={currentDay}
             lastCompletedDay={lastCompletedDay}
-            totalDays={expandedSlugs.length}
+            totalDays={today.totalDays}
             googleMapsUrl={googleMapsUrl}
+            todayCardShowsDrive={isActive && todayResort != null}
             startDate={startDate}
             startDateEnabled={startDateEnabled}
           />
         </section>
       </div>
 
-      {/* Mark day done / Undo / Share, always within reach. */}
+      {/* Start / Navigate + Finish day / Plan another, and Share, always
+          within reach. */}
       <TripStickyBar
         tripId={trip.id}
         tripName={trip.name ?? fallbackName}
-        isActive={isActive}
-        tripFinished={tripFinished}
-        currentDay={currentDay}
-        lastCompletedDay={lastCompletedDay}
-        totalDays={expandedSlugs.length}
+        state={today.state}
+        day={today.day}
+        totalDays={today.totalDays}
+        isLastDay={today.nextDay == null}
+        stayPut={today.stayPut}
+        navigate={
+          todayResort
+            ? { name: todayResort.name, url: directionsUrl(todayResort.lat, todayResort.lng) }
+            : null
+        }
       />
     </main>
   );

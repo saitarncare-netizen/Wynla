@@ -13,6 +13,7 @@ import {
   driveFilterLabel,
   encodeStoredOrigin,
   findOrigin,
+  formatDriveTime,
   formatDriveTimeLabel,
   hasCachedDriveTimes,
   originByCode,
@@ -191,6 +192,16 @@ describe("estimate labelling", () => {
     expect(formatDriveTimeLabel(9000, true)).toBe("≈ 2h 30m");
     expect(formatDriveTimeLabel(9000, false)).toBe("2h 30m");
     expect(formatDriveTimeLabel(300, true)).toBe("≈ 0h 05m");
+  });
+
+  it("carries a rounded-up minute into the hour instead of printing 60m", () => {
+    // 8h 59m 40s used to print "8h 60m": minutes were rounded apart from hours.
+    expect(formatDriveTime(8 * 3600 + 59 * 60 + 40)).toBe("9h 00m");
+    expect(formatDriveTime(3599.6)).toBe("1h 00m");
+    expect(formatDriveTime(3600 + 29)).toBe("1h 00m");
+    expect(formatDriveTime(3600 + 31)).toBe("1h 01m");
+    expect(formatDriveTime(0)).toBe("0h 00m");
+    expect(formatDriveTime(29)).toBe("0h 00m");
   });
 
   it("marks uncached cities in the picker option label and leaves cached ones plain", () => {

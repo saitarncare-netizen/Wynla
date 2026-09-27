@@ -7,6 +7,12 @@ import type { User } from "@supabase/supabase-js";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { invalidateProStatus } from "@/lib/proClient";
 import Icon from "@/components/icons/Icon";
+import { customHistoryState } from "@/components/Map/sheetHistory";
+
+// One row of the account menu. min-h-11 keeps every row a 44 px target
+// (the rows were 36 px, under the phone minimum).
+const MENU_ITEM =
+  "flex min-h-11 items-center gap-2 border-t border-wn-charcoal/10 px-3 py-2 text-sm font-medium text-wn-charcoal transition hover:bg-wn-offwhite hover:text-wn-navy";
 
 // Header sign-in / user-menu button. Renders nothing until we know the auth
 // state, then either a "Sign in" link or a small avatar dropdown. The button
@@ -116,7 +122,8 @@ export default function AuthButton() {
         // Only point at the menu while it exists in the DOM; a dangling id
         // is flagged by axe and announced as an unreachable control.
         aria-controls={menuOpen ? "account-menu" : undefined}
-        className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-wn-navy text-sm font-bold text-white shadow-sm transition hover:bg-wn-navy/90 active:scale-95"
+        // 36 px avatar, 44 px target: the ::before grows the hit area.
+        className="relative inline-flex h-9 w-9 items-center justify-center rounded-full bg-wn-navy text-sm font-bold text-white shadow-sm transition before:absolute before:-inset-1 before:content-[''] hover:bg-wn-navy/90 active:scale-95"
       >
         {initial}
       </button>
@@ -140,29 +147,40 @@ export default function AuthButton() {
               href="/favorites"
               role="menuitem"
               onClick={() => setMenuOpen(false)}
-              className="flex items-center gap-2 border-t border-wn-charcoal/10 px-3 py-2 text-sm font-medium text-wn-charcoal transition hover:bg-wn-offwhite hover:text-wn-navy"
+              className={MENU_ITEM}
             >
               <Icon name="heart" className="h-4 w-4 text-wn-navy/70" />
               Favorites
             </Link>
-            {/* Stage 4 — "Plan a trip" + "My trips" relocated here from
-                the map header. The header now keeps a single anon-only
-                "Plan a trip" entry; once signed in those links live
-                inside this dropdown to keep the top-of-app uncluttered. */}
+            {/* "Plan a trip" is also the gold header button for everyone
+                (2026-09-27); this entry stays for people who look for it
+                here. On the map it opens the planner in place: a plain
+                link to "/?plan=1" dropped every other param, and losing
+                ?days made the planner trim a multi-day draft to one day. */}
             <Link
               href="/?plan=1"
               role="menuitem"
-              onClick={() => setMenuOpen(false)}
-              className="flex items-center gap-2 border-t border-wn-charcoal/10 px-3 py-2 text-sm font-medium text-wn-charcoal transition hover:bg-wn-offwhite hover:text-wn-navy"
+              onClick={(e) => {
+                setMenuOpen(false);
+                if (pathname !== "/") return;
+                e.preventDefault();
+                const params = new URLSearchParams(window.location.search);
+                params.set("plan", "1");
+                // Same write MapPage uses (history API + sheet-safe
+                // state), so Next syncs useSearchParams without a server
+                // round trip.
+                window.history.replaceState(customHistoryState(window.history.state), "", `?${params.toString()}`);
+              }}
+              className={MENU_ITEM}
             >
-              <span aria-hidden="true" className="text-base leading-none">🗺️</span>
+              <Icon name="map" className="h-4 w-4 text-wn-navy/70" />
               Plan a trip
             </Link>
             <Link
               href="/trips"
               role="menuitem"
               onClick={() => setMenuOpen(false)}
-              className="flex items-center gap-2 border-t border-wn-charcoal/10 px-3 py-2 text-sm font-medium text-wn-charcoal transition hover:bg-wn-offwhite hover:text-wn-navy"
+              className={MENU_ITEM}
             >
               <Icon name="trips" className="h-4 w-4 text-wn-navy/70" />
               My trips
@@ -171,7 +189,7 @@ export default function AuthButton() {
               href="/account"
               role="menuitem"
               onClick={() => setMenuOpen(false)}
-              className="flex items-center gap-2 border-t border-wn-charcoal/10 px-3 py-2 text-sm font-medium text-wn-charcoal transition hover:bg-wn-offwhite hover:text-wn-navy"
+              className={MENU_ITEM}
             >
               <Icon name="settings" className="h-4 w-4 text-wn-navy/70" />
               Account
@@ -181,7 +199,7 @@ export default function AuthButton() {
               role="menuitem"
               onClick={signOut}
               disabled={signingOut}
-              className="block w-full border-t border-wn-charcoal/10 px-3 py-2 text-left text-sm font-medium text-wn-charcoal transition hover:bg-wn-offwhite hover:text-wn-navy disabled:opacity-60"
+              className={`${MENU_ITEM} w-full text-left disabled:opacity-60`}
             >
               {signingOut ? "Signing out…" : "Sign out"}
             </button>

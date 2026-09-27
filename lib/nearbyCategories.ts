@@ -125,6 +125,12 @@ export type NearbyRow = {
   // ratings (top picks per category, well-rated + enough reviews). Per
   // Google ToS we store only this boolean, never the rating values.
   is_recommended?: boolean | null;
+  // Which table the row came from. Not a column: ids are only unique per
+  // table, so a trip stores places as kind:id (see lib/dayPlans.ts). Set
+  // by lib/fetchNearby.ts and stamped by NearbyRestaurants /
+  // NearbyActivities for server-fetched rows; a row without it cannot be
+  // saved to a trip.
+  kind?: "restaurant" | "activity";
 };
 
 // The Round 9 importer fell back to OSM addr:street (or a free-text

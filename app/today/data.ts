@@ -11,6 +11,7 @@ import { verdict, type PassContext, type Verdict, type VerdictResort, type Verdi
 import type { DailyWeather } from "@/lib/snowSurface";
 import { heroSourceFor, type HeroSource } from "@/lib/heroSource";
 import { shiftDate } from "@/lib/weather/time";
+import { tripStopNames } from "@/lib/tripLabels";
 
 type Client = Awaited<ReturnType<typeof createSupabaseServerClient>>;
 
@@ -241,11 +242,9 @@ export async function loadNextTrip(supabase: Client, todayISO: string): Promise<
     ? await supabase.from("resorts").select("slug, name").in("slug", slugs)
     : { data: [] as Array<{ slug: string; name: string }> };
   const nameBySlug = new Map((names ?? []).map((r) => [r.slug, r.name]));
-  const stopNames: string[] = [];
-  for (const s of pick.resort_slugs ?? []) {
-    const n = nameBySlug.get(s) ?? s;
-    if (stopNames[stopNames.length - 1] !== n) stopNames.push(n);
-  }
+  // Same naming as the /trips cards, so an old trip whose slug the
+  // resorts table no longer has reads "Mohawk", not "mohawk".
+  const stopNames = tripStopNames(pick.resort_slugs, nameBySlug);
 
   return {
     id: pick.id,

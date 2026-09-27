@@ -1,5 +1,15 @@
 import { describe, expect, it } from "vitest";
-import { completeCurrentDay, sortTrips, tripFinished, undoLastCompletedDay } from "./tripProgress";
+import {
+  completeCurrentDay,
+  effectiveCurrentDay,
+  finishDay,
+  restartTrip,
+  sortTrips,
+  startTrip,
+  tripFinished,
+  undoLastCompletedDay,
+  undoStart,
+} from "./tripProgress";
 
 const base = { started_at: null, total_days: 3, completed_days: [] as number[] };
 
@@ -71,11 +81,104 @@ describe("undoLastCompletedDay", () => {
       current_day: 2,
     });
   });
-  it("resets the trip when the only completed day is undone", () => {
-    expect(undoLastCompletedDay({ started_at: "s", current_day: 2, completed_days: [1] })).toEqual({
-      completed_days: [],
-      current_day: null,
-      started_at: null,
+  it("keeps the trip started when the only completed day is undone", () => {
+    // Starting is its own tap now: undoing "Finish day 1" lands on an
+    // active day 1, not back on the Start screen.
+    const u = undoLastCompletedDay({ started_at: "s", current_day: 2, completed_days: [1] });
+    expect(u).toEqual({ completed_days: [], current_day: 1 });
+    expect(u).not.toHaveProperty("started_at");
+  });
+  it("undoes the last day of a finished trip in place", () => {
+    expect(undoLastCompletedDay({ started_at: "s", current_day: 3, completed_days: [1, 2, 3] })).toEqual({
+      completed_days: [1, 2],
+      current_day: 3,
     });
+  });
+  it("undoes the day the button showed", () => {
+    expect(undoLastCompletedDay({ started_at: "s", current_day: 3, completed_days: [1, 2] }, 2)).toEqual({
+      completed_days: [1],
+      current_day: 2,
+    });
+  });
+  it("ignores a stale 'Undo day N' once a later day was finished elsewhere", () => {
+    // The page showed "Undo day 1"; another device has since finished day 2.
+    expect(undoLastCompletedDay({ started_at: "s", current_day: 3, completed_days: [1, 2] }, 1)).toBeNull();
+  });
+  it("ignores a second 'Undo day N' tap after the first already undid it", () => {
+    // Both Undo buttons showed "Undo day 2"; the first tap left day 1 as
+    // the latest, which the second tap must not unmark.
+    expect(undoLastCompletedDay({ started_at: "s", current_day: 2, completed_days: [1] }, 2)).toBeNull();
+  });
+});
+
+describe("startTrip", () => {
+  it("starts on day 1 with nothing finished", () => {
+    expect(startTrip({ started_at: null, current_day: null, completed_days: null }, "2026-12-20T14:00:00Z")).toEqual({
+      started_at: "2026-12-20T14:00:00Z",
+      current_day: 1,
+      completed_days: [],
+    });
+  });
+  it("is a no-op on a trip that is already started, so progress is never wiped", () => {
+    expect(startTrip({ started_at: "s", current_day: 3, completed_days: [1, 2] }, "n")).toBeNull();
+  });
+});
+
+describe("restartTrip", () => {
+  it("clears progress and the start", () => {
+    expect(restartTrip()).toEqual({ started_at: null, current_day: null, completed_days: [] });
+  });
+});
+
+describe("undoStart", () => {
+  it("takes back a Start tap while no day is finished", () => {
+    expect(undoStart({ started_at: "s", current_day: 1, completed_days: [] })).toEqual({
+      started_at: null,
+      current_day: null,
+      completed_days: [],
+    });
+    expect(undoStart({ started_at: "s", current_day: 1, completed_days: null })).toEqual(restartTrip());
+  });
+  it("never wipes finished days: a stale page left open after Start must resync instead", () => {
+    expect(undoStart({ started_at: "s", current_day: 3, completed_days: [1, 2] })).toBeNull();
+    expect(undoStart({ started_at: "s", current_day: 1, completed_days: [1] })).toBeNull();
+  });
+  it("is a no-op on a trip that is not started (already undone elsewhere)", () => {
+    expect(undoStart({ started_at: null, current_day: null, completed_days: [] })).toBeNull();
+  });
+});
+
+describe("effectiveCurrentDay", () => {
+  it("defaults to day 1 and clamps into the trip", () => {
+    expect(effectiveCurrentDay({ started_at: "s", current_day: null, completed_days: null }, 3)).toBe(1);
+    expect(effectiveCurrentDay({ started_at: "s", current_day: 0, completed_days: [] }, 3)).toBe(1);
+    expect(effectiveCurrentDay({ started_at: "s", current_day: 7, completed_days: [] }, 3)).toBe(3);
+  });
+  it("moves past a day that is already finished, stopping at the last day", () => {
+    expect(effectiveCurrentDay({ started_at: "s", current_day: 1, completed_days: [1, 2] }, 3)).toBe(3);
+    expect(effectiveCurrentDay({ started_at: "s", current_day: 3, completed_days: [1, 2, 3] }, 3)).toBe(3);
+  });
+});
+
+describe("finishDay", () => {
+  const active = { started_at: "s", current_day: 2, completed_days: [1] };
+  it("finishes the day the button showed and moves to the next", () => {
+    expect(finishDay(active, 2, 3, "n")).toEqual({ completed_days: [1, 2], current_day: 3 });
+  });
+  it("finishes the last day in place", () => {
+    expect(finishDay({ started_at: "s", current_day: 3, completed_days: [1, 2] }, 3, 3, "n")).toEqual({
+      completed_days: [1, 2, 3],
+      current_day: 3,
+    });
+  });
+  it("ignores a second tap for the same day (card + sticky bar, or two devices)", () => {
+    const afterFirst = { started_at: "s", current_day: 3, completed_days: [1, 2] };
+    expect(finishDay(afterFirst, 2, 3, "n")).toBeNull();
+  });
+  it("ignores an already finished last day", () => {
+    expect(finishDay({ started_at: "s", current_day: 3, completed_days: [1, 2, 3] }, 3, 3, "n")).toBeNull();
+  });
+  it("never starts a trip: a stale page must resync, not auto-start", () => {
+    expect(finishDay({ started_at: null, current_day: null, completed_days: [] }, 1, 3, "n")).toBeNull();
   });
 });

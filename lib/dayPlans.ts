@@ -7,6 +7,12 @@
 // 2026-06-28-trip-day-plans.sql). The trip page selects * and passes
 // `dayPlansEnabled` down so the UI hides itself until the column is live —
 // no deploy needed when it lands.
+//
+// Places belong to a MOUNTAIN, not a single day: a 3-night stay at Vail
+// shows everything saved on any of those three days in trip mode, and so
+// does a second visit to Vail later in the trip (lib/tripToday.ts, via
+// unionPlaces). Storage stays per day so notes ("leave at 7") keep their
+// day and nothing needs a migration; the union happens at read time.
 
 export type DayPlace = {
   /** nearby_restaurants.id or nearby_activities.id */
@@ -27,7 +33,14 @@ export type DayPlan = {
 export type DayPlans = Record<string, DayPlan>;
 
 const MAX_NOTE_LEN = 2000;
-const MAX_PLACES_PER_DAY = 12;
+/** Exported so the editor can stop offering adds at the cap instead of
+ *  letting withDayPlan silently drop the 13th place. */
+export const MAX_PLACES_PER_DAY = 12;
+
+/** Identity of a saved place: ids are only unique within their table. */
+export function placeKey(p: Pick<DayPlace, "kind" | "id">): string {
+  return `${p.kind}:${p.id}`;
+}
 
 /** Defensive parse — jsonb from the DB could be anything if hand-edited. */
 export function parseDayPlans(raw: unknown): DayPlans {
@@ -88,4 +101,35 @@ export function withDayPlan(
     next[String(day)] = clean;
   }
   return next;
+}
+
+/** placeKeys of every place saved on a day OTHER than `day`. A place is
+ *  saved at most once per trip ("+ Trip" enforces it, lib/saveToTrip), and
+ *  trip mode shows a mountain's places on each of its days, so the day
+ *  editor must not offer these again: a second copy on day 2 of a stay
+ *  would be a hidden duplicate the Today card dedupes away. */
+export function placeKeysOutsideDay(plans: DayPlans, day: number): string[] {
+  const keys = new Set<string>();
+  for (const [d, plan] of Object.entries(plans)) {
+    if (d === String(day)) continue;
+    for (const p of plan.places ?? []) keys.add(placeKey(p));
+  }
+  return [...keys];
+}
+
+/** Every place saved on any of `days`, in the order the days are given
+ *  (so the caller decides which day leads), first save wins on a
+ *  duplicate. The union is uncapped: each day keeps its own cap. */
+export function unionPlaces(plans: DayPlans, days: number[]): DayPlace[] {
+  const seen = new Set<string>();
+  const out: DayPlace[] = [];
+  for (const day of days) {
+    for (const p of plans[String(day)]?.places ?? []) {
+      const key = placeKey(p);
+      if (seen.has(key)) continue;
+      seen.add(key);
+      out.push(p);
+    }
+  }
+  return out;
 }

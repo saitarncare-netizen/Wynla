@@ -29,9 +29,11 @@ import {
   type PassProductAccess,
 } from "@/lib/passAccess";
 import { googleMapsUrl } from "@/lib/externalLinks";
+import { directionsUrl } from "@/components/Map/ResortSheetMath";
 import { getDifficultyMix } from "@/lib/difficulty";
 import FavoriteToggle from "@/components/auth/FavoriteToggle";
 import CompareToggle from "@/components/CompareToggle";
+import PlanTripPill from "@/components/PlanTripPill";
 import RecordRecentVisit from "@/components/RecordRecentVisit";
 import DifficultyBar from "@/components/Map/DifficultyBar";
 import { crowdForecast, upcomingSaturday, CROWD_COLORS } from "@/lib/crowdForecast";
@@ -756,6 +758,14 @@ export default async function ResortPage({
 
   const lng = Number(resort.longitude);
   const lat = Number(resort.latitude);
+  // Hero actions. Directions only with usable coordinates (otherwise
+  // Google Maps gets a "NaN,NaN" destination); Plan trip never for a
+  // permanently closed mountain.
+  const canDirect = Number.isFinite(lat) && Number.isFinite(lng);
+  const canPlanTrip = resort.operating_status !== "closed";
+  // "+ Trip" on each nearby card saves the place into the user's trip for
+  // this mountain; same closed-resort rule as Plan trip.
+  const saveToTrip = canPlanTrip ? { resortSlug: resort.slug, resortName: resort.name } : undefined;
   const primary = primaryPass(resort.passes);
   const heroBg = passColor(primary);
   // Photo / terrain card / gradient, one policy for every surface
@@ -795,9 +805,11 @@ export default async function ResortPage({
       {/* HERO — vetted winter photo when the row has a storage-hosted one,
           else the resort's terrain card (scripts/photos/2-terrain-cards.mjs),
           else the designed navy gradient. Photos come from the
-          scripts/photos/* Commons harvest + vision-vetting pipeline. */}
+          scripts/photos/* Commons harvest + vision-vetting pipeline.
+          on-dark turns the global focus outline gold: the default navy
+          ring vanished against this hero for keyboard users. */}
       <header
-        className="relative w-full overflow-hidden"
+        className="on-dark relative w-full overflow-hidden"
         style={{
           // accentOnNavy mixes the pass colour toward navy until the white
           // title clears 4.5:1 (raw Ikon yellow / Epic orange did not).
@@ -830,25 +842,13 @@ export default async function ResortPage({
           }}
         />
 
-        {/* Hero actions — plan + compare + favorite. The way back to the
+        {/* Hero toggles — compare + favorite. Plan trip and Directions
+            live in the hero body, under the name. The way back to the
             map is the AppShell bar: lib/nav.ts backLinkFor() returns
             /?recent=<slug> for resort pages, so the map still rings the
             pin the user just visited (Saitarn 2026-05-23). */}
         <div className="relative z-10 mx-auto flex max-w-5xl items-center justify-end px-4 py-4 sm:px-6">
           <div className="flex items-center gap-2">
-            {/* Opens the planner with this resort as day 1, so the page
-                is a doorway into a trip rather than a dead end (audit
-                trip-planner-46-entry). Icon-only on the narrowest phones;
-                the label shows from sm. */}
-            <Link
-              href={`/?plan=1&route=${encodeURIComponent(resort.slug)}&days=1`}
-              aria-label={`Plan a trip to ${resort.name}`}
-              title="Plan a trip here"
-              className="inline-flex h-11 items-center justify-center gap-1 rounded-full bg-white/95 px-3 text-xs font-semibold text-wn-charcoal shadow-wn-md backdrop-blur-sm transition hover:text-wn-navy active:scale-95 motion-reduce:transition-none sm:px-3.5"
-            >
-              <Icon name="map" className="h-4 w-4" />
-              <span className="hidden sm:inline">Plan a trip</span>
-            </Link>
             <CompareToggle resortId={resort.id} size="lg" />
             <FavoriteToggle resortId={resort.id} size="lg" />
           </div>
@@ -901,6 +901,49 @@ export default async function ResortPage({
               Skis only
             </p>
           )}
+
+          {/* Plan trip + Directions — the two things a visitor does next,
+              right under the name where the eye lands. Plan trip used to
+              sit in the top-right row as an unlabelled map icon on phones;
+              four labelled pills do not fit one 390 px row (and would
+              re-wrap whenever Compare flips to "Comparing"), so the pair
+              gets its own row. Same pair, order and gold primary as the
+              map sheet's ActionBar (ResortSheetContent), so a resort reads
+              the same on both surfaces. Hand-rolled pills rather than
+              <Button>: they echo the rounded-full hero toggles, and cx()
+              does not merge a radius override. Plan trip opens the planner
+              with this resort added to the trip in progress, or starting
+              one with it (audit trip-planner-46-entry). The pill is a
+              client island (components/PlanTripPill) because its label
+              follows the trip being planned in this tab exactly like the
+              sheet's ActionBar: "Plan trip", "Add to trip" or "View trip"
+              (it used to say "Plan trip" here while the sheet said "View
+              trip" for the same resort). It links with ?add=, never
+              ?route=, and its accessible name starts with the visible
+              label (WCAG 2.5.3).
+              A permanently closed mountain gets no pill unless it is
+              already in the trip: the "Permanently closed" badge sits just
+              above, and the gold pill would invite a trip to a place that
+              cannot be skied (the same rule lib/near.ts buildNearRows
+              applies). Directions stays, since the place still exists.
+              empty:hidden drops the row when neither action renders
+              (known only after hydration for the pill), so no empty gap
+              is left under the badges. */}
+          <div className="mt-6 flex w-full max-w-sm items-center gap-2 empty:hidden">
+            <PlanTripPill slug={resort.slug} name={resort.name} closed={!canPlanTrip} />
+            {canDirect && (
+              <a
+                href={directionsUrl(lat, lng)}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Directions to ${resort.name} (opens Google Maps)`}
+                className="inline-flex h-11 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-white/95 px-4 text-sm font-semibold text-wn-navy shadow-wn-md backdrop-blur-sm transition hover:bg-white active:scale-[0.98] motion-reduce:transition-none"
+              >
+                <Icon name="pin" className="h-4 w-4 shrink-0" />
+                Directions
+              </a>
+            )}
+          </div>
         </div>
       </header>
 
@@ -932,6 +975,13 @@ export default async function ResortPage({
           forecastDates={forecastDateLabels}
           preview={seasonPreview}
         />
+
+        {/* Inaugural Season 2026 — Powder Day Score retired from the
+            UI. The Snow Surface Forecast (above) covers the same
+            "what will today feel like?" question with more nuance —
+            powder, packed powder, frozen granular, icy, etc. — and a
+            3-day outlook. lib/powderScore.ts + components/PowderDayScore.tsx
+            stay in tree as dead code in case we want to revive it. */}
 
         {/* Today's weather — the current-conditions snapshot that feeds
             the surface classifier above. Kept compact and second so the
@@ -965,35 +1015,28 @@ export default async function ResortPage({
             the page opens on what changes daily, not on what never does. */}
         <QuickStats resort={resort} status={status} tz={tz} now={now} />
 
-        {/* PASS ACCESS — tier-aware rules behind each pass chip: every
-            product of every family the resort is on, with days, blackout
-            dates, reservation and bonus-mountain flags, and the verified
-            date + official source. resorts.passes[] still decides WHICH
-            families appear (and the pin colour); lib/passAccess.ts only
-            adds the detail. Sits with the static profile because pass
-            rules change a few times a year, not daily. */}
-        {(resort.passes ?? []).some(isPassFamily) && (
-          <Section
-            id="pass-access"
-            title="Pass access"
-            subtitle={`Days, blackout dates and reservation rules per pass product for the ${PASS_ACCESS_SEASON} season.`}
-          >
-            <PassAccessSection slug={resort.slug} passes={resort.passes ?? []} />
+        {/* TRIP BLOCK — once the snow looks worth it, the page follows
+            the order a visitor plans a day: what is around the mountain,
+            where to sleep, how to get there. Reference detail (pass
+            rules, amenities, hours) comes after; the founder asked for
+            the places ahead of the pass fine print (Saitarn 2026-09-27). */}
+
+        {/* AROUND THE RESORT — nearby eats + off-mountain activities,
+            Round 9 (2026-06). Curated from OpenStreetMap within ~25 km of
+            the resort. The whole section is hidden when the DB has no rows
+            for this resort (low-coverage areas during the initial sweep
+            stay quiet instead of showing an empty "Around the resort"
+            header — the Section wrapper itself doesn't self-collapse). */}
+        {(nearbyRestaurants.length > 0 || nearbyActivities.length > 0) && (
+          <Section id="around-the-resort" title="Around the resort">
+            <NearbyRestaurants rows={nearbyRestaurants} saveToTrip={saveToTrip} />
+            <NearbyActivities rows={nearbyActivities} saveToTrip={saveToTrip} />
           </Section>
         )}
 
-        {/* Inaugural Season 2026 — Powder Day Score retired from the
-            UI. The Snow Surface Forecast (above) covers the same
-            "what will today feel like?" question with more nuance —
-            powder, packed powder, frozen granular, icy, etc. — and a
-            3-day outlook. lib/powderScore.ts + components/PowderDayScore.tsx
-            stay in tree as dead code in case we want to revive it. */}
-
         {/* WHERE TO STAY — three lodging partners (Booking, Vrbo,
-            Airbnb). Sits right after the conditions block so a user
-            who's just decided "yes the snow looks worth it" can act
-            on lodging without scrolling past five more stat sections.
-            Booking + Vrbo earn Wynla a commission; Airbnb is a
+            Airbnb), right after the places so eat-and-sleep read as one
+            run. Booking + Vrbo earn Wynla a commission; Airbnb is a
             no-affiliate UX courtesy. FTC disclosure lives in the
             global footer. */}
         <WhereToStay
@@ -1006,36 +1049,12 @@ export default async function ResortPage({
           }}
         />
 
-        {/* AMENITIES — Stage 23 booleans + legacy night/halfpipe/glades. */}
-        <FullAmenities resort={resort} />
-
-        {/* NEARBY EATS + OFF-MOUNTAIN — Round 9 (2026-06).
-            Curated from OpenStreetMap within ~25 km of the resort.
-            The whole section is hidden when the DB has no rows for this
-            resort (low-coverage areas during the initial sweep stay
-            quiet instead of showing an empty "Around the resort"
-            header — the Section wrapper itself doesn't self-collapse). */}
-        {(nearbyRestaurants.length > 0 || nearbyActivities.length > 0) && (
-          <Section id="around-the-resort" title="Around the resort">
-            <NearbyRestaurants rows={nearbyRestaurants} />
-            <NearbyActivities rows={nearbyActivities} />
-          </Section>
-        )}
-
-        {/* CLOSEST AIRPORT — Stage 23; audit round 2 added the airport
-            name + city, an estimated distance / drive from coordinates
-            (the DB distance exists for 4 of 425 rows) and a flights link. */}
-        {resort.closest_airport_iata && (
-          <Section title="Closest airport">
-            <ClosestAirportCard resort={resort} lat={lat} lng={lng} />
-          </Section>
-        )}
-
-        {/* QUICK ACTIONS — utility-only after Stage 37.
-            Booking (lodging / lift tickets / gear / flights / insurance)
-            moved into the dedicated PlanYourTrip section higher in the
-            page; this row is now just navigation + trail map + webcam,
-            which are the no-revenue informational links. */}
+        {/* MAPS & CAMERAS — the no-revenue informational links:
+            navigation, trail map, webcam, resort website. The only other
+            partner links on the page are lodging (Where to stay) and
+            flights (Closest airport); the old tickets / gear / insurance
+            cluster ("Plan your trip") was retired for the Founder Season
+            and its component deleted (recoverable from git, 6488af5). */}
         <Section title="Maps & cameras">
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
             <ActionLink
@@ -1074,6 +1093,37 @@ export default async function ResortPage({
             )}
           </div>
         </Section>
+
+        {/* CLOSEST AIRPORT — Stage 23; audit round 2 added the airport
+            name + city, an estimated distance / drive from coordinates
+            (the DB distance exists for 4 of 425 rows) and a flights link. */}
+        {resort.closest_airport_iata && (
+          <Section title="Closest airport">
+            <ClosestAirportCard resort={resort} lat={lat} lng={lng} />
+          </Section>
+        )}
+
+        {/* PASS ACCESS — tier-aware rules behind each pass chip: every
+            product of every family the resort is on, with days, blackout
+            dates, reservation and bonus-mountain flags, and the verified
+            date + official source. resorts.passes[] still decides WHICH
+            families appear (and the pin colour); lib/passAccess.ts only
+            adds the detail. Opens the reference half of the page, below
+            the trip block: pass rules change a few times a year, and the
+            hero pass badges and the map sheet's pass chips jump straight
+            here through #pass-access, so sitting lower costs no taps. */}
+        {(resort.passes ?? []).some(isPassFamily) && (
+          <Section
+            id="pass-access"
+            title="Pass access"
+            subtitle={`Days, blackout dates and reservation rules per pass product for the ${PASS_ACCESS_SEASON} season.`}
+          >
+            <PassAccessSection slug={resort.slug} passes={resort.passes ?? []} />
+          </Section>
+        )}
+
+        {/* AMENITIES — Stage 23 booleans + legacy night/halfpipe/glades. */}
+        <FullAmenities resort={resort} />
 
         {/* ABOUT — Stage 33: hide entirely if there's nothing useful
             to show (after we dropped the noisy "Night skiing: No" row,
@@ -1395,7 +1445,8 @@ function Section({
   subtitle,
   children,
 }: {
-  /** Anchor target, e.g. the panel's "See all places nearby" link. */
+  /** Anchor target for deep links: #pass-access (hero pass badges, the
+   *  map sheet's pass chips) and #around-the-resort. */
   id?: string;
   title: string;
   subtitle?: string;

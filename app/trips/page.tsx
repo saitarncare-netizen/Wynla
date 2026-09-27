@@ -1,23 +1,38 @@
 // /trips — list of the signed-in user's saved trips.
-// Auth-guarded: redirects to /login?next=/trips if not signed in.
+// Signed out, the page explains what a trip is and opens the planner
+// (GuestTrips) instead of redirecting to /login: Trips is a tab in the
+// phone bar and planning works without an account (the planner asks for
+// sign-in only at Save), so a login wall there hid the feature from the
+// people most likely to try it.
 //
 // Order: scheduled trips soonest first (when trips.start_date exists,
 // feature-detected off select("*")), then undated trips newest first.
 // Finished trips move to a Completed section so the next plan is at
 // the top, not a trip from last February (audit trip-planner-46).
 
+import type { Metadata } from "next";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { TEMPLATES } from "@/lib/tripTemplates";
 import Button from "@/components/ui/Button";
 import Notice from "@/components/ui/Notice";
 import PageHeader from "@/components/ui/PageHeader";
+import { cx } from "@/components/ui/cx";
+import GuestIntroCard from "@/components/GuestIntroCard";
 import { sortTrips, tripFinished, tripStartDate, type TripListRow } from "@/lib/tripProgress";
+import { pluralize, tripRouteLabel, tripStopNames } from "@/lib/tripLabels";
 import Icon from "@/components/icons/Icon";
 import TripDeleteButton from "./TripDeleteButton";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Trips",
+  description: "Plan a ski trip day by day, then follow it with one-tap directions.",
+  // Personal list (robots.txt disallows /trips too); the signed-out
+  // explainer is not a landing page worth indexing either.
+  robots: { index: false, follow: false },
+};
 
 type TripRow = TripListRow & {
   id: string;
@@ -37,7 +52,7 @@ export default async function TripsPage() {
   const supabase = await createSupabaseServerClient();
   const { data: userData } = await supabase.auth.getUser();
   if (!userData.user) {
-    redirect("/login?next=/trips");
+    return <GuestTrips />;
   }
 
   // select * so start_date rides along once the column exists.
@@ -128,16 +143,66 @@ function EmptyState() {
       <div className="mt-5">
         <Button href="/?days=3&plan=1">Plan a trip</Button>
       </div>
-      <ul className="mt-6 grid w-full gap-2 text-left sm:grid-cols-3">
+      <TemplateShortcuts onCard className="mt-6" />
+    </div>
+  );
+}
+
+// Signed-out /trips. No list to show, so the page sells the idea in
+// three steps (the same promise the planner and trip page keep: pick
+// mountains, save places near each one, follow it with directions) and
+// hands over the planner. Sign-in is second: a guest can plan without
+// it, and anyone with saved trips already knows they want it. The
+// ready-made itineraries sit underneath as the low-effort start.
+function GuestTrips() {
+  return (
+    <main className="min-h-dvh bg-wn-offwhite">
+      <PageHeader title="Trips" width="max-w-3xl" />
+      <div className="mx-auto max-w-3xl px-4 pb-10 pt-4 sm:px-6">
+        <GuestIntroCard
+          headingId="trips-guest-title"
+          icon="trips"
+          title="Plan a ski trip day by day"
+          steps={[
+            { icon: "mountain", text: "Pick your mountains and how many days at each." },
+            { icon: "pin", text: "Save restaurants and things to do near each mountain." },
+            { icon: "car", text: "On the day, follow it with one-tap directions." },
+          ]}
+          primary={{ href: "/?plan=1", label: "Plan a trip" }}
+          secondary={{ href: "/login?next=/trips", label: "Sign in to see your trips" }}
+          note="Planning is free. You only sign in to save a trip."
+        />
+        <section aria-labelledby="trips-templates-title" className="mt-8">
+          <h2 id="trips-templates-title" className="mb-3 text-eyebrow font-bold uppercase text-wn-muted">
+            Or start from a ready-made trip
+          </h2>
+          <TemplateShortcuts />
+        </section>
+      </div>
+    </main>
+  );
+}
+
+/** The first three ready-made itineraries and a link to the rest. Used
+ *  inside the white empty-state card (`onCard`: off-white tiles) and on
+ *  the off-white guest page (white tiles), so the tiles read as tiles on
+ *  either surface. */
+function TemplateShortcuts({ onCard = false, className }: { onCard?: boolean; className?: string }) {
+  return (
+    <div className={cx("flex w-full flex-col", onCard ? "items-center" : "items-start", className)}>
+      <ul className="grid w-full gap-2 text-left sm:grid-cols-3">
         {TEMPLATES.slice(0, 3).map((t) => (
           <li key={t.slug}>
             <Link
               href={`/trip-templates/${t.slug}`}
-              className="block min-h-11 rounded-wn-sm border border-wn-line bg-wn-offwhite p-3 transition hover:border-wn-navy/40"
+              className={cx(
+                "block min-h-11 rounded-wn-sm border border-wn-line p-3 transition hover:border-wn-navy/40",
+                onCard ? "bg-wn-offwhite" : "bg-white shadow-wn-sm",
+              )}
             >
               <span className="block text-sm font-semibold text-wn-navy">{t.title}</span>
               <span className="mt-0.5 block text-xs text-wn-muted">
-                {t.daysPerResort.reduce((a, b) => a + b, 0)} days from {t.origin.short}
+                {pluralize(t.daysPerResort.reduce((a, b) => a + b, 0), "day")} from {t.origin.short}
               </span>
             </Link>
           </li>
@@ -145,9 +210,10 @@ function EmptyState() {
       </ul>
       <Link
         href="/trip-templates"
-        className="mt-3 inline-flex min-h-11 items-center text-xs font-semibold text-wn-muted hover:text-wn-navy"
+        className="mt-3 inline-flex min-h-11 items-center gap-1 text-xs font-semibold text-wn-muted hover:text-wn-navy"
       >
-        All templates →
+        All templates
+        <Icon name="arrow-right" className="h-3.5 w-3.5" />
       </Link>
     </div>
   );
@@ -159,13 +225,10 @@ function TripCard({ trip, nameBySlug }: { trip: TripRow; nameBySlug: Map<string,
   const progress = trip.total_days ? Math.round((completedDays.length / trip.total_days) * 100) : 0;
   const finished = tripFinished(trip);
   const startDate = tripStartDate(trip);
-  // Unique stops in order, e.g. "Killington → Stowe → Sugarbush".
-  const stopNames: string[] = [];
-  for (const s of trip.resort_slugs ?? []) {
-    const n = nameBySlug.get(s) ?? s;
-    if (stopNames[stopNames.length - 1] !== n) stopNames.push(n);
-  }
-  const routeLabel = stopNames.slice(0, 3).join(" → ") + (stopNames.length > 3 ? ` +${stopNames.length - 3}` : "");
+  // Stops in order, e.g. "Killington → Stowe → Sugarbush". A slug the
+  // resorts table no longer has prints as a readable name, not "mohawk".
+  const stopNames = tripStopNames(trip.resort_slugs, nameBySlug);
+  const routeLabel = tripRouteLabel(stopNames);
   const title = trip.name ?? `${trip.total_days}-day trip`;
   return (
     <li className="flex items-stretch rounded-wn-md border border-wn-line bg-white shadow-wn-sm transition hover:border-wn-navy/30">
@@ -190,7 +253,7 @@ function TripCard({ trip, nameBySlug }: { trip: TripRow; nameBySlug: Map<string,
         <p className="mt-0.5 text-xs text-wn-muted">
           {trip.lodging_mode === "basecamp" ? "🏠 Basecamp" : "🛣️ Road trip"}
           {" · "}
-          {trip.total_days} days
+          {pluralize(trip.total_days, "day")}
           {startDate ? ` · starts ${prettyDate(startDate)}` : ""}
           {trip.origin_label ? ` · from ${trip.origin_label}` : ""}
         </p>

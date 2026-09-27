@@ -3,10 +3,10 @@
 // Resort detail for the map: a three-snap bottom sheet on phones
 // (ResortSheet.tsx) and a 380 px right rail on desktop, both built from
 // the same content pieces in ResortSheetContent.tsx. This file owns the
-// data resolution (drive time upgrade, status, tiles) and the snap state.
+// data resolution (drive time upgrade, season status) and the snap state;
+// the conditions tiles fetch their own per-resort extras.
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import Link from "next/link";
 import { passColor, primaryPass } from "@/lib/passColors";
 import { formatDriveTime, type Origin } from "@/lib/origins";
 import { fetchMatrixDriveTime, type MatrixResult } from "@/lib/mapboxMatrix";
@@ -18,14 +18,15 @@ import type { Resort, DriveTime, WeatherSnapshot } from "./MapPage";
 import ResortSheet, { type SheetSnap } from "./ResortSheet";
 import {
   ActionBar,
+  ConditionsGlance,
+  FullPageButton,
   HeroBackdrop,
   HeroStatusPill,
+  MountainFacts,
   NearbyInPanel,
   PassChips,
   RailControls,
-  StatRow,
   StatusRow,
-  buildStatTiles,
   pickKeyStat,
   type DriveDisplay,
 } from "./ResortSheetContent";
@@ -169,7 +170,6 @@ export default function ResortPanel({
   // The pill already says "Opens ~Nov 22 · in 61 days" off-season; the
   // countdown adds value only for the in-season "N days left" reading.
   const showCountdown = seasonInfo.status === "in-season" && seasonInfo.nextCloseDate != null;
-  const tiles = useMemo(() => buildStatTiles(resort, weather, status), [resort, weather, status]);
   const keyStat = pickKeyStat(resort);
 
   // Sheet height → parent (map padding + bottom stack). Only settled snaps
@@ -198,26 +198,22 @@ export default function ResortPanel({
     </span>
   ) : null;
 
+  // Body order (founder, 2026-09-27): conditions first, then what the
+  // mountain is like, then ONE clear way to the full page; passes, the
+  // season countdown and the nearby strip follow. The old drive-method
+  // sentence is gone: the ≈ in the hero already marks an estimate.
   const body = (
     <div className="space-y-3 px-4 py-3">
-      <StatRow tiles={tiles} />
-      <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-wn-charcoal/65">
-        <span>
-          {drive
-            ? drive.estimate
-              ? "Drive time estimated from straight-line distance"
-              : "Drive time from cached road routing"
-            : "Drive time unavailable"}
-        </span>
-        <Link
-          href={`/resort/${resort.slug}`}
-          className="whitespace-nowrap font-semibold text-wn-navy underline-offset-2 hover:underline"
-        >
-          Full resort page →
-        </Link>
-      </div>
+      <ConditionsGlance
+        resort={resort}
+        weather={weather}
+        status={status}
+        openProjected={seasonInfo.openProjected}
+      />
+      <MountainFacts resort={resort} />
+      <FullPageButton slug={resort.slug} />
       {activeAirport && airportDriveText && (
-        <p className="text-[11px] font-medium text-wn-charcoal/65">
+        <p className="text-xs font-medium text-wn-muted">
           <span aria-hidden="true">✈ </span>
           ≈ {airportDriveText} from {activeAirport.label} ({activeAirport.iata}) · estimated
         </p>
@@ -226,7 +222,15 @@ export default function ResortPanel({
       {showCountdown && (
         <StatusRow status={status} countdown={<SeasonCountdown info={seasonInfo} variant="badge" />} />
       )}
-      <NearbyInPanel key={resort.id} resortId={resort.id} slug={resort.slug} />
+      <NearbyInPanel
+        key={resort.id}
+        resortId={resort.id}
+        saveToTrip={
+          resort.operating_status === "closed"
+            ? undefined
+            : { resortSlug: resort.slug, resortName: resort.name }
+        }
+      />
     </div>
   );
 

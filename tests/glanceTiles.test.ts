@@ -1,5 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { buildGlanceTiles, formatRelativeAge, type GlanceInput } from "@/lib/glanceTiles";
+import {
+  buildGlanceTiles,
+  buildMountainFacts,
+  buildSheetTiles,
+  formatRelativeAge,
+  formatSnowTotal,
+  type GlanceInput,
+  type SheetGlanceInput,
+} from "@/lib/glanceTiles";
 import type { ResortStatus } from "@/lib/seasonDates";
 
 // One builder feeds both the map's resort sheet and the resort page, so
@@ -82,7 +90,7 @@ describe("buildGlanceTiles", () => {
     expect(tiles[3].detail).toBeUndefined();
   });
 
-  it("shows the derived status instead of an empty base on the map sheet", () => {
+  it("can show the derived status instead of an empty base", () => {
     const tiles = buildGlanceTiles(
       input({
         resort: { snow_new_24h_in: null, snow_base_depth_in: null, snow_report_status: null, snow_report_updated_at: null },
@@ -90,13 +98,175 @@ describe("buildGlanceTiles", () => {
         statusWhenNoBase: true,
       }),
     );
-    expect(tiles[1]).toMatchObject({ key: "status", label: "Status", value: "Opens ~Nov 22", source: "in 61 days" });
+    expect(tiles[1]).toMatchObject({
+      key: "status",
+      label: "Status",
+      value: "Opens ~Nov 22",
+      detail: "in 61 days",
+      source: "Season dates",
+    });
   });
 
   it("carries the surface confidence on the page and omits it when unknown", () => {
     expect(buildGlanceTiles(input())[2].source).toBe("Forecast · 1h ago · high confidence");
     const map = buildGlanceTiles(input({ surface: { kind: "active", label: "Packed powder" } }));
     expect(map[2].source).toBe("Forecast · 1h ago");
+  });
+});
+
+describe("buildSheetTiles", () => {
+  const NO_REPORT = { snow_new_24h_in: null, snow_base_depth_in: null, snow_report_status: null, snow_report_updated_at: null };
+  const EXTRAS = { snowNext3In: 7.6, lowF: 12, todayWindMph: 14, todayGustMph: 31, fetchedAt: "2026-01-15T13:00:00Z" };
+
+  function sheet(over: Partial<SheetGlanceInput> = {}): SheetGlanceInput {
+    return { ...input(), extras: EXTRAS, ...over };
+  }
+
+  it("puts snow and today's weather on top, then base and surface", () => {
+    expect(buildSheetTiles(sheet()).map((t) => t.key)).toEqual(["snow", "temp", "base", "surface"]);
+  });
+
+  it("shows high and low as one value with the condition and today's forecast wind on the detail line", () => {
+    const today = buildSheetTiles(sheet())[1];
+    expect(today).toMatchObject({
+      label: "High / low today",
+      value: "28° / 15°F",
+      // The day's forecast peaks, worded as peaks: every number on this
+      // tile is today's forecast, so the one "Forecast" source is true.
+      detail: "Cloudy · wind up to 14 mph, gusts 31",
+      source: "Forecast · 1h ago",
+    });
+  });
+
+  it("names gusts only once they matter, and falls back to the fetched low", () => {
+    const calm = buildSheetTiles(
+      sheet({
+        weather: { temp_high_f: 30, conditions_short: "Sunny", fetched_at: "2026-01-15T14:00:00Z" },
+        extras: { ...EXTRAS, todayWindMph: 8.4, todayGustMph: 18 },
+      }),
+    )[1];
+    expect(calm).toMatchObject({ value: "30° / 12°F", detail: "Sunny · wind up to 8 mph" });
+    const noWind = buildSheetTiles(sheet({ extras: { ...EXTRAS, todayWindMph: null, todayGustMph: 40 } }))[1];
+    expect(noWind.detail).toBe("Cloudy");
+  });
+
+  it("keeps a high-only reading honest while the low is unknown", () => {
+    const today = buildSheetTiles(
+      sheet({ weather: { temp_high_f: 30, conditions_short: null, fetched_at: null }, extras: undefined }),
+    )[1];
+    expect(today).toMatchObject({ label: "High today", value: "30°F", source: "Forecast · today" });
+    expect(today.detail).toBeUndefined();
+    const none = buildSheetTiles(sheet({ weather: null, extras: null }))[1];
+    expect(none).toMatchObject({ value: "—", source: "Not synced" });
+    expect(none.detail).toBeUndefined();
+  });
+
+  it("swaps a paused surface for the next-3-days snow total", () => {
+    const tiles = buildSheetTiles(sheet({ resort: NO_REPORT, status: OFF, surface: null }));
+    expect(tiles.map((t) => t.key)).toEqual(["snow", "temp", "status", "next-snow"]);
+    expect(tiles[3]).toMatchObject({ label: "Snow next 3 days", value: '8"', source: "Forecast · 2h ago", accent: true });
+  });
+
+  it("says loading, then Not synced, instead of inventing a total", () => {
+    const loading = buildSheetTiles(sheet({ surface: null, extras: undefined }))[3];
+    expect(loading).toMatchObject({ key: "next-snow", value: "…", source: "Forecast" });
+    const missing = buildSheetTiles(sheet({ surface: null, extras: null }))[3];
+    expect(missing).toMatchObject({ value: "—", source: "Not synced" });
+    const stale = buildSheetTiles(sheet({ surface: null, extras: { ...EXTRAS, snowNext3In: null } }))[3];
+    expect(stale).toMatchObject({ value: "—", source: "Not synced" });
+    const dry = buildSheetTiles(sheet({ surface: null, extras: { ...EXTRAS, snowNext3In: 0 } }))[3];
+    expect(dry).toMatchObject({ value: '0"', accent: false });
+  });
+
+  it("marks a projected opening as projected and never an announced one", () => {
+    const status: ResortStatus = { kind: "opens", label: "Opens Dec 18", detail: "in 82 days", tone: "navy", dormant: true };
+    const projected = buildSheetTiles(sheet({ resort: NO_REPORT, status, openProjected: true }))[2];
+    expect(projected).toMatchObject({ key: "status", value: "Opens Dec 18", detail: "in 82 days · projected", source: "Season dates" });
+    const announced = buildSheetTiles(sheet({ resort: NO_REPORT, status, openProjected: false }))[2];
+    expect(announced.detail).toBe("in 82 days");
+    // openProjected describes the OPENING date only; an open resort's
+    // detail stays as the status wrote it.
+    const open = buildSheetTiles(sheet({ resort: NO_REPORT, status: OPEN, openProjected: true }))[2];
+    expect(open.detail).toBe("12/20 lifts");
+  });
+
+  it("says Reported only for an open status backed by a licensed report", () => {
+    const reported = buildSheetTiles(
+      sheet({ resort: { ...NO_REPORT, snow_report_status: "reported", snow_report_updated_at: "2026-01-15T12:00:00Z" } }),
+    )[2];
+    expect(reported).toMatchObject({ key: "status", value: "Open today", source: "Reported · 3h ago" });
+    const derived = buildSheetTiles(sheet({ resort: NO_REPORT }))[2];
+    expect(derived.source).toBe("Season dates");
+    const unknown: ResortStatus = { kind: "unknown", label: "Check resort", detail: "Live status not available", tone: "muted", dormant: false };
+    expect(buildSheetTiles(sheet({ resort: NO_REPORT, status: unknown }))[2].source).toBe("Check the resort");
+  });
+});
+
+describe("formatSnowTotal", () => {
+  it("rounds to whole inches from 1 inch and keeps a dusting visible", () => {
+    expect(formatSnowTotal(0)).toBe('0"');
+    expect(formatSnowTotal(0.04)).toBe('0"');
+    expect(formatSnowTotal(0.4)).toBe('0.4"');
+    expect(formatSnowTotal(1.4)).toBe('1"');
+    expect(formatSnowTotal(11.5)).toBe('12"');
+  });
+});
+
+describe("buildMountainFacts", () => {
+  const FULL = {
+    summit_elevation_ft: 11570,
+    base_elevation_ft: 8120,
+    vertical_drop: 3450,
+    total_trails: 147,
+    total_lifts: 31,
+    has_night_skiing: true,
+  };
+  const texts = (r: Parameters<typeof buildMountainFacts>[0]) => buildMountainFacts(r).map((f) => f.text.replace(/ /g, " "));
+
+  it("lists summit, base, trails, lifts and night skiing", () => {
+    expect(texts(FULL)).toEqual(["Summit 11,570 ft", "Base 8,120 ft", "147 trails", "31 lifts", "Night skiing"]);
+  });
+
+  it("keeps each number glued to its unit", () => {
+    expect(buildMountainFacts(FULL)[0].text).toBe("Summit 11,570 ft");
+  });
+
+  it("adds the vertical drop only when an elevation is missing", () => {
+    expect(texts({ ...FULL, base_elevation_ft: null })).toEqual([
+      "Summit 11,570 ft",
+      "Vertical 3,450 ft",
+      "147 trails",
+      "31 lifts",
+      "Night skiing",
+    ]);
+    expect(texts({ ...FULL, summit_elevation_ft: null, base_elevation_ft: null, has_night_skiing: false })).toEqual([
+      "Vertical 3,450 ft",
+      "147 trails",
+      "31 lifts",
+    ]);
+  });
+
+  it("skips missing, zero and junk values and singularises one lift", () => {
+    expect(
+      texts({
+        summit_elevation_ft: "not a number",
+        base_elevation_ft: 0,
+        vertical_drop: null,
+        total_trails: null,
+        total_lifts: "1",
+        has_night_skiing: null,
+      }),
+    ).toEqual(["1 lift"]);
+    expect(
+      buildMountainFacts({
+        summit_elevation_ft: null,
+        base_elevation_ft: null,
+        vertical_drop: null,
+        total_trails: null,
+        total_lifts: null,
+        has_night_skiing: null,
+      }),
+    ).toEqual([]);
   });
 });
 

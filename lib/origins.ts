@@ -308,9 +308,12 @@ export function decodeStoredOrigin(raw: string | null | undefined): StoredOrigin
   return null;
 }
 
+/** "2h 05m". Rounds to the minute FIRST and splits hours from that total:
+ *  rounding the minute part on its own printed 8h 59m 40s as "8h 60m". */
 export function formatDriveTime(seconds: number): string {
-  const h = Math.floor(seconds / 3600);
-  const m = Math.round((seconds % 3600) / 60);
+  const totalMinutes = Math.max(0, Math.round(seconds / 60));
+  const h = Math.floor(totalMinutes / 60);
+  const m = totalMinutes % 60;
   return `${h}h ${String(m).padStart(2, "0")}m`;
 }
 
