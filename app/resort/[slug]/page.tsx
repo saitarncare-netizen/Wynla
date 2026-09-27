@@ -757,6 +757,11 @@ export default async function ResortPage({
 
   const lng = Number(resort.longitude);
   const lat = Number(resort.latitude);
+  // Hero actions. Directions only with usable coordinates (otherwise
+  // Google Maps gets a "NaN,NaN" destination); Plan trip never for a
+  // permanently closed mountain.
+  const canDirect = Number.isFinite(lat) && Number.isFinite(lng);
+  const canPlanTrip = resort.operating_status !== "closed";
   const primary = primaryPass(resort.passes);
   const heroBg = passColor(primary);
   // Photo / terrain card / gradient, one policy for every surface
@@ -904,31 +909,39 @@ export default async function ResortPage({
               <Button>: they echo the rounded-full hero toggles, and cx()
               does not merge a radius override. Plan trip opens the planner
               with this resort as day 1 (audit trip-planner-46-entry); its
-              accessible name starts with the visible label (WCAG 2.5.3). */}
-          <div className="mt-6 flex w-full max-w-sm items-center gap-2">
-            <Link
-              href={`/?plan=1&route=${encodeURIComponent(resort.slug)}&days=1`}
-              aria-label={`Plan trip to ${resort.name}`}
-              className="inline-flex h-11 min-w-0 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-wn-gold px-4 text-sm font-bold text-wn-navy shadow-wn-md transition hover:bg-wn-gold/90 active:scale-[0.98] motion-reduce:transition-none"
-            >
-              <Icon name="trips" className="h-4 w-4 shrink-0" />
-              Plan trip
-            </Link>
-            {/* Only with usable coordinates: a row without them would hand
-                Google Maps a "NaN,NaN" destination. */}
-            {Number.isFinite(lat) && Number.isFinite(lng) && (
-              <a
-                href={directionsUrl(lat, lng)}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`Directions to ${resort.name} (opens Google Maps)`}
-                className="inline-flex h-11 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-white/95 px-4 text-sm font-semibold text-wn-navy shadow-wn-md backdrop-blur-sm transition hover:bg-white active:scale-[0.98] motion-reduce:transition-none"
-              >
-                <Icon name="pin" className="h-4 w-4 shrink-0" />
-                Directions
-              </a>
-            )}
-          </div>
+              accessible name starts with the visible label (WCAG 2.5.3).
+              A permanently closed mountain gets no Plan trip: the
+              "Permanently closed" badge sits just above, and the gold pill
+              would invite a trip to a place that cannot be skied (the same
+              rule lib/near.ts buildNearRows applies). Directions stays, since
+              the place still exists; with neither action the row is not
+              rendered, so no empty gap is left under the badges. */}
+          {(canPlanTrip || canDirect) && (
+            <div className="mt-6 flex w-full max-w-sm items-center gap-2">
+              {canPlanTrip && (
+                <Link
+                  href={`/?plan=1&route=${encodeURIComponent(resort.slug)}&days=1`}
+                  aria-label={`Plan trip to ${resort.name}`}
+                  className="inline-flex h-11 min-w-0 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-wn-gold px-4 text-sm font-bold text-wn-navy shadow-wn-md transition hover:bg-wn-gold/90 active:scale-[0.98] motion-reduce:transition-none"
+                >
+                  <Icon name="trips" className="h-4 w-4 shrink-0" />
+                  Plan trip
+                </Link>
+              )}
+              {canDirect && (
+                <a
+                  href={directionsUrl(lat, lng)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Directions to ${resort.name} (opens Google Maps)`}
+                  className="inline-flex h-11 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-white/95 px-4 text-sm font-semibold text-wn-navy shadow-wn-md backdrop-blur-sm transition hover:bg-white active:scale-[0.98] motion-reduce:transition-none"
+                >
+                  <Icon name="pin" className="h-4 w-4 shrink-0" />
+                  Directions
+                </a>
+              )}
+            </div>
+          )}
         </div>
       </header>
 
