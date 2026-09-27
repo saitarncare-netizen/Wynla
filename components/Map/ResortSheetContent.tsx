@@ -459,6 +459,10 @@ export function ActionBar({
   const draftSlugs = usePlannerDraftSlugs();
   const inTrip = draftSlugs.includes(resort.slug);
   const planLabel = draftSlugs.length === 0 ? "Plan trip" : inTrip ? "View trip" : "Add to trip";
+  // A permanently closed mountain cannot be skied, so it gets no gold
+  // Plan/Add button (same rule as the resort page hero and lib/near.ts);
+  // "View trip" stays if it is somehow already in the draft.
+  const canPlan = resort.operating_status !== "closed" || inTrip;
 
   async function share() {
     const url = `${window.location.origin}/resort/${resort.slug}`;
@@ -489,14 +493,16 @@ export function ActionBar({
       }}
     >
       <div className="flex items-center gap-1.5">
-        <button
-          type="button"
-          onClick={onPlanTrip}
-          className="inline-flex h-11 min-w-0 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-wn-gold px-3 text-sm font-bold text-wn-navy shadow-sm transition hover:bg-wn-gold/90 active:scale-[0.98]"
-        >
-          <Icon name={inTrip ? "check" : "trips"} className="h-4 w-4" />
-          {planLabel}
-        </button>
+        {canPlan && (
+          <button
+            type="button"
+            onClick={onPlanTrip}
+            className="inline-flex h-11 min-w-0 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-wn-gold px-3 text-sm font-bold text-wn-navy shadow-sm transition hover:bg-wn-gold/90 active:scale-[0.98]"
+          >
+            <Icon name={inTrip ? "check" : "trips"} className="h-4 w-4" />
+            {planLabel}
+          </button>
+        )}
         {canDirect && (
           <a
             href={directionsUrl(lat, lng)}
@@ -607,7 +613,14 @@ function rankNearby(rows: NearbyRow[]): NearbyRow[] {
   );
 }
 
-export function NearbyInPanel({ resortId }: { resortId: number }) {
+export function NearbyInPanel({
+  resortId,
+  saveToTrip,
+}: {
+  resortId: number;
+  /** Adds the "+ Trip" button to each card (omitted for closed resorts). */
+  saveToTrip?: { resortSlug: string; resortName: string };
+}) {
   const [rows, setRows] = useState<NearbyRow[]>([]);
   useEffect(() => {
     let cancelled = false;
@@ -624,7 +637,7 @@ export function NearbyInPanel({ resortId }: { resortId: number }) {
   const picks = rows.slice(0, TOP_PICKS_LIMIT);
   return (
     <div className="border-t border-wn-charcoal/10 pt-1">
-      <NearbyGroup emoji="⭐" label="Top picks nearby" rows={picks} variant="compact" />
+      <NearbyGroup emoji="⭐" label="Top picks nearby" rows={picks} variant="compact" saveToTrip={saveToTrip} />
     </div>
   );
 }

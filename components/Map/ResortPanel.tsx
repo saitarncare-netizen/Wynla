@@ -222,7 +222,15 @@ export default function ResortPanel({
       {showCountdown && (
         <StatusRow status={status} countdown={<SeasonCountdown info={seasonInfo} variant="badge" />} />
       )}
-      <NearbyInPanel key={resort.id} resortId={resort.id} />
+      <NearbyInPanel
+        key={resort.id}
+        resortId={resort.id}
+        saveToTrip={
+          resort.operating_status === "closed"
+            ? undefined
+            : { resortSlug: resort.slug, resortName: resort.name }
+        }
+      />
     </div>
   );
 

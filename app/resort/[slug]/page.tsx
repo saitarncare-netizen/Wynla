@@ -762,6 +762,9 @@ export default async function ResortPage({
   // permanently closed mountain.
   const canDirect = Number.isFinite(lat) && Number.isFinite(lng);
   const canPlanTrip = resort.operating_status !== "closed";
+  // "+ Trip" on each nearby card saves the place into the user's trip for
+  // this mountain; same closed-resort rule as Plan trip.
+  const saveToTrip = canPlanTrip ? { resortSlug: resort.slug, resortName: resort.name } : undefined;
   const primary = primaryPass(resort.passes);
   const heroBg = passColor(primary);
   // Photo / terrain card / gradient, one policy for every surface
@@ -1031,8 +1034,8 @@ export default async function ResortPage({
             header — the Section wrapper itself doesn't self-collapse). */}
         {(nearbyRestaurants.length > 0 || nearbyActivities.length > 0) && (
           <Section id="around-the-resort" title="Around the resort">
-            <NearbyRestaurants rows={nearbyRestaurants} />
-            <NearbyActivities rows={nearbyActivities} />
+            <NearbyRestaurants rows={nearbyRestaurants} saveToTrip={saveToTrip} />
+            <NearbyActivities rows={nearbyActivities} saveToTrip={saveToTrip} />
           </Section>
         )}
 
