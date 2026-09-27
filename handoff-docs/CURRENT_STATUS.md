@@ -115,9 +115,12 @@ Integration decisions worth knowing:
 
 ## Do not
 
-- Delete `components/PlanYourTrip.tsx`, `components/PowderDayScore.tsx`,
-  `lib/powderScore.ts` or `lib/affiliateLinks.ts`: they are still imported
-  by the resort page and kept for the Season 2 restore.
+- Delete `lib/affiliateLinks.ts` (the resort page's flights link and
+  `WhereToStay` import it; its unused ticket / gear / insurance builders
+  are kept for the Season 2 restore) or `components/PowderDayScore.tsx` +
+  `lib/powderScore.ts` (unused, kept in case the Powder Day Score comes
+  back). The old `PlanYourTrip` cluster was deleted on 2026-09-27; git
+  history has it.
 - Use Wikipedia for pass affiliations, or fabricate any stat. NULL and a
   dash beat a guess.
 - Promote Listed to Featured in code; that is a manual curation decision.
