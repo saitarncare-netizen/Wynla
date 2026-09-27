@@ -148,6 +148,66 @@ export function usePlannerDraftSlugs(): string[] {
   return useMemo(() => (key ? key.split(",") : []), [key]);
 }
 
+export type PlanActionLabel = "Plan trip" | "Add to trip" | "View trip";
+
+/**
+ * Wording of the gold trip button on a resort (map sheet ActionBar and
+ * the resort page hero pill), from the trip being planned in this tab:
+ * "Plan trip" with no draft, "Add to trip" when this resort would be a
+ * new stop, "View trip" when it already is one. One helper so the two
+ * surfaces cannot drift apart again (the hero used to say "Plan trip"
+ * while the sheet said "View trip" for the same resort). Every label
+ * sends ?add=<slug>, which appends, starts or just opens the trip.
+ */
+export function planActionLabel(
+  draftSlugs: readonly string[],
+  slug: string,
+): { label: PlanActionLabel; inTrip: boolean } {
+  const inTrip = draftSlugs.includes(slug);
+  const label = draftSlugs.length === 0 ? "Plan trip" : inTrip ? "View trip" : "Add to trip";
+  return { label, inTrip };
+}
+
+/** URL params that hold the trip's starting point (MapPage's origin
+    resolver and the planner's "From <label>" line read them). */
+export const TRIP_ORIGIN_PARAMS = ["from", "fromLat", "fromLng", "fromLabel"] as const;
+
+/**
+ * The planner's share of the URL that survives Clear all. ?days is the
+ * trip's length and ?plan keeps an open planner open (Clear all is also
+ * in the Filters drawer the planner opens), so neither is a filter. While
+ * the planner is open the origin params stay as well: they are where the
+ * trip starts, and dropping them made the origin silently fall back to
+ * the stored city mid-plan, re-timing every leg. With the planner closed
+ * the origin still resets to the stored choice, as before. MapPage adds
+ * the params it owns (?airport) on top.
+ */
+export function plannerParamsKeptByClearAll(current: Pick<URLSearchParams, "get">): URLSearchParams {
+  const next = new URLSearchParams();
+  const daysParam = current.get("days");
+  if (daysParam) next.set("days", daysParam);
+  // Same test as MapPage's plannerOpen.
+  if (current.get("plan") === "1") {
+    next.set("plan", "1");
+    for (const key of TRIP_ORIGIN_PARAMS) {
+      const value = current.get(key);
+      if (value) next.set(key, value);
+    }
+  }
+  return next;
+}
+
+/**
+ * Whether the resort sheet must close as the planner opens. On phones
+ * the two are full-width bottom surfaces and must not stack: the sheet's
+ * own Plan trip button closes it, but the header "Plan" button and the
+ * avatar menu's "Plan a trip" open the planner by URL alone. The desktop
+ * rail sits beside the planner, so it stays.
+ */
+export function sheetClosesForPlanner(isDesktop: boolean, selectedId: number | null): boolean {
+  return !isDesktop && selectedId != null;
+}
+
 export function plannedDays(stops: Stop[]): number {
   return stops.reduce((sum, s) => sum + s.days, 0);
 }

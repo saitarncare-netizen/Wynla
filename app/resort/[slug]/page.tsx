@@ -33,6 +33,7 @@ import { directionsUrl } from "@/components/Map/ResortSheetMath";
 import { getDifficultyMix } from "@/lib/difficulty";
 import FavoriteToggle from "@/components/auth/FavoriteToggle";
 import CompareToggle from "@/components/CompareToggle";
+import PlanTripPill from "@/components/PlanTripPill";
 import RecordRecentVisit from "@/components/RecordRecentVisit";
 import DifficultyBar from "@/components/Map/DifficultyBar";
 import { crowdForecast, upcomingSaturday, CROWD_COLORS } from "@/lib/crowdForecast";
@@ -912,43 +913,37 @@ export default async function ResortPage({
               <Button>: they echo the rounded-full hero toggles, and cx()
               does not merge a radius override. Plan trip opens the planner
               with this resort added to the trip in progress, or starting
-              one with it (audit trip-planner-46-entry). ?add=, not ?route=:
-              a route seed replaces every stop, and people reach this page
-              from a resort sheet mid-plan; no ?days, the planner sets the
-              length from the draft plus this stop. Its accessible name
-              starts with the visible label (WCAG 2.5.3).
-              A permanently closed mountain gets no Plan trip: the
-              "Permanently closed" badge sits just above, and the gold pill
-              would invite a trip to a place that cannot be skied (the same
-              rule lib/near.ts buildNearRows applies). Directions stays, since
-              the place still exists; with neither action the row is not
-              rendered, so no empty gap is left under the badges. */}
-          {(canPlanTrip || canDirect) && (
-            <div className="mt-6 flex w-full max-w-sm items-center gap-2">
-              {canPlanTrip && (
-                <Link
-                  href={`/?plan=1&add=${encodeURIComponent(resort.slug)}`}
-                  aria-label={`Plan trip to ${resort.name}`}
-                  className="inline-flex h-11 min-w-0 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-wn-gold px-4 text-sm font-bold text-wn-navy shadow-wn-md transition hover:bg-wn-gold/90 active:scale-[0.98] motion-reduce:transition-none"
-                >
-                  <Icon name="trips" className="h-4 w-4 shrink-0" />
-                  Plan trip
-                </Link>
-              )}
-              {canDirect && (
-                <a
-                  href={directionsUrl(lat, lng)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`Directions to ${resort.name} (opens Google Maps)`}
-                  className="inline-flex h-11 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-white/95 px-4 text-sm font-semibold text-wn-navy shadow-wn-md backdrop-blur-sm transition hover:bg-white active:scale-[0.98] motion-reduce:transition-none"
-                >
-                  <Icon name="pin" className="h-4 w-4 shrink-0" />
-                  Directions
-                </a>
-              )}
-            </div>
-          )}
+              one with it (audit trip-planner-46-entry). The pill is a
+              client island (components/PlanTripPill) because its label
+              follows the trip being planned in this tab exactly like the
+              sheet's ActionBar: "Plan trip", "Add to trip" or "View trip"
+              (it used to say "Plan trip" here while the sheet said "View
+              trip" for the same resort). It links with ?add=, never
+              ?route=, and its accessible name starts with the visible
+              label (WCAG 2.5.3).
+              A permanently closed mountain gets no pill unless it is
+              already in the trip: the "Permanently closed" badge sits just
+              above, and the gold pill would invite a trip to a place that
+              cannot be skied (the same rule lib/near.ts buildNearRows
+              applies). Directions stays, since the place still exists.
+              empty:hidden drops the row when neither action renders
+              (known only after hydration for the pill), so no empty gap
+              is left under the badges. */}
+          <div className="mt-6 flex w-full max-w-sm items-center gap-2 empty:hidden">
+            <PlanTripPill slug={resort.slug} name={resort.name} closed={!canPlanTrip} />
+            {canDirect && (
+              <a
+                href={directionsUrl(lat, lng)}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Directions to ${resort.name} (opens Google Maps)`}
+                className="inline-flex h-11 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-white/95 px-4 text-sm font-semibold text-wn-navy shadow-wn-md backdrop-blur-sm transition hover:bg-white active:scale-[0.98] motion-reduce:transition-none"
+              >
+                <Icon name="pin" className="h-4 w-4 shrink-0" />
+                Directions
+              </a>
+            )}
+          </div>
         </div>
       </header>
 

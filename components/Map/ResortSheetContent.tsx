@@ -34,7 +34,7 @@ import DifficultyBar from "./DifficultyBar";
 import { directionsUrl } from "./ResortSheetMath";
 import { buildMountainFacts, buildSheetTiles, type GlanceTile } from "@/lib/glanceTiles";
 import { HIT_AREA_44_FROM_32 } from "@/lib/hitArea";
-import { usePlannerDraftSlugs } from "@/lib/plannerDraft";
+import { planActionLabel, usePlannerDraftSlugs } from "@/lib/plannerDraft";
 
 // Families that have per-product rules in lib/data/passAccess.json. Kept
 // local (not imported from lib/passAccess) so the map bundle does not pull
@@ -456,9 +456,9 @@ export function ActionBar({
 }) {
   const [shared, setShared] = useState<"idle" | "copied" | "failed">("idle");
   const canDirect = Number.isFinite(lat) && Number.isFinite(lng);
-  const draftSlugs = usePlannerDraftSlugs();
-  const inTrip = draftSlugs.includes(resort.slug);
-  const planLabel = draftSlugs.length === 0 ? "Plan trip" : inTrip ? "View trip" : "Add to trip";
+  // Same wording rule as the resort page hero (PlanTripPill), shared via
+  // planActionLabel so the two surfaces never disagree about one resort.
+  const { label: planLabel, inTrip } = planActionLabel(usePlannerDraftSlugs(), resort.slug);
   // A permanently closed mountain cannot be skied, so it gets no gold
   // Plan/Add button (same rule as the resort page hero and lib/near.ts);
   // "View trip" stays if it is somehow already in the draft.

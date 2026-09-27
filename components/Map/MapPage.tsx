@@ -62,6 +62,7 @@ import { haversineMeters, estimateDriveSeconds, estimateDriveMeters } from "@/li
 import { PASS_COLORS, PASS_LABELS, PASS_KEYS } from "@/lib/passColors";
 import { matchesSizeFilter, SIZE_TIER_LABELS, type SizeTier } from "@/lib/sizeTier";
 import { liftCounts, type LiftTypes } from "@/lib/liftTypes";
+import { plannerParamsKeptByClearAll, sheetClosesForPlanner } from "@/lib/plannerDraft";
 
 // mapbox-gl is ~500 KB gzipped. Loaded statically it sat on the critical
 // path of the whole homepage, so the header, search and filter buttons
@@ -925,9 +926,19 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   // Defensive: when the planner closes, clear any trip overlays so a
   // user who saved + deleted a trip never sees lingering "in_trip"
   // pin highlights or preview lines on the main map.
+  //
+  // When it opens on a phone with a resort sheet up, the sheet goes: the
+  // header "Plan" button (shown to signed-in people too since 2026-09-27)
+  // and the avatar menu's "Plan a trip" flip ?plan=1 without touching the
+  // selection, so the planner and the sheet stacked (the sheet's own Plan
+  // trip button already closes it). Only the selection is cleared here:
+  // openResort's recently-viewed timer is a side effect that has no place
+  // in render. The desktop rail sits beside the planner and stays.
   if (lastSeenPlannerOpen !== plannerOpen) {
     setLastSeenPlannerOpen(plannerOpen);
-    if (!plannerOpen) {
+    if (plannerOpen) {
+      if (sheetClosesForPlanner(isDesktop, selectedId)) setSelectedId(null);
+    } else {
       if (tripResortIds.length > 0) setTripResortIds([]);
       if (previewLeg) setPreviewLeg(null);
       if (tripRoute) setTripRoute(null);
@@ -1301,13 +1312,14 @@ export default function MapPage({ resorts, driveTimes, weather, isAuthed }: Prop
   // trip being planned is not a filter: ?days is its length (it grows as
   // mountains are added from resort sheets) and ?plan keeps the planner
   // open when Clear all is tapped in the Filters drawer the planner
-  // opened. Dropping ?days used to shorten the trip and cut stops.
+  // opened. Dropping ?days used to shorten the trip and cut stops. With
+  // the planner open the explicit origin (?from, fromLat/fromLng,
+  // fromLabel) stays too: it is where the trip starts, and falling back
+  // to the stored city mid-plan re-timed every leg without a word. The
+  // rule lives in lib/plannerDraft plannerParamsKeptByClearAll (tested).
   function clearAll() {
-    const next = new URLSearchParams();
+    const next = plannerParamsKeptByClearAll(searchParams);
     if (airportFilter) next.set("airport", airportFilter);
-    const daysParam = searchParams.get("days");
-    if (daysParam) next.set("days", daysParam);
-    if (plannerOpen) next.set("plan", "1");
     writeQuery(next);
   }
 
