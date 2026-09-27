@@ -121,16 +121,20 @@ const getCachedDriveTimes = unstable_cache(
 
 const getCachedWeather = unstable_cache(
   async (): Promise<WeatherSnapshot[]> => {
-    // The map panel shows today's conditions and high only. The 10-day
-    // forecast, lows, wind and 48h snow all live on /resort/[slug].
+    // The map sheet's "High / low today" tile needs today's conditions,
+    // high and low (one small integer per resort). The forecast strip,
+    // wind and gusts are per-resort extras the sheet fetches when it
+    // opens (lib/fetchResortWeather.ts); the rest lives on /resort/[slug].
     const { data, error } = await supabase
       .from("weather_cache")
       // fetched_at dates the map sheet's "Forecast · 3h ago" tiles.
-      .select("resort_id, temp_high_f, conditions_short, fetched_at");
+      .select("resort_id, temp_high_f, temp_low_f, conditions_short, fetched_at");
     if (error) throw new Error(`weather_cache: ${error.message}`);
     return (data ?? []) as WeatherSnapshot[];
   },
-  ["home-weather"],
+  // Bump the suffix whenever the select list changes, for the same
+  // reason as home-resorts: the data cache outlives a deploy.
+  ["home-weather", "v2"],
   { revalidate: HOME_DATA_REVALIDATE_SECONDS, tags: [HOME_DATA_CACHE_TAG] },
 );
 

@@ -253,12 +253,16 @@ export type DriveTimeRows = Record<
   Array<[resortId: number, durationSeconds: number, distanceMeters: number | null]>
 >;
 
-// The map panel's 3-stat card shows only today's conditions and the high.
-// Lows, wind, 48h snow and the 10-day forecast are rendered on
-// /resort/[slug], which fetches its own weather row.
+// The map sheet's "High / low today" tile: today's conditions, high and
+// low. Wind and the next-3-days snow come from the sheet's own lazy
+// per-resort read (lib/fetchResortWeather.ts); 48h snow and the 10-day
+// forecast are rendered on /resort/[slug], which fetches its own row.
 export type WeatherSnapshot = {
   resort_id: number;
   temp_high_f: number | null;
+  /** Optional so older payloads still type-check; when it is missing the
+   *  sheet uses the low from its lazy per-resort read. */
+  temp_low_f?: number | null;
   conditions_short: string | null;
   /** When the weather sync wrote the row; the sheet's stat tiles show
    *  it as "Forecast · 3h ago". Optional so older payloads still type. */

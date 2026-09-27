@@ -3,6 +3,10 @@
 // percent, with a label row below. When all four buckets are zero
 // the component returns null — callers gate visibility based on
 // getDifficultyMix() returning a non-null result.
+//
+// Labels are sentence case at 12 px: the old uppercase, letter-spaced
+// "INTERMEDIATE" measured ~90 px and overflowed its quarter of the row
+// on a 375 px phone (74 px on the resort page, 83 px in the map sheet).
 
 import type { DifficultyMix } from "@/lib/difficulty";
 
@@ -12,8 +16,9 @@ type Props = {
       percentages were derived from underlying trail counts rather than
       taken directly from a published percentage. */
   showSourceHint?: boolean;
-  /** "compact" trims label sizes for the in-map ResortPanel; "full" is
-      the default size used on /resort/[slug]. */
+  /** "compact" (the map's resort sheet) puts each symbol beside its
+      percentage to save a line; "full" is the default size used on
+      /resort/[slug]. */
   size?: "compact" | "full";
 };
 
@@ -50,7 +55,7 @@ export default function DifficultyBar({ mix, showSourceHint, size = "full" }: Pr
       key: "expert",
       pct: mix.expert,
       color: "#000000",
-      label: "Expert Only",
+      label: "Expert only",
       symbol: (
         <span className="flex items-center gap-0.5" aria-hidden="true">
           <span className="block h-2 w-2 rotate-45 bg-black" />
@@ -60,14 +65,13 @@ export default function DifficultyBar({ mix, showSourceHint, size = "full" }: Pr
     },
   ];
 
-  const labelClass = size === "compact" ? "text-[10px]" : "text-[11px]";
-  const numClass = size === "compact" ? "text-xs" : "text-sm";
-  const barHeight = size === "compact" ? "h-2.5" : "h-3";
+  const compact = size === "compact";
+  const barHeight = compact ? "h-2.5" : "h-3";
 
   return (
     <div>
       <div
-        className={`flex w-full ${barHeight} overflow-hidden rounded-full border border-wn-charcoal/10`}
+        className={`flex w-full ${barHeight} overflow-hidden rounded-full border border-wn-line`}
         role="img"
         aria-label={`Difficulty mix: ${segments.map((s) => `${s.pct}% ${s.label}`).join(", ")}`}
       >
@@ -81,21 +85,28 @@ export default function DifficultyBar({ mix, showSourceHint, size = "full" }: Pr
           ) : null,
         )}
       </div>
-      <div className="mt-1.5 grid grid-cols-4 gap-1">
+      {/* The bar's aria-label already reads the whole mix, so the legend
+          is hidden from screen readers rather than read twice. */}
+      <div className="mt-1.5 grid grid-cols-4 gap-1" aria-hidden="true">
         {segments.map((s) => (
-          <div key={s.key} className="flex flex-col items-center gap-0.5 text-center">
-            <span className="flex h-3 items-center justify-center">{s.symbol}</span>
-            <span className={`${numClass} font-bold leading-none text-wn-navy`}>
-              {s.pct}%
-            </span>
-            <span className={`${labelClass} font-semibold uppercase leading-tight tracking-wide text-wn-charcoal/55`}>
-              {s.label}
-            </span>
+          <div key={s.key} className="flex min-w-0 flex-col items-center gap-0.5 text-center">
+            {compact ? (
+              <span className="flex items-center gap-1">
+                <span className="flex h-3 items-center justify-center">{s.symbol}</span>
+                <span className="text-sm font-bold leading-none tabular-nums text-wn-navy">{s.pct}%</span>
+              </span>
+            ) : (
+              <>
+                <span className="flex h-3 items-center justify-center">{s.symbol}</span>
+                <span className="text-sm font-bold leading-none tabular-nums text-wn-navy">{s.pct}%</span>
+              </>
+            )}
+            <span className="text-xs font-medium leading-tight text-wn-muted">{s.label}</span>
           </div>
         ))}
       </div>
       {showSourceHint && !mix.fromPct && (
-        <p className="mt-1.5 text-[10px] italic text-wn-charcoal/45">
+        <p className="mt-1.5 text-xs italic text-wn-muted">
           Mix derived from trail counts.
         </p>
       )}
