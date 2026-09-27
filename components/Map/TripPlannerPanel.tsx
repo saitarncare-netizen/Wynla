@@ -1452,7 +1452,9 @@ export default function TripPlannerPanel({
                 </h2>
                 <p className="mt-1 text-[11px] leading-tight text-white/70">
                   {remainingDays === 0
-                    ? `✓ All ${days} days planned`
+                    ? days === 1
+                      ? "✓ Day planned"
+                      : `✓ All ${days} days planned`
                     : `${daysPlanned} of ${days} days planned`}
                   {" · "}
                   {stops.length} stop{stops.length === 1 ? "" : "s"} · ≈ {formatDriveTime(totalDriveSeconds)} total drive
