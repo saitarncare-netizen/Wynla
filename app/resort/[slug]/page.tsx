@@ -908,8 +908,12 @@ export default async function ResortPage({
               the same on both surfaces. Hand-rolled pills rather than
               <Button>: they echo the rounded-full hero toggles, and cx()
               does not merge a radius override. Plan trip opens the planner
-              with this resort as day 1 (audit trip-planner-46-entry); its
-              accessible name starts with the visible label (WCAG 2.5.3).
+              with this resort added to the trip in progress, or starting
+              one with it (audit trip-planner-46-entry). ?add=, not ?route=:
+              a route seed replaces every stop, and people reach this page
+              from a resort sheet mid-plan; no ?days, the planner sets the
+              length from the draft plus this stop. Its accessible name
+              starts with the visible label (WCAG 2.5.3).
               A permanently closed mountain gets no Plan trip: the
               "Permanently closed" badge sits just above, and the gold pill
               would invite a trip to a place that cannot be skied (the same
@@ -920,7 +924,7 @@ export default async function ResortPage({
             <div className="mt-6 flex w-full max-w-sm items-center gap-2">
               {canPlanTrip && (
                 <Link
-                  href={`/?plan=1&route=${encodeURIComponent(resort.slug)}&days=1`}
+                  href={`/?plan=1&add=${encodeURIComponent(resort.slug)}`}
                   aria-label={`Plan trip to ${resort.name}`}
                   className="inline-flex h-11 min-w-0 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-wn-gold px-4 text-sm font-bold text-wn-navy shadow-wn-md transition hover:bg-wn-gold/90 active:scale-[0.98] motion-reduce:transition-none"
                 >
