@@ -144,17 +144,15 @@ export default async function TodayPage() {
 function GuestToday() {
   return (
     <main className="min-h-dvh bg-wn-offwhite pb-10">
-      <PageHeader
-        width="max-w-2xl"
-        title="Today"
-        description="Go, wait or skip: this morning's call for every mountain you save."
-      />
+      {/* Title only, like the guest /trips header: the card below does the
+          explaining, so the header does not say it a third time. */}
+      <PageHeader width="max-w-2xl" title="Today" />
       <div className="mx-auto mt-5 max-w-2xl px-4 sm:px-6">
         <GuestIntroCard
           headingId="today-guest-title"
           icon="sun"
           title="Go, Wait or Skip, every morning"
-          body="Today gives each mountain you saved one call for the day, with the reason behind it."
+          body="One call for each mountain you save, with the reason behind it."
           steps={[
             {
               icon: "heart",
