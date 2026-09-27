@@ -11,11 +11,15 @@
 // trip to one-slug-per-day (days_per_resort all 1s — an equivalent
 // representation the rest of the app already handles), then swap that
 // day's slug. total_days is unchanged.
+//
+// The day's saved places belong to the OLD mountain and move to the days
+// still at it (lib/tripToday movePlacesOnSwap); its note stays.
 
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
-import { parseDayPlans, withDayPlan } from "@/lib/dayPlans";
+import { parseDayPlans } from "@/lib/dayPlans";
+import { movePlacesOnSwap } from "@/lib/tripToday";
 import { useFocusTrap } from "@/lib/useFocusTrap";
 import Input from "@/components/ui/Input";
 
@@ -149,18 +153,24 @@ export default function DayResortSwap({ tripId, day, currentName }: Props) {
     const oldSlug = nextSlugs[day - 1];
     nextSlugs[day - 1] = slug;
 
-    // Attached places belong to the OLD mountain's town — keep the note
-    // but drop the places for this day so the plan doesn't silently mix
-    // two towns. Only touch day_plans when the column already exists.
+    // Attached places belong to the OLD mountain's town, so they leave
+    // this day (the plan must not silently mix two towns) but are not
+    // deleted: "+ Trip" stores a whole stay's places on the stay's first
+    // day, so swapping day 1 of a 3-night Vail stay used to wipe every
+    // Vail place while days 2-3 were still Vail. movePlacesOnSwap hands
+    // them to the days still at the old mountain (12/day cap, once per
+    // trip) and drops them only when none is left. The note stays on this
+    // day. Only touch day_plans when the column already exists; fresh is
+    // the row just read, so a place saved elsewhere since page load moves
+    // too.
     const payload: Record<string, unknown> = {
       resort_slugs: nextSlugs,
       days_per_resort: nextSlugs.map(() => 1),
     };
     if (oldSlug !== slug && "day_plans" in fresh && fresh.day_plans !== undefined) {
       const plans = parseDayPlans(fresh.day_plans);
-      const cur = plans[String(day)];
-      if (cur?.places?.length) {
-        payload.day_plans = withDayPlan(plans, day, { note: cur.note, places: [] });
+      if (plans[String(day)]?.places?.length) {
+        payload.day_plans = movePlacesOnSwap(plans, nextSlugs, day, oldSlug);
       }
     }
 

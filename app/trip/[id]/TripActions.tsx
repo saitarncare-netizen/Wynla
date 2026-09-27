@@ -31,6 +31,10 @@ type Props = {
   lastCompletedDay: number | null;
   totalDays: number;
   googleMapsUrl: string | null;
+  /** The Today card at the top of the page is showing a drive to today's
+   *  mountain right now (trip under way, resort known). Only then may the
+   *  route blurb link there for "each day's drive". */
+  todayCardShowsDrive: boolean;
   /** Planned first ski day (YYYY-MM-DD) or null when unset. */
   startDate: string | null;
   /** False until the trips.start_date column exists — hides the editor. */
@@ -54,6 +58,7 @@ export default function TripActions({
   lastCompletedDay,
   totalDays,
   googleMapsUrl,
+  todayCardShowsDrive,
   startDate,
   startDateEnabled,
 }: Props) {
@@ -181,12 +186,23 @@ export default function TripActions({
       {googleMapsUrl && (
         <p className="mb-3 text-sm text-wn-charcoal">
           {/* "the Today card at the top of this page", not a bare "Today":
-              the phone tab bar's Today tab is a different screen. */}
-          Every stop in order, as one route. For each day&apos;s drive, use the{" "}
-          <a href="#today" className="font-semibold text-wn-navy underline underline-offset-2">
-            Today card at the top of this page
-          </a>
-          .
+              the phone tab bar's Today tab is a different screen. Linked
+              only while that card is showing today's drive: before the
+              start it offers day 1 only, and a finished trip has none. */}
+          Every stop in order, as one route.
+          {todayCardShowsDrive ? (
+            <>
+              {" "}For each day&apos;s drive, use the{" "}
+              <a href="#today" className="font-semibold text-wn-navy underline underline-offset-2">
+                Today card at the top of this page
+              </a>
+              .
+            </>
+          ) : (
+            !isActive &&
+            !tripFinished &&
+            " Once the trip starts, the Today card at the top of this page has each day's drive."
+          )}
         </p>
       )}
       <div className="flex flex-wrap gap-2">
@@ -204,7 +220,8 @@ export default function TripActions({
         {(isActive || tripFinished) && lastCompletedDay != null && (
           <Button
             variant="secondary"
-            onClick={() => progress.run("undo")}
+            // The day this button names: a stale page undoes it or nothing.
+            onClick={() => progress.run("undo", lastCompletedDay)}
             disabled={anyBusy}
             loading={progress.running === "undo"}
             title="Unmark the last completed day"

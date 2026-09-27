@@ -94,6 +94,21 @@ describe("undoLastCompletedDay", () => {
       current_day: 3,
     });
   });
+  it("undoes the day the button showed", () => {
+    expect(undoLastCompletedDay({ started_at: "s", current_day: 3, completed_days: [1, 2] }, 2)).toEqual({
+      completed_days: [1],
+      current_day: 2,
+    });
+  });
+  it("ignores a stale 'Undo day N' once a later day was finished elsewhere", () => {
+    // The page showed "Undo day 1"; another device has since finished day 2.
+    expect(undoLastCompletedDay({ started_at: "s", current_day: 3, completed_days: [1, 2] }, 1)).toBeNull();
+  });
+  it("ignores a second 'Undo day N' tap after the first already undid it", () => {
+    // Both Undo buttons showed "Undo day 2"; the first tap left day 1 as
+    // the latest, which the second tap must not unmark.
+    expect(undoLastCompletedDay({ started_at: "s", current_day: 2, completed_days: [1] }, 2)).toBeNull();
+  });
 });
 
 describe("startTrip", () => {

@@ -32,6 +32,7 @@ import {
 } from "@/lib/tripProgress";
 import { placeCategoryLabel, type TodayModel } from "@/lib/tripToday";
 import { placeKey } from "@/lib/dayPlans";
+import { resortNameFromSlug } from "@/lib/tripLabels";
 import { mapsDirectionsUrl } from "@/lib/nearbyCategories";
 import { directionsUrl } from "@/components/Map/ResortSheetMath";
 import { formatDriveTime } from "@/lib/origins";
@@ -148,7 +149,11 @@ export function useTripProgress(tripId: string, totalDays: number) {
   // explicit "Restart trip" tap, and its result is the same whatever the
   // row holds. "Undo start" is "unstart", which reads first so a stale
   // page never clears days finished on another device.
-  async function run(action: ProgressAction, day = 0): Promise<void> {
+  // `day` is the day the tapped button showed: "Finish day N" finishes N
+  // only, and "Undo day N" undoes N only (a page left open while day N+1
+  // was finished elsewhere must not unmark N+1, a day that button never
+  // named). Omitted, finish refuses and undo takes the latest day.
+  async function run(action: ProgressAction, day?: number): Promise<void> {
     if (inflight.has(tripId)) return;
     setInflight(tripId, action);
     setError(null);
@@ -171,8 +176,8 @@ export function useTripProgress(tripId: string, totalDays: number) {
             : action === "unstart"
               ? undoStart(prior)
               : action === "finish"
-                ? finishDay(prior, day, totalDays, now)
-                : undoLastCompletedDay(prior);
+                ? finishDay(prior, day ?? 0, totalDays, now)
+                : undoLastCompletedDay(prior, day);
       }
       if (update) {
         const { data, error: writeErr } = await supabase
@@ -218,8 +223,13 @@ type Props = {
 export default function TodayCard({ tripId, today, resorts, startDate, drive, placesEnabled, canAddPlaces }: Props) {
   const { running, busy, error, run } = useTripProgress(tripId, today.totalDays);
   const resort = today.slug ? resorts[today.slug] : undefined;
-  const resortName = resort?.name ?? today.slug ?? "your first stop";
+  // A slug the resorts table no longer knows (renamed or merged since the
+  // trip was saved) reads "Mohawk", not the raw "mohawk".
+  const resortName = resort?.name || resortNameFromSlug(today.slug ?? "") || "your first stop";
   const navUrl = resort ? directionsUrl(resort.lat, resort.lng) : null;
+  // The day the "Undo day N" buttons name; passed to the write so a stale
+  // page undoes that day or nothing (lib/tripProgress undoLastCompletedDay).
+  const undoDay = today.lastCompletedDay;
 
   // When a tap moves the trip on (Start, Finish, Undo) the button that
   // had focus is gone; move focus to the new heading so keyboard and
@@ -400,15 +410,15 @@ export default function TodayCard({ tripId, today, resorts, startDate, drive, pl
               >
                 {today.nextDay ? `Finish day ${today.day}` : "Finish trip"}
               </Button>
-              {today.lastCompletedDay != null ? (
+              {undoDay != null ? (
                 <Button
                   variant="ghost"
-                  onClick={() => run("undo")}
+                  onClick={() => run("undo", undoDay)}
                   loading={running === "undo"}
                   disabled={busy}
-                  title={`Unmark day ${today.lastCompletedDay}`}
+                  title={`Unmark day ${undoDay}`}
                 >
-                  Undo day {today.lastCompletedDay}
+                  Undo day {undoDay}
                 </Button>
               ) : (
                 // Nothing finished yet: the only thing to undo is the
@@ -424,7 +434,7 @@ export default function TodayCard({ tripId, today, resorts, startDate, drive, pl
               {today.nextDay
                 ? today.nextDay.sameStop
                   ? `Tomorrow: another day at ${resortName}`
-                  : `Tomorrow: ${resorts[today.nextDay.slug]?.name ?? today.nextDay.slug}`
+                  : `Tomorrow: ${resorts[today.nextDay.slug]?.name || resortNameFromSlug(today.nextDay.slug)}`
                 : "Last day. Finish the trip when you head home."}
             </p>
           </>
@@ -436,9 +446,14 @@ export default function TodayCard({ tripId, today, resorts, startDate, drive, pl
               <Button variant="secondary" onClick={() => run("restart")} loading={running === "restart"} disabled={busy}>
                 Restart trip
               </Button>
-              {today.lastCompletedDay != null && (
-                <Button variant="ghost" onClick={() => run("undo")} loading={running === "undo"} disabled={busy}>
-                  Undo day {today.lastCompletedDay}
+              {undoDay != null && (
+                <Button
+                  variant="ghost"
+                  onClick={() => run("undo", undoDay)}
+                  loading={running === "undo"}
+                  disabled={busy}
+                >
+                  Undo day {undoDay}
                 </Button>
               )}
             </div>

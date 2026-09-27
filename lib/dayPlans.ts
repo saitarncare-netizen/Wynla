@@ -8,11 +8,11 @@
 // `dayPlansEnabled` down so the UI hides itself until the column is live —
 // no deploy needed when it lands.
 //
-// Places belong to a mountain STOP, not a single day: a 3-night stay at
-// Vail shows everything saved on any of those three days in trip mode
-// (lib/tripToday.ts, via unionPlaces). Storage stays per day so notes
-// ("leave at 7") keep their day and nothing needs a migration; the union
-// happens at read time.
+// Places belong to a MOUNTAIN, not a single day: a 3-night stay at Vail
+// shows everything saved on any of those three days in trip mode, and so
+// does a second visit to Vail later in the trip (lib/tripToday.ts, via
+// unionPlaces). Storage stays per day so notes ("leave at 7") keep their
+// day and nothing needs a migration; the union happens at read time.
 
 export type DayPlace = {
   /** nearby_restaurants.id or nearby_activities.id */
@@ -101,6 +101,20 @@ export function withDayPlan(
     next[String(day)] = clean;
   }
   return next;
+}
+
+/** placeKeys of every place saved on a day OTHER than `day`. A place is
+ *  saved at most once per trip ("+ Trip" enforces it, lib/saveToTrip), and
+ *  trip mode shows a mountain's places on each of its days, so the day
+ *  editor must not offer these again: a second copy on day 2 of a stay
+ *  would be a hidden duplicate the Today card dedupes away. */
+export function placeKeysOutsideDay(plans: DayPlans, day: number): string[] {
+  const keys = new Set<string>();
+  for (const [d, plan] of Object.entries(plans)) {
+    if (d === String(day)) continue;
+    for (const p of plan.places ?? []) keys.add(placeKey(p));
+  }
+  return [...keys];
 }
 
 /** Every place saved on any of `days`, in the order the days are given

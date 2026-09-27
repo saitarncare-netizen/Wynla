@@ -124,11 +124,18 @@ export function completeCurrentDay(prior: TripProgress, totalDays: number, nowIS
  *  stays started even when nothing is left completed: starting is its own
  *  tap now, so undoing "Finish day 1" lands on an active day 1, not back
  *  on the Start screen (Restart is the way back there). Returns null when
- *  there is nothing to undo. */
-export function undoLastCompletedDay(prior: TripProgress): ProgressUpdate | null {
+ *  there is nothing to undo.
+ *
+ *  `expectedDay` is the N the tapped "Undo day N" button showed. When the
+ *  latest finished day is no longer N (a page left open while day N+1 was
+ *  finished on another device, or the other Undo button already ran) the
+ *  tap is stale: null, and the caller just resyncs, instead of silently
+ *  unmarking a day the person never saw on that button. */
+export function undoLastCompletedDay(prior: TripProgress, expectedDay?: number): ProgressUpdate | null {
   const completed = prior.completed_days ?? [];
   if (completed.length === 0) return null;
   const last = Math.max(...completed);
+  if (expectedDay !== undefined && last !== expectedDay) return null;
   return {
     completed_days: completed.filter((d) => d !== last),
     current_day: Math.min(prior.current_day ?? last, last),
