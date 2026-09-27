@@ -10,20 +10,33 @@
 // browser client — RLS owner-update already covers it (same pattern as
 // TripActions). Note saves are debounced 800ms; place add/remove saves
 // immediately. All writes are optimistic with rollback on error.
+//
+// Trip mode: the Today card at the top of the page lists the places saved
+// for today's mountain STOP (every day of a multi-night stay), so a place
+// add/remove here refreshes the server render to keep that list current,
+// and a saved chip opens Google Maps DIRECTIONS (the rider is on the
+// mountain, headed there) rather than a map search.
 
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import {
+  MAX_PLACES_PER_DAY,
   parseDayPlans,
+  placeKey,
   withDayPlan,
   type DayPlace,
   type DayPlan as DayPlanT,
   type DayPlans,
 } from "@/lib/dayPlans";
-import { mapsPlaceUrl } from "@/lib/nearbyCategories";
+import { mapsDirectionsUrl } from "@/lib/nearbyCategories";
+import { placeCategoryLabel } from "@/lib/tripToday";
 import Icon from "@/components/icons/Icon";
 
 export type NearbyOption = DayPlace & { is_recommended: boolean };
+
+/** window event (detail = day number) that opens that day's add list. */
+export const OPEN_DAY_PLAN_EVENT = "wn:open-day-plan";
 
 type Props = {
   tripId: string;
@@ -33,9 +46,14 @@ type Props = {
   nearby: NearbyOption[];
   /** Muted styling for completed days. */
   completed?: boolean;
+  /** Day 2+ of a multi-night stay: places saved on any day of the stay
+   *  already show every day in the Today card, so say so instead of
+   *  inviting the rider to re-add them. */
+  continuesStay?: boolean;
 };
 
-export default function DayPlan({ tripId, day, initialPlans, nearby, completed }: Props) {
+export default function DayPlan({ tripId, day, initialPlans, nearby, completed, continuesStay }: Props) {
+  const router = useRouter();
   const [plans, setPlans] = useState<DayPlans>(() => parseDayPlans(initialPlans));
   const plan: DayPlanT = plans[String(day)] ?? {};
   const [note, setNote] = useState(plan.note ?? "");
@@ -65,7 +83,7 @@ export default function DayPlan({ tripId, day, initialPlans, nearby, completed }
   // merge only THIS day's plan over it before writing. .select("id")
   // exposes the RLS 0-row case (non-owner) as an error instead of a
   // silent fake success.
-  async function persist(update: DayPlanT, rollback: DayPlans) {
+  async function persist(update: DayPlanT, rollback: DayPlans, refreshToday = false) {
     setSaveState("saving");
     const sb = createSupabaseBrowserClient();
     const { data: freshRow, error: readErr } = await sb
@@ -90,16 +108,31 @@ export default function DayPlan({ tripId, day, initialPlans, nearby, completed }
     } else {
       setPlans(merged);
       setSaveState("idle");
+      // Re-render the server page so the Today card's place list matches.
+      // Client state here survives a refresh; notes skip it (typing would
+      // re-run the page's queries every 800 ms for text the card never shows).
+      if (refreshToday) router.refresh();
     }
   }
 
-  function commit(update: DayPlanT) {
+  function commit(update: DayPlanT, refreshToday = false) {
     const prev = plansRef.current;
     // Optimistic local view of this day; persist() recomputes against the
     // fresh server copy so sibling days are never clobbered.
     setPlans(withDayPlan(prev, day, update));
-    void persist(update, prev);
+    void persist(update, prev, refreshToday);
   }
+
+  // The Today card's "Add places" link scrolls to #day-N and fires this
+  // event so the day's add list is already open when it lands. An event,
+  // not hashchange: a second tap on the same link changes no hash.
+  useEffect(() => {
+    function onOpen(e: Event) {
+      if ((e as CustomEvent<number>).detail === day) setOpen(true);
+    }
+    window.addEventListener(OPEN_DAY_PLAN_EVENT, onOpen);
+    return () => window.removeEventListener(OPEN_DAY_PLAN_EVENT, onOpen);
+  }, [day]);
 
   // Debounced note save. "Saving…" shows from the first keystroke so the
   // user always has an unsaved-work cue during the debounce window.
@@ -132,43 +165,75 @@ export default function DayPlan({ tripId, day, initialPlans, nearby, completed }
   );
 
   const places = plan.places ?? [];
-  const attachedIds = new Set(places.map((p) => `${p.kind}:${p.id}`));
-  const addable = nearby.filter((n) => !attachedIds.has(`${n.kind}:${n.id}`));
+  const attachedIds = new Set(places.map(placeKey));
+  const addable = nearby.filter((n) => !attachedIds.has(placeKey(n)));
+  // withDayPlan keeps at most MAX_PLACES_PER_DAY; past it an add would
+  // flash in and silently vanish, so the list says so instead.
+  const full = places.length >= MAX_PLACES_PER_DAY;
 
   // Place edits carry the LIVE textarea note (noteRef), not the plans
   // state — otherwise a place edit right after a failed note save would
   // persist the rolled-back old note while the screen shows the new one.
   function addPlace(n: NearbyOption) {
+    if (full) return;
     notePendingRef.current = false;
-    commit({ note: noteRef.current, places: [...places, { ...n }] });
+    // Only the DayPlace fields: is_recommended is a list hint, not plan data.
+    const place: DayPlace = {
+      id: n.id,
+      kind: n.kind,
+      name: n.name,
+      category: n.category,
+      latitude: n.latitude,
+      longitude: n.longitude,
+      website_url: n.website_url,
+    };
+    commit({ note: noteRef.current, places: [...places, place] }, true);
   }
   function removePlace(p: DayPlace) {
     notePendingRef.current = false;
-    commit({
-      note: noteRef.current,
-      places: places.filter((x) => !(x.kind === p.kind && x.id === p.id)),
-    });
+    commit(
+      {
+        note: noteRef.current,
+        places: places.filter((x) => placeKey(x) !== placeKey(p)),
+      },
+      true,
+    );
   }
 
   const hasContent = places.length > 0 || note.trim() !== "";
 
   return (
     <div className={`mt-3 border-t border-dashed border-wn-line pt-3 ${completed ? "opacity-80" : ""}`}>
+      {continuesStay && (
+        // "the Today card at the top of this page", never a bare "Today":
+        // the phone tab bar has a Today tab (/today, My mountains today)
+        // that does not show trip places.
+        <p className="mb-2 flex items-start gap-1.5 text-xs text-wn-muted">
+          <Icon name="info" className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+          <span>
+            Places saved for this stay show every day in the{" "}
+            <a href="#today" className="font-semibold text-wn-navy underline underline-offset-2">
+              Today card at the top of this page
+            </a>
+          </span>
+        </p>
+      )}
       {/* Attached places — always visible when present (the itinerary). */}
       {places.length > 0 && (
         <ul className="mb-2 flex flex-wrap gap-x-1.5 gap-y-2">
           {places.map((p) => (
             <li
-              key={`${p.kind}:${p.id}`}
+              key={placeKey(p)}
               className="group inline-flex items-center gap-1 rounded-full border border-wn-navy/15 bg-wn-navy/5 py-1 pl-2.5 pr-1 text-xs font-semibold text-wn-navy"
             >
               <a
-                href={mapsPlaceUrl(p.name, p.latitude, p.longitude)}
+                href={mapsDirectionsUrl(p.name, p.latitude, p.longitude)}
                 target="_blank"
                 rel="noopener noreferrer"
                 // Vertical-only hit area (~44 px); stays clear of the remove x.
                 className="relative before:absolute before:inset-x-0 before:-inset-y-3.5 before:content-[''] hover:underline"
-                title={`${p.name} — open in Google Maps`}
+                aria-label={`Directions to ${p.name}`}
+                title={`Directions to ${p.name} in Google Maps`}
               >
                 <span aria-hidden="true">{p.kind === "restaurant" ? "🍽️ " : "🎯 "}</span>
                 {p.name}
@@ -222,11 +287,16 @@ export default function DayPlan({ tripId, day, initialPlans, nearby, completed }
         </span>
       </div>
 
+      {open && full && (
+        <p className="mt-2 rounded-wn-sm border border-wn-line bg-wn-offwhite px-3 py-2 text-xs text-wn-muted">
+          {MAX_PLACES_PER_DAY} places is the most for one day. Remove one to add another.
+        </p>
+      )}
       {/* One-tap add list — compact rows, recommended first. */}
-      {open && addable.length > 0 && (
+      {open && !full && addable.length > 0 && (
         <ul className="mt-2 max-h-56 space-y-1 overflow-y-auto rounded-wn-sm border border-wn-line bg-white p-1.5">
           {addable.map((n) => (
-            <li key={`${n.kind}:${n.id}`}>
+            <li key={placeKey(n)}>
               <button
                 type="button"
                 onClick={() => addPlace(n)}
@@ -240,11 +310,7 @@ export default function DayPlan({ tripId, day, initialPlans, nearby, completed }
                     {n.is_recommended && <span aria-hidden="true">⭐ </span>}
                     {n.name}
                   </span>
-                  {n.category && (
-                    <span className="block truncate text-xs capitalize text-wn-muted">
-                      {n.category}
-                    </span>
-                  )}
+                  <span className="block truncate text-xs text-wn-muted">{placeCategoryLabel(n)}</span>
                 </span>
                 <span
                   aria-hidden="true"
@@ -257,7 +323,7 @@ export default function DayPlan({ tripId, day, initialPlans, nearby, completed }
           ))}
         </ul>
       )}
-      {open && addable.length === 0 && (
+      {open && !full && addable.length === 0 && (
         <p className="mt-2 rounded-wn-sm border border-wn-line bg-wn-offwhite px-3 py-2 text-xs text-wn-muted">
           Everything nearby is already on this day.
         </p>
