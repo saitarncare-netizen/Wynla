@@ -144,20 +144,26 @@ export function isRunningNow(t: TripShape, today: string): boolean {
 
 /**
  * A trip that is behind the person: every day done, or started but gone
- * quiet past its window (see isRunningNow), or never started but dated
- * (start_date) entirely before today's window.
- * A trip dated today or later is never past unless finished, whatever
- * started_at says: Start can be tapped days ahead, and a trip re-dated
- * after an earlier run keeps that run's started_at (TripActions edits
- * start_date alone). "+ Trip" refuses past trips (canSaveInto), so
- * without this it would turn away next month's trip.
+ * quiet past its window (see isRunningNow), or dated (start_date) and
+ * today is past its dated window.
+ * A dated trip is never past unless finished while today is on or before
+ * its start date or inside its dated days (+ the grace), whatever
+ * started_at says: Start can be tapped weeks ahead and never moves
+ * started_at afterwards (startTrip), and a trip re-dated after an earlier
+ * run keeps that run's started_at (TripActions edits start_date alone).
+ * "+ Trip" refuses past trips (canSaveInto), so without this it would
+ * turn away next month's trip, or this trip on its own day 2. Only once
+ * the dated window is over does started_at get a say (a trip restarted
+ * recently but still carrying an old date is running, not past).
  */
 export function isPastTrip(t: TripShape & Pick<SaveTripRow, "start_date">, today: string): boolean {
   if (tripFinished(t)) return true;
   const start = tripStartDate(t);
-  if (start != null && start >= today) return false;
+  // A future start_date is inside the window too (negative elapsed days).
+  if (start != null && withinTripWindow(start, t.total_days, today)) return false;
   if (t.started_at != null) return !isRunningNow(t, today);
-  return start != null && !withinTripWindow(start, t.total_days, today);
+  // Dated, and its window (checked above) is over; undated plans are not past.
+  return start != null;
 }
 
 // ---------- Which trip, which day ----------

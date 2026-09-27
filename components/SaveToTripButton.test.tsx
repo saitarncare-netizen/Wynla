@@ -454,6 +454,38 @@ describe("SaveToTripButton — only a trip still ahead takes a save", () => {
     expect(screen.getByText("Saved · Day 1")).toBeTruthy();
   });
 
+  it("saves into a dated trip under way even when Start was tapped weeks before it", async () => {
+    // Dated yesterday (so today is day 2), Start tapped 30 days ago: the
+    // old started_at must not turn the trip away mid-trip.
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const pad = (n: number) => String(n).padStart(2, "0");
+    const underWay = (over: Partial<Row> = {}) =>
+      vailTrip({
+        days_per_resort: [3],
+        total_days: 3,
+        start_date: `${yesterday.getFullYear()}-${pad(yesterday.getMonth() + 1)}-${pad(yesterday.getDate())}`,
+        started_at: new Date(Date.now() - 30 * 86_400_000).toISOString(),
+        current_day: 2,
+        completed_days: [1],
+        ...over,
+      });
+
+    fake.db.user = { id: "u1" };
+    fake.db.trips = [underWay()];
+    const first = await renderButtons();
+    await tap("Add Moe's BBQ to trip");
+    expect(fake.db.updates.map((u) => u.id)).toEqual(["t1"]);
+    expect(screen.getByText("Saved · Day 1")).toBeTruthy();
+    first.unmount();
+
+    // A place saved before the trip keeps its In trip mark on day 2.
+    await nextTask();
+    fake.db.trips = [underWay({ day_plans: { "1": { places: [SAVED_PLACE] } } })];
+    await renderButtons();
+    expect(screen.getByRole("button", { name: "In trip: Moe's BBQ, day 1 of Ikon week" })).toBeTruthy();
+  });
+
   it("re-checks the fresh row: a stop skied since the list loaded is not saved into", async () => {
     fake.db.user = { id: "u1" };
     fake.db.trips = [

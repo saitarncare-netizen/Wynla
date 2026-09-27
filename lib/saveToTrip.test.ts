@@ -333,6 +333,19 @@ describe("isRunningNow / isPastTrip", () => {
     // Dated before today, the old started_at still decides.
     expect(isPastTrip(started("2026-02-14T00:00:00Z", { start_date: "2026-02-14" }), today)).toBe(true);
   });
+
+  it("keeps trusting the start date while today is inside the dated trip", () => {
+    // Start tapped Dec 1 for a trip dated Dec 9: on Dec 10 it is day 2.
+    const early = started("2026-12-01T15:00:00Z", { start_date: "2026-12-09" });
+    expect(isPastTrip(early, today)).toBe(false);
+    expect(canSaveInto(early, "vail", today)).toBe(true);
+    // Dec 9 + 3 days + TRIP_GRACE_DAYS is its last day; after that the
+    // old started_at decides again, and says past.
+    expect(isPastTrip(early, "2026-12-14")).toBe(false);
+    expect(isPastTrip(early, "2026-12-15")).toBe(true);
+    // Finished still wins.
+    expect(isPastTrip({ ...early, completed_days: [1, 2, 3] }, today)).toBe(true);
+  });
 });
 
 describe("canSaveInto / pickSaveTarget", () => {
@@ -394,6 +407,29 @@ describe("canSaveInto / pickSaveTarget", () => {
   it("keeps an upcoming trip whose Start was tapped long ago", () => {
     const redated = trip({ id: "redated", start_date: "2026-12-20", started_at: "2026-02-14T16:00:00Z" });
     expect(pickSaveTarget([redated], "vail", today)?.id).toBe("redated");
+  });
+
+  it("keeps it through every day of the dated trip, not just until it starts", () => {
+    // 3 days from Dec 20, Start tapped Dec 1 (Start is offered any time and
+    // never moves started_at). Day 2 and day 3 are the days it matters.
+    const early = trip({
+      id: "early",
+      days_per_resort: [3],
+      total_days: 3,
+      start_date: "2026-12-20",
+      started_at: "2026-12-01T15:00:00Z",
+      current_day: 2,
+      completed_days: [1],
+    });
+    for (const day of ["2026-12-19", "2026-12-20", "2026-12-21", "2026-12-22", "2026-12-25"]) {
+      expect(canSaveInto(early, "vail", day)).toBe(true);
+      expect(pickSaveTarget([early], "vail", day)?.id).toBe("early");
+    }
+    // Dec 20 + 3 days + TRIP_GRACE_DAYS is the last day it takes a save.
+    expect(pickSaveTarget([early], "vail", "2026-12-26")).toBeNull();
+    // Same for a trip re-dated after last season's run.
+    const redated = { ...early, id: "redated", started_at: "2026-02-14T16:00:00Z" };
+    expect(pickSaveTarget([redated], "vail", "2026-12-21")?.id).toBe("redated");
   });
 
   it("passes over an upcoming trip whose days here were all ticked ahead", () => {
